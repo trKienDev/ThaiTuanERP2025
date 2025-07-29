@@ -8,7 +8,7 @@ import { LoginResponse } from '../models/login-response.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-      private readonly api = `${environment.apiUrl}/Account`;
+      private readonly api = `${environment.apiUrl}/account`;
 
       constructor(private http: HttpClient) {}
 

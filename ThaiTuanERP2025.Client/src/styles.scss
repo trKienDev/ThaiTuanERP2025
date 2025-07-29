@@ -1,7 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Lexend&display=swap');
 @import url('./styles/_button.scss');
 :root {
-      --ultramarin: '#0437F2';
+      --ultramarin: #0437F2;
+      --main-bg-color: #f8f9fd;
+      --main-theme-fg: #fff5d6;
+      --main-theme-bg: #d5a36e;
+      --main-foreground-hover: #a46e34;
       --logo-size: 250px;
 }
 
@@ -9,8 +13,9 @@ body {
       font-family: 'Lexend', sans-serif;
       font-size: 13px;
 }
-label, button, input {
+label, button, input, span {
       font-family: 'Lexend', sans-serif;
+      font-size: 12px;
 }
 
 .logo-container {

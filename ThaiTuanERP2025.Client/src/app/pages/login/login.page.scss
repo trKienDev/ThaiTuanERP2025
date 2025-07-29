@@ -40,18 +40,18 @@ input:focus {
             box-sizing: border-box;
       }
       .icon-wrapper {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-}
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+      }
 
       .toggle-password {
             width: 20px;
