@@ -1,0 +1,87 @@
+####################################################
+# .NET Core & Visual Studio
+####################################################
+
+## User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## Build results
+bin/
+obj/
+out/
+[Bb]uild/
+[Ll]og/
+.vs/
+TestResults/
+
+## Others
+*.ncb
+*.sdf
+*.cache
+*.dbmdl
+*.bak
+*.orig
+
+# Entity Framework
+Migrations/
+
+# Rider IDE
+.idea/
+
+# ASP.NET Secrets
+secrets.json
+
+# Environment files
+.env
+
+# appsettings files
+appsettings.Development.json
+appsettings.Local.json
+
+####################################################
+# Node / Angular
+####################################################
+
+# Node modules
+client/node_modules/
+
+# Angular build output
+client/dist/
+client/.angular/
+
+# Logs
+client/npm-debug.log*
+client/yarn-debug.log*
+client/yarn-error.log*
+
+# IDE settings (VSCode)
+client/.vscode/
+.vscode/
+
+####################################################
+# OS files
+####################################################
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
+
+####################################################
+# Zip or archive files
+####################################################
+*.zip
+*.rar
+*.7z
+*.tar.gz
