@@ -1,0 +1,28 @@
+<div class="login-container">
+      <div class="logo-container">
+            <div class="logo-wrapper">
+                  <img src="thaituanlogo.png" alt="thaituangroup-logo" class="thaituan-logo" />
+            </div>
+      </div>
+      <form (ngSubmit)="login()">
+            <div class="form-group">
+                  <label for="username">Username</label>
+                  <input type="text" [(ngModel)]="username" name="username" required />
+            </div>
+            <div class="form-group">
+                  <label for="password">Password</label>
+                  <div class="password-wrapper">
+                        <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" name="password" id="password" required />
+                        <div class="icon-wrapper">
+                              <img [src]="'assets/icons/' + (showPassword ? 'eye-off.svg' : 'eye.svg')" class="toggle-password" width="24" height="24" alt="Toggle visibility" (click)="togglePassword()" />
+                        </div>
+                  </div>
+            </div>
+            <div class="button-wrapper">
+                  <button role="button" class="button-85" type="submit" [disabled]="isLoading">
+                        {{ isLoading ? 'Đang xử lý...' : 'Đăng nhập' }}
+                  </button>
+            </div>
+            <p *ngIf="message" class="error-message">{{ message }}</p>
+      </form>
+</div>

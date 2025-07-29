@@ -1,0 +1,11 @@
+.layout-container {
+  display: flex;
+  height: calc(100vh - 64px); // Nếu topbar cao 64px
+}
+
+.main-content {
+  flex: 1;
+  padding: 1rem;
+  background-color: #f5f5f5;
+  overflow-y: auto;
+}
