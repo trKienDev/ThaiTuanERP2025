@@ -84,6 +84,7 @@ builder.Services.AddCors(options =>
 	});
 });
 builder.Services.AddControllers();
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
 var app = builder.Build();
 
