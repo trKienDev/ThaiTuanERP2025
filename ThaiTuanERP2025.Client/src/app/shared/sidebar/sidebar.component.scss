@@ -1,0 +1,36 @@
+.sidebar {
+  width: 220px;
+  background: linear-gradient(to bottom, #5c6bc0, #3949ab);
+  color: white;
+  height: 100%;
+  padding: 1rem;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+nav ul li {
+  margin-bottom: 0.5rem;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: white;
+  padding: 0.5rem;
+  display: block;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+nav ul li a:hover,
+nav ul li a.active {
+  background: rgba(255, 255, 255, 0.2);
+}
