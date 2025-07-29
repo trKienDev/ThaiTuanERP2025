@@ -6,11 +6,14 @@ import { routes } from './app/app.routes';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { jwtInterceptor } from './app/core/interceptors/jwt.interceptor';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { importProvidersFrom } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 
 bootstrapApplication(AppComponent, {
       providers: [
             provideRouter(routes),
             provideHttpClient(withInterceptors([jwtInterceptor])),
-            provideAnimations()
+            provideAnimations(),
+            importProvidersFrom(MatIconModule)
       ]
 });
