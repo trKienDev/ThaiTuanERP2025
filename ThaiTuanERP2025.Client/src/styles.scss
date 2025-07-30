@@ -4,20 +4,21 @@
       --ultramarin: #0437F2;
       --main-bg-color: #f8f9fd;
       --sub-bg-color: #f6f8fa;
+      --sub-bg-color_hover: #818b981a;
       --main-theme-bg: #d5a36e;
       --main-foreground-hover: #A50021;
       --main-theme-fg: #f8e1e1;
-      --default-border: #eee2e2;
+      --default-border: #d1d9e0b3;
       --logo-size: 250px;
 }
 
-body {
+body, label, button, input, span, h1, h2, h3, h4, span, p {
       font-family: 'Lexend', sans-serif;
       font-size: 13px;
 }
-label, button, input, span {
-      font-family: 'Lexend', sans-serif;
-      font-size: 13px;
+ul, ol {
+      margin: 0;
+      padding: 0;
 }
 
 .logo-container {

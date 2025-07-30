@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ThaiTuanERP2025.Domain.Account.Enums;
 
 namespace ThaiTuanERP2025.Application.Account.Commands.Login
 {
@@ -15,5 +16,6 @@ namespace ThaiTuanERP2025.Application.Account.Commands.Login
 
 	public class LoginResultDto {
 		public string AccessToken { get; set; } = default!;
+		public UserRole UserRole { get; set; }
 	}
 }

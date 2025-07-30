@@ -1,30 +1,71 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { ApiResponse } from '../models/api-response.model';
 import { LoginResponse } from '../models/login-response.model';
 
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-      private readonly api = `${environment.apiUrl}/account`;
+      private readonly API_URL = `${environment.apiUrl}/account`;
+      private readonly TOKEN_KEY = 'access_token';
+      private readonly ROLE_KEY = 'user_role';
 
-      constructor(private http: HttpClient) {}
+      private tokenSubject = new BehaviorSubject<string | null>(null);
+      private roleSubject = new BehaviorSubject<string | null>(null);
+
+      public token$ = this.tokenSubject.asObservable();
+      public role$ = this.tokenSubject.asObservable();
+
+      constructor(private http: HttpClient) {
+            // Load from localStorage on app start
+            const storedToken = localStorage.getItem(this.TOKEN_KEY);
+            const storedRole = localStorage.getItem(this.ROLE_KEY);
+
+            if (storedToken) this.tokenSubject.next(storedToken);
+            if(storedRole) this.roleSubject.next(storedRole);
+      }
 
       login(username: string, password: string): Observable<ApiResponse<LoginResponse>> {
-            return this.http.post<ApiResponse<LoginResponse>>(`${this.api}/login`, { username, password });
+            return this.http.post<ApiResponse<LoginResponse>>(`${this.API_URL}/login`, { username, password });
       }
-
-      saveToken(token: string) {
-            localStorage.setItem('access_token', token);
+      loginSuccess(token: string, role: string) {
+            localStorage.setItem(this.TOKEN_KEY, token);
+            localStorage.setItem(this.ROLE_KEY, role);
+            this.tokenSubject.next(token);
+            this.roleSubject.next(role);
       }
-
-      getToken(): string | null {
-            return localStorage.getItem('access_token');
-      }
-
       logout() {
-            localStorage.removeItem('access_token');
+            localStorage.removeItem(this.TOKEN_KEY);
+            localStorage.removeItem(this.ROLE_KEY);
+            this.tokenSubject.next(null);
+            this.roleSubject.next(null);
+      }
+
+      // Ưu tiên lấy từ BehaviorSubject nếu đã có
+      // ==> Fallback sang localStorage nếu chưa có (reload trang)
+      getToken(): string | null { 
+            const token = this.tokenSubject.value;
+            if(token) return token;
+
+            const stored = localStorage.getItem(this.TOKEN_KEY);
+            if(stored) this.tokenSubject.next(stored);
+            return stored;
+      }
+      getUserRole(): string | null {
+            const role = this.roleSubject.value;
+            if(role) return role;
+
+            const stored = localStorage.getItem(this.ROLE_KEY);
+            if(stored) this.roleSubject.next(stored);
+            return stored;
+      }
+      isAdmin(): boolean {
+            return this.roleSubject.value === 'admin';
+      }
+
+      isLoggedIn(): boolean {
+            return !this.tokenSubject.value;
       }
 }
