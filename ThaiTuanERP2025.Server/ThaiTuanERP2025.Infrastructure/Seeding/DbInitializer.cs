@@ -30,7 +30,7 @@ namespace ThaiTuanERP2025.Infrastructure.Seeding
 						employeeCode: "ITC01",
 						passwordHash: PasswordHasher.Hash("Th@iTu@n2025"),
 						avatarUrl: "",
-						role: UserRole.Admin,
+						role: UserRole.admin,
 						position: "System Admin",
 						departmentId: dept.Id,
 						email: new Email("itcenter@thaituan.com.vn")

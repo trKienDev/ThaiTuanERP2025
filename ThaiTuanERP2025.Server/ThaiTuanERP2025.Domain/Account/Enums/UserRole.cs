@@ -11,10 +11,10 @@ namespace ThaiTuanERP2025.Domain.Account.Enums
 	public enum UserRole
 	{
 		[Display(Name = "Quản trị viên")]
-		Admin = 0,
+		admin = 0,
 		[Display(Name = "Quản lý")]
-		Manager = 1,
+		manager = 1,
 		[Display(Name = "Nhân viên")]
-		Employee = 2
+		employee = 2
 	}
 }

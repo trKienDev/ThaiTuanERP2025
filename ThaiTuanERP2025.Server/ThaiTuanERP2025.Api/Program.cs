@@ -13,6 +13,7 @@ using ThaiTuanERP2025.Infrastructure.Account.Repositories;
 using ThaiTuanERP2025.Infrastructure.Seeding;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Infrastructure.Authentication;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,7 @@ builder.Services.AddMediatR(typeof(AssemblyReference).Assembly);
 builder.Services.AddDbContext<ThaiTuanERP2025DbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("ThaiTuanERP2025Db")));
 builder.Services.AddValidatorsFromAssembly(typeof(CreateUserCommandValidator).Assembly);
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<iJWTProvider, JwtProvider>(); 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -83,7 +85,9 @@ builder.Services.AddCors(options =>
 		      .AllowCredentials();
 	});
 });
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options => { 
+	options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); 
+});
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
 var app = builder.Build();

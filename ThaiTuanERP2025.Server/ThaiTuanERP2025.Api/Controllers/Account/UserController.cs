@@ -11,7 +11,7 @@ using ThaiTuanERP2025.Application.Account.Queries.GetUserById;
 namespace ThaiTuanERP2025.Api.Controllers.Account
 {
 	[ApiController]
-	[Route("api/accounts/users")]
+	[Route("api/[controller]")]
 	public class UserController : ControllerBase
 	{
 		private readonly IMediator _mediator;
