@@ -63,9 +63,10 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		private void ConfigureDepartment(ModelBuilder modelBuilder) {
 			modelBuilder.Entity<Department>(builder =>
 			{
+				builder.HasIndex(g => g.Code).IsUnique();
 				builder.HasKey(g => g.Id);
 				builder.Property(g => g.Name).IsRequired().HasMaxLength(100);
-				builder.Property(g => g.Code).HasMaxLength(255);
+				builder.Property(g => g.Code).IsRequired().HasMaxLength(255);
 			});
 		}
 		private void ConfigureGroup(ModelBuilder modelBuilder)
