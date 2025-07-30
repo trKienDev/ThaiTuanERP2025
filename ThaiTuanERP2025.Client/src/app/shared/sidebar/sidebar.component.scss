@@ -46,6 +46,9 @@
 .sidebar nav ul li a:hover, .sidebar nav ul li a.active {
       background-color: var(--main-theme-fg);
 }
-.sidebar nav ul li a:hover .sidebar-title, .sidebar nav ul li a:hover .material-icons-round {
+.sidebar nav ul li a:hover .sidebar-title, 
+.sidebar nav ul li a:hover .material-icons-round,
+.sidebar nav ul li a.active .sidebar-title,
+.sidebar nav ul li a.active .material-icons-round {
       color: var(--main-foreground-hover);
 }
