@@ -89,6 +89,7 @@ builder.Services.AddControllers().AddJsonOptions(options => {
 	options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); 
 });
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
+builder.WebHost.CaptureStartupErrors(true);
 
 var app = builder.Build();
 
@@ -113,6 +114,7 @@ app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.UseDeveloperExceptionPage();
 
 app.Run();
 
