@@ -57,8 +57,11 @@ export class LoginComponent implements OnInit{
             this.authService.login(this.username, this.password).subscribe({
                   next: (res: ApiResponse<LoginResponse>) => {
                         this.isLoading = false;
-                        if (res.isSuccess && res.data?.accessToken) {
-                              this.authService.saveToken(res.data.accessToken);
+                        
+                        if(res.isSuccess && res.data?.accessToken && res.data.userRole) {
+                              const { accessToken, userRole } = res.data;
+
+                              this.authService.loginSuccess(accessToken, userRole);
                               this.router.navigateByUrl('/splash');
                         } else {
                               this.message = res.message || 'Đăng nhập thất bại';

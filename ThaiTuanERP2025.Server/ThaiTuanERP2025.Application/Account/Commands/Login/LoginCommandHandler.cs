@@ -37,6 +37,7 @@ namespace ThaiTuanERP2025.Application.Account.Commands.Login
 			return new LoginResultDto
 			{
 				AccessToken = token,
+				UserRole = user.Role
 			};
 		}
 	}
