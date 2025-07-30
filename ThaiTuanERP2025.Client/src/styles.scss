@@ -3,10 +3,11 @@
 :root {
       --ultramarin: #0437F2;
       --main-bg-color: #f8f9fd;
-      --main-theme-fg: #fff5d6;
       --sub-bg-color: #f6f8fa;
       --main-theme-bg: #d5a36e;
-      --main-foreground-hover: #a46e34;
+      --main-foreground-hover: #A50021;
+      --main-theme-fg: #f8e1e1;
+      --default-border: #eee2e2;
       --logo-size: 250px;
 }
 
@@ -16,7 +17,7 @@ body {
 }
 label, button, input, span {
       font-family: 'Lexend', sans-serif;
-      font-size: 12px;
+      font-size: 13px;
 }
 
 .logo-container {
