@@ -2,6 +2,9 @@
 @import url('./styles/_button.scss');
 @import url('./styles/_modal.scss');
 @import url('./styles/_keyword-css.scss');
+@import url('./styles/_cards.scss');
+
+
 :root {
       --ultramarin: #0437F2;
       --main-bg-color: #f8f9fd;
@@ -18,12 +21,17 @@ body, label, button, input, span, span, p {
       font-family: 'Lexend', sans-serif;
       font-size: 13px;
 }
-h1, h2, h3, h4 {
-      font-family: 'Lexend', sans-serif;
-}
+
 ul, ol {
       margin: 0;
       padding: 0;
+}
+input {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+      border-radius: 5px;
+      border: 1px solid var(--default-border);
 }
 
 .logo-container {
@@ -64,5 +72,5 @@ ul, ol {
       from { left: -150%; opacity: 1; }
       to { left: 100%; opacity: 0; }
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body { height: 100%; margin: 0; }
+

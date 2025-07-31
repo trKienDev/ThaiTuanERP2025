@@ -1,11 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { HttpClient } from '@angular/common/http';
-import { environment } from "../../../../../environments/environment";
-import * as XLSX from 'xlsx';
 import { ExcelImportService } from "../../../../shared/services/excel/excel-import.service";
-import { ApiResponse } from "../../../../core/models/api-response.model";
 import { Department } from "../../models/department.model";
 import { DepartmentService } from "../../services/department.service";
 
