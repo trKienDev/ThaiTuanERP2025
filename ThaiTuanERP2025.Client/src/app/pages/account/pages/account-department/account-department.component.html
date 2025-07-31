@@ -1,25 +1,39 @@
 <h2>Quản lý phòng ban</h2>
 
-<form class="" (ngSubmit)="addDepartment()" #departmentForm="ngForm">
-      <input type="text" name="code" [(ngModel)]="newDepartment.code" placeholder="Mã phòng ban" required/>
-      <input type="text" name="name" [(ngModel)]="newDepartment.name" placeholder="Tên phòng ban" required/>
-      <button type="submit" [disabled]="!departmentForm.valid">Thêm</button>
-</form>
+<div class="d-flex gap-20p">
+      <div class="primary-card">
+            <div class="card-header">
+                  <div class="card-title">Thêm phòng ban</div>
+            </div>
+            <div class="card-body">
+                  <form class="d-flex gap-10p" (ngSubmit)="addDepartment()" #departmentForm="ngForm">
+                        <input class="w-25" type="text" name="code" [(ngModel)]="newDepartment.code" placeholder="Mã phòng ban" required/>
+                        <input class="w-60" type="text" name="name" [(ngModel)]="newDepartment.name" placeholder="Tên phòng ban" required/>
+                        <button class="w-15 button-62" type="submit" [disabled]="!departmentForm.valid">Thêm</button>
+                  </form>
+            </div>
+      </div>
 
-<div class="import-department-excel">
-      <hr />
-      <h3>Import danh sách từ Excel</h3>
-      <a href="/assets/templates/department-template.xlsx" download>
-            <i class="fa-solid fa-file-excel"></i>
-            Tải file Excel mẫu
-      </a>
-      <input type="file" (change)="onFileSelected($event)" accept=".xlsx, .xls" />
-      <button (click)="uploadExcel()" [disabled]="importedDepartments.length === 0">
-            Import danh sách
-      </button>
-      <p *ngIf="importedDepartments.length">
-            Đã đọc được {{ importedDepartments.length }} phòng ban từ file Excel
-      </p>
+      <div class="primary-card">
+            <div class="import-department-excel">
+                  <div class="card-header">
+                        Thêm phòng ban - Excel
+                        <a href="/assets/templates/department-template.xlsx" download>
+                              <i class="fa-solid fa-file-excel"></i>
+                              Tải file Excel mẫu
+                        </a>
+                  </div>
+                  <div class="card-body">
+                        <input type="file" (change)="onFileSelected($event)" accept=".xlsx, .xls" />
+                        <button (click)="uploadExcel()" [disabled]="importedDepartments.length === 0">
+                              Import danh sách
+                        </button>
+                        <p *ngIf="importedDepartments.length">
+                              Đã đọc được {{ importedDepartments.length }} phòng ban từ file Excel
+                        </p>
+                  </div>
+            </div>
+      </div>
 </div>
 
 <div *ngIf="successMessage" class="alert-success">
