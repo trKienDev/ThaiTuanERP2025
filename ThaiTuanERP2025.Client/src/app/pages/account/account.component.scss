@@ -53,12 +53,13 @@
 
             &.selected {
                   background-color: #fff;
-                  color: #000;
+                  color: var(--main-foreground-hover);
                   border: 1px solid var(--default-border, #ccc);
                   border-bottom: 1px solid #fff; // "che" border dưới
                   z-index: 2;
                   position: relative;
                   margin-bottom: -1px;
+                  font-weight: bold;
             }
       }
 }

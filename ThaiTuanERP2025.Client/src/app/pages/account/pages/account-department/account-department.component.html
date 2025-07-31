@@ -5,3 +5,45 @@
       <input type="text" name="name" [(ngModel)]="newDepartment.name" placeholder="Tên phòng ban" required/>
       <button type="submit" [disabled]="!departmentForm.valid">Thêm</button>
 </form>
+
+<div class="import-department-excel">
+      <hr />
+      <h3>Import danh sách từ Excel</h3>
+      <a href="/assets/templates/department-template.xlsx" download>
+            <i class="fa-solid fa-file-excel"></i>
+            Tải file Excel mẫu
+      </a>
+      <input type="file" (change)="onFileSelected($event)" accept=".xlsx, .xls" />
+      <button (click)="uploadExcel()" [disabled]="importedDepartments.length === 0">
+            Import danh sách
+      </button>
+      <p *ngIf="importedDepartments.length">
+            Đã đọc được {{ importedDepartments.length }} phòng ban từ file Excel
+      </p>
+</div>
+
+<div *ngIf="successMessage" class="alert-success">
+      {{ successMessage }}
+</div>
+
+<table>
+      <thead>
+            <tr>
+                  <th>
+                        <input #masterCheckbox type="checkbox" [checked]="isAllSelected()" (change)="toggleAll($event)" />
+                  </th>
+                  <th>Mã phòng ban</th>
+                  <th>Tên phòng ban</th>
+                  <th></th>
+            </tr>
+      </thead>
+      <tbody>
+            <tr *ngFor="let dept of departments">
+                  <td>
+                       <input type="checkbox" [(ngModel)]="dept.selected" (change)="updateMasterCheckboxState()" />
+                  </td>
+                  <td>{{ dept.code }}</td>
+                  <td>{{ dept.name }}</td>
+            </tr>
+      </tbody>
+</table>

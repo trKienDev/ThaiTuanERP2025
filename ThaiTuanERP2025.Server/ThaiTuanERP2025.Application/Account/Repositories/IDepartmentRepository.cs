@@ -10,5 +10,6 @@ namespace ThaiTuanERP2025.Application.Account.Repositories
 	public interface IDepartmentRepository
 	{
 		Task AddAsync(Department department, CancellationToken cancellationToken);
+		Task<List<Department>> GetAllAsync(CancellationToken cancellationToken);
 	}
 }

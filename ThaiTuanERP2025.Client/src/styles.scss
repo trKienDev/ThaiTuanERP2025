@@ -12,9 +12,12 @@
       --logo-size: 250px;
 }
 
-body, label, button, input, span, h1, h2, h3, h4, span, p {
+body, label, button, input, span, span, p {
       font-family: 'Lexend', sans-serif;
       font-size: 13px;
+}
+h1, h2, h3, h4 {
+      font-family: 'Lexend', sans-serif;
 }
 ul, ol {
       margin: 0;
