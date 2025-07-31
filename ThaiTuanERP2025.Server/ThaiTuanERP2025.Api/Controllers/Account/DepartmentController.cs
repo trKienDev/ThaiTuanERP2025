@@ -1,7 +1,10 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Account.Commands.AddDepartment;
+using ThaiTuanERP2025.Application.Account.Dtos;
+using ThaiTuanERP2025.Application.Account.Queries.GetAllDepartments;
 
 namespace ThaiTuanERP2025.Api.Controllers.Account
 {
@@ -16,12 +19,31 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			_mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 		}
 
+		[HttpGet("all")]
+		public async Task<ActionResult<List<DepartmentDto>>> GetAll(CancellationToken cancellationToken)
+		{
+			var departments = await _mediator.Send(new GetAllDepartmentsQuery(), cancellationToken);
+			return Ok(ApiResponse<List<DepartmentDto>>.Success(departments));
+		}
+
 		[HttpPost]
 		public async Task<IActionResult> Create([FromBody] AddDepartmentCommand command)
 		{
-			if (command == null) return BadRequest("Command cannot be null");
+			if (command == null)
+				return BadRequest(ApiResponse<object>.Fail("Dữ liệu rộng hoặc không hợp lệ !"));
+
 			var departmentId = await _mediator.Send(command);
-			return Ok(new { departmentId });
+			return Ok(ApiResponse<object>.Success( new {departmentId }));
+		}
+
+		[HttpPost("bulk")]
+		public async Task<IActionResult> BulkImport([FromBody] BulkAddDepartmentsCommand command)
+		{
+			if (command == null || command.Departments == null || !command.Departments.Any())
+				return BadRequest(ApiResponse<object>.Fail("Dữ liệu rộng hoặc không hợp lệ !"));
+
+			var addCount = await _mediator.Send(command);
+			return Ok(ApiResponse<object>.Success(new { added = addCount }, "Import thành công"));
 		}
 	}
 }
