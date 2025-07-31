@@ -1,6 +1,6 @@
 <h2>Quản lý phòng ban</h2>
 
-<form (ngSubmit)="addDepartment()" #departmentForm="ngForm">
+<form class="" (ngSubmit)="addDepartment()" #departmentForm="ngForm">
       <input type="text" name="code" [(ngModel)]="newDepartment.code" placeholder="Mã phòng ban" required/>
       <input type="text" name="name" [(ngModel)]="newDepartment.name" placeholder="Tên phòng ban" required/>
       <button type="submit" [disabled]="!departmentForm.valid">Thêm</button>
