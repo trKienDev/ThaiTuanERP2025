@@ -1,0 +1,16 @@
+.primary-card {
+      border-radius: 5px;
+      background-color: white;
+      border: 1px solid var(--default-border);
+      width: fit-content;
+      height: fit-content;
+}
+.primary-card .card-header {
+      font-size: 15px;
+      font-weight: 500;
+      padding: 15px;
+      border-bottom: 1px solid var(--default-border);
+}
+.primary-card .card-body {
+      padding: 15px;
+}
