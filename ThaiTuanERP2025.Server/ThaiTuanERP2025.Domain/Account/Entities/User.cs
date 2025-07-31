@@ -83,6 +83,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		{
 			IsActive = false;
 		}
+		
 		public void ChangePassword(string newPasswordHash) {
 			if (string.IsNullOrWhiteSpace(newPasswordHash)) throw new ArgumentException("Mật khẩu mới không hợp lệ");
 			PasswordHash = newPasswordHash;
