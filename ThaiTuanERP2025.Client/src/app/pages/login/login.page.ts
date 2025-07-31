@@ -2,9 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../core/services/auth.service.js';
 import { ApiResponse } from '../../core/models/api-response.model.js';
 import { LoginResponse } from '../../core/models/login-response.model.js';
+import { AuthService } from '../../core/services/auth/auth.service.js';
 
 @Component({
       selector: 'app-login',

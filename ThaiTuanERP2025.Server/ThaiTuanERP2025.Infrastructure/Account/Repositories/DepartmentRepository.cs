@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,10 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 		public DepartmentRepository(ThaiTuanERP2025DbContext dbContext)
 		{
 			_dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+		}
+
+		public async Task<List<Department>> GetAllAsync(CancellationToken cancellationToken) {
+			return await _dbContext.Departments.ToListAsync(cancellationToken);
 		}
 
 		public async Task AddAsync(Department department, CancellationToken cancellationToken)

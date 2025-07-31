@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Text.Json;
+using ThaiTuanERP2025.Api.Common;
 
 namespace ThaiTuanERP2025.Api.Middleware
 {
@@ -24,17 +25,13 @@ namespace ThaiTuanERP2025.Api.Middleware
 				context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
 				context.Response.ContentType = "application/json";
 
-				var errorResponse = new
-				{
-					Message = "Dữ liệu không hợp lệ",
-					Errors = ex.Errors.Select(e => new
-					{
-						Field = e.PropertyName,
-						Error = e.ErrorMessage
-					})
-				};
+				var errorMessages = ex.Errors.Select(e => $"{e.PropertyName}: {e.ErrorMessage}").ToList();
 
-				await context.Response.WriteAsync(JsonSerializer.Serialize(errorResponse));
+				var response = ApiResponse<List<string>>.Fail("Dữ liệu không hợp lệ");
+				response.Data = errorMessages;
+
+				var json = JsonSerializer.Serialize(response);
+				await context.Response.WriteAsync(json);
 			}
 		}
 	}
