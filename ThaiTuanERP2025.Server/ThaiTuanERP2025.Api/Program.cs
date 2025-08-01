@@ -23,7 +23,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddMediatR(typeof(AssemblyReference).Assembly);
 builder.Services.AddDbContext<ThaiTuanERP2025DbContext>(options => {
-	options.UseSqlServer(builder.Configuration.GetConnectionString("ThaiTuanERP2025Db"));
+	options.UseSqlServer(builder.Configuration.GetConnectionString("ThaiTuanERP2025Db"), sqlOptions => {
+		sqlOptions.EnableRetryOnFailure();
+	})
+	.EnableSensitiveDataLogging() // In tham số truy vấn
+	.LogTo(Console.WriteLine, LogLevel.Information); // In toàn bộ SQL ra console
 });
 builder.Services.AddValidatorsFromAssembly(typeof(CreateUserCommandValidator).Assembly);
 builder.Services.AddScoped<IUserRepository, UserRepository>();

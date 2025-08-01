@@ -40,5 +40,20 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 			await _dbContext.Departments.AddAsync(department, cancellationToken);
 			await _dbContext.SaveChangesAsync(cancellationToken);
 		}
+
+		public async Task<List<Department>> GetByIdAsync(IEnumerable<Guid> departmentIds, CancellationToken cancellationToken)
+		{
+			if (departmentIds == null || !departmentIds.Any())
+				return new List<Department>();
+
+			var guidList = departmentIds.Select(id => $"'{id}'").ToList();
+			var sql = $"SELECT * FROM Departments WHERE Id IN ({string.Join(",", guidList)})";
+
+			return await _dbContext.Departments
+			    .FromSqlRaw(sql)
+			    .AsNoTracking()
+			    .ToListAsync(cancellationToken);
+		}
+
 	}
 }
