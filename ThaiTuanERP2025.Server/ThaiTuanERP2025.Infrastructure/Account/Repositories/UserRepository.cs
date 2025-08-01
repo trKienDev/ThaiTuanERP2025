@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Account.Repositories;
+using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
@@ -14,8 +15,9 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 		private readonly ThaiTuanERP2025DbContext _context;
 		public UserRepository(ThaiTuanERP2025DbContext context)
 		{
-			_context = context;
+			_context = context ?? throw new ArgumentNullException(nameof(context));
 		}
+
 
 		public async Task<User?> GetByIdAsync(Guid id) {
 			return await _context.Users.Include(u => u.Department)
@@ -32,8 +34,11 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 				.Include(u => u.UserGroups).ThenInclude(ug => ug.Group).ToListAsync();
 		}
 
-		public async Task AddAsync(User user) {
-			await _context.Users.AddAsync(user);
+		public Task AddAsync(User user)
+		{
+			_context.Users.Add(user);
+
+			return Task.CompletedTask;
 		}
 
 		public async Task UpdateAysnc(User user) {

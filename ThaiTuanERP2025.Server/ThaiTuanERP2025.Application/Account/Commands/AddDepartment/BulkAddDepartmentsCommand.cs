@@ -8,5 +8,5 @@ using System.Threading.Tasks;
 namespace ThaiTuanERP2025.Application.Account.Commands.AddDepartment
 {
 	public record DepartmentDtoForImport(string Code, string Name);
-	public record BulkAddDepartmentsCommand(List<DepartmentDtoForImport> Departments) : IRequest<int>;
+	public record BulkAddDepartmentsCommand(List<DepartmentDtoForImport> Departments) : IRequest<Unit>;
 }

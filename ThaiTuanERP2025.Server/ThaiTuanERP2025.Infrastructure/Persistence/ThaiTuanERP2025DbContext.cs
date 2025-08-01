@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Domain.Account.Entities;
 
 namespace ThaiTuanERP2025.Infrastructure.Persistence
@@ -84,6 +85,11 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 				builder.HasOne(ug => ug.User).WithMany(u => u.UserGroups).HasForeignKey(ug => ug.UserId);
 				builder.HasOne(ug => ug.Group).WithMany(g => g.UserGroups).HasForeignKey(ug => ug.GroupId);
 			});
+		}
+
+		public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+		{
+			return base.SaveChangesAsync(cancellationToken);
 		}
 	}
 }

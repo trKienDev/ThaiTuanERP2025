@@ -6,20 +6,21 @@ using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Application.Account.Repositories;
+using ThaiTuanERP2025.Application.Common.Persistence;
 
 namespace ThaiTuanERP2025.Application.Account.Queries.GetUserById
 {
 	public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserDto>
 	{
-		private readonly IUserRepository _userRepository;
+		private readonly IUnitOfWork _unitOfWork;
 
-		public GetUserByIdQueryHandler(IUserRepository userRepository)
+		public GetUserByIdQueryHandler(IUnitOfWork unitOfWork)
 		{
-			_userRepository = userRepository;
+			_unitOfWork = unitOfWork;
 		}
 
 		public async Task<UserDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken) {
-			var user = await _userRepository.GetByIdAsync(request.Id);
+			var user = await _unitOfWork.Users.GetByIdAsync(request.Id);
 			if (user == null) throw new Exception("User không tồn tại");
 
 			return new UserDto
@@ -31,6 +32,12 @@ namespace ThaiTuanERP2025.Application.Account.Queries.GetUserById
 				Phone = user.Phone?.Value,
 				Role = user.Role,
 				DepartmentId = user.DepartmentId,
+				Department = user.Department is null ? null : new DepartmentDto
+				{
+					Id = user.Department.Id,
+					Name = user.Department.Name,
+					Code = user.Department.Code
+				}
 			};
 		}
 	}

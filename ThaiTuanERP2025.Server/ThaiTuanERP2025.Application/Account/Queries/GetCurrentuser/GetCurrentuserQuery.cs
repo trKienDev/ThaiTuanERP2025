@@ -7,12 +7,12 @@ using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Account.Dtos;
 
-namespace ThaiTuanERP2025.Application.Account.Queries.GetCurrentuser
+namespace ThaiTuanERP2025.Application.Account.Queries.GetCurrentUser
 {
-	public class GetCurrentuserQuery : IRequest<UserDto>
+	public class GetCurrentUserQuery : IRequest<UserDto>
 	{
 		public ClaimsPrincipal UserPrincipal { get; }
-		public GetCurrentuserQuery(ClaimsPrincipal userPrincipal)
+		public GetCurrentUserQuery(ClaimsPrincipal userPrincipal)
 		{
 			UserPrincipal = userPrincipal;
 		}
