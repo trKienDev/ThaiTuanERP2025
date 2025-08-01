@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 
 namespace ThaiTuanERP2025.Application.Account.Commands.AddDepartment
 {
-	public record AddDepartmentCommand(string Name, string Code) : IRequest<Guid>;
+	public record AddDepartmentCommand(string Name, string Code) : IRequest<Unit>;
 }

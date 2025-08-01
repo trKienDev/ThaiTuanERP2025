@@ -5,28 +5,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Account.Repositories;
+using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Domain.Account.Entities;
 
 namespace ThaiTuanERP2025.Application.Account.Commands.AddDepartment
 {
-	public class BulkAddDepartmentsCommandHandler : IRequestHandler<BulkAddDepartmentsCommand, int>
+	public class BulkAddDepartmentsCommandHandler : IRequestHandler<BulkAddDepartmentsCommand, Unit>
 	{
-		private readonly IDepartmentRepository _departmentRepository;
-		public BulkAddDepartmentsCommandHandler(IDepartmentRepository departmentRepository)
+		private readonly IUnitOfWork _unitOfWork;
+		public BulkAddDepartmentsCommandHandler(IUnitOfWork unitOfWork)
 		{
-			_departmentRepository = departmentRepository ?? throw new ArgumentNullException(nameof(departmentRepository));
+			_unitOfWork = unitOfWork;
 		}
 
-		public async Task<int> Handle(BulkAddDepartmentsCommand request, CancellationToken cancellationToken)
+		public async Task<Unit> Handle(BulkAddDepartmentsCommand request, CancellationToken cancellationToken)
 		{
-			int count = 0;
-			foreach(var dto in request.Departments)
-			{
+			var departments = new List<Department>();
+			foreach(var dto in request.Departments) {
 				var dept = new Department(dto.Name, dto.Code);
-				await _departmentRepository.AddAsync(dept, cancellationToken);
-				count++;
+				departments.Add(dept);
 			}
-			return count;
+
+			await _unitOfWork.Departments.AddRangeAysnc(departments);
+			await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+			return Unit.Value;
 		}
 	}
 }
