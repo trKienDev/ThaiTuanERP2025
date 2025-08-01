@@ -14,17 +14,26 @@ using ThaiTuanERP2025.Infrastructure.Seeding;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Infrastructure.Authentication;
 using System.Text.Json.Serialization;
+using ThaiTuanERP2025.Application.Common.Persistence;
+using ThaiTuanERP2025.Infrastructure.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddOpenApi();
 builder.Services.AddMediatR(typeof(AssemblyReference).Assembly);
-builder.Services.AddDbContext<ThaiTuanERP2025DbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("ThaiTuanERP2025Db")));
+builder.Services.AddDbContext<ThaiTuanERP2025DbContext>(options => {
+	options.UseSqlServer(builder.Configuration.GetConnectionString("ThaiTuanERP2025Db"), sqlOptions => {
+		sqlOptions.EnableRetryOnFailure();
+	})
+	.EnableSensitiveDataLogging() // In tham số truy vấn
+	.LogTo(Console.WriteLine, LogLevel.Information); // In toàn bộ SQL ra console
+});
 builder.Services.AddValidatorsFromAssembly(typeof(CreateUserCommandValidator).Assembly);
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<iJWTProvider, JwtProvider>(); 
+builder.Services.AddScoped<IUnitOfWork, AppUnitOfWork>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {

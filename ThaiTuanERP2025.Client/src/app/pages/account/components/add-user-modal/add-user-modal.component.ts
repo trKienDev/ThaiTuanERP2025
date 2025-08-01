@@ -23,7 +23,10 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class AddUserModalComponent {
       @Output() close = new EventEmitter<void>();
-      @Output() save = new EventEmitter<any>();
+      @Output() save = new EventEmitter<{
+            user: User,
+            callback: (ok: boolean, message?: string) => void // truyền callback
+      }>();
       
       readonly roles = Object.values(UserRole);
 
@@ -35,21 +38,14 @@ export class AddUserModalComponent {
             password: '',
             role: UserRole.User,
             phone: undefined,
-            department: '',
+            departmentId: '',
+            department: undefined,
             position: '',
       };
       departments: Department[] = [];
       filteredDepartments: Department[] = [];
       selectedDepartmentName: string = '';
-
       showPassword = false;
-      showConfirmPassword = false;
-      confirmPassword: string = '';
-
-      get passwordMismatch(): boolean {
-            console.log('passsword mismatch');
-            return this.user.password !== this.confirmPassword && this.confirmPassword !== '';
-      }
 
       constructor(private departmentService: DepartmentService) {
             this.loadDepartments();
@@ -68,28 +64,32 @@ export class AddUserModalComponent {
             });
       }
 
-      onDepartmentInputChange(input: string): void {
+      onDepartmentInputChange(value: string) {
+            const lowerValue = value.toLowerCase(); 
             this.filteredDepartments = this.departments.filter(dept => 
-                  `${dept.code} ${dept.name}`.toLowerCase().includes(input.toLowerCase())
-            )
+                  dept.name.toLowerCase().includes(lowerValue) ||
+                  dept.code.toLowerCase().includes(lowerValue)
+            );
       }
-
-      onDepartmentSelected(deptName: string): void {
-            const selected = this.departments.find(d => d.name === deptName);
-            if(selected) {
-                  this.user.department = selected.id ?? '';
-            }
+      onDepartmentSelected(deptId: string) {
+            this.user.department?.id ?? deptId;
       }
-
-      onDepartmentBlur(event: FocusEvent): void {
-            const input = event.target as HTMLInputElement | null;
-            if(!input) return;
-            this.onDepartmentSelected(input.value);
+      displayDepartmentFn = (deptId: string): string => {
+            const dept = this.departments.find(d => d.id === deptId);
+            return dept ? `${dept.code} - ${dept.name}` : '';
       }
 
       onSubmit() {
-            this.save.emit(this.user);
-            this.onClose();
+            this.save.emit({
+                  user: this.user,
+                  callback: (ok, message?: string) => {
+                        if(ok) { 
+                              alert('Tạo user thành công');
+                              this.onClose(); 
+                        }
+                        else alert(message || 'Lỗi tạo user');
+                  }
+            });
       }
 
       onClose() {
