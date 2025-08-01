@@ -52,6 +52,7 @@ namespace ThaiTuanERP2025.Application.Account.Queries.GetAllUsers
 				Id = u.Id,
 				FullName = u.FullName,
 				Username = u.Username,
+				Position = u.Position,
 				Email = u.Email?.Value,
 				Phone = u.Phone?.Value,
 				Role = u.Role,

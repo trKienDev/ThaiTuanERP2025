@@ -13,5 +13,6 @@ namespace ThaiTuanERP2025.Application.Account.Repositories
 		Task AddRangeAysnc(IEnumerable<Department> departments);
 		Task<bool> ExistAsync(Guid departmentId);
 		Task<List<Department>> GetAllAsync(CancellationToken cancellationToken);
+		Task<List<Department>> GetByIdAsync(IEnumerable<Guid> departmentIds, CancellationToken cancellationToken);
 	}
 }

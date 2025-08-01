@@ -20,6 +20,10 @@ export class DepartmentService {
             );
       }
 
+      getByIds(ids: string[]) {
+            return this.http.post<ApiResponse<Department[]>>(`${this.API_URL}/by-ids`, ids);
+      } 
+
       add(dept: Department): Observable<void> {
             return this.http.post<ApiResponse<{ departmentId: string }>>(this.API_URL, dept).pipe(
                   map(res => {
