@@ -22,11 +22,38 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 			return await _dbContext.Departments.ToListAsync(cancellationToken);
 		}
 
+		public async Task AddRangeAysnc(IEnumerable<Department> departments)
+		{
+			if (departments == null || !departments.Any()) throw new ArgumentNullException(nameof(departments));
+			await _dbContext.Departments.AddRangeAsync(departments);
+			await _dbContext.SaveChangesAsync();
+		}
+
+		public async Task<bool> ExistAsync(Guid departmentId)
+		{
+			return await _dbContext.Departments.AnyAsync(d => d.Id == departmentId);
+		}
+
 		public async Task AddAsync(Department department, CancellationToken cancellationToken)
 		{
 			if (department == null) throw new ArgumentNullException(nameof(department));
 			await _dbContext.Departments.AddAsync(department, cancellationToken);
 			await _dbContext.SaveChangesAsync(cancellationToken);
 		}
+
+		public async Task<List<Department>> GetByIdAsync(IEnumerable<Guid> departmentIds, CancellationToken cancellationToken)
+		{
+			if (departmentIds == null || !departmentIds.Any())
+				return new List<Department>();
+
+			var guidList = departmentIds.Select(id => $"'{id}'").ToList();
+			var sql = $"SELECT * FROM Departments WHERE Id IN ({string.Join(",", guidList)})";
+
+			return await _dbContext.Departments
+			    .FromSqlRaw(sql)
+			    .AsNoTracking()
+			    .ToListAsync(cancellationToken);
+		}
+
 	}
 }

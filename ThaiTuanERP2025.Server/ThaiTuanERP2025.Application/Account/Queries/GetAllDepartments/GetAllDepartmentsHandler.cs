@@ -20,7 +20,12 @@ namespace ThaiTuanERP2025.Application.Account.Queries.GetAllDepartments
 		public async Task<List<DepartmentDto>> Handle(GetAllDepartmentsQuery request, CancellationToken cancellationToken)
 		{
 			var departments = await _departmentRepository.GetAllAsync(cancellationToken);
-			return departments.Select(d => new DepartmentDto(d.Id, d.Name, d.Code)).ToList();
+			return departments.Select(d => new DepartmentDto
+			{
+				Id = d.Id,
+				Name = d.Name,
+				Code = d.Code
+			}).ToList();
 		}
 	}
 }

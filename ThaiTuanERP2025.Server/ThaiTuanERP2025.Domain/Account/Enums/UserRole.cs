@@ -15,6 +15,6 @@ namespace ThaiTuanERP2025.Domain.Account.Enums
 		[Display(Name = "Quản lý")]
 		manager = 1,
 		[Display(Name = "Nhân viên")]
-		employee = 2
+		user = 2
 	}
 }
