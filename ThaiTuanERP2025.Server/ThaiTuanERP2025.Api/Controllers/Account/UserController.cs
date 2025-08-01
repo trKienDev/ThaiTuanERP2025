@@ -6,6 +6,7 @@ using ThaiTuanERP2025.Application.Account.Commands.CreateUser;
 using ThaiTuanERP2025.Application.Account.Commands.UpdateUser;
 using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Application.Account.Queries.GetAllUsers;
+using ThaiTuanERP2025.Application.Account.Queries.GetCurrentUser;
 using ThaiTuanERP2025.Application.Account.Queries.GetUserById;
 
 namespace ThaiTuanERP2025.Api.Controllers.Account
@@ -29,14 +30,6 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			var user = await _mediator.Send(new GetUserByIdQuery(id));
 			return Ok(ApiResponse<UserDto>.Success(user));	
 		}
-		/// <summary>
-		/// Tạo người dùng
-		/// </summary>
-		[HttpPost]
-		public async Task<IActionResult> Create([FromBody] CreateUserCommand command) {
-			var result = await _mediator.Send(command);
-			return Ok(ApiResponse<UserDto>.Success(result));
-		}
 
 		/// <summary>
 		/// Lấy danh sách người dùng có thể lọc theo keyword, role, department
@@ -48,6 +41,23 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			return Ok(ApiResponse<List<UserDto>>.Success(result));
 		}
 
+		[HttpGet("me")]
+		public async Task<IActionResult> GetMe() {
+			var user = await _mediator.Send(new GetCurrentUserQuery(User));
+			return Ok(ApiResponse<UserDto>.Success(user));
+		}
+
+		/// <summary>
+		/// Tạo người dùng
+		/// </summary>
+		[HttpPost]
+		public async Task<IActionResult> Create([FromBody] CreateUserCommand command)
+		{
+			var result = await _mediator.Send(command);
+			return Ok(ApiResponse<UserDto>.Success(result));
+		}
+
+
 		[Authorize(Roles = "Admin")]
 		[HttpPut("{id:guid}")]
 		public async Task<IActionResult> Update(Guid id, [FromBody] UpdateUserCommand command) {
@@ -55,5 +65,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			var result = await _mediator.Send(command);
 			return Ok(ApiResponse<UserDto>.Success(result));
 		}
+
+
 	}
 }

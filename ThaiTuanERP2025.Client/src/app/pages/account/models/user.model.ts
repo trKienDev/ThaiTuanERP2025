@@ -1,3 +1,4 @@
+import { Department } from "./department.model";
 import { UserRole } from "./user-roles.enum";
 
 export interface User {
@@ -10,6 +11,6 @@ export interface User {
       avatarUrl?: string;
       role: UserRole;
       phone?: number;
-      departmentId: string;
+      department?: Department;
       position: string;
 }

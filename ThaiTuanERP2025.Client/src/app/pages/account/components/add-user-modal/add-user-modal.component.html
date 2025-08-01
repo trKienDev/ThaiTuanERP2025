@@ -45,7 +45,7 @@
                               <mat-label>Phòng ban</mat-label>
                               <input type="text" 
                                     matInput [matAutocomplete]="auto" 
-                                    [(ngModel)]="user.departmentId" 
+                                    [(ngModel)]="user.department?.id" 
                                     (ngModelChange)="onDepartmentInputChange($event)"
                                     name="department" 
                               required/>

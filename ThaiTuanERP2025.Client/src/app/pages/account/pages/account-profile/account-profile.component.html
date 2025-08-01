@@ -8,26 +8,26 @@
                   <div class="col-body-wrapper">
                         <div class="row">
                               <div class="fullname-wrapper">
-                                    <span class="username"></span>
+                                    <span class="username">{{ user?.fullName }}</span>
                               </div>
                               <div class="employee-code-wrapper">
-                                    <span class="employee-code"></span>
+                                    <span class="employee-code">{{ user?.employeeCode }}</span>
                               </div>
                         </div>
                         <div class="row">
                               <div class="user-email-wrapper">
-                                    <div class="user-email"></div>
+                                    <span class="user-email">{{ user?.email }}</span>
                               </div>
                               <div class="user-phone-wrapper">
-                                    <div class="user-phone"></div>
+                                    <span class="user-phone"></span>
                               </div>
                         </div>
                         <div class="row">
                               <div class="user-department-wrapper">
-                                    <div class="user-department"></div>
+                                    <span class="user-department">{{ user?.department?.name }}</span>
                               </div>
                               <div class="user-position-wrapper">
-                                    <div class="user-position"></div>
+                                    <div class="user-position">{{ user?.position }}</div>
                               </div>
                         </div>
                   </div>
