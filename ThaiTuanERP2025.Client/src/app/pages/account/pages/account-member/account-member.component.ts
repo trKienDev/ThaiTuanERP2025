@@ -17,20 +17,22 @@ export class AccountMemberComponent {
 
       constructor(private userService: UserService){}
 
-      addUser(newUser: Partial<User>) {
-            this.userService.createUser(newUser).subscribe({
+      addUser({ user, callback}: {
+            user: Partial<User>,
+            callback: (ok: boolean, message?: string) => void
+      }) {
+            this.userService.createUser(user).subscribe({
                   next: (res) => {
                         if(res.isSuccess && res.data) {
                               this.users.push(res.data);
-                              this.showModal = false;
+                              callback(true);
                         } else {
-                              alert(res.message ?? 'Lỗi tạo user');
+                              callback(false, res.message ?? 'Tạo user thất bại');
                         }
-                  }, 
-                  error: (err) => {
+                  }, error: (err) => {
                         console.error('Lỗi khi tạo user: ', err);
-                        alert('Không thể kết nối tới server');
+                        callback(false, 'Không thể kết nối tới server');
                   }
-            });
-      }
+            })
+      };
 }

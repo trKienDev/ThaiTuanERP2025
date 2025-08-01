@@ -43,11 +43,17 @@
                   <div class="d-flex gap-5p">
                         <mat-form-field appearance="fill">
                               <mat-label>Phòng ban</mat-label>
-                              <input type="text" matInput [matAutocomplete]="auto" [(ngModel)]="selectedDepartmentName" (ngModelChange)="onDepartmentInputChange($event)"
-                                    (blur)="onDepartmentBlur($event)" name="departmentName" required/>
-                                    <mat-autocomplete #auto="matAutocomplete">
-                                          <mat-option *ngFor="let dept of filteredDepartments" [value]="dept.id"> {{ dept.code }} - {{ dept.name }} </mat-option>
-                                    </mat-autocomplete>
+                              <input type="text" 
+                                    matInput [matAutocomplete]="auto" 
+                                    [(ngModel)]="user.departmentId" 
+                                    (ngModelChange)="onDepartmentInputChange($event)"
+                                    name="department" 
+                              required/>
+                              <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayDepartmentFn">
+                                    <mat-option *ngFor="let dept of filteredDepartments" [value]="dept.id"> 
+                                          {{ dept.code }} - {{ dept.name }} 
+                                    </mat-option>
+                              </mat-autocomplete>
                         </mat-form-field>
                         <label for="">
                               Chức vụ
@@ -57,23 +63,13 @@
 
                   <div>
                         <mat-form-field appearance="fill" class="w-50">
-          <mat-label>Mật khẩu</mat-label>
-          <input matInput [type]="showPassword ? 'text' : 'password'"
-                 [(ngModel)]="user.password" name="password" required />
-          <button mat-icon-button matSuffix type="button" (click)="showPassword = !showPassword">
-            <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-          </button>
-        </mat-form-field>
-
-        <mat-form-field appearance="fill" class="w-50">
-          <mat-label>Nhập lại mật khẩu</mat-label>
-          <input matInput [type]="showConfirmPassword ? 'text' : 'password'"
-                 [(ngModel)]="confirmPassword" name="confirmPassword" required />
-          <button mat-icon-button matSuffix type="button" (click)="showConfirmPassword = !showConfirmPassword">
-            <mat-icon>{{ showConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-          </button>
-          <mat-error *ngIf="passwordMismatch">Mật khẩu không khớp</mat-error>
-        </mat-form-field>
+                              <mat-label>Mật khẩu</mat-label>
+                              <input matInput [type]="showPassword ? 'text' : 'password'"
+                                    [(ngModel)]="user.password" name="password" required />
+                              <button mat-icon-button matSuffix type="button" (click)="showPassword = !showPassword">
+                                    <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                              </button>
+                        </mat-form-field>
                   </div>
 
                   <div class="actions">
