@@ -5,23 +5,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Account.Repositories;
+using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Domain.Account.Entities;
 
 namespace ThaiTuanERP2025.Application.Account.Commands.AddDepartment
 {
-	public class AddDepartmentCommandHandler : IRequestHandler<AddDepartmentCommand, Guid>
+	public class AddDepartmentCommandHandler : IRequestHandler<AddDepartmentCommand, Unit>
 	{
-		private readonly IDepartmentRepository _departmentRepository;
-		public AddDepartmentCommandHandler(IDepartmentRepository departmentRepository)
+		private readonly IUnitOfWork _unitOfWork;
+		public AddDepartmentCommandHandler(IUnitOfWork unitOfWork)
 		{
-			_departmentRepository = departmentRepository ?? throw new ArgumentNullException(nameof(departmentRepository));
+			_unitOfWork = unitOfWork;
 		}
 
-		public async Task<Guid> Handle(AddDepartmentCommand request, CancellationToken cancellationToken)
+		public async Task<Unit> Handle(AddDepartmentCommand request, CancellationToken cancellationToken)
 		{
 			var department = new Department(request.Name, request.Code);
-			await _departmentRepository.AddAsync(department, cancellationToken);
-			return department.Id;
+			await _unitOfWork.Departments.AddAsync(department, cancellationToken);
+			await _unitOfWork.SaveChangesAsync(cancellationToken);
+			return Unit.Value;
 		}
 	}	
 }

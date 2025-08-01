@@ -22,6 +22,18 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 			return await _dbContext.Departments.ToListAsync(cancellationToken);
 		}
 
+		public async Task AddRangeAysnc(IEnumerable<Department> departments)
+		{
+			if (departments == null || !departments.Any()) throw new ArgumentNullException(nameof(departments));
+			await _dbContext.Departments.AddRangeAsync(departments);
+			await _dbContext.SaveChangesAsync();
+		}
+
+		public async Task<bool> ExistAsync(Guid departmentId)
+		{
+			return await _dbContext.Departments.AnyAsync(d => d.Id == departmentId);
+		}
+
 		public async Task AddAsync(Department department, CancellationToken cancellationToken)
 		{
 			if (department == null) throw new ArgumentNullException(nameof(department));
