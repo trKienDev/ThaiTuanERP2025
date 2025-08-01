@@ -24,6 +24,10 @@ export class UserService {
             );
       }
 
+      getCurrentuser(): Observable<ApiResponse<User>> {
+            return this.http.get<ApiResponse<User>>(`${this.API_URL}/me`);
+      }
+
       getUserById(id: string): Observable<ApiResponse<User>> {
             return this.http.get<ApiResponse<User>>(`${this.API_URL}/${id}`);
       }
