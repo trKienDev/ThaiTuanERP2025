@@ -9,10 +9,10 @@ using ThaiTuanERP2025.Application.Common.Persistence;
 
 namespace ThaiTuanERP2025.Application.Account.Queries.GetDepartmentsByIds
 {
-	public class GetDepartmentsByIdsHandler : IRequestHandler<GetDepartmentsByIdsQuery, List<DepartmentDto>>
+	public class GetDepartmentsByIdsQueryHandler : IRequestHandler<GetDepartmentsByIdsQuery, List<DepartmentDto>>
 	{
 		private readonly IUnitOfWork _unitOfWork;
-		public GetDepartmentsByIdsHandler(IUnitOfWork unitOfWork)
+		public GetDepartmentsByIdsQueryHandler(IUnitOfWork unitOfWork)
 		{
 			_unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
 		}
