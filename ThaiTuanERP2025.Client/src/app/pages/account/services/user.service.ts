@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { User } from "../models/user.model";
-import { Observable } from "rxjs";
+import { catchError, map, Observable, throwError } from "rxjs";
 import { ApiResponse } from "../../../core/models/api-response.model";
 
 @Injectable({ providedIn: 'root'})
@@ -14,8 +14,14 @@ export class UserService {
             return this.http.post<ApiResponse<User>>(this.API_URL, user);
       } 
 
-      getAllUsers(): Observable<ApiResponse<User[]>> {
-            return this.http.get<ApiResponse<User[]>>(this.API_URL);
+      getAllUsers(): Observable<User[]> {
+            return this.http.get<ApiResponse<User[]>>(`${this.API_URL}/all`).pipe(
+                  map(res => {
+                        if(res.isSuccess && res.data) return res.data;
+                        throw new Error(res.message || 'Không thể tải danh sách user');
+                  }), 
+                  catchError(err => throwError(() => new Error(err?.error?.message || 'Không thể tải danh sách users')))
+            );
       }
 
       getUserById(id: string): Observable<ApiResponse<User>> {

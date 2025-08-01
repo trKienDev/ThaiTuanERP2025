@@ -8,4 +8,6 @@ import { Component } from "@angular/core";
       templateUrl: './account-profile.component.html',
       styleUrl: './account-profile.component.scss',
 })
-export class AccountProfileComponent {}
+export class AccountProfileComponent {
+      
+}

@@ -41,7 +41,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 		/// <summary>
 		/// Lấy danh sách người dùng có thể lọc theo keyword, role, department
 		/// </summary>
-		[HttpGet]
+		[HttpGet("all")]
 		public async Task<IActionResult> GetAll([FromQuery] string? keyword, [FromQuery] string? role, Guid? departmentId) {
 			var query = new GetAllUsersQuery(keyword, role, departmentId);
 			var result = await _mediator.Send(query);
