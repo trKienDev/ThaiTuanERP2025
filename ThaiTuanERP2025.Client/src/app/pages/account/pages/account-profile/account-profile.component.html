@@ -1,36 +1,51 @@
-<div class="user-profile-wrapper">
-      <div class="col-left">
-            <img class="avatar-img" src="" alt="avatar user">
-      </div>
-      <div class="col-right">
-            <div class="col-header">Thông tin cá nhân</div>
-            <div class="col-body">
-                  <div class="col-body-wrapper">
-                        <div class="row">
-                              <div class="fullname-wrapper">
-                                    <span class="username">{{ user?.fullName }}</span>
-                              </div>
-                              <div class="employee-code-wrapper">
-                                    <span class="employee-code">{{ user?.employeeCode }}</span>
-                              </div>
-                        </div>
-                        <div class="row">
-                              <div class="user-email-wrapper">
-                                    <span class="user-email">{{ user?.email }}</span>
-                              </div>
-                              <div class="user-phone-wrapper">
-                                    <span class="user-phone">{{ user?.phone }}</span>
-                              </div>
-                        </div>
-                        <div class="row">
-                              <div class="user-department-wrapper">
-                                    <span class="user-department">{{ user?.department?.name }}</span>
-                              </div>
-                              <div class="user-position-wrapper">
-                                    <div class="user-position">{{ user?.position }}</div>
+<div class="user-profile">
+      <div class="user-profile-container d-flex">
+            <div class="col-left">
+                  <div class="username-wrapper">
+                        <div class="username">&#64;{{ user?.username || '---' }}</div>
+                  </div>
+                  <div class="avatar-img-wrapper">
+                        <img class="avatar-img" [src]="user?.avatarUrl || 'default-user-avatar.jpg'" alt="avatar user"
+                              (click)="triggerAvatarUpload()" style="cursor: pointer;"/>
+                        <input type="file" id="avatar-input" hidden accept="image/png, image/jpeg, image/jpg" (change)="onAvatarSelected($event)">
+                  </div>
+                  <div class="save-avatar-wrapper d-flex justify-content-center">
+                        <button class="button-1" (click)="uploadAvatar()">Cập nhật avatar</button>
+                  </div>
+            </div>
+            <div class="col-right">
+                  <div class="primary-card">
+                        <div class="card-header">Thông tin cá nhân</div>
+                        <div class="card-body">
+                              <div class="d-flex fl-wrap">
+                                    <div class="row fullname-wrapper w-50">
+                                          <label for="user-fullname">Họ tên</label>
+                                          <div class="card-box user-fullname">{{ user?.fullName || '---' }}</div>
+                                    </div>
+                                    <div class="row employee-code-wrapper w-50">
+                                          <label for="employee-code">Mã nhân viên</label>
+                                          <div class="card-box employee-code">{{ user?.employeeCode || '---' }}</div>
+                                    </div>
+                                    <div class="row user-email-wrapper w-50">
+                                          <label for="user-email">Email</label>
+                                          <div class="card-box user-email">{{ user?.email || '---' }}</div>
+                                    </div>
+                                    <div class="row user-phone-wrapper w-50">
+                                          <label for="user-phone">Số điện thoại</label>
+                                          <div class="card-box user-phone">{{ user?.phone || '---' }}</div>
+                                    </div>
+                                    <div class="row user-department-wrapper w-50">
+                                          <label for="user-department">Phòng ban</label>
+                                          <div class="card-box user-department">{{ user?.department?.name || '---' }}</div>
+                                    </div>
+                                    <div class="row user-position-wrapper w-50">
+                                          <label for="user-position">Chức vụ</label>
+                                          <div class="card-box user-position">{{ user?.position || '---' }}</div>
+                                    </div>
                               </div>
                         </div>
                   </div>
+
             </div>
       </div>
 </div>

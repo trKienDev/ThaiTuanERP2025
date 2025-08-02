@@ -1,6 +1,11 @@
 // display
 .d-flex { display: flex; }
+.fl-wrap { flex-wrap: wrap;}
 .d-none { display: none; }
+
+// justify-content
+.justify-content-center { justify-content: center; }
+
 // gap
 .gap-5p { gap: 5px; }
 .gap-10p { gap: 10px; }
@@ -15,3 +20,5 @@
 .w-60 { width: 60%; }
 .w-70 { width: 70%; }
 .w-75 { width: 75%; }
+//max-width 
+.mw-100 { max-width: 100%;}

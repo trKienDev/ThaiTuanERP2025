@@ -23,7 +23,7 @@ namespace ThaiTuanERP2025.Application.Account.Commands.Login
 		}
 
 		public async Task<LoginResultDto> Handle(LoginCommand request, CancellationToken cancellationToken) { 
-			var user = await _userRepository.GetByUsernameAsync(request.Username);
+			var user = await _userRepository.GetByEmployeeCode(request.EmployeeCode);
 			if (user == null || !PasswordHasher.Verify(request.Password, user.PasswordHash)) {
 				throw new AppException("Tên đăng nhập hoặc mật khẩu không đúng");
 			}

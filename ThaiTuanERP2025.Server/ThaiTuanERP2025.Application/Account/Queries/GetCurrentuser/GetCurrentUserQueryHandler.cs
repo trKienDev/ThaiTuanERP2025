@@ -33,9 +33,12 @@ namespace ThaiTuanERP2025.Application.Account.Queries.GetCurrentUser
 				Id = user.Id,
 				Username = user.Username,
 				FullName = user.FullName,
+				EmployeeCode = user.EmployeeCode,
 				Email = user.Email?.Value,
 				Phone = user.Phone?.Value,
+				Position = user.Position,
 				Role = user.Role,
+				AvatarUrl = user.AvatarUrl,
 				DepartmentId = user.DepartmentId,
 				Department = user.Department is null ? null : new DepartmentDto
 				{

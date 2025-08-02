@@ -27,8 +27,8 @@ export class AuthService {
             if(storedRole) this.roleSubject.next(storedRole);
       }
 
-      login(username: string, password: string): Observable<ApiResponse<LoginResponse>> {
-            return this.http.post<ApiResponse<LoginResponse>>(`${this.API_URL}/login`, { username, password });
+      login(employeeCode: string, password: string): Observable<ApiResponse<LoginResponse>> {
+            return this.http.post<ApiResponse<LoginResponse>>(`${this.API_URL}/login`, { employeeCode, password });
       }
       loginSuccess(token: string, role: string) {
             localStorage.setItem(this.TOKEN_KEY, token);
