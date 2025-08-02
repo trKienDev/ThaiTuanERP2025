@@ -7,10 +7,17 @@
 }
 .primary-card .card-header {
       font-size: 15px;
-      font-weight: 500;
+      font-weight: bold;
       padding: 15px;
       border-bottom: 1px solid var(--default-border);
 }
 .primary-card .card-body {
       padding: 15px;
+}
+.primary-card .card-box {
+      width: 80%;
+      border: 1px solid var(--default-border);
+      border-radius: 5px;
+      padding: 10px;
+      user-select: none;
 }

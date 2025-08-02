@@ -16,6 +16,8 @@ using ThaiTuanERP2025.Infrastructure.Authentication;
 using System.Text.Json.Serialization;
 using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Infrastructure.Common;
+using ThaiTuanERP2025.Application.Account.Mappings;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +37,7 @@ builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<iJWTProvider, JwtProvider>(); 
 builder.Services.AddScoped<IUnitOfWork, AppUnitOfWork>();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddAutoMapper(typeof(Program)); 
 builder.Services.AddSwaggerGen(options =>
 {
 	options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
@@ -124,6 +127,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.UseDeveloperExceptionPage();
+app.UseStaticFiles();
 
 app.Run();
 

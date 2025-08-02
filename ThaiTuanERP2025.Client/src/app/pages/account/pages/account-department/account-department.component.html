@@ -9,7 +9,7 @@
                   <form class="d-flex gap-10p" (ngSubmit)="addDepartment()" #departmentForm="ngForm">
                         <input class="w-25" type="text" name="code" [(ngModel)]="newDepartment.code" placeholder="Mã phòng ban" required/>
                         <input class="w-60" type="text" name="name" [(ngModel)]="newDepartment.name" placeholder="Tên phòng ban" required/>
-                        <button class="w-15 button-62" type="submit" [disabled]="!departmentForm.valid">Thêm</button>
+                        <button class="w-15 button-stackoverflow" type="submit" [disabled]="!departmentForm.valid">Thêm</button>
                   </form>
             </div>
       </div>
