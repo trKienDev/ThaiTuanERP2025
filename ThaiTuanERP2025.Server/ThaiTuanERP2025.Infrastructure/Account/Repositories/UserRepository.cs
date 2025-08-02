@@ -29,6 +29,11 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 			return await _context.Users.Include(u => u.UserGroups).ThenInclude(ug => ug.Group)
 				.FirstOrDefaultAsync(u => u.Username == username);
 		}
+		public async Task<User?> GetByEmployeeCode(string employeeCode)
+		{
+			return await _context.Users.Include(u => u.UserGroups).ThenInclude(ug => ug.Group)
+				.FirstOrDefaultAsync(u => u.EmployeeCode == employeeCode);
+		}
 		public async Task<List<User>> GetAllAsync() {
 			return await _context.Users.Include(u => u.Department)
 				.Include(u => u.UserGroups).ThenInclude(ug => ug.Group).ToListAsync();

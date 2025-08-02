@@ -14,7 +14,7 @@ import { AuthService } from '../../core/services/auth/auth.service.js';
       styleUrls: ['./login.page.scss'],
 })
 export class LoginComponent implements OnInit{
-      username = '';
+      employeeCode = '';
       password = '';
       showPassword = false;
       message: string | null = null;
@@ -51,13 +51,15 @@ export class LoginComponent implements OnInit{
       }
 
       login() {
+            console.log('run login');
             this.message = null;
             this.isLoading = true;
 
-            this.authService.login(this.username, this.password).subscribe({
+            this.authService.login(this.employeeCode, this.password).subscribe({
                   next: (res: ApiResponse<LoginResponse>) => {
                         this.isLoading = false;
-                        
+                        console.log('res.success: ', res.isSuccess);
+                        console.log('res.data: ', res.data);
                         if(res.isSuccess && res.data?.accessToken && res.data.userRole) {
                               const { accessToken, userRole } = res.data;
 

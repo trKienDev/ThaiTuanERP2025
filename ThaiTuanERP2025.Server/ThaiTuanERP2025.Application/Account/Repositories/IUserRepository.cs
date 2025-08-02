@@ -11,6 +11,7 @@ namespace ThaiTuanERP2025.Application.Account.Repositories
 	public interface IUserRepository
 	{
 		Task<User?> GetByIdAsync(Guid id);
+		Task<User?> GetByEmployeeCode(string employeeCode);
 		Task<User?> GetByUsernameAsync(string username);
 		Task<List<User>> GetAllAsync();
 

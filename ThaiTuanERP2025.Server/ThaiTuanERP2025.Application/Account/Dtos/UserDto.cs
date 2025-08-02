@@ -12,9 +12,12 @@ namespace ThaiTuanERP2025.Application.Account.Dtos
 		public Guid Id { get; set; }
 		public string FullName { get; set; } = default!;
 		public string Username { get; set; } = default!;
+		public string EmployeeCode { get; set; } = default!;
 		public string Position { get; set; } = default!;
 		public string? Email { get; set; }
 		public string? Phone { get; set; }
+		public string AvatarUrl { get; set; } = default!;
+
 		public UserRole Role { get; set; } = default!;
 		public Guid DepartmentId { get; set; }
 
