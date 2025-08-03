@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +16,11 @@ namespace ThaiTuanERP2025.Application.Account.Queries.GetCurrentUser
 	public class GetCurrentUserQueryHandler : IRequestHandler<GetCurrentUserQuery, UserDto> 
 	{
 		private readonly IUnitOfWork _unitOfWork;
-		public GetCurrentUserQueryHandler(IUnitOfWork unitOfWork)
+		private readonly IMapper _mapper;
+		public GetCurrentUserQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
 		{
 			_unitOfWork = unitOfWork;
+			_mapper = mapper;
 		}
 
 		public async Task<UserDto> Handle(GetCurrentUserQuery request, CancellationToken cancellationToken) {
@@ -28,25 +31,7 @@ namespace ThaiTuanERP2025.Application.Account.Queries.GetCurrentUser
 			var user = await _unitOfWork.Users.GetByIdAsync(userId)
 				?? throw new NotFoundException("Người dùng không tồn tại");
 
-			return new UserDto
-			{
-				Id = user.Id,
-				Username = user.Username,
-				FullName = user.FullName,
-				EmployeeCode = user.EmployeeCode,
-				Email = user.Email?.Value,
-				Phone = user.Phone?.Value,
-				Position = user.Position,
-				Role = user.Role,
-				AvatarUrl = user.AvatarUrl,
-				DepartmentId = user.DepartmentId,
-				Department = user.Department is null ? null : new DepartmentDto
-				{
-					Id = user.Department.Id,
-					Name = user.Department.Name,
-					Code = user.Department.Code
-				}
-			};
+			return _mapper.Map<UserDto>(user);
 		}
 	}
 }
