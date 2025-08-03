@@ -10,6 +10,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 	public class Group
 	{
 		public Guid Id { get; private set; }
+		public Guid AdminId { get; private set; }
 		public string Name { get; private set; } = string.Empty;
 		public string Description { get; private set; } = string.Empty;
 

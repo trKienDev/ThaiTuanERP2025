@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,13 +15,14 @@ using ThaiTuanERP2025.Domain.Common;
 
 namespace ThaiTuanERP2025.Application.Account.Commands.CreateUser
 {
-	
 	public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserDto>
 	{
 		private readonly IUnitOfWork _unitOfWork;
-		public CreateUserCommandHandler(IUnitOfWork unitOfWork)
+		private readonly IMapper _mapper;
+		public CreateUserCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
 		{
 			_unitOfWork = unitOfWork;
+			_mapper = mapper;
 		}
 
 		public async Task<UserDto> Handle(CreateUserCommand request, CancellationToken cancellationToken) {
@@ -52,16 +54,7 @@ namespace ThaiTuanERP2025.Application.Account.Commands.CreateUser
 				if(affectedRows == 0)
 					throw new Exception("Không thể lưu User vào DB");
 
-				return new UserDto
-				{
-					Id = user.Id,
-					FullName = user.FullName,
-					Username = user.Username,
-					Email = user.Email?.Value,
-					Phone = user.Phone?.Value,
-					Role = user.Role,
-					DepartmentId = user.DepartmentId,
-				};
+				return _mapper.Map<UserDto>(user);
 			} catch(Exception ex) {
 				Console.WriteLine($"[EXCEPTION] Lỗi khi lưu User: {ex.Message}");
 				throw;
