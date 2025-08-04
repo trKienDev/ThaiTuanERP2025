@@ -12,7 +12,9 @@ namespace ThaiTuanERP2025.Application.Common.Persistence
 		// Define the DbContext type
 		IUserRepository Users { get; }
 		IDepartmentRepository Departments { get; }
-		
+		IGroupRepository Groups { get; }
+		IUserGroupRepository UserGroups { get; }
+
 		Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 		//Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess);
 		//void Dispose();

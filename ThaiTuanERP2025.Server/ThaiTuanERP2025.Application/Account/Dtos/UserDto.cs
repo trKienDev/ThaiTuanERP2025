@@ -23,4 +23,6 @@ namespace ThaiTuanERP2025.Application.Account.Dtos
 
 		public DepartmentDto? Department { get; set; } = default!;
 	}
+
+	
 }

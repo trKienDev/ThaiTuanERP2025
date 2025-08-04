@@ -23,6 +23,9 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			if(userId == Guid.Empty) throw new ArgumentNullException("UserId không hợp lệ");
 			if (groupId == Guid.Empty) throw new ArgumentNullException("GroupId không hợp lệ");
 
+			UserId = userId;
+			GroupId = groupId;
+
 			User = null!;
 			Group = null!;	
 		}

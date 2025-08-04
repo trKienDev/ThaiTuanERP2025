@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Infrastructure.Common;
 using ThaiTuanERP2025.Application.Account.Mappings;
+using ThaiTuanERP2025.Application.Account.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,13 +31,27 @@ builder.Services.AddDbContext<ThaiTuanERP2025DbContext>(options => {
 	.EnableSensitiveDataLogging() // In tham số truy vấn
 	.LogTo(Console.WriteLine, LogLevel.Information); // In toàn bộ SQL ra console
 });
+
+// Fluent Validation
 builder.Services.AddValidatorsFromAssembly(typeof(CreateUserCommandValidator).Assembly);
+builder.Services.AddValidatorsFromAssemblyContaining<RemoveUserDtoValidator>();
+
+// Repositories
+builder.Services.AddScoped<iJWTProvider, JwtProvider>();
+builder.Services.AddScoped<IUnitOfWork, AppUnitOfWork>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-builder.Services.AddScoped<iJWTProvider, JwtProvider>(); 
-builder.Services.AddScoped<IUnitOfWork, AppUnitOfWork>();
-builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddScoped<IGroupRepository, GroupRepository>();
+builder.Services.AddScoped<IUserGroupRepository, UserGroupRepository>();
+
+// Auto Mapper
+builder.Services.AddAutoMapper(typeof(AssemblyReference).Assembly);
 builder.Services.AddAutoMapper(typeof(UserMappingProfile).Assembly);
+builder.Services.AddAutoMapper(typeof(GroupMappingProfile).Assembly);
+
+// Api
+builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen(options =>
 {
 	options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme

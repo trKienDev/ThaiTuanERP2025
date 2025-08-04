@@ -2,7 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { ExcelImportService } from "../../../../shared/services/excel/excel-import.service";
-import { Department } from "../../models/department.model";
+import { Department } from "../../dtos/department.model";
 import { DepartmentService } from "../../services/department.service";
 
 @Component({

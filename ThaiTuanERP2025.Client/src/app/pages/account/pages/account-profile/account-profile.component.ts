@@ -1,9 +1,9 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
-import { User } from "../../models/user.model";
 import { UserService } from "../../services/user.service";
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { environment } from "../../../../../environments/environment";
+import { UserDto } from "../../dtos/user.dto";
 
 @Component({
       selector: 'account-profile',
@@ -14,7 +14,7 @@ import { environment } from "../../../../../environments/environment";
 })
 export class AccountProfileComponent implements OnInit {
       baseUrl: string = environment.baseUrl;
-      user: User | null = null;
+      user: UserDto | null = null;
       selectedAvatarFile: File | null = null;
       isUploading: boolean = false;
       
@@ -45,7 +45,7 @@ export class AccountProfileComponent implements OnInit {
                   }
                   return this.baseUrl + this.user.avatarUrl; // server path
             }
-            return 'assets/default-user-avatar.jpg';
+            return 'default-user-avatar.jpg';
       }
       onAvatarSelected(event: Event): void {
             const input = event.target as HTMLInputElement;
