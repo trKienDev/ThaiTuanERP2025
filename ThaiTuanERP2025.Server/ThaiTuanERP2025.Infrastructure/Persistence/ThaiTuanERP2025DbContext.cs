@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Domain.Finance.Entities;
 
 namespace ThaiTuanERP2025.Infrastructure.Persistence
 {
@@ -26,6 +27,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 			ConfigureDepartment(modelBuilder);
 			ConfigureGroup(modelBuilder);
 			ConfigureUserGroup(modelBuilder);
+			ConfigureFinance(modelBuilder);
 		}
 
 		private void ConfigureUser(ModelBuilder modelBuilder)
@@ -60,7 +62,6 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 				builder.HasOne(u => u.Manager).WithMany().HasForeignKey(u => u.ManagerId).OnDelete(DeleteBehavior.Restrict);
 			});
 		}
-
 		private void ConfigureDepartment(ModelBuilder modelBuilder) {
 			modelBuilder.Entity<Department>(builder =>
 			{
@@ -86,6 +87,68 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 				builder.HasOne(ug => ug.Group).WithMany(g => g.UserGroups).HasForeignKey(ug => ug.GroupId);
 			});
 		}
+
+		private void ConfigureFinance(ModelBuilder modelBuilder) {
+			modelBuilder.Entity<BudgetGroup>(builder =>
+			{
+				builder.HasKey(e => e.Id);
+				builder.HasIndex(e => e.Code).IsUnique();
+				builder.Property(e => e.Code).IsRequired().HasMaxLength(50);
+				builder.Property(e => e.Name).IsRequired().HasMaxLength(255);
+			});
+
+			modelBuilder.Entity<BudgetCode>(builder =>
+			{
+				builder.HasKey(e => e.Id);
+				builder.HasIndex(e => e.Code).IsUnique();
+				builder.Property(e => e.Code).IsRequired().HasMaxLength(50);
+				builder.Property(e => e.Name).IsRequired().HasMaxLength(255);
+				builder.HasOne(e => e.BudgetGroup)
+					.WithMany(g => g.BudgetCodes)
+					.HasForeignKey(e => e.BudgetGroupId)
+					.OnDelete(DeleteBehavior.Restrict);
+			});
+
+			modelBuilder.Entity<BudgetPeriod>(builder =>
+			{
+				builder.HasKey(e => e.Id);
+				builder.HasIndex(e => new { e.Year, e.Month }).IsUnique();
+				builder.Property(e => e.Year).IsRequired();
+				builder.Property(e => e.Month).IsRequired();
+			});
+
+			modelBuilder.Entity<BudgetPlan>(builder =>
+			{
+				builder.HasKey(e => e.Id);
+				builder.Property(e => e.Amount).HasColumnType("decimal(18, 2)").IsRequired();
+				builder.Property(e => e.Status).HasMaxLength(50).IsRequired();
+				builder.HasIndex(e => new { e.DepartmentId, e.BudgetCodeId, e.BudgetPeriodId }).IsUnique();
+				builder.HasOne(e => e.BudgetCode)
+					.WithMany(c => c.BudgetPlans)
+					.HasForeignKey(e => e.BudgetCodeId)
+					.OnDelete(DeleteBehavior.Restrict);
+				builder.HasOne(e => e.BudgetPeriod)
+					.WithMany(p => p.BudgetPlans)
+					.HasForeignKey(e => e.BudgetPeriodId)
+					.OnDelete(DeleteBehavior.Restrict);
+			});
+
+			modelBuilder.Entity<BankAccount>(builder =>
+			{
+				builder.HasKey(e => e.Id);
+				builder.Property(e => e.AccountNumber).IsRequired().HasMaxLength(50);
+				builder.Property(e => e.BankName).IsRequired().HasMaxLength(100);
+				builder.Property(e => e.AccountHolder).IsRequired().HasMaxLength(100);
+				builder.Property(e => e.EmployeeCode).HasMaxLength(50);
+				builder.Property(e => e.Note).HasMaxLength(500);
+				builder.Property(e => e.CustomerName).HasMaxLength(250);
+				builder.HasOne<Department>()
+					.WithMany()
+					.HasForeignKey(e => e.DepartmentId)
+					.OnDelete(DeleteBehavior.Restrict);
+			});
+		}
+
 
 		public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{
