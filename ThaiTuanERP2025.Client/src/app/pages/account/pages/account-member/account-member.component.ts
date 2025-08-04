@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
-import { User } from "../../models/user.model";
+import { CreateUserDto, UserDto } from "../../dtos/user.dto";
 import { AddUserModalComponent } from "../../components/add-user-modal/add-user-modal.component";
 import { UserService } from "../../services/user.service";
 import { DepartmentService } from "../../services/department.service";
@@ -14,7 +14,7 @@ import { DepartmentService } from "../../services/department.service";
 }) 
 export class AccountMemberComponent implements OnInit {
       showModal = false;
-      users: User[] = [];
+      users: UserDto[] = [];
       departmentMap: { [id: string]: string } = {}; 
 
       constructor(
@@ -57,9 +57,10 @@ export class AccountMemberComponent implements OnInit {
       }
 
       addUser({ user, callback}: {
-            user: Partial<User>,
+            user: CreateUserDto,
             callback: (ok: boolean, message?: string) => void
       }) {
+            console.log('user: ', user);
             this.userService.createUser(user).subscribe({
                   next: (res) => {
                         if(res.isSuccess && res.data) {
