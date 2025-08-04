@@ -1,0 +1,29 @@
+<div class="modal-backdrop" @fadeInOut>
+      <div class="modal-content" [formGroup]="form">
+            <button class="close-btn" (click)="onCancel()">x</button>
+
+            <h2>Tạo nhóm mới</h2>
+
+            <input type="text" placeholder="Tên nhóm" formControlName="name" />
+            <div class="error" *ngIf="form.get('name')?.invalid && form.get('name')?.touched">Tên nhóm là bắt buộc</div>
+
+            <textarea placeholder="Mô tả nhóm" formControlName="description"></textarea>
+
+            <label for="Quản trị viên"></label>
+            <select formControlName="adminUserId">
+                  <option [value]="''" disabled selected>Chọn quản trị viên</option>
+                  <option *ngFor="let user of users" [value]="user.id"> {{ user.fullName }} </option>
+            </select>
+            <div class="error" *ngIf="form.get('adminUserId')?.invalid && form.get('adminUserId')?.touched">Quản trị viên là bắt buộc</div>
+
+            <label for="Thành viên"></label>
+            <select multiple formControlName="memberIds">
+                  <option *ngFor="let user of users" [value]="user.id" [disabled]="user.id === form.get('adminUserId')?.value"> {{ user.fullName }} </option>
+            </select>
+
+            <div class="actions">
+                  <button class="save-btn" (click)="onSave()">Tạo nhóm</button>
+                  <button class="cancel-btn" (click)="onCancel()">Hủy</button>
+            </div>
+      </div>
+</div>
