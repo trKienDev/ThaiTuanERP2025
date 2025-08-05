@@ -24,8 +24,8 @@ namespace ThaiTuanERP2025.Application.Account.Commands.DeleteGroup
 			if (group.AdminId != request.RequestingUserId)
 				throw new ForbiddenException("Chỉ admin mới có quyền xóa nhóm");
 			
-			await _unitOfWork.Groups.DeleteAsync(group);
-			await _unitOfWork.SaveChangesAsync();
+			_unitOfWork.Groups.Delete(group); // Remove(...) là một thao tác đồng bộ, và bạn đã gọi SaveChangesAsync() ngay sau đó, thì "không cần thiết phải dùng await cho Delete"
+			await _unitOfWork.SaveChangesAsync(cancellationToken);
 			return Unit.Value;
 		}
 

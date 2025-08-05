@@ -1,20 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ThaiTuanERP2025.Application.Account.Repositories;
 using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Infrastructure.Common;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 {
-	public class DepartmentRepository : IDepartmentRepository
+	public class DepartmentRepository : BaseRepository<Department>, IDepartmentRepository
 	{
 		private readonly ThaiTuanERP2025DbContext _dbContext;
-		public DepartmentRepository(ThaiTuanERP2025DbContext dbContext)
+		public DepartmentRepository(ThaiTuanERP2025DbContext dbContext) : base(dbContext)
 		{
 			_dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-		}
-
-		public async Task<List<Department>> GetAllAsync(CancellationToken cancellationToken) {
-			return await _dbContext.Departments.ToListAsync(cancellationToken);
 		}
 
 		public async Task AddRangeAysnc(IEnumerable<Department> departments)
@@ -27,13 +24,6 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 		public async Task<bool> ExistAsync(Guid departmentId)
 		{
 			return await _dbContext.Departments.AnyAsync(d => d.Id == departmentId);
-		}
-
-		public async Task AddAsync(Department department, CancellationToken cancellationToken)
-		{
-			if (department == null) throw new ArgumentNullException(nameof(department));
-			await _dbContext.Departments.AddAsync(department, cancellationToken);
-			await _dbContext.SaveChangesAsync(cancellationToken);
 		}
 
 		public async Task<List<Department>> GetByIdAsync(IEnumerable<Guid> departmentIds, CancellationToken cancellationToken)
@@ -49,6 +39,5 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 			    .AsNoTracking()
 			    .ToListAsync(cancellationToken);
 		}
-
 	}
 }

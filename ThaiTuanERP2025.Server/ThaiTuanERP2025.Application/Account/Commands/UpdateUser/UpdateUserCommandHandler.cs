@@ -41,7 +41,7 @@ namespace ThaiTuanERP2025.Application.Account.Commands.UpdateUser
 			if(request.IsActive) user.Activate();
 			else user.Deactivate();
 
-			await _userRepository.UpdateAysnc(user);
+			_userRepository.Update(user);
 
 			return new UserDto
 			{
