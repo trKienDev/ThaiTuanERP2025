@@ -3,6 +3,8 @@ import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { BudgetGroupDto } from "../../dtos/budget-group.dto";
 import { BudgetGroupService } from "../../services/budget-group.service";
 import { FormsModule } from "@angular/forms";
+import { handleApiResponse } from "../../../../core/utils/handle-api-response.utils";
+import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
 
 @Component({
       selector: 'finance-budget-group',
@@ -27,32 +29,37 @@ export class BudgetGroupComponent implements OnInit {
 
       loadBudgetGroups(): void {
             this.budgetGroupService.getAll().subscribe({
-                  next: (res) => {
-                        if(res.isSuccess && res.data) {
-                              this.budgetGroups = res.data.map(bg => ({ ...bg, selected: false }),),
-                              this.updateMasterCheckboxState();
-                        } else {
-                              this.errorMessages = res.errors ?? [res.message ?? 'Tải nhóm ngân sách thất bại'];
+                  next: res => handleApiResponse(res, 
+                        (data) => {
+                              this.budgetGroups = data.map(bg => ({ ...bg, selected: false }));
+                              this.updateMasterCheckboxState?.();
+                        }, 
+                        (errors) => {
+                              this.errorMessages = errors;
                         }
-                  },
-                  error: (err) => alert(err.message)
-            })
+                  ),
+                  error: err => {
+                        this.errorMessages = handleHttpError(err);
+                  }
+            });
       }
 
       createBudgetGroup(): void {
             this.budgetGroupService.create(this.newBudgetGroup).subscribe({
-                  next: (res) => {
-                        if(res.isSuccess) {
+                  next: res => handleApiResponse(res, 
+                        (data) => {
                               this.newBudgetGroup = { code: '', name: '' };
-                              this.successMessage = 'Đã thêm nhóm ngân sách thành công!';
+                              this.successMessage = 'Đã thêm nhóm ngân sách thành công';
                               this.loadBudgetGroups();
                               setTimeout(() => this.successMessage = null, 3000);
-                        } else {
-                              this.errorMessages = res.errors ?? [res.message ?? 'Thêm nhóm ngân sách thất bại'];
+                        },
+                        (errors) => {
+                              this.errorMessages = errors;
                         }
-
-                  },
-                  error: (err) => alert(err.message)
+                  ),
+                  error: err => {
+                        this.errorMessages = handleHttpError(err);
+                  }
             });
       }
 

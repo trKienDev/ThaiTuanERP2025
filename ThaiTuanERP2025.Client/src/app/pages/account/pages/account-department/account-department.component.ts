@@ -40,7 +40,7 @@ export class AccountDepartmentComponent implements OnInit {
       }
 
       addDepartment(): void {
-            this.departmentService.add(this.newDepartment).subscribe({
+            this.departmentService.create(this.newDepartment).subscribe({
                   next: () => {
                         this.newDepartment = { code: '', name: ''};
                         this.successMessage = 'Đã thêm phòng ban thành công!';
