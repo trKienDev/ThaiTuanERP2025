@@ -25,7 +25,7 @@ namespace ThaiTuanERP2025.Application.Account.Commands.ChangePassword
 			}
 
 			user.ChangePassword(PasswordHasher.Hash(request.CurrentPassword));
-			await _userRepository.UpdateAysnc(user);
+			_userRepository.Update(user);
 
 			return "Đổi mật khẩu thành công";
 

@@ -7,27 +7,27 @@ using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Account.Repositories;
 using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Infrastructure.Common;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 {
-	public class UserGroupRepository : IUserGroupRepository
+	public class UserGroupRepository : BaseRepository<UserGroup>, IUserGroupRepository
 	{
-		private readonly ThaiTuanERP2025DbContext _dbContext;
-		public UserGroupRepository(ThaiTuanERP2025DbContext dbContext)
+		private ThaiTuanERP2025DbContext DbContext => (ThaiTuanERP2025DbContext)_context;
+		public UserGroupRepository(ThaiTuanERP2025DbContext context) : base(context)
 		{
-			_dbContext = dbContext;
 		}
 
 		public async Task<UserGroup?> GetAsync(Guid userId, Guid groupId) {
-			return await _dbContext.UserGroups
+			return await DbContext.UserGroups
 				.Include(ug => ug.User)
 				.Include(ug => ug.Group)
 				.FirstOrDefaultAsync(ug => ug.UserId == userId && ug.GroupId == groupId);
 		}
 
 		public async Task<List<UserGroup>> GetByGroupIdAsync(Guid groupId) {
-			return await _dbContext.UserGroups
+			return await DbContext.UserGroups
 				.Where(ug => ug.GroupId == groupId)
 				.Include(ug => ug.User)
 				.ToListAsync();
@@ -35,26 +35,26 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 
 		public async Task<List<UserGroup>> GetByUserIdAsync(Guid userId)
 		{
-			return await _dbContext.UserGroups
+			return await DbContext.UserGroups
 				.Where(ug => ug.UserId == userId)
 				.Include(ug => ug.Group)
 				.ToListAsync();
 		}
 
-		public async Task AddAsync(UserGroup userGroup)
+		public new async Task AddAsync(UserGroup userGroup)
 		{
-			await _dbContext.UserGroups.AddAsync(userGroup);
+			await base.AddAsync(userGroup);
 		}
 
 		public Task RemoveAsync(UserGroup userGroup)
 		{
-			_dbContext.UserGroups.Remove(userGroup);
+			base.Delete(userGroup);
 			return Task.CompletedTask;
 		}
 
 		public Task<bool> ExistAsync(Guid userId, Guid groupId)
 		{
-			return _dbContext.UserGroups.AnyAsync(ug => ug.UserId == userId && ug.GroupId == groupId);
+			return DbContext.UserGroups.AnyAsync(ug => ug.UserId == userId && ug.GroupId == groupId);
 		}
 	}
 }

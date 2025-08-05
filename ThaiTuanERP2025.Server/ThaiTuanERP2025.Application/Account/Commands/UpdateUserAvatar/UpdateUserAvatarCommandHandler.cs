@@ -35,7 +35,7 @@ namespace ThaiTuanERP2025.Application.Account.Commands.UpdateUserAvatar
 				phone: user.Phone
 			);
 
-			await _unitOfWork.Users.UpdateAysnc(user);
+			_unitOfWork.Users.Update(user);
 			return _mapper.Map<UserDto>(user);
 		}
 	}

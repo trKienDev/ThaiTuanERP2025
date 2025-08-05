@@ -21,7 +21,7 @@ namespace ThaiTuanERP2025.Application.Account.Commands.AddDepartment
 		public async Task<Unit> Handle(AddDepartmentCommand request, CancellationToken cancellationToken)
 		{
 			var department = new Department(request.Name, request.Code);
-			await _unitOfWork.Departments.AddAsync(department, cancellationToken);
+			await _unitOfWork.Departments.AddAsync(department);
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 			return Unit.Value;
 		}

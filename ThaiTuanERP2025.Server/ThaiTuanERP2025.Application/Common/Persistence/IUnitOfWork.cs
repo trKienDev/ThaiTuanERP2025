@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Account.Repositories;
+using ThaiTuanERP2025.Application.Finance.Repositories;
 
 namespace ThaiTuanERP2025.Application.Common.Persistence
 {
@@ -14,6 +15,11 @@ namespace ThaiTuanERP2025.Application.Common.Persistence
 		IDepartmentRepository Departments { get; }
 		IGroupRepository Groups { get; }
 		IUserGroupRepository UserGroups { get; }
+		IBankAccountRepository BankAccounts { get; }
+		IBudgetCodeRepository BudgetCodes { get; }
+		IBudgetGroupRepository BudgetGroups { get; }
+		IBudgetPeriodRepository BudgetPeriods { get; }
+		IBudgetPlanRepository BudgetPlans { get; }
 
 		Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 		//Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess);
