@@ -18,6 +18,9 @@ using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Infrastructure.Common;
 using ThaiTuanERP2025.Application.Account.Mappings;
 using ThaiTuanERP2025.Application.Account.Validators;
+using ThaiTuanERP2025.Application.Finance.Repositories;
+using ThaiTuanERP2025.Infrastructure.Finance.Repositories;
+using ThaiTuanERP2025.Application.Finance.Mappings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,11 +46,17 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IGroupRepository, GroupRepository>();
 builder.Services.AddScoped<IUserGroupRepository, UserGroupRepository>();
+builder.Services.AddScoped<IBudgetCodeRepository, BudgetCodeRepository>();
+builder.Services.AddScoped<IBudgetGroupRepository, BudgetGroupRepository>();
+builder.Services.AddScoped<IBudgetPeriodRepository, BudgetPeriodRepository>();
+builder.Services.AddScoped<IBudgetPlanRepository, BudgetPlanRepository>();
+builder.Services.AddScoped<IBankAccountRepository, BankAccountRepository>();
 
 // Auto Mapper
 builder.Services.AddAutoMapper(typeof(AssemblyReference).Assembly);
 builder.Services.AddAutoMapper(typeof(UserMappingProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(GroupMappingProfile).Assembly);
+builder.Services.AddAutoMapper(typeof(BudgetGroupMappingProfile).Assembly);
 
 // Api
 builder.Services.AddEndpointsApiExplorer();
