@@ -1,0 +1,33 @@
+<div class="finance-navbar">
+      <nav class="finance-navbar__container">
+            <ul class="finance-navbar__list">
+                  <li class="finance-navbar__item">
+                        <a class="finance-navbar__link" routerLink="/finance/budget-group" routerLinkActive="selected"  [routerLinkActiveOptions]="{ exact: true }">
+                              <span class="finance-navbar__icon material-icons-round">payments</span>
+                              <span class="finance-navbar__name">Nhóm ngân sách</span>
+                        </a>
+                  </li>
+                  <!-- <li class="finance-navbar__item">
+                        <a class="finance-navbar__link" routerLink="/finance/budget-code" routerLinkActive="selected"  [routerLinkActiveOptions]="{ exact: true }">
+                              <span class="finance-navbar__icon material-icons-round">savings</span>
+                              <span class="finance-navbar__name">Ngân sách</span>
+                        </a>
+                  </li>
+                  <li class="finance-navbar__item">
+                        <a class="finance-navbar__link" routerLink="/finance/budget-plan" routerLinkActive="selected"  [routerLinkActiveOptions]="{ exact: true }">
+                              <span class="finance-navbar__icon material-icons-round">timelapse</span>
+                              <span class="finance-navbar__name">Thời gian lập ngân sách</span>
+                        </a>
+                  </li>
+                  <li class="finance-navbar__item">
+                        <a class="finance-navbar__link" routerLink="/finance/bank-account" routerLinkActive="selected"  [routerLinkActiveOptions]="{ exact: true }">
+                              <span class="finance-navbar__icon material-icons-round">account_balance</span>
+                              <span class="finance-navbar__name">Tài khoản ngân hàng</span>
+                        </a>
+                  </li> -->
+            </ul>
+      </nav>
+</div>
+<div class="finance-navbar__content">
+      <router-outlet></router-outlet>
+</div>

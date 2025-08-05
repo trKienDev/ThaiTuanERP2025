@@ -21,6 +21,9 @@ using ThaiTuanERP2025.Application.Account.Validators;
 using ThaiTuanERP2025.Application.Finance.Repositories;
 using ThaiTuanERP2025.Infrastructure.Finance.Repositories;
 using ThaiTuanERP2025.Application.Finance.Mappings;
+using ThaiTuanERP2025.Application.Finance.Commands.CreateBudgetGroup;
+using ThaiTuanERP2025.Application.Finance.Commands.UpdateBudgetGroup;
+using ThaiTuanERP2025.Application.Behaviors;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,9 +38,15 @@ builder.Services.AddDbContext<ThaiTuanERP2025DbContext>(options => {
 	.LogTo(Console.WriteLine, LogLevel.Information); // In toàn bộ SQL ra console
 });
 
+// Behaviors
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+
 // Fluent Validation
 builder.Services.AddValidatorsFromAssembly(typeof(CreateUserCommandValidator).Assembly);
 builder.Services.AddValidatorsFromAssemblyContaining<RemoveUserDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateBudgetGroupCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateBudgetGroupCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateBudgetGroupCommandValidator>();
 
 // Repositories
 builder.Services.AddScoped<iJWTProvider, JwtProvider>();
@@ -142,7 +151,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseSwagger();
 app.UseSwaggerUI();
-app.UseMiddleware<ValidationExceptionMiddleware>();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseHttpsRedirection();
 app.UseCors();
