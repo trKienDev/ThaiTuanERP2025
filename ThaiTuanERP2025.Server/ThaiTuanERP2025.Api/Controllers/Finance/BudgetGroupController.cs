@@ -21,7 +21,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 			_mediator = mediator;
 		}
 
-		[HttpGet]
+		[HttpGet("all")]
 		public async Task<ActionResult<ApiResponse<List<BudgetGroupDto>>>> GetAll() {
 			var result = await _mediator.Send(new GetAllBudgetGroupsQuery());
 			return Ok(ApiResponse<List<BudgetGroupDto>>.Success(result));

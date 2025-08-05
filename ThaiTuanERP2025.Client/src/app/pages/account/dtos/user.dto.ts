@@ -1,4 +1,4 @@
-import { Department } from "./department.model";
+import { DepartmentDto } from "./department.dto";
 import { UserRole } from "./user-roles.enum";
 
 export interface UserDto {
@@ -12,7 +12,7 @@ export interface UserDto {
       role: UserRole;
       phone?: string;
       departmentId?: string;  
-      department?: Department;
+      department?: DepartmentDto;
       position: string;
 }
 

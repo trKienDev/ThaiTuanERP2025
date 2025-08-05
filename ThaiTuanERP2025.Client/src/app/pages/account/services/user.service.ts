@@ -42,8 +42,6 @@ export class UserService {
 
       updateAvatar(file: File): Observable<ApiResponse<string>> {
             const formData = new FormData();
-            formData.append('file', file);
-
             return this.http.post<ApiResponse<string>>(`${this.API_URL}/upload-avatar`, formData);
       }
 }

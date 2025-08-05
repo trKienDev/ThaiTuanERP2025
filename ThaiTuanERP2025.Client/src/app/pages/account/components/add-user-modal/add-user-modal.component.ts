@@ -3,13 +3,13 @@ import { Component, EventEmitter, Output } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { CreateUserDto, UserDto } from "../../dtos/user.dto";
 import { UserRole } from "../../dtos/user-roles.enum";
-import { Department } from "../../dtos/department.model";
 import { DepartmentService } from "../../services/department.service";
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from '@angular/material/button';
+import { DepartmentDto } from "../../dtos/department.dto";
 
 @Component({
       selector: 'add-user-modal',
@@ -42,8 +42,8 @@ export class AddUserModalComponent {
             department: undefined,
             position: '',
       };
-      departments: Department[] = [];
-      filteredDepartments: Department[] = [];
+      departments: DepartmentDto[] = [];
+      filteredDepartments: DepartmentDto[] = [];
       selectedDepartmentName: string = '';
       showPassword = false;
 
