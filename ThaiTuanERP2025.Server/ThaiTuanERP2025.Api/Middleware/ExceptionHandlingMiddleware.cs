@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using FluentValidation;
+using System.Net;
 using System.Text.Json;
 using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Domain.Exceptions;
@@ -34,7 +35,7 @@ namespace ThaiTuanERP2025.Api.Middleware
 			ApiResponse<string> response;
 			int statusCode;
 
-			switch(exception) {
+			switch(exception) {				
 				case NotFoundException: 
 					statusCode = (int)HttpStatusCode.NotFound; 
 					response = ApiResponse<string>.Fail(exception.Message);
@@ -50,6 +51,11 @@ namespace ThaiTuanERP2025.Api.Middleware
 				case AppException:
 					statusCode = (int)HttpStatusCode.BadRequest;
 					response = ApiResponse<string>.Fail(exception.Message);
+					break;
+				case ValidationException validationEx:
+					statusCode = (int)HttpStatusCode.BadRequest;
+					var errors = validationEx.Errors.Select(e => e.ErrorMessage).ToArray();
+					response = ApiResponse<string>.Fail("Dữ liệu không hợp lệ", errors);
 					break;
 				default:
 					statusCode = (int)HttpStatusCode.InternalServerError;

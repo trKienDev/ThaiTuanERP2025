@@ -21,6 +21,7 @@ export class AccountProfileComponent implements OnInit {
       constructor(private userService: UserService, private snackBar: MatSnackBar) {}
 
       ngOnInit(): void {
+            console.log('Account profile');
             this.userService.getCurrentuser().subscribe({
                   next: (res) => {
                         if(res.isSuccess && res.data) {
