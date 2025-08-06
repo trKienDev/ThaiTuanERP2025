@@ -1,2 +1,4 @@
 <h2>Ngân sách</h2>
 
+<button (click)="showModal = true">Thêm ngân sách</button>
+<add-budget-code-modal *ngIf="showModal" (close)="showModal = false" (save)="createBudgetCode($event)"></add-budget-code-modal>
