@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ThaiTuanERP2025.Application;
-using ThaiTuanERP2025.Application.Account.Commands.CreateUser;
 using ThaiTuanERP2025.Infrastructure.Persistence; // call AssemblyReference
 using FluentValidation;
 using ThaiTuanERP2025.Api.Middleware;
@@ -21,9 +20,22 @@ using ThaiTuanERP2025.Application.Account.Validators;
 using ThaiTuanERP2025.Application.Finance.Repositories;
 using ThaiTuanERP2025.Infrastructure.Finance.Repositories;
 using ThaiTuanERP2025.Application.Finance.Mappings;
-using ThaiTuanERP2025.Application.Finance.Commands.CreateBudgetGroup;
-using ThaiTuanERP2025.Application.Finance.Commands.UpdateBudgetGroup;
 using ThaiTuanERP2025.Application.Behaviors;
+using ThaiTuanERP2025.Application.Account.Commands.Departments.AddDepartment;
+using ThaiTuanERP2025.Application.Account.Commands.Users.CreateUser;
+using ThaiTuanERP2025.Application.Finance.Commands.BudgetGroup.UpdateBudgetGroup;
+using ThaiTuanERP2025.Application.Finance.Commands.BudgetGroup.CreateBudgetGroup;
+using ThaiTuanERP2025.Application.Account.Commands.Accounts.Login;
+using ThaiTuanERP2025.Application.Account.Commands.Departments.BulkAddDepartmentCommand;
+using ThaiTuanERP2025.Application.Account.Commands.Groups.ChangeGroupAdmin;
+using ThaiTuanERP2025.Application.Account.Commands.Groups.AddUserToGroup;
+using ThaiTuanERP2025.Application.Account.Commands.Groups.CreateGroup;
+using ThaiTuanERP2025.Application.Account.Commands.Groups.DeleteGroup;
+using ThaiTuanERP2025.Application.Account.Commands.Groups.RemoveUserFromGroup;
+using ThaiTuanERP2025.Application.Account.Commands.Groups.UpdateGroup;
+using ThaiTuanERP2025.Application.Account.Commands.Users.UpdateUserAvatar;
+using ThaiTuanERP2025.Application.Account.Queries.Departments.GetDepartmentsByIds;
+using ThaiTuanERP2025.Application.Account.Queries.Users.GetUserById;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,6 +59,18 @@ builder.Services.AddValidatorsFromAssemblyContaining<RemoveUserDtoValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateBudgetGroupCommandValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateBudgetGroupCommandValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateBudgetGroupCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<AddDepartmentCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<LoginCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<BulkAddDepartmentsCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<ChangeGroupAdminCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<AddUserToGroupCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateGroupCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<DeleteGroupCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<RemoveUserFromGroupCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateGroupCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateUserAvatarCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<GetDepartmentsByIdsQueryValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<GetUserByIdQueryValidator>();
 
 // Repositories
 builder.Services.AddScoped<iJWTProvider, JwtProvider>();

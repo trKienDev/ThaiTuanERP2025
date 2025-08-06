@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
-using ThaiTuanERP2025.Application.Finance.Commands.CreateBudgetGroup;
+using ThaiTuanERP2025.Application.Finance.Commands.BudgetGroup.CreateBudgetGroup;
+using ThaiTuanERP2025.Application.Finance.Commands.BudgetGroup.UpdateBudgetGroup;
 using ThaiTuanERP2025.Application.Finance.Commands.DeleteBudgetGroup;
-using ThaiTuanERP2025.Application.Finance.Commands.UpdateBudgetGroup;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Application.Finance.Queries.GetAllBudgetGroups;
 
