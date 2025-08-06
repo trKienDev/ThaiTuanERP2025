@@ -36,6 +36,7 @@ using ThaiTuanERP2025.Application.Account.Commands.Groups.UpdateGroup;
 using ThaiTuanERP2025.Application.Account.Commands.Users.UpdateUserAvatar;
 using ThaiTuanERP2025.Application.Account.Queries.Departments.GetDepartmentsByIds;
 using ThaiTuanERP2025.Application.Account.Queries.Users.GetUserById;
+using ThaiTuanERP2025.Application.Finance.Commands.BudgetCodes.CreateBudgetCode;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,11 +44,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddMediatR(typeof(AssemblyReference).Assembly);
 builder.Services.AddDbContext<ThaiTuanERP2025DbContext>(options => {
-	options.UseSqlServer(builder.Configuration.GetConnectionString("ThaiTuanERP2025Db"), sqlOptions => {
+	options.UseSqlServer(builder.Configuration.GetConnectionString("ThaiTuanERP2025Db"), sqlOptions =>
+	{
 		sqlOptions.EnableRetryOnFailure();
-	})
-	.EnableSensitiveDataLogging() // In tham số truy vấn
-	.LogTo(Console.WriteLine, LogLevel.Information); // In toàn bộ SQL ra console
+	});
 });
 
 // Behaviors
@@ -71,6 +71,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<UpdateGroupCommandValidator
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateUserAvatarCommandValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<GetDepartmentsByIdsQueryValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<GetUserByIdQueryValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateBudgetCodeCommand>();
 
 // Repositories
 builder.Services.AddScoped<iJWTProvider, JwtProvider>();
@@ -87,9 +88,8 @@ builder.Services.AddScoped<IBankAccountRepository, BankAccountRepository>();
 
 // Auto Mapper
 builder.Services.AddAutoMapper(typeof(AssemblyReference).Assembly);
-builder.Services.AddAutoMapper(typeof(UserMappingProfile).Assembly);
-builder.Services.AddAutoMapper(typeof(GroupMappingProfile).Assembly);
-builder.Services.AddAutoMapper(typeof(BudgetGroupMappingProfile).Assembly);
+builder.Services.AddAutoMapper(typeof(AccountMappingProfile).Assembly);
+builder.Services.AddAutoMapper(typeof(FinanceMappingProfile).Assembly);
 
 // Api
 builder.Services.AddEndpointsApiExplorer();

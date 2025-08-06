@@ -4,19 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ThaiTuanERP2025.Domain.Finance.Entities
+namespace ThaiTuanERP2025.Application.Finance.DTOs
 {
-	public class BudgetCode
+	public class BudgetCodeDto
 	{
 		public Guid Id { get; set; }
 		public string Code { get; set; } = null!;
 		public string Name { get; set; } = null!;
 		public Guid BudgetGroupId { get; set; }
-		public BudgetGroup BudgetGroup { get; set; } = null!;
-
 		public bool IsActive { get; set; } = true;
 		public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
-		
-		public ICollection<BudgetPlan> BudgetPlans { get; set; } = new List<BudgetPlan>();
 	}
 }
