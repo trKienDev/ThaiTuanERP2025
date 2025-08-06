@@ -5,8 +5,8 @@ using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Account.Commands.Departments.AddDepartment;
 using ThaiTuanERP2025.Application.Account.Commands.Departments.BulkAddDepartmentCommand;
 using ThaiTuanERP2025.Application.Account.Dtos;
-using ThaiTuanERP2025.Application.Account.Queries.GetAllDepartments;
-using ThaiTuanERP2025.Application.Account.Queries.GetDepartmentsByIds;
+using ThaiTuanERP2025.Application.Account.Queries.Departments.GetAllDepartments;
+using ThaiTuanERP2025.Application.Account.Queries.Departments.GetDepartmentsByIds;
 
 namespace ThaiTuanERP2025.Api.Controllers.Account
 {

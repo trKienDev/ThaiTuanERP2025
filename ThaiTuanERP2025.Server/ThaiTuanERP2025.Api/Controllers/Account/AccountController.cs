@@ -6,7 +6,7 @@ using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Account.Commands.ChangePassword;
 using ThaiTuanERP2025.Application.Account.Commands.Login;
 using ThaiTuanERP2025.Application.Account.Dtos;
-using ThaiTuanERP2025.Application.Account.Queries.GetCurrentUser;
+using ThaiTuanERP2025.Application.Account.Queries.Users.GetCurrentUser;
 
 namespace ThaiTuanERP2025.Api.Controllers.Account
 {

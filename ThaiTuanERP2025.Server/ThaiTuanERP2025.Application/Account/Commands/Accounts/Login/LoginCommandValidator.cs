@@ -15,7 +15,7 @@ namespace ThaiTuanERP2025.Application.Account.Commands.Accounts.Login
 				.NotEmpty().WithMessage("Mã nhân viên không được để trống");
 
 			RuleFor(x => x.Password)
-				.NotEmpty().WithMessage("Mật khẩu không được để trống")
+				.NotEmpty().WithMessage("Mật khẩu không được để trống");
 		}
 	}
 }
