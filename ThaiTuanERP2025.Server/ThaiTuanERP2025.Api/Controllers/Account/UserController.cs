@@ -1,10 +1,10 @@
-﻿	using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
-using ThaiTuanERP2025.Application.Account.Commands.CreateUser;
-using ThaiTuanERP2025.Application.Account.Commands.UpdateUser;
 using ThaiTuanERP2025.Application.Account.Commands.UpdateUserAvatar;
+using ThaiTuanERP2025.Application.Account.Commands.Users.CreateUser;
+using ThaiTuanERP2025.Application.Account.Commands.Users.UpdateUser;
 using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Application.Account.Queries.GetAllUsers;
 using ThaiTuanERP2025.Application.Account.Queries.GetCurrentUser;
