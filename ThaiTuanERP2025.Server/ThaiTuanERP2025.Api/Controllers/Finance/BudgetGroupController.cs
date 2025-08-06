@@ -7,6 +7,7 @@ using ThaiTuanERP2025.Application.Finance.Commands.BudgetGroup.DeleteBudgetGroup
 using ThaiTuanERP2025.Application.Finance.Commands.BudgetGroup.UpdateBudgetGroup;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Application.Finance.Queries.BudgetGroups.GetAllBudgetGroups;
+using ThaiTuanERP2025.Application.Finance.Queries.BudgetGroups.GetBudgetGroupById;
 
 namespace ThaiTuanERP2025.Api.Controllers.Finance
 {
@@ -25,6 +26,12 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 		public async Task<ActionResult<ApiResponse<List<BudgetGroupDto>>>> GetAll() {
 			var result = await _mediator.Send(new GetAllBudgetGroupsQuery());
 			return Ok(ApiResponse<List<BudgetGroupDto>>.Success(result));
+		}
+
+		[HttpGet("{id:guid}")]
+		public async Task<IActionResult> GetById(Guid Id) {
+			var budgetGroup = await _mediator.Send(new GetBudgetGroupByIdQuery(Id));
+			return Ok(ApiResponse<BudgetGroupDto>.Success(budgetGroup));
 		}
 
 		[HttpPost]

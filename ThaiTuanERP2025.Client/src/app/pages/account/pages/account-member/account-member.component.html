@@ -1,7 +1,6 @@
 <h1>Quản lý thành viên</h1>
 
 <button (click)="showModal = true">Thêm thành viên</button>
-
 <add-user-modal *ngIf="showModal" (close)="showModal = false" (save)="addUser($event)"></add-user-modal>
 
 <table class="table-members">
