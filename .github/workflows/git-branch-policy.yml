@@ -28,7 +28,7 @@ jobs:
           echo "🔍 Kiểm tra nhánh: $BRANCH_NAME"
 
           # Regex: Loại nhánh + module + tên tính năng (phải có ít nhất 2 phần sau tiền tố)
-          if [[ ! "$BRANCH_NAME" =~ ^(feature|bugfix|hotfix|refactor)/[a-z0-9_-]+/.+ ]]; then
+          if [[ ! "$BRANCH_NAME" =~ ^(feature|bugfix|hotfix|refactor)/[a-z0-9_-]+(/.+)?$ ]]; then
             echo "❌ Tên nhánh không hợp lệ!"
             echo "👉 Đặt tên theo dạng: feature/module/feature-name"
             echo "   Ví dụ: feature/account/user-crud"
