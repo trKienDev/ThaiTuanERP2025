@@ -8,7 +8,7 @@ export const accountRoutes: Routes = [
             component: AccountComponent,
             children: [
                   { path: '', redirectTo: 'profile', pathMatch: 'full' },
-                  { path: 'profile', loadComponent: () => import('./pages/account-profile/account-profile.component').then((m) => m.AccountProfileComponent),},
+                  { path: 'profile', loadComponent: () => import('./pages/account-profile/account-profile.component').then((m) => m.AccountProfileComponent)},
                   { path: 'setting', loadComponent: () => import('./pages/account-setting/account-setting.component').then((m) => m.AccountSettingComponent)},
                   { path: 'group', loadComponent: () => import('./pages/account-group/account-group.component').then((m) => m.AccountGroupComponent)},
                   { 

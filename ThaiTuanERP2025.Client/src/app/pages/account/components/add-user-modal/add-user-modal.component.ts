@@ -1,15 +1,17 @@
 import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Output } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { User } from "../../models/user.model";
 import { UserRole } from "../../models/user-roles.enum";
-import { Department } from "../../models/department.model";
 import { DepartmentService } from "../../services/department.service";
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from '@angular/material/button';
+import { handleApiResponse } from "../../../../core/utils/handle-api-response.utils";
+import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
+import { CreateUserModel, UserModel } from "../../models/user.model";
+import { DepartmentModel } from "../../models/department.model";
 
 @Component({
       selector: 'add-user-modal',
@@ -23,11 +25,14 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class AddUserModalComponent {
       @Output() close = new EventEmitter<void>();
-      @Output() save = new EventEmitter<any>();
+      @Output() save = new EventEmitter<{
+            user: CreateUserModel,
+            callback: (ok: boolean, message?: string) => void // truyền callback
+      }>();
       
       readonly roles = Object.values(UserRole);
 
-      user: User = {
+      user: UserModel = {
             fullName: '',
             username: '',
             employeeCode: '',
@@ -35,21 +40,14 @@ export class AddUserModalComponent {
             password: '',
             role: UserRole.User,
             phone: undefined,
-            department: '',
+            departmentId: '',
+            department: undefined,
             position: '',
       };
-      departments: Department[] = [];
-      filteredDepartments: Department[] = [];
+      departments: DepartmentModel[] = [];
+      filteredDepartments: DepartmentModel[] = [];
       selectedDepartmentName: string = '';
-
       showPassword = false;
-      showConfirmPassword = false;
-      confirmPassword: string = '';
-
-      get passwordMismatch(): boolean {
-            console.log('passsword mismatch');
-            return this.user.password !== this.confirmPassword && this.confirmPassword !== '';
-      }
 
       constructor(private departmentService: DepartmentService) {
             this.loadDepartments();
@@ -57,39 +55,53 @@ export class AddUserModalComponent {
       
       loadDepartments(): void {
             this.departmentService.getAll().subscribe({
-                  next: (data) => {
-                        this.departments = data;
-                        this.filteredDepartments = data;
-                  },
-                  error: (err) => {
-                        alert(err.message);
-                        console.error(err);
-                  }
+                  next: res => handleApiResponse(res, 
+                        (data) => {
+                              this.departments = data;
+                              this.filteredDepartments = data;
+                        }
+                  ), 
+                  error: err => alert(handleHttpError(err).join('\n'))
             });
       }
 
-      onDepartmentInputChange(input: string): void {
+      onDepartmentInputChange(value: string) {
+            const lowerValue = value.toLowerCase(); 
             this.filteredDepartments = this.departments.filter(dept => 
-                  `${dept.code} ${dept.name}`.toLowerCase().includes(input.toLowerCase())
-            )
+                  dept.name.toLowerCase().includes(lowerValue) ||
+                  dept.code.toLowerCase().includes(lowerValue)
+            );
       }
-
-      onDepartmentSelected(deptName: string): void {
-            const selected = this.departments.find(d => d.name === deptName);
-            if(selected) {
-                  this.user.department = selected.id ?? '';
-            }
+      onDepartmentSelected(deptId: string) {
+            this.user.department?.id ?? deptId;
       }
-
-      onDepartmentBlur(event: FocusEvent): void {
-            const input = event.target as HTMLInputElement | null;
-            if(!input) return;
-            this.onDepartmentSelected(input.value);
+      displayDepartmentFn = (deptId: string): string => {
+            const dept = this.departments.find(d => d.id === deptId);
+            return dept ? `${dept.code} - ${dept.name}` : '';
       }
 
       onSubmit() {
-            this.save.emit(this.user);
-            this.onClose();
+            const dto: CreateUserModel = {
+                  fullName: this.user.fullName,
+                  username: this.user.username,
+                  employeeCode: this.user.employeeCode,
+                  email: this.user.email,
+                  password: this.user.password,
+                  role: this.user.role,
+                  phone: this.user.phone,
+                  departmentId: this.user.departmentId,
+                  position: this.user.position
+            };
+            this.save.emit({
+                  user: dto,
+                  callback: (ok, message?: string) => {
+                        if(ok) { 
+                              alert('Tạo user thành công');
+                              this.onClose(); 
+                        }
+                        else alert(message || 'Lỗi tạo user');
+                  }
+            });
       }
 
       onClose() {

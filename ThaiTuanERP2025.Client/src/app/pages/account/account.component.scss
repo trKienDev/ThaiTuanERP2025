@@ -1,69 +1,13 @@
+@use '../../../styles/navbar';
+
 .account-navbar {
-      background-color: var(--sub-bg-color, #f8f9fa);
-      border-bottom: 1px solid var(--default-border, #ccc);
-      padding: 0 1rem;
-      display: flex;
-      justify-content: flex-start;
-      position: relative;
-      z-index: 1;
-
-      &__container {
-            width: 100%;
-      }
-
-      &__list {
-            display: flex;
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            gap: 5px;
-      }
-
-      &__item {
-            margin: 0;
-      }
-
-      &__link {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            padding: 0.6rem 1.2rem;
-            font-weight: 500;
-            font-size: 14px;
-            text-decoration: none;
-            color: #333;
-            background-color: transparent;
-            border: 1px solid transparent;
-            border-bottom: none;
-            border-radius: 0.5rem 0.5rem 0 0;
-            position: relative;
-
-            z-index: 1;
-            transition: all 0.2s ease-in-out;
-
-            .account-navbar__icon {
-                  font-size: 18px;
-                  color: inherit;
-            }
-
-            &:hover {
-                  background-color: var(--sub-bg-color_hover);
-                  color: #000;
-            }
-
-            &.selected {
-                  background-color: #fff;
-                  color: var(--main-foreground-hover);
-                  border: 1px solid var(--default-border, #ccc);
-                  border-bottom: 1px solid #fff; // "che" border dưới
-                  z-index: 2;
-                  position: relative;
-                  margin-bottom: -1px;
-                  font-weight: bold;
-            }
-      }
+      @extend .navbar;
+      &__container { @extend .navbar__container; }
+      &__list { @extend .navbar__list; }
+      &__item { @extend .navbar__item; }
+      &__link { @extend .navbar__link; }
+      &__icon { @extend .navbar__icon; }
 }
-
 .account-navbar__content {
       padding: 0px 1rem;
 }

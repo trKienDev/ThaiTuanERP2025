@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
-using ThaiTuanERP2025.Application.Account.Commands.AddDepartment;
+using ThaiTuanERP2025.Application.Account.Commands.Departments.AddDepartment;
+using ThaiTuanERP2025.Application.Account.Commands.Departments.BulkAddDepartmentCommand;
 using ThaiTuanERP2025.Application.Account.Dtos;
-using ThaiTuanERP2025.Application.Account.Queries.GetAllDepartments;
+using ThaiTuanERP2025.Application.Account.Queries.Departments.GetAllDepartments;
+using ThaiTuanERP2025.Application.Account.Queries.Departments.GetDepartmentsByIds;
 
 namespace ThaiTuanERP2025.Api.Controllers.Account
 {
@@ -44,6 +46,15 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 
 			var addCount = await _mediator.Send(command);
 			return Ok(ApiResponse<object>.Success(new { added = addCount }, "Import thành công"));
+		}
+
+		[HttpPost("by-ids")]
+		public async Task<ActionResult<List<DepartmentDto>>> GetByIds([FromBody] List<Guid> ids, CancellationToken cancellationToken)
+		{
+			if(ids == null || !ids.Any())
+				return BadRequest(ApiResponse<List<DepartmentDto>>.Fail("Dữ liệu rộng hoặc không hợp lệ !"));
+			var departments = await _mediator.Send(new GetDepartmentsByIdsQuery(ids), cancellationToken);
+			return Ok(ApiResponse<List<DepartmentDto>>.Success(departments));
 		}
 	}
 }
