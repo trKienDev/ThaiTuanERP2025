@@ -36,10 +36,10 @@ jobs:
           echo "🔍 Kiểm tra nhánh: $BRANCH_NAME"
 
           # Phải theo format: feature/module/feature-name
-          if [[ ! "$BRANCH_NAME" =~ ^(feature|bugfix|hotfix|refactor)/[a-z0-9_-]+/.+ ]]; then
+           if [[ ! "$BRANCH_NAME" =~ ^(feature|bugfix|hotfix|refactor)/[a-z0-9_-]+(/[a-z0-9_-]+)?$ ]]; then
             echo "❌ Tên nhánh không hợp lệ!"
-            echo "👉 Đặt tên theo dạng: feature/module/feature-name"
-            echo "   Ví dụ: feature/account/user-crud"
+            echo "👉 Đặt tên theo dạng: feature/module hoặc feature/module/feature-name"
+            echo "   Ví dụ: feature/account hoặc feature/account/user-crud"
             exit 1
           else
             echo "✅ Tên nhánh hợp lệ."
