@@ -1,10 +1,10 @@
 import { CommonModule } from "@angular/common";
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
-import { BudgetGroupDto } from "../../dtos/budget-group.dto";
 import { BudgetGroupService } from "../../services/budget-group.service";
 import { FormsModule } from "@angular/forms";
 import { handleApiResponse } from "../../../../core/utils/handle-api-response.utils";
 import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
+import { BudgetGroupModel } from "../../models/budget-group.model";
 
 @Component({
       selector: 'finance-budget-group',
@@ -17,7 +17,7 @@ export class BudgetGroupComponent implements OnInit {
       newBudgetGroup = { code: '', name: '' };
       successMessage: string | null = null;
       errorMessages: string[] = [];
-      budgetGroups: (BudgetGroupDto & { selected: boolean})[] = [];
+      budgetGroups: (BudgetGroupModel & { selected: boolean})[] = [];
       
       @ViewChild('masterCheckbox', { static: false }) masterCheckbox!: ElementRef<HTMLInputElement>;
      

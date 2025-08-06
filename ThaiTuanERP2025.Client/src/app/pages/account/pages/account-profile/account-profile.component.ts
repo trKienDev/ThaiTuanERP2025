@@ -3,7 +3,7 @@ import { Component, OnInit } from "@angular/core";
 import { UserService } from "../../services/user.service";
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { environment } from "../../../../../environments/environment";
-import { UserDto } from "../../dtos/user.dto";
+import { UserModel } from "../../models/user.model";
 
 @Component({
       selector: 'account-profile',
@@ -14,7 +14,7 @@ import { UserDto } from "../../dtos/user.dto";
 })
 export class AccountProfileComponent implements OnInit {
       baseUrl: string = environment.baseUrl;
-      user: UserDto | null = null;
+      user: UserModel | null = null;
       selectedAvatarFile: File | null = null;
       isUploading: boolean = false;
       

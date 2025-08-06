@@ -1,10 +1,10 @@
-export interface BudgetGroupDto {
+export interface BudgetGroupModel {
       id: string;
       code: string;
       name: string;
 }
 
-export interface CreateBudgetGroupDto {
+export interface CreateBudgetGroupModel {
       code: string;
       name: string;
 }

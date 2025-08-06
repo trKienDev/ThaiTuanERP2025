@@ -1,17 +1,17 @@
 import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Output } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { CreateUserDto, UserDto } from "../../dtos/user.dto";
-import { UserRole } from "../../dtos/user-roles.enum";
+import { UserRole } from "../../models/user-roles.enum";
 import { DepartmentService } from "../../services/department.service";
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from '@angular/material/button';
-import { DepartmentDto } from "../../dtos/department.dto";
 import { handleApiResponse } from "../../../../core/utils/handle-api-response.utils";
 import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
+import { CreateUserModel, UserModel } from "../../models/user.model";
+import { DepartmentModel } from "../../models/department.model";
 
 @Component({
       selector: 'add-user-modal',
@@ -26,13 +26,13 @@ import { handleHttpError } from "../../../../core/utils/handle-http-errors.util"
 export class AddUserModalComponent {
       @Output() close = new EventEmitter<void>();
       @Output() save = new EventEmitter<{
-            user: CreateUserDto,
+            user: CreateUserModel,
             callback: (ok: boolean, message?: string) => void // truyền callback
       }>();
       
       readonly roles = Object.values(UserRole);
 
-      user: UserDto = {
+      user: UserModel = {
             fullName: '',
             username: '',
             employeeCode: '',
@@ -44,8 +44,8 @@ export class AddUserModalComponent {
             department: undefined,
             position: '',
       };
-      departments: DepartmentDto[] = [];
-      filteredDepartments: DepartmentDto[] = [];
+      departments: DepartmentModel[] = [];
+      filteredDepartments: DepartmentModel[] = [];
       selectedDepartmentName: string = '';
       showPassword = false;
 
@@ -81,7 +81,7 @@ export class AddUserModalComponent {
       }
 
       onSubmit() {
-            const dto: CreateUserDto = {
+            const dto: CreateUserModel = {
                   fullName: this.user.fullName,
                   username: this.user.username,
                   employeeCode: this.user.employeeCode,
@@ -92,7 +92,6 @@ export class AddUserModalComponent {
                   departmentId: this.user.departmentId,
                   position: this.user.position
             };
-            console.log('dto: ', dto);
             this.save.emit({
                   user: dto,
                   callback: (ok, message?: string) => {

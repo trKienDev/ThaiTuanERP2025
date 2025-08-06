@@ -1,14 +1,14 @@
 import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
-import { CreateGroupDto } from "../../dtos/group.dto";
-import { UserDto } from "../../dtos/user.dto";
 import { UserService } from "../../services/user.service";
 import { GroupService } from "../../services/group.service";
 import { trigger, transition, style, animate } from '@angular/animations';
 import { forkJoin } from 'rxjs';
 import { handleApiResponse } from "../../../../core/utils/handle-api-response.utils";
 import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
+import { UserModel } from "../../models/user.model";
+import { CreateGroupModel } from "../../models/group.model";
 
 @Component({
       selector: 'add-group-modal',
@@ -32,13 +32,13 @@ export class AddGroupModalComponent implements OnInit {
       @Output() close = new EventEmitter<void>();
       @Output() saved = new EventEmitter<void>();
 
-      group: CreateGroupDto = {
+      group: CreateGroupModel = {
             name: '',
             description: '',
             adminUserId: '',
       };
       form!: FormGroup;
-      users: UserDto[] = [];
+      users: UserModel[] = [];
       memberIds: string[] = [];
       errorMessages: string[] = [];
 
