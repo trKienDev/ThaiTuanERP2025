@@ -1,7 +1,7 @@
-import { DepartmentDto } from "./department.dto";
+import { DepartmentModel } from "./department.model";
 import { UserRole } from "./user-roles.enum";
 
-export interface UserDto {
+export interface UserModel {
       id?: string;
       fullName: string;
       username: string;
@@ -12,11 +12,11 @@ export interface UserDto {
       role: UserRole;
       phone?: string;
       departmentId?: string;  
-      department?: DepartmentDto;
+      department?: DepartmentModel;
       position: string;
 }
 
-export interface CreateUserDto {
+export interface CreateUserModel {
       fullName: string;
       username: string;
       employeeCode: string;

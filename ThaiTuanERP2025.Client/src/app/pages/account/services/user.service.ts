@@ -1,33 +1,33 @@
 import { Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
-import { CreateUserDto, UserDto } from "../dtos/user.dto";
 import { catchError, map, Observable, throwError } from "rxjs";
 import { ApiResponse } from "../../../core/models/api-response.model";
+import { CreateUserModel, UserModel } from "../models/user.model";
 
 @Injectable({ providedIn: 'root'})
 export class UserService {
       private readonly API_URL = `${environment.apiUrl}/user`;
       constructor(private http: HttpClient) {}
 
-      createUser(user: CreateUserDto): Observable<ApiResponse<UserDto>> {
-            return this.http.post<ApiResponse<UserDto>>(this.API_URL, user);
+      createUser(user: CreateUserModel): Observable<ApiResponse<UserModel>> {
+            return this.http.post<ApiResponse<UserModel>>(this.API_URL, user);
       } 
 
-      getAllUsers(): Observable<ApiResponse<UserDto[]>> {
-            return this.http.get<ApiResponse<UserDto[]>>(`${this.API_URL}/all`);
+      getAllUsers(): Observable<ApiResponse<UserModel[]>> {
+            return this.http.get<ApiResponse<UserModel[]>>(`${this.API_URL}/all`);
       }
 
-      getCurrentuser(): Observable<ApiResponse<UserDto>> {
-            return this.http.get<ApiResponse<UserDto>>(`${this.API_URL}/me`);
+      getCurrentuser(): Observable<ApiResponse<UserModel>> {
+            return this.http.get<ApiResponse<UserModel>>(`${this.API_URL}/me`);
       }
 
-      getUserById(id: string): Observable<ApiResponse<UserDto>> {
-            return this.http.get<ApiResponse<UserDto>>(`${this.API_URL}/${id}`);
+      getUserById(id: string): Observable<ApiResponse<UserModel>> {
+            return this.http.get<ApiResponse<UserModel>>(`${this.API_URL}/${id}`);
       }
 
-      updateUser(id: string, user: Partial<UserDto>): Observable<ApiResponse<UserDto>> {
-            return this.http.put<ApiResponse<UserDto>>(`${this.API_URL}/${id}`, user);
+      updateUser(id: string, user: Partial<UserModel>): Observable<ApiResponse<UserModel>> {
+            return this.http.put<ApiResponse<UserModel>>(`${this.API_URL}/${id}`, user);
       }
 
       deleteUser(id: string): Observable<ApiResponse<void>> {

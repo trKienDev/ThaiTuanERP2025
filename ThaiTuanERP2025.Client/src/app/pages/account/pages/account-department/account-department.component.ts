@@ -3,9 +3,9 @@ import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { ExcelImportService } from "../../../../shared/services/excel/excel-import.service";
 import { DepartmentService } from "../../services/department.service";
-import { DepartmentDto } from "../../dtos/department.dto";
 import { handleApiResponse } from "../../../../core/utils/handle-api-response.utils";
 import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
+import { DepartmentModel } from "../../models/department.model";
 
 @Component({
       selector: 'account-department',
@@ -17,8 +17,8 @@ import { handleHttpError } from "../../../../core/utils/handle-http-errors.util"
 export class AccountDepartmentComponent implements OnInit {
       newDepartment = { code: '', name: '', };
       successMessage: string | null = null;
-      departments: (DepartmentDto & { selected: boolean })[] = [];
-      importedDepartments: DepartmentDto[] = [];
+      departments: (DepartmentModel & { selected: boolean })[] = [];
+      importedDepartments: DepartmentModel[] = [];
 
       @ViewChild('masterCheckbox', { static: false }) masterCheckbox!: ElementRef<HTMLInputElement>;
       

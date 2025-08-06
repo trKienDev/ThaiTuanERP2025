@@ -1,16 +1,16 @@
-import { UserDto } from "./user.dto";
+import { UserModel } from "./user.model";
 
-export interface GroupDto {
+export interface GroupModel {
       id: string;
       name: string;
       description: string;
       adminId: string;
       adminName: string;
       memberCount: number;
-      members: UserDto[];
+      members: UserModel[];
 }
 
-export interface CreateGroupDto {
+export interface CreateGroupModel {
       name: string;
       description: string;
       adminUserId: string;
