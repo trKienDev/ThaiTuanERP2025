@@ -6,10 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Common.Persistence;
+using ThaiTuanERP2025.Application.Finance.Commands.BudgetGroup.CreateBudgetGroup;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Domain.Finance.Entities;
 
-namespace ThaiTuanERP2025.Application.Finance.Commands.BudgetGroup.CreateBudgetGroup
+namespace ThaiTuanERP2025.Application.Finance.Commands.BudgetGroups.CreateBudgetGroup
 {
 	public class CreateBudgetGroupCommandHandler : IRequestHandler<CreateBudgetGroupCommand, BudgetGroupDto>
 	{
@@ -23,7 +24,7 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.BudgetGroup.CreateBudgetG
 
 		public async Task<BudgetGroupDto> Handle(CreateBudgetGroupCommand request, CancellationToken cancellationToken)
 		{
-			var entity = new BudgetGroup
+			var entity = new Domain.Finance.Entities.BudgetGroup
 			{
 				Id = Guid.NewGuid(),
 				Code = request.Code,

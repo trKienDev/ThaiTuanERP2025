@@ -1,15 +1,14 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
-using ThaiTuanERP2025.Application.Account.Commands.AddUserToGroup;
-using ThaiTuanERP2025.Application.Account.Commands.ChangeGroupAdmin;
-using ThaiTuanERP2025.Application.Account.Commands.DeleteGroup;
+using ThaiTuanERP2025.Application.Account.Commands.Group.ChangeGroupAdmin;
 using ThaiTuanERP2025.Application.Account.Commands.Group.CreateGroup;
+using ThaiTuanERP2025.Application.Account.Commands.Group.DeleteGroup;
+using ThaiTuanERP2025.Application.Account.Commands.Group.RemoveUserFromGroup;
 using ThaiTuanERP2025.Application.Account.Commands.Groups.AddUserToGroup;
-using ThaiTuanERP2025.Application.Account.Commands.RemoveUserFromGroup;
-using ThaiTuanERP2025.Application.Account.Commands.UpdateGroup;
+using ThaiTuanERP2025.Application.Account.Commands.Groups.UpdateGroup;
 using ThaiTuanERP2025.Application.Account.Dtos;
-using ThaiTuanERP2025.Application.Account.Queries.GetAllGroupsQuery;
+using ThaiTuanERP2025.Application.Account.Queries.Groups.GetAllGroupsQuery;
 using ThaiTuanERP2025.Application.Account.Validators;
 
 namespace ThaiTuanERP2025.Api.Controllers.Account
