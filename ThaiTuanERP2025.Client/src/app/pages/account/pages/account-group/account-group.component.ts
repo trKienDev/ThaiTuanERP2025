@@ -1,12 +1,11 @@
 import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
-import { GroupDto } from "../../dtos/group.dto";
 import { GroupService } from "../../services/group.service";
-import { catchError, throwError } from "rxjs";
 import { FormsModule } from "@angular/forms";
 import { AddGroupModalComponent } from "../../components/add-group-modal/add-group-modal.component";
 import { handleApiResponse } from "../../../../core/utils/handle-api-response.utils";
 import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
+import { GroupModel } from "../../models/group.model";
 
 @Component({
       selector: 'account-group',
@@ -16,7 +15,7 @@ import { handleHttpError } from "../../../../core/utils/handle-http-errors.util"
       styleUrl: './account-group.component.scss',
 })
 export class AccountGroupComponent {
-      groups: GroupDto[] = [];
+      groups: GroupModel[] = [];
       searchKeyword = '';
       showAddGroupModal = false;
 
@@ -36,7 +35,7 @@ export class AccountGroupComponent {
             })
       }
 
-      filteredGroups(): GroupDto[] {
+      filteredGroups(): GroupModel[] {
             return this.groups.filter(
                   g => g.name.toLowerCase().includes(this.searchKeyword.toLowerCase())
             );
@@ -46,17 +45,17 @@ export class AccountGroupComponent {
             this.showAddGroupModal = true;
       }
 
-      onViewGroup(group: GroupDto) {
+      onViewGroup(group: GroupModel) {
       // ví dụ: điều hướng đến route `/groups/:id`
             console.log('Xem nhóm:', group);
       }
 
-      onEditGroup(group: GroupDto) {
+      onEditGroup(group: GroupModel) {
       // mở modal hoặc chuyển sang trang chỉnh sửa nhóm
             console.log('Chỉnh sửa nhóm:', group);
       }
 
-      onDeleteGroup(group: GroupDto) {
+      onDeleteGroup(group: GroupModel) {
             const confirmDelte = confirm(`Bạn có chắc muốn xóa nhóm "${group.name} không ?`);
             if(!confirmDelte) return;
 

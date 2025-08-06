@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
-import { CreateGroupDto, GroupDto } from "../dtos/group.dto";
 import { catchError, map, Observable, throwError } from "rxjs";
 import { ApiResponse } from "../../../core/models/api-response.model";
+import { CreateGroupModel, GroupModel } from "../models/group.model";
 
 @Injectable({ providedIn: 'root' })
 export class GroupService {
@@ -11,12 +11,12 @@ export class GroupService {
 
       constructor(private http: HttpClient) {}
 
-      createGroup(dto: CreateGroupDto): Observable<ApiResponse<GroupDto>> {
-            return this.http.post<ApiResponse<GroupDto>>(this.API_URL, dto);
+      createGroup(dto: CreateGroupModel): Observable<ApiResponse<GroupModel>> {
+            return this.http.post<ApiResponse<GroupModel>>(this.API_URL, dto);
       }
 
-      getAllGroups(): Observable<ApiResponse<GroupDto[]>> {
-            return this.http.get<ApiResponse<GroupDto[]>>(`${this.API_URL}`);
+      getAllGroups(): Observable<ApiResponse<GroupModel[]>> {
+            return this.http.get<ApiResponse<GroupModel[]>>(`${this.API_URL}`);
       }
 
       deleteGroup(id: string, requestorId: string): Observable<ApiResponse<void>> {

@@ -2,24 +2,24 @@ import { Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { catchError, map, Observable, throwError } from "rxjs";
-import { BudgetGroupDto, CreateBudgetGroupDto } from "../dtos/budget-group.dto";
 import { ApiResponse } from "../../../core/models/api-response.model";
+import { BudgetGroupModel, CreateBudgetGroupModel } from "../models/budget-group.model";
 
 @Injectable({ providedIn: 'root' })
 export class BudgetGroupService {
       private readonly API_URL = `${environment.apiUrl}/budget-group`;
       constructor(private http: HttpClient) {}
 
-      getAll(): Observable<ApiResponse<BudgetGroupDto[]>> {
-            return this.http.get<ApiResponse<BudgetGroupDto[]>>(`${this.API_URL}/all`);
+      getAll(): Observable<ApiResponse<BudgetGroupModel[]>> {
+            return this.http.get<ApiResponse<BudgetGroupModel[]>>(`${this.API_URL}/all`);
       }
 
-      create(dto: CreateBudgetGroupDto): Observable<ApiResponse<BudgetGroupDto>> {
-            return this.http.post<ApiResponse<BudgetGroupDto>>(this.API_URL, dto);
+      create(dto: CreateBudgetGroupModel): Observable<ApiResponse<BudgetGroupModel>> {
+            return this.http.post<ApiResponse<BudgetGroupModel>>(this.API_URL, dto);
       }
 
-      update(dto: BudgetGroupDto): Observable<ApiResponse<BudgetGroupDto>> {
-            return this.http.put<ApiResponse<BudgetGroupDto>>(`${this.API_URL}/${dto.id}`, dto);
+      update(dto: BudgetGroupModel): Observable<ApiResponse<BudgetGroupModel>> {
+            return this.http.put<ApiResponse<BudgetGroupModel>>(`${this.API_URL}/${dto.id}`, dto);
       }
 
       delete(id: string): Observable<ApiResponse<string>> {

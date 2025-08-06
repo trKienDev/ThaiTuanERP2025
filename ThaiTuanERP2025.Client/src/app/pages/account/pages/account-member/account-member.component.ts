@@ -1,11 +1,11 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
-import { CreateUserDto, UserDto } from "../../dtos/user.dto";
 import { AddUserModalComponent } from "../../components/add-user-modal/add-user-modal.component";
 import { UserService } from "../../services/user.service";
 import { DepartmentService } from "../../services/department.service";
 import { handleApiResponse } from "../../../../core/utils/handle-api-response.utils";
 import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
+import { CreateUserModel, UserModel } from "../../models/user.model";
 
 @Component({
       selector: 'account-member',
@@ -16,7 +16,7 @@ import { handleHttpError } from "../../../../core/utils/handle-http-errors.util"
 }) 
 export class AccountMemberComponent implements OnInit {
       showModal = false;
-      users: UserDto[] = [];
+      users: UserModel[] = [];
       departmentMap: { [id: string]: string } = {}; 
 
       constructor(
@@ -63,7 +63,7 @@ export class AccountMemberComponent implements OnInit {
       }
 
       addUser({ user, callback}: {
-            user: CreateUserDto,
+            user: CreateUserModel,
             callback: (ok: boolean, message?: string) => void
       }) {
             this.userService.createUser(user).subscribe({
