@@ -4,6 +4,12 @@
 
             <h2>Tạo nhóm mới</h2>
 
+            <div *ngIf="errorMessages.length > 0" class="error-list">
+                  <ul>
+                        <li *ngFor="let err of errorMessages">{{ err }}</li>
+                  </ul>
+            </div>
+
             <input type="text" placeholder="Tên nhóm" formControlName="name" />
             <div class="error" *ngIf="form.get('name')?.invalid && form.get('name')?.touched">Tên nhóm là bắt buộc</div>
 
