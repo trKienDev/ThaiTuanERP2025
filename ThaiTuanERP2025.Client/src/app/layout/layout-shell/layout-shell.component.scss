@@ -1,12 +1,11 @@
 .layout-container {
       display: flex;
-      height: calc(100vh - 64px); 
 }
 .main-content {
       flex: 1;
       padding: 0px 1.5rem;
       background-color: var(--main-bg-color);
-      overflow-y: auto;
+      
 }
 .main-content-container {
       background-color: white;
