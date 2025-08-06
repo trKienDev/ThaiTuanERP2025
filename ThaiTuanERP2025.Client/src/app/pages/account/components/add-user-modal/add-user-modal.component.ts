@@ -10,6 +10,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from '@angular/material/button';
 import { DepartmentDto } from "../../dtos/department.dto";
+import { handleApiResponse } from "../../../../core/utils/handle-api-response.utils";
+import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
 
 @Component({
       selector: 'add-user-modal',
@@ -53,14 +55,13 @@ export class AddUserModalComponent {
       
       loadDepartments(): void {
             this.departmentService.getAll().subscribe({
-                  next: (data) => {
-                        this.departments = data;
-                        this.filteredDepartments = data;
-                  },
-                  error: (err) => {
-                        alert(err.message);
-                        console.error(err);
-                  }
+                  next: res => handleApiResponse(res, 
+                        (data) => {
+                              this.departments = data;
+                              this.filteredDepartments = data;
+                        }
+                  ), 
+                  error: err => alert(handleHttpError(err).join('\n'))
             });
       }
 

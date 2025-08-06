@@ -9,10 +9,11 @@ using ThaiTuanERP2025.Domain.Finance.Entities;
 
 namespace ThaiTuanERP2025.Application.Finance.Mappings
 {
-	public class BudgetGroupMappingProfile : Profile
+	public class FinanceMappingProfile : Profile
 	{
-		public BudgetGroupMappingProfile() { 
+		public FinanceMappingProfile() { 
 			CreateMap<BudgetGroup, BudgetGroupDto>();
+			CreateMap<BudgetCode, BudgetCodeDto>();
 		}
 	}
 }
