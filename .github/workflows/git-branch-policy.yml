@@ -20,14 +20,22 @@ jobs:
 
   check-branch-name:
     runs-on: ubuntu-latest
+    # BỎ QUA kiểm tra với các nhánh hệ thống như main, develop, release, hotfix...
+    if: |
+      !(startsWith(github.head_ref, 'main') ||
+        startsWith(github.head_ref, 'develop') ||
+        startsWith(github.head_ref, 'release') ||
+        startsWith(github.head_ref, 'hotfix') ||
+        startsWith(github.head_ref, 'patch') ||
+        startsWith(github.head_ref, 'test'))
+
     steps:
       - name: 🧪 Check if branch name follows convention
         run: |
           BRANCH_NAME="${{ github.head_ref }}"
-
           echo "🔍 Kiểm tra nhánh: $BRANCH_NAME"
 
-          # Regex: Loại nhánh + module + tên tính năng (phải có ít nhất 2 phần sau tiền tố)
+          # Phải theo format: feature/module/feature-name
           if [[ ! "$BRANCH_NAME" =~ ^(feature|bugfix|hotfix|refactor)/[a-z0-9_-]+/.+ ]]; then
             echo "❌ Tên nhánh không hợp lệ!"
             echo "👉 Đặt tên theo dạng: feature/module/feature-name"
