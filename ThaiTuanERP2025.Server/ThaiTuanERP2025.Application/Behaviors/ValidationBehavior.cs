@@ -21,7 +21,8 @@ namespace ThaiTuanERP2025.Application.Behaviors
 			TRequest request,
 			RequestHandlerDelegate<TResponse> next,
 			CancellationToken cancellationToken
-		) {
+		)
+		{
 			if (_validators.Any())
 			{
 				var context = new ValidationContext<TRequest>(request);
@@ -34,4 +35,5 @@ namespace ThaiTuanERP2025.Application.Behaviors
 			}
 			return await next();
 		}
+	}
 }
