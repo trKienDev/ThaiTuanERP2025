@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Finance\Entities\BankAccount.cs~RF8a28ba8.TMP" />
+    <None Remove="Finance\Entities\BudgetCode.cs~RF89f545a.TMP" />
+  </ItemGroup>
+
 </Project>

@@ -13,6 +13,7 @@ export const routes: Routes = [
             children:  [
                   { path: '', redirectTo: 'home', pathMatch: 'full' },
                   { path: 'account', loadChildren: () => import('./pages/account/account.routes').then((m) => m.accountRoutes) },
+                  { path: 'finance', loadChildren: () => import('./pages/finance/finance.route').then((m) => m.financeRoutes )},
                   { path: 'admin', loadComponent: () => import('./pages/admin/admin.component').then(m => m.AdminComponent)},
                   { path: 'home', component: HomeComponent }
             ]

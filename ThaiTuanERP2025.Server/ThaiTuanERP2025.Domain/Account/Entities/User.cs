@@ -15,7 +15,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public string AvatarUrl { get; private set; } = string.Empty;
 		public UserRole Role { get; private set; }
 		public string Position { get; private set; } = string.Empty;
-
+		
 		public Email? Email { get; private set; }
 		public Phone? Phone { get; private set; }
 

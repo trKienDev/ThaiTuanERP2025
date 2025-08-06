@@ -1,13 +1,11 @@
 import { CommonModule } from "@angular/common";
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { HttpClient } from '@angular/common/http';
-import { environment } from "../../../../../environments/environment";
-import * as XLSX from 'xlsx';
 import { ExcelImportService } from "../../../../shared/services/excel/excel-import.service";
-import { ApiResponse } from "../../../../core/models/api-response.model";
-import { Department } from "../../models/department.model";
 import { DepartmentService } from "../../services/department.service";
+import { handleApiResponse } from "../../../../core/utils/handle-api-response.utils";
+import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
+import { DepartmentModel } from "../../models/department.model";
 
 @Component({
       selector: 'account-department',
@@ -19,10 +17,11 @@ import { DepartmentService } from "../../services/department.service";
 export class AccountDepartmentComponent implements OnInit {
       newDepartment = { code: '', name: '', };
       successMessage: string | null = null;
-      departments: (Department & { selected: boolean })[] = [];
-      importedDepartments: Department[] = [];
+      departments: (DepartmentModel & { selected: boolean })[] = [];
+      importedDepartments: DepartmentModel[] = [];
 
       @ViewChild('masterCheckbox', { static: false }) masterCheckbox!: ElementRef<HTMLInputElement>;
+      
       constructor(
             private departmentService: DepartmentService,
             private excelService: ExcelImportService
@@ -34,23 +33,31 @@ export class AccountDepartmentComponent implements OnInit {
 
       loadDepartments(): void {
             this.departmentService.getAll().subscribe({
-                  next: (data) => {
-                        this.departments = data.map(d => ({ ...d, selected: false })),
-                        this.updateMasterCheckboxState();
-                  },
-                  error: (err) => alert(err.message)
+                  next: res => handleApiResponse(res, 
+                        (data) => {
+                              this.departments = data.map(d => ({ ...d, selected: false }));
+                              this.updateMasterCheckboxState();
+                        }, 
+                        (errors) => {
+                              alert(errors.join('\n'));
+                        }
+                  ),
+                  error: err => alert(handleHttpError(err).join('\n'))
             });
       }
 
       addDepartment(): void {
-            this.departmentService.add(this.newDepartment).subscribe({
-                  next: () => {
-                        this.newDepartment = { code: '', name: ''};
-                        this.successMessage = 'Đã thêm phòng ban thành công!';
-                        this.loadDepartments();
-                        setTimeout(() => this.successMessage = null, 3000);
-                  }, 
-                  error: (err) => alert(err.message)
+            this.departmentService.create(this.newDepartment).subscribe({
+                  next: res => handleApiResponse(res,
+                        () => {
+                              this.newDepartment = { code: '', name: '' };
+                              this.successMessage = 'Đã thêm phòng ban thành công';
+                              this.loadDepartments();
+                              setTimeout(() => this.successMessage = null, 3000); 
+                        },
+                        (errors) => alert(errors.join('\n'))
+                  ),
+                  error: err => alert(handleHttpError(err).join('\n'))
             });
       }
 
@@ -70,13 +77,16 @@ export class AccountDepartmentComponent implements OnInit {
       uploadExcel(): void {
             if(this.importedDepartments.length === 0) return;
             this.departmentService.importExcel(this.importedDepartments).subscribe({
-                  next: (added) => {
-                        this.successMessage = `Đã import ${added} phòng ban thành công`;
-                        this.importedDepartments = [];
-                        this.loadDepartments();
-                        setTimeout(() => this.successMessage = null, 3000);
-                  }, 
-                  error: (err) => alert(err.message)
+                  next: res => handleApiResponse(res, 
+                        (added) => {
+                              this.successMessage = `Đã import ${added} phòng ban thành công`;
+                              this.importedDepartments = [];
+                              this.loadDepartments();
+                              setTimeout(() => this.successMessage = null, 3000);
+                        },
+                        (errors) => alert(errors.join('\n'))
+                  ),
+                  error: err => alert(handleHttpError(err).join('\n'))
             });
       }
 

@@ -6,11 +6,11 @@
       </div>
       <form (ngSubmit)="login()">
             <div class="form-group">
-                  <label for="username">Username</label>
-                  <input type="text" [(ngModel)]="username" name="username" required />
+                  <label for="username">Mã nhân viên</label>
+                  <input type="text" [(ngModel)]="employeeCode" name="username" required />
             </div>
             <div class="form-group">
-                  <label for="password">Password</label>
+                  <label for="password">Mật khẩu</label>
                   <div class="password-wrapper">
                         <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" name="password" id="password" required />
                         <div class="icon-wrapper">

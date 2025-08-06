@@ -3,3 +3,38 @@
 <button (click)="showModal = true">Thêm thành viên</button>
 
 <add-user-modal *ngIf="showModal" (close)="showModal = false" (save)="addUser($event)"></add-user-modal>
+
+<table class="table-members">
+      <thead>
+            <tr>
+                  <th>
+                        <input #masterCheckbox type="checkbox"/>
+                  </th>
+                  <th>Họ tên</th>
+                  <th>Chức vụ</th>
+                  <th>Phòng ban</th>
+                  <th>Vai trò</th>
+                  <th>Quản lý</th>
+                  <th></th>
+            </tr>
+      </thead>
+      <tbody>
+            <tr *ngFor="let user of users">
+                  <td>
+                        <input type="checkbox">
+                  </td>
+                  <td>{{ user.fullName }}</td>
+                  <td>{{ user.position }}</td>
+                  <td>
+                        <ng-container *ngIf="user.departmentId && departmentMap[user.departmentId]; else fallback">
+                              {{ departmentMap[user.departmentId] }}
+                        </ng-container>
+                        <ng-template #fallback>---</ng-template>
+                  </td>
+
+                  <td>{{ user.role }}</td>
+                  <td></td>
+                  <td></td>
+            </tr>
+      </tbody>
+</table>
