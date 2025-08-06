@@ -7,6 +7,8 @@ import { UserService } from "../../services/user.service";
 import { GroupService } from "../../services/group.service";
 import { trigger, transition, style, animate } from '@angular/animations';
 import { forkJoin } from 'rxjs';
+import { handleApiResponse } from "../../../../core/utils/handle-api-response.utils";
+import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
 
 @Component({
       selector: 'add-group-modal',
@@ -38,6 +40,7 @@ export class AddGroupModalComponent implements OnInit {
       form!: FormGroup;
       users: UserDto[] = [];
       memberIds: string[] = [];
+      errorMessages: string[] = [];
 
       constructor(
             private fb: FormBuilder,
@@ -53,8 +56,11 @@ export class AddGroupModalComponent implements OnInit {
                   memberIds: [[]]
             });
             this.userService.getAllUsers().subscribe({
-                  next: users => this.users = users,
-                  error: err => alert('Không thể tải danh sách người dùng')
+                  next: res => handleApiResponse(res, 
+                        (data) => this.users = data,
+                        (errors) => this.errorMessages = errors
+                  ),
+                  error: err => this.errorMessages = handleHttpError(err)
             });
       }
 
@@ -71,32 +77,31 @@ export class AddGroupModalComponent implements OnInit {
                   description: group.description,
                   adminUserId: group.adminUserId
             }).subscribe({
-                  next: res => {
-                        if(res.isSuccess && res.data) {
-                              const groupDto = res.data;
-                              const memberIds = group.memberIds.filter((id: string) => id !== this.group.adminUserId);
-                              
-                              if(memberIds.lenght === 0) {
+                  next: res => handleApiResponse(res, 
+                        (groupDto) => {
+                              const memberIds = group.memberIds.filter((id: string) => id !== group.adminUserId);
+                              if(memberIds.length === 0) {
                                     this.finish();
                                     return;
                               }
 
-                              const request = memberIds.map((userId: string) => this.groupService.addUserToGroup(groupDto.id, userId));
-                              
-                              forkJoin(request).subscribe({
+                              const requests = memberIds.map((userId: string) => this.groupService.addUserToGroup(groupDto.id, userId));
+
+                              forkJoin(requests).subscribe({
                                     next: () => this.finish(),
                                     error: err => {
-                                          console.error(err);
-                                          alert('Lỗi khi thêm thành viên')
+                                          this.errorMessages = handleHttpError(err);
                                     }
-                              })
-                        } else {
-                              alert(res.message || 'Tạo nhóm thất bại');
+                              });
+                        },
+                        (errors) => {
+                              this.errorMessages = errors;
+                              setTimeout(() => this.errorMessages = [], 5000);
                         }
-                  },
+                  ),
                   error: err => {
-                        alert('Lỗi khi tạo nhóm');
-                        console.error(err);
+                        this.errorMessages = handleHttpError(err);
+                        setTimeout(() => this.errorMessages = [], 5000);
                   }
             });
       }

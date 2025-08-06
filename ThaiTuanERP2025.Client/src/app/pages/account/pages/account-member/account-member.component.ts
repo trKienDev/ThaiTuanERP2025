@@ -4,6 +4,8 @@ import { CreateUserDto, UserDto } from "../../dtos/user.dto";
 import { AddUserModalComponent } from "../../components/add-user-modal/add-user-modal.component";
 import { UserService } from "../../services/user.service";
 import { DepartmentService } from "../../services/department.service";
+import { handleApiResponse } from "../../../../core/utils/handle-api-response.utils";
+import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
 
 @Component({
       selector: 'account-member',
@@ -28,31 +30,35 @@ export class AccountMemberComponent implements OnInit {
 
       loadUsers(): void {
             this.userService.getAllUsers().subscribe({
-                  next: (users) => {
-                        this.users = users;
+                  next: res => handleApiResponse(res, 
+                        (users) => {
+                              this.users = users;
 
-                        const departmentIds = [...new Set(
-                              users.map(u => u.departmentId).filter((id): id is string => !!id)
-                        )];
-                        if(departmentIds.length === 0) {
-                              this.departmentMap = {};
-                              return;
-                        }
-                        
-                        this.departmentService.getByIds(departmentIds).subscribe({
-                              next: (res) => {
-                                    if(res.isSuccess && res.data) {
-                                          this.departmentMap = {};
-                                          for(const dept of res.data) {
-                                                if (dept.id) this.departmentMap[dept.id] = dept.name;
-                                          }
-                                    } else {
-                                          alert('Không thể tải phòng ban');
-                                    }
+                              const departmentIds = [...new Set(
+                                    users.map(u => u.departmentId).filter((id): id is string => !!id)
+                              )];
+
+                              if(departmentIds.length === 0) {
+                                    this.departmentMap = {};
+                                    return;
                               }
-                        })
-                  }, 
-                  error: (err) => alert(err.message)
+
+                              this.departmentService.getByIds(departmentIds).subscribe({
+                                    next: res => handleApiResponse(res, 
+                                          (departments) => {
+                                                this.departmentMap = {};
+                                                for(const dept of departments) {
+                                                      if(dept.id) this.departmentMap[dept.id] = dept.name;
+                                                }
+                                          },
+                                          (errors) => alert(errors.join('\n'))
+                                    ),   
+                                    error: err => alert(handleHttpError(err).join('\n'))
+                              });
+                        },
+                        (errors) => alert(errors.join('\n'))
+                  ),
+                  error: err => alert(handleHttpError(err).join('\n'))
             });
       }
 
@@ -60,18 +66,17 @@ export class AccountMemberComponent implements OnInit {
             user: CreateUserDto,
             callback: (ok: boolean, message?: string) => void
       }) {
-            console.log('user: ', user);
             this.userService.createUser(user).subscribe({
-                  next: (res) => {
-                        if(res.isSuccess && res.data) {
+                  next: res => handleApiResponse(res, 
+                        () => {
                               this.loadUsers();
                               callback(true);
-                        } else {
-                              callback(false, res.message ?? 'Tạo user thất bại');
-                        }
-                  }, error: (err) => {
-                        console.error('Lỗi khi tạo user: ', err);
-                        callback(false, 'Không thể kết nối tới server');
+                        },
+                        (errors) => callback(false, errors.join(', '))
+                  ),
+                  error: err => {
+                        const messages = handleHttpError(err);
+                        callback(false, messages.join(', '));
                   }
             })
       };

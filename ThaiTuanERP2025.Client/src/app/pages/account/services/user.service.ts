@@ -14,14 +14,8 @@ export class UserService {
             return this.http.post<ApiResponse<UserDto>>(this.API_URL, user);
       } 
 
-      getAllUsers(): Observable<UserDto[]> {
-            return this.http.get<ApiResponse<UserDto[]>>(`${this.API_URL}/all`).pipe(
-                  map(res => {
-                        if(res.isSuccess && res.data) return res.data;
-                        throw new Error(res.message || 'Không thể tải danh sách user');
-                  }), 
-                  catchError(err => throwError(() => new Error(err?.error?.message || 'Không thể tải danh sách users')))
-            );
+      getAllUsers(): Observable<ApiResponse<UserDto[]>> {
+            return this.http.get<ApiResponse<UserDto[]>>(`${this.API_URL}/all`);
       }
 
       getCurrentuser(): Observable<ApiResponse<UserDto>> {
