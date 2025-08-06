@@ -15,13 +15,8 @@ export class GroupService {
             return this.http.post<ApiResponse<GroupDto>>(this.API_URL, dto);
       }
 
-      getAllGroups(): Observable<GroupDto[]> {
-            return this.http.get<ApiResponse<GroupDto[]>>(`${this.API_URL}`).pipe(
-                  map(res => {
-                        if(res.isSuccess && res.data) return res.data;
-                        throw new Error(res.message || "Không thể tải danh sách nhóm");
-                  }), catchError(err => throwError(() => new Error(err?.error?.message || "Không thể lấy danh sách nhóm")))
-            );
+      getAllGroups(): Observable<ApiResponse<GroupDto[]>> {
+            return this.http.get<ApiResponse<GroupDto[]>>(`${this.API_URL}`);
       }
 
       deleteGroup(id: string, requestorId: string): Observable<ApiResponse<void>> {

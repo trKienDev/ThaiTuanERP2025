@@ -5,6 +5,8 @@ import { GroupService } from "../../services/group.service";
 import { catchError, throwError } from "rxjs";
 import { FormsModule } from "@angular/forms";
 import { AddGroupModalComponent } from "../../components/add-group-modal/add-group-modal.component";
+import { handleApiResponse } from "../../../../core/utils/handle-api-response.utils";
+import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
 
 @Component({
       selector: 'account-group',
@@ -25,13 +27,13 @@ export class AccountGroupComponent {
       }
 
       loadGroups(): void {
-            this.groupService.getAllGroups().pipe(
-                  catchError(err => {
-                        alert('Lỗi khi tải nhóm');
-                        console.error('Lỗi khi tải nhóm: ', err.message);
-                        return throwError(() => err);
-                  })
-            ).subscribe(groups => this.groups = groups);
+            this.groupService.getAllGroups().subscribe({
+                  next: res => handleApiResponse(res, 
+                        (data) => this.groups = data,
+                        (errors) => alert(errors.join('\n'))
+                  ),
+                  error: err => alert(handleHttpError(err).join('\n'))
+            })
       }
 
       filteredGroups(): GroupDto[] {
@@ -60,16 +62,14 @@ export class AccountGroupComponent {
 
             const requestorId = '00000000-0000-0000-0000-000000000001'; // TODO: lấy ID user thực tế
             this.groupService.deleteGroup(group.id, requestorId).subscribe({
-                  next: () => {
-                        this.groups = this.groups.filter(
-                              g => g.id !== group.id
-                        );
-                        alert('Đã xóa nhóm thành công');
-                  },
-                  error: err => {
-                        console.error('Lỗ khi xóa nhóm: ', err.message);
-                        alert('Xóa nhóm thất bại');
-                  }
+                  next: res => handleApiResponse(res, 
+                        () => {
+                              this.groups = this.groups.filter(g => g.id !== group.id);
+                              alert('Đã xóa nhóm thành công');
+                        },
+                        (errors) => alert(errors.join('\n'))
+                  ),
+                  error: err => alert(handleHttpError(err).join('\n'))
             });
       }
 }
