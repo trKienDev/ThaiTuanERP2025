@@ -7,7 +7,7 @@ using ThaiTuanERP2025.Application.Finance.Queries.BudgetCodes.GetAllBudgetCodesQ
 
 namespace ThaiTuanERP2025.Api.Controllers.Finance
 {
-	[Route("api/[controller]")]
+	[Route("api/budget-code")]
 	[ApiController]
 	public class BudgetCodeController : ControllerBase
 	{

@@ -37,6 +37,7 @@ using ThaiTuanERP2025.Application.Account.Commands.Users.UpdateUserAvatar;
 using ThaiTuanERP2025.Application.Account.Queries.Departments.GetDepartmentsByIds;
 using ThaiTuanERP2025.Application.Account.Queries.Users.GetUserById;
 using ThaiTuanERP2025.Application.Finance.Commands.BudgetCodes.CreateBudgetCode;
+using ThaiTuanERP2025.Application.Finance.Queries.BudgetGroups.GetBudgetGroupById;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -72,6 +73,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<UpdateUserAvatarCommandVali
 builder.Services.AddValidatorsFromAssemblyContaining<GetDepartmentsByIdsQueryValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<GetUserByIdQueryValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateBudgetCodeCommand>();
+builder.Services.AddValidatorsFromAssemblyContaining<GetBudgetGroupByIdQueryValidator>();
 
 // Repositories
 builder.Services.AddScoped<iJWTProvider, JwtProvider>();
