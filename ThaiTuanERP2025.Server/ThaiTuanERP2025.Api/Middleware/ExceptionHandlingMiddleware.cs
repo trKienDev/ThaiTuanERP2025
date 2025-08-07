@@ -48,9 +48,9 @@ namespace ThaiTuanERP2025.Api.Middleware
 					statusCode = (int)HttpStatusCode.Forbidden;
 					response = ApiResponse<string>.Fail("Bạn không có quyền truy cập chức năng này");
 					break;
-				case AppException:
-					statusCode = (int)HttpStatusCode.BadRequest;
-					response = ApiResponse<string>.Fail(exception.Message);
+				case AppException appEx:
+					statusCode = appEx.StatusCode;
+					response = ApiResponse<string>.Fail(appEx.Message);
 					break;
 				case ValidationException validationEx:
 					statusCode = (int)HttpStatusCode.BadRequest;

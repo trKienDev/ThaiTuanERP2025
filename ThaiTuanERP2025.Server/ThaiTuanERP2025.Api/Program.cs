@@ -38,6 +38,10 @@ using ThaiTuanERP2025.Application.Account.Queries.Departments.GetDepartmentsById
 using ThaiTuanERP2025.Application.Account.Queries.Users.GetUserById;
 using ThaiTuanERP2025.Application.Finance.Commands.BudgetCodes.CreateBudgetCode;
 using ThaiTuanERP2025.Application.Finance.Queries.BudgetGroups.GetBudgetGroupById;
+using ThaiTuanERP2025.Application.Finance.Commands.BudgetCodes.UpdateBudgetCodeStatus;
+using ThaiTuanERP2025.Application.Finance.Commands.BudgetPeriods.CreateBudgetPeriod;
+using ThaiTuanERP2025.Application.Finance.Commands.BudgetPeriods.UpdateBudgetPeriod;
+using ThaiTuanERP2025.Application.Finance.Commands.BudgetPeriods.DeleteBudgetPeriod;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,6 +78,10 @@ builder.Services.AddValidatorsFromAssemblyContaining<GetDepartmentsByIdsQueryVal
 builder.Services.AddValidatorsFromAssemblyContaining<GetUserByIdQueryValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateBudgetCodeCommand>();
 builder.Services.AddValidatorsFromAssemblyContaining<GetBudgetGroupByIdQueryValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateBudgetCodeStatusCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateBudgetPeriodCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateBudgetPeriodCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<DeleteBudgetPeriodCommandValidator>();
 
 // Repositories
 builder.Services.AddScoped<iJWTProvider, JwtProvider>();
