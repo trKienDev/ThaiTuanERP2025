@@ -1,53 +1,12 @@
 // =========| getcssscan |============
 
 // *** button-1 ***
-.button-1 {
-      border: none;
-      display: flex;
-      padding: 0.75rem 1.5rem;
-      background-color: #488aec;
-      color: #ffffff;
-      font-size: 0.75rem;
-      line-height: 1rem;
-      font-weight: 700;
-      text-align: center;
-      cursor: pointer;
-      vertical-align: middle;
-      align-items: center;
-      border-radius: 0.5rem;
-      user-select: none;
-      gap: 0.75rem;
-      box-shadow: 0 4px 6px -1px #488aec31, 0 2px 4px -1px #488aec17;
-      transition: all 0.6s ease;
-}
+.button-1 { border: none; display: flex; padding: 0.75rem 1.5rem; background-color: #488aec; color: #ffffff; font-size: 0.75rem; line-height: 1rem; font-weight: 700; text-align: center; cursor: pointer; vertical-align: middle; align-items: center; border-radius: 0.5rem; user-select: none; gap: 0.75rem; box-shadow: 0 4px 6px -1px #488aec31, 0 2px 4px -1px #488aec17; transition: all 0.6s ease; }
 .button-1:hover { box-shadow: 0 10px 15px -3px #488aec4f, 0 4px 6px -2px #488aec17; }
 .button-1:focus, .button-1:active { opacity: 0.85; box-shadow: none; }
 
 // *** button-4 ***
-.button-4 {
-      appearance: none;
-      background-color: #FAFBFC;
-      border: 1px solid rgba(27, 31, 35, 0.15);
-      border-radius: 6px;
-      box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset;
-      box-sizing: border-box;
-      color: #24292E;
-      cursor: pointer;
-      display: inline-block;
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 20px;
-      list-style: none;
-      padding: 6px 16px;
-      position: relative;
-      transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
-      user-select: none;
-      -webkit-user-select: none;
-      touch-action: manipulation;
-      vertical-align: middle;
-      white-space: nowrap;
-      word-wrap: break-word;
-}
+.button-4 { appearance: none; background-color: #FAFBFC; border: 1px solid rgba(27, 31, 35, 0.15); border-radius: 6px; box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset; box-sizing: border-box; color: #24292E; cursor: pointer; display: inline-block; font-size: 14px; font-weight: 500; line-height: 20px; list-style: none; padding: 6px 16px; position: relative; transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1); user-select: none; -webkit-user-select: none; touch-action: manipulation; vertical-align: middle; white-space: nowrap; word-wrap: break-word; }
 .button-4:hover { background-color: #F3F4F6; text-decoration: none; transition-duration: 0.1s; cursor: pointer; }
 .button-4:active { background-color: #EDEFF2; box-shadow: rgba(225, 228, 232, 0.2) 0 1px 0 inset; transition: none 0s; }
 .button-4:focus { outline: 1px transparent; }
@@ -55,107 +14,18 @@
 .button-4:-webkit-details-marker { display: none; }
 
 // *** button-64 ***
-.button-85 {
-      padding: 0.6em 2em;
-      border: none;
-      outline: none;
-      color: rgb(255, 255, 255);
-      background: rgb(77, 76, 76);
-      cursor: pointer;
-      position: relative;
-      z-index: 0;
-      border-radius: 10px;
-      user-select: none;
-      -webkit-user-select: none;
-      touch-action: manipulation;
-}
-
-.button-85:before {
-      content: "";
-      background: linear-gradient( 45deg,#ff0000,#ff7300,#fffb00,#48ff00,#00ffd5,#002bff,#7a00ff,#ff00c8,#ff0000 );
-      position: absolute;
-      top: -2px;
-      left: -2px;
-      background-size: 400%;
-      z-index: -1;
-      filter: blur(5px);
-      -webkit-filter: blur(5px);
-      width: calc(100% + 4px);
-      height: calc(100% + 4px);
-      animation: glowing-button-85 20s linear infinite;
-      transition: opacity 0.3s ease-in-out;
-      border-radius: 10px;
-}
-@keyframes glowing-button-85 {
-      0% { background-position: 0 0; }
-      50% { background-position: 400% 0; }
-      100% { background-position: 0 0; }
-}
-.button-85:after {
-      z-index: -1;
-      content: "";
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background: rgb(0, 0, 0);
-      left: 0;
-      top: 0;
-      border-radius: 10px;
-}
-
+.button-85 { padding: 0.6em 2em; border: none; outline: none; color: rgb(255, 255, 255); background: rgb(77, 76, 76); cursor: pointer; position: relative; z-index: 0; border-radius: 10px; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+.button-85:before { content: ""; background: linear-gradient( 45deg,#ff0000,#ff7300,#fffb00,#48ff00,#00ffd5,#002bff,#7a00ff,#ff00c8,#ff0000 ); position: absolute; top: -2px; left: -2px; background-size: 400%; z-index: -1; filter: blur(5px); -webkit-filter: blur(5px); width: calc(100% + 4px); height: calc(100% + 4px); animation: glowing-button-85 20s linear infinite; transition: opacity 0.3s ease-in-out; border-radius: 10px; }
+@keyframes glowing-button-85 { 0% { background-position: 0 0; } 50% { background-position: 400% 0; } 100% { background-position: 0 0; } }
+.button-85:after { z-index: -1; content: ""; position: absolute; width: 100%; height: 100%; background: rgb(0, 0, 0); left: 0; top: 0; border-radius: 10px; }
 
 // *** button-62 ***
-.button-62 {
-      background: linear-gradient(to bottom right, #EF4765, #FF9A5A);
-      border: 0;
-      border-radius: 12px;
-      color: #FFFFFF;
-      cursor: pointer;
-      display: inline-block;
-      font-weight: 500;
-      line-height: 2.5;
-      outline: transparent;
-      padding: 0 1rem;
-      text-align: center;
-      text-decoration: none;
-      transition: box-shadow .2s ease-in-out;
-      user-select: none;
-      -webkit-user-select: none;
-      touch-action: manipulation;
-      white-space: nowrap;
-}
+.button-62 { background: linear-gradient(to bottom right, #EF4765, #FF9A5A); border: 0;border-radius: 12px; color: #FFFFFF; cursor: pointer; display: inline-block; font-weight: 500; line-height: 2.5; outline: transparent; padding: 0 1rem; text-align: center; text-decoration: none; transition: box-shadow .2s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: manipulation; white-space: nowrap; }
 .button-62:focus { box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5); }
 .button-62:hover { box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5); }
 
-
 // *** button-stackoverflow***
-.button-stackoverflow {
-      background-color: #0095ff;
-      border: 1px solid transparent;
-      border-radius: 3px;
-      box-shadow: rgba(255, 255, 255, .4) 0 1px 0 0 inset;
-      box-sizing: border-box;
-      color: #fff;
-      cursor: pointer;
-      display: inline-block;
-      font-size: 13px;
-      font-weight: 400;
-      line-height: 1.15385;
-      margin: 0;
-      outline: none;
-      padding: 8px .8em;
-      position: relative;
-      text-align: center;
-      text-decoration: none;
-      user-select: none;
-      -webkit-user-select: none;
-      touch-action: manipulation;
-      vertical-align: baseline;
-      white-space: nowrap;
-}
-
+.button-stackoverflow { background-color: #0095ff; border: 1px solid transparent; border-radius: 3px; box-shadow: rgba(255, 255, 255, .4) 0 1px 0 0 inset; box-sizing: border-box; color: #fff; cursor: pointer; display: inline-block; font-size: 13px; font-weight: 400; line-height: 1.15385; margin: 0; outline: none; padding: 8px .8em; position: relative; text-align: center; text-decoration: none; user-select: none; -webkit-user-select: none; touch-action: manipulation; vertical-align: baseline; white-space: nowrap; }
 .button-stackoverflow:hover, .button-stackoverflow:focus { background-color: #07c; }
-
 .button-stackoverflow:focus { box-shadow: 0 0 0 4px rgba(0, 149, 255, .15); }
-
 .button-stackoverflow:active { background-color: #0064bd; box-shadow: none; }
