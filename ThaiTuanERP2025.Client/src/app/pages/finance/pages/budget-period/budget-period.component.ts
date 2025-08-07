@@ -1,20 +1,21 @@
 import { CommonModule } from "@angular/common";
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
-import { BudgetPeriodModel, CreateBudgetPeriodModel } from "../../models/budget-period.model";
+import { BudgetPeriodModel } from "../../models/budget-period.model";
 import { BudgetPeriodService } from "../../services/budget-period.service";
 import { handleApiResponse } from "../../../../core/utils/handle-api-response.utils";
 import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
+import { FormsModule } from "@angular/forms";
 
 @Component({
       selector: 'finance-budget-period',
       standalone: true,
-      imports: [ CommonModule ],
+      imports: [ CommonModule, FormsModule ],
       templateUrl: './budget-period.component.html',
       styleUrl: './budget-period.component.scss',
 })
 export class BudgetPeriodComponent implements OnInit{
-      newYear!: number;
-      newMonth!: number;
+      year!: number;
+      month!: number;
       sucessMessage: string | null = null;
       errorMessages: string[] = [];
       budgetPeriods: (BudgetPeriodModel & { selected: boolean})[] = [];
@@ -31,6 +32,7 @@ export class BudgetPeriodComponent implements OnInit{
             this.budgetPeriodService.getAll().subscribe({
                   next: res => handleApiResponse(res,
                         (data) => {
+                              console.log('data: ', data);
                               this.budgetPeriods = data.map(bp => ({ ...bp, selected: false }));
                               this.updateMasterCheckboxState();
                         }, 
@@ -45,15 +47,17 @@ export class BudgetPeriodComponent implements OnInit{
       } 
 
       createBudgetPeriod() {
-            if (!this.newYear || !this.newMonth || this.newMonth < 1 || this.newMonth > 12) {
+            if (!this.year || !this.month || this.month < 1 || this.month > 12) {
                   this.errorMessages = ['Vui lòng nhập năm và tháng hợp lệ (tháng từ 1 đến 12)'];
                   return;
             }
-            this.budgetPeriodService.create(this.newMonth, this.newYear).subscribe({
+            console.log('month: ', this.month);
+            console.log('year: ', this.year);
+            this.budgetPeriodService.create({ month: this.month, year: this.year }).subscribe({
                   next: res => handleApiResponse(res, 
                         (data) => {
-                              this.newYear = 0;
-                              this.newMonth = 0;
+                              this.year = 0;
+                              this.month = 0;
                               this.loadBudgetPeriods();
                         },
                         (errors) => {

@@ -7,16 +7,16 @@ import { BudgetPeriodModel } from "../models/budget-period.model";
 
 @Injectable({ providedIn: 'root' })
 export class BudgetPeriodService {
-      private readonly API_URL = `${environment}/budget-period`;
+      private readonly API_URL = `${environment.apiUrl}/budget-period`;
 
       constructor(private http: HttpClient) {}
 
       getAll(): Observable<ApiResponse<BudgetPeriodModel[]>> {
-            return this.http.get<ApiResponse<BudgetPeriodModel[]>>(this.API_URL);
+            return this.http.get<ApiResponse<BudgetPeriodModel[]>>(`${this.API_URL}/all`);
       }
 
-      create(year: number, month: number): Observable<ApiResponse<BudgetPeriodModel>> {
-            return this.http.post<ApiResponse<BudgetPeriodModel>>(this.API_URL, { year, month });
+      create(payload: { year: number, month: number }): Observable<ApiResponse<BudgetPeriodModel>> {
+            return this.http.post<ApiResponse<BudgetPeriodModel>>(this.API_URL, payload );
       }
 
       updateStatus(id: string, isActive: boolean): Observable<ApiResponse<void>> {

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
 using ThaiTuanERP2025.Api.Common;
@@ -10,6 +11,7 @@ using ThaiTuanERP2025.Application.Finance.Queries.BudgetPeriods.GetAllBudgetPeri
 
 namespace ThaiTuanERP2025.Api.Controllers.Finance
 {
+	[Authorize]
 	[Route("api/budget-period")]
 	[ApiController]
 	public class BudgetPeriodController : ControllerBase
