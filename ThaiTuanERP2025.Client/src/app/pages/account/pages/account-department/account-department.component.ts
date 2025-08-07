@@ -6,11 +6,12 @@ import { DepartmentService } from "../../services/department.service";
 import { handleApiResponse } from "../../../../core/utils/handle-api-response.utils";
 import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
 import { DepartmentModel } from "../../models/department.model";
+import { EditDepartmentModalComponent } from "../../components/edit-department-modal/edit-department-modal.component";
 
 @Component({
       selector: 'account-department',
       standalone: true,
-      imports: [ CommonModule, FormsModule ],
+      imports: [ CommonModule, FormsModule, EditDepartmentModalComponent ],
       templateUrl: './account-department.component.html',
       styleUrl: './account-department.component.scss'
 })
@@ -19,6 +20,8 @@ export class AccountDepartmentComponent implements OnInit {
       successMessage: string | null = null;
       departments: (DepartmentModel & { selected: boolean })[] = [];
       importedDepartments: DepartmentModel[] = [];
+       isEditing = false;
+      selectedDepartment: DepartmentModel = { id: '', code: '', name: '' };
 
       @ViewChild('masterCheckbox', { static: false }) masterCheckbox!: ElementRef<HTMLInputElement>;
       
@@ -73,6 +76,7 @@ export class AccountDepartmentComponent implements OnInit {
                   console.error(err);
             }
       }
+      
 
       uploadExcel(): void {
             if(this.importedDepartments.length === 0) return;
@@ -95,6 +99,7 @@ export class AccountDepartmentComponent implements OnInit {
             this.departments.forEach(d => d.selected = checked);
             this.updateMasterCheckboxState();
       }
+      
       updateMasterCheckboxState(): void {
             const allSelected = this.departments.every(d => d.selected);
             const noneSelected = this.departments.every(d => !d.selected);
@@ -107,4 +112,52 @@ export class AccountDepartmentComponent implements OnInit {
       isAllSelected(): boolean {
             return this.departments.length > 0 && this.departments.every(d => d.selected);
       }
+onDelete(dept: DepartmentModel): void {     
+  if (!dept.id) {
+    alert('ID không hợp lệ');
+    return;
+  }
+  if (confirm('Bạn có chắc muốn xóa phòng ban này?')) {
+       console.log('Open Edit:', dept); 
+    this.departmentService.deleteDepartment(dept.id).subscribe({
+      next: () => {
+        this.successMessage = 'Xóa thành công';
+        this.loadDepartments();
+        setTimeout(() => this.successMessage = null, 3000);
+      },
+      error: (err) => alert('Lỗi xóa: ' + err.message),
+    });
+  }
+}
+      openEditModal(dept: DepartmentModel): void {
+             console.log('Open Edit:', dept); 
+            this.selectedDepartment = { ...dept };            
+            this.isEditing = true;
+      }
+
+      cancelEdit(): void {
+            this.isEditing = false;
+            this.selectedDepartment = { id: '', code: '', name: '' };
+      }
+
+updateDepartment(updated: DepartmentModel): void {
+  if (!updated.id) {
+    alert('ID phòng ban không hợp lệ');
+    return;
+  }
+
+  this.departmentService.updateDepartment(updated.id, {id: updated.id,
+    code: updated.code,
+    name: updated.name
+  }).subscribe({
+    next: () => {
+      this.successMessage = 'Cập nhật phòng ban thành công!';
+      this.loadDepartments();
+      this.cancelEdit();
+      setTimeout(() => this.successMessage = null, 3000);
+    },
+    error: (err) => alert(err.message)
+  });
+}
+    
 }

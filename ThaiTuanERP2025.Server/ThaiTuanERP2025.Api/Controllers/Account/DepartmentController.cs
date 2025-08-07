@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Account.Commands.Departments.AddDepartment;
 using ThaiTuanERP2025.Application.Account.Commands.Departments.BulkAddDepartmentCommand;
+using ThaiTuanERP2025.Application.Account.Commands.Departments.DeleteDepartment;
+using ThaiTuanERP2025.Application.Account.Commands.Departments.UpdateDepartment;
 using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Application.Account.Queries.Departments.GetAllDepartments;
 using ThaiTuanERP2025.Application.Account.Queries.Departments.GetDepartmentsByIds;
@@ -56,5 +58,22 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			var departments = await _mediator.Send(new GetDepartmentsByIdsQuery(ids), cancellationToken);
 			return Ok(ApiResponse<List<DepartmentDto>>.Success(departments));
 		}
-	}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateDepartmentCommand body)
+        {
+            if (id != body.Id)
+                return BadRequest();
+
+            await _mediator.Send(body);
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            
+            await _mediator.Send(new DeleteDepartmentCommand(id));
+            return NoContent();
+        }
+    }
 }
