@@ -39,5 +39,23 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 			    .AsNoTracking()
 			    .ToListAsync(cancellationToken);
 		}
-	}
+
+        public async Task UpdateAsync(Department department)
+        {
+            _dbContext.Departments.Update(department);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            var entity = await _dbContext.Departments.FindAsync(id);
+            if (entity != null)
+            {
+                _dbContext.Departments.Remove(entity);
+                await _dbContext.SaveChangesAsync();
+            }
+        }
+
+
+    }
 }
