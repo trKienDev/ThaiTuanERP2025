@@ -9,7 +9,7 @@ using ThaiTuanERP2025.Application.Finance.DTOs;
 namespace ThaiTuanERP2025.Application.Finance.Commands.BudgetPeridos.CreateBudgetPeriod
 {
 	public record CreateBudgetPeriodCommand(
-		int Year,
-		int Month
+		int Month,
+		int Year
 	) : IRequest<BudgetPeriodDto>;
 }

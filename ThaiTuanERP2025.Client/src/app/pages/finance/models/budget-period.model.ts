@@ -3,6 +3,7 @@ export interface BudgetPeriodModel {
       year: number;
       month: number;
       isActive: boolean;
+      createdDate: string;
       updatedDate?: string;
 }
 export interface CreateBudgetPeriodModel {
