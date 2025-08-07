@@ -55,6 +55,10 @@ builder.Services.AddDbContext<ThaiTuanERP2025DbContext>(options => {
 	});
 });
 
+// GetCurrentUserService
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
 // Behaviors
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
