@@ -5,11 +5,12 @@ import { BudgetCodeService } from "../../services/budget-code.service";
 import { handleApiResponse } from "../../../../core/utils/handle-api-response.utils";
 import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
 import { AddBudgetCodeModalComponent } from "../../components/add-budget-code/add-budget-code-modal.component";
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
       selector: 'finance-budget-code',
       standalone: true,
-      imports: [CommonModule, AddBudgetCodeModalComponent ],
+      imports: [CommonModule, AddBudgetCodeModalComponent, MatTooltipModule ],
       templateUrl: './budget-code.component.html',
       styleUrl: './budget-code.component.scss',
 })
