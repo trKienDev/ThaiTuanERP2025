@@ -4,9 +4,11 @@
 @import url('./styles/_keyword-css.scss');
 @import url('./styles/_cards.scss');
 @import url('./styles/_toggle-switch.scss');
+@import url('./styles/_message.scss');
 
 
 :root {
+      --cadmium-red: #D22B2B;
       --ultramarin: #0437F2;
       --main-bg-color: #f8f9fd;
       --sub-bg-color: #f6f8fa;

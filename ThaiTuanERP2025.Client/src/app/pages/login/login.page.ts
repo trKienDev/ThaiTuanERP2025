@@ -1,28 +1,38 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiResponse } from '../../core/models/api-response.model.js';
 import { LoginResponse } from '../../core/models/login-response.model.js';
 import { AuthService } from '../../core/services/auth/auth.service.js';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { handleApiResponse } from '../../core/utils/handle-api-response.utils.js';
+import { handleApiResponse$ } from '../../core/utils/handle-api-response.operator.js';
+import { tap } from 'rxjs';
 
 @Component({
       selector: 'app-login',
       standalone: true,
-      imports: [CommonModule, FormsModule ],
+      imports: [CommonModule, ReactiveFormsModule ],
       templateUrl: './login.page.html',
       styleUrls: ['./login.page.scss'],
 })
 export class LoginComponent implements OnInit{
-      employeeCode = '';
-      password = '';
+      loginForm!: FormGroup;
       showPassword = false;
       message: string | null = null;
       isLoading = false;
 
-      constructor(private authService: AuthService, private router: Router) {}
+      constructor(
+            private authService: AuthService, 
+            private fb: FormBuilder,
+            private router: Router) {}
 
       ngOnInit() {
+            this.loginForm = this.fb.group({
+                  employeeCode: ['', Validators.required],
+                  password: ['', Validators.required]
+            });
+
             const logoWrapper = document.querySelector('.logo-wrapper');
 
             const triggerShine = () => {
@@ -50,29 +60,31 @@ export class LoginComponent implements OnInit{
             this.showPassword = !this.showPassword;
       }
 
-      login() {
-            console.log('run login');
+      onSubmit(): void {
+            if(this.loginForm.invalid) {
+                  this.loginForm.markAllAsTouched();
+                  return;
+            }
+
+            const { employeeCode, password } = this.loginForm.value;
+
             this.message = null;
             this.isLoading = true;
 
-            this.authService.login(this.employeeCode, this.password).subscribe({
-                  next: (res: ApiResponse<LoginResponse>) => {
+            this.authService.login(employeeCode, password).pipe(
+                  handleApiResponse$<LoginResponse>(),
+                  tap((data) => {
+                        this.authService.loginSuccess(data.accessToken, data.userRole);
+                  })
+            ).subscribe({
+                  next: () => {
                         this.isLoading = false;
-                        console.log('res.success: ', res.isSuccess);
-                        console.log('res.data: ', res.data);
-                        if(res.isSuccess && res.data?.accessToken && res.data.userRole) {
-                              const { accessToken, userRole } = res.data;
-
-                              this.authService.loginSuccess(accessToken, userRole);
-                              this.router.navigateByUrl('/splash');
-                        } else {
-                              this.message = res.message || 'Đăng nhập thất bại';
-                        }
+                        this.router.navigateByUrl('/splash')
                   },
-                  error: () => {
+                  error: (err) => {
                         this.isLoading = false;
-                        this.message = "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau";
+                        this.message = err?.message || 'Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau';
                   }
-            });
-      }
+            })
+      };
 }
