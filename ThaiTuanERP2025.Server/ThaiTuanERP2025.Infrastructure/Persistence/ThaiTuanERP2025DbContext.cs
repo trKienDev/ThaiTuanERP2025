@@ -161,23 +161,23 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{
 			var entries = ChangeTracker.Entries<AuditableEntity>();
-			var currentUserId = _currentUserService.UserId;
-			foreach(var entry in entries) {
+			var currentUserId = _currentUserService?.UserId ?? Guid.Empty;
+			foreach (var entry in entries) {
 				switch (entry.State)
 				{
 					case EntityState.Added:
-						entry.Entity.CreatedByUserId = currentUserId ?? Guid.Empty;
+						entry.Entity.CreatedByUserId = currentUserId;
 						entry.Entity.CreatedDate = DateTime.UtcNow;
 						break;
 					case EntityState.Modified:
 						entry.Entity.DateModified = DateTime.UtcNow;
-						entry.Entity.ModifiedByUserId = currentUserId ?? Guid.Empty;
+						entry.Entity.ModifiedByUserId = currentUserId;
 						break;
 					case EntityState.Deleted:
 						// Thay vì xóa thực tế, đánh dấu là đã xóa
 						entry.Entity.IsDeleted = true;
 						entry.Entity.DeletedDate = DateTime.UtcNow;
-						entry.Entity.DeletedByUserId = currentUserId ?? Guid.Empty;
+						entry.Entity.DeletedByUserId = currentUserId;
 						entry.State = EntityState.Modified; // Chuyển sang trạng thái Modified để lưu lại thông tin xóa
 						break;
 				}
