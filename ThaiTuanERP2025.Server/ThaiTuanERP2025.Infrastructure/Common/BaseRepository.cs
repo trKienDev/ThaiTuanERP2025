@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Common.Persistence;
@@ -32,6 +33,12 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		{
 			if (entity == null) throw new ArgumentNullException(nameof(entity));
 			await _dbSet.AddAsync(entity);
+		}
+
+		public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
+		{
+			if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+			return await _dbSet.AnyAsync(predicate);
 		}
 
 		public void Update(T entity)

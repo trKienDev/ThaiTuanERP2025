@@ -3,6 +3,9 @@
 .fl-wrap { flex-wrap: wrap;}
 .d-none { display: none; }
 
+// font-family
+
+
 // justify-content
 .justify-content-center { justify-content: center; }
 .justify-content-between { justify-content: space-between; }
@@ -11,6 +14,13 @@
 .gap-5p { gap: 5px; }
 .gap-10p { gap: 10px; }
 .gap-20p { gap: 20px; }
+
+
+//max-width 
+.mw-100 { max-width: 100%;}
+
+// user-select
+.user-select-none { user-select: none; }
 
 // width
 .w-15 { width: 15%; }
@@ -21,5 +31,3 @@
 .w-60 { width: 60%; }
 .w-70 { width: 70%; }
 .w-75 { width: 75%; }
-//max-width 
-.mw-100 { max-width: 100%;}

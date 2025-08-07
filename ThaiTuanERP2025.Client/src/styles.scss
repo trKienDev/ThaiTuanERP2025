@@ -15,7 +15,9 @@
       --main-foreground-hover: #A50021;
       --main-theme-fg: #f8e1e1;
       --default-border: #d1d9e0b3;
+      --gold-color: #FFD700;
       --logo-size: 250px;
+
 }
 
 body {
@@ -75,3 +77,9 @@ input {
 }
 html, body { height: 100%; margin: 0; }
 
+.mat-mdc-tooltip-surface {
+      font-family: 'Lexend' !important;
+      user-select: none;
+      background-color: var(--gold-color) !important;
+      color: black !important;
+}
