@@ -25,4 +25,10 @@ export class DepartmentService {
       importExcel(departments: DepartmentModel[]): Observable<ApiResponse<number>> {
             return this.http.post<ApiResponse<number>>(`${this.API_URL}/bulk`, { departments });
       }
+      deleteDepartment(id: string): Observable<any> {
+            return this.http.delete(`${this.API_URL}/${id}`);
+      }
+         updateDepartment(id: string, body: Partial<DepartmentModel>): Observable<any> {
+            return this.http.put(`${this.API_URL}/${id}`, body);
+      }
 }

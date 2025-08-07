@@ -1,0 +1,56 @@
+<div class="modal-backdrop" *ngIf="visible">
+  <div class="modal-container">
+    <form (ngSubmit)="onSubmit()" #editForm="ngForm" class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">
+          <i class="fas fa-edit"></i>
+          Sửa phòng ban
+        </h2>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label required">Mã phòng ban</label>
+          <input
+            type="text"
+            class="form-input"
+            name="code"
+            [(ngModel)]="selectedDepartment.code"
+            readonly
+            placeholder="Mã phòng ban"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label required">Tên phòng ban</label>
+          <input
+            type="text"
+            class="form-input"
+            name="name"
+            [(ngModel)]="selectedDepartment.name"
+            required
+            placeholder="VD: Nhân sự, Công nghệ thông tin"
+          />
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          class="btn btn-primary"
+          type="submit"
+          [disabled]="!editForm.valid"
+        >
+          <i class="fas fa-save"></i>
+          Cập nhật
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="onCancel()"
+        >
+          Hủy
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
