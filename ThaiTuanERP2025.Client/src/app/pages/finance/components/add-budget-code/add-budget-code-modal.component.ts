@@ -64,4 +64,21 @@ export class AddBudgetCodeModalComponent {
             const budgetGroup = this.budgetGroups.find(bg => bg.id === budgetGroupId);
             return budgetGroup ? `${budgetGroup.code} - ${budgetGroup.name}` : '';
       }
+
+      onSubmit() {
+            this.save.emit({
+                  budgetCode: this.budgetCode,
+                  callback: (ok, message?: string) => {
+                        if(ok) {
+                              alert('Tạo ngân sách thành công');
+                              this.onClose();
+                        }
+                        else alert(message || 'Lỗi tạo ngân sách');
+                  }
+            });
+      }
+
+      onClose() {
+            this.close.emit();
+      }
 }

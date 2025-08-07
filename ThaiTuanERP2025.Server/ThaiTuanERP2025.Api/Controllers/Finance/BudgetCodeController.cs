@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Finance.Commands.BudgetCodes.CreateBudgetCode;
+using ThaiTuanERP2025.Application.Finance.Commands.BudgetCodes.UpdateBudgetCodeStatus;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Application.Finance.Queries.BudgetCodes.GetAllBudgetCodesQuery;
 
@@ -29,6 +30,14 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 		{
 			var result = await _mediator.Send(new GetAllBudgetCodesQuery());
 			return Ok(ApiResponse<List<BudgetCodeDto>>.Success(result));
+		}
+
+		[HttpPut("{id}/status")]
+		public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] bool isActive)
+		{
+			var command = new UpdateBudgetCodeStatusCommand { Id = id, IsActive = isActive };
+			await _mediator.Send(command);
+			return Ok(ApiResponse<bool>.Success(true));
 		}
 	}
 }

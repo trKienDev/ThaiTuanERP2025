@@ -3,6 +3,7 @@
 @import url('./styles/_modal.scss');
 @import url('./styles/_keyword-css.scss');
 @import url('./styles/_cards.scss');
+@import url('./styles/_toggle-switch.scss');
 
 
 :root {
@@ -17,7 +18,7 @@
       --logo-size: 250px;
 }
 
-body, label, button, input, span, span, p, textarea, option, select {
+body {
       font-family: 'Lexend', sans-serif;
       font-size: 13px;
 }
