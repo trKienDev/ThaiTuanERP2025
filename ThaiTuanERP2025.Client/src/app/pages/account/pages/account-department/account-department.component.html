@@ -1,7 +1,7 @@
 <h2>Quản lý phòng ban</h2>
 
-<div class="d-flex gap-20p">
-      <div class="primary-card">
+<div class="d-flex gap-20p" style="width: 50%;height: 180px">
+      <div class="primary-card" style="width: 50%; height: 150px;">
             <div class="card-header">
                   <div class="card-title">Thêm phòng ban</div>
             </div>
@@ -14,7 +14,7 @@
             </div>
       </div>
 
-      <div class="primary-card">
+      <div class="primary-card" style="width: 50%;height: 150px">
             <div class="import-department-excel">
                   <div class="card-header">
                         Thêm phòng ban - Excel
@@ -25,9 +25,9 @@
                   </div>
                   <div class="card-body">
                         <input type="file" (change)="onFileSelected($event)" accept=".xlsx, .xls" />
-                        <button (click)="uploadExcel()" [disabled]="importedDepartments.length === 0">
+                        <button style="margin-top: 10px;;" (click)="uploadExcel()" [disabled]="importedDepartments.length === 0">
                               Import danh sách
-                        </button>
+                        </button>   
                         <p *ngIf="importedDepartments.length">
                               Đã đọc được {{ importedDepartments.length }} phòng ban từ file Excel
                         </p>
@@ -48,16 +48,41 @@
                   </th>
                   <th>Mã phòng ban</th>
                   <th>Tên phòng ban</th>
-                  <th></th>
+                  <th>Thao tác</th>
             </tr>
       </thead>
       <tbody>
             <tr *ngFor="let dept of departments">
                   <td>
-                       <input type="checkbox" [(ngModel)]="dept.selected" (change)="updateMasterCheckboxState()" />
+                       <input type="checkbox" [(ngModel)]="dept.selected"
+                        (change)="updateMasterCheckboxState()" />
                   </td>
                   <td>{{ dept.code }}</td>
                   <td>{{ dept.name }}</td>
+                  <td style="text-align: center; margin-right: 10px">
+                        <button class="btn btn-secondary" 
+             (click)="openEditModal(dept)"
+                title="Chỉnh sửa"
+              >
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn btn-danger" 
+                  (click)="onDelete(dept)"
+                title="Xóa"
+              >
+                <i class="fas fa-trash"></i>
+              </button>
+        
+                  </td>
             </tr>
       </tbody>
 </table>
+
+
+  <app-edit-department-modal
+    [visible]="isEditing"
+    [selectedDepartment]="selectedDepartment"
+    (submitUpdate)="updateDepartment($event)"
+    (cancel)="cancelEdit()"
+  ></app-edit-department-modal>
+
