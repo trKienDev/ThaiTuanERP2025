@@ -18,8 +18,6 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.BudgetPeriods.CreateBudge
 			RuleFor(x => x.Month)
 				.Must((command, month) =>
 				{
-					Console.WriteLine($"[DEBUG] Year: {command.Year}, Month: {month}");
-
 					var currentMonth = DateTime.UtcNow.Month;
 					var nextMonth = currentMonth == 12 ? 1 : currentMonth + 1;
 					return month == currentMonth || month == nextMonth;

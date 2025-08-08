@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Common.Persistence;
-using ThaiTuanERP2025.Application.Finance.Commands.BudgetGroup.CreateBudgetGroup;
+using ThaiTuanERP2025.Application.Finance.Commands.BudgetGroups.CreateBudgetGroup;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Domain.Finance.Entities;
 
