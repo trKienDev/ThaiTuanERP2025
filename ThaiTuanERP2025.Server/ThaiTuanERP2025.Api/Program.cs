@@ -42,6 +42,7 @@ using ThaiTuanERP2025.Application.Finance.Commands.BudgetCodes.UpdateBudgetCodeS
 using ThaiTuanERP2025.Application.Finance.Commands.BudgetPeriods.CreateBudgetPeriod;
 using ThaiTuanERP2025.Application.Finance.Commands.BudgetPeriods.UpdateBudgetPeriod;
 using ThaiTuanERP2025.Application.Finance.Commands.BudgetPeriods.DeleteBudgetPeriod;
+using ThaiTuanERP2025.Application.Finance.Commands.BudgetPlans.CreateBudgetPlan;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -86,6 +87,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<UpdateBudgetCodeStatusComma
 builder.Services.AddValidatorsFromAssemblyContaining<CreateBudgetPeriodCommandValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateBudgetPeriodCommandValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<DeleteBudgetPeriodCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateBudgetPlanCommandValidator>();
 
 // Repositories
 builder.Services.AddScoped<iJWTProvider, JwtProvider>();

@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 
 namespace ThaiTuanERP2025.Application.Account.Commands.Departments.DeleteDepartment
 {
-    public record DeleteDepartmentCommand(Guid id) : IRequest;
+	public record DeleteDepartmentCommand(Guid id) : IRequest;
 }

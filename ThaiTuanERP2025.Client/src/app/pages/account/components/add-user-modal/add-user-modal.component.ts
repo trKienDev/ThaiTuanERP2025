@@ -55,12 +55,10 @@ export class AddUserModalComponent {
       
       loadDepartments(): void {
             this.departmentService.getAll().subscribe({
-                  next: res => handleApiResponse(res, 
-                        (data) => {
-                              this.departments = data;
-                              this.filteredDepartments = data;
-                        }
-                  ), 
+                  next: (data) => {
+                        this.departments = data;
+                        this.filteredDepartments = data;
+                  },
                   error: err => alert(handleHttpError(err).join('\n'))
             });
       }

@@ -58,22 +58,24 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			var departments = await _mediator.Send(new GetDepartmentsByIdsQuery(ids), cancellationToken);
 			return Ok(ApiResponse<List<DepartmentDto>>.Success(departments));
 		}
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateDepartmentCommand body)
-        {
-            if (id != body.Id)
-                return BadRequest();
 
-            await _mediator.Send(body);
-            return NoContent();
-        }
+		[HttpPut("{id}")]
+		public async Task<IActionResult> Update(Guid id, [FromBody] UpdateDepartmentCommand body)
+		{
+			if (id != body.Id)
+				return BadRequest(ApiResponse<string>.Fail("Id không hợp lệ"));
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            
-            await _mediator.Send(new DeleteDepartmentCommand(id));
-            return NoContent();
-        }
+			await _mediator.Send(body);
+			return Ok(ApiResponse<string>.Success("Cập nhật department thành công"));
+		}
+
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> Delete(Guid id)
+		{
+			if(id == Guid.Empty)
+				return BadRequest(ApiResponse<string>.Fail("Id không hợp lệ"));
+			await _mediator.Send(new DeleteDepartmentCommand(id));
+			return Ok(ApiResponse<string>.Success("Xoá department thành công"));
+		}
     }
 }

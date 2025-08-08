@@ -3,7 +3,6 @@ import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { ExcelImportService } from "../../../../shared/services/excel/excel-import.service";
 import { DepartmentService } from "../../services/department.service";
-import { handleApiResponse } from "../../../../core/utils/handle-api-response.utils";
 import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
 import { DepartmentModel } from "../../models/department.model";
 import { EditDepartmentModalComponent } from "../../components/edit-department-modal/edit-department-modal.component";
@@ -36,30 +35,22 @@ export class AccountDepartmentComponent implements OnInit {
 
       loadDepartments(): void {
             this.departmentService.getAll().subscribe({
-                  next: res => handleApiResponse(res, 
-                        (data) => {
-                              this.departments = data.map(d => ({ ...d, selected: false }));
-                              this.updateMasterCheckboxState();
-                        }, 
-                        (errors) => {
-                              alert(errors.join('\n'));
-                        }
-                  ),
+                  next: (data) => {
+                        this.departments = data.map(d => ({ ...d, selected: false }));
+                        this.updateMasterCheckboxState();
+                  }, 
                   error: err => alert(handleHttpError(err).join('\n'))
             });
       }
 
       addDepartment(): void {
             this.departmentService.create(this.newDepartment).subscribe({
-                  next: res => handleApiResponse(res,
-                        () => {
-                              this.newDepartment = { code: '', name: '' };
-                              this.successMessage = 'Đã thêm phòng ban thành công';
-                              this.loadDepartments();
-                              setTimeout(() => this.successMessage = null, 3000); 
-                        },
-                        (errors) => alert(errors.join('\n'))
-                  ),
+                  next: () => {
+                        this.newDepartment = { code: '', name: '' };
+                        this.successMessage = 'Đã thêm phòng ban thành công';
+                        this.loadDepartments();
+                        setTimeout(() => this.successMessage = null, 3000); 
+                  },
                   error: err => alert(handleHttpError(err).join('\n'))
             });
       }
@@ -77,19 +68,15 @@ export class AccountDepartmentComponent implements OnInit {
             }
       }
       
-
       uploadExcel(): void {
             if(this.importedDepartments.length === 0) return;
             this.departmentService.importExcel(this.importedDepartments).subscribe({
-                  next: res => handleApiResponse(res, 
-                        (added) => {
-                              this.successMessage = `Đã import ${added} phòng ban thành công`;
-                              this.importedDepartments = [];
-                              this.loadDepartments();
-                              setTimeout(() => this.successMessage = null, 3000);
-                        },
-                        (errors) => alert(errors.join('\n'))
-                  ),
+                  next: (added) => {
+                        this.successMessage = `Đã import ${added} phòng ban thành công`;
+                        this.importedDepartments = [];
+                        this.loadDepartments();
+                        setTimeout(() => this.successMessage = null, 3000);
+                  },
                   error: err => alert(handleHttpError(err).join('\n'))
             });
       }
@@ -112,25 +99,26 @@ export class AccountDepartmentComponent implements OnInit {
       isAllSelected(): boolean {
             return this.departments.length > 0 && this.departments.every(d => d.selected);
       }
-onDelete(dept: DepartmentModel): void {     
-  if (!dept.id) {
-    alert('ID không hợp lệ');
-    return;
-  }
-  if (confirm('Bạn có chắc muốn xóa phòng ban này?')) {
-       console.log('Open Edit:', dept); 
-    this.departmentService.deleteDepartment(dept.id).subscribe({
-      next: () => {
-        this.successMessage = 'Xóa thành công';
-        this.loadDepartments();
-        setTimeout(() => this.successMessage = null, 3000);
-      },
-      error: (err) => alert('Lỗi xóa: ' + err.message),
-    });
-  }
-}
+
+      onDelete(dept: DepartmentModel): void {     
+            if (!dept.id) {
+                  alert('ID không hợp lệ');
+                  return;
+            }
+
+            if (confirm('Bạn có chắc muốn xóa phòng ban này?')) {
+                  this.departmentService.deleteDepartment(dept.id).subscribe({
+                        next: () => {
+                              this.successMessage = 'Xóa thành công';
+                              this.loadDepartments();
+                              setTimeout(() => this.successMessage = null, 3000);
+                        },
+                        error: (err) => alert('Lỗi xóa: ' + err.message),
+                  });
+            }
+      }
+
       openEditModal(dept: DepartmentModel): void {
-             console.log('Open Edit:', dept); 
             this.selectedDepartment = { ...dept };            
             this.isEditing = true;
       }
@@ -140,24 +128,24 @@ onDelete(dept: DepartmentModel): void {
             this.selectedDepartment = { id: '', code: '', name: '' };
       }
 
-updateDepartment(updated: DepartmentModel): void {
-  if (!updated.id) {
-    alert('ID phòng ban không hợp lệ');
-    return;
-  }
+      updateDepartment(updated: DepartmentModel): void {
+            if (!updated.id) {
+                  alert('ID phòng ban không hợp lệ');
+                  return;
+            }
 
-  this.departmentService.updateDepartment(updated.id, {id: updated.id,
-    code: updated.code,
-    name: updated.name
-  }).subscribe({
-    next: () => {
-      this.successMessage = 'Cập nhật phòng ban thành công!';
-      this.loadDepartments();
-      this.cancelEdit();
-      setTimeout(() => this.successMessage = null, 3000);
-    },
-    error: (err) => alert(err.message)
-  });
-}
-    
+            this.departmentService.updateDepartment(updated.id, {
+                  id: updated.id,
+                  code: updated.code,
+                  name: updated.name
+            }).subscribe({
+                  next: () => {
+                        this.successMessage = 'Cập nhật phòng ban thành công!';
+                        this.loadDepartments();
+                        this.cancelEdit();
+                        setTimeout(() => this.successMessage = null, 3000);
+                  },
+                  error: (err) => alert(err.message)
+            });
+      }
 }

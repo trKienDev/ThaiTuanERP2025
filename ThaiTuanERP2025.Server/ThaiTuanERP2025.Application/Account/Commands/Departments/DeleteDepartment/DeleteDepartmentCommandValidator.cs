@@ -13,7 +13,7 @@ namespace ThaiTuanERP2025.Application.Account.Commands.Departments.DeleteDepartm
 		public DeleteDepartmentCommandValidator()
 		{
 			RuleFor(x => x.id)
-				.NotEmpty().WithMessage("api không lấy được id, vui lòng kiểm tra lại");
+				.NotEmpty().WithMessage("Id không được để trống");
 		
 		}
 	}
