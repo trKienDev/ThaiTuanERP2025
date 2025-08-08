@@ -10,6 +10,7 @@ namespace ThaiTuanERP2025.Domain.Common
 	{
 		public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 		public Guid CreatedByUserId { get; set; } // Foreign Key
+
 		public DateTime? DateModified { get; set; }
 		public Guid? ModifiedByUserId { get; set; } // Foreign Key
 		

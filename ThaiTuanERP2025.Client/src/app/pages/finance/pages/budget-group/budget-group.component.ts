@@ -45,6 +45,7 @@ export class BudgetGroupComponent implements OnInit {
       }
 
       createBudgetGroup(): void {
+            this.newBudgetGroup.code = this.newBudgetGroup.code.toUpperCase();
             this.budgetGroupService.create(this.newBudgetGroup).subscribe({
                   next: res => handleApiResponse(res, 
                         (data) => {

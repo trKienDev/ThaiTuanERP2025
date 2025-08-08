@@ -24,7 +24,7 @@ using ThaiTuanERP2025.Application.Behaviors;
 using ThaiTuanERP2025.Application.Account.Commands.Departments.AddDepartment;
 using ThaiTuanERP2025.Application.Account.Commands.Users.CreateUser;
 using ThaiTuanERP2025.Application.Finance.Commands.BudgetGroup.UpdateBudgetGroup;
-using ThaiTuanERP2025.Application.Finance.Commands.BudgetGroup.CreateBudgetGroup;
+using ThaiTuanERP2025.Application.Finance.Commands.BudgetGroups.CreateBudgetGroup;
 using ThaiTuanERP2025.Application.Account.Commands.Accounts.Login;
 using ThaiTuanERP2025.Application.Account.Commands.Departments.BulkAddDepartmentCommand;
 using ThaiTuanERP2025.Application.Account.Commands.Groups.ChangeGroupAdmin;
