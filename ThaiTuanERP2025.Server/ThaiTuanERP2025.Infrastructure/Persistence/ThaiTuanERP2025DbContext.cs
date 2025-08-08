@@ -157,7 +157,6 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 			});
 		}
 
-
 		public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{
 			var entries = ChangeTracker.Entries<AuditableEntity>();
@@ -183,6 +182,26 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 				}
 			}
 			return base.SaveChangesAsync(cancellationToken);
+		}
+
+		private void ApplyGlobalFilters(ModelBuilder modelBuilder)
+		{
+			foreach(var entityType in modelBuilder.Model.GetEntityTypes())
+			{
+				if (typeof(AuditableEntity).IsAssignableFrom(entityType.ClrType))
+				{
+					var method = typeof(ThaiTuanERP2025DbContext)
+						.GetMethod(nameof(SetSoftDeleteFilter), System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)
+						? .MakeGenericMethod(entityType.ClrType);
+
+					method?.Invoke(null, new object[] { modelBuilder });
+				}
+			}
+		}
+
+		private static void SetSoftDeleteFilter<TEntity>(ModelBuilder builder) where TEntity : AuditableEntity
+		{
+			builder.Entity<TEntity>().HasQueryFilter(e => !e.IsDeleted);
 		}
 	}
 }

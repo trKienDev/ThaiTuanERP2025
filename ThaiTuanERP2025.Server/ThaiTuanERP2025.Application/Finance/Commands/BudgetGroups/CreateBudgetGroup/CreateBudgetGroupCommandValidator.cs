@@ -5,16 +5,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ThaiTuanERP2025.Application.Finance.Commands.BudgetGroup.CreateBudgetGroup
+namespace ThaiTuanERP2025.Application.Finance.Commands.BudgetGroups.CreateBudgetGroup
 {
 	public class CreateBudgetGroupCommandValidator : AbstractValidator<CreateBudgetGroupCommand>
 	{
 		public CreateBudgetGroupCommandValidator()
 		{
-			RuleFor(x => x.Code)
+			RuleFor(x => x.Code) 
 				.NotEmpty().WithMessage("Mã nhóm ngân sách không được để trống.")
 				.MaximumLength(20).WithMessage("Mã nhóm ngân sách không được vượt quá 20 ký tự.")
-				.Matches(@"^[A-Z0-9]+$").WithMessage("Mã nhóm ngân sách chỉ được chứa chữ hoa và số, không có dấu cách hoặc ký tự đặc biệt.");
+				.Matches(@"^[A-Z0-9]+$").WithMessage("Mã nhóm ngân sách chỉ được chứa chữ hoa và số, không có dấu cách hoặc ký tự đặc biệt.")
+				.Custom((code, context) =>
+				{
+					Console.WriteLine($"[DEBUG] Code: {code}");
+				});
 
 			RuleFor(x => x.Name)
 				.NotEmpty().WithMessage("Tên nhóm ngân sách không được để trống.")
