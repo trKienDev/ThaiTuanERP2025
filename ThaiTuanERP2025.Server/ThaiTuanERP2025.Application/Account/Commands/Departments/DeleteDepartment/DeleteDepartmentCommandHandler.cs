@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,26 +10,30 @@ using ThaiTuanERP2025.Application.Account.Repositories;
 using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Exceptions;
 
 namespace ThaiTuanERP2025.Application.Account.Commands.Departments.DeleteDepartment
 {
-    public class DeleteDepartmentHandler : IRequestHandler<DeleteDepartmentCommand>
-    {
-        private readonly IDepartmentRepository _repo;
-
-        public DeleteDepartmentHandler(IDepartmentRepository repo)
+        public class DeleteDepartmentHandler : IRequestHandler<DeleteDepartmentCommand>
         {
-            _repo = repo;
-        }
+                private readonly IMapper _mapper;
+                private readonly IUnitOfWork _unitOfWork;
 
-        public async Task<Unit> Handle(DeleteDepartmentCommand request, CancellationToken cancellationToken)
-        {
-            var department = await _repo.GetByIdAsync(request.id);
-            if (department == null)
-                throw new Exception("Department not found");
+                public DeleteDepartmentHandler(IMapper mapper, IUnitOfWork unitOfWork)
+                {
+                        _unitOfWork = unitOfWork;
+			_mapper = mapper;
+		}
 
-            await _repo.DeleteAsync(request.id);
-            return Unit.Value;
-        }
-    }
+                public async Task<Unit> Handle(DeleteDepartmentCommand request, CancellationToken cancellationToken)
+                {
+                        var department = await _unitOfWork.Departments.GetByIdAsync(request.id);
+                        if (department == null)
+                                throw new NotFoundException("Department not found");
+
+                        await _unitOfWork.Departments.DeleteAsync(request.id);
+			await _unitOfWork.SaveChangesAsync(cancellationToken);
+			return Unit.Value;
+                }
+                }
 }

@@ -23,10 +23,8 @@ export class AccountProfileComponent implements OnInit {
       ngOnInit(): void {
             console.log('Account profile');
             this.userService.getCurrentuser().subscribe({
-                  next: (res) => {
-                        if(res.isSuccess && res.data) {
-                              this.user = res.data;
-                        }
+                  next: (data) => {
+                        this.user = data;
                   },
                   error: () => {
                         alert('Không thể lấy thông tin người dùng hiện tại');
@@ -78,17 +76,13 @@ export class AccountProfileComponent implements OnInit {
             this.isUploading = true;
 
             this.userService.updateAvatar(this.selectedAvatarFile).subscribe({
-                  next: (res) => {
+                  next: (data) => {
                         this.isUploading = false;
-                        if(res.isSuccess && res.data) {
-                              if(this.user) {
-                                    this.user.avatarUrl = res.data;
-                              }
-                              this.selectedAvatarFile = null;
-                              this.snackBar.open('Cập nhật ảnh đại diện thành công', 'Đóng', { duration: 3000 });
-                        } else {
-                              this.snackBar.open(res.message || 'Cập nhật ảnh thất bại', 'Đóng', { duration: 3000 });
+                        if(this.user) {
+                              this.user.avatarUrl = data;
                         }
+                        this.selectedAvatarFile = null;
+                        this.snackBar.open('Cập nhật ảnh đại diện thành công', 'Đóng', { duration: 3000 });
                   }, 
                   error: (err) => {
                          this.isUploading = false;

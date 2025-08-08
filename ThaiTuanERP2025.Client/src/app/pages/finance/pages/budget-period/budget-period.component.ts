@@ -30,16 +30,10 @@ export class BudgetPeriodComponent implements OnInit{
 
       loadBudgetPeriods() {
             this.budgetPeriodService.getAll().subscribe({
-                  next: res => handleApiResponse(res,
-                        (data) => {
-                              console.log('data: ', data);
-                              this.budgetPeriods = data.map(bp => ({ ...bp, selected: false }));
-                              this.updateMasterCheckboxState();
-                        }, 
-                        (errors) => {
-                              this.errorMessages = errors;
-                        }
-                  ),
+                  next: (data) => {
+                        this.budgetPeriods = data.map(bp => ({ ...bp, selected: false }));
+                        this.updateMasterCheckboxState();
+                  }, 
                   error: err => {
                         this.errorMessages = handleHttpError(err);
                   }
@@ -51,19 +45,13 @@ export class BudgetPeriodComponent implements OnInit{
                   this.errorMessages = ['Vui lòng nhập năm và tháng hợp lệ (tháng từ 1 đến 12)'];
                   return;
             }
-            console.log('month: ', this.month);
-            console.log('year: ', this.year);
+
             this.budgetPeriodService.create({ month: this.month, year: this.year }).subscribe({
-                  next: res => handleApiResponse(res, 
-                        (data) => {
-                              this.year = 0;
-                              this.month = 0;
-                              this.loadBudgetPeriods();
-                        },
-                        (errors) => {
-                              this.errorMessages = errors;
-                        }
-                  ), 
+                  next: (data) => {
+                        this.year = 0;
+                        this.month = 0;
+                        this.loadBudgetPeriods();
+                  },
                   error: err => {
                         this.errorMessages = handleHttpError(err);
                   }
