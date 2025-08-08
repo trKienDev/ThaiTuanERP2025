@@ -32,15 +32,10 @@ export class BudgetCodeComponent implements OnInit {
 
       loadBudgetCodes(): void {
             this.budgetCodeService.getAll().subscribe({
-                  next: res => handleApiResponse(res, 
-                        (data) => {
-                              this.budgetCodes = data.map(bc => ({ ...bc, selected: false }));
-                              this.updateMasterCheckboxState();
-                        },
-                        (errors) => {
-                              alert(errors.join('\n'));
-                        }
-                  ),
+                  next: (data) => {
+                        this.budgetCodes = data.map(bc => ({ ...bc, selected: false }));
+                        this.updateMasterCheckboxState();
+                  },
                   error: err => alert(handleHttpError(err).join('\n'))
             });
       }
@@ -50,13 +45,10 @@ export class BudgetCodeComponent implements OnInit {
             callback: (ok: boolean, message?: string) => void
       }) {
             this.budgetCodeService.create(budgetCode).subscribe({
-                  next: res => handleApiResponse(res, 
-                        () => {
+                  next: () => {
                               this.loadBudgetCodes();
                               callback(true);
                         },
-                        (errors) => callback(false, errors.join(', '))
-                  ),
                   error: err => {
                         const messages = handleHttpError(err);
                         callback(false, messages.join(', '));
@@ -87,19 +79,7 @@ export class BudgetCodeComponent implements OnInit {
             budgetCode.isActive = !oldValue;
 
             this.budgetCodeService.updateStatus(budgetCode.id, budgetCode.isActive).subscribe({
-                  next: res => handleApiResponse(res, 
-                        () => {
-
-                        },
-                        (errors) => {
-                              budgetCode.isActive = oldValue;
-                              this.errorMessages = errors;
-                              setTimeout(() => this.errorMessages = [], 4000);
-                        }, 
-                        () => {
-                              budgetCode.isActive = !budgetCode.isActive;
-                        }
-                  ),
+                  next: () => {},
                   error: err => {
                         budgetCode.isActive = !budgetCode.isActive;
                         this.errorMessages = handleHttpError(err);

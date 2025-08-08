@@ -40,12 +40,10 @@ export class AddBudgetCodeModalComponent {
 
       loadBudgetGroups(): void {
             this.budgetGroupService.getAll().subscribe({
-                  next: res => handleApiResponse(res, 
-                        (data) => {
-                              this.budgetGroups = data;
-                              this.filteredBudgetGroups = data;
-                        }
-                  ),
+                  next: (data) => {
+                        this.budgetGroups = data;
+                        this.filteredBudgetGroups = data;
+                  },
                   error: err => alert(handleHttpError(err).join('\n'))
             })
       }

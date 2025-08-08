@@ -29,15 +29,10 @@ export class BudgetGroupComponent implements OnInit {
 
       loadBudgetGroups(): void {
             this.budgetGroupService.getAll().subscribe({
-                  next: res => handleApiResponse(res, 
-                        (data) => {
-                              this.budgetGroups = data.map(bg => ({ ...bg, selected: false }));
-                              this.updateMasterCheckboxState?.();
-                        }, 
-                        (errors) => {
-                              this.errorMessages = errors;
-                        }
-                  ),
+                  next: (data) => {
+                        this.budgetGroups = data.map(bg => ({ ...bg, selected: false }));
+                        this.updateMasterCheckboxState?.();
+                  },
                   error: err => {
                         this.errorMessages = handleHttpError(err);
                   }
@@ -47,17 +42,12 @@ export class BudgetGroupComponent implements OnInit {
       createBudgetGroup(): void {
             this.newBudgetGroup.code = this.newBudgetGroup.code.toUpperCase();
             this.budgetGroupService.create(this.newBudgetGroup).subscribe({
-                  next: res => handleApiResponse(res, 
-                        (data) => {
-                              this.newBudgetGroup = { code: '', name: '' };
-                              this.successMessage = 'Đã thêm nhóm ngân sách thành công';
-                              this.loadBudgetGroups();
-                              setTimeout(() => this.successMessage = null, 3000);
-                        },
-                        (errors) => {
-                              this.errorMessages = errors;
-                        }
-                  ),
+                  next: (data) => {
+                        this.newBudgetGroup = { code: '', name: '' };
+                        this.successMessage = 'Đã thêm nhóm ngân sách thành công';
+                        this.loadBudgetGroups();
+                        setTimeout(() => this.successMessage = null, 3000);
+                  },
                   error: err => {
                         this.errorMessages = handleHttpError(err);
                   }
