@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,6 +37,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 			ConfigureGroup(modelBuilder);
 			ConfigureUserGroup(modelBuilder);
 			ConfigureFinance(modelBuilder);
+			ApplyGlobalFilters(modelBuilder);
 		}
 
 		private void ConfigureUser(ModelBuilder modelBuilder)
@@ -103,6 +105,23 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 				builder.HasIndex(e => e.Code).IsUnique();
 				builder.Property(e => e.Code).IsRequired().HasMaxLength(50);
 				builder.Property(e => e.Name).IsRequired().HasMaxLength(255);
+
+				// Audit User
+				builder.HasOne(e => e.CreatedByUser)
+					.WithMany()
+					.HasForeignKey(e => e.CreatedByUserId)
+					.OnDelete(DeleteBehavior.Restrict);
+
+				builder.HasOne(e => e.ModifiedByUser)
+					.WithMany()
+					.HasForeignKey(e => e.ModifiedByUserId)
+					.OnDelete(DeleteBehavior.Restrict);
+
+				builder.HasOne(e => e.DeletedByUser)
+					.WithMany()
+					.HasForeignKey(e => e.DeletedByUserId)
+					.OnDelete(DeleteBehavior.Restrict);
+
 			});
 
 			modelBuilder.Entity<BudgetCode>(builder =>
@@ -184,24 +203,51 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 			return base.SaveChangesAsync(cancellationToken);
 		}
 
+		/// <summary>
+		/// Áp dụng bộ lọc toàn cục cho các entity kế thừa AuditableEntity
+		/// !IsDeleted cho tất cả entity kế thừa AuditableEntity.
+		/// Nếu entity có navigation tới cha mà cha cũng kế thừa AuditableEntity ⇒ tự động thêm điều kiện !Parent.IsDeleted.
+		/// logic: ẩn con khi cha bị ẩn
+		/// </summary>
+		/// <param name="modelBuilder"></param>
 		private void ApplyGlobalFilters(ModelBuilder modelBuilder)
 		{
 			foreach(var entityType in modelBuilder.Model.GetEntityTypes())
 			{
-				if (typeof(AuditableEntity).IsAssignableFrom(entityType.ClrType))
+				var clrType = entityType.ClrType;
+
+				// Bỏ qua entity không kế thừa AuditableEntity
+				if(!typeof(AuditableEntity).IsAssignableFrom(clrType))
+					continue;
+				
+				var parameter = Expression.Parameter(clrType, "e");
+
+				// Điều kiện chính: !e.IsDeleted
+				var isDeletedProperty = Expression.Property(parameter, nameof(AuditableEntity.IsDeleted));
+				var notDeleted = Expression.Not(isDeletedProperty);
+
+				Expression finalFilter = notDeleted;
+
+				// Duyệt qua navigation tới cha
+				foreach (var navigation in entityType.GetNavigations())
 				{
-					var method = typeof(ThaiTuanERP2025DbContext)
-						.GetMethod(nameof(SetSoftDeleteFilter), System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)
-						? .MakeGenericMethod(entityType.ClrType);
+					var targetClrType = navigation.TargetEntityType.ClrType;
+					if (typeof(AuditableEntity).IsAssignableFrom(targetClrType) && navigation.IsOnDependent)
+					{
+						// e.Parent != null && !e.Parent.IsDeleted	
+						var navProperty = Expression.Property(parameter, navigation.Name);
+						var parentNotNull = Expression.NotEqual(navProperty, Expression.Constant(null, targetClrType));
+						var parentIsDeletedProperty = Expression.Property(navProperty, nameof(AuditableEntity.IsDeleted));
+						var parentNotDeleted = Expression.Not(parentIsDeletedProperty);
+						var parentCondition = Expression.AndAlso(parentNotNull, parentNotDeleted);
 
-					method?.Invoke(null, new object[] { modelBuilder });
+						finalFilter = Expression.AndAlso(finalFilter, parentCondition);
+					}
 				}
-			}
-		}
 
-		private static void SetSoftDeleteFilter<TEntity>(ModelBuilder builder) where TEntity : AuditableEntity
-		{
-			builder.Entity<TEntity>().HasQueryFilter(e => !e.IsDeleted);
+				var lamba = Expression.Lambda(finalFilter, parameter);
+				modelBuilder.Entity(clrType).HasQueryFilter(lamba);
+			}
 		}
 	}
 }
