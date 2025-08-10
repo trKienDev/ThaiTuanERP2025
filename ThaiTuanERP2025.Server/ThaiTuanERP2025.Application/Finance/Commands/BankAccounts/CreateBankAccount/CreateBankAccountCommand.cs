@@ -1,0 +1,18 @@
+﻿using MediatR;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ThaiTuanERP2025.Application.Finance.DTOs;
+
+namespace ThaiTuanERP2025.Application.Finance.Commands.BankAccounts.CreateBankAccount
+{
+	public record CreateBankAccountCommand (
+		string AccountNumber,
+		string BankName,
+		string? AccountHolder,
+		Guid? DepartmentId,
+		string? CustomerName
+	) : IRequest<BankAccountDto>;
+}

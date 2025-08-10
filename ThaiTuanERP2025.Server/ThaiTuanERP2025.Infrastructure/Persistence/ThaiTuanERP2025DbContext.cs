@@ -205,7 +205,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 				builder.Property(e => e.Note).HasMaxLength(500);
 				builder.Property(e => e.CustomerName).HasMaxLength(250);
 
-				builder.HasOne<Department>()
+				builder.HasOne(b => b.Department)
 					.WithMany()
 					.HasForeignKey(e => e.DepartmentId)
 					.OnDelete(DeleteBehavior.Restrict);

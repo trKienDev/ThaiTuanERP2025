@@ -9,10 +9,17 @@ namespace ThaiTuanERP2025.Application.Common.Persistence
 {
 	public interface IBaseRepository<T> where T : class
 	{
+		Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
+
+		Task<List<T>> FindAsync(Expression<Func<T, bool>> predicate);
+		Task<List<T>> FindIncludingAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes);
+
 		Task<T?> GetByIdAsync(Guid id);
 		Task<List<T>> GetAllAsync();
+		Task<List<T>> GetAllIncludingAsync(params Expression<Func<T, object>>[] includes);
+
 		Task AddAsync(T entity);
-		Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
+		
 		void Update(T entity);
 		void Delete(T entity);
 	}

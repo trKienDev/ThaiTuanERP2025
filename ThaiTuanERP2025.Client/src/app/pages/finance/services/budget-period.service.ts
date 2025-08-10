@@ -17,6 +17,11 @@ export class BudgetPeriodService {
                   .pipe(handleApiResponse$<BudgetPeriodModel[]>());
       }
 
+      getAllActive(): Observable<BudgetPeriodModel[]> {
+            return this.http.get<ApiResponse<BudgetPeriodModel[]>>(`${this.API_URL}/active`)
+                  .pipe(handleApiResponse$<BudgetPeriodModel[]>());
+      }
+
       create(payload: { year: number, month: number }): Observable<BudgetPeriodModel> {
             return this.http.post<ApiResponse<BudgetPeriodModel>>(this.API_URL, payload)
                   .pipe(handleApiResponse$<BudgetPeriodModel>());

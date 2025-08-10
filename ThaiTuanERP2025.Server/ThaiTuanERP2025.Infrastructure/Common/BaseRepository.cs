@@ -29,6 +29,35 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			return await _dbSet.ToListAsync();
 		}
 
+		// filter by condition
+		public virtual async Task<List<T>> FindAsync(Expression<Func<T, bool>> predicate)
+		{
+			if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+			return await _dbSet.AsNoTracking().Where(predicate).ToListAsync();
+		}
+
+		// filter by navigation
+		public virtual async Task<List<T>> GetAllIncludingAsync(params Expression<Func<T, object>>[] includes) {
+			IQueryable<T> query = _dbSet.AsNoTracking();
+			if (includes != null)
+				foreach (var include in includes)
+					query = query.Include(include);
+
+			return await query.ToListAsync();
+		}
+
+		// filter by condition and navigation
+		public virtual async Task<List<T>> FindIncludingAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes) {
+			if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+
+			IQueryable<T> query = _dbSet.AsNoTracking().Where(predicate);
+			if (includes != null)
+				foreach (var include in includes)
+					query = query.Include(include);
+
+			return await query.ToListAsync();
+		}
+
 		public async Task AddAsync(T entity)
 		{
 			if (entity == null) throw new ArgumentNullException(nameof(entity));

@@ -21,10 +21,12 @@ export class BudgetPlanService {
                   .pipe(handleApiResponse$<BudgetPlanModel>());
       }
 
-      update(plan: Partial<CreateBudgetPlanModel>): Observable<BudgetPlanModel> {
-            return this.http.put<ApiResponse<BudgetPlanModel>>(this.API_URL, plan)
+      update(id: string, plan: Partial<CreateBudgetPlanModel>): Observable<BudgetPlanModel> {
+            return this.http.put<ApiResponse<BudgetPlanModel>>(`${this.API_URL}/${id}`, plan)
                   .pipe(handleApiResponse$<BudgetPlanModel>());
       }
 
-      
+      delete(id: string): Observable<ApiResponse<void>> {
+            return this.http.delete<ApiResponse<void>>(`${this.API_URL}/${id}`);
+      }
 }

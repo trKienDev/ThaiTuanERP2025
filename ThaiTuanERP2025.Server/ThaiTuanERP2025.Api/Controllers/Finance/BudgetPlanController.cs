@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
-using ThaiTuanERP2025.Application.Account.Dtos;
+using ThaiTuanERP2025.Application.Finance.Dtos;
 using ThaiTuanERP2025.Application.Finance.Commands.BudgetPlans.CreateBudgetPlan;
 using ThaiTuanERP2025.Application.Finance.Commands.BudgetPlans.DeleteBudgetPlan;
 using ThaiTuanERP2025.Application.Finance.Commands.BudgetPlans.UpdateBudgetPlan;
