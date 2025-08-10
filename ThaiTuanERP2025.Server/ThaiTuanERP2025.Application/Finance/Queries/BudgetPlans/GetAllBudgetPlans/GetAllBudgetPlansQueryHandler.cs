@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ThaiTuanERP2025.Application.Account.Dtos;
+using ThaiTuanERP2025.Application.Finance.Dtos;
 using ThaiTuanERP2025.Application.Common.Persistence;
 
 namespace ThaiTuanERP2025.Application.Finance.Queries.BudgetPlans.GetAllBudgetPlans
@@ -22,9 +22,12 @@ namespace ThaiTuanERP2025.Application.Finance.Queries.BudgetPlans.GetAllBudgetPl
 
 		public async Task<List<BudgetPlanDto>> Handle(GetAllBudgetPlansQuery request, CancellationToken cancellationToken)
 		{
-			var entities = await _unitOfWork.BudgetPlans.GetAllAsync();
+			var entities = await _unitOfWork.BudgetPlans.GetAllIncludingAsync(
+				x => x.Department,
+				x => x.BudgetCode,
+				x => x.BudgetPeriod
+			);
 			return _mapper.Map<List<BudgetPlanDto>>(entities);
 		}
-
 	}
 }

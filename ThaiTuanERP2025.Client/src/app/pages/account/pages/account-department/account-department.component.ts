@@ -19,7 +19,7 @@ export class AccountDepartmentComponent implements OnInit {
       successMessage: string | null = null;
       departments: (DepartmentModel & { selected: boolean })[] = [];
       importedDepartments: DepartmentModel[] = [];
-       isEditing = false;
+      isEditing = false;
       selectedDepartment: DepartmentModel = { id: '', code: '', name: '' };
 
       @ViewChild('masterCheckbox', { static: false }) masterCheckbox!: ElementRef<HTMLInputElement>;

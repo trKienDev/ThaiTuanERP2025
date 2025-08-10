@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Observable, pipe } from "rxjs";
 import { ApiResponse } from "../../../core/models/api-response.model";
 import { BudgetCodeModel, CreateBudgetCodeModel } from "../models/budget-code.model";
 import { handleApiResponse$ } from "../../../core/utils/handle-api-response.operator";
@@ -13,6 +13,11 @@ export class BudgetCodeService {
 
       getAll(): Observable<BudgetCodeModel[]> {
             return this.http.get<ApiResponse<BudgetCodeModel[]>>(`${this.API_URL}/all`)
+                  .pipe(handleApiResponse$<BudgetCodeModel[]>());
+      }
+
+      getAllActive(): Observable<BudgetCodeModel[]> {
+            return this.http.get<ApiResponse<BudgetCodeModel[]>>(`${this.API_URL}/active`)
                   .pipe(handleApiResponse$<BudgetCodeModel[]>());
       }
 

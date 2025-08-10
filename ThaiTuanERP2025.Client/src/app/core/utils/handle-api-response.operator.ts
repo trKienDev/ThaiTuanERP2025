@@ -6,6 +6,7 @@ export function handleApiResponse$<T>() {
       return (source$: Observable<ApiResponse<T>>): Observable<T> =>
             source$.pipe(
                   map((response) => {
+                        console.log('response: ', response);
                         if (response.isSuccess && response.data !== null && response.data !== undefined) {
                               return response.data;
                         }

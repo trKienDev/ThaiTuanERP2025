@@ -7,6 +7,7 @@ using ThaiTuanERP2025.Application.Finance.Commands.BudgetPeridos.CreateBudgetPer
 using ThaiTuanERP2025.Application.Finance.Commands.BudgetPeriods.DeleteBudgetPeriod;
 using ThaiTuanERP2025.Application.Finance.Commands.BudgetPeriods.UpdateBudgetPeriod;
 using ThaiTuanERP2025.Application.Finance.DTOs;
+using ThaiTuanERP2025.Application.Finance.Queries.BudgetPeriods.GetAllActiveBudgetPeriods;
 using ThaiTuanERP2025.Application.Finance.Queries.BudgetPeriods.GetAllBudgetPeriods;
 
 namespace ThaiTuanERP2025.Api.Controllers.Finance
@@ -27,6 +28,12 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 		{
 			var budgetPeriods = await _mediator.Send(new GetAllBudgetPeriodsQuery());
 			return Ok(ApiResponse<List<BudgetPeriodDto>>.Success(budgetPeriods));
+		}
+
+		[HttpGet("active")]
+		public async Task<IActionResult> GetAllActive() {
+			var result = await _mediator.Send(new GetAllActiveBudgetPeriodsQuery());
+			return Ok(ApiResponse<List<BudgetPeriodDto>>.Success(result));
 		}
 
 		[HttpPost]

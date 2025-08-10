@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 
-namespace ThaiTuanERP2025.Application.Finance.Queries.BudgetCodes.GetAllBudgetCodesQuery
+namespace ThaiTuanERP2025.Application.Finance.Queries.BudgetCodes.GetAllBudgetCodes
 {
 	public class GetAllBudgetCodesQueryHandler : IRequestHandler<GetAllBudgetCodesQuery, List<BudgetCodeDto>>
 	{

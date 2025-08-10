@@ -7,7 +7,8 @@ import { AuthService } from '../../core/services/auth/auth.service.js';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { handleApiResponse } from '../../core/utils/handle-api-response.utils.js';
 import { handleApiResponse$ } from '../../core/utils/handle-api-response.operator.js';
-import { tap } from 'rxjs';
+import { catchError, EMPTY, finalize, tap } from 'rxjs';
+import { handleHttpError } from '../../core/utils/handle-http-errors.util.js';
 
 @Component({
       selector: 'app-login',
@@ -20,6 +21,7 @@ export class LoginComponent implements OnInit{
       loginForm!: FormGroup;
       showPassword = false;
       message: string | null = null;
+      traceId: string | null = null;
       isLoading = false;
 
       constructor(
@@ -67,24 +69,22 @@ export class LoginComponent implements OnInit{
             }
 
             const { employeeCode, password } = this.loginForm.value;
-
             this.message = null;
             this.isLoading = true;
 
             this.authService.login(employeeCode, password).pipe(
                   handleApiResponse$<LoginResponse>(),
-                  tap((data) => {
-                        this.authService.loginSuccess(data.accessToken, data.userRole);
-                  })
+                  tap((data) => this.authService.loginSuccess(data.accessToken, data.userRole)),
+                  catchError((err) => {
+                        const msgs = handleHttpError(err);
+                        this.message = msgs[0];
+                        return EMPTY; // nuốt lỗi để subscribe.next không chạy, và không gọi error callback
+                  }),
+                  finalize(() => (this.isLoading = false))
             ).subscribe({
                   next: () => {
-                        this.isLoading = false;
                         this.router.navigateByUrl('/splash')
-                  },
-                  error: (err) => {
-                        this.isLoading = false;
-                        this.message = err?.message || 'Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau';
                   }
-            })
+            });
       };
 }
