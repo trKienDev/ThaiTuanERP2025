@@ -47,8 +47,7 @@
                                     matInput [matAutocomplete]="auto" 
                                     [(ngModel)]="user.departmentId" 
                                     (ngModelChange)="onDepartmentInputChange($event)"
-                                    name="department" 
-                              required/>
+                                    name="department" required/>
                               <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayDepartmentFn">
                                     <mat-option *ngFor="let dept of filteredDepartments" [value]="dept.id"> 
                                           {{ dept.code }} - {{ dept.name }} 

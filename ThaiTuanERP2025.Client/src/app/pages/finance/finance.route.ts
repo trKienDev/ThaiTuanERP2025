@@ -10,6 +10,7 @@ export const financeRoutes: Routes = [
                   { path: 'budget-group', loadComponent: () => import('./pages/budget-group/budget-group.component').then((m) => m.BudgetGroupComponent )},
                   { path: 'budget-code', loadComponent: () => import('./pages/budget-code/budget-code.component').then((m) => m.BudgetCodeComponent)},
                   { path: 'budget-period', loadComponent: () => import('./pages/budget-period/budget-period.component').then((m) => m.BudgetPeriodComponent )},
+                  { path: 'budget-plan', loadComponent: () => import('./pages/budget-plan/budget-plan.component').then((m) => m.BudgetPlanComponent )},
             ]
       }
 ];

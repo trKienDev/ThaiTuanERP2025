@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ThaiTuanERP2025.Application.Account.Dtos
+namespace ThaiTuanERP2025.Application.Finance.Dtos
 {
 	public class BudgetPlanDto
 	{

@@ -8,7 +8,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from '@angular/material/button';
-import { handleApiResponse } from "../../../../core/utils/handle-api-response.utils";
 import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
 import { CreateUserModel, UserModel } from "../../models/user.model";
 import { DepartmentModel } from "../../models/department.model";
