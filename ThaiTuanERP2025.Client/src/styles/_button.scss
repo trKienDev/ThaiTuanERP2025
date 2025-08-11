@@ -29,3 +29,53 @@
 .button-stackoverflow:hover, .button-stackoverflow:focus { background-color: #07c; }
 .button-stackoverflow:focus { box-shadow: 0 0 0 4px rgba(0, 149, 255, .15); }
 .button-stackoverflow:active { background-color: #0064bd; box-shadow: none; }
+
+// *** button-download ***
+.button-download { display: inline-block; position: relative; padding: 6px; background-color: #4CC713; color: white; font-family: 'Lexend', sans-serif; text-decoration: none; font-size: 13px; text-align: center; text-indent: 30px; border: none; border-radius: 5px; }
+.button-download:hover { background-color: #45a21a; color: white; cursor: pointer; }
+.button-download:before, .button-download:after { content: ' '; display: block; position: absolute; left: 15px; top: 52%; }
+.button-download:before { width: 10px; height: 2px; border-style: solid; border-width: 0 2px 2px; }
+.button-download:after { width: 0; height: 0; margin-left: 3px; margin-top: -7px; border-style: solid; border-width: 4px 4px 0 4px; border-color: transparent; border-top-color: inherit; animation: download-arrow 1s linear infinite; animation-play-state: paused; }
+.button-download:hover:before { border-color: #cdefbd; }
+.button-download:hover:after { border-top-color: #cdefbd; animation-play-state: running; }
+@keyframes download-arrow { 0% { margin-top: -7px; opacity: 1; } 0.001% { margin-top: -15px; opacity: 0.4; } 50% { opacity: 1; } 100% { margin-top: 0; opacity: 0.4; }}
+
+
+.container-btn-file {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  background-color: #307750;
+  color: #fff;
+  border-style: none;
+  padding: 1em 2em;
+  border-radius: 0.5em;
+  overflow: hidden;
+  z-index: 1;
+  box-shadow: 4px 8px 10px -3px rgba(0, 0, 0, 0.356);
+  transition: all 250ms;
+}
+.container-btn-file input[type="file"] {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+.container-btn-file > svg {
+  margin-right: 1em;
+}
+.container-btn-file::before {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 0;
+  border-radius: 0.5em;
+  background-color: #469b61;
+  z-index: -1;
+  transition: all 350ms;
+}
+.container-btn-file:hover::before {
+  width: 100%;
+}
