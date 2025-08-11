@@ -18,7 +18,7 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.BankAccounts.DeleteBankAc
 		}
 
 		public async Task<Unit> Handle(DeleteBankAccountCommand command, CancellationToken cancellationToken)  {
-			var entity = await _unitOfWork.BankAccounts.GetByIdAsync(command.Id, cancellationToken)
+			var entity = await _unitOfWork.BankAccounts.GetByIdAsync(command.Id)
 				?? throw new NotFoundException("Tài khoản ngân hàng không tồn tại");
 
 			_unitOfWork.BankAccounts.Delete(entity);
