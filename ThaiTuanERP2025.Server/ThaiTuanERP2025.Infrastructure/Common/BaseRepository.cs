@@ -20,24 +20,38 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			_dbSet = _context.Set<T>();
 		}
 
+		public IQueryable<T> Query(bool asNoTracking = true)
+		{
+			return asNoTracking ? _dbSet.AsNoTracking() : _dbSet.AsQueryable();
+		}
+		public IQueryable<T> Query(Expression<Func<T, bool>> predicate, bool asNoTracking = true)
+		{
+			if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+			var query = asNoTracking ? _dbSet.AsNoTracking() : _dbSet.AsQueryable();
+			return query.Where(predicate);
+		}
+		public IQueryable<T> QueryIncluding(bool asNoTracking = true, params Expression<Func<T, object>>[] includes) {
+			IQueryable<T> query = asNoTracking ? _dbSet.AsNoTracking() : _dbSet.AsQueryable();
+			if (includes != null)
+			{
+				foreach (var include in includes)
+				{
+					query = query.Include(include);
+				}
+			}
+			return query;
+		}
+
 		public virtual async Task<T?> GetByIdAsync(Guid id)
 		{
 			return await _dbSet.FindAsync(id);
 		}
-
 		public virtual async Task<List<T>> GetAllAsync() {
 			return await _dbSet.ToListAsync();
 		}
-
-		// filter by condition
-		public virtual async Task<List<T>> FindAsync(Expression<Func<T, bool>> predicate)
-		{
-			if (predicate == null) throw new ArgumentNullException(nameof(predicate));
-			return await _dbSet.AsNoTracking().Where(predicate).ToListAsync();
-		}
-
 		// filter by navigation
-		public virtual async Task<List<T>> GetAllIncludingAsync(params Expression<Func<T, object>>[] includes) {
+		public virtual async Task<List<T>> GetAllIncludingAsync(params Expression<Func<T, object>>[] includes)
+		{
 			IQueryable<T> query = _dbSet.AsNoTracking();
 			if (includes != null)
 				foreach (var include in includes)
@@ -46,8 +60,15 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			return await query.ToListAsync();
 		}
 
+		// filter by condition
+		public virtual async Task<List<T>> FindAsync(Expression<Func<T, bool>> predicate)
+		{
+			if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+			return await _dbSet.AsNoTracking().Where(predicate).ToListAsync();
+		}
 		// filter by condition and navigation
-		public virtual async Task<List<T>> FindIncludingAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes) {
+		public virtual async Task<List<T>> FindIncludingAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
+		{
 			if (predicate == null) throw new ArgumentNullException(nameof(predicate));
 
 			IQueryable<T> query = _dbSet.AsNoTracking().Where(predicate);

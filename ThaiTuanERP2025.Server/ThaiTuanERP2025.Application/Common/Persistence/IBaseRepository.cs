@@ -11,6 +11,11 @@ namespace ThaiTuanERP2025.Application.Common.Persistence
 	{
 		Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
 
+		// IQueryable<T> (ko materialize sớm) để còn compose filter/sort/paging/ProjectTo ở phía DB
+		IQueryable<T> Query(bool asNoTracking = true);
+		IQueryable<T> Query(Expression<Func<T, bool>> predicate, bool asNoTracking = true);
+		IQueryable<T> QueryIncluding(bool asNoTracking = true, params Expression<Func<T, object>>[] includes);
+
 		Task<List<T>> FindAsync(Expression<Func<T, bool>> predicate);
 		Task<List<T>> FindIncludingAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes);
 

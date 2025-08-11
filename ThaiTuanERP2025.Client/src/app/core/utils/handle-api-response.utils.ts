@@ -14,7 +14,7 @@ export function handleApiResponse<T> (
                   onError(errors);
             } else {
                   alert('API error');
-                  console.log('API error: ', errors);
+                  console.error('API error: ', errors);
             }
 
             if(rollbackFn) {
