@@ -1,12 +1,11 @@
 import { map } from 'rxjs/operators';
 import { ApiResponse } from '../models/api-response.model';
-import { Observable, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 
 export function handleApiResponse$<T>() {
       return (source$: Observable<ApiResponse<T>>): Observable<T> =>
             source$.pipe(
                   map((response) => {
-                        console.log('response: ', response);
                         if (response.isSuccess && response.data !== null && response.data !== undefined) {
                               return response.data;
                         }
