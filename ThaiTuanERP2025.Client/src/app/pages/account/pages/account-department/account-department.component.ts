@@ -6,6 +6,7 @@ import { DepartmentService } from "../../services/department.service";
 import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
 import { DepartmentModel } from "../../models/department.model";
 import { EditDepartmentModalComponent } from "../../components/edit-department-modal/edit-department-modal.component";
+import { finalize } from "rxjs";
 
 @Component({
       selector: 'account-department',
@@ -21,9 +22,12 @@ export class AccountDepartmentComponent implements OnInit {
       importedDepartments: DepartmentModel[] = [];
       isEditing = false;
       selectedDepartment: DepartmentModel = { id: '', code: '', name: '' };
+      isImporting = false;
+      fileName = '';
 
       @ViewChild('masterCheckbox', { static: false }) masterCheckbox!: ElementRef<HTMLInputElement>;
-      
+      @ViewChild('excelFile', { static: false }) excelFile!: ElementRef<HTMLInputElement>;
+
       constructor(
             private departmentService: DepartmentService,
             private excelService: ExcelImportService
@@ -48,6 +52,7 @@ export class AccountDepartmentComponent implements OnInit {
                   next: () => {
                         this.newDepartment = { code: '', name: '' };
                         this.successMessage = 'Đã thêm phòng ban thành công';
+                        this.excelFile?.nativeElement && (this.excelFile.nativeElement.value = '');
                         this.loadDepartments();
                         setTimeout(() => this.successMessage = null, 3000); 
                   },
@@ -57,28 +62,47 @@ export class AccountDepartmentComponent implements OnInit {
 
       async onFileSelected(event: Event): Promise<void> {
             const file = (event.target as HTMLInputElement).files?.[0];
-            if(!file) return;
+            this.importedDepartments = [];
+            if(!file) {
+                  this.fileName = '';
+                  return;
+            }
 
+            this.fileName = file.name;
             try {
                   const rows = await this.excelService.parseExcelFile(file);
                   this.importedDepartments = this.excelService.mapToDepartment(rows);
             } catch(err) {
+                  this.fileName = '';
                   alert('Lỗi khi đọc file excel');
                   console.error(err);
             }
       }
+
+      clearFile(): void {
+            this.importedDepartments = [];
+            this.fileName = '';
+            if (this.excelFile?.nativeElement) this.excelFile.nativeElement.value = '';
+      }
       
       uploadExcel(): void {
-            if(this.importedDepartments.length === 0) return;
-            this.departmentService.importExcel(this.importedDepartments).subscribe({
-                  next: (added) => {
-                        this.successMessage = `Đã import ${added} phòng ban thành công`;
-                        this.importedDepartments = [];
-                        this.loadDepartments();
-                        setTimeout(() => this.successMessage = null, 3000);
-                  },
-                  error: err => alert(handleHttpError(err).join('\n'))
-            });
+            if(!this.importedDepartments.length || this.isImporting) return;
+            this.isImporting = true;
+
+            this.departmentService.importExcel(this.importedDepartments)
+                  .pipe(finalize(() => this.isImporting = false))
+                  .subscribe({
+                        next: added => {
+                              this.successMessage = `Đã import ${added} phòng ban thành công`;
+                              this.clearFile();
+                              this.loadDepartments();
+                              setTimeout(() => this.successMessage = null, 3000);
+                        },
+                        error: err => alert(handleHttpError(err).join('\n'))
+                  });
+      }
+      onCancelImport(): void {
+            this.clearFile();
       }
 
       toggleAll(event: Event): void {
