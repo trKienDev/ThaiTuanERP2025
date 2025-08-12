@@ -32,14 +32,12 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Repositories
 				.ProjectTo<BankAccountDto>(_mapperConfiguration)
 				.FirstOrDefaultAsync(cancellationToken);
 		}
-		public async Task<PagedResult<BankAccountDto>> SearchPagedAsync(bool? onlyActive, Guid? departmentId, int page, int pageSize, CancellationToken cancellationToken = default)
+		public async Task<PagedResult<BankAccountDto>> SearchPagedAsync(bool? onlyActive, int page, int pageSize, CancellationToken cancellationToken = default)
 		{
 			var query = _dbContext.Set<BankAccount>().AsNoTracking();
 
 			if (onlyActive is true)
 				query = query.Where(x => x.IsActive);
-			if (departmentId.HasValue)
-				query = query.Where(x => x.DepartmentId == departmentId);
 
 			var total = await query.CountAsync(cancellationToken);
 			var items = await query.OrderBy(x => x.BankName).ThenBy(x => x.AccountNumber)

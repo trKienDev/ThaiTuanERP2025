@@ -25,9 +25,9 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 		}
 
 		[HttpGet("all")]
-		public async Task<IActionResult> GetAll([FromQuery] bool? onlyActive, [FromQuery] Guid? departmentId, [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+		public async Task<IActionResult> GetAll([FromQuery] bool? onlyActive, [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
 		{
-			var data = await _mediator.Send(new GetAllBankAccountsQuery(onlyActive, departmentId, page, pageSize));
+			var data = await _mediator.Send(new GetAllBankAccountsQuery(onlyActive, page, pageSize));
 			return Ok(ApiResponse<PagedResult<BankAccountDto>>.Success(data, "Lấy danh sách tài khoản ngân hàng thành công"));
 		}
 		

@@ -4,12 +4,15 @@ import { PagedResult } from "../../../../shared/models/paged-result.model";
 import { BankAccountDto } from "../../models/bank-account.model";
 import { BankAccountService } from "../../services/bank-account.service";
 import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
-import { FormsModule } from "@angular/forms";
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
 
 @Component({
       selector: 'finance-bank-account',
       standalone: true,
-      imports: [ CommonModule, FormsModule ],
+      imports: [ CommonModule, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatAutocompleteModule ],
       templateUrl: './bank-account.component.html',
       styleUrl: './bank-account.component.scss',
 })
@@ -17,19 +20,32 @@ export class BankAccountComponent implements OnInit {
       bankAccounts: PagedResult<BankAccountDto> | null = null;
       isLoading = false;
       errorMessages?: string;
-
       // filters
       onlyActive: boolean | null = null;
-      departmentId: string | null = null;
-
       // paging
       page = 1;
       pageSize = 20;
+      // create form
+      creating = false;
+      createForm!: FormGroup;
 
-      constructor(private bankAccountService: BankAccountService) {}
+      constructor(
+            private bankAccountService: BankAccountService, 
+            private formBuilder: FormBuilder,
+      ) {}
 
       ngOnInit(): void {
+            this.buildForm();
             this.loadBankAccounts();
+      }
+
+      private buildForm() {
+            this.createForm = this.formBuilder.group({
+                  accountNumber: ['', [Validators.required, Validators.maxLength(50)]],
+                  bankName: ['', [Validators.required, Validators.maxLength(100)]],
+                  accountHolder: ['', Validators.required, Validators.maxLength(100)],
+                  ownerName: [''],
+            });
       }
 
       loadBankAccounts(): void {
@@ -38,7 +54,6 @@ export class BankAccountComponent implements OnInit {
 
             this.bankAccountService.getPaged({
                   onlyActive: this.onlyActive ?? undefined,
-                  departmentId: this.departmentId ?? undefined,
                   page: this.page,
                   pageSize: this.pageSize
             }).subscribe({
@@ -54,12 +69,10 @@ export class BankAccountComponent implements OnInit {
             this.page = 1;
             this.loadBankAccounts();
       }
-
       totalPages(): number {
             if(!this.bankAccounts) return 1;
             return Math.max(1, Math.ceil(this.bankAccounts.totalCount / this.bankAccounts.pageSize));
       }
-
       prev(): void {
             if(this.page > 1) {
                   this.page--;
@@ -72,7 +85,6 @@ export class BankAccountComponent implements OnInit {
                   this.loadBankAccounts();
             }
       }
-
       onPageSizeChange(pageSize: number): void {
             this.pageSize = pageSize;
             this.page = 1;
@@ -85,12 +97,29 @@ export class BankAccountComponent implements OnInit {
                   error: err => alert(handleHttpError(err).join('\n'))
             });
       }
-
       confirmDelete(ba: BankAccountDto): void {
             if(!confirm(`Xoá tài khoản ${ba.bankName} - ${ba.accountNumber}?`)) return;
             this.bankAccountService.delete(ba.id).subscribe({
                   next: _ => this.refreshFirstPage(),
                   error: err => alert(handleHttpError(err).join('\n'))
             })
+      }
+
+      toggleCreate() { this.creating = !this.creating };
+      submitCreate() {
+            if(this.createForm.invalid) {
+                  this.createForm.markAllAsTouched();
+                  return;
+            }
+
+            const command = this.createForm.value;
+            this.bankAccountService.create(command).subscribe({
+                  next: _ => {
+                        this.creating = false;
+                        this.createForm.reset();
+                        this.refreshFirstPage();
+                  },
+                  error: err => alert(handleHttpError(err).join('\n'))
+            });
       }
 }

@@ -14,16 +14,12 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public string BankName { get; set; } = null!;
 		public string? AccountHolder { get; set; } = null!;
 		public string? EmployeeCode { get; set; }
-		public string? CustomerName { get; set; }
+		public string? OwnerName { get; set; }
 		public string? Note { get; set; }
 		public bool IsActive { get; set; } = true;
-
-		public Guid? DepartmentId { get; set; }
-		public virtual Department? Department { get; set; }
 
 		public User CreatedByUser { get; set; } = null!;
 		public User? ModifiedByUser { get; set; }
 		public User? DeletedByUser { get; set; }
-
 	}
 }

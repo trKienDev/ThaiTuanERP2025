@@ -1,3 +1,9 @@
+// align-items
+.align-items-center { align-items: center; }
+
+// cursort
+.cursor-pointer { cursor: pointer; }
+
 // display
 .d-flex { display: flex; }
 .fl-wrap { flex-wrap: wrap;}
@@ -5,19 +11,15 @@
 
 // font-family
 
-
 // justify-content
 .justify-content-center { justify-content: center; }
 .justify-content-between { justify-content: space-between; }
+.justify-content-end { justify-content: flex-end;}
 
 // gap
 .gap-5p { gap: 5px; }
 .gap-10p { gap: 10px; }
 .gap-20p { gap: 20px; }
-
-
-//max-width 
-.mw-100 { max-width: 100%;}
 
 // user-select
 .user-select-none { user-select: none; }
@@ -31,3 +33,7 @@
 .w-60 { width: 60%; }
 .w-70 { width: 70%; }
 .w-75 { width: 75%; }
+//max-width 
+.mw-100 { max-width: 100%;}
+// min-width
+.minw-340px { min-width: 340px;}

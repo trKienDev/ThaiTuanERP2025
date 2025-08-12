@@ -10,7 +10,7 @@ namespace ThaiTuanERP2025.Application.Finance.Repositories
 {
 	public interface IBankAccountReadRepository
 	{
-		Task<PagedResult<BankAccountDto>> SearchPagedAsync(bool? onlyActive, Guid? departmentId, int page, int pageSize, CancellationToken cancellationToken = default);
+		Task<PagedResult<BankAccountDto>> SearchPagedAsync(bool? onlyActive, int page, int pageSize, CancellationToken cancellationToken = default);
 		Task<BankAccountDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
 	}

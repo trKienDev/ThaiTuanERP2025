@@ -11,9 +11,7 @@ namespace ThaiTuanERP2025.Application.Finance.DTOs
 		string AccountNumber,
 		string BankName,
 		string? AccountHolder,
-		Guid? DepartmentId,
-		string? DepartmentName,
-		string? CustomerName,
+		string? OwnerName,
 		bool IsActive,
 		DateTime CreatedDate
 	);

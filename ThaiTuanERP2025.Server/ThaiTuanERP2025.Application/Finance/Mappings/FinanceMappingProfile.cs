@@ -24,8 +24,7 @@ namespace ThaiTuanERP2025.Application.Finance.Mappings
 				.ForMember(dest => dest.BudgetCodeName, opt => opt.MapFrom(src => src.BudgetCode.Name))
 				.ForMember(dest => dest.BudgetPeriodName, opt => opt.MapFrom(src => $"{src.BudgetPeriod.Month:D2}/{src.BudgetPeriod.Year}"));
 
-			CreateMap<BankAccount, BankAccountDto>()
-				.ForMember(d => d.DepartmentName, o => o.MapFrom(s => s.Department != null ? s.Department.Name : null));
+			CreateMap<BankAccount, BankAccountDto>();
 		}
 	}
 }
