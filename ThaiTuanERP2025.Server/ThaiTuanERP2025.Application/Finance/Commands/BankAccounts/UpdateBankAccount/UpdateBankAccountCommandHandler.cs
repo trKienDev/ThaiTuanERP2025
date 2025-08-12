@@ -24,14 +24,13 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.BankAccounts.UpdateBankAc
 			var entity = await _unitOfWork.BankAccounts.GetByIdAsync(command.Id)
 				?? throw new NotFoundException("Tài khoản ngân hàng không tồn tại");
 
-			if (await _unitOfWork.BankAccounts.ExistsDuplicateAsync(command.AccountNumber, command.BankName, command.DepartmentId, command.CustomerName, command.Id, cancellationToken))
+			if (await _unitOfWork.BankAccounts.ExistsDuplicateAsync(command.AccountNumber, command.BankName, command.OwnerName, command.Id, cancellationToken))
 				throw new ConflictException("Khách hàng đã có tài khoản ngân hàng này");
 
 			entity.AccountNumber = command.AccountNumber;
 			entity.BankName = command.BankName;
 			entity.AccountHolder = command.AccountHolder;
-			entity.DepartmentId = command.DepartmentId;
-			entity.CustomerName = command.CustomerName;
+			entity.OwnerName = command.OwnerName;
 
 			_unitOfWork.BankAccounts.Update(entity);
 			await _unitOfWork.SaveChangesAsync(cancellationToken);

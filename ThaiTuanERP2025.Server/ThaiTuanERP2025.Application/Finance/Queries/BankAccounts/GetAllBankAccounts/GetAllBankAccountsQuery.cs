@@ -9,5 +9,5 @@ using ThaiTuanERP2025.Application.Finance.DTOs;
 
 namespace ThaiTuanERP2025.Application.Finance.Queries.BankAccounts.GetAllBankAccounts
 {
-	public record GetAllBankAccountsQuery (bool? OnlyActive = null, Guid? DepartmentId = null, int Page = 1, int PageSize = 20) : IRequest<PagedResult<BankAccountDto>>;
+	public record GetAllBankAccountsQuery (bool? OnlyActive = null, int Page = 1, int PageSize = 20) : IRequest<PagedResult<BankAccountDto>>;
 }

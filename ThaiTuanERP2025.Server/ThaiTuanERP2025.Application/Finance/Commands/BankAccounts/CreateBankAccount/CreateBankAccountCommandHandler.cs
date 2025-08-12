@@ -24,7 +24,7 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.BankAccounts.CreateBankAc
 
 		public async Task<BankAccountDto> Handle(CreateBankAccountCommand command, CancellationToken cancellationToken)
 		{
-			if (await _unitOfWork.BankAccounts.ExistsDuplicateAsync(command.AccountNumber, command.BankName, command.DepartmentId, command.CustomerName, null, cancellationToken))
+			if (await _unitOfWork.BankAccounts.ExistsDuplicateAsync(command.AccountNumber, command.BankName, command.OwnerName, null, cancellationToken))
 				throw new ConflictException("Tài khoản ngân hàng đã tồn tại cho chủ thể này");
 
 			var entity = new BankAccount
@@ -33,15 +33,13 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.BankAccounts.CreateBankAc
 				AccountNumber = command.AccountNumber,
 				BankName = command.BankName,
 				AccountHolder = command.AccountHolder,
-				DepartmentId = command.DepartmentId,
-				CustomerName = command.CustomerName,
+				OwnerName = command.OwnerName,
 				IsActive = true,
 			};
 
 			await _unitOfWork.BankAccounts.AddAsync(entity);
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 			return _mapper.Map<BankAccountDto>(entity);
-
 		}
 	}
 }

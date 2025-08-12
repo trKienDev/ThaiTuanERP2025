@@ -13,7 +13,6 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.BankAccounts.UpdateBankAc
 		string AccountNumber,
 		string BankName,
 		string? AccountHolder,
-		Guid? DepartmentId,
-		string? CustomerName
+		string? OwnerName
 	) : IRequest<BankAccountDto>;
 }

@@ -3,9 +3,7 @@ export interface BankAccountDto {
       accountNumber: string;
       bankName: string;
       accountHolder?: string | null;
-      departmentId?: string | null;
-      departmentName?: string | null;
-      customerName?: string | null;
+      ownerName?: string | null;
       isActive: boolean;
       createdDate: string;
 }
@@ -14,8 +12,7 @@ export interface CreateBankAccountCommand {
       accountNumber: string;
       bankName: string;
       accountHolder?: string | null;
-      departmentId?: string | null; // XOR với customerName
-      customerName?: string | null;
+      ownerName?: string | null;
 }
 
 export interface UpdateBankAccountCommand extends CreateBankAccountCommand {

@@ -12,8 +12,7 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.BankAccounts.UpdateBankAc
 	{
 		public UpdateBankAccountCommandValidator() {
 			Include(new BankAccountOwnerValidator<UpdateBankAccountCommand>(
-				x => x.DepartmentId,
-				x => x.CustomerName
+				x => x.OwnerName
 			));
 
 			RuleFor(x => x.Id).NotEmpty().WithMessage("Id không được để trống");
@@ -22,7 +21,7 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.BankAccounts.UpdateBankAc
 			RuleFor(x => x.BankName).NotEmpty().WithMessage("Tên ngân hàng không được bỏ trống")
 				.MaximumLength(150).WithMessage("Tên ngân hàng không được vượt qua 150 ký tự");
 			RuleFor(x => x.AccountHolder).MaximumLength(150).WithMessage("Tên tài khoản không vượt quá 150 ký tự");
-			RuleFor(x => x.CustomerName).MaximumLength(200).WithMessage("Tên khách hàng không vượt quá 200 ký tự");
+			RuleFor(x => x.OwnerName).MaximumLength(200).WithMessage("Tên khách hàng không vượt quá 200 ký tự");
 
 
 		}

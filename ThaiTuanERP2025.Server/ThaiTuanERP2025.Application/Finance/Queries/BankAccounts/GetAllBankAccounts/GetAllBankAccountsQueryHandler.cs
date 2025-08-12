@@ -25,8 +25,7 @@ namespace ThaiTuanERP2025.Application.Finance.Queries.BankAccounts.GetAllBankAcc
 		{
 			var page = request.Page <= 0 ? 1 : request.Page;
 			var pageSize = request.PageSize <= 0 ? 20 : request.PageSize;
-			return await _unitOfWork.BankAccountRead.SearchPagedAsync(request.OnlyActive, request.DepartmentId, page, pageSize, cancellationToken);
+			return await _unitOfWork.BankAccountRead.SearchPagedAsync(request.OnlyActive, page, pageSize, cancellationToken);
 		}
-
 	}
 }
