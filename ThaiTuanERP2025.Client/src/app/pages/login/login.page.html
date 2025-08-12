@@ -8,8 +8,9 @@
             <div class="form-group">
                   <label for="username">Mã nhân viên</label>
                   <input type="text" formControlName="employeeCode" />
-                  <div class="alert-message danger-alert" *ngIf="loginForm.get('employeeCode')?.touched && loginForm.get('employeeCode')?.invalid">
+                  <div class="alert-message danger-alert" *ngIf="submitted && loginForm.get('employeeCode')?.invalid && !alertClosed.employeeCode">
                         Mã nhân viên không được để trống
+                        <button type="button" class="close-btn" (click)="closeAlert('employeeCode')">×</button>
                   </div>
             </div>
             <div class="form-group">
@@ -20,11 +21,15 @@
                               <img [src]="'assets/icons/' + (showPassword ? 'eye-off.svg' : 'eye.svg')" class="toggle-password" width="24" height="24" alt="Toggle visibility" (click)="togglePassword()" />
                         </div>
                   </div>
-                  <div class="alert-message danger-alert" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+                  <div class="alert-message danger-alert" *ngIf="submitted && loginForm.get('password')?.invalid && !alertClosed.password">
                         Mật khẩu không được để trống
+                        <button type="button" class="close-btn" (click)="closeAlert('password')">×</button>
                   </div>
             </div>
-            <p *ngIf="message" class="alert-message danger-alert">{{ message }}</p>
+            <p *ngIf="message && !alertClosed.global" class="alert-message danger-alert">
+                  {{ message }}
+                  <button type="button" class="close-btn" (click)="closeAlert('global')">×</button>
+            </p>
             <div class="button-wrapper">
                   <button role="button" class="button-login" type="submit" [disabled]="isLoading">
                         {{ isLoading ? 'Đang xử lý...' : 'Đăng nhập' }}

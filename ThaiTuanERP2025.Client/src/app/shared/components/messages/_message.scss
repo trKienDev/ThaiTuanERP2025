@@ -1,0 +1,29 @@
+.alert-message {
+      background-color: #fbe7e7;
+      border-radius: 8px;
+      padding: 10px 10px;
+      margin-top: 10px;
+}
+.danger-alert {
+      color: red;
+}
+.alert-message {
+  position: relative;
+  padding-right: 30px;
+
+  .close-btn {
+    position: absolute;
+    top: 2px;
+    right: 6px;
+    background: transparent;
+    border: none;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer; // hoặc màu phù hợp
+    transition: all ease 0.5s;
+  }
+  .close-btn:hover {
+      color: red;
+      transform: scale(1.2);
+  }
+}
