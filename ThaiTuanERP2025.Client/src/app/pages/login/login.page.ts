@@ -23,6 +23,13 @@ export class LoginComponent implements OnInit{
       message: string | null = null;
       traceId: string | null = null;
       isLoading = false;
+      submitted = false;
+
+      alertClosed = {
+            employeeCode: false,
+            password: false,
+            global: false
+      }
 
       constructor(
             private authService: AuthService, 
@@ -58,11 +65,20 @@ export class LoginComponent implements OnInit{
             setInterval(triggerShine, 10000);
       }
 
+      closeAlert(field: 'employeeCode' | 'password' | 'global') {
+            this.alertClosed[field] = true;
+      }
+
       togglePassword() {
             this.showPassword = !this.showPassword;
       }
 
       onSubmit(): void {
+            this.submitted = true;
+
+            // Reset trạng thái đóng alert khi submit lại
+            this.alertClosed = { employeeCode: false, password: false, global: false };
+
             if(this.loginForm.invalid) {
                   this.loginForm.markAllAsTouched();
                   return;
