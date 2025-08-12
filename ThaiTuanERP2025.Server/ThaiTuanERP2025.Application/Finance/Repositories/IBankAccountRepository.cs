@@ -12,6 +12,6 @@ namespace ThaiTuanERP2025.Application.Finance.Repositories
 {
 	public interface IBankAccountRepository : IBaseRepository<BankAccount>
 	{
-		Task<bool> ExistsDuplicateAsync(string accountNumber, string bankName, Guid? departmentId, string? customerName, Guid? excludeId = null, CancellationToken cancellationToken = default);
+		Task<bool> ExistsDuplicateAsync(string accountNumber, string bankName, string? customerName, Guid? excludeId = null, CancellationToken cancellationToken = default);
 	}
 }

@@ -203,12 +203,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 				builder.Property(e => e.AccountHolder).IsRequired().HasMaxLength(100);
 				builder.Property(e => e.EmployeeCode).HasMaxLength(50);
 				builder.Property(e => e.Note).HasMaxLength(500);
-				builder.Property(e => e.CustomerName).HasMaxLength(250);
-
-				builder.HasOne(b => b.Department)
-					.WithMany()
-					.HasForeignKey(e => e.DepartmentId)
-					.OnDelete(DeleteBehavior.Restrict);
+				builder.Property(e => e.OwnerName).HasMaxLength(250);
 
 				builder.HasOne(e => e.CreatedByUser)
 					.WithMany().HasForeignKey(e => e.CreatedByUserId)

@@ -19,12 +19,11 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Repositories
 	{
 		public BankAccountRepository(ThaiTuanERP2025DbContext dbContext) : base(dbContext) {}
 
-		public Task<bool> ExistsDuplicateAsync(string accounNumber, string bankName, Guid? departmentId, string? customerName, Guid? excludeId = null, CancellationToken cancellationToken = default) {
+		public Task<bool> ExistsDuplicateAsync(string accounNumber, string bankName, string? ownerName, Guid? excludeId = null, CancellationToken cancellationToken = default) {
 			var q = _dbSet.AsNoTracking().Where(x =>
 				x.AccountNumber == accounNumber &&
 				x.BankName == bankName &&
-				x.DepartmentId == departmentId &&
-				x.CustomerName == customerName
+				x.OwnerName == ownerName
 			);
 
 			if (excludeId.HasValue) q = q.Where(x => x.Id != excludeId.Value);
