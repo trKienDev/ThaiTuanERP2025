@@ -1,19 +1,19 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ApiResponse } from '../../core/models/api-response.model.js';
 import { LoginResponse } from '../../core/models/login-response.model.js';
 import { AuthService } from '../../core/services/auth/auth.service.js';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { handleApiResponse } from '../../core/utils/handle-api-response.utils.js';
 import { handleApiResponse$ } from '../../core/utils/handle-api-response.operator.js';
 import { catchError, EMPTY, finalize, tap } from 'rxjs';
 import { handleHttpError } from '../../core/utils/handle-http-errors.util.js';
+import { FieldErrorComponent } from '../../shared/components/messages/field-error.component.js';
+import { AlertMesssageComponent } from '../../shared/components/messages/alert-message.component.js';
 
 @Component({
       selector: 'app-login',
       standalone: true,
-      imports: [CommonModule, ReactiveFormsModule ],
+      imports: [CommonModule, ReactiveFormsModule, FieldErrorComponent, AlertMesssageComponent ],
       templateUrl: './login.page.html',
       styleUrls: ['./login.page.scss'],
 })
