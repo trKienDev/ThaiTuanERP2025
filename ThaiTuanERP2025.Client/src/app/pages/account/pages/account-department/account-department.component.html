@@ -9,7 +9,7 @@
                   <form class="d-flex gap-10p" (ngSubmit)="addDepartment()" #departmentForm="ngForm">
                         <input class="w-25" type="text" name="code" [(ngModel)]="newDepartment.code" placeholder="Mã phòng ban" required/>
                         <input class="w-60" type="text" name="name" [(ngModel)]="newDepartment.name" placeholder="Tên phòng ban" required/>
-                        <button class="primary-button" type="submit" [disabled]="!departmentForm.valid">Thêm</button>
+                        <button class="save-button" type="submit" [disabled]="!departmentForm.valid">Thêm</button>
                   </form>
             </div>
       </div>
@@ -32,10 +32,9 @@
                               <ng-template #noFile>
                                     <span class="file-name muted">Chưa chọn file</span>
                               </ng-template>
-                              <!-- <button type="button" class="btn btn-link" *ngIf="fileName" (click)="clearFile()">Xóa</button> -->
                         </div>
                         <div class="actions d-flex justify-content-end">
-                              <button class="primary-button" type="button" (click)="uploadExcel()" [disabled]="!importedDepartments.length || isImporting">Import danh sách</button>
+                              <button class="save-button" type="button" (click)="uploadExcel()" [disabled]="!importedDepartments.length || isImporting">Import danh sách</button>
                               <button type="button" class="cancel-button" (click)="onCancelImport()" [disabled]="!importedDepartments.length && !fileName">Hủy</button>
                         </div>
                         
@@ -87,9 +86,9 @@
 </table>
 
 
-  <app-edit-department-modal
-    [visible]="isEditing"
-    [selectedDepartment]="selectedDepartment"
-    (submitUpdate)="updateDepartment($event)"
-    (cancel)="cancelEdit()"
-  ></app-edit-department-modal>
+<app-edit-department-modal
+      [visible]="isEditing"
+      [selectedDepartment]="selectedDepartment"
+      (submitUpdate)="updateDepartment($event)"
+      (cancel)="cancelEdit()">
+</app-edit-department-modal>

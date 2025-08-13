@@ -8,10 +8,7 @@
             <div class="form-group">
                   <label for="username">Mã nhân viên</label>
                   <input type="text" formControlName="employeeCode" />
-                  <div class="alert-message danger-alert" *ngIf="submitted && loginForm.get('employeeCode')?.invalid && !alertClosed.employeeCode">
-                        Mã nhân viên không được để trống
-                        <button type="button" class="close-btn" (click)="closeAlert('employeeCode')">×</button>
-                  </div>
+                  <app-field-error [control]="loginForm.get('employeeCode')" [submitted]="submitted">Mã nhân viên không được để trống</app-field-error>
             </div>
             <div class="form-group">
                   <label for="password">Mật khẩu</label>
@@ -26,10 +23,7 @@
                         <button type="button" class="close-btn" (click)="closeAlert('password')">×</button>
                   </div>
             </div>
-            <p *ngIf="message && !alertClosed.global" class="alert-message danger-alert">
-                  {{ message }}
-                  <button type="button" class="close-btn" (click)="closeAlert('global')">×</button>
-            </p>
+            <app-alert-message [visible]="!!message" type="danger-alert" (closed)="message = null">{{ message }}</app-alert-message>
             <div class="button-wrapper">
                   <button role="button" class="button-login" type="submit" [disabled]="isLoading">
                         {{ isLoading ? 'Đang xử lý...' : 'Đăng nhập' }}

@@ -7,9 +7,9 @@ import { AbstractControl, NonNullableFormBuilder } from "@angular/forms";
       standalone: true,
       imports: [CommonModule],
       template: `
-            <div class="alert-message danger-message" role="alert" *ngIf="visible">
+            <div class="alert-message danger-alert" role="alert" *ngIf="visible">
                   <ng-content></ng-content>
-                  <button type="button" class="close-btn" (click)="closes=true" aria-label="Đóng">x</button>
+                  <button type="button" class="close-btn" (click)="closed=true" aria-label="Đóng">x</button>
             </div>
       `
 })
