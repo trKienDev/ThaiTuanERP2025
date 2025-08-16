@@ -12,15 +12,24 @@ export function handleHttpError(
                   return ['Lỗi máy chủ. Vui lòng thử lại sau'];
             }
 
-            if(error.error?.errors && Array.isArray(error.error.errors)) {
-                  return error.error.errors;
-            } 
+            // Ưu tiên mảng errors nếu có phần tử
+            const errsCamel = Array.isArray(error.error?.errors) ? error.error.errors as string[] : [];
+            const errsPascal = Array.isArray(error.error?.Errors) ? error.error.Errors as string[] : [];
+            const errs = (errsCamel.length ? errsCamel : errsPascal);
+            if (errs.length > 0) return errs;
 
-            if(typeof error.error?.message === 'string') {
-                  return [error.error.message];
-            }
+            // Nếu không có errors, lấy message
+            const msg = (typeof error.error?.message === 'string' && error.error.message) ||
+                  (typeof error.error?.Message === 'string' && error.error.Message);
+            if (msg) return [msg];
 
+            // Fallback cuối
             return [error.message || fallbackMessage];
+      }
+
+      // Không phải HttpErrorResponse (ví dụ Error do handleApiResponse$ ném)
+      if (error?.message && typeof error.message === 'string') {
+            return [error.message];
       }
 
       return [fallbackMessage];

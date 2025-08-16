@@ -4,25 +4,31 @@
                   <img src="thaituanlogo.png" alt="thaituangroup-logo" class="thaituan-logo" />
             </div>
       </div>
-      <form (ngSubmit)="login()">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
             <div class="form-group">
                   <label for="username">Mã nhân viên</label>
-                  <input type="text" [(ngModel)]="employeeCode" name="username" required />
+                  <input type="text" formControlName="employeeCode" />
+                  <app-field-error [control]="loginForm.get('employeeCode')" [submitted]="submitted">Mã nhân viên không được để trống</app-field-error>
             </div>
             <div class="form-group">
                   <label for="password">Mật khẩu</label>
                   <div class="password-wrapper">
-                        <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" name="password" id="password" required />
+                        <input [type]="showPassword ? 'text' : 'password'" formControlName="password" />
                         <div class="icon-wrapper">
                               <img [src]="'assets/icons/' + (showPassword ? 'eye-off.svg' : 'eye.svg')" class="toggle-password" width="24" height="24" alt="Toggle visibility" (click)="togglePassword()" />
                         </div>
                   </div>
+                  <div class="alert-message danger-alert" *ngIf="submitted && loginForm.get('password')?.invalid && !alertClosed.password">
+                        Mật khẩu không được để trống
+                        <button type="button" class="close-btn" (click)="closeAlert('password')">×</button>
+                  </div>
             </div>
+            <app-alert-message [visible]="!!message" type="danger-alert" (closed)="message = null">{{ message }}</app-alert-message>
             <div class="button-wrapper">
-                  <button role="button" class="button-85" type="submit" [disabled]="isLoading">
+                  <button role="button" class="button-login" type="submit" [disabled]="isLoading">
                         {{ isLoading ? 'Đang xử lý...' : 'Đăng nhập' }}
                   </button>
             </div>
-            <p *ngIf="message" class="error-message">{{ message }}</p>
+            
       </form>
 </div>

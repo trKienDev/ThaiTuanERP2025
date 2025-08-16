@@ -1,5 +1,5 @@
 .sidebar {
-      width: 92px;
+      width: 80px;
       height: 100vh;
       display: flex;
       flex-direction: column;
@@ -18,10 +18,6 @@
       width: 100%;
 }
 
-.sidebar nav ul li {
-      width: 100%;
-}
-
 .sidebar nav ul li a {
       display: flex;
       flex-direction: column;
@@ -29,9 +25,9 @@
       color: white;
       text-decoration: none;
       font-size: 10px;
-      padding: 13px;
+      padding: 10px 5px;
       transition: background-color 0.5s;
-      border-radius: 10px;
+      border-radius: 8px;
       margin-bottom: 10px;
 }
 .sidebar nav ul li a .material-icons-round {
@@ -44,7 +40,8 @@
       font-size: 10px;
 }
 .sidebar nav ul li a:hover, .sidebar nav ul li a.active {
-      background-color: var(--main-theme-fg);
+      background-color: white;
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 }
 .sidebar nav ul li a:hover .sidebar-title, 
 .sidebar nav ul li a:hover .material-icons-round,
@@ -52,3 +49,5 @@
 .sidebar nav ul li a.active .material-icons-round {
       color: var(--main-foreground-hover);
 }
+
+

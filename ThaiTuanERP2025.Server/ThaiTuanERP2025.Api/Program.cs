@@ -24,7 +24,7 @@ using ThaiTuanERP2025.Application.Behaviors;
 using ThaiTuanERP2025.Application.Account.Commands.Departments.AddDepartment;
 using ThaiTuanERP2025.Application.Account.Commands.Users.CreateUser;
 using ThaiTuanERP2025.Application.Finance.Commands.BudgetGroup.UpdateBudgetGroup;
-using ThaiTuanERP2025.Application.Finance.Commands.BudgetGroup.CreateBudgetGroup;
+using ThaiTuanERP2025.Application.Finance.Commands.BudgetGroups.CreateBudgetGroup;
 using ThaiTuanERP2025.Application.Account.Commands.Accounts.Login;
 using ThaiTuanERP2025.Application.Account.Commands.Departments.BulkAddDepartmentCommand;
 using ThaiTuanERP2025.Application.Account.Commands.Groups.ChangeGroupAdmin;
@@ -37,6 +37,16 @@ using ThaiTuanERP2025.Application.Account.Commands.Users.UpdateUserAvatar;
 using ThaiTuanERP2025.Application.Account.Queries.Departments.GetDepartmentsByIds;
 using ThaiTuanERP2025.Application.Account.Queries.Users.GetUserById;
 using ThaiTuanERP2025.Application.Finance.Commands.BudgetCodes.CreateBudgetCode;
+using ThaiTuanERP2025.Application.Finance.Queries.BudgetGroups.GetBudgetGroupById;
+using ThaiTuanERP2025.Application.Finance.Commands.BudgetCodes.UpdateBudgetCodeStatus;
+using ThaiTuanERP2025.Application.Finance.Commands.BudgetPeriods.CreateBudgetPeriod;
+using ThaiTuanERP2025.Application.Finance.Commands.BudgetPeriods.UpdateBudgetPeriod;
+using ThaiTuanERP2025.Application.Finance.Commands.BudgetPeriods.DeleteBudgetPeriod;
+using ThaiTuanERP2025.Application.Finance.Commands.BudgetPlans.CreateBudgetPlan;
+using System.Text.Json;
+using ThaiTuanERP2025.Application.Finance.Commands.BankAccounts.CreateBankAccount;
+using ThaiTuanERP2025.Application.Finance.Commands.BankAccounts.UpdateBankAccount;
+using ThaiTuanERP2025.Application.Finance.Commands.BankAccounts.DeleteBankAccount;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +59,10 @@ builder.Services.AddDbContext<ThaiTuanERP2025DbContext>(options => {
 		sqlOptions.EnableRetryOnFailure();
 	});
 });
+
+// GetCurrentUserService
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 // Behaviors
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
@@ -72,6 +86,15 @@ builder.Services.AddValidatorsFromAssemblyContaining<UpdateUserAvatarCommandVali
 builder.Services.AddValidatorsFromAssemblyContaining<GetDepartmentsByIdsQueryValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<GetUserByIdQueryValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateBudgetCodeCommand>();
+builder.Services.AddValidatorsFromAssemblyContaining<GetBudgetGroupByIdQueryValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateBudgetCodeStatusCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateBudgetPeriodCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateBudgetPeriodCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<DeleteBudgetPeriodCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateBudgetPlanCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateBankAccountCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateBankAccountCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<DeleteBankAccountCommandValidator>();
 
 // Repositories
 builder.Services.AddScoped<iJWTProvider, JwtProvider>();
@@ -85,6 +108,7 @@ builder.Services.AddScoped<IBudgetGroupRepository, BudgetGroupRepository>();
 builder.Services.AddScoped<IBudgetPeriodRepository, BudgetPeriodRepository>();
 builder.Services.AddScoped<IBudgetPlanRepository, BudgetPlanRepository>();
 builder.Services.AddScoped<IBankAccountRepository, BankAccountRepository>();
+builder.Services.AddScoped<IBankAccountReadRepository, BankAccountReadRepository>();
 
 // Auto Mapper
 builder.Services.AddAutoMapper(typeof(AssemblyReference).Assembly);
@@ -154,7 +178,8 @@ builder.Services.AddCors(options =>
 	});
 });
 builder.Services.AddControllers().AddJsonOptions(options => { 
-	options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); 
+	options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+	options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
 });
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.WebHost.CaptureStartupErrors(true);
@@ -175,13 +200,14 @@ if (app.Environment.IsDevelopment())
 
 app.UseSwagger();
 app.UseSwaggerUI();
+//app.UseDeveloperExceptionPage();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseHttpsRedirection();
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
-app.UseDeveloperExceptionPage();
 app.UseStaticFiles();
 
 app.Run();
