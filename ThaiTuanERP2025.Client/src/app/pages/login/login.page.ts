@@ -1,28 +1,47 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ApiResponse } from '../../core/models/api-response.model.js';
 import { LoginResponse } from '../../core/models/login-response.model.js';
 import { AuthService } from '../../core/services/auth/auth.service.js';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { handleApiResponse$ } from '../../core/utils/handle-api-response.operator.js';
+import { catchError, EMPTY, finalize, tap } from 'rxjs';
+import { handleHttpError } from '../../core/utils/handle-http-errors.util.js';
+import { FieldErrorComponent } from '../../shared/components/messages/field-error.component.js';
+import { AlertMesssageComponent } from '../../shared/components/messages/alert-message.component.js';
 
 @Component({
       selector: 'app-login',
       standalone: true,
-      imports: [CommonModule, FormsModule ],
+      imports: [CommonModule, ReactiveFormsModule, FieldErrorComponent, AlertMesssageComponent ],
       templateUrl: './login.page.html',
       styleUrls: ['./login.page.scss'],
 })
 export class LoginComponent implements OnInit{
-      employeeCode = '';
-      password = '';
+      loginForm!: FormGroup;
       showPassword = false;
       message: string | null = null;
+      traceId: string | null = null;
       isLoading = false;
+      submitted = false;
 
-      constructor(private authService: AuthService, private router: Router) {}
+      alertClosed = {
+            employeeCode: false,
+            password: false,
+            global: false
+      }
+
+      constructor(
+            private authService: AuthService, 
+            private fb: FormBuilder,
+            private router: Router) {}
 
       ngOnInit() {
+            this.loginForm = this.fb.group({
+                  employeeCode: ['', Validators.required],
+                  password: ['', Validators.required]
+            });
+
             const logoWrapper = document.querySelector('.logo-wrapper');
 
             const triggerShine = () => {
@@ -46,33 +65,42 @@ export class LoginComponent implements OnInit{
             setInterval(triggerShine, 10000);
       }
 
+      closeAlert(field: 'employeeCode' | 'password' | 'global') {
+            this.alertClosed[field] = true;
+      }
+
       togglePassword() {
             this.showPassword = !this.showPassword;
       }
 
-      login() {
-            console.log('run login');
+      onSubmit(): void {
+            this.submitted = true;
+
+            // Reset trạng thái đóng alert khi submit lại
+            this.alertClosed = { employeeCode: false, password: false, global: false };
+
+            if(this.loginForm.invalid) {
+                  this.loginForm.markAllAsTouched();
+                  return;
+            }
+
+            const { employeeCode, password } = this.loginForm.value;
             this.message = null;
             this.isLoading = true;
 
-            this.authService.login(this.employeeCode, this.password).subscribe({
-                  next: (res: ApiResponse<LoginResponse>) => {
-                        this.isLoading = false;
-                        console.log('res.success: ', res.isSuccess);
-                        console.log('res.data: ', res.data);
-                        if(res.isSuccess && res.data?.accessToken && res.data.userRole) {
-                              const { accessToken, userRole } = res.data;
-
-                              this.authService.loginSuccess(accessToken, userRole);
-                              this.router.navigateByUrl('/splash');
-                        } else {
-                              this.message = res.message || 'Đăng nhập thất bại';
-                        }
-                  },
-                  error: () => {
-                        this.isLoading = false;
-                        this.message = "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau";
+            this.authService.login(employeeCode, password).pipe(
+                  handleApiResponse$<LoginResponse>(),
+                  tap((data) => this.authService.loginSuccess(data.accessToken, data.userRole)),
+                  catchError((err) => {
+                        const msgs = handleHttpError(err);
+                        this.message = msgs[0];
+                        return EMPTY; // nuốt lỗi để subscribe.next không chạy, và không gọi error callback
+                  }),
+                  finalize(() => (this.isLoading = false))
+            ).subscribe({
+                  next: () => {
+                        this.router.navigateByUrl('/splash')
                   }
             });
-      }
+      };
 }

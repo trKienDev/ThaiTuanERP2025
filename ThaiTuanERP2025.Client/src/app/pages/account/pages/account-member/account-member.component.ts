@@ -30,34 +30,28 @@ export class AccountMemberComponent implements OnInit {
 
       loadUsers(): void {
             this.userService.getAllUsers().subscribe({
-                  next: res => handleApiResponse(res, 
-                        (users) => {
-                              this.users = users;
+                  next: (users) => {
+                        this.users = users;
 
-                              const departmentIds = [...new Set(
-                                    users.map(u => u.departmentId).filter((id): id is string => !!id)
-                              )];
+                        const departmentIds = [...new Set(
+                              users.map(u => u.departmentId).filter((id): id is string => !!id)
+                        )];
 
-                              if(departmentIds.length === 0) {
+                        if(departmentIds.length === 0) {
+                              this.departmentMap = {};
+                              return;
+                        }
+
+                        this.departmentService.getByIds(departmentIds).subscribe({
+                              next: (departments) => {
                                     this.departmentMap = {};
-                                    return;
-                              }
-
-                              this.departmentService.getByIds(departmentIds).subscribe({
-                                    next: res => handleApiResponse(res, 
-                                          (departments) => {
-                                                this.departmentMap = {};
-                                                for(const dept of departments) {
-                                                      if(dept.id) this.departmentMap[dept.id] = dept.name;
-                                                }
-                                          },
-                                          (errors) => alert(errors.join('\n'))
-                                    ),   
-                                    error: err => alert(handleHttpError(err).join('\n'))
-                              });
-                        },
-                        (errors) => alert(errors.join('\n'))
-                  ),
+                                    for(const dept of departments) {
+                                          if(dept.id) this.departmentMap[dept.id] = dept.name;
+                                    }
+                              },   
+                              error: err => alert(handleHttpError(err).join('\n'))
+                        });
+                  },
                   error: err => alert(handleHttpError(err).join('\n'))
             });
       }
@@ -67,13 +61,10 @@ export class AccountMemberComponent implements OnInit {
             callback: (ok: boolean, message?: string) => void
       }) {
             this.userService.createUser(user).subscribe({
-                  next: res => handleApiResponse(res, 
-                        () => {
+                  next: () => {
                               this.loadUsers();
                               callback(true);
                         },
-                        (errors) => callback(false, errors.join(', '))
-                  ),
                   error: err => {
                         const messages = handleHttpError(err);
                         callback(false, messages.join(', '));

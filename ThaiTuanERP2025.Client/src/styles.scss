@@ -3,24 +3,27 @@
 @import url('./styles/_modal.scss');
 @import url('./styles/_keyword-css.scss');
 @import url('./styles/_cards.scss');
+@import url('./styles/_toggle-switch.scss');
+@import url('./app/shared/components/messages/_message.scss');
 
 
 :root {
+      --cadmium-red: #D22B2B;
       --ultramarin: #0437F2;
-      --main-bg-color: #f8f9fd;
+      --main-bg-color: #f6f8fa;
       --sub-bg-color: #f6f8fa;
       --sub-bg-color_hover: #818b981a;
       --main-theme-bg: #d5a36e;
       --main-foreground-hover: #A50021;
       --main-theme-fg: #f8e1e1;
       --default-border: #d1d9e0b3;
+      --gold-color: #FFD700;
       --logo-size: 250px;
+
 }
 
-body, label, button, input, span, span, p, textarea, option, select {
-      font-family: 'Lexend', sans-serif;
-      font-size: 13px;
-}
+body, input { font-family: 'Lexend', sans-serif; font-size: 13px; }
+
 
 ul, ol {
       margin: 0;
@@ -74,3 +77,9 @@ input {
 }
 html, body { height: 100%; margin: 0; }
 
+.mat-mdc-tooltip-surface {
+      font-family: 'Lexend' !important;
+      user-select: none;
+      background-color: var(--gold-color) !important;
+      color: black !important;
+}

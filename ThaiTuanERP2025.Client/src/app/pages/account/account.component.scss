@@ -7,7 +7,5 @@
       &__item { @extend .navbar__item; }
       &__link { @extend .navbar__link; }
       &__icon { @extend .navbar__icon; }
-}
-.account-navbar__content {
-      padding: 0px 1rem;
+      &__content { @extend .navbar__content; }
 }
