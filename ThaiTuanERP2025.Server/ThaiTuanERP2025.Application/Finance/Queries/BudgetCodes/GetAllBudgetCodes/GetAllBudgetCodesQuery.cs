@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 
-namespace ThaiTuanERP2025.Application.Finance.Queries.BudgetCodes.GetAllBudgetCodesQuery
+namespace ThaiTuanERP2025.Application.Finance.Queries.BudgetCodes.GetAllBudgetCodes
 {
 	public class GetAllBudgetCodesQuery : IRequest<List<BudgetCodeDto>> {}
 }

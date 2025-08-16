@@ -1,14 +1,23 @@
-.form-department {
-      display: flex;
-      justify-content: space-around;
+.file-uploader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
-.alert-success {
-      background-color: #d4edda;
-      color: #155724;
-      padding: 8px 12px;
-      border: 1px solid #c3e6cb;
-      border-radius: 4px;
-      margin-top: 10px;
-      width: fit-content;
-      font-family: 'Lexend';
+
+.file-input { display: none; } /* ẩn input gốc */
+
+.btn { padding: .5rem 1rem; border-radius: 8px; cursor: pointer; }
+.btn-primary { background: #6c5ce7; color: #fff; border: none; }
+.btn-outline { background: transparent; border: 1px solid var(--default-border, #ccc); }
+.btn-link { background: transparent; border: none; text-decoration: underline; padding: 0; }
+
+.file-name {
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
+.file-name.muted { color: #888; }
+
+.actions { display: flex; gap: 10px; margin-top: 10px; }

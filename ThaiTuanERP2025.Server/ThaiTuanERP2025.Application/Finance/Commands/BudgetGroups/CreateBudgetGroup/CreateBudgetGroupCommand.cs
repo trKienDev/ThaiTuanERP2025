@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 
-namespace ThaiTuanERP2025.Application.Finance.Commands.BudgetGroup.CreateBudgetGroup
+namespace ThaiTuanERP2025.Application.Finance.Commands.BudgetGroups.CreateBudgetGroup
 {
 	public class CreateBudgetGroupCommand : IRequest<BudgetGroupDto>
 	{

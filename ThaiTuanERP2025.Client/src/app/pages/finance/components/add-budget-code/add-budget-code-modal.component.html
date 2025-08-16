@@ -1,0 +1,32 @@
+<div class="modal-backdrop">
+      <div class="modal">
+            <h2>Thêm mã ngân sách mới</h2>
+            <form (ngSubmit)="onSubmit()">
+                  <div class="d-flex gap-5p">
+                        <input class="w-30" placeholder="Mã ngân sách" [(ngModel)]="budgetCode.code" name="budgetCodeCode" required/>
+                        <input class="w-70" placeholder="Tên ngân sách" [(ngModel)]="budgetCode.name" name="budgetCodeName" required/>
+                  </div>
+
+                  <div class="">
+                        <mat-form-field appearance="fill">
+                              <mat-label>Nhóm ngân sách</mat-label>
+                              <input type="text"
+                                    matInput [matAutocomplete]="auto"
+                                    [(ngModel)]="budgetCode.budgetGroupId"
+                                    (ngModelChange)="onBudgetGroupInputChange($event)"
+                                    name="budget-group"
+                              required/>
+                              <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayBudgetGroupFn">
+                                    <mat-option *ngFor="let bg of filteredBudgetGroups" [value]="bg.id">
+                                          {{ bg.code }} - {{ bg.name }}
+                                    </mat-option>
+                              </mat-autocomplete>
+                        </mat-form-field>
+                  </div>
+                  <div class="actions">
+                        <button type="submit">Thêm</button>
+                        <button type="button" (click)="onClose()">Hủy</button>
+                  </div>
+            </form>
+      </div>
+</div>

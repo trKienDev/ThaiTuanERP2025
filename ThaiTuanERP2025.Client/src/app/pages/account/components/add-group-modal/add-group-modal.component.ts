@@ -8,7 +8,7 @@ import { forkJoin } from 'rxjs';
 import { handleApiResponse } from "../../../../core/utils/handle-api-response.utils";
 import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
 import { UserModel } from "../../models/user.model";
-import { CreateGroupModel } from "../../models/group.model";
+import { CreateGroupModel, GroupModel } from "../../models/group.model";
 
 @Component({
       selector: 'add-group-modal',
@@ -56,10 +56,7 @@ export class AddGroupModalComponent implements OnInit {
                   memberIds: [[]]
             });
             this.userService.getAllUsers().subscribe({
-                  next: res => handleApiResponse(res, 
-                        (data) => this.users = data,
-                        (errors) => this.errorMessages = errors
-                  ),
+                  next: (data) => this.users = data,
                   error: err => this.errorMessages = handleHttpError(err)
             });
       }
@@ -72,33 +69,27 @@ export class AddGroupModalComponent implements OnInit {
 
             const group = this.form.value;
 
-            this.groupService.createGroup({
+            this.groupService.create({
                   name: group.name,
                   description: group.description,
                   adminUserId: group.adminUserId
             }).subscribe({
-                  next: res => handleApiResponse(res, 
-                        (groupDto) => {
-                              const memberIds = group.memberIds.filter((id: string) => id !== group.adminUserId);
-                              if(memberIds.length === 0) {
-                                    this.finish();
-                                    return;
-                              }
-
-                              const requests = memberIds.map((userId: string) => this.groupService.addUserToGroup(groupDto.id, userId));
-
-                              forkJoin(requests).subscribe({
-                                    next: () => this.finish(),
-                                    error: err => {
-                                          this.errorMessages = handleHttpError(err);
-                                    }
-                              });
-                        },
-                        (errors) => {
-                              this.errorMessages = errors;
-                              setTimeout(() => this.errorMessages = [], 5000);
+                  next: (groupDto) => {
+                        const memberIds = group.memberIds.filter((id: string) => id !== group.adminUserId);
+                        if(memberIds.length === 0) {
+                              this.finish();
+                              return;
                         }
-                  ),
+
+                        const requests = memberIds.map((userId: string) => this.groupService.addUserToGroup(groupDto.id, userId));
+
+                        forkJoin(requests).subscribe({
+                              next: () => this.finish(),
+                              error: err => {
+                                    this.errorMessages = handleHttpError(err);
+                              }
+                        });
+                  },
                   error: err => {
                         this.errorMessages = handleHttpError(err);
                         setTimeout(() => this.errorMessages = [], 5000);

@@ -16,6 +16,7 @@ namespace ThaiTuanERP2025.Application.Common.Persistence
 		IGroupRepository Groups { get; }
 		IUserGroupRepository UserGroups { get; }
 		IBankAccountRepository BankAccounts { get; }
+		IBankAccountReadRepository BankAccountRead { get; }
 		IBudgetCodeRepository BudgetCodes { get; }
 		IBudgetGroupRepository BudgetGroups { get; }
 		IBudgetPeriodRepository BudgetPeriods { get; }

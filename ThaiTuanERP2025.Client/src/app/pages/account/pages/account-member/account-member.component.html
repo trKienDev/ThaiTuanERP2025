@@ -1,7 +1,6 @@
 <h1>Quản lý thành viên</h1>
 
 <button (click)="showModal = true">Thêm thành viên</button>
-
 <add-user-modal *ngIf="showModal" (close)="showModal = false" (save)="addUser($event)"></add-user-modal>
 
 <table class="table-members">
@@ -20,9 +19,7 @@
       </thead>
       <tbody>
             <tr *ngFor="let user of users">
-                  <td>
-                        <input type="checkbox">
-                  </td>
+                  <td><input type="checkbox"></td>
                   <td>{{ user.fullName }}</td>
                   <td>{{ user.position }}</td>
                   <td>

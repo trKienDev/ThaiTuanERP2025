@@ -3,7 +3,8 @@ import { ApiResponse } from "../models/api-response.model";
 export function handleApiResponse<T> (
       response: ApiResponse<T>,
       onSuccess: (data: T) => void,
-      onError?: (errors: string[]) => void
+      onError?: (errors: string[]) => void,
+      rollbackFn?: () => void
 ):void {
       if(response.isSuccess && response.data !== null && response.data !== undefined) {
             onSuccess(response.data);
@@ -13,7 +14,11 @@ export function handleApiResponse<T> (
                   onError(errors);
             } else {
                   alert('API error');
-                  console.log('API error: ', errors);
+                  console.error('API error: ', errors);
+            }
+
+            if(rollbackFn) {
+                  rollbackFn();
             }
       }
 }
