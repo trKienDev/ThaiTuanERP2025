@@ -21,6 +21,7 @@ namespace ThaiTuanERP2025.Application.Common.Persistence
 		IBudgetGroupRepository BudgetGroups { get; }
 		IBudgetPeriodRepository BudgetPeriods { get; }
 		IBudgetPlanRepository BudgetPlans { get; }
+		ISupplierRepository Suppliers { get; }
 
 		Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 		//Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess);

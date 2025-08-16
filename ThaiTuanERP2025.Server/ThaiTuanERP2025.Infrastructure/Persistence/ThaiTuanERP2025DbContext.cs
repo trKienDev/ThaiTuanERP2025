@@ -29,6 +29,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<Department> Departments => Set<Department>();
 		public DbSet<Group> Groups => Set<Group>();
 		public DbSet<UserGroup> UserGroups => Set<UserGroup>();
+		
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -215,6 +216,38 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 					.WithMany().HasForeignKey(e => e.DeletedByUserId)
 					.OnDelete(DeleteBehavior.Restrict);
 			});
+
+			modelBuilder.Entity<Supplier>(builder =>
+			{
+				builder.HasKey(e => e.Id);
+				builder.HasIndex(e => e.Code).IsUnique();
+				builder.Property(e => e.Code).IsRequired().HasMaxLength(30);
+				builder.Property(e => e.Name).IsRequired().HasMaxLength(200);
+				builder.Property(e => e.ShortName).HasMaxLength(50);
+				builder.Property(e => e.IsActive).HasDefaultValue(true);
+
+				builder.Property(e => e.TaxCode).HasMaxLength(50);
+				builder.Property(e => e.WithholdingTaxType).HasMaxLength(20);
+				builder.Property(e => e.WithholdingTaxRate).HasPrecision(5, 2);
+				builder.Property(e => e.DefaultCurrency).IsRequired().HasMaxLength(3);
+				builder.Property(e => e.PaymentTermDays).HasDefaultValue(30);
+
+				builder.Property(e => e.Email).HasMaxLength(150);
+				builder.Property(e => e.Phone).HasMaxLength(30);
+				builder.Property(e => e.AddressLine1).HasMaxLength(200);
+				builder.Property(e => e.AddressLine2).HasMaxLength(200);
+				builder.Property(e => e.City).HasMaxLength(100);
+				builder.Property(e => e.StateOrProvince).HasMaxLength(100);
+				builder.Property(e => e.PostalCode).HasMaxLength(20);
+				builder.Property(e => e.Country).HasMaxLength(2);
+				builder.Property(e => e.Note).HasMaxLength(500);
+
+				// Quan hệ Audit users (giống các entity khác của bạn)
+				builder.HasOne(e => e.CreatedByUser).WithMany().HasForeignKey(e => e.CreatedByUserId).OnDelete(DeleteBehavior.Restrict);
+				builder.HasOne(e => e.ModifiedByUser).WithMany().HasForeignKey(e => e.ModifiedByUserId).OnDelete(DeleteBehavior.Restrict);
+				builder.HasOne(e => e.DeletedByUser).WithMany().HasForeignKey(e => e.DeletedByUserId).OnDelete(DeleteBehavior.Restrict);
+			});
+
 		}
 
 		public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

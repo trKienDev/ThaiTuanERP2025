@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Common.Persistence;
+using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Common
@@ -100,7 +101,20 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		public void Delete(T entity)
 		{
 			if (entity == null) throw new ArgumentNullException(nameof(entity));
-			_dbSet.Remove(entity);
+
+			// nếu entity là AuditableEntity thì xóa mềm
+			if (entity is AuditableEntity auditable)
+			{
+				auditable.IsDeleted = true;
+				auditable.DeletedDate = DateTime.UtcNow;
+				// auditable.DeletedByUserId = _currentUserService.UserId; // nếu bạn đã có service người dùng hiện tại
+				_dbSet.Update(entity); // update thay vì remove
+			}
+			else
+			{
+				// fallback: hard delete
+				_dbSet.Remove(entity);
+			}
 		}
 	}
 }
