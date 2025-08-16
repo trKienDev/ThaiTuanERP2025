@@ -33,7 +33,8 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			IBudgetPlanRepository budgetPlans,
 			IBudgetCodeRepository budgetCodes,
 			IBankAccountRepository bankAccounts,
-			IBankAccountReadRepository bankAccountRead
+			IBankAccountReadRepository bankAccountRead,
+			ISupplierRepository suppliers
 		) {
 			_dbContext = dbContext;
 
@@ -49,6 +50,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 
 			BankAccounts = bankAccounts;
 			BankAccountRead = bankAccountRead;
+			Suppliers = suppliers;
 		}
 
 		// Account
@@ -64,6 +66,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		public IBudgetCodeRepository BudgetCodes { get; }
 		public IBankAccountRepository BankAccounts { get; }
 		public IBankAccountReadRepository BankAccountRead { get; }
+		public ISupplierRepository Suppliers { get; }
 
 		public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{

@@ -109,6 +109,7 @@ builder.Services.AddScoped<IBudgetPeriodRepository, BudgetPeriodRepository>();
 builder.Services.AddScoped<IBudgetPlanRepository, BudgetPlanRepository>();
 builder.Services.AddScoped<IBankAccountRepository, BankAccountRepository>();
 builder.Services.AddScoped<IBankAccountReadRepository, BankAccountReadRepository>();
+builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 
 // Auto Mapper
 builder.Services.AddAutoMapper(typeof(AssemblyReference).Assembly);
