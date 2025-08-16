@@ -26,6 +26,7 @@ namespace ThaiTuanERP2025.Application.Common.Persistence
 		Task AddAsync(T entity);
 		
 		void Update(T entity);
+
 		void Delete(T entity);
 	}
 }
