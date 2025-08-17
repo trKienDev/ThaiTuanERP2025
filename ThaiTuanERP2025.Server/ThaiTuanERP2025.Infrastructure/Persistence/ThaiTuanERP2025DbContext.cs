@@ -11,6 +11,7 @@ using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Finance.Entities;
+using ThaiTuanERP2025.Domain.Partner.Entities;
 
 namespace ThaiTuanERP2025.Infrastructure.Persistence
 {
@@ -29,7 +30,8 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<Department> Departments => Set<Department>();
 		public DbSet<Group> Groups => Set<Group>();
 		public DbSet<UserGroup> UserGroups => Set<UserGroup>();
-		
+		public DbSet<PartnerBankAccount> PartnerBankAccounts => Set<PartnerBankAccount>();
+
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -38,6 +40,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 			ConfigureGroup(modelBuilder);
 			ConfigureUserGroup(modelBuilder);
 			ConfigureFinance(modelBuilder);
+			ConfigurePartner(modelBuilder);
 			ApplyGlobalFilters(modelBuilder);
 		}
 
@@ -250,6 +253,33 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 
 		}
 
+		private void ConfigurePartner(ModelBuilder modelBuilder) {
+			modelBuilder.Entity<PartnerBankAccount>(b =>
+			{
+				b.ToTable("PartnerBankAccounts");
+				b.HasKey(x => x.Id);
+
+				b.HasIndex(x => x.SupplierId).IsUnique(); // ép 1–1
+
+				b.Property(x => x.AccountNumber).IsRequired().HasMaxLength(50);
+				b.Property(x => x.BankName).IsRequired().HasMaxLength(150);
+				b.Property(x => x.AccountHolder).HasMaxLength(150);
+				b.Property(x => x.SwiftCode).HasMaxLength(11); // BIC 8 hoặc 11 ký tự
+				b.Property(x => x.Branch).HasMaxLength(150);
+				b.Property(x => x.Note).HasMaxLength(500);
+
+				// Quan hệ 1–1 với Supplier
+				b.HasOne(p => p.Supplier)
+					.WithOne(s => s.BankAccount) // hoặc .WithOne(s => s.BankAccount) nếu bạn thêm navigation ở Supplier
+					.HasForeignKey<PartnerBankAccount>(p => p.SupplierId)
+					.OnDelete(DeleteBehavior.Restrict);
+
+				// Audit FK nếu bạn đang áp dụng tương tự các entity khác:
+				b.HasOne(e => e.CreatedByUser).WithMany().HasForeignKey(e => e.CreatedByUserId).OnDelete(DeleteBehavior.Restrict);
+				b.HasOne(e => e.ModifiedByUser).WithMany().HasForeignKey(e => e.ModifiedByUserId).OnDelete(DeleteBehavior.Restrict);
+				b.HasOne(e => e.DeletedByUser).WithMany().HasForeignKey(e => e.DeletedByUserId).OnDelete(DeleteBehavior.Restrict);
+			});
+		}
 		public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{
 			var entries = ChangeTracker.Entries<AuditableEntity>();

@@ -4,7 +4,7 @@ import { PagedResult } from "../../../../shared/models/paged-result.model";
 import { BankAccountDto } from "../../models/bank-account.model";
 import { BankAccountService } from "../../services/bank-account.service";
 import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
-import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";

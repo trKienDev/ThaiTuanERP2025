@@ -47,6 +47,10 @@ using System.Text.Json;
 using ThaiTuanERP2025.Application.Finance.Commands.BankAccounts.CreateBankAccount;
 using ThaiTuanERP2025.Application.Finance.Commands.BankAccounts.UpdateBankAccount;
 using ThaiTuanERP2025.Application.Finance.Commands.BankAccounts.DeleteBankAccount;
+using ThaiTuanERP2025.Application.Partner.Mappings;
+using ThaiTuanERP2025.Application.Partner.Repositories;
+using ThaiTuanERP2025.Infrastructure.Partner.Repositories;
+using ThaiTuanERP2025.Application.Partner.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -95,6 +99,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateBudgetPlanCommandVali
 builder.Services.AddValidatorsFromAssemblyContaining<CreateBankAccountCommandValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateBankAccountCommandValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<DeleteBankAccountCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<PartnerBankAccountValidators>();
 
 // Repositories
 builder.Services.AddScoped<iJWTProvider, JwtProvider>();
@@ -110,11 +115,13 @@ builder.Services.AddScoped<IBudgetPlanRepository, BudgetPlanRepository>();
 builder.Services.AddScoped<IBankAccountRepository, BankAccountRepository>();
 builder.Services.AddScoped<IBankAccountReadRepository, BankAccountReadRepository>();
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
+builder.Services.AddScoped<IPartnerBankAccountRepository, PartnerBankAccountRepository>();
 
 // Auto Mapper
 builder.Services.AddAutoMapper(typeof(AssemblyReference).Assembly);
 builder.Services.AddAutoMapper(typeof(AccountMappingProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(FinanceMappingProfile).Assembly);
+builder.Services.AddAutoMapper(typeof(PartnerMappingProfile).Assembly);
 
 // Api
 builder.Services.AddEndpointsApiExplorer();
