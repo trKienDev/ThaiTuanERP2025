@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Account.Repositories;
 using ThaiTuanERP2025.Application.Finance.Repositories;
+using ThaiTuanERP2025.Application.Partner.Repositories;
 
 namespace ThaiTuanERP2025.Application.Common.Persistence
 {
@@ -22,6 +23,7 @@ namespace ThaiTuanERP2025.Application.Common.Persistence
 		IBudgetPeriodRepository BudgetPeriods { get; }
 		IBudgetPlanRepository BudgetPlans { get; }
 		ISupplierRepository Suppliers { get; }
+		IPartnerBankAccountRepository PartnerBankAccounts { get; }
 
 		Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 		//Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess);
