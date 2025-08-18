@@ -32,7 +32,7 @@ namespace ThaiTuanERP2025.Application.Partner.Commands.PartnerBankAccounts.Upser
 				entity.SupplierId = command.supplierId;
 
 				await _unitOfWork.PartnerBankAccounts.AddAsync(entity);
-				await _unitOfWork.SaveChangesAsync();
+				await _unitOfWork.SaveChangesAsync(cancellationToken);
 
 				return _mapper.Map<PartnerBankAccountDto>(entity);
 			} else {

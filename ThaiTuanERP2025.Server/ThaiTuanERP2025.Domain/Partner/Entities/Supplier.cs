@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Finance.Entities;
 
 namespace ThaiTuanERP2025.Domain.Partner.Entities
 {
@@ -19,7 +20,7 @@ namespace ThaiTuanERP2025.Domain.Partner.Entities
 		public string? WithholdingTaxType { get; set; } 
 		public decimal? WithholdingTaxRate { get; set; }
 		public string DefaultCurrency { get; set; } = "VND";
-		public int PaymentTermDays { get; set; } = 30;
+		public int? PaymentTermDays { get; set; } = 30;
 
 		public Guid? PostingProfileId { get; set; }
 		public Guid? SupplierGroupId { get; set; }
@@ -33,6 +34,12 @@ namespace ThaiTuanERP2025.Domain.Partner.Entities
 		public string? PostalCode { get; set; }
 		public string? Country { get; set; }	
 		public string? Note { get; set; }
+
+		bool IsForeign { get; set; }
+		public Guid? DefaultTaxId { get; set; } // Reference to a Tax entity, can be null if no default tax
+		public Tax? DefaultTax { get; set; }
+		public Guid? DefaultWithholdingTaxTypeId { get; set; } // Reference to a WithholdingTaxType entity, can be null if no default WHT type
+		public WithholdingTaxType? DefaultWithholdingTaxType { get; set; }
 
 		public PartnerBankAccount? BankAccount { get; set; }
 

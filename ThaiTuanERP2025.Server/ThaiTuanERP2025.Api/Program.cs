@@ -51,6 +51,8 @@ using ThaiTuanERP2025.Application.Partner.Mappings;
 using ThaiTuanERP2025.Application.Partner.Repositories;
 using ThaiTuanERP2025.Infrastructure.Partner.Repositories;
 using ThaiTuanERP2025.Application.Partner.Validators;
+using ThaiTuanERP2025.Application.Common.Services;
+using ThaiTuanERP2025.Infrastructure.Common.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -104,6 +106,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<PartnerBankAccountValidator
 // Repositories
 builder.Services.AddScoped<iJWTProvider, JwtProvider>();
 builder.Services.AddScoped<IUnitOfWork, AppUnitOfWork>();
+builder.Services.AddScoped<ICodeGenerator, CodeGenerator>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IGroupRepository, GroupRepository>();

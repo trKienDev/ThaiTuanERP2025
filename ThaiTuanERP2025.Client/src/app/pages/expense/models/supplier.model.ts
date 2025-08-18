@@ -1,6 +1,6 @@
 export interface SupplierDto {
       id: string;
-      code: string;
+      code?: string;
       name: string;
       shortName: string;
       isActive: boolean;
@@ -31,7 +31,7 @@ export interface SupplierDto {
 }
 
 export interface CreateSupplierRequest {
-      code: string;
+      code?: string;
       name: string;
       defaultCurrency: string;
 
