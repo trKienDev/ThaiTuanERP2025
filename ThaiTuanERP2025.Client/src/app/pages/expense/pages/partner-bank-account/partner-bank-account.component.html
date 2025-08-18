@@ -1,4 +1,13 @@
+<div *ngIf="!isLoading && !bankAccount" class="empty-hint">
+  Nhà cung cấp này chưa có tài khoản ngân hàng - nhập thông tin bên dưới và nhấn save
+</div>
+<!-- giữ nguyên form như hiện tại -->
+
 <form [formGroup]="form" (ngSubmit)="save()" class="space-y-4">
+  <!-- +++ alert thành công -->
+  <div *ngIf="successMessage" class="alert success">
+    {{ successMessage }}
+  </div>
   <div *ngIf="errorMessages.length" class="bg-red-50 border border-red-200 p-3 rounded">
     <div *ngFor="let e of errorMessages" class="text-red-700 text-sm">• {{ e }}</div>
   </div>
@@ -29,11 +38,6 @@
       <label class="block text-sm font-medium">SWIFT/BIC</label>
       <input class="mt-1 input" formControlName="swiftCode" />
       <small class="text-gray-500">8 hoặc 11 ký tự chữ/số.</small>
-    </div>
-
-    <div>
-      <label class="block text-sm font-medium">Chi nhánh</label>
-      <input class="mt-1 input" formControlName="branch" />
     </div>
 
     <div>

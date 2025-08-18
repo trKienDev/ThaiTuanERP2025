@@ -8,5 +8,5 @@ using ThaiTuanERP2025.Application.Partner.DTOs;
 
 namespace ThaiTuanERP2025.Application.Partner.Commands.Suppliers.CreateSupplier
 {
-	public record CreateSupplierCommand(CreateSupplierRequest request) : IRequest<SupplierDto>;
+	public record CreateSupplierCommand(CreateSupplierRequest Request) : IRequest<SupplierDto>;
 }
