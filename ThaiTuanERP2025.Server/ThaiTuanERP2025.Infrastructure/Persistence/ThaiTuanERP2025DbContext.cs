@@ -31,7 +31,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<Group> Groups => Set<Group>();
 		public DbSet<UserGroup> UserGroups => Set<UserGroup>();
 		public DbSet<PartnerBankAccount> PartnerBankAccounts => Set<PartnerBankAccount>();
-
+		public DbSet<NumberSeries> NumberSeries => Set<NumberSeries>();
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -42,6 +42,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 			ConfigureFinance(modelBuilder);
 			ConfigurePartner(modelBuilder);
 			ApplyGlobalFilters(modelBuilder);
+			ConfigureNumberSeries(modelBuilder);
 		}
 
 		private void ConfigureUser(ModelBuilder modelBuilder)
@@ -223,7 +224,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 			modelBuilder.Entity<Supplier>(builder =>
 			{
 				builder.HasKey(e => e.Id);
-				builder.HasIndex(e => e.Code).IsUnique();
+				builder.HasIndex(e => e.Code).IsUnique().HasFilter("[IsDeleted] = 0"); // unique Code (không đụng bản ghi đã xóa mềm)
 				builder.Property(e => e.Code).IsRequired().HasMaxLength(30);
 				builder.Property(e => e.Name).IsRequired().HasMaxLength(200);
 				builder.Property(e => e.ShortName).HasMaxLength(50);
@@ -249,6 +250,11 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 				builder.HasOne(e => e.CreatedByUser).WithMany().HasForeignKey(e => e.CreatedByUserId).OnDelete(DeleteBehavior.Restrict);
 				builder.HasOne(e => e.ModifiedByUser).WithMany().HasForeignKey(e => e.ModifiedByUserId).OnDelete(DeleteBehavior.Restrict);
 				builder.HasOne(e => e.DeletedByUser).WithMany().HasForeignKey(e => e.DeletedByUserId).OnDelete(DeleteBehavior.Restrict);
+
+				builder.ToTable(t => t.HasCheckConstraint(
+					 "CK_Suppliers_PaymentTermDays",
+					"[PaymentTermDays] IS NULL OR ([PaymentTermDays] BETWEEN 0 AND 365)"
+				));
 			});
 
 		}
@@ -280,6 +286,24 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 				b.HasOne(e => e.DeletedByUser).WithMany().HasForeignKey(e => e.DeletedByUserId).OnDelete(DeleteBehavior.Restrict);
 			});
 		}
+		
+		private void ConfigureNumberSeries(ModelBuilder modelBuilder) {
+			modelBuilder.Entity<NumberSeries>(b =>
+			{
+				b.ToTable("NumberSeries");
+				b.HasKey(x => x.Id);
+
+				b.HasIndex(x => x.Key).IsUnique();
+				b.Property(x => x.Key).IsRequired().HasMaxLength(100);
+
+				b.Property(x => x.Prefix).IsRequired().HasMaxLength(20);
+				b.Property(x => x.PadLength).IsRequired().HasDefaultValue(6); // độ dài padding, mặc định 6 ký tự
+				b.Property(x => x.NextNumber).IsRequired();
+
+				b.Property(x => x.RowVersion).IsRowVersion(); // concurrency token
+			});
+		}
+		
 		public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{
 			var entries = ChangeTracker.Entries<AuditableEntity>();
