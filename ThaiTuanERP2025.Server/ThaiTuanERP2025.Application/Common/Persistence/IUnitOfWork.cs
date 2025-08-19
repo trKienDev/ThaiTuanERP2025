@@ -24,6 +24,11 @@ namespace ThaiTuanERP2025.Application.Common.Persistence
 		IBudgetPlanRepository BudgetPlans { get; }
 		ISupplierRepository Suppliers { get; }
 		IPartnerBankAccountRepository PartnerBankAccounts { get; }
+		ILedgerAccountRepository LedgerAccounts { get; }
+		ILedgerAccountTypeRepository LedgerAccountTypes { get; }
+		ITaxRepository Taxes { get; }
+		ICashOutCodeRepository CashOutCodes { get; }
+		ICashOutGroupRepository CashOutGroups { get; }
 
 		Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 		//Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess);

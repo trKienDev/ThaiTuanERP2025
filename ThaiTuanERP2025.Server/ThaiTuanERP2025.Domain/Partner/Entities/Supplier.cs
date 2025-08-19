@@ -37,9 +37,7 @@ namespace ThaiTuanERP2025.Domain.Partner.Entities
 
 		bool IsForeign { get; set; }
 		public Guid? DefaultTaxId { get; set; } // Reference to a Tax entity, can be null if no default tax
-		public Tax? DefaultTax { get; set; }
 		public Guid? DefaultWithholdingTaxTypeId { get; set; } // Reference to a WithholdingTaxType entity, can be null if no default WHT type
-		public WithholdingTaxType? DefaultWithholdingTaxType { get; set; }
 
 		public PartnerBankAccount? BankAccount { get; set; }
 

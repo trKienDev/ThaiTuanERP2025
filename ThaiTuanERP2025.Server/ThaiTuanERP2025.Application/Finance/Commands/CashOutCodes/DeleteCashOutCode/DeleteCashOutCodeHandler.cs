@@ -1,0 +1,29 @@
+﻿using MediatR;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ThaiTuanERP2025.Application.Common.Persistence;
+using ThaiTuanERP2025.Domain.Exceptions;
+
+namespace ThaiTuanERP2025.Application.Finance.Commands.CashOutCodes.DeleteCashOutCode
+{
+	public class DeleteCashOutCodeHandler : IRequestHandler<DeleteCashOutCodeCommand, bool>
+	{
+		private readonly IUnitOfWork _unitOfWork;
+		public DeleteCashOutCodeHandler(IUnitOfWork unitOfWork) {
+			_unitOfWork = unitOfWork;
+		}
+
+		public async Task<bool> Handle(DeleteCashOutCodeCommand request, CancellationToken cancellationToken) {
+			var entity = await _unitOfWork.CashOutCodes.SingleOrDefaultIncludingAsync(x => 
+				x.Id == request.Id, asNoTracking: false, cancellationToken
+			);
+			if (entity is null) throw new NotFoundException("Không tìm thấy mã dòng tiền ra");
+			_unitOfWork.CashOutCodes.Delete(entity);
+			await _unitOfWork.SaveChangesAsync(cancellationToken);
+			return true;
+		}
+	}
+}

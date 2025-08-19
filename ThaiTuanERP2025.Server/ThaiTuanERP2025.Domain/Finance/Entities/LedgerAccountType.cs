@@ -8,14 +8,14 @@ using ThaiTuanERP2025.Domain.Finance.Enums;
 
 namespace ThaiTuanERP2025.Domain.Finance.Entities
 {
-	public class WithholdingTaxType : AuditableEntity
+	public class LedgerAccountType : AuditableEntity
 	{
 		public string Code { get; set; } = null!;
 		public string Name { get; set; } = null!;
-		public decimal Rate { get; set; }
-		public WhtBasis Basis { get; set; } = WhtBasis.Gross; // Mặc định là Gross
+		public AccountKind Kind { get; set; }
+		public string? Description { get; set; }
+		public bool IsActive { get; set; } = true;
 
-		public string? GLMapping { get; set; } // Mã tài khoản kế toán liên kết, có thể null nếu không có
-		public bool IsActive { get; set; } = true; 
+		public ICollection<LedgerAccount> LedgerAccounts { get; set; } = new List<LedgerAccount>();
 	}
 }
