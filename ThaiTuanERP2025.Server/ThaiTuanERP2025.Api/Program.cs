@@ -53,6 +53,9 @@ using ThaiTuanERP2025.Infrastructure.Partner.Repositories;
 using ThaiTuanERP2025.Application.Partner.Validators;
 using ThaiTuanERP2025.Application.Common.Services;
 using ThaiTuanERP2025.Infrastructure.Common.Services;
+using ThaiTuanERP2025.Application.Finance.Commands.LedgerAccountTypes.CreateLedgerAccountType;
+using ThaiTuanERP2025.Application.Finance.Commands.LedgerAccountTypes.UpdateLedgerAccountType;
+using ThaiTuanERP2025.Application.Finance.Commands.LedgerAccounts.CreateLedgerAccount;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -102,6 +105,9 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateBankAccountCommandVal
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateBankAccountCommandValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<DeleteBankAccountCommandValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<PartnerBankAccountValidators>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateLedgerAccountTypeValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateLedgerAccountTypeValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateLedgerAccountValidator>();
 
 // Repositories
 builder.Services.AddScoped<iJWTProvider, JwtProvider>();
@@ -119,12 +125,18 @@ builder.Services.AddScoped<IBankAccountRepository, BankAccountRepository>();
 builder.Services.AddScoped<IBankAccountReadRepository, BankAccountReadRepository>();
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<IPartnerBankAccountRepository, PartnerBankAccountRepository>();
+builder.Services.AddScoped<ILedgerAccountTypeRepository, LedgerAccountTypeRepository>();
+builder.Services.AddScoped<ILedgerAccountRepository, LedgerAccountRepository>();
+builder.Services.AddScoped<ICashOutCodeRepository, CashOutCodeRepository>();
+builder.Services.AddScoped<ICashOutGroupRepository, CashOutGroupRepository>();
+builder.Services.AddScoped<ITaxRepository, ITaxRepository>();
 
 // Auto Mapper
 builder.Services.AddAutoMapper(typeof(AssemblyReference).Assembly);
 builder.Services.AddAutoMapper(typeof(AccountMappingProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(FinanceMappingProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(PartnerMappingProfile).Assembly);
+
 
 // Api
 builder.Services.AddEndpointsApiExplorer();

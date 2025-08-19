@@ -32,9 +32,15 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<UserGroup> UserGroups => Set<UserGroup>();
 		public DbSet<PartnerBankAccount> PartnerBankAccounts => Set<PartnerBankAccount>();
 		public DbSet<NumberSeries> NumberSeries => Set<NumberSeries>();
+		public DbSet<LedgerAccountType> LedgerAccountTypes => Set<LedgerAccountType>();
+		public DbSet<LedgerAccount> LedgerAccounts => Set<LedgerAccount>();
+		public DbSet<Tax> Taxes => Set<Tax>();
+		public DbSet<CashOutGroup> CashOutGroups => Set<CashOutGroup>();
+		public DbSet<CashOutCode> CashOutCodes => Set<CashOutCode>();
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
+			modelBuilder.ApplyConfigurationsFromAssembly(typeof(ThaiTuanERP2025DbContext).Assembly);
 			ConfigureUser(modelBuilder);
 			ConfigureDepartment(modelBuilder);
 			ConfigureGroup(modelBuilder);

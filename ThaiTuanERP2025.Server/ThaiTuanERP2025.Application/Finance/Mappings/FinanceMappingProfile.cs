@@ -29,7 +29,21 @@ namespace ThaiTuanERP2025.Application.Finance.Mappings
 
 			CreateMap<BankAccount, BankAccountDto>();
 
-			
+			CreateMap<LedgerAccountType, LedgerAccountTypeDto>();
+
+			CreateMap<LedgerAccount, LedgerAccountDto>()
+				.ForMember(d => d.AccounTypeName, o => o.MapFrom(s => s.LedgerAccountType.Name));
+
+			CreateMap<Tax, TaxDto>()
+				.ForMember(d => d.PostingAccountNumber, o => o.MapFrom(s => s.PostingAccount.Number))
+				.ForMember(d => d.PostingAccountNumber, o => o.MapFrom(s => s.PostingAccount.Name));
+
+			CreateMap<CashOutGroup, CashOutGroupDto>();
+
+			CreateMap<CashOutCode, CashOutCodeDto>()
+				.ForMember(d => d.CashOutGroupName, o => o.MapFrom(s => s.CashOutGroup.Name))
+				.ForMember(d => d.PostingAccountNumber, o => o.MapFrom(s => s.PostingAccount.Number))
+				.ForMember(d => d.PostingAccountName, o => o.MapFrom(s => s.PostingAccount.Name));
 		}
 	}
 }
