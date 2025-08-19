@@ -8,12 +8,17 @@ using ThaiTuanERP2025.Domain.Finance.Enums;
 
 namespace ThaiTuanERP2025.Domain.Finance.Entities
 {
-	public class Tax :AuditableEntity
+	public class Tax : AuditableEntity
 	{
-		public string Code { get; set; } = null!;
-		public string Name { get; set; } = null!;
-		public decimal Rate { get; set; } 
-		public PriceMode PriceMode { get; set; } = PriceMode.Net; // Mặc định là Net
-		public bool IsActive { get; set; } = true; // Mặc định là true
+		public string PolicyName { get; set; } = null!;
+		public decimal Rate { get; set; }
+		public TaxBroadType TaxBroadType { get; set; }
+		public ConsumptionSubType? ConsumptionSubType { get; set; }
+
+		public Guid PostingLedgerAccountId { get; set; }
+		public string? Description { get; set; }	
+		public bool IsActive { get; set; } = true;
+
+		public LedgerAccount PostingLedgerAccount { get; set; } = null!;
 	}
 }

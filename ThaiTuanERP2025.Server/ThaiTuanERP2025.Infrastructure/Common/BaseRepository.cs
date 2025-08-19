@@ -21,6 +21,30 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			_dbSet = _context.Set<T>();
 		}
 
+		public virtual Task<List<T>> ListAsync(Func<IQueryable<T>, IQueryable<T>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default)
+		{
+			if (builder == null) throw new ArgumentNullException(nameof(builder));
+			var query = asNoTracking ? _dbSet.AsNoTracking() : _dbSet.AsQueryable();
+			return builder(query).ToListAsync(cancellationToken);
+		}
+		public virtual Task<T?> SingleOrDefaultAsync(Func<IQueryable<T>, IQueryable<T>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default)
+		{
+			if (builder == null) throw new ArgumentNullException(nameof(builder));
+			var query = asNoTracking ? _dbSet.AsNoTracking() : _dbSet.AsQueryable();
+			return builder(query).SingleOrDefaultAsync(cancellationToken);
+		}
+		public virtual Task<T?> SingleOrDefaultIncludingAsync(Expression<Func<T, bool>> predicate, bool asNoTracking = true, CancellationToken cancellationToken = default, params Expression<Func<T, object>>[] includes)
+		{
+			if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+			IQueryable<T> query = asNoTracking ? _dbSet.AsNoTracking() : _dbSet.AsQueryable();
+			if (includes != null)
+			{
+				foreach (var include in includes)
+					query = query.Include(include);
+			}
+			return query.SingleOrDefaultAsync(predicate, cancellationToken);
+		}
+
 		public IQueryable<T> Query(bool asNoTracking = true)
 		{
 			return asNoTracking ? _dbSet.AsNoTracking() : _dbSet.AsQueryable();
