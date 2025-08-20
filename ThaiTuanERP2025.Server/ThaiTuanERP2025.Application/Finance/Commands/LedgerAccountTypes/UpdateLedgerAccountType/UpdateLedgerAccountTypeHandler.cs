@@ -20,6 +20,10 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.LedgerAccountTypes.Update
 		public async Task<LedgerAccountTypeDto> Handle(UpdateLedgerAccountTypeCommand command, CancellationToken cancellationToken) {
 			var entity = await _unitOfWork.LedgerAccountTypes.GetByIdAsync(command.Id)
 				?? throw new NotFoundException("Không tìm thấy loại tài khoản kế toán");
+
+			if (await _unitOfWork.LedgerAccountTypes.CodeExistsAsync(command.Code, command.Id, cancellationToken))
+				throw new ConflictException($"Mã loại tài khoản kế toán này đã tồn tại");
+
 			entity.Code = command.Code;
 			entity.Name = command.Name;
 			entity.Kind = command.Kind;

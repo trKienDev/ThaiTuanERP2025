@@ -7,11 +7,6 @@ using ThaiTuanERP2025.Application.Account.Repositories;
 using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Application.Finance.Repositories;
 using ThaiTuanERP2025.Application.Partner.Repositories;
-using ThaiTuanERP2025.Domain.Account.Entities;
-using ThaiTuanERP2025.Domain.Finance.Entities;
-using ThaiTuanERP2025.Domain.Partner.Entities;
-using ThaiTuanERP2025.Infrastructure.Account.Repositories;
-using ThaiTuanERP2025.Infrastructure.Finance.Repositories;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Common
@@ -37,9 +32,15 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			IBankAccountRepository bankAccounts,
 			IBankAccountReadRepository bankAccountRead,
 			ISupplierRepository suppliers,
+			ILedgerAccountRepository ledgerAccounts,
+			ILedgerAccountTypeRepository ledgerAccountTypes,
+			ITaxRepository taxes,
+			ICashOutCodeRepository cashOutCodes,
+			ICashOutGroupRepository cashOutGroups,
 
 			// Partner
 			IPartnerBankAccountRepository partnerBankAccount
+			
 		) {
 			_dbContext = dbContext;
 
@@ -56,6 +57,12 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			BankAccounts = bankAccounts;
 			BankAccountRead = bankAccountRead;
 			Suppliers = suppliers;
+
+			LedgerAccountTypes = ledgerAccountTypes;
+			LedgerAccounts = ledgerAccounts;
+			Taxes = taxes;
+			CashOutCodes = cashOutCodes;
+			CashOutGroups = cashOutGroups;
 
 			PartnerBankAccounts = partnerBankAccount;
 		}
@@ -75,6 +82,11 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		public IBankAccountReadRepository BankAccountRead { get; }
 		public ISupplierRepository Suppliers { get; }
 		public IPartnerBankAccountRepository PartnerBankAccounts { get; }
+		public ILedgerAccountRepository LedgerAccounts { get; }
+		public ILedgerAccountTypeRepository LedgerAccountTypes { get; }
+		public ITaxRepository Taxes { get; }
+		public ICashOutCodeRepository CashOutCodes { get; }
+		public ICashOutGroupRepository CashOutGroups { get; }
 
 		public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{

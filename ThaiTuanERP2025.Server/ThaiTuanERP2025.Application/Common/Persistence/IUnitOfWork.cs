@@ -31,15 +31,5 @@ namespace ThaiTuanERP2025.Application.Common.Persistence
 		ICashOutGroupRepository CashOutGroups { get; }
 
 		Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
-		//Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess);
-		//void Dispose();
-		//void Dispose(bool disposing);
-		//bool HasChanges();
-		//int SaveChanges();
-		//int SaveChanges(bool acceptAllChangesOnSuccess);
-		//void Clear();
-		//void RejectChanges();
-		//void AcceptAllChanges();
-		//void AcceptAllChanges(bool acceptAllChangesOnSuccess);
 	}
 }

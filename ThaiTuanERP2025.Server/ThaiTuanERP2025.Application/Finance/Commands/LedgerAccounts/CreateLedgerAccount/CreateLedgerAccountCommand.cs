@@ -9,7 +9,7 @@ using ThaiTuanERP2025.Application.Finance.DTOs;
 namespace ThaiTuanERP2025.Application.Finance.Commands.LedgerAccounts.CreateLedgerAccount
 {
 	public record CreateLedgerAccountCommand(
-		string Number, string Name, Guid AccountTypeId, Guid? ParentAccountId,
+		string Number, string Name, Guid LedgerAccountTypeId, Guid? ParentLedgerAccountId,
 		string? Description
 	) : IRequest<LedgerAccountDto>;
 }

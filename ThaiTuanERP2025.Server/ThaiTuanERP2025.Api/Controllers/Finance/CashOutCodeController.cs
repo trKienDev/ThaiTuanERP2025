@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 using ThaiTuanERP2025.Api.Common;
@@ -12,7 +13,9 @@ using ThaiTuanERP2025.Application.Finance.Queries.CashOutCodes.GetCashOutCodeByI
 
 namespace ThaiTuanERP2025.Api.Controllers.Finance
 {
-	
+	[ApiController]
+	[Authorize]
+	[Route("api/cashout-codes")]
 	public class CashOutCodeController : ControllerBase
 	{
 		private readonly IMediator _mediator;
