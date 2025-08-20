@@ -19,7 +19,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public Email? Email { get; private set; }
 		public Phone? Phone { get; private set; }
 
-		public Guid DepartmentId { get; private set; }
+		public Guid? DepartmentId { get; private set; }
 		public Department? Department { get; private set; }
 
 		public Guid? ManagerId { get; private set; }
@@ -43,7 +43,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			string avatarUrl,
 			UserRole role,
 			string position,
-			Guid departmentId,
+			Guid? departmentId,
 			Email? email = null,
 			Phone? phone = null
 		) {

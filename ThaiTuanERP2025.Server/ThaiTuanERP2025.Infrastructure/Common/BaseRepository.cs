@@ -98,7 +98,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 
 			IQueryable<T> query = _dbSet.AsNoTracking().Where(predicate);
 			if (includes != null)
-				foreach (var include in includes)
+				foreach (var include in includes.Distinct())
 					query = query.Include(include);
 
 			return await query.ToListAsync();

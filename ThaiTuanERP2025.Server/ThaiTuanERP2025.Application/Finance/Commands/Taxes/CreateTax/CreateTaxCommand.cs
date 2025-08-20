@@ -10,7 +10,6 @@ using ThaiTuanERP2025.Domain.Finance.Enums;
 namespace ThaiTuanERP2025.Application.Finance.Commands.Taxes.CreateTax
 {
 	public record CreateTaxCommand(
-		string PolicyName, decimal Rate, TaxBroadType TaxBroadType, ConsumptionSubType? ConsumptionSubType,
-		Guid PostingLedgerAccountId, string? Description
+		string PolicyName, decimal Rate, Guid PostingLedgerAccountId, string? Description
 	) : IRequest<TaxDto>;
 }

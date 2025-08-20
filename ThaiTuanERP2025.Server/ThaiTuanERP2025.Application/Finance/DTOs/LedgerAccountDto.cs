@@ -7,7 +7,15 @@ using System.Threading.Tasks;
 namespace ThaiTuanERP2025.Application.Finance.DTOs
 {
 	public record LedgerAccountDto(
-		Guid Id, string Number, string Name, Guid LedgerAccountTypeId, Guid LedgerAccounTypeName,
-		Guid ParrentLedgerAccountId, string Path, int Level ,string? Description, bool IsActive
+		Guid Id, 
+		string Number, 
+		string Name, 
+		Guid LedgerAccountTypeId, 
+		string LedgerAccounTypeName,
+		Guid? ParentLedgerAccountId, 
+		string Path, 
+		int Level,
+		string? Description, 
+		bool IsActive
 	);
 }

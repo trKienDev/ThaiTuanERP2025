@@ -17,29 +17,33 @@ namespace ThaiTuanERP2025.Infrastructure.Seeding
 		{
 			if (!context.Users.Any(u => u.Username == "admin"))
 			{
+				// 1) Tạo admin CHƯA gán department
+				var admin = new User(
+				    fullName: "Admin",
+				    userName: "admin",
+				    employeeCode: "ITC01",
+				    passwordHash: PasswordHasher.Hash("Th@iTu@n2025"),
+				    avatarUrl: "",
+				    role: UserRole.admin,
+				    position: "System Admin",
+				    departmentId: null,                                    // ✅
+				    email: new Email("itcenter@thaituan.com.vn")
+				);
+				admin.SetSuperAdmin(true);
+				context.Users.Add(admin);
+				context.SaveChanges();
+
+				// 2) Tạo phòng ban, gán CreatedByUserId = admin.Id
 				var dept = new Department("Phòng IT", "ITC");
+				// nếu AuditableEntity có CreatedByUserId:
+				// dept.CreatedByUserId = admin.Id;
+				// hoặc: dept.CreatedByUser = admin;
 				context.Departments.Add(dept);
-				context.SaveChanges(); // phải lưu để có ID
+				context.SaveChanges();
 
-				// sau khi đã có department
-				if (!context.Users.Any())
-				{
-					var admin = new User(
-						fullName: "Admin",
-						userName: "admin",
-						employeeCode: "ITC01",
-						passwordHash: PasswordHasher.Hash("Th@iTu@n2025"),
-						avatarUrl: "",
-						role: UserRole.admin,
-						position: "System Admin",
-						departmentId: dept.Id,
-						email: new Email("itcenter@thaituan.com.vn")
-					);
-					admin.SetSuperAdmin(true);
-
-					context.Users.Add(admin);
-					context.SaveChanges();
-				}
+				// 3) Gán admin vào phòng ban vừa tạo
+				admin.SetDepartment(dept.Id);
+				context.SaveChanges();
 			}
 		}
 	}

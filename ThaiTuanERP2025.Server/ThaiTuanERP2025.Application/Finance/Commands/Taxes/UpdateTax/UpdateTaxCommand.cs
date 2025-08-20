@@ -11,7 +11,6 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.Taxes.UpdateTax
 {
 	public record UpdateTaxCommand(
 		Guid Id, string PolicyName, decimal Rate, 
-		TaxBroadType TaxBroadType, ConsumptionSubType? ConsumptionSubType,
 		Guid PostingLedgerAccountId, string? Description
 	) : IRequest<TaxDto>;
 }

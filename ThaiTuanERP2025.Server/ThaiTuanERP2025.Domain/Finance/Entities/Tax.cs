@@ -12,8 +12,6 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 	{
 		public string PolicyName { get; set; } = null!;
 		public decimal Rate { get; set; }
-		public TaxBroadType TaxBroadType { get; set; }
-		public ConsumptionSubType? ConsumptionSubType { get; set; }
 
 		public Guid PostingLedgerAccountId { get; set; }
 		public string? Description { get; set; }	

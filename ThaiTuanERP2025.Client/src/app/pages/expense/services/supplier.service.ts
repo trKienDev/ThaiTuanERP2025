@@ -6,7 +6,7 @@ import { catchError, Observable } from "rxjs";
 import { ApiResponse } from "../../../core/models/api-response.model";
 import { handleApiResponse$ } from "../../../core/utils/handle-api-response.operator";
 import { handleHttpError } from "../../../core/utils/handle-http-errors.util";
-import { PagedResult } from "../../../shared/models/paged-result.model";
+import { PagedResult } from "../../../core/models/paged-result.model";
 
 @Injectable({ providedIn: 'root'}) 
 export class SupplierService {
