@@ -43,7 +43,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 			modelBuilder.ApplyConfigurationsFromAssembly(typeof(ThaiTuanERP2025DbContext).Assembly);
 			ConfigureFinance(modelBuilder);
 			ConfigurePartner(modelBuilder);
-			ApplyGlobalFilters(modelBuilder);
+			ApplySoftDeleteFilters(modelBuilder);
 			ConfigureNumberSeries(modelBuilder);
 		}
 
@@ -143,51 +143,24 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 			return base.SaveChangesAsync(cancellationToken);
 		}
 
-		/// <summary>
-		/// Áp dụng bộ lọc toàn cục cho các entity kế thừa AuditableEntity
-		/// !IsDeleted cho tất cả entity kế thừa AuditableEntity.
-		/// Nếu entity có navigation tới cha mà cha cũng kế thừa AuditableEntity ⇒ tự động thêm điều kiện !Parent.IsDeleted.
-		/// logic: ẩn con khi cha bị ẩn
-		/// </summary>
-		/// <param name="modelBuilder"></param>
-		private void ApplyGlobalFilters(ModelBuilder modelBuilder)
+		private static void ApplySoftDeleteFilters(ModelBuilder modelBuilder)
 		{
-			foreach(var entityType in modelBuilder.Model.GetEntityTypes())
+			foreach (var entityType in modelBuilder.Model.GetEntityTypes())
 			{
 				var clrType = entityType.ClrType;
 
-				// Bỏ qua entity không kế thừa AuditableEntity
-				if(!typeof(AuditableEntity).IsAssignableFrom(clrType))
+				// Bỏ qua các type không phải entity thực (owned/skip navigations etc.)
+				if (clrType == null || !typeof(AuditableEntity).IsAssignableFrom(clrType))
 					continue;
-				
+
 				var parameter = Expression.Parameter(clrType, "e");
+				var prop = Expression.Property(parameter, nameof(AuditableEntity.IsDeleted));
+				var body = Expression.Not(prop); // !e.IsDeleted
+				var lambda = Expression.Lambda(body, parameter);
 
-				// Điều kiện chính: !e.IsDeleted
-				var isDeletedProperty = Expression.Property(parameter, nameof(AuditableEntity.IsDeleted));
-				var notDeleted = Expression.Not(isDeletedProperty);
-
-				Expression finalFilter = notDeleted;
-
-				// Duyệt qua navigation tới cha
-				foreach (var navigation in entityType.GetNavigations())
-				{
-					var targetClrType = navigation.TargetEntityType.ClrType;
-					if (typeof(AuditableEntity).IsAssignableFrom(targetClrType) && navigation.IsOnDependent)
-					{
-						// e.Parent != null && !e.Parent.IsDeleted	
-						var navProperty = Expression.Property(parameter, navigation.Name);
-						var parentNotNull = Expression.NotEqual(navProperty, Expression.Constant(null, targetClrType));
-						var parentIsDeletedProperty = Expression.Property(navProperty, nameof(AuditableEntity.IsDeleted));
-						var parentNotDeleted = Expression.Not(parentIsDeletedProperty);
-						var parentCondition = Expression.AndAlso(parentNotNull, parentNotDeleted);
-
-						finalFilter = Expression.AndAlso(finalFilter, parentCondition);
-					}
-				}
-
-				var lamba = Expression.Lambda(finalFilter, parameter);
-				modelBuilder.Entity(clrType).HasQueryFilter(lamba);
+				modelBuilder.Entity(clrType).HasQueryFilter(lambda);
 			}
 		}
+
 	}
 }
