@@ -1,14 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Domain.Exceptions;
-using ThaiTuanERP2025.Domain.Finance.Enums;
 
 namespace ThaiTuanERP2025.Application.Finance.Commands.Taxes.UpdateTax
 {
@@ -40,8 +34,6 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.Taxes.UpdateTax
 
 			entity.PolicyName = request.PolicyName;
 			entity.Rate = request.Rate;	
-			entity.TaxBroadType = request.TaxBroadType;
-			entity.ConsumptionSubType = request.TaxBroadType == TaxBroadType.Consumption ? request.ConsumptionSubType : null;
 			entity.PostingLedgerAccountId = request.PostingLedgerAccountId;	
 			entity.Description = request.Description;
 

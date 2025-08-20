@@ -13,7 +13,7 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 	{
 		public void Configure(EntityTypeBuilder<LedgerAccount> builder)
 		{
-			builder.ToTable("Accounts", "Finance").HasKey(x => x.Id);
+			builder.ToTable("LedgerAccounts", "Finance").HasKey(x => x.Id);
 
 			builder.Property(x => x.Number).IsRequired().HasMaxLength(50);
 			builder.Property(x => x.Name).IsRequired().HasMaxLength(200);

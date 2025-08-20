@@ -34,16 +34,11 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.Taxes.CreateTax
 			);
 			if (posting is null) throw new NotFoundException("Tài khoản hoạch toán không tồn tại");
 
-			// Ràng buộc ConsumptionSubType theo TaxBroadType
-			var consumptionSubType = command.TaxBroadType == TaxBroadType.Consumption ? command.ConsumptionSubType : null;
-
 			var entity = new Tax
 			{
 				Id = Guid.NewGuid(),
 				PolicyName = command.PolicyName,
 				Rate = command.Rate,
-				TaxBroadType = command.TaxBroadType,
-				ConsumptionSubType = command.TaxBroadType == TaxBroadType.Consumption ? command.ConsumptionSubType : null,
 				PostingLedgerAccountId = command.PostingLedgerAccountId,
 				Description = command.Description,
 				IsActive = true

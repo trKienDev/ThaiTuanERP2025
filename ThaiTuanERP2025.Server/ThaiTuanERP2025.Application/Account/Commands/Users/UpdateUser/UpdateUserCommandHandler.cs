@@ -52,7 +52,7 @@ namespace ThaiTuanERP2025.Application.Account.Commands.Users.UpdateUser
 				Email = user.Email?.Value,
 				Phone = user.Phone?.Value,
 				Role = user.Role,
-				DepartmentId = user.DepartmentId
+				DepartmentId = user?.DepartmentId
 			};
 		}
 	}

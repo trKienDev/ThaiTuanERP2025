@@ -35,10 +35,14 @@ namespace ThaiTuanERP2025.Application.Finance.Mappings
 				.ForMember(d => d.LedgerAccounTypeName, o => o.MapFrom(s => s.LedgerAccountType.Name));
 
 			CreateMap<Tax, TaxDto>()
-				.ForMember(d => d.TaxBroadType, o => o.MapFrom(s => s.TaxBroadType))
-				.ForMember(d => d.PostingLedgerAccountId, o => o.MapFrom(s => s.PostingLedgerAccountId))
-				.ForMember(d => d.PostingLedgerAccountNumber, o => o.MapFrom(s => s.PostingLedgerAccount.Number))
-				.ForMember(d => d.PostingLedgerAccountName, o => o.MapFrom(s => s.PostingLedgerAccount.Name));
+	    .ForCtorParam(nameof(TaxDto.Id), o => o.MapFrom(s => s.Id))
+	    .ForCtorParam(nameof(TaxDto.PolicyName), o => o.MapFrom(s => s.PolicyName))
+	    .ForCtorParam(nameof(TaxDto.Rate), o => o.MapFrom(s => s.Rate))
+	    .ForCtorParam(nameof(TaxDto.PostingLedgerAccountId), o => o.MapFrom(s => s.PostingLedgerAccountId))
+	    .ForCtorParam(nameof(TaxDto.PostingLedgerAccountNumber), o => o.MapFrom(s => s.PostingLedgerAccount.Number))
+	    .ForCtorParam(nameof(TaxDto.PostingLedgerAccountName), o => o.MapFrom(s => s.PostingLedgerAccount.Name))
+	    .ForCtorParam(nameof(TaxDto.Description), o => o.MapFrom(s => s.Description))
+	    .ForCtorParam(nameof(TaxDto.IsActive), o => o.MapFrom(s => s.IsActive));
 
 			CreateMap<CashOutGroup, CashOutGroupDto>();
 

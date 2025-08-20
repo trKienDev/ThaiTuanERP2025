@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
-import { PagedResult } from "../../../../shared/models/paged-result.model";
+import { PagedResult } from "../../../../core/models/paged-result.model";
 import { BankAccountDto } from "../../models/bank-account.model";
 import { BankAccountService } from "../../services/bank-account.service";
 import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
