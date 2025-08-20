@@ -26,9 +26,9 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.LedgerAccounts.CreateLedg
 		{
 			string parentPath = "/";
 			int ParentLevel = -1;
-			if(command.ParentAccountId.HasValue)
+			if(command.ParentLedgerAccountId.HasValue)
 			{
-				var parentAccount = await _unitOfWork.LedgerAccounts.GetByIdAsync(command.ParentAccountId.Value)
+				var parentAccount = await _unitOfWork.LedgerAccounts.GetByIdAsync(command.ParentLedgerAccountId.Value)
 					?? throw new NotFoundException("Parent account not found");
 				parentPath = parentAccount.Path;
 				ParentLevel = parentAccount.Level;
@@ -38,8 +38,8 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.LedgerAccounts.CreateLedg
 			{
 				Number = command.Number,
 				Name = command.Name,
-				AccountTypeId = command.AccountTypeId,
-				ParrentAccountId = command.ParentAccountId,
+				LedgerAccountTypeId = command.LedgerAccountTypeId,
+				ParrentLedgerAccountId = command.ParentLedgerAccountId,
 				Path = $"{parentPath}{command.Number}",
 				Level = ParentLevel + 1,
 				Description = command.Description,

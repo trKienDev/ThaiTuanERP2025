@@ -9,7 +9,7 @@ using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Domain.Exceptions;
 
-namespace ThaiTuanERP2025.Application.Finance.Queries.LedgerAccountTypes.GetLedgerAccountTypeById.GetAccountTypeByIdQuery
+namespace ThaiTuanERP2025.Application.Finance.Queries.LedgerAccountTypes.GetLedgerAccountTypeById
 {
 	public class GetLedgerAccountTypeByIdHandler : IRequestHandler<GetLedgerAccountTypeByIdQuery, LedgerAccountTypeDto>
 	{
@@ -23,7 +23,7 @@ namespace ThaiTuanERP2025.Application.Finance.Queries.LedgerAccountTypes.GetLedg
 
 		public async Task<LedgerAccountTypeDto> Handle(GetLedgerAccountTypeByIdQuery request, CancellationToken cancellationToken)
 		{
-			var accountType = await _unitOfWork.LedgerAccountTypes.GetByIdAsync(request.Id);
+			var accountType = await _unitOfWork.LedgerAccountTypes.GetByIdAsync(request.Id)
 				?? throw new NotFoundException($"Không tìm thấy tài khoản kế toán với ID: '{request.Id}'");
 			return _mapper.Map<LedgerAccountTypeDto>(accountType);
 		}

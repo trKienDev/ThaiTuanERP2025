@@ -21,9 +21,9 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 
 			builder.HasIndex(x => x.PolicyName).IsUnique();
 
-			builder.HasOne(x => x.PostingAccount)
+			builder.HasOne(x => x.PostingLedgerAccount)
 				.WithMany()
-				.HasForeignKey(x => x.PostingAccountId)
+				.HasForeignKey(x => x.PostingLedgerAccountId)
 				.OnDelete(DeleteBehavior.Restrict);
 		}
 	}

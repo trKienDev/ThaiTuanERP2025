@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Domain.Exceptions;
+using ThaiTuanERP2025.Domain.Finance.Enums;
 
 namespace ThaiTuanERP2025.Application.Finance.Commands.Taxes.UpdateTax
 {
@@ -27,14 +28,20 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.Taxes.UpdateTax
 			)) throw new ConflictException($"Chính sách thuế '{request.PolicyName}' đã tồn tại");
 
 			var entity = await _unitOfWork.Taxes.SingleOrDefaultIncludingAsync(
-				x => x.PolicyName == request.PolicyName && x.Id == request.Id, asNoTracking: false, cancellationToken
+				x => x.Id == request.Id, asNoTracking: false, cancellationToken
 			);
 			if (entity is null) throw new NotFoundException("không tìm thấy chính sách thuế");
+
+			// Kiểm tra tài khoản hạch toán mới có tồn tại
+			var postingLedgerAccount = await _unitOfWork.Taxes.SingleOrDefaultIncludingAsync(x =>
+				x.Id == request.PostingLedgerAccountId, asNoTracking: false, cancellationToken
+			);
+			if (postingLedgerAccount is null) throw new NotFoundException("Tài khoản hạch toán không tồn tại");
 
 			entity.PolicyName = request.PolicyName;
 			entity.Rate = request.Rate;	
 			entity.TaxBroadType = request.TaxBroadType;
-			entity.ConsumptionSubType = request.ConsumptionSubType;
+			entity.ConsumptionSubType = request.TaxBroadType == TaxBroadType.Consumption ? request.ConsumptionSubType : null;
 			entity.PostingLedgerAccountId = request.PostingLedgerAccountId;	
 			entity.Description = request.Description;
 
