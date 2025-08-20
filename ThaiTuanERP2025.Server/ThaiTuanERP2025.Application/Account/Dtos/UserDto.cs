@@ -19,7 +19,7 @@ namespace ThaiTuanERP2025.Application.Account.Dtos
 		public string AvatarUrl { get; set; } = default!;
 
 		public UserRole Role { get; set; } = default!;
-		public Guid DepartmentId { get; set; }
+		public Guid? DepartmentId { get; set; }
 
 		public DepartmentDto? Department { get; set; } = default!;
 	}

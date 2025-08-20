@@ -47,7 +47,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 			return Ok(ApiResponse<CashOutGroupDto>.Success(result));
 		}
 
-		[HttpPatch("{id:guid}/sttatus")]
+		[HttpPatch("{id:guid}/status")]
 		public async Task<ActionResult> ToggleStatus(Guid id, bool isActive) {
 			var result = await _mediator.Send(new ToggleCashOutGroupStatusCommand(id, isActive));
 			return Ok(ApiResponse<bool>.Success(result));

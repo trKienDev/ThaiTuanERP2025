@@ -1,0 +1,152 @@
+<!-- finance-tax.component.html -->
+<section class="expense-navbar__content tax-page">
+  <header class="page-bar">
+    <h2>Thuế (Tax)</h2>
+    <div class="spacer"></div>
+    <button class="btn primary" (click)="openCreate()">+ Thêm thuế</button>
+  </header>
+
+  <div class="toolbar">
+    <div class="filters">
+      <div class="search">
+        <input type="text" placeholder="Tìm theo mã/tên chính sách (PolicyName)…"
+               [(ngModel)]="filters.q" (input)="applyFilter()" />
+      </div>
+      <select [(ngModel)]="filters.status" (change)="applyFilter()">
+        <option value="all">Tất cả trạng thái</option>
+        <option value="active">Đang dùng</option>
+        <option value="inactive">Ngưng</option>
+      </select>
+      <button class="btn ghost" (click)="clearFilters()" *ngIf="hasFilter()">Xoá bộ lọc</button>
+    </div>
+
+    <div class="extras">
+      <button class="btn ghost" (click)="export()">Xuất</button>
+      <button class="btn ghost" (click)="reload()">Tải lại</button>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table class="grid">
+      <thead>
+        <tr>
+          <th style="width:36px">
+            <input type="checkbox" [checked]="allChecked()" (change)="toggleAll($event)" />
+          </th>
+          <th (click)="sortBy('policyName')">PolicyName <span [class.active]="sort.field==='policyName'">↕</span></th>
+          <th class="num" (click)="sortBy('rate')">Tỷ lệ (%) <span [class.active]="sort.field==='rate'">↕</span></th>
+          <th>Tài khoản hạch toán</th>
+          <th>Trạng thái</th>
+          <th style="width:56px"></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let t of view">
+          <td>
+            <input type="checkbox" [checked]="selected.has(t.id)" (change)="toggleSelet(t.id, $event)" />
+          </td>
+          <td class="mono">{{ t.policyName }}</td>
+          <td class="num">{{ t.rate * 100 | number:'1.0-1' }}</td>
+          <td>
+            <ng-container *ngIf="t.postingLedgerAccountCode || t.postingLedgerAccountName; else showId">
+              <span class="mono">{{ t.postingLedgerAccountCode }}</span>
+              <span *ngIf="t.postingLedgerAccountName">— {{ t.postingLedgerAccountName }}</span>
+            </ng-container>
+            <ng-template #showId>
+              <span class="mono">{{ t.postingLedgerAccountId }}</span>
+            </ng-template>
+          </td>
+          <td>
+            <label class="switch">
+              <input type="checkbox" [checked]="t.isActive" (change)="toggleStatus(t, $event)" />
+              <span class="slider"></span>
+            </label>
+            <span class="status" [class.on]="t.isActive" [class.off]="!t.isActive">
+              {{ t.isActive ? 'Đang dùng' : 'Ngưng' }}
+            </span>
+          </td>
+          <td class="row-actions">
+            <button class="icon" title="Xem/Sửa" (click)="openEdit(t)">⋯</button>
+          </td>
+        </tr>
+
+        <tr *ngIf="!loading && view.length === 0">
+          <td colspan="6" class="empty">Không có dữ liệu phù hợp.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Drawer -->
+  <aside class="drawer" [class.open]="drawer.open">
+    <div class="drawer__header">
+      <h3>{{ drawer.mode==='create' ? 'Thêm thuế' : 'Sửa: ' + form.value.policyName }}</h3>
+      <button class="icon" (click)="closeDrawer()">✕</button>
+    </div>
+
+    <form class="drawer__body" [formGroup]="form" (ngSubmit)="save()">
+      <div class="group">
+        <label>PolicyName *</label>
+        <input formControlName="policyName" placeholder="VD: VAT10" />
+        <small class="err" *ngIf="fc.policyName.touched && fc.policyName.invalid">Bắt buộc, tối đa 50 ký tự.</small>
+      </div>
+
+      <div class="row-2">
+        <div class="group">
+          <label>Tỷ lệ (%) *</label>
+          <input type="number" step="0.1" min="0" max="100" formControlName="ratePercent" />
+          <small class="err" *ngIf="fc.ratePercent.touched && fc.ratePercent.invalid">0–100.</small>
+        </div>
+
+        <div class="group">
+          <label>Trạng thái</label>
+          <label class="switch">
+            <input type="checkbox" formControlName="isActive" />
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="group">
+        <label>Tài khoản hạch toán *</label>
+        <select formControlName="postingLedgerAccountId">
+          <option value="" disabled>-- Chọn tài khoản --</option>
+          <option *ngFor="let o of ledgerAccountOptions" [ngValue]="o.id">
+            {{ o.code }} — {{ o.name }}
+          </option>
+        </select>
+        <small class="hint">Hiển thị code-name nếu API trả kèm; nếu chưa có API lookup, tạm nhập ID.</small>
+      </div>
+
+      <div class="group">
+        <label>Ghi chú</label>
+        <textarea rows="3" formControlName="description" placeholder="Ghi chú tuỳ chọn"></textarea>
+      </div>
+
+      <div class="preview">
+        <div class="row-2">
+          <div class="group">
+            <label>Số tiền gốc (net)</label>
+            <input type="number" min="0" step="1000" [(ngModel)]="preview.base" name="previewBase" (input)="recalcPreview()" />
+          </div>
+          <div class="group">
+            <label>Tỷ lệ hiện hành</label>
+            <div class="mono">{{ (form.value.ratePercent || 0) | number:'1.0-1' }}%</div>
+          </div>
+        </div>
+        <div class="grid-mini">
+          <div>Thuế (net × %):</div><div class="num mono">{{ preview.tax | number }}</div>
+          <div>Tổng (net + thuế):</div><div class="num mono">{{ preview.total | number }}</div>
+        </div>
+      </div>
+
+      <div class="drawer__footer">
+        <button type="button" class="btn" (click)="closeDrawer()">Hủy</button>
+        <button type="submit" class="btn primary" [disabled]="form.invalid || saving">
+          {{ drawer.mode==='create' ? 'Lưu' : 'Cập nhật' }}
+        </button>
+      </div>
+    </form>
+  </aside>
+</section>
