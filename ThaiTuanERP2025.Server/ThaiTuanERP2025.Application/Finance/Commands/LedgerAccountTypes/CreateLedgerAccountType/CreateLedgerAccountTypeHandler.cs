@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Application.Finance.DTOs;
+using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Finance.Entities;
 
 namespace ThaiTuanERP2025.Application.Finance.Commands.LedgerAccountTypes.CreateLedgerAccountType
@@ -23,6 +24,9 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.LedgerAccountTypes.Create
 
 		public async Task<LedgerAccountTypeDto> Handle(CreateLedgerAccountTypeCommand command, CancellationToken cancellationToken)
 		{
+			if (await _unitOfWork.LedgerAccountTypes.CodeExistsAsync(command.Code, null, cancellationToken))
+				throw new ConflictException($"Mã loại tài khoản kế toán '{command.Code}' đã tồn tại");
+
 			var entity = new LedgerAccountType
 			{
 				Code = command.Code,

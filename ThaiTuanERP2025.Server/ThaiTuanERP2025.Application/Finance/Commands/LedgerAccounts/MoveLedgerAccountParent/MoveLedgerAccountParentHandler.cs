@@ -19,7 +19,7 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.LedgerAccounts.MoveAccoun
 
 		public async Task<bool> Handle(MoveLedgerAccountParentCommand command, CancellationToken cancellationToken)
 		{
-			var node = await _unitOfWork.LedgerAccounts.GetByIdAsync(command.AccountId)
+			var node = await _unitOfWork.LedgerAccounts.GetByIdAsync(command.LedgerAccountId)
 				?? throw new NotFoundException("Không tìm thấy tài khoản kế toán nhóm");
 			var oldPrefix = node.Path;
 			var oldBaseLevel = node.Level;
@@ -27,11 +27,11 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.LedgerAccounts.MoveAccoun
 			string newParentPath = "/";
 			int newParentLevel = -1;
 
-			if (command.NewParentAccountId.HasValue)
+			if (command.NewParentLedgerAccountId.HasValue)
 			{
-				if (command.NewParentAccountId.Value == node.Id) 
+				if (command.NewParentLedgerAccountId.Value == node.Id) 
 					throw new ConflictException("Không thể di chuyển tài khoản kế toán vào chính nó");
-				var parent = await _unitOfWork.LedgerAccounts.GetByIdAsync(command.NewParentAccountId.Value)
+				var parent = await _unitOfWork.LedgerAccounts.GetByIdAsync(command.NewParentLedgerAccountId.Value)
 					?? throw new NotFoundException("Không tìm thấy tài khoản kế toán nhóm cha mới");
 				if (parent.Path.StartsWith(oldPrefix))
 					throw new ConflictException("Không thể di chuyển tài khoản kế toán vào một nhóm con của nó");
@@ -39,7 +39,7 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.LedgerAccounts.MoveAccoun
 				newParentLevel = parent.Level;
 			}
 
-			node.ParrentAccountId = command.NewParentAccountId;
+			node.ParrentLedgerAccountId = command.NewParentLedgerAccountId;
 			node.Path = $"{newParentPath}{node.Number}";
 			node.Level = newParentLevel + 1;
 

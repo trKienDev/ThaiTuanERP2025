@@ -32,9 +32,12 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.Taxes.CreateTax
 				x => x.Id == command.PostingLedgerAccountId,
 				true, cancellationToken
 			);
-			if (posting is null) throw new NotFoundException("Posting account không tồn tại");
+			if (posting is null) throw new NotFoundException("Tài khoản hoạch toán không tồn tại");
 
-			var e = new Tax
+			// Ràng buộc ConsumptionSubType theo TaxBroadType
+			var consumptionSubType = command.TaxBroadType == TaxBroadType.Consumption ? command.ConsumptionSubType : null;
+
+			var entity = new Tax
 			{
 				Id = Guid.NewGuid(),
 				PolicyName = command.PolicyName,
@@ -46,11 +49,11 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.Taxes.CreateTax
 				IsActive = true
 			};
 
-			await _unitOfWork.Taxes.AddAsync(e);
+			await _unitOfWork.Taxes.AddAsync(entity);
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 
 			var loaded = await _unitOfWork.Taxes.SingleOrDefaultIncludingAsync(
-				x => x.Id == e.Id,
+				x => x.Id == entity.Id,
 				true,
 				cancellationToken, 
 				x => x.PostingLedgerAccount

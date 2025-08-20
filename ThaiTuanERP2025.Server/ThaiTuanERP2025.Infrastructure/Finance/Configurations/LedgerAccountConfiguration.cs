@@ -9,7 +9,7 @@ using ThaiTuanERP2025.Domain.Finance.Entities;
 
 namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 {
-	public class AccountConfiguration : IEntityTypeConfiguration<LedgerAccount>
+	public class LedgerAccountConfiguration : IEntityTypeConfiguration<LedgerAccount>
 	{
 		public void Configure(EntityTypeBuilder<LedgerAccount> builder)
 		{
@@ -24,16 +24,16 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 
 			builder.HasIndex(x => x.Number).IsUnique();
 			builder.HasIndex(x => x.Path);
-			builder.HasIndex(x => x.ParrentAccountId);
+			builder.HasIndex(x => x.ParrentLedgerAccountId);
 
 			builder.HasOne(x => x.LedgerAccountType)
 				.WithMany(x => x.LedgerAccounts)
-				.HasForeignKey(x => x.AccountTypeId)
+				.HasForeignKey(x => x.LedgerAccountTypeId)
 				.OnDelete(DeleteBehavior.Restrict);
 
 			builder.HasOne(x => x.Parent)
 				.WithMany(x => x.Children)
-				.HasForeignKey(x => x.ParrentAccountId)
+				.HasForeignKey(x => x.ParrentLedgerAccountId)
 				.OnDelete(DeleteBehavior.Restrict);
 		}
 	}

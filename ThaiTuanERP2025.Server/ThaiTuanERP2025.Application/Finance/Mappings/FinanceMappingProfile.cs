@@ -32,18 +32,22 @@ namespace ThaiTuanERP2025.Application.Finance.Mappings
 			CreateMap<LedgerAccountType, LedgerAccountTypeDto>();
 
 			CreateMap<LedgerAccount, LedgerAccountDto>()
-				.ForMember(d => d.AccounTypeName, o => o.MapFrom(s => s.LedgerAccountType.Name));
+				.ForMember(d => d.LedgerAccounTypeName, o => o.MapFrom(s => s.LedgerAccountType.Name));
 
 			CreateMap<Tax, TaxDto>()
-				.ForMember(d => d.PostingAccountNumber, o => o.MapFrom(s => s.PostingAccount.Number))
-				.ForMember(d => d.PostingAccountNumber, o => o.MapFrom(s => s.PostingAccount.Name));
+				.ForMember(d => d.TaxBroadType, o => o.MapFrom(s => s.TaxBroadType))
+				.ForMember(d => d.PostingLedgerAccountId, o => o.MapFrom(s => s.PostingLedgerAccountId))
+				.ForMember(d => d.PostingLedgerAccountNumber, o => o.MapFrom(s => s.PostingLedgerAccount.Number))
+				.ForMember(d => d.PostingLedgerAccountName, o => o.MapFrom(s => s.PostingLedgerAccount.Name));
 
 			CreateMap<CashOutGroup, CashOutGroupDto>();
 
 			CreateMap<CashOutCode, CashOutCodeDto>()
+				.ForMember(d => d.CashOutGroupCode, o => o.MapFrom(s => s.CashOutGroup.Code))
 				.ForMember(d => d.CashOutGroupName, o => o.MapFrom(s => s.CashOutGroup.Name))
-				.ForMember(d => d.PostingAccountNumber, o => o.MapFrom(s => s.PostingAccount.Number))
-				.ForMember(d => d.PostingAccountName, o => o.MapFrom(s => s.PostingAccount.Name));
+				.ForMember(d => d.PostingLedgerAccountId, o => o.MapFrom(s => s.PostingLedegerAccoutnId))
+				.ForMember(d => d.PostingLedgerAccountNumber, o => o.MapFrom(s => s.PostingLedgerAccount.Number))
+				.ForMember(d => d.PostingLedgerAccountName, o => o.MapFrom(s => s.PostingLedgerAccount.Name));
 		}
 	}
 }

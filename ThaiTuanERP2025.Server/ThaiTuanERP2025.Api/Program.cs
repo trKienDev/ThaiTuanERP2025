@@ -56,6 +56,8 @@ using ThaiTuanERP2025.Infrastructure.Common.Services;
 using ThaiTuanERP2025.Application.Finance.Commands.LedgerAccountTypes.CreateLedgerAccountType;
 using ThaiTuanERP2025.Application.Finance.Commands.LedgerAccountTypes.UpdateLedgerAccountType;
 using ThaiTuanERP2025.Application.Finance.Commands.LedgerAccounts.CreateLedgerAccount;
+using ThaiTuanERP2025.Application.Finance.Commands.Taxes.CreateTax;
+using ThaiTuanERP2025.Application.Finance.Commands.Taxes.UpdateTax;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -108,6 +110,8 @@ builder.Services.AddValidatorsFromAssemblyContaining<PartnerBankAccountValidator
 builder.Services.AddValidatorsFromAssemblyContaining<CreateLedgerAccountTypeValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateLedgerAccountTypeValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateLedgerAccountValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateTaxValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateTaxCommand>();
 
 // Repositories
 builder.Services.AddScoped<iJWTProvider, JwtProvider>();
@@ -129,14 +133,13 @@ builder.Services.AddScoped<ILedgerAccountTypeRepository, LedgerAccountTypeReposi
 builder.Services.AddScoped<ILedgerAccountRepository, LedgerAccountRepository>();
 builder.Services.AddScoped<ICashOutCodeRepository, CashOutCodeRepository>();
 builder.Services.AddScoped<ICashOutGroupRepository, CashOutGroupRepository>();
-builder.Services.AddScoped<ITaxRepository, ITaxRepository>();
+builder.Services.AddScoped<ITaxRepository, TaxRepository>();
 
 // Auto Mapper
 builder.Services.AddAutoMapper(typeof(AssemblyReference).Assembly);
 builder.Services.AddAutoMapper(typeof(AccountMappingProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(FinanceMappingProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(PartnerMappingProfile).Assembly);
-
 
 // Api
 builder.Services.AddEndpointsApiExplorer();

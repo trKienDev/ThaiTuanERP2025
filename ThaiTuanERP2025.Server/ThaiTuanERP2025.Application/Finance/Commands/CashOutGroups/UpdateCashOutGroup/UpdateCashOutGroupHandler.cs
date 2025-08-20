@@ -33,6 +33,12 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.CashOutGroups.UpdateCashO
 			);
 			if (entity is null) throw new NotFoundException("Không tìm thấy nhóm tài khoản đầu ra");
 
+			entity.Code = request.Code;	
+			entity.Name = request.Name;
+			entity.Description = request.Description;	
+
+			await _unitOfWork.SaveChangesAsync(cancellationToken);
+
 			var loaded = await _unitOfWork.CashOutGroups.SingleOrDefaultIncludingAsync(x =>
 				x.Id == request.Id
 			);

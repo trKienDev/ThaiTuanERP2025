@@ -18,7 +18,11 @@ namespace ThaiTuanERP2025.Application.Partner.Mappings
 			CreateMap<CreateSupplierRequest, Supplier>()
 				.ForMember(d => d.PaymentTermDays, o => o.MapFrom(s => s.PaymentTermDays ?? 30))
 				.ForMember(d => d.DefaultCurrency, o => o.MapFrom(s => s.DefaultCurrency.ToUpperInvariant()))
-				.ForMember(d => d.Code, o => o.MapFrom(s => s.Code.ToUpperInvariant()));
+				.ForMember(d => d.Code, o => {
+					// Chỉ map khi Code có giá trị 
+					o.PreCondition(s => !string.IsNullOrWhiteSpace(s.Code));
+					o.MapFrom(s => s.Code!.Trim().ToUpperInvariant());
+				});
 			CreateMap<UpdateSupplierRequest, Supplier>()
 				.ForMember(d => d.Code, o => o.Ignore())
 				.ForMember(d => d.DefaultCurrency, o => o.MapFrom(s => s.DefaultCurrency.ToUpperInvariant()));

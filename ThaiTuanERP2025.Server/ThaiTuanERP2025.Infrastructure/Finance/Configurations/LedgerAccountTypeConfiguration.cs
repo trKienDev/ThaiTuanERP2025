@@ -9,7 +9,7 @@ using ThaiTuanERP2025.Domain.Finance.Entities;
 
 namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 {
-	public class AccountTypeConfiguration : IEntityTypeConfiguration<LedgerAccountType>
+	public class LedgerAccountTypeConfiguration : IEntityTypeConfiguration<LedgerAccountType>
 	{
 		public void Configure(EntityTypeBuilder<LedgerAccountType> builer) {
 			builer.ToTable("AccountTypes", "Finance").HasKey(x => x.Id);

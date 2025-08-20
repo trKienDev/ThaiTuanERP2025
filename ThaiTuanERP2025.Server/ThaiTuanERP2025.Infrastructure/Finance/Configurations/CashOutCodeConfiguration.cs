@@ -26,9 +26,9 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 				.WithMany(x => x.CashOutCodes)
 				.HasForeignKey(x => x.CashOutGroupId)
 				.OnDelete(DeleteBehavior.Restrict);
-			builder.HasOne(x => x.PostingAccount)
+			builder.HasOne(x => x.PostingLedgerAccount)
 				.WithMany()
-				.HasForeignKey(x => x.PostingAccoutnId)
+				.HasForeignKey(x => x.PostingLedegerAccoutnId)
 				.OnDelete(DeleteBehavior.Restrict);
 		}
 	}
