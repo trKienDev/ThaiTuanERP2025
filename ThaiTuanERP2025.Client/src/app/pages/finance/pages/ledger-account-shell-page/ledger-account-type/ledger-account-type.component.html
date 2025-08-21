@@ -1,29 +1,89 @@
-<div class="type-list__header">
-  <input type="text" [(ngModel)]="searchTerm" placeholder="Tìm kiếm loại tài khoản..." />
-  <button class="btn btn--sm btn--primary" (click)="openCreate()">+ Thêm</button>
-</div>
-
-<ul class="type-list">
-  <li
-    *ngFor="let t of filtered()"
-    [class.active]="t.id === selectedTypeId"
-    (click)="onSelect(t.id)">
-    <div class="type-list__row">
-      <span (dblclick)="openEdit(t)">{{ t.code }} – {{ t.name }}</span>
+<div class="lat">
+  <header class="lat__header">
+    <div>
+      <h2 class="lat__title">Loại Tài khoản</h2>
+      <p class="lat__subtitle">Dùng để phân loại giao dịch và ghi nhận lịch sử tài chính của công ty</p>
     </div>
-  </li>
-</ul>
+    <button class="btn btn-primary" (click)="openCreate()">+ Loại tài khoản</button>
+  </header>
 
-<div class="empty" *ngIf="!loading && types.length === 0">
-  <p>Chưa có loại tài khoản nào.</p>
-  <button class="btn btn--sm btn--primary" (click)="openCreate()">+ Thêm loại tài khoản</button>
+  <!-- CREATE -->
+  <form *ngIf="createOpen" class="panel form" (ngSubmit)="submitCreate()">
+    <h3>Tạo loại tài khoản</h3>
+    <div class="grid">
+      <label>Tên
+        <input [(ngModel)]="createForm.name" name="c_name" required />
+      </label>
+      <label>Mã
+        <input [(ngModel)]="createForm.code" name="c_code" required />
+      </label>
+      <label>Kiểu
+        <select [(ngModel)]="createForm.ledgerAccountTypeKind" name="c_kind">
+          <option *ngFor="let k of kindOptions" [ngValue]="k.value">{{ k.label }}</option>
+        </select>
+      </label>
+      <label class="col-2">Mô tả
+        <input [(ngModel)]="createForm.description" name="c_desc" />
+      </label>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn" (click)="cancelCreate()">Hủy</button>
+      <button type="submit" class="btn btn-primary">Lưu</button>
+    </div>
+  </form>
+
+  <!-- EDIT -->
+  <form *ngIf="editOpen" class="panel form" (ngSubmit)="submitEdit()">
+    <h3>Sửa loại tài khoản</h3>
+    <div class="grid">
+      <label>Tên
+        <input [(ngModel)]="editForm.name" name="e_name" required />
+      </label>
+      <label>Mã
+        <input [(ngModel)]="editForm.code" name="e_code" required />
+      </label>
+      <label>Kiểu
+        <select [(ngModel)]="editForm.ledgerAccountTypeKind" name="e_kind">
+          <option *ngFor="let k of kindOptions" [ngValue]="k.value">{{ k.label }}</option>
+        </select>
+      </label>
+      <label class="col-2">Mô tả
+        <input [(ngModel)]="editForm.description" name="e_desc" />
+      </label>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn" (click)="cancelEdit()">Hủy</button>
+      <button type="submit" class="btn btn-primary">Cập nhật</button>
+    </div>
+  </form>
+
+  <!-- LIST -->
+  <div class="lat__table-wrap panel">
+    <table class="lat__table">
+      <thead>
+        <tr>
+          <th>TÊN LOẠI TÀI KHOẢN</th>
+          <th>MÃ LOẠI TÀI KHOẢN</th>
+          <th>KIỂU</th>
+          <th>MÔ TẢ</th>
+          <th class="col-actions"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let t of (types$ | async) ?? []" (click)="selectRow(t.id)" class="row-clickable">
+          <td>{{ t.name }}</td>
+          <td class="code">{{ t.code }}</td>
+          <td>{{ kindLabel(t.ledgerAccountTypeKind) }}</td>
+          <td class="desc">{{ t.description }}</td>
+          <td class="actions" (click)="$event.stopPropagation()">
+            <button class="btn btn-link" (click)="openEdit(t)">Sửa</button>
+            <button class="btn btn-link danger" (click)="delete(t.id)">Xóa</button>
+          </td>
+        </tr>
+        <tr *ngIf="((types$ | async) ?? []).length === 0">
+          <td colspan="5" class="empty">Chưa có loại tài khoản nào.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
-
-<app-ledger-account-type-form-drawer
-*ngIf="drawerOpen"
-  [open]="drawerOpen"
-  [mode]="drawerMode"
-  [data]="selectedType"
-  (closed)="closeDrawer()"
-  (saved)="onSaved()"
-/>
