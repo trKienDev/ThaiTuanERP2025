@@ -1,0 +1,45 @@
+<div class="ledger-shell">
+  <aside class="ledger-shell__sidebar">
+    <button
+      class="sidebar__item"
+      [class.active]="view === 'type'"
+      (click)="selectView('type')">
+      Loại tài khoản kế toán
+    </button>
+
+    <button
+      class="sidebar__item"
+      [class.active]="view === 'account'"
+      (click)="selectView('account')">
+      Tài khoản kế toán
+    </button>
+  </aside>
+
+  <main class="ledger-shell__content">
+    <!-- Tab: Loại tài khoản kế toán -->
+    <section *ngIf="view === 'type'" class="panel">
+      <!-- Gợi ý: emit (typeSelected) khi người dùng chọn 1 loại -->
+      <finance-ledger-account-type
+        (typeSelected)="onTypeChange($event)">
+      </finance-ledger-account-type>
+    </section>
+
+    <!-- Tab: Tài khoản kế toán -->
+    <section *ngIf="view === 'account'" class="panel">
+      <!-- Nếu cần chọn loại trước khi quản lý tài khoản -->
+      <ng-container *ngIf="selectedTypeId; else pickTypeHint">
+        <!-- Nếu Input của component yêu cầu string, truyền undefined khi null -->
+        <finance-ledger-account
+          [ledgerAccountTypeId]="selectedTypeId">
+        </finance-ledger-account>
+      </ng-container>
+
+      <ng-template #pickTypeHint>
+        <div class="empty">
+          Hãy chuyển sang tab “Loại tài khoản kế toán” và chọn 1 loại
+          để quản lý danh sách tài khoản thuộc loại đó.
+        </div>
+      </ng-template>
+    </section>
+  </main>
+</div>
