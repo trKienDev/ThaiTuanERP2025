@@ -1,0 +1,52 @@
+<div class="account-tree" *ngIf="ledgerAccountTypeId; else emptyState">
+  <ng-container *ngIf="tree.length > 0; else noData">
+    <ul class="tree-root">
+      <ng-container *ngFor="let node of tree">
+        <ng-template [ngTemplateOutlet]="renderNode" [ngTemplateOutletContext]="{ $implicit: node }"></ng-template>
+      </ng-container>
+    </ul>
+  </ng-container>
+</div>
+
+<ng-template #renderNode let-node>
+  <li class="tree-node" [class.selected]="isSelected(node)">
+    <div class="tree-node__content" [ngStyle]="indent(node.node.level)" (click)="onSelect(node)">
+      <span class="tree-node__toggle" *ngIf="node.children.length > 0" (click)="toggleExpand(node); $event.stopPropagation()">
+        {{ node.expanded ? '▼' : '▶' }}
+      </span>
+      <span class="tree-node__label">{{ node.node.code }} – {{ node.node.name }}</span>
+      <span class="badge" [class.badge--green]="node.node.isActive" [class.badge--gray]="!node.node.isActive">
+        {{ node.node.isActive ? 'Active' : 'Inactive' }}
+      </span>
+      <button class="btn btn--sm btn--link" (click)="openCreateChild(node); $event.stopPropagation()">+ Thêm con</button>
+    </div>
+
+    <ul class="tree-children" *ngIf="node.expanded && node.children.length > 0">
+      <ng-container *ngFor="let child of node.children">
+        <ng-template [ngTemplateOutlet]="renderNode" [ngTemplateOutletContext]="{ $implicit: child }"></ng-template>
+      </ng-container>
+    </ul>
+  </li>
+</ng-template>
+
+<div class="toolbar">
+  <button class="btn btn--primary btn--sm" (click)="openCreate()">+ Thêm tài khoản kế toán</button>
+</div>
+
+
+<ng-template #noData>
+  <div class="empty">Không có tài khoản nào</div>
+</ng-template>
+
+<ng-template #emptyState>
+  <div class="empty">Chọn loại tài khoản ở cột trái</div>
+</ng-template>
+
+<app-ledger-account-form-drawer
+  [open]="drawerOpen"
+  [mode]="drawerMode"
+  [ledgerAccountTypeId]="ledgerAccountTypeId!"
+  [currentNode]="selectedNode"
+  (closed)="closeDrawer()"
+  (saved)="onSaved()"
+/>

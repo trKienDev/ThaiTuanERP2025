@@ -31,7 +31,7 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.LedgerAccountTypes.Create
 			{
 				Code = command.Code,
 				Name = command.Name,
-				Kind = command.Kind,
+				LedgerAccountTypeKind = command.LedgerAccountTypeKind,
 				Description = command.Description
 			};
 
