@@ -1,84 +1,135 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { LedgerAccountTypeDto } from '../../../models/ledger-account-type.dto';
-import { LedgerAccountTypeService } from '../../../services/ledger-account-type.service';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { LedgerAccountTypeFormDrawerComponent } from '../ledger-account-type-form-drawer/ledger-account-type-form-drawer.component';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { CreateLedgerAccountTypeRequest, LedgerAccountTypeDto, UpdateLedgerAccountTypeRequest } from '../../../models/ledger-account-type.dto';
+import { LedgerAccountTypeService } from '../../../services/ledger-account-type.service';
 
 @Component({
-  selector: 'app-ledger-account-type',
-  imports: [ CommonModule, FormsModule, ReactiveFormsModule, LedgerAccountTypeFormDrawerComponent],
+  selector: 'finance-ledger-account-type',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './ledger-account-type.component.html',
   styleUrls: ['./ledger-account-type.component.scss']
 })
-export class LedgerAccountTypeComponent {
-  @Input() selectedTypeId: string | null = null;
-  @Output() typeSelected = new EventEmitter<string>();
+export class LedgerAccountTypeComponent implements OnInit {
+      @Output() typeSelected = new EventEmitter<string>();
 
-  types: LedgerAccountTypeDto[] = [];
-  loading = false;
-  searchTerm = '';
+      // listing
+      types$!: Observable<LedgerAccountTypeDto[]>;
 
-  drawerOpen = false;
-  drawerMode: 'create' | 'edit' = 'create';
-  selectedType: LedgerAccountTypeDto | null = null;
+      // create
+      createOpen = false;
+      createForm: CreateLedgerAccountTypeRequest = { 
+            name: '', 
+            code: '',
+            ledgerAccountTypeKind: 1,
+            description: '' 
+      };
 
-  constructor(private service: LedgerAccountTypeService) {}
+      // edit
+      editOpen = false;
+      editingId: string | null = null;
+      editForm: UpdateLedgerAccountTypeRequest = { 
+            name: '', 
+            code: '', 
+            ledgerAccountTypeKind: 1,
+            description: '' 
+      };
 
-  ngOnInit(): void {
-    console.log('drawerOpen on init:', this.drawerOpen);
-    this.loadTypes();
-  }
+      readonly kindOptions = [
+            { value: 1, label: 'Tài sản' },
+            { value: 2, label: 'Nợ phải trả' },
+            { value: 3, label: 'Vốn CSH' },
+            { value: 4, label: 'Doanh thu' },
+            { value: 5, label: 'Chi phí' },
+      ];
 
-  loadTypes() {
-    this.loading = true;
-    this.service.getAll().subscribe({
-      next: (res) => {
-        this.types = res;
-        this.loading = false;
+      // map string -> number khi API trả "Asset" thay vì 1
+      private readonly strToNum: Record<string, number> = {
+            Asset: 1, Liability: 2, Equity: 3, Revenue: 4, Expense: 5,
+      };
 
-        // Nếu chưa có loại nào được chọn → auto chọn cái đầu tiên
-        if (!this.selectedTypeId && this.types.length) {
-          this.onSelect(this.types[0].id);
-        }
-      },
-      error: () => {
-        this.types = [];
-        this.loading = false;
+      constructor(private service: LedgerAccountTypeService) {}
+
+      ngOnInit(): void {
+            this.reload();
       }
-    });
+
+      /** load danh sách */
+      reload() {
+            this.types$ = this.service.getAll();
+      }
+
+      // chọn 1 dòng -> báo về shell
+      selectRow(id: string) {
+            this.typeSelected.emit(id);
+      }
+
+      /** ==== CREATE ==== */
+      openCreate() {
+            this.createForm = { name: '', code: '', ledgerAccountTypeKind: 1, description: '' };
+            this.createOpen = true;
+      }
+
+      cancelCreate() { this.createOpen = false; }
+
+      submitCreate() {
+            // gửi số 1..5
+            this.createForm.ledgerAccountTypeKind = this.toNumberKind(this.createForm.ledgerAccountTypeKind);
+            this.service.create(this.createForm).subscribe({
+            next: () => { this.createOpen = false; this.reload(); }
+            });
+      }
+
+      /** ==== EDIT ==== */
+      openEdit(item: LedgerAccountTypeDto) {
+            this.editingId = item.id;
+                  this.editForm = {
+                  name: item.name,
+                  code: item.code,
+                  // chuẩn hóa về số nếu API trả "Asset"/"1"
+                  ledgerAccountTypeKind: this.toNumberKind((item as any).ledgerAccountTypeKind),
+                  description: item.description ?? ''
+            };
+            this.editOpen = true;
+      }
+
+      cancelEdit() { this.editOpen = false; this.editingId = null; }
+
+      submitEdit() {
+            if (!this.editingId) return;
+            this.editForm.ledgerAccountTypeKind = this.toNumberKind(this.editForm.ledgerAccountTypeKind);
+            this.service.update(this.editingId, this.editForm).subscribe({
+                  next: () => { this.editOpen = false; this.editingId = null; this.reload(); }
+            });
+      }
+
+      /** ==== DELETE ==== */
+      delete(id: string) {
+            if (!confirm('Bạn chắc chắn muốn xóa loại tài khoản này?')) return;
+            this.service.delete(id).subscribe({ next: _ => this.reload() });
+      }
+
+      /** Chuẩn hóa giá trị enum: "Asset" | 1 | "1" -> 1..5 */
+  toNumberKind(value: number | string | undefined): number {
+    if (value == null) return 1;
+    if (typeof value === 'number') return value;
+    const n = Number(value);
+    if (!Number.isNaN(n)) return n as 1|2|3|4|5;
+    return this.strToNum[value] ?? 1;
   }
 
-  filtered(): LedgerAccountTypeDto[] {
-    const keyword = this.searchTerm.toLowerCase();
-    return this.types.filter(t =>
-      t.code.toLowerCase().includes(keyword) || t.name.toLowerCase().includes(keyword)
-    );
+  /** Map 1..5 (hoặc "Asset") -> nhãn tiếng Việt */
+  kindLabel(kind: number | string | undefined) {
+    const n = this.toNumberKind(kind);
+    const map: Record<number, string> = {
+      1: 'Tài sản',
+      2: 'Nợ phải trả',
+      3: 'Vốn CSH',
+      4: 'Doanh thu',
+      5: 'Chi phí',
+    };
+    return map[n] ?? '';
   }
-
-  onSelect(id: string) {
-    this.typeSelected.emit(id);
-  }
-
-  openCreate() {
-    this.drawerMode = 'create';
-    this.selectedType = null;
-    this.drawerOpen = true;
-  }
-
-  openEdit(type: LedgerAccountTypeDto) {
-    this.drawerMode = 'edit';
-    this.selectedType = type;
-    this.drawerOpen = true;
-  }
-
-  closeDrawer() {
-    this.drawerOpen = false;
-  }
-
- onSaved() {
-    this.loadTypes();
-  }
-
-
 }
