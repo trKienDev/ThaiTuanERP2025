@@ -1,11 +1,19 @@
-import { TaxDto } from "./tax.dto";
+export type LedgerAccountKind = 'Asset' | 'Liability' | 'Equity' | 'Revenue' | 'Expense';
 
 export interface LedgerAccountTypeDto {
       id: string;
       code: string;
       name: string;
+      kind: LedgerAccountKind;
       isActive: boolean;
-      description?: string;
+      description?: string | null;
 }
-export type CreateLedgerAccountTypeRequest = Omit<LedgerAccountTypeDto, 'id' | 'isActive'> & { isActive?: boolean }
-export type UpdateLedgerAccountTypeRequest = Partial<Omit<LedgerAccountTypeDto, 'id'>>;
+
+export interface CreateLedgerAccountTypeRequest {
+      code: string;
+      name: string;
+      kind: LedgerAccountKind;
+      description?: string | null;
+}
+
+export interface UpdateLedgerAccountTypeRequest extends CreateLedgerAccountTypeRequest {}

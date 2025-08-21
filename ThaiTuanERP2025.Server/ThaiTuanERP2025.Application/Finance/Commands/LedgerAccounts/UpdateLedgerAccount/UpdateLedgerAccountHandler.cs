@@ -38,6 +38,7 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.LedgerAccounts.UpdateLedg
 			entity.Name = command.Name;
 			entity.LedgerAccountTypeId = command.LedgerAccountTypeId;
 			entity.Description = command.Description;
+			entity.LedgerAccountBalanceType = command.LedgerAccountBalanceType;
 
 			await _unitOfWork.SaveChangesAsync( cancellationToken );
 

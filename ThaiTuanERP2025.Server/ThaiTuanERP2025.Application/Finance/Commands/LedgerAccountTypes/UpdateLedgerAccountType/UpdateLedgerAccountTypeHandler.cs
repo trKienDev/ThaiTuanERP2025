@@ -26,7 +26,7 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.LedgerAccountTypes.Update
 
 			entity.Code = command.Code;
 			entity.Name = command.Name;
-			entity.Kind = command.Kind;
+			entity.LedgerAccountTypeKind = command.LedgerAccountTypeKind;
 			entity.Description = command.Description;
 			
 			await _unitOfWork.SaveChangesAsync(cancellationToken);

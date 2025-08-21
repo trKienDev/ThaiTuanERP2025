@@ -10,5 +10,10 @@ using ThaiTuanERP2025.Domain.Finance.Enums;
 
 namespace ThaiTuanERP2025.Application.Finance.Commands.LedgerAccountTypes.CreateLedgerAccountType
 {
-	public record CreateLedgerAccountTypeCommand(string Code, string Name, AccountKind Kind, string? Description) : IRequest<LedgerAccountTypeDto>;
+	public record CreateLedgerAccountTypeCommand(
+		string Code, 
+		string Name, 
+		LedgerAccountTypeKind LedgerAccountTypeKind, 
+		string? Description
+	) : IRequest<LedgerAccountTypeDto>;
 }
