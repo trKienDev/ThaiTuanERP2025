@@ -10,6 +10,7 @@ using ThaiTuanERP2025.Application.Finance.Commands.LedgerAccounts.UpdateLedgerAc
 using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Application.Finance.Queries.LedgerAccounts.GetAllLedgerAccounts;
 using ThaiTuanERP2025.Application.Finance.Queries.LedgerAccounts.GetLedgerAccountById;
+using ThaiTuanERP2025.Application.Finance.Queries.LedgerAccounts.GetLedgerAccountsByType;
 
 namespace ThaiTuanERP2025.Api.Controllers.Finance
 {
@@ -33,6 +34,12 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 		public async Task<IActionResult> GetById(Guid id) {
 			var dto = await _mediator.Send(new GetLedgerAccountByIdQuery(id));
 			return Ok(ApiResponse<LedgerAccountDto>.Success(dto));
+		}
+
+		[HttpGet("by-type")]
+		public async Task<IActionResult> GetByType([FromQuery] Guid typeId) {
+			var tree = await _mediator.Send(new GetLedgerAccountsByTypeQuery(typeId));
+			return Ok(ApiResponse<List<LedgerAccountTreeDto>>.Success(tree));
 		}
 
 		[HttpPost]

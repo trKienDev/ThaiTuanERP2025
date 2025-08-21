@@ -20,10 +20,12 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.LedgerAccountTypes.Update
 			RuleFor(x => x.Name)
 				.NotEmpty().WithMessage("Tên loại tài khoản không được để trống.")
 				.MaximumLength(250).WithMessage("Tên loại tài khoản không được vượt quá 250 ký tự.");
-			RuleFor(x => x.Kind)
+			RuleFor(x => x.LedgerAccountTypeKind)
 				.IsInEnum().WithMessage("Loại tài khoản không hợp lệ.");
 			RuleFor(x => x.Description)
 				.MaximumLength(500).WithMessage("Mô tả không được vượt quá 500 ký tự.");
 		}
 	}
 }
+
+

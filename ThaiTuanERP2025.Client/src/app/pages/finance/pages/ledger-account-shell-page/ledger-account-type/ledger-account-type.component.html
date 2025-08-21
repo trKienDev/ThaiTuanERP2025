@@ -1,0 +1,29 @@
+<div class="type-list__header">
+  <input type="text" [(ngModel)]="searchTerm" placeholder="Tìm kiếm loại tài khoản..." />
+  <button class="btn btn--sm btn--primary" (click)="openCreate()">+ Thêm</button>
+</div>
+
+<ul class="type-list">
+  <li
+    *ngFor="let t of filtered()"
+    [class.active]="t.id === selectedTypeId"
+    (click)="onSelect(t.id)">
+    <div class="type-list__row">
+      <span (dblclick)="openEdit(t)">{{ t.code }} – {{ t.name }}</span>
+    </div>
+  </li>
+</ul>
+
+<div class="empty" *ngIf="!loading && types.length === 0">
+  <p>Chưa có loại tài khoản nào.</p>
+  <button class="btn btn--sm btn--primary" (click)="openCreate()">+ Thêm loại tài khoản</button>
+</div>
+
+<app-ledger-account-type-form-drawer
+*ngIf="drawerOpen"
+  [open]="drawerOpen"
+  [mode]="drawerMode"
+  [data]="selectedType"
+  (closed)="closeDrawer()"
+  (saved)="onSaved()"
+/>

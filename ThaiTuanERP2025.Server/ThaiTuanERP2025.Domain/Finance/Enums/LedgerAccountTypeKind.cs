@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ThaiTuanERP2025.Domain.Finance.Enums
 {
-	public enum AccountKind
+	public enum LedgerAccountTypeKind
 	{
 		Asset = 1,
 		Liability = 2,

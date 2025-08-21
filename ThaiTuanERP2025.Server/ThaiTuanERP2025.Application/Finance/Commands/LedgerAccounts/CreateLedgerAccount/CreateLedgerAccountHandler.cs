@@ -38,6 +38,7 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.LedgerAccounts.CreateLedg
 			{
 				Number = command.Number,
 				Name = command.Name,
+				LedgerAccountBalanceType = command.LedgerAccountBalanceType,
 				LedgerAccountTypeId = command.LedgerAccountTypeId,
 				ParrentLedgerAccountId = command.ParentLedgerAccountId,
 				Path = $"{parentPath}{command.Number}",
