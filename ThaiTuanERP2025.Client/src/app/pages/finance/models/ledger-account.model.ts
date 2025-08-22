@@ -52,3 +52,10 @@ export interface LedgerAccountRow {
 }
 
 export type LedgerAccountBalanceTypeEnum = 1 | 2 | 3 | 4; // Debit,  Credit, Both, None 
+
+export interface LedgerAccountLookupDto {
+      id: string;
+      number: string;
+      name: string;
+      path?: string;
+}

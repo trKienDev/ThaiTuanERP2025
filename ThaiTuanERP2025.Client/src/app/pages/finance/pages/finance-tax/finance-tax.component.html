@@ -1,1 +1,72 @@
-<h1>Hello</h1>
+<section class="tax-form" [formGroup]="form">
+      <header class="tax-form__header">
+            <h2>Tạo chính sách thuế</h2>
+            <p class="hint">Nhập tỷ lệ theo dạng thập phân (ví dụ: 0.1 = 10%).</p>
+      </header>
+
+      <form class="tax-form__grid" (ngSubmit)="submit()" novalidate>
+            <!-- Policy Name -->
+            <div class="form-field">
+                  <label for="policyName">Tên chính sách <span class="req">*</span></label>
+                  <input id="policyName" type="text" formControlName="policyName" placeholder="VD: VAT 10%" autocomplete="off"/>
+                  <small class="error" *ngIf="form.controls.policyName.touched && form.controls.policyName.hasError('required')">Bắt buộc.</small>
+                  <small class="error" *ngIf="form.controls.policyName.hasError('maxlength')">Tối đa 128 ký tự.</small>
+                  <small class="error" *ngIf="form.controls.policyName.hasError('policyTaken')">Tên đã tồn tại.</small>
+            </div>
+
+            <!-- Rate -->
+            <div class="form-field">
+                  <label for="rate">Tỷ lệ (0..1) <span class="req">*</span></label>
+                  <input id="rate" type="number" step="0.01" min="0" max="1" formControlName="rate" placeholder="VD: 0.1" autocomplete="off"/>
+                  <small class="error" *ngIf="form.controls.rate.touched && form.controls.rate.hasError('required')"> Bắt buộc. </small>
+                  <small class="error" *ngIf="form.controls.rate.hasError('number')"> Không hợp lệ. </small>
+                  <small class="error" *ngIf="form.controls.rate.hasError('range')"> Giá trị phải từ 0 đến 1. </small>
+            </div>
+
+            <!-- Posting Ledger Account (typeahead lookup) -->
+            <div class="form-field">
+                  <label for="pla">Tài khoản hạch toán (Ledger Account) <span class="req">*</span></label>
+
+                  <div class="lookup">
+                  <input id="pla" type="text" [formControl]="plaQuery" (focus)="showDropdown = options.length > 0" placeholder="Tìm theo số hoặc tên tài khoản..." autocomplete="off" />
+                        <button type="button" class="lookup__clear" *ngIf="form.value.postingLedgerAccountId" (click)="clearSelectedLedger()">×</button>
+
+                        <ul class="lookup__dropdown" *ngIf="showDropdown">
+                              <li class="lookup__option" *ngFor="let opt of options" (click)="selectLedgerAccount(opt)">
+                                    <div class="opt-main">
+                                          <span class="opt-number">{{ opt.number }}</span>
+                                          <span class="opt-name">— {{ opt.name }}</span>
+                                    </div>
+                                    <small class="opt-path" *ngIf="opt.path">{{ opt.path }}</small>
+                              </li>
+                              <li class="lookup__empty" *ngIf="options.length === 0">Không có kết quả</li>
+                        </ul>
+                  </div>
+                  <small class="error" *ngIf="form.controls.postingLedgerAccountId.touched && form.controls.postingLedgerAccountId.hasError('required')">Bắt buộc.</small>
+            </div>
+
+            <!-- Description -->
+            <div class="form-field form-field--row">
+                  <label for="desc">Mô tả</label>
+                  <textarea id="desc" rows="3" formControlName="description" placeholder="Ghi chú..."></textarea>
+                  <small class="error" *ngIf="form.controls.description.hasError('maxlength')"> Tối đa 512 ký tự. </small>
+            </div>
+
+            <!-- IsActive -->
+            <div class="form-field form-field--inline">
+                  <label class="switch">
+                        <input type="checkbox" formControlName="isActive" />
+                        <span>Đang hoạt động</span>
+                  </label>
+            </div>
+
+            <!-- Actions -->
+            <div class="actions">
+            <button type="submit" [disabled]="submitting || form.invalid">
+                  {{ submitting ? 'Đang lưu...' : 'Tạo thuế' }}
+            </button>
+            </div>
+      </form>
+
+      <p class="server-message" *ngIf="serverMessage">{{ serverMessage }}</p>
+</section>

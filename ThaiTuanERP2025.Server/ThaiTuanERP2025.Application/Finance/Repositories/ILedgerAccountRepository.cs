@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Common.Persistence;
+using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Domain.Finance.Entities;
 
 namespace ThaiTuanERP2025.Application.Finance.Repositories
@@ -12,5 +13,6 @@ namespace ThaiTuanERP2025.Application.Finance.Repositories
 	{
 		Task<bool> NumberExistsAsync(string number, Guid? excludeId = null, CancellationToken cancellationToken = default);
 		Task<List<LedgerAccount>> GetSubtreeAsync(string pathPrefix, bool asNoTracking = true, CancellationToken cancellationToken = default);
+		Task<List<LedgerAccountLookupDto>> LookupAsync(string? keyword, int take, CancellationToken cancellationToken = default);
 	}
 }

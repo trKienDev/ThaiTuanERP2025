@@ -11,6 +11,7 @@ using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Application.Finance.Queries.LedgerAccounts.GetAllLedgerAccounts;
 using ThaiTuanERP2025.Application.Finance.Queries.LedgerAccounts.GetLedgerAccountById;
 using ThaiTuanERP2025.Application.Finance.Queries.LedgerAccounts.GetLedgerAccountsByType;
+using ThaiTuanERP2025.Application.Finance.Queries.LedgerAccounts.LookupLedgerAccounts;
 
 namespace ThaiTuanERP2025.Api.Controllers.Finance
 {
@@ -40,6 +41,14 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 		public async Task<IActionResult> GetByType([FromQuery] Guid typeId) {
 			var tree = await _mediator.Send(new GetLedgerAccountsByTypeQuery(typeId));
 			return Ok(ApiResponse<List<LedgerAccountTreeDto>>.Success(tree));
+		}
+
+		[HttpGet("lookup")]
+		public async Task<ActionResult<ApiResponse<List<LedgerAccountLookupDto>>>> Lookup(
+			[FromQuery] string? keyword, [FromQuery] int take = 20, CancellationToken cancellationToken = default
+		) {
+			var result = await _mediator.Send(new LookupLedgerAccountsQuery(keyword, take), cancellationToken);
+			return Ok(ApiResponse<List<LedgerAccountLookupDto>>.Success(result));
 		}
 
 		[HttpPost]
