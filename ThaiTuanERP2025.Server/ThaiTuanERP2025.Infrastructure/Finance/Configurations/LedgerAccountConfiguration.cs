@@ -24,7 +24,7 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 
 			builder.HasIndex(x => x.Number).IsUnique();
 			builder.HasIndex(x => x.Path);
-			builder.HasIndex(x => x.ParrentLedgerAccountId);
+			builder.HasIndex(x => x.ParentLedgerAccountId);
 
 			builder.HasOne(x => x.LedgerAccountType)
 				.WithMany(x => x.LedgerAccounts)
@@ -33,7 +33,7 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 
 			builder.HasOne(x => x.Parent)
 				.WithMany(x => x.Children)
-				.HasForeignKey(x => x.ParrentLedgerAccountId)
+				.HasForeignKey(x => x.ParentLedgerAccountId)
 				.OnDelete(DeleteBehavior.Restrict);
 		}
 	}

@@ -8,5 +8,8 @@ using ThaiTuanERP2025.Application.Finance.DTOs;
 
 namespace ThaiTuanERP2025.Application.Finance.Queries.Taxes.GetAllTaxes
 {
-	public record GetAllTaxesQuery : IRequest<List<TaxDto>>;
+	public class GetAllTaxesQuery : IRequest<List<TaxDto>> {
+		public bool? IsActive {  get; set; }	
+		public string? Search {  get; set; }
+	}
 }

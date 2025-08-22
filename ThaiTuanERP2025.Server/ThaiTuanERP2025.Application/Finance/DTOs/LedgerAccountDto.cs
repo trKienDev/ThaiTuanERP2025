@@ -12,7 +12,7 @@ namespace ThaiTuanERP2025.Application.Finance.DTOs
 		string Number, 
 		string Name, 
 		Guid LedgerAccountTypeId, 
-		string LedgerAccounTypeName,
+		string LedgerAccountTypeName,
 		Guid? ParentLedgerAccountId, 
 		LedgerAccountBalanceType LedgerAccountBalanceType,
 		string Path, 
