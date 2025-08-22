@@ -20,4 +20,11 @@ namespace ThaiTuanERP2025.Application.Finance.DTOs
 		string? Description, 
 		bool IsActive
 	);
+
+	public sealed record LedgerAccountLookupDto (
+		Guid Id, 
+		string Number,
+		string Name,
+		string? Path
+	);
 }
