@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Application.Finance.Repositories;
 using ThaiTuanERP2025.Domain.Finance.Entities;
 using ThaiTuanERP2025.Infrastructure.Common;
@@ -25,6 +26,23 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Repositories
 			IQueryable<LedgerAccount> query = _dbSet.Where(x => x.Path.StartsWith(pathPrefix));
 			if (asNoTracking) query = query.AsNoTracking();
 			return query.OrderBy(x => x.Path).ToListAsync(cancellationToken);
+		}
+
+		public async Task<List<LedgerAccountLookupDto>> LookupAsync(string? keyword, int take, CancellationToken cancellationToken)
+		{
+			var query = _dbSet.AsNoTracking();
+
+			if (!string.IsNullOrWhiteSpace(keyword))
+			{
+				query = query.Where(la =>
+					EF.Functions.Like(la.Number, $"%{keyword}%") ||
+					EF.Functions.Like(la.Name, $"%{keyword}%")
+				 );
+			}
+
+			return await query.OrderBy(la => la.Number)
+				.Select(la => new LedgerAccountLookupDto(la.Id, la.Number, la.Name, la.Path))
+				.Take(take).ToListAsync(cancellationToken);
 		}
 	}
 }

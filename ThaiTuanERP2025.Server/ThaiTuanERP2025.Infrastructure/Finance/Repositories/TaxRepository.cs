@@ -130,7 +130,6 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Repositories
 				),
 				cancellationToken
 			);
-
 		}
 	}
 }
