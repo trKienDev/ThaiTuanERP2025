@@ -39,7 +39,7 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.LedgerAccounts.MoveAccoun
 				newParentLevel = parent.Level;
 			}
 
-			node.ParrentLedgerAccountId = command.NewParentLedgerAccountId;
+			node.ParentLedgerAccountId = command.NewParentLedgerAccountId;
 			node.Path = $"{newParentPath}{node.Number}";
 			node.Level = newParentLevel + 1;
 

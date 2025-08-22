@@ -32,7 +32,8 @@ namespace ThaiTuanERP2025.Application.Finance.Mappings
 			CreateMap<LedgerAccountType, LedgerAccountTypeDto>();
 
 			CreateMap<LedgerAccount, LedgerAccountDto>()
-				.ForMember(d => d.LedgerAccounTypeName, o => o.MapFrom(s => s.LedgerAccountType.Name));
+				.ForCtorParam(nameof(LedgerAccountDto.LedgerAccountTypeName), opt => opt.MapFrom(src => src.LedgerAccountType.Name))
+				.ForCtorParam(nameof(LedgerAccountDto.ParentLedgerAccountId),opt => opt.MapFrom(src => src.ParentLedgerAccountId));
 
 			CreateMap<Tax, TaxDto>()
 				.ForMember(d => d.PostingLedgerAccountNumber, o => o.MapFrom(s => s.PostingLedgerAccount.Number))

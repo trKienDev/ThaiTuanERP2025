@@ -6,11 +6,11 @@ import { CreateLedgerAccountTypeRequest, LedgerAccountTypeDto, UpdateLedgerAccou
 import { LedgerAccountTypeService } from '../../../services/ledger-account-type.service';
 
 @Component({
-  selector: 'finance-ledger-account-type',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './ledger-account-type.component.html',
-  styleUrls: ['./ledger-account-type.component.scss']
+      selector: 'finance-ledger-account-type',
+      standalone: true,
+      imports: [CommonModule, FormsModule],
+      templateUrl: './ledger-account-type.component.html',
+      styleUrls: ['./ledger-account-type.component.scss']
 })
 export class LedgerAccountTypeComponent implements OnInit {
       @Output() typeSelected = new EventEmitter<string>();
@@ -78,7 +78,7 @@ export class LedgerAccountTypeComponent implements OnInit {
             // gửi số 1..5
             this.createForm.ledgerAccountTypeKind = this.toNumberKind(this.createForm.ledgerAccountTypeKind);
             this.service.create(this.createForm).subscribe({
-            next: () => { this.createOpen = false; this.reload(); }
+                  next: () => { this.createOpen = false; this.reload(); }
             });
       }
 

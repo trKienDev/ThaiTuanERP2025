@@ -14,6 +14,7 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.LedgerAccounts.UpdateLedg
 		string Number, 
 		string Name, 
 		Guid LedgerAccountTypeId, 
+		Guid ParentLedgerAccountId,
 		LedgerAccountBalanceType LedgerAccountBalanceType,
 		string? Description
 	) : IRequest<LedgerAccountDto>;
