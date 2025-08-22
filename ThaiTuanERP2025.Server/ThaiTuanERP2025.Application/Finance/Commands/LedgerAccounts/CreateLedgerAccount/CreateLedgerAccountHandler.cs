@@ -9,6 +9,7 @@ using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Finance.Entities;
+using ThaiTuanERP2025.Domain.Finance.Services;
 
 namespace ThaiTuanERP2025.Application.Finance.Commands.LedgerAccounts.CreateLedgerAccount
 {
@@ -24,33 +25,37 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.LedgerAccounts.CreateLedg
 
 		public async Task<LedgerAccountDto> Handle(CreateLedgerAccountCommand command, CancellationToken cancellationToken)
 		{
-			string parentPath = "/";
-			int ParentLevel = -1;
+			// 1) Chuẩn hóa input
+			var number = command.Number?.Trim() ?? throw new ArgumentNullException(nameof(command.Number));
+
+			// 2) Tìm parent (nếu có) theo ParrentLedgerAccountId (đánh vần như entity)
+			LedgerAccount? parentAccount = null;
 			if(command.ParentLedgerAccountId.HasValue)
 			{
-				var parentAccount = await _unitOfWork.LedgerAccounts.GetByIdAsync(command.ParentLedgerAccountId.Value)
-					?? throw new NotFoundException("Parent account not found");
-				parentPath = parentAccount.Path;
-				ParentLevel = parentAccount.Level;
+				parentAccount = await _unitOfWork.LedgerAccounts.GetByIdAsync(command.ParentLedgerAccountId.Value)
+					?? throw new NotFoundException("Parent ledger account not found");
 			}
 
+			// 3) Khởi tạo entity
 			var entity = new LedgerAccount
 			{
 				Number = command.Number,
 				Name = command.Name,
 				LedgerAccountBalanceType = command.LedgerAccountBalanceType,
 				LedgerAccountTypeId = command.LedgerAccountTypeId,
-				ParrentLedgerAccountId = command.ParentLedgerAccountId,
-				Path = $"{parentPath}{command.Number}",
-				Level = ParentLevel + 1,
+				ParentLedgerAccountId = command.ParentLedgerAccountId,
 				Description = command.Description,
 				IsActive = true
 			};
 
+			// 4) Đặt Path/Level bằng helper
+			LedgerAccountPathHelper.SetPathAndLevel(entity, parentAccount);
+
+			// 5) Lưu
 			await _unitOfWork.LedgerAccounts.AddAsync(entity);
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-			// include AccountType for mapping name
+			// 6) Reload + map DTO include type name
 			var reloaded = await _unitOfWork.LedgerAccounts.SingleOrDefaultIncludingAsync(
 				a => a.Id == entity.Id,
 				asNoTracking: true,

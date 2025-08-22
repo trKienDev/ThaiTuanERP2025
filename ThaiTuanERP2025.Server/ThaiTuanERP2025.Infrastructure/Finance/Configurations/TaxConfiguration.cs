@@ -16,7 +16,12 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 			builder.ToTable("Taxes", "Finance").HasKey(x => x.Id);
 
 			builder.Property(x => x.PolicyName).IsRequired().HasMaxLength(200);
-			builder.Property(x => x.Rate).IsRequired().HasColumnType("decimal(5,2)");
+
+			// Lưu tỉ lệ dạng '0.10' = 10%
+			builder.Property(x => x.Rate).IsRequired().HasColumnType("decimal(9, 4)");
+
+			builder.Property(x => x.IsActive).HasDefaultValue(true);
+
 			builder.Property(x => x.Description).HasMaxLength(1000);
 
 			builder.HasIndex(x => x.PolicyName).IsUnique();

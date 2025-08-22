@@ -19,7 +19,7 @@ namespace ThaiTuanERP2025.Application.Finance.Queries.LedgerAccounts.GetLedgerAc
 						.OrderBy(x => x.Number)
 				);
 
-			var lookup = entities.ToLookup(x => x.ParrentLedgerAccountId);
+			var lookup = entities.ToLookup(x => x.ParentLedgerAccountId);
 
 			List<LedgerAccountTreeDto> BuildTree(Guid? parentId) {
 				return lookup[parentId].Select(x => new LedgerAccountTreeDto

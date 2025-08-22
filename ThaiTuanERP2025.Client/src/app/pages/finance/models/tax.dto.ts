@@ -1,15 +1,13 @@
 export interface TaxDto {
-      id: string;
       policyName: string;
       rate: number;
       postingLedgerAccountId: string;
       isActive: boolean;
-      description?: string;
-
-      postingLedgerAccountCode?: string;
-      postingLedgerAccountName?: string;
+      description?: string | null;
 }
 
-
-export type CreateTaxRequest = Omit<TaxDto, 'id' | 'postingLedgerAccountCode' | 'postingLedgerAccountName'>;
-export type UpdateTaxRequest = Partial<Omit<TaxDto, 'postingLedgerAccountCode' | 'postingLedgerAccountName'>>;
+export interface TaxRequestDto extends TaxDto {
+      id: string;
+      postingLedgerAccountNumber?: string;
+      postingLedgerAccountName?: string;
+}

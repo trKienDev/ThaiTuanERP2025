@@ -13,7 +13,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public string Number { get; set; } = null!;
 		public string Name { get; set; } = null!;
 		public Guid? LedgerAccountTypeId { get; set; }	
-		public Guid? ParrentLedgerAccountId { get; set; }
+		public Guid? ParentLedgerAccountId { get; set; }
 
 		// tối ưu cây
 		public string Path { get; set; } = "/";
