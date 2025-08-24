@@ -14,6 +14,7 @@ export const financeRoutes: Routes = [
                   { path: 'bank-account', loadComponent: () => import('./pages/bank-account/bank-account.component').then((m) => m.BankAccountComponent )},
                   { path: 'tax', loadComponent: () => import('./pages/finance-tax/finance-tax.component').then((m) => m.FinanceTaxComponent )},
                   { path: 'ledger-account', loadComponent: () => import('./pages/ledger-account-shell-page/ledger-account-shell-page.component').then((m) => m.LedgerAccountShellPageComponent)},
+                  { path: 'cashout', loadComponent: () => import('./pages/cashout/cashout-shell-page.component').then((m) => m.CashoutShellPageComponent )},
             ]
       }
 ];

@@ -15,7 +15,7 @@ export class LedgerAccountService extends BaseCrudService<LedgerAccountDto, Crea
       }
 
       lookup(keyword: string, take = 20): Observable<LedgerAccountLookupDto[]> {
-            let params = new HttpParams().set('keyword', keyword).set('take', take);
+            let params = new HttpParams().set('keyword', keyword).set('take', String(take));
             return this.http.get<ApiResponse<LedgerAccountLookupDto[]>>(`${this.endpoint}/lookup`, { params })
                   .pipe(handleApiResponse$<LedgerAccountLookupDto[]>(),
                   catchError(err => throwError(() => err))
