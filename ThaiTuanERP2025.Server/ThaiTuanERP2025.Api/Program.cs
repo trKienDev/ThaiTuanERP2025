@@ -60,6 +60,7 @@ using ThaiTuanERP2025.Application.Finance.Commands.Taxes.CreateTax;
 using ThaiTuanERP2025.Application.Finance.Commands.Taxes.UpdateTax;
 using ThaiTuanERP2025.Application.Finance.Commands.CashoutGroups.CreateCashoutGroup;
 using ThaiTuanERP2025.Application.Finance.Commands.CashoutGroups.UpdateCashoutGroup;
+using ThaiTuanERP2025.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -121,6 +122,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<UpdateCashoutGroupValidator
 builder.Services.AddScoped<iJWTProvider, JwtProvider>();
 builder.Services.AddScoped<IUnitOfWork, AppUnitOfWork>();
 builder.Services.AddScoped<ICodeGenerator, CodeGenerator>();
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IGroupRepository, GroupRepository>();
@@ -138,6 +140,9 @@ builder.Services.AddScoped<ILedgerAccountRepository, LedgerAccountRepository>();
 builder.Services.AddScoped<ICashoutCodeRepository, CashoutCodeRepository>();
 builder.Services.AddScoped<ICashoutGroupRepository, CashoutGroupRepository>();
 builder.Services.AddScoped<ITaxRepository, TaxRepository>();
+
+// Infrastructure
+builder.Services.AddInfrastructure(builder.Configuration);
 
 // Auto Mapper
 builder.Services.AddAutoMapper(typeof(AssemblyReference).Assembly);
