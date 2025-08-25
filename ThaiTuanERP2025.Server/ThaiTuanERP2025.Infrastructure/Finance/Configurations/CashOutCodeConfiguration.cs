@@ -9,11 +9,11 @@ using ThaiTuanERP2025.Domain.Finance.Entities;
 
 namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 {
-	public class CashOutCodeConfiguration : IEntityTypeConfiguration<CashOutCode>
+	public class CashOutCodeConfiguration : IEntityTypeConfiguration<CashoutCode>
 	{
-		public void Configure(EntityTypeBuilder<CashOutCode> builder)
+		public void Configure(EntityTypeBuilder<CashoutCode> builder)
 		{
-			builder.ToTable("CashOutCodes", "Finance").HasIndex(x => x.Id);
+			builder.ToTable("CashoutCodes", "Finance").HasIndex(x => x.Id);
 
 			builder.Property(x => x.Code).IsRequired().HasMaxLength(64);
 			builder.Property(x => x.Name).IsRequired().HasMaxLength(250);
@@ -22,9 +22,9 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 			builder.HasIndex(x => x.Code).IsUnique();
 			builder.HasIndex(x => x.Name);
 
-			builder.HasOne(x => x.CashOutGroup)
-				.WithMany(x => x.CashOutCodes)
-				.HasForeignKey(x => x.CashOutGroupId)
+			builder.HasOne(x => x.CashoutGroup)
+				.WithMany(x => x.CashoutCodes)
+				.HasForeignKey(x => x.CashoutGroupId)
 				.OnDelete(DeleteBehavior.Restrict);
 			builder.HasOne(x => x.PostingLedgerAccount)
 				.WithMany()

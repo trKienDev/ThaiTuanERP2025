@@ -1,15 +1,7 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Finance.Dtos;
 using ThaiTuanERP2025.Application.Finance.DTOs;
-using ThaiTuanERP2025.Application.Partner.DTOs;
 using ThaiTuanERP2025.Domain.Finance.Entities;
-using ThaiTuanERP2025.Domain.Partner.Entities;
 
 namespace ThaiTuanERP2025.Application.Finance.Mappings
 {
@@ -39,11 +31,24 @@ namespace ThaiTuanERP2025.Application.Finance.Mappings
 				.ForMember(d => d.PostingLedgerAccountNumber, o => o.MapFrom(s => s.PostingLedgerAccount.Number))
 				.ForMember(d => d.PostingLedgerAccountNumber, o => o.MapFrom(s => s.PostingLedgerAccount.Name));
 
-			CreateMap<CashOutGroup, CashOutGroupDto>();
+			CreateMap<CashoutGroup, CashoutGroupDto>()
+				.ConstructUsing((src, context) =>
+					new CashoutGroupDto(
+						src.Id,
+						src.Code,
+						src.Name,
+						src.Description,
+						src.IsActive,
+						src.ParentId,
+						src.Path,
+						src.Level,
+						src.Children.Select(child => context.Mapper.Map<CashoutGroupDto>(child)).ToList()
+					)
+				);
 
-			CreateMap<CashOutCode, CashOutCodeDto>()
-				.ForMember(d => d.CashOutGroupCode, o => o.MapFrom(s => s.CashOutGroup.Code))
-				.ForMember(d => d.CashOutGroupName, o => o.MapFrom(s => s.CashOutGroup.Name))
+			CreateMap<CashoutCode, CashoutCodeDto>()
+				.ForMember(d => d.CashoutGroupCode, o => o.MapFrom(s => s.CashoutGroup.Code))
+				.ForMember(d => d.CashoutGroupName, o => o.MapFrom(s => s.CashoutGroup.Name))
 				.ForMember(d => d.PostingLedgerAccountId, o => o.MapFrom(s => s.PostingLedegerAccoutnId))
 				.ForMember(d => d.PostingLedgerAccountNumber, o => o.MapFrom(s => s.PostingLedgerAccount.Number))
 				.ForMember(d => d.PostingLedgerAccountName, o => o.MapFrom(s => s.PostingLedgerAccount.Name));

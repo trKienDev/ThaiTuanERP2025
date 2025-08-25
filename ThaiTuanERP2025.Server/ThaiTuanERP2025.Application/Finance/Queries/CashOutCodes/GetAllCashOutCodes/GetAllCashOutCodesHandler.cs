@@ -8,26 +8,26 @@ using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 
-namespace ThaiTuanERP2025.Application.Finance.Queries.CashOutCodes.GetAllCashOutCodes
+namespace ThaiTuanERP2025.Application.Finance.Queries.CashoutCodes.GetAllCashoutCodes
 {
-	public class GetAllCashOutCodesHandler : IRequestHandler<GetAllCashOutCodesQuery, List<CashOutCodeDto>>
+	public class GetAllCashoutCodesHandler : IRequestHandler<GetAllCashoutCodesQuery, List<CashoutCodeDto>>
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly IMapper _mapper;
-		public GetAllCashOutCodesHandler(IUnitOfWork unitOfWork, IMapper mapper)
+		public GetAllCashoutCodesHandler(IUnitOfWork unitOfWork, IMapper mapper)
 		{
 			_unitOfWork = unitOfWork;
 			_mapper = mapper;
 		}
 
-		public async Task<List<CashOutCodeDto>> Handle(GetAllCashOutCodesQuery request, CancellationToken cancellationToken) {
-			var list = await _unitOfWork.CashOutCodes.FindIncludingAsync(
+		public async Task<List<CashoutCodeDto>> Handle(GetAllCashoutCodesQuery request, CancellationToken cancellationToken) {
+			var list = await _unitOfWork.CashoutCodes.FindIncludingAsync(
 				_ => true,
-				x => x.CashOutGroup,
+				x => x.CashoutGroup,
 				x => x.PostingLedgerAccount
 			);
 			var ordered = list.OrderBy(x => x.Code).ToList();
-			return _mapper.Map<List<CashOutCodeDto>>(ordered);
+			return _mapper.Map<List<CashoutCodeDto>>(ordered);
 		}
 	}
 }

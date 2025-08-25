@@ -58,6 +58,8 @@ using ThaiTuanERP2025.Application.Finance.Commands.LedgerAccountTypes.UpdateLedg
 using ThaiTuanERP2025.Application.Finance.Commands.LedgerAccounts.CreateLedgerAccount;
 using ThaiTuanERP2025.Application.Finance.Commands.Taxes.CreateTax;
 using ThaiTuanERP2025.Application.Finance.Commands.Taxes.UpdateTax;
+using ThaiTuanERP2025.Application.Finance.Commands.CashoutGroups.CreateCashoutGroup;
+using ThaiTuanERP2025.Application.Finance.Commands.CashoutGroups.UpdateCashoutGroup;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -111,7 +113,9 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateLedgerAccountTypeVali
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateLedgerAccountTypeValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateLedgerAccountValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateTaxValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<UpdateTaxCommand>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateTaxValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateCashoutGroupValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateCashoutGroupValidator>();
 
 // Repositories
 builder.Services.AddScoped<iJWTProvider, JwtProvider>();
@@ -131,8 +135,8 @@ builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<IPartnerBankAccountRepository, PartnerBankAccountRepository>();
 builder.Services.AddScoped<ILedgerAccountTypeRepository, LedgerAccountTypeRepository>();
 builder.Services.AddScoped<ILedgerAccountRepository, LedgerAccountRepository>();
-builder.Services.AddScoped<ICashOutCodeRepository, CashOutCodeRepository>();
-builder.Services.AddScoped<ICashOutGroupRepository, CashOutGroupRepository>();
+builder.Services.AddScoped<ICashoutCodeRepository, CashoutCodeRepository>();
+builder.Services.AddScoped<ICashoutGroupRepository, CashoutGroupRepository>();
 builder.Services.AddScoped<ITaxRepository, TaxRepository>();
 
 // Auto Mapper

@@ -10,25 +10,25 @@ using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Domain.Exceptions;
 
-namespace ThaiTuanERP2025.Application.Finance.Commands.CashOutCodes.UpdateCashOutCode
+namespace ThaiTuanERP2025.Application.Finance.Commands.CashoutCodes.UpdateCashoutCode
 {
-	public class UpdateCashOutCodeHandler : IRequestHandler<UpdateCashOutCodeCommand, CashOutCodeDto>
+	public class UpdateCashoutCodeHandler : IRequestHandler<UpdateCashoutCodeCommand, CashoutCodeDto>
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly IMapper _mapper;
-		public UpdateCashOutCodeHandler(IUnitOfWork unitOfWork, IMapper mapper)
+		public UpdateCashoutCodeHandler(IUnitOfWork unitOfWork, IMapper mapper)
 		{
 			_unitOfWork = unitOfWork;
 			_mapper = mapper;
 		}
 
-		public async Task<CashOutCodeDto> Handle(UpdateCashOutCodeCommand request, CancellationToken cancellationToken) {
-			if (await _unitOfWork.CashOutCodes.AnyAsync(x =>
+		public async Task<CashoutCodeDto> Handle(UpdateCashoutCodeCommand request, CancellationToken cancellationToken) {
+			if (await _unitOfWork.CashoutCodes.AnyAsync(x =>
 				x.Code == request.Code &&
 				x.Id != request.Id
 			)) throw new ConflictException($"Mã dòng tiền ra '{request.Code}' đã tồn tại");
 
-			var entity = await _unitOfWork.CashOutCodes.SingleOrDefaultIncludingAsync(x =>
+			var entity = await _unitOfWork.CashoutCodes.SingleOrDefaultIncludingAsync(x =>
 				x.Id == request.Id,
 				asNoTracking: false
 			);
@@ -36,20 +36,20 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.CashOutCodes.UpdateCashOu
 
 			entity.Code = request.Code;
 			entity.Name = request.Name;
-			entity.CashOutGroupId = request.CashOutGroupId;
+			entity.CashoutGroupId = request.CashOutGroupId;
 			entity.PostingLedegerAccoutnId = request.PostingLedgerAccountId;
 			entity.Description = request.Description;
 
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-			var loaded = await _unitOfWork.CashOutCodes.SingleOrDefaultIncludingAsync(x =>
+			var loaded = await _unitOfWork.CashoutCodes.SingleOrDefaultIncludingAsync(x =>
 				x.Id == request.Id,
 				true, cancellationToken,
-				x => x.CashOutGroup,
+				x => x.CashoutGroup,
 				x => x.PostingLedgerAccount
 			);
 			if (loaded is null) throw new AppException("Có lỗi trong quá trình tạo dòng tiền ra");
-			return _mapper.Map<CashOutCodeDto>(loaded);
+			return _mapper.Map<CashoutCodeDto>(loaded);
 		}
 	}
 }

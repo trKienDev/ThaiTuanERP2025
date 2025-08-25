@@ -7,25 +7,25 @@ using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Domain.Exceptions;
 
-namespace ThaiTuanERP2025.Application.Finance.Commands.CashOutGroups.DeleteCashOutGroup
+namespace ThaiTuanERP2025.Application.Finance.Commands.CashoutGroups.DeleteCashoutGroup
 {
-	public class DeleteCashOutGroupHandler : IRequestHandler<DeleteCashOutGroupCommand, bool>
+	public class DeleteCashoutGroupHandler : IRequestHandler<DeleteCashoutGroupCommand, bool>
 	{
 		private readonly IUnitOfWork _unitOfWork;
-		public DeleteCashOutGroupHandler(IUnitOfWork unitOfWork)
+		public DeleteCashoutGroupHandler(IUnitOfWork unitOfWork)
 		{
 			_unitOfWork = unitOfWork;
 		}
 
-		public async Task<bool> Handle(DeleteCashOutGroupCommand request, CancellationToken cancellationToken) {
-			var entity = await _unitOfWork.CashOutGroups.SingleOrDefaultIncludingAsync(x =>  
+		public async Task<bool> Handle(DeleteCashoutGroupCommand request, CancellationToken cancellationToken) {
+			var entity = await _unitOfWork.CashoutGroups.SingleOrDefaultIncludingAsync(x =>  
 				x.Id == request.Id,
 				asNoTracking: false,
 				cancellationToken
 			);
 
 			if (entity is null) throw new NotFoundException("Không tìm thấy nhóm tài khoản đầu ra");
-			_unitOfWork.CashOutGroups.Delete(entity);
+			_unitOfWork.CashoutGroups.Delete(entity);
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 			return true;
 		}

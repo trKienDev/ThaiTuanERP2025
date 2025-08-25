@@ -3,13 +3,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 using ThaiTuanERP2025.Api.Common;
-using ThaiTuanERP2025.Application.Finance.Commands.CashOutCodes.CreateCashOutCode;
-using ThaiTuanERP2025.Application.Finance.Commands.CashOutCodes.DeleteCashOutCode;
-using ThaiTuanERP2025.Application.Finance.Commands.CashOutCodes.ToggleCashOutCodeStatus;
-using ThaiTuanERP2025.Application.Finance.Commands.CashOutCodes.UpdateCashOutCode;
+using ThaiTuanERP2025.Application.Finance.Commands.CashoutCodes.DeleteCashoutCode;
+using ThaiTuanERP2025.Application.Finance.Commands.CashoutCodes.ToggleCashoutCodeActivate;
+using ThaiTuanERP2025.Application.Finance.Commands.CashoutCodes.UpdateCashoutCode;
+using ThaiTuanERP2025.Application.Finance.Commands.CashoutCodes.CreateCashoutCode;
 using ThaiTuanERP2025.Application.Finance.DTOs;
-using ThaiTuanERP2025.Application.Finance.Queries.CashOutCodes.GetAllCashOutCodes;
-using ThaiTuanERP2025.Application.Finance.Queries.CashOutCodes.GetCashOutCodeById;
+using ThaiTuanERP2025.Application.Finance.Queries.CashoutCodes.GetAllCashoutCodes;
+using ThaiTuanERP2025.Application.Finance.Queries.CashoutCodes.GetCashoutCodeById;
 
 namespace ThaiTuanERP2025.Api.Controllers.Finance
 {
@@ -26,37 +26,37 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 
 		[HttpGet]
 		public async Task<ActionResult> GetAll() {
-			var list = await _mediator.Send(new GetAllCashOutCodesQuery());
-			return Ok(ApiResponse<List<CashOutCodeDto>>.Success(list));
+			var list = await _mediator.Send(new GetAllCashoutCodesQuery());
+			return Ok(ApiResponse<List<CashoutCodeDto>>.Success(list));
 		}
 
 		[HttpGet("{id:guid}")]
 		public async Task<ActionResult> GetById(Guid id) {
-			var dto = await _mediator.Send(new GetCashOutCodeByIdQuery(id));
-			return Ok(ApiResponse<CashOutCodeDto>.Success(dto)); 
+			var dto = await _mediator.Send(new GetCashoutCodeByIdQuery(id));
+			return Ok(ApiResponse<CashoutCodeDto>.Success(dto)); 
 		}
 
 		[HttpPost]
-		public async Task<ActionResult> Create([FromBody] CreateCashOutCodeCommand command) {
+		public async Task<ActionResult> Create([FromBody] CreateCashoutCodeCommand command) {
 			var result = await _mediator.Send(command);
-			return Ok(ApiResponse<CashOutCodeDto>.Success(result));
+			return Ok(ApiResponse<CashoutCodeDto>.Success(result));
 		}
 
 		[HttpPut("{id:guid}")]
-		public async Task<ActionResult> Update(Guid id, [FromBody] UpdateCashOutCodeCommand command) {
+		public async Task<ActionResult> Update(Guid id, [FromBody] UpdateCashoutCodeCommand command) {
 			var result = await _mediator.Send(command with { Id = id });
-			return Ok(ApiResponse<CashOutCodeDto>.Success(result));
+			return Ok(ApiResponse<CashoutCodeDto>.Success(result));
 		}
 
 		[HttpPatch("{id:guid}/status")]
 		public async Task<ActionResult> ToggleStatus(Guid id, [FromBody] bool isActive) {
-			var result = await _mediator.Send(new ToggleCashOutCodeStatusCommand(id, isActive));	
+			var result = await _mediator.Send(new ToggleCashoutCodeActivateCommand(id, isActive));	
 			return Ok(ApiResponse<bool>.Success(result));
 		}
 
 		[HttpDelete("{id:guid}")]
 		public async Task<ActionResult> Delete(Guid id) {
-			var result = await _mediator.Send(new DeleteCashOutCodeCommand(id));
+			var result = await _mediator.Send(new DeleteCashoutCodeCommand(id));
 			return Ok(ApiResponse<bool>.Success(result));
 		}
 

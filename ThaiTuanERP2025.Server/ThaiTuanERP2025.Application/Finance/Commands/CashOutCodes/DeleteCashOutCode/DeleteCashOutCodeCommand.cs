@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ThaiTuanERP2025.Application.Finance.Commands.CashOutCodes.DeleteCashOutCode
+namespace ThaiTuanERP2025.Application.Finance.Commands.CashoutCodes.DeleteCashoutCode
 {
-	public record DeleteCashOutCodeCommand(Guid Id) : IRequest<bool>;
+	public record DeleteCashoutCodeCommand(Guid Id) : IRequest<bool>;
 }
