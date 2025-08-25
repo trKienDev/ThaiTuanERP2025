@@ -30,8 +30,8 @@ export class FinanceTaxComponent implements OnInit {
 
       loadTaxes(): void {
             this.taxService.getAll().subscribe({
-                  next: (data) => {
-                        this.taxes = data;
+                  next: (taxes) => {
+                        this.taxes = taxes;
                   }
             });
       }

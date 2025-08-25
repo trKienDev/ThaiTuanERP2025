@@ -11,9 +11,9 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Finance.Repositories
 {
-	public class CashOutCodeRepository : BaseRepository<CashOutCode>, ICashOutCodeRepository
+	public class CashoutCodeRepository : BaseRepository<CashoutCode>, ICashoutCodeRepository
 	{
-		public CashOutCodeRepository(ThaiTuanERP2025DbContext dbContext) : base(dbContext) { }
+		public CashoutCodeRepository(ThaiTuanERP2025DbContext dbContext) : base(dbContext) { }
 		public Task<bool> CodeExistsAsync(string code, Guid? excludeId = null, CancellationToken cancellationToken = default)
 		{
 			var query = _dbSet.AsNoTracking().Where(x => x.Code == code);

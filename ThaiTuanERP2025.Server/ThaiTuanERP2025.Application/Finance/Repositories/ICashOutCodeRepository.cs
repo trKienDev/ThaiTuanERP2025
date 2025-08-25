@@ -8,7 +8,7 @@ using ThaiTuanERP2025.Domain.Finance.Entities;
 
 namespace ThaiTuanERP2025.Application.Finance.Repositories
 {
-	public interface ICashOutCodeRepository : IBaseRepository<CashOutCode>
+	public interface ICashoutCodeRepository : IBaseRepository<CashoutCode>
 	{
 		Task<bool> CodeExistsAsync(string code, Guid? excludeId = null, CancellationToken cancellationToken = default);
 	}

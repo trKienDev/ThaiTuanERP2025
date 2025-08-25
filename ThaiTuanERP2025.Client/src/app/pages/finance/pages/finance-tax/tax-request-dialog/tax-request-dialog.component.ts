@@ -19,7 +19,8 @@ import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from "@angular/ma
       selector: 'tax-request-dialog',
       standalone: true,
       imports: [CommonModule, ReactiveFormsModule, MatDialogModule,
-    MatFormFieldModule, MatInputModule, MatCheckboxModule, MatButtonModule, MatSelectModule, MatAutocompleteModule, FormsModule, MatInputModule],
+            MatFormFieldModule, MatInputModule, MatCheckboxModule, MatButtonModule, MatSelectModule, MatAutocompleteModule, FormsModule, MatInputModule
+      ],
       templateUrl: './tax-request-dialog.component.html',
       styleUrl: './tax-request-dialog.component.scss',
 })

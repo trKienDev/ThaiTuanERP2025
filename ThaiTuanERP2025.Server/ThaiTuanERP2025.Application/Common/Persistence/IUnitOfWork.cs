@@ -27,8 +27,8 @@ namespace ThaiTuanERP2025.Application.Common.Persistence
 		ILedgerAccountRepository LedgerAccounts { get; }
 		ILedgerAccountTypeRepository LedgerAccountTypes { get; }
 		ITaxRepository Taxes { get; }
-		ICashOutCodeRepository CashOutCodes { get; }
-		ICashOutGroupRepository CashOutGroups { get; }
+		ICashoutCodeRepository CashoutCodes { get; }
+		ICashoutGroupRepository CashoutGroups { get; }
 
 		Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 	}

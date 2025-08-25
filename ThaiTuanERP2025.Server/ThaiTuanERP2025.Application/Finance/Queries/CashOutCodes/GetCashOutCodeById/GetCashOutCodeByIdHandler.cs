@@ -10,27 +10,27 @@ using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Domain.Exceptions;
 
-namespace ThaiTuanERP2025.Application.Finance.Queries.CashOutCodes.GetCashOutCodeById
+namespace ThaiTuanERP2025.Application.Finance.Queries.CashoutCodes.GetCashoutCodeById
 {
-	public class GetCashOutCodeByIdHandler : IRequestHandler<GetCashOutCodeByIdQuery, CashOutCodeDto>
+	public class GetCashoutCodeByIdHandler : IRequestHandler<GetCashoutCodeByIdQuery, CashoutCodeDto>
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly IMapper _mapper;
-		public GetCashOutCodeByIdHandler(IUnitOfWork unitOfWork, IMapper mapper)
+		public GetCashoutCodeByIdHandler(IUnitOfWork unitOfWork, IMapper mapper)
 		{
 			_unitOfWork = unitOfWork;
 			_mapper = mapper;
 		}
 
-		public async Task<CashOutCodeDto> Handle(GetCashOutCodeByIdQuery request, CancellationToken cancellationToken) { 
-			var entity = await _unitOfWork.CashOutCodes.SingleOrDefaultIncludingAsync(x => 
+		public async Task<CashoutCodeDto> Handle(GetCashoutCodeByIdQuery request, CancellationToken cancellationToken) { 
+			var entity = await _unitOfWork.CashoutCodes.SingleOrDefaultIncludingAsync(x => 
 				x.Id == request.Id,
 				true, cancellationToken,
-				x => x.CashOutGroup, 
+				x => x.CashoutGroup, 
 				x => x.PostingLedgerAccount
 			);
 			if (entity is null) throw new NotFoundException("Không tìm thấy mã dòng tiền ra");
-			return _mapper.Map<CashOutCodeDto>(entity);
+			return _mapper.Map<CashoutCodeDto>(entity);
 		}
 	}
 }

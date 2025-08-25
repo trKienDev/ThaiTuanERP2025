@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
-using ThaiTuanERP2025.Application.Finance.Commands.CashOutGroups.CreateCashOutGroup;
-using ThaiTuanERP2025.Application.Finance.Commands.CashOutGroups.DeleteCashOutGroup;
-using ThaiTuanERP2025.Application.Finance.Commands.CashOutGroups.ToggleCashOutGroupStatus;
-using ThaiTuanERP2025.Application.Finance.Commands.CashOutGroups.UpdateCashOutGroup;
+using ThaiTuanERP2025.Application.Finance.Commands.CashoutGroups.CashoutOutGroup;
+using ThaiTuanERP2025.Application.Finance.Commands.CashoutGroups.CreateCashoutGroup;
+using ThaiTuanERP2025.Application.Finance.Commands.CashoutGroups.DeleteCashoutGroup;
+using ThaiTuanERP2025.Application.Finance.Commands.CashOutGroups.ToggleCashOutGroupActivate;
 using ThaiTuanERP2025.Application.Finance.DTOs;
-using ThaiTuanERP2025.Application.Finance.Queries.CashOutGroups.GetAllCashOutGroups;
-using ThaiTuanERP2025.Application.Finance.Queries.CashOutGroups.GetCashOutGroupById;
+using ThaiTuanERP2025.Application.Finance.Queries.CashoutGroups.GetAllCashoutGroups;
+using ThaiTuanERP2025.Application.Finance.Queries.CashoutGroups.GetCashoutGroupById;
 
 namespace ThaiTuanERP2025.Api.Controllers.Finance
 {
@@ -25,37 +25,37 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 
 		[HttpGet]
 		public async Task<ActionResult> GetAll() {
-			var data = await _mediator.Send(new GetAllCashOutGroupsQuery());
-			return Ok(ApiResponse<List<CashOutGroupDto>>.Success(data));
+			var data = await _mediator.Send(new GetAllCashoutGroupsQuery());
+			return Ok(ApiResponse<List<CashoutGroupDto>>.Success(data));
 		}
 
 		[HttpGet("{id:guid}")]
 		public async Task<ActionResult> GetById(Guid id) {
-			var data = await _mediator.Send(new GetCashOutGroupByIdQuery(id));
-			return Ok(ApiResponse<CashOutGroupDto>.Success(data));
+			var data = await _mediator.Send(new GetCashoutGroupByIdQuery(id));
+			return Ok(ApiResponse<CashoutGroupDto>.Success(data));
 		}
 
 		[HttpPost]
-		public async Task<ActionResult> Create([FromBody] CreateCashOutGroupCommand command) {
+		public async Task<ActionResult> Create([FromBody] CreateCashoutGroupCommand command) {
 			var dto = await _mediator.Send(command);
-			return Ok(ApiResponse<CashOutGroupDto>.Success(dto));
+			return Ok(ApiResponse<CashoutGroupDto>.Success(dto));
 		}
 
 		[HttpPut("{id:guid}")]
-		public async Task<ActionResult> Update(Guid id, [FromBody] UpdateCashOutGroupCommand command) {
+		public async Task<ActionResult> Update(Guid id, [FromBody] UpdateCashoutGroupCommand command) {
 			var result = await _mediator.Send(command with { Id = id});
-			return Ok(ApiResponse<CashOutGroupDto>.Success(result));
+			return Ok(ApiResponse<CashoutGroupDto>.Success(result));
 		}
 
 		[HttpPatch("{id:guid}/status")]
 		public async Task<ActionResult> ToggleStatus(Guid id, bool isActive) {
-			var result = await _mediator.Send(new ToggleCashOutGroupStatusCommand(id, isActive));
+			var result = await _mediator.Send(new ToggleCashoutGroupActivateCommand(id, isActive));
 			return Ok(ApiResponse<bool>.Success(result));
 		}
 
 		[HttpDelete("{id:guid}")]
 		public async Task<ActionResult> Delete(Guid id) {
-			var result = await _mediator.Send(new DeleteCashOutGroupCommand(id));
+			var result = await _mediator.Send(new DeleteCashoutGroupCommand(id));
 			return Ok(ApiResponse<bool>.Success(result));
 		}
 	}

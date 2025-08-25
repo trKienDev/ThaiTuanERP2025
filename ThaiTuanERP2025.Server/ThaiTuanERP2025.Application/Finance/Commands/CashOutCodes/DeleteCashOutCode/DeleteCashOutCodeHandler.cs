@@ -7,21 +7,21 @@ using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Domain.Exceptions;
 
-namespace ThaiTuanERP2025.Application.Finance.Commands.CashOutCodes.DeleteCashOutCode
+namespace ThaiTuanERP2025.Application.Finance.Commands.CashoutCodes.DeleteCashoutCode
 {
-	public class DeleteCashOutCodeHandler : IRequestHandler<DeleteCashOutCodeCommand, bool>
+	public class DeleteCashoutCodeHandler : IRequestHandler<DeleteCashoutCodeCommand, bool>
 	{
 		private readonly IUnitOfWork _unitOfWork;
-		public DeleteCashOutCodeHandler(IUnitOfWork unitOfWork) {
+		public DeleteCashoutCodeHandler(IUnitOfWork unitOfWork) {
 			_unitOfWork = unitOfWork;
 		}
 
-		public async Task<bool> Handle(DeleteCashOutCodeCommand request, CancellationToken cancellationToken) {
-			var entity = await _unitOfWork.CashOutCodes.SingleOrDefaultIncludingAsync(x => 
+		public async Task<bool> Handle(DeleteCashoutCodeCommand request, CancellationToken cancellationToken) {
+			var entity = await _unitOfWork.CashoutCodes.SingleOrDefaultIncludingAsync(x => 
 				x.Id == request.Id, asNoTracking: false, cancellationToken
 			);
 			if (entity is null) throw new NotFoundException("Không tìm thấy mã dòng tiền ra");
-			_unitOfWork.CashOutCodes.Delete(entity);
+			_unitOfWork.CashoutCodes.Delete(entity);
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 			return true;
 		}

@@ -8,22 +8,22 @@ using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 
-namespace ThaiTuanERP2025.Application.Finance.Queries.CashOutGroups.GetAllCashOutGroups
+namespace ThaiTuanERP2025.Application.Finance.Queries.CashoutGroups.GetAllCashoutGroups
 {
-	public class GetAllCashOutGroupsHandler : IRequestHandler<GetAllCashOutGroupsQuery, List<CashOutGroupDto>>
+	public class GetAllCashoutGroupsHandler : IRequestHandler<GetAllCashoutGroupsQuery, List<CashoutGroupDto>>
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly IMapper _mapper;	
-		public GetAllCashOutGroupsHandler(IUnitOfWork unitOfWork, IMapper mapper)
+		public GetAllCashoutGroupsHandler(IUnitOfWork unitOfWork, IMapper mapper)
 		{
 			_unitOfWork = unitOfWork;
 			_mapper = mapper;
 		}
 
-		public async Task<List<CashOutGroupDto>> Handle(GetAllCashOutGroupsQuery request, CancellationToken cancellationToken) {
-			var list = await _unitOfWork.CashOutGroups.FindIncludingAsync(_ => true);
+		public async Task<List<CashoutGroupDto>> Handle(GetAllCashoutGroupsQuery request, CancellationToken cancellationToken) {
+			var list = await _unitOfWork.CashoutGroups.FindIncludingAsync(_ => true);
 			var ordered = list.OrderBy(x => x.Name).ToList();
-			return _mapper.Map<List<CashOutGroupDto>>(ordered);
+			return _mapper.Map<List<CashoutGroupDto>>(ordered);
 		}
 	}
 }
