@@ -6,7 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 
-namespace ThaiTuanERP2025.Application.Finance.Commands.CashOutGroups.CreateCashOutGroup
+namespace ThaiTuanERP2025.Application.Finance.Commands.CashoutGroups.CreateCashoutGroup
 {
-	public record CreateCashOutGroupCommand(string Code, string Name, string? Description) : IRequest<CashOutGroupDto>;
+	public record CreateCashoutGroupCommand(
+		string? Code, string Name, string? Description, Guid? ParentId
+	) : IRequest<CashoutGroupDto>;
 }

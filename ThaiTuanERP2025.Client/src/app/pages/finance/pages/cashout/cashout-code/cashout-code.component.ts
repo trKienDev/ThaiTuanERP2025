@@ -1,5 +1,7 @@
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
+import { CashoutCodeRequestDialogComponent } from "./cashout-code-request-dialog/cashout-code-request-dialog.component";
 
 @Component({
       selector: 'finance-cashout-code',
@@ -7,7 +9,21 @@ import { Component } from "@angular/core";
       imports: [ CommonModule ],
       templateUrl: './cashout-code.component.html',
       styleUrl: './cashout-code.component.scss',
+      changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CashoutCodeComponent {
-      
+      constructor(private dialog: MatDialog) {}
+
+      openCreateCashoutCodeModal(): void {
+            const dialogRef = this.dialog.open(CashoutCodeRequestDialogComponent, {
+                  width: '520px',
+                  disableClose: true
+            });
+
+            dialogRef.afterClosed().subscribe((result) => {
+                  if(result === 'created') {
+                        close();
+                  }
+            })
+      }
 }

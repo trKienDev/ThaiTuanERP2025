@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 
-namespace ThaiTuanERP2025.Application.Finance.Queries.CashOutCodes.GetCashOutCodeById
+namespace ThaiTuanERP2025.Application.Finance.Queries.CashoutCodes.GetCashoutCodeById
 {
-	public record GetCashOutCodeByIdQuery(Guid Id) : IRequest<CashOutCodeDto>;
+	public record GetCashoutCodeByIdQuery(Guid Id) : IRequest<CashoutCodeDto>;
 }

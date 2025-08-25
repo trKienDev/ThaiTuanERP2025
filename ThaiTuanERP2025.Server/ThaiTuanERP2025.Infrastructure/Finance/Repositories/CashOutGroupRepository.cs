@@ -11,9 +11,9 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Finance.Repositories
 {
-	public class CashOutGroupRepository : BaseRepository<CashOutGroup>, ICashOutGroupRepository
+	public class CashoutGroupRepository : BaseRepository<CashoutGroup>, ICashoutGroupRepository
 	{
-		public CashOutGroupRepository(ThaiTuanERP2025DbContext dbContext) : base(dbContext) {}
+		public CashoutGroupRepository(ThaiTuanERP2025DbContext dbContext) : base(dbContext) {}
 
 		public Task<bool> CodeExistsAsync(string code, Guid? excludeId = null, CancellationToken cancellationToken = default)
 		{

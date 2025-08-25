@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 
-namespace ThaiTuanERP2025.Application.Finance.Queries.CashOutGroups.GetAllCashOutGroups
+namespace ThaiTuanERP2025.Application.Finance.Queries.CashoutGroups.GetAllCashoutGroups
 {
-	public record GetAllCashOutGroupsQuery() : IRequest<List<CashOutGroupDto>>;
+	public record GetAllCashoutGroupsQuery() : IRequest<List<CashoutGroupDto>>;
 }

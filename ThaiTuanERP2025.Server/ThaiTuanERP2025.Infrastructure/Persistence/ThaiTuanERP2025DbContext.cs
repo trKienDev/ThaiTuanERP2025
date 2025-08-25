@@ -35,8 +35,8 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<LedgerAccountType> LedgerAccountTypes => Set<LedgerAccountType>();
 		public DbSet<LedgerAccount> LedgerAccounts => Set<LedgerAccount>();
 		public DbSet<Tax> Taxes => Set<Tax>();
-		public DbSet<CashOutGroup> CashOutGroups => Set<CashOutGroup>();
-		public DbSet<CashOutCode> CashOutCodes => Set<CashOutCode>();
+		public DbSet<CashoutGroup> CashOutGroups => Set<CashoutGroup>();
+		public DbSet<CashoutCode> CashOutCodes => Set<CashoutCode>();
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

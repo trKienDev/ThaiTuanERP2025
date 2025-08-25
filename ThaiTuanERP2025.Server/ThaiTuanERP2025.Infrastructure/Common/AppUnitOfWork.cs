@@ -35,8 +35,8 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			ILedgerAccountRepository ledgerAccounts,
 			ILedgerAccountTypeRepository ledgerAccountTypes,
 			ITaxRepository taxes,
-			ICashOutCodeRepository cashOutCodes,
-			ICashOutGroupRepository cashOutGroups,
+			ICashoutCodeRepository cashoutCodes,
+			ICashoutGroupRepository cashoutGroups,
 
 			// Partner
 			IPartnerBankAccountRepository partnerBankAccount
@@ -61,8 +61,8 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			LedgerAccountTypes = ledgerAccountTypes;
 			LedgerAccounts = ledgerAccounts;
 			Taxes = taxes;
-			CashOutCodes = cashOutCodes;
-			CashOutGroups = cashOutGroups;
+			CashoutCodes = cashoutCodes;
+			CashoutGroups = cashoutGroups;
 
 			PartnerBankAccounts = partnerBankAccount;
 		}
@@ -85,8 +85,8 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		public ILedgerAccountRepository LedgerAccounts { get; }
 		public ILedgerAccountTypeRepository LedgerAccountTypes { get; }
 		public ITaxRepository Taxes { get; }
-		public ICashOutCodeRepository CashOutCodes { get; }
-		public ICashOutGroupRepository CashOutGroups { get; }
+		public ICashoutCodeRepository CashoutCodes { get; }
+		public ICashoutGroupRepository CashoutGroups { get; }
 
 		public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{

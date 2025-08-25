@@ -6,7 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 
-namespace ThaiTuanERP2025.Application.Finance.Commands.CashOutGroups.UpdateCashOutGroup
+namespace ThaiTuanERP2025.Application.Finance.Commands.CashoutGroups.CashoutOutGroup
 {
-	public record UpdateCashOutGroupCommand(Guid Id, string Code, string Name, string? Description) : IRequest<CashOutGroupDto>;
+	public record UpdateCashoutGroupCommand(
+		Guid Id, string? Code, string Name, string? Description,
+		Guid? ParentId
+	) : IRequest<CashoutGroupDto>;
 }
