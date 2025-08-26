@@ -12,6 +12,11 @@
     <PackageReference Include="MediatR" Version="11.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Common\Repositories\" />
+    <Folder Include="Files\Commands\UploadFile\" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

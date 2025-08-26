@@ -5,10 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using ThaiTuanERP2025.Application.Common.Interfaces;
 
-namespace ThaiTuanERP2025.Infrastructure.FileStorage
+namespace ThaiTuanERP2025.Infrastructure.Files.FileStorage
 {
 	public sealed class MinioFileStorage : IFileStorage
 	{
@@ -24,7 +23,8 @@ namespace ThaiTuanERP2025.Infrastructure.FileStorage
 			}
 		}
 
-		public async Task UploadAsync(string bucket, string objectKey, Stream conent, string contentType, CancellationToken cancellationToken) {
+		public async Task UploadAsync(string bucket, string objectKey, Stream conent, string contentType, CancellationToken cancellationToken)
+		{
 			await _minio.PutObjectAsync(new PutObjectArgs()
 				.WithBucket(bucket)
 				.WithObject(objectKey)

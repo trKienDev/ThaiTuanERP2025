@@ -61,6 +61,8 @@ using ThaiTuanERP2025.Application.Finance.Commands.Taxes.UpdateTax;
 using ThaiTuanERP2025.Application.Finance.Commands.CashoutGroups.CreateCashoutGroup;
 using ThaiTuanERP2025.Application.Finance.Commands.CashoutGroups.UpdateCashoutGroup;
 using ThaiTuanERP2025.Infrastructure;
+using ThaiTuanERP2025.Application.Files.Repositories;
+using ThaiTuanERP2025.Infrastructure.Files.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -122,7 +124,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<UpdateCashoutGroupValidator
 builder.Services.AddScoped<iJWTProvider, JwtProvider>();
 builder.Services.AddScoped<IUnitOfWork, AppUnitOfWork>();
 builder.Services.AddScoped<ICodeGenerator, CodeGenerator>();
-
+builder.Services.AddScoped<IStoredFilesRepository, StoredFilesRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IGroupRepository, GroupRepository>();

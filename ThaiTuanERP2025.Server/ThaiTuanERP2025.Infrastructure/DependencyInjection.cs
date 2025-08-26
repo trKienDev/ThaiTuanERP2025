@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Common.Interfaces;
-using ThaiTuanERP2025.Infrastructure.FileStorage;
+using ThaiTuanERP2025.Infrastructure.Files.FileStorage;
 
 namespace ThaiTuanERP2025.Infrastructure
 {
