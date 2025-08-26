@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Account.Repositories;
+using ThaiTuanERP2025.Application.Files.Repositories;
 using ThaiTuanERP2025.Application.Finance.Repositories;
 using ThaiTuanERP2025.Application.Partner.Repositories;
 
@@ -29,6 +30,7 @@ namespace ThaiTuanERP2025.Application.Common.Persistence
 		ITaxRepository Taxes { get; }
 		ICashoutCodeRepository CashoutCodes { get; }
 		ICashoutGroupRepository CashoutGroups { get; }
+		IStoredFilesRepository StoredFiles { get; }
 
 		Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 	}
