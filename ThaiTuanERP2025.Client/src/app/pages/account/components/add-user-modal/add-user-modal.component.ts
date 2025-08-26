@@ -9,8 +9,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from '@angular/material/button';
 import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
-import { CreateUserModel, UserModel } from "../../models/user.model";
 import { DepartmentModel } from "../../models/department.model";
+import { CreateUserRequest, UserDto } from "../../models/user.model";
 
 @Component({
       selector: 'add-user-modal',
@@ -25,13 +25,13 @@ import { DepartmentModel } from "../../models/department.model";
 export class AddUserModalComponent {
       @Output() close = new EventEmitter<void>();
       @Output() save = new EventEmitter<{
-            user: CreateUserModel,
+            user: CreateUserRequest,
             callback: (ok: boolean, message?: string) => void // truyền callback
       }>();
       
       readonly roles = Object.values(UserRole);
 
-      user: UserModel = {
+      user: UserDto = {
             fullName: '',
             username: '',
             employeeCode: '',
@@ -78,7 +78,7 @@ export class AddUserModalComponent {
       }
 
       onSubmit() {
-            const dto: CreateUserModel = {
+            const dto: CreateUserRequest  = {
                   fullName: this.user.fullName,
                   username: this.user.username,
                   employeeCode: this.user.employeeCode,

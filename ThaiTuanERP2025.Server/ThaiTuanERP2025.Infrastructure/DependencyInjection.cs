@@ -61,12 +61,22 @@ namespace ThaiTuanERP2025.Infrastructure
 
 			// ========= File Storage (MinIO) =========
 			services.Configure<FileStorageOptions>(cfg.GetSection("Minio"));
+			services.Configure<MinioSettings>(cfg.GetSection("Minio"));
 
-			services.AddMinio(c => c
-				.WithEndpoint(new Uri(cfg["Minio:Endpoint"]!))      // ví dụ: http://localhost:9000
-				.WithCredentials(cfg["Minio:AccessKey"]!, cfg["Minio:SecretKey"]!)
-				.Build()
-			);
+			var minioSection = cfg.GetSection("Minio");
+			var endpoint = minioSection["Endpoint"]!;                            // http://localhost:9000
+			var accessKey = minioSection["AccessKey"]!;
+			var secretKey = minioSection["SecretKey"]!;
+
+			var minioSettings = cfg.GetSection("Minio").Get<MinioSettings>();
+			if (minioSettings is null)
+				throw new InvalidOperationException("MinIO settings are missing or malformed in configuration.");
+
+			var minioClient = CustomMinioClientFactory.Create(minioSettings);
+
+			var uri = new Uri(endpoint);
+
+			services.AddSingleton<IMinioClient>(minioClient);
 			services.AddScoped<IFileStorage, MinioFileStorage>();
 
 			return services;

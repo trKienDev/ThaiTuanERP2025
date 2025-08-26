@@ -2,9 +2,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
+using ThaiTuanERP2025.Api.Contracts.Users;
 using ThaiTuanERP2025.Application.Account.Commands.Users.CreateUser;
 using ThaiTuanERP2025.Application.Account.Commands.Users.UpdateUser;
-using ThaiTuanERP2025.Application.Account.Commands.Users.UpdateUserAvatar;
+using ThaiTuanERP2025.Application.Account.Commands.Users.UpdateUserAvatarFileId;
 using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Application.Account.Queries.Users.GetAllUsers;
 using ThaiTuanERP2025.Application.Account.Queries.Users.GetCurrentUser;
@@ -66,37 +67,10 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			return Ok(ApiResponse<UserDto>.Success(result));
 		}
 
-		[HttpPost("upload-avatar")]
-		public async Task<IActionResult> UploadAvatar(IFormFile file) {
-			if (file == null || file.Length == 0)
-				return BadRequest(ApiResponse<string>.Fail("File không hợp lệ"));
-
-			var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
-			var extension = Path.GetExtension(file.FileName).ToLower();
-
-			if(!allowedExtensions.Contains(extension))
-				return BadRequest(ApiResponse<string>.Fail("Chỉ hỗ trợ định dạng ảnh JPG, JPEG, PNG"));	
-
-			var user = await _mediator.Send(new GetCurrentUserQuery(User));
-			if (user == null)
-				return NotFound(ApiResponse<string>.Fail("Người dùng không tồn tại"));
-
-			var fileName = $"{Guid.NewGuid()}{extension}";
-			var folderPath = Path.Combine("wwwroot", "uploads", "avatars");
-			var filePath = Path.Combine(folderPath, fileName);
-
-			Directory.CreateDirectory(folderPath);
-
-			using(var stream = new FileStream(filePath, FileMode.Create)) {
-				await file.CopyToAsync(stream);
-			}
-
-			// Cập nhật avatar URL chho user
-			var avatarUrl = $"/uploads/avatars/{fileName}";
-			var updateCommand = new UpdateUserAvatarCommand(user.Id, avatarUrl);
-			var updatedUser = await _mediator.Send(updateCommand);
-
-			return Ok(ApiResponse<string>.Success(updatedUser.AvatarUrl));
+		[HttpPut("{id:guid}/avatar")]
+		public async Task<ActionResult<ApiResponse<string>>> SetAvatar(Guid id, [FromBody] SetUserAvatarRequest request, CancellationToken cancellationToken) {
+			await _mediator.Send(new UpdateUserAvatarFileIdCommand(id, request.FileId), cancellationToken);
+			return Ok(ApiResponse<string>.Success("Cập nhật avatar thành công"));
 		}
 	}
 }

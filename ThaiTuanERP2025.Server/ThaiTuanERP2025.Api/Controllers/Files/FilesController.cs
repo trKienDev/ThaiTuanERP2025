@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Files.Commands.HardDelete;
@@ -11,6 +12,7 @@ using ThaiTuanERP2025.Application.Files.Queries.GetFileDownloadUrl;
 namespace ThaiTuanERP2025.Api.Controllers.Files
 {
 	[ApiController]
+	[Authorize]
 	[Route("api/files")]
 	public class FilesController : ControllerBase
 	{
