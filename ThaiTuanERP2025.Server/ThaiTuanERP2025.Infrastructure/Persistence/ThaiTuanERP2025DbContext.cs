@@ -10,6 +10,7 @@ using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Files.Entities;
 using ThaiTuanERP2025.Domain.Finance.Entities;
 using ThaiTuanERP2025.Domain.Partner.Entities;
 
@@ -37,6 +38,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<Tax> Taxes => Set<Tax>();
 		public DbSet<CashoutGroup> CashOutGroups => Set<CashoutGroup>();
 		public DbSet<CashoutCode> CashOutCodes => Set<CashoutCode>();
+		public DbSet<StoredFile> StoredFiles => Set<StoredFile>();
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

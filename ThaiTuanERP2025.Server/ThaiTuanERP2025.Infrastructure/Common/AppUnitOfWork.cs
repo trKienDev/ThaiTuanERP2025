@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Account.Repositories;
 using ThaiTuanERP2025.Application.Common.Persistence;
+using ThaiTuanERP2025.Application.Files.Repositories;
 using ThaiTuanERP2025.Application.Finance.Repositories;
 using ThaiTuanERP2025.Application.Partner.Repositories;
 using ThaiTuanERP2025.Infrastructure.Persistence;
@@ -17,6 +18,8 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 
 		public AppUnitOfWork(
 			ThaiTuanERP2025DbContext dbContext,
+
+			IStoredFilesRepository storedFiles, 
 
 			// Account
 			IUserRepository users,
@@ -44,6 +47,8 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		) {
 			_dbContext = dbContext;
 
+			StoredFiles = storedFiles;
+
 			Users = users;
 			Departments = departments;
 			Groups = groups;
@@ -67,6 +72,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			PartnerBankAccounts = partnerBankAccount;
 		}
 
+		public IStoredFilesRepository StoredFiles { get; }
 		// Account
 		public IUserRepository Users { get; }
 		public IDepartmentRepository Departments { get; }
