@@ -10,6 +10,7 @@ using ThaiTuanERP2025.Infrastructure.Authentication;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using ThaiTuanERP2025.Infrastructure;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -117,7 +118,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+	FileProvider = new PhysicalFileProvider("D:\\ERP-Files"),
+	RequestPath = "/files/public"
+});
 
 app.Run();
 
