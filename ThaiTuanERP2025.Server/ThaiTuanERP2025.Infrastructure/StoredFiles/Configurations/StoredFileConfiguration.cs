@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ThaiTuanERP2025.Domain.Files.Entities;
 
-namespace ThaiTuanERP2025.Infrastructure.Files.Configurations
+namespace ThaiTuanERP2025.Infrastructure.StoredFiles.Configurations
 {
 	public class StoredFileConfiguration : IEntityTypeConfiguration<StoredFile>
 	{
