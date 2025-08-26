@@ -23,7 +23,6 @@ namespace ThaiTuanERP2025.Infrastructure.Seeding
 				    userName: "admin",
 				    employeeCode: "ITC01",
 				    passwordHash: PasswordHasher.Hash("Th@iTu@n2025"),
-				    avatarUrl: "",
 				    role: UserRole.admin,
 				    position: "System Admin",
 				    departmentId: null,                                    // ✅

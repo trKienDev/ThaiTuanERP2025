@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Domain.Files.Entities;
 
 namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 {
@@ -20,7 +21,7 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 			builder.Property(u => u.Username).IsRequired().HasMaxLength(100);
 			builder.Property(u => u.EmployeeCode).IsRequired().HasMaxLength(50);
 			builder.Property(u => u.PasswordHash).IsRequired();
-			builder.Property(u => u.AvatarUrl).HasMaxLength(500);
+			builder.Property(u => u.AvatarFileId).IsRequired(false);
 			builder.Property(u => u.Role).HasMaxLength(100); // nhân viên, quản lý, giám đốc, PGĐ, TGĐ
 			builder.Property(u => u.Position).HasMaxLength(100); // nhân viên IT
 
@@ -40,6 +41,11 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 				.HasForeignKey(u => u.DepartmentId)
 				.IsRequired(false)
 				.OnDelete(DeleteBehavior.Restrict);
+			builder.HasOne<StoredFile>()
+				.WithMany()
+				.HasForeignKey(u => u.AvatarFileId)
+				.IsRequired(false)	
+				.OnDelete(DeleteBehavior.SetNull);
 			builder.HasOne(u => u.Manager).WithMany().HasForeignKey(u => u.ManagerId).OnDelete(DeleteBehavior.Restrict);
 		}
 	}

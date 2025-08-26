@@ -1,39 +1,40 @@
 import { Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Observable, switchMap } from "rxjs";
 import { ApiResponse } from "../../../core/models/api-response.model";
-import { CreateUserModel, UserModel } from "../models/user.model";
+import {  CreateUserRequest, UpdateUserRequest, UserDto } from "../models/user.model";
 import { handleApiResponse$ } from "../../../core/utils/handle-api-response.operator";
+import { FileService } from "../../../core/services/api/file.service";
 
 @Injectable({ providedIn: 'root'})
 export class UserService {
       private readonly API_URL = `${environment.apiUrl}/user`;
-      constructor(private http: HttpClient) {}
+      constructor(private http: HttpClient, private fileService: FileService) {}
 
-      createUser(user: CreateUserModel): Observable<UserModel> {
-            return this.http.post<ApiResponse<UserModel>>(this.API_URL, user)
-                  .pipe(handleApiResponse$<UserModel>());
+      createUser(user: CreateUserRequest): Observable<UserDto> {
+            return this.http.post<ApiResponse<UserDto>>(this.API_URL, user)
+                  .pipe(handleApiResponse$<UserDto>());
       } 
 
-      getAllUsers(): Observable<UserModel[]> {
-            return this.http.get<ApiResponse<UserModel[]>>(`${this.API_URL}/all`)
-                  .pipe(handleApiResponse$<UserModel[]>());
+      getAllUsers(): Observable<UserDto[]> {
+            return this.http.get<ApiResponse<UserDto[]>>(`${this.API_URL}/all`)
+                  .pipe(handleApiResponse$<UserDto[]>());
       }
 
-      getCurrentuser(): Observable <UserModel> {
-            return this.http.get<ApiResponse<UserModel>>(`${this.API_URL}/me`)
-                  .pipe(handleApiResponse$<UserModel>());
+      getCurrentuser(): Observable <UserDto> {
+            return this.http.get<ApiResponse<UserDto>>(`${this.API_URL}/me`)
+                  .pipe(handleApiResponse$<UserDto>());
       }
 
-      getUserById(id: string): Observable <UserModel> {
-            return this.http.get<ApiResponse<UserModel>>(`${this.API_URL}/${id}`)
-                  .pipe(handleApiResponse$<UserModel>());
+      getUserById(id: string): Observable <UserDto> {
+            return this.http.get<ApiResponse<UserDto>>(`${this.API_URL}/${id}`)
+                  .pipe(handleApiResponse$<UserDto>());
       }
 
-      updateUser(id: string, user: Partial<UserModel>): Observable<UserModel> {
-            return this.http.put<ApiResponse<UserModel>>(`${this.API_URL}/${id}`, user)
-                  .pipe(handleApiResponse$<UserModel>());
+      updateUser(id: string, user: UpdateUserRequest): Observable<UserDto> {
+            return this.http.put<ApiResponse<UserDto>>(`${this.API_URL}/${id}`, user)
+                  .pipe(handleApiResponse$<UserDto>());
       }
 
       deleteUser(id: string): Observable<void> {
@@ -41,9 +42,14 @@ export class UserService {
                   .pipe(handleApiResponse$<void>());
       }
 
-      updateAvatar(file: File): Observable<string> {
-            const formData = new FormData();
-            return this.http.post<ApiResponse<string>>(`${this.API_URL}/upload-avatar`, formData)
-                  .pipe(handleApiResponse$<string>());
+      updateAvatar(file: File, userId: string): Observable<string> {
+            return this.fileService.uploadFile(file, 'account', 'user', userId, false).pipe(
+                  switchMap((uploadResult) => {
+                        console.log('upload result: ', uploadResult);
+                        const body = { fileId: uploadResult.id };
+                        return this.http.put<ApiResponse<string>>(`${this.API_URL}/${userId}/avatar`, body)
+                              .pipe(handleApiResponse$<string>());
+                  })
+            );
       }
 }
