@@ -12,7 +12,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public string Username { get; private set; } = string.Empty;
 		public string EmployeeCode { get; private set; } = string.Empty;
 		public string PasswordHash { get; private set; } = string.Empty;
-		public string AvatarUrl { get; private set; } = string.Empty;
+		public Guid? AvatarFileId { get; private set; }
 		public UserRole Role { get; private set; }
 		public string Position { get; private set; } = string.Empty;
 		
@@ -40,12 +40,12 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			string userName, 
 			string employeeCode,
 			string passwordHash,
-			string avatarUrl,
 			UserRole role,
 			string position,
 			Guid? departmentId,
 			Email? email = null,
-			Phone? phone = null
+			Phone? phone = null,
+			Guid? avatarFileId = null
 		) {
 			if (string.IsNullOrWhiteSpace(fullName)) throw new ArgumentException("Tên không được để trống");
 			if (string.IsNullOrWhiteSpace(userName)) throw new ArgumentException("Username không hợp lệ");
@@ -58,7 +58,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			PasswordHash = passwordHash;
 			Email = email;
 			Phone = phone;
-			AvatarUrl = avatarUrl;	
+			AvatarFileId = avatarFileId;
 			Role = role;
 			Position = position;
 			DepartmentId = departmentId;
@@ -73,21 +73,15 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			ManagerId = managerId;
 		}
 		public bool HasRole(UserRole role) => Role == role;
-		public void SetSuperAdmin(bool isSuper) {
-			IsSuperAdmin = isSuper;
-		}
-		public void Activate() {
-			IsActive = true;
-		}
-		public void Deactivate()
-		{
-			IsActive = false;
-		}
+		public void SetSuperAdmin(bool isSuper) => IsSuperAdmin = isSuper;
+		public void Activate() => IsActive = true;
+		public void Deactivate() => IsActive = false;
 		
 		public void ChangePassword(string newPasswordHash) {
 			if (string.IsNullOrWhiteSpace(newPasswordHash)) throw new ArgumentException("Mật khẩu mới không hợp lệ");
 			PasswordHash = newPasswordHash;
 		}
+
 		public void UpdateProfile(
 			string fullName,
 			string avatarUrl,
@@ -98,17 +92,14 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		{
 			if (string.IsNullOrWhiteSpace(fullName)) throw new ArgumentException("Tên không được để trống");
 			FullName = fullName;
-			AvatarUrl = avatarUrl;
 			Position = position;
 			Email = email;	
 			Phone = phone;	
 		}
-		public void SetRole(UserRole role) {
-			Role = role;
-		}
-		public void SetDepartment(Guid departmentId)
-		{
-			DepartmentId = departmentId;
-		}
+
+		public void SetRole(UserRole role) => Role = role;
+		public void SetDepartment(Guid departmentId) =>DepartmentId = departmentId;
+		public void UpdateAvatar(Guid? fileId) => AvatarFileId = fileId;
+
 	}
 }
