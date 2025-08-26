@@ -26,17 +26,21 @@ namespace ThaiTuanERP2025.Application.Files.Commands.UploadFile
 				throw new ValidationException("File", "Không tìm thấy file upload");
 
 			await _storage.EnsureReadyAsync(cancellationToken);
-			var key = BuildObjectKey(request.Module, request.Entity, request.EntityId, request.File.FileName);
+
+			var objectKey = BuildObjectKey(request.Module, request.Entity, request.EntityId, request.File.FileName);
+
 			await using var stream = await request.File.OpenReadStream(cancellationToken);
 			var contentType = string.IsNullOrWhiteSpace(request.File.ContentType) ? "application/octet-stream" : request.File.ContentType!;
-			await _storage.UploadAsync(key, stream, contentType, cancellationToken);
+
+			// Upload to local storage
+			await _storage.UploadAsync(objectKey, stream, contentType, cancellationToken);
 
 			var bucketName = ( _storage as IFileStorageInfo)?.BucketName ?? string.Empty;
 			var entity = new StoredFile
 			{
 				Id = Guid.NewGuid(),
 				Bucket = bucketName,           // (giữ trường nếu schema còn; hạ tầng quản bucket → có thể để trống/ghi tên cố định khi save)
-				ObjectKey = key,
+				ObjectKey = objectKey,
 				FileName = request.File.FileName,
 				ContentType = contentType,
 				Size = request.File.Length,
@@ -49,7 +53,7 @@ namespace ThaiTuanERP2025.Application.Files.Commands.UploadFile
 			await _unitOfWork.StoredFiles.AddAsync(entity);
 			await _unitOfWork.SaveChangesAsync();
 
-			return new UploadFileResult(entity.Id, key, entity.Size, entity.FileName, entity.ContentType);
+			return new UploadFileResult(entity.Id, objectKey, entity.Size, entity.FileName, entity.ContentType);
 
 		}
 
