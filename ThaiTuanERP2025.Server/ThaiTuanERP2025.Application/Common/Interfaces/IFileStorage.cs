@@ -8,8 +8,9 @@ namespace ThaiTuanERP2025.Application.Common.Interfaces
 {
 	public interface IFileStorage
 	{
-		Task EnsureBucketAsync(string bucket, CancellationToken cancellationToken);
-		Task UploadAsync(string bucket, string objectKey, Stream content, string contentType, CancellationToken cancellationToken);
-		Task<string> GetPresignedGetUrlAsync(string bucket, string objectKey, TimeSpan expiry, CancellationToken cancellationToken);
+		Task EnsureReadyAsync(CancellationToken cancellationToken);
+		Task UploadAsync(string objectKey, Stream content, string contentType, CancellationToken cancellationToken);
+		Task<string> GetPresignedGetUrlAsync(string objectKey, CancellationToken cancellationToken);
+		Task RemoveAsync(string objectKey, CancellationToken cancellationToken);
 	}
 }
