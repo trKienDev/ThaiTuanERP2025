@@ -1,0 +1,31 @@
+<div class="ledger-shell">
+  <aside class="ledger-shell__sidebar">
+    <button
+      class="sidebar__item"
+      [class.active]="view === 'type'"
+      (click)="selectView('type')">
+      Loại tài khoản hoạch toán
+    </button>
+
+    <button
+      class="sidebar__item"
+      [class.active]="view === 'account'"
+      (click)="selectView('account')">
+      Tài khoản hoạch toán
+    </button>
+  </aside>
+
+  <main class="ledger-shell__content">
+    <!-- Tab: Loại tài khoản kế toán -->
+    <section *ngIf="view === 'type'" class="panel">
+      <!-- Không cần emit typeSelected nữa -->
+      <finance-ledger-account-type></finance-ledger-account-type>
+    </section>
+
+    <!-- Tab: Tài khoản kế toán -->
+    <section *ngIf="view === 'account'" class="panel">
+      <!-- Luôn hiển thị toàn bộ ledger-account -->
+      <finance-ledger-account></finance-ledger-account>
+    </section>
+  </main>
+</div>

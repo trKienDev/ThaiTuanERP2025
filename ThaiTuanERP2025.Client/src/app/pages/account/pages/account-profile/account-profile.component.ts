@@ -3,7 +3,7 @@ import { Component, OnInit } from "@angular/core";
 import { UserService } from "../../services/user.service";
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { environment } from "../../../../../environments/environment";
-import { UserModel } from "../../models/user.model";
+import { UserDto } from "../../models/user.model";
 
 @Component({
       selector: 'account-profile',
@@ -14,21 +14,20 @@ import { UserModel } from "../../models/user.model";
 })
 export class AccountProfileComponent implements OnInit {
       baseUrl: string = environment.baseUrl;
-      user: UserModel | null = null;
+      user: UserDto | null = null;
       selectedAvatarFile: File | null = null;
       isUploading: boolean = false;
       
       constructor(private userService: UserService, private snackBar: MatSnackBar) {}
 
       ngOnInit(): void {
-            console.log('Account profile');
+            this.loadCurrentUser();
+      }
+
+      private loadCurrentUser(): void {
             this.userService.getCurrentuser().subscribe({
-                  next: (data) => {
-                        this.user = data;
-                  },
-                  error: () => {
-                        alert('Không thể lấy thông tin người dùng hiện tại');
-                  }
+                  next: (data) => this.user = data,
+                  error: () => this.snackBar.open('Không thể lấy thông tin người dùng', 'Đóng', { duration: 3000 }),
             });
       }
 
@@ -38,11 +37,9 @@ export class AccountProfileComponent implements OnInit {
       }
 
       get avatarSrc(): string {
-            if (this.user?.avatarUrl) {
-                  if (this.user.avatarUrl.startsWith('data:image')) {
-                        return this.user.avatarUrl; // base64 → dùng trực tiếp
-                  }
-                  return this.baseUrl + this.user.avatarUrl; // server path
+            console.log('user: ', this.user);
+            if (this.user?.avatarFileObjectKey) {
+                  return this.baseUrl + '/files/public/' + this.user.avatarFileObjectKey;
             }
             return 'default-user-avatar.jpg';
       }
@@ -53,41 +50,49 @@ export class AccountProfileComponent implements OnInit {
 
                   const allowedTypes = ['image/jpg', 'image/jpeg', 'image/png'];
                   if(!allowedTypes.includes(file.type)) {
-                        alert('Chỉ nhận ảnh .JPEG, .JPG hoặc .PNG');
+                        this.snackBar.open('Chỉ hỗ trợ ảnh .JPEG, .JPG hoặc .PNG', 'Đóng', { duration: 3000 });
                         return;
                   }
 
                   this.selectedAvatarFile = file;
+
+                  // preview ảnh bằng base64
                   const reader = new FileReader();
                   reader.onload = () => {
                         if(this.user) {
-                              this.user.avatarUrl = reader.result as string;
+                              this.user.avatarFileId = reader.result as string;
                         }
                   };
                   reader.readAsDataURL(file); 
             }
       }
+      
       uploadAvatar(): void {
             if(!this.selectedAvatarFile) {
                   this.snackBar.open('Vui lòng chọn avatar trước', 'Đóng', { duration: 3000 });
                   return;
             }
 
-            this.isUploading = true;
+            if(!this.user) 
+                  return;
 
-            this.userService.updateAvatar(this.selectedAvatarFile).subscribe({
-                  next: (data) => {
-                        this.isUploading = false;
-                        if(this.user) {
-                              this.user.avatarUrl = data;
-                        }
+            this.isUploading = true;
+            if (!this.user || !this.user.id) {
+                  this.snackBar.open('Không xác định được ID người dùng', 'Đóng', { duration: 3000 });
+                  return;
+            }
+
+            this.userService.updateAvatar(this.selectedAvatarFile, this.user.id).subscribe({
+                  next: (url) => {
+                        this.user!.avatarFileId = url; // gán đường dẫn mới trả về
                         this.selectedAvatarFile = null;
-                        this.snackBar.open('Cập nhật ảnh đại diện thành công', 'Đóng', { duration: 3000 });
+                        this.snackBar.open('Cập nhật avatar thành công', 'Đóng', { duration: 3000 });
+                        this.isUploading = false;
                   }, 
                   error: (err) => {
-                         this.isUploading = false;
+                        this.isUploading = false;
                         console.error('Upload avatar error: ', err);
-                         this.snackBar.open('Không thể cập nhật ảnh đại diện', 'Đóng', { duration: 3000 });
+                        this.snackBar.open('Không thể cập nhật ảnh đại diện', 'Đóng', { duration: 3000 });
                   }
             })
       }

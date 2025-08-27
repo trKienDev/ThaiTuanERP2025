@@ -16,10 +16,12 @@ namespace ThaiTuanERP2025.Application.Account.Dtos
 		public string Position { get; set; } = default!;
 		public string? Email { get; set; }
 		public string? Phone { get; set; }
-		public string AvatarUrl { get; set; } = default!;
+
+		public string? AvatarFileId { get; set; }
+		public string? AvatarFileObjectKey { get; set; }
 
 		public UserRole Role { get; set; } = default!;
-		public Guid DepartmentId { get; set; }
+		public Guid? DepartmentId { get; set; }
 
 		public DepartmentDto? Department { get; set; } = default!;
 	}

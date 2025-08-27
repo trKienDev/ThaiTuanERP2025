@@ -10,7 +10,9 @@
                         <input type="file" id="avatar-input" hidden accept="image/png, image/jpeg, image/jpg" (change)="onAvatarSelected($event)">
                   </div>
                   <div class="save-avatar-wrapper d-flex justify-content-center">
-                        <button class="button-1" (click)="uploadAvatar()">Cập nhật avatar</button>
+                        <button class="button-1" (click)="uploadAvatar()" [disabled]="isUploading">
+                              {{ isUploading ? 'Đang tải' : 'Cập nhật avatar' }}
+                        </button>
                   </div>
             </div>
             <div class="col-right">

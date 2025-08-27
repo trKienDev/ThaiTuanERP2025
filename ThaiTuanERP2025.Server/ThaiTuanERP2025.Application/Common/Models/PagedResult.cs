@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace ThaiTuanERP2025.Application.Common.Models
 {
-	public record class PagedResult<T>(IReadOnlyList<T> Items, int TotalCount, int Page, int PageSize);
+	public record PagedResult<T>(IReadOnlyList<T> Items, int TotalCount, int Page, int PageSize);
 }

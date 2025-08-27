@@ -9,7 +9,7 @@ import { AbstractControl, NonNullableFormBuilder } from "@angular/forms";
       template: `
             <div class="alert-message danger-alert" role="alert" *ngIf="visible">
                   <ng-content></ng-content>
-                  <button type="button" class="close-btn" (click)="closed=true" aria-label="Đóng">x</button>
+                  <button type="button" class="close-btn" (click)="closed=true" aria-label="Đóng">×</button>
             </div>
       `
 })

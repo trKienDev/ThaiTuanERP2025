@@ -1,0 +1,14 @@
+<div class="cashout-shell">
+      <aside class="cashout-shell__sidebar">
+            <button class="sidebar__item" [class.active]="view === 'group'" (click)="selectView('group')">Nhóm khoản tiền ra</button>
+            <button class="sidebar__item" [class.active]="view === 'code'" (click)="selectView('code')">Khoản tiền ra</button>
+      </aside>
+      <main class="cashout-shell__content">
+            <section *ngIf="view === 'group'" class="panel">
+                  <finance-cashout-group></finance-cashout-group>
+            </section>
+            <section *ngIf="view === 'code'" class="panel">
+                  <finance-cashout-code></finance-cashout-code>
+            </section>
+      </main>
+</div>
