@@ -22,8 +22,8 @@ namespace ThaiTuanERP2025.Api.Controllers.Files
 			_mediator = mediator;
 		}
 
-		[HttpPost("upload")]
-		public async Task<ActionResult<ApiResponse<UploadFileResult>>> Upload(IFormFile file, [FromForm] string module, [FromForm] string entity, [FromForm] string? entityId = null,[FromForm] bool isPublic = false, CancellationToken cancellationToken = default) {
+		[HttpPost("upload-single")]
+		public async Task<ActionResult<ApiResponse<UploadFileResult>>> UploadSingle(IFormFile file, [FromForm] string module, [FromForm] string entity, [FromForm] string? entityId = null,[FromForm] bool isPublic = false, CancellationToken cancellationToken = default) {
 			if(file is null || file.Length == 0) 
 				return BadRequest(ApiResponse<UploadFileResult>.Fail("Không tìm thấy file tải lên"));
 

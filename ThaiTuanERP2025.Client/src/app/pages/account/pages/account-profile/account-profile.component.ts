@@ -31,19 +31,15 @@ export class AccountProfileComponent implements OnInit {
             });
       }
 
-
-
       triggerAvatarUpload(): void {
             const fileInput = document.getElementById('avatar-input') as HTMLInputElement;
             fileInput?.click();
       }
 
       get avatarSrc(): string {
-            if (this.user?.avatarUrl) {
-                  if (this.user.avatarUrl.startsWith('data:image')) {
-                        return this.user.avatarUrl; // base64 → dùng trực tiếp
-                  }
-                  return this.baseUrl + this.user.avatarUrl; // server path
+            console.log('user: ', this.user);
+            if (this.user?.avatarFileObjectKey) {
+                  return this.baseUrl + '/files/public/' + this.user.avatarFileObjectKey;
             }
             return 'default-user-avatar.jpg';
       }
@@ -64,7 +60,7 @@ export class AccountProfileComponent implements OnInit {
                   const reader = new FileReader();
                   reader.onload = () => {
                         if(this.user) {
-                              this.user.avatarUrl = reader.result as string;
+                              this.user.avatarFileId = reader.result as string;
                         }
                   };
                   reader.readAsDataURL(file); 
@@ -88,7 +84,7 @@ export class AccountProfileComponent implements OnInit {
 
             this.userService.updateAvatar(this.selectedAvatarFile, this.user.id).subscribe({
                   next: (url) => {
-                        this.user!.avatarUrl = url; // gán đường dẫn mới trả về
+                        this.user!.avatarFileId = url; // gán đường dẫn mới trả về
                         this.selectedAvatarFile = null;
                         this.snackBar.open('Cập nhật avatar thành công', 'Đóng', { duration: 3000 });
                         this.isUploading = false;

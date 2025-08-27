@@ -10,6 +10,6 @@ namespace ThaiTuanERP2025.Infrastructure.StoredFiles.Configurations
 	{
 		public string Bucket { get; set; } = "files";
 		public int PresignedExpirySeconds { get; set; } = 300;
-		public string? BasePath { get; set; } = "D:\\ERP-Files";
+		public string? BasePath { get; set; } = "E:\\KIEN\\task\\ThaiTuanERP2025.drive";
 	}
 }

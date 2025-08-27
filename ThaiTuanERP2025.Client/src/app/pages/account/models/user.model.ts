@@ -8,7 +8,10 @@ export interface UserDto {
       employeeCode: string;
       email?: string;
       password: string;
-      avatarUrl?: string;
+
+      avatarFileId?: string;
+      avatarFileObjectKey?: string;
+
       role: UserRole;
       phone?: string;
       departmentId?: string;  

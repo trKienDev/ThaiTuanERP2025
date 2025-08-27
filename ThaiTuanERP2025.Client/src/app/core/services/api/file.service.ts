@@ -20,7 +20,7 @@ export class FileService {
                   formData.append('entityId', entityId);
             formData.append('isPublic', String(isPublic));
 
-            return this.http.post<ApiResponse<UploadFileResult>>(`${this.API_URL}/upload`, formData)
+            return this.http.post<ApiResponse<UploadFileResult>>(`${this.API_URL}/upload-single`, formData)
                   .pipe(handleApiResponse$<UploadFileResult>());
       }
 
