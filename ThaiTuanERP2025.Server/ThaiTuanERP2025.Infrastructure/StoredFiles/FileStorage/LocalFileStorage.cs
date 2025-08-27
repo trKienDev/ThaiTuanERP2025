@@ -15,7 +15,7 @@ namespace ThaiTuanERP2025.Infrastructure.StoredFiles.FileStorage
 		private readonly int _expirySeconds;
 		public string BucketName => "local-files";
 		public LocalFileStorage(IOptions<FileStorageOptions> options) {
-			_basePath = options.Value.BasePath ?? "D:\\ERP-Files";
+			_basePath = options.Value.BasePath ?? "E:\\KIEN\\task\\ThaiTuanERP2025.drive";
 			_expirySeconds = options.Value.PresignedExpirySeconds;
 		}
 
