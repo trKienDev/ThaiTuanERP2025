@@ -1,0 +1,39 @@
+<h2 mat-dialog-title>Nhóm dòng tiền ra mới</h2>
+
+<div mat-dialog-content [formGroup]="form">
+      <mat-form-field appearance="outline">
+            <mat-label>Tên nhóm dòng tiền ra</mat-label>
+            <input matInput formControlName="name" placeholder="Tên nhóm dòng tiền ra">
+            <mat-error *ngIf="cashoutGroupRequestForm.name.hasError('required')">Bắt buộc</mat-error>
+            <mat-error *ngIf="cashoutGroupRequestForm.name.hasError('maxlength')">Tối đa 200 ký tự</mat-error>
+            <mat-error *ngIf="cashoutGroupRequestForm.name.hasError('nameToken')">Tên nhóm đã tồn tại</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Mô tả</mat-label>
+            <textarea matInput formControlName="description" rows="3"></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Nhóm cha (tuỳ chọn)</mat-label>
+            <mat-select formControlName="parentId">
+                  <mat-option [value]="null">-- Không có nhóm cha --</mat-option>
+                  <mat-option *ngFor="let group of parentOptions" [value]="group.id">
+                        {{ group.name }}
+                  </mat-option>
+            </mat-select>
+      </mat-form-field>
+
+      <mat-checkbox formControlName="isActive">Kích hoạt</mat-checkbox>
+
+      <div *ngIf="errorMessages.length" class="mt-2">
+            <div *ngFor="let msg of errorMessages" class="text-red-600 text-sm">• {{ msg }}</div>
+      </div>
+
+</div>
+<div mat-dialog-actions align="end">
+      <button mat-button (click)="cancel()" [disabled]="saving">Hủy</button>
+      <button mat-raised-button color="primary" (click)="submit()" [disabled]="saving">
+            {{ saving ? 'Đang lưu...' : 'Lưu' }}
+      </button>
+</div>

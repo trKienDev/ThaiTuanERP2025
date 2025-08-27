@@ -1,0 +1,10 @@
+<button mat-raised-button color="primary" (click)="openCreateTaxModal()">
+      + Thêm Thuế
+</button>
+
+<!-- phần danh sách có sẵn của bạn -->
+<ul>
+      <li *ngFor="let tax of taxes">
+            {{ tax.policyName }} — {{ tax.rate * 100 }}%
+      </li>
+</ul>

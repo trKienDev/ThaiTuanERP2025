@@ -8,7 +8,7 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
       template: `
             <p class="alert-message" [ngClass]="type" role="alert" *ngIf="visible">
                   <ng-content></ng-content>
-                  <button type="button" class="close-btn" (click)="close()" aria-label="Đóng">x</button>
+                  <button type="button" class="close-btn" (click)="close()" aria-label="Đóng">×</button>
             </p>
       `
 })

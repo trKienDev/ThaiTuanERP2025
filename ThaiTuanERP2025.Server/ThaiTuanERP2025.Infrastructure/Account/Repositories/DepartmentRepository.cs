@@ -21,7 +21,7 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 			await _dbContext.SaveChangesAsync();
 		}
 
-		public async Task<bool> ExistAsync(Guid departmentId)
+		public async Task<bool> ExistAsync(Guid? departmentId)
 		{
 			return await _dbContext.Departments.AnyAsync(d => d.Id == departmentId);
 		}

@@ -4,17 +4,21 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using ThaiTuanERP2025.Domain.Common;
 
 namespace ThaiTuanERP2025.Domain.Account.Entities
 {
-	public class Group
+	public class Group : AuditableEntity
 	{
-		public Guid Id { get; private set; }
 		public Guid AdminId { get; private set; }
 		public string Name { get; private set; } = string.Empty;
 		public string Description { get; private set; } = string.Empty;
 
 		public ICollection<UserGroup> UserGroups { get; private set; }
+
+		public User CreatedByUser { get; set; } = null!;
+		public User? ModifiedByUser { get; set; }
+		public User? DeletedByUser { get; set; }
 
 		private Group()
 		{
