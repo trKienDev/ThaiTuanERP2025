@@ -10,6 +10,7 @@ using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Files.Entities;
 using ThaiTuanERP2025.Domain.Finance.Entities;
 using ThaiTuanERP2025.Domain.Partner.Entities;
@@ -36,9 +37,16 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<LedgerAccountType> LedgerAccountTypes => Set<LedgerAccountType>();
 		public DbSet<LedgerAccount> LedgerAccounts => Set<LedgerAccount>();
 		public DbSet<Tax> Taxes => Set<Tax>();
+		public DbSet<WithholdingTaxType> WithholdingTaxTypes => Set<WithholdingTaxType>();
 		public DbSet<CashoutGroup> CashOutGroups => Set<CashoutGroup>();
 		public DbSet<CashoutCode> CashOutCodes => Set<CashoutCode>();
 		public DbSet<StoredFile> StoredFiles => Set<StoredFile>();
+		public DbSet<BankAccount> BankAccounts => Set<BankAccount>();
+		public DbSet<Supplier> Suppliers => Set<Supplier>();
+		public DbSet<Invoice> Invoices => Set<Invoice>();
+		public DbSet<InvoiceLine> InvoiceLines => Set<InvoiceLine>();
+		public DbSet<InvoiceFile> InvoiceFiles => Set<InvoiceFile>();
+		public DbSet<InvoiceFollwer> InvoiceFollwers => Set<InvoiceFollwer>();	
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

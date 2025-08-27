@@ -31,6 +31,8 @@ namespace ThaiTuanERP2025.Application.Finance.Mappings
 				.ForMember(d => d.PostingLedgerAccountNumber, o => o.MapFrom(s => s.PostingLedgerAccount.Number))
 				.ForMember(d => d.PostingLedgerAccountNumber, o => o.MapFrom(s => s.PostingLedgerAccount.Name));
 
+			CreateMap<WithholdingTaxType, WithholdingTaxTypeDto>();
+
 			CreateMap<CashoutGroup, CashoutGroupDto>()
 				.ConstructUsing((src, context) =>
 					new CashoutGroupDto(

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,8 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 	public class UserGroupRepository : BaseRepository<UserGroup>, IUserGroupRepository
 	{
 		private ThaiTuanERP2025DbContext DbContext => (ThaiTuanERP2025DbContext)_context;
-		public UserGroupRepository(ThaiTuanERP2025DbContext context) : base(context)
+		public UserGroupRepository(ThaiTuanERP2025DbContext context, IConfigurationProvider configurationProvider) 
+			: base(context, configurationProvider)
 		{
 		}
 
