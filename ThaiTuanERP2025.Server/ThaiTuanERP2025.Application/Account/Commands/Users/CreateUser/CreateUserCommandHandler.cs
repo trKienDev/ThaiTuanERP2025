@@ -38,7 +38,6 @@ namespace ThaiTuanERP2025.Application.Account.Commands.Users.CreateUser
 					userName: request.Username,
 					employeeCode: request.EmployeeCode,
 					passwordHash: PasswordHasher.Hash(request.Password),
-					avatarUrl: request.AvatarUrl,
 					role: role,
 					position: request.Position,
 					departmentId: request.DepartmentId,

@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { PagedResult } from "../../../shared/models/paged-result.model";
+import { PagedResult } from "../../../core/models/paged-result.model";
 import { BankAccountDto, CreateBankAccountCommand, UpdateBankAccountCommand } from "../models/bank-account.model";
 import { handleApiResponse$ } from "../../../core/utils/handle-api-response.operator";
 import { ApiResponse } from "../../../core/models/api-response.model";

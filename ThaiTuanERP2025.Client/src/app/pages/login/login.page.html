@@ -18,10 +18,7 @@
                               <img [src]="'assets/icons/' + (showPassword ? 'eye-off.svg' : 'eye.svg')" class="toggle-password" width="24" height="24" alt="Toggle visibility" (click)="togglePassword()" />
                         </div>
                   </div>
-                  <div class="alert-message danger-alert" *ngIf="submitted && loginForm.get('password')?.invalid && !alertClosed.password">
-                        Mật khẩu không được để trống
-                        <button type="button" class="close-btn" (click)="closeAlert('password')">×</button>
-                  </div>
+                  <app-field-error [control]="loginForm.get('password')" [submitted]="submitted">Mật khẩu không được để trống</app-field-error>
             </div>
             <app-alert-message [visible]="!!message" type="danger-alert" (closed)="message = null">{{ message }}</app-alert-message>
             <div class="button-wrapper">

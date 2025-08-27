@@ -5,10 +5,9 @@ import { UserService } from "../../services/user.service";
 import { GroupService } from "../../services/group.service";
 import { trigger, transition, style, animate } from '@angular/animations';
 import { forkJoin } from 'rxjs';
-import { handleApiResponse } from "../../../../core/utils/handle-api-response.utils";
 import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
-import { UserModel } from "../../models/user.model";
 import { CreateGroupModel, GroupModel } from "../../models/group.model";
+import { UserDto } from "../../models/user.model";
 
 @Component({
       selector: 'add-group-modal',
@@ -38,7 +37,7 @@ export class AddGroupModalComponent implements OnInit {
             adminUserId: '',
       };
       form!: FormGroup;
-      users: UserModel[] = [];
+      users: UserDto[] = [];
       memberIds: string[] = [];
       errorMessages: string[] = [];
 

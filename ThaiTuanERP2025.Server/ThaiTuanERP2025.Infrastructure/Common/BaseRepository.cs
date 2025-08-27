@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Common.Persistence;
+using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Common
@@ -18,6 +19,30 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		{
 			_context = context ?? throw new ArgumentNullException(nameof(context));
 			_dbSet = _context.Set<T>();
+		}
+
+		public virtual Task<List<T>> ListAsync(Func<IQueryable<T>, IQueryable<T>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default)
+		{
+			if (builder == null) throw new ArgumentNullException(nameof(builder));
+			var query = asNoTracking ? _dbSet.AsNoTracking() : _dbSet.AsQueryable();
+			return builder(query).ToListAsync(cancellationToken);
+		}
+		public virtual Task<T?> SingleOrDefaultAsync(Func<IQueryable<T>, IQueryable<T>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default)
+		{
+			if (builder == null) throw new ArgumentNullException(nameof(builder));
+			var query = asNoTracking ? _dbSet.AsNoTracking() : _dbSet.AsQueryable();
+			return builder(query).SingleOrDefaultAsync(cancellationToken);
+		}
+		public virtual Task<T?> SingleOrDefaultIncludingAsync(Expression<Func<T, bool>> predicate, bool asNoTracking = true, CancellationToken cancellationToken = default, params Expression<Func<T, object>>[] includes)
+		{
+			if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+			IQueryable<T> query = asNoTracking ? _dbSet.AsNoTracking() : _dbSet.AsQueryable();
+			if (includes != null)
+			{
+				foreach (var include in includes)
+					query = query.Include(include);
+			}
+			return query.SingleOrDefaultAsync(predicate, cancellationToken);
 		}
 
 		public IQueryable<T> Query(bool asNoTracking = true)
@@ -73,7 +98,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 
 			IQueryable<T> query = _dbSet.AsNoTracking().Where(predicate);
 			if (includes != null)
-				foreach (var include in includes)
+				foreach (var include in includes.Distinct())
 					query = query.Include(include);
 
 			return await query.ToListAsync();
@@ -100,7 +125,20 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		public void Delete(T entity)
 		{
 			if (entity == null) throw new ArgumentNullException(nameof(entity));
-			_dbSet.Remove(entity);
+
+			// nếu entity là AuditableEntity thì xóa mềm
+			if (entity is AuditableEntity auditable)
+			{
+				auditable.IsDeleted = true;
+				auditable.DeletedDate = DateTime.UtcNow;
+				// auditable.DeletedByUserId = _currentUserService.UserId; // nếu bạn đã có service người dùng hiện tại
+				_dbSet.Update(entity); // update thay vì remove
+			}
+			else
+			{
+				// fallback: hard delete
+				_dbSet.Remove(entity);
+			}
 		}
 	}
 }

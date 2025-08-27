@@ -1,0 +1,134 @@
+.tax-form {
+  padding: 1rem;
+  &__header {
+    margin-bottom: 1rem;
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 0 0 .25rem;
+    }
+    .hint {
+      margin: 0;
+      color: #666;
+      font-size: .9rem;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: .75rem;
+    max-width: 720px;
+  }
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+
+  &--row textarea { width: 100%; }
+  &--inline {
+    flex-direction: row;
+    align-items: center;
+    gap: .5rem;
+  }
+}
+
+label { font-weight: 500; }
+.req { color: #d00; }
+
+input[type="text"],
+input[type="number"],
+textarea {
+  padding: .5rem .6rem;
+  border: 1px solid var(--default-border, #ccc);
+  border-radius: .5rem;
+  outline: none;
+}
+
+.error {
+  color: #c62828;
+  font-size: .8125rem;
+}
+
+.actions {
+  margin-top: .5rem;
+  button {
+    padding: .5rem .9rem;
+    border: none;
+    border-radius: .5rem;
+    cursor: pointer;
+  }
+}
+
+.server-message {
+  margin-top: .75rem;
+}
+
+/* optional: simple switch style */
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.lookup {
+  position: relative;
+
+  input {
+    width: 100%;
+    padding-right: 2rem; // chừa chỗ nút clear
+  }
+
+  &__clear {
+    position: absolute;
+    right: .4rem;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  &__dropdown {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-top: .25rem;
+    max-height: 260px;
+    overflow: auto;
+    background: #fff;
+    border: 1px solid var(--default-border, #ddd);
+    border-radius: .5rem;
+    z-index: 5;
+    padding: .25rem 0;
+    box-shadow: 0 8px 24px rgba(0,0,0,.06);
+  }
+
+  &__option {
+    padding: .5rem .75rem;
+    display: flex;
+    flex-direction: column;
+    gap: .1rem;
+    cursor: pointer;
+
+    &:hover { background: #f6f7f8; }
+
+    .opt-main {
+      display: flex;
+      gap: .25rem;
+      align-items: baseline;
+    }
+    .opt-number { font-weight: 600; }
+    .opt-name { color: #555; }
+    .opt-path { color: #888; }
+  }
+
+  &__empty {
+    padding: .5rem .75rem;
+    color: #777;
+  }
+}

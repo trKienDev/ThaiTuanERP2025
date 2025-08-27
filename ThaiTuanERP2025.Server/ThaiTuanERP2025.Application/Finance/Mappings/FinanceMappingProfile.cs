@@ -1,9 +1,4 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Finance.Dtos;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Domain.Finance.Entities;
@@ -25,6 +20,38 @@ namespace ThaiTuanERP2025.Application.Finance.Mappings
 				.ForMember(dest => dest.BudgetPeriodName, opt => opt.MapFrom(src => $"{src.BudgetPeriod.Month:D2}/{src.BudgetPeriod.Year}"));
 
 			CreateMap<BankAccount, BankAccountDto>();
+
+			CreateMap<LedgerAccountType, LedgerAccountTypeDto>();
+
+			CreateMap<LedgerAccount, LedgerAccountDto>()
+				.ForCtorParam(nameof(LedgerAccountDto.LedgerAccountTypeName), opt => opt.MapFrom(src => src.LedgerAccountType.Name))
+				.ForCtorParam(nameof(LedgerAccountDto.ParentLedgerAccountId),opt => opt.MapFrom(src => src.ParentLedgerAccountId));
+
+			CreateMap<Tax, TaxDto>()
+				.ForMember(d => d.PostingLedgerAccountNumber, o => o.MapFrom(s => s.PostingLedgerAccount.Number))
+				.ForMember(d => d.PostingLedgerAccountNumber, o => o.MapFrom(s => s.PostingLedgerAccount.Name));
+
+			CreateMap<CashoutGroup, CashoutGroupDto>()
+				.ConstructUsing((src, context) =>
+					new CashoutGroupDto(
+						src.Id,
+						src.Code,
+						src.Name,
+						src.Description,
+						src.IsActive,
+						src.ParentId,
+						src.Path,
+						src.Level,
+						src.Children.Select(child => context.Mapper.Map<CashoutGroupDto>(child)).ToList()
+					)
+				);
+
+			CreateMap<CashoutCode, CashoutCodeDto>()
+				.ForMember(d => d.CashoutGroupCode, o => o.MapFrom(s => s.CashoutGroup.Code))
+				.ForMember(d => d.CashoutGroupName, o => o.MapFrom(s => s.CashoutGroup.Name))
+				.ForMember(d => d.PostingLedgerAccountId, o => o.MapFrom(s => s.PostingLedegerAccoutnId))
+				.ForMember(d => d.PostingLedgerAccountNumber, o => o.MapFrom(s => s.PostingLedgerAccount.Number))
+				.ForMember(d => d.PostingLedgerAccountName, o => o.MapFrom(s => s.PostingLedgerAccount.Name));
 		}
 	}
 }

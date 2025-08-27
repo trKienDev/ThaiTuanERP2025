@@ -1,4 +1,4 @@
-import { UserModel } from "./user.model";
+import { UserDto } from "./user.model";
 
 export interface GroupModel {
       id: string;
@@ -7,7 +7,7 @@ export interface GroupModel {
       adminId: string;
       adminName: string;
       memberCount: number;
-      members: UserModel[];
+      members: UserDto[];
 }
 
 export interface CreateGroupModel {
