@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Repositories
 {
 	public class TaxRepository : BaseRepository<Tax>, ITaxRepository
 	{
-		public TaxRepository(ThaiTuanERP2025DbContext dbContext) : base(dbContext) { }
+		public TaxRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider) { }
 
 		public Task<bool> PolicyNameExistsAsync(string policyName, Guid? excludeId = null, CancellationToken cancellationToken = default)
 		{

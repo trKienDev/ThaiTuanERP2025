@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +17,9 @@ namespace ThaiTuanERP2025.Infrastructure.StoredFiles.Repositories
 	public class StoredFilesRepository : BaseRepository<StoredFile>, IStoredFilesRepository
 	{
 		private readonly ThaiTuanERP2025DbContext _dbContext;
-		public StoredFilesRepository(ThaiTuanERP2025DbContext dbContext) : base(dbContext)
+		public StoredFilesRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider)
 		{
-			_dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+			_dbContext = dbContext;
 		}
 
 		public async Task<List<StoredFile>> ListByEntitiesAsync(string module, string entity, string entityId, CancellationToken cancellationToken)

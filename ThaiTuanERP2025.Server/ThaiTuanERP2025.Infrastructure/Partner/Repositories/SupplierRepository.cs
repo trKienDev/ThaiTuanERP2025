@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace ThaiTuanERP2025.Infrastructure.Partner.Repositories
 {
 	public class SupplierRepository : BaseRepository<Supplier>, ISupplierRepository
 	{
-		public SupplierRepository(ThaiTuanERP2025DbContext dbContext) : base(dbContext) { }
+		public SupplierRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider) { }
 
 		public Task<bool> ExistsByCodeAsync(string code, CancellationToken cancellationToken = default) {
 			return _dbSet.AnyAsync(x => x.Code == code, cancellationToken);

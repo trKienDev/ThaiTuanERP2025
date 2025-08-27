@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +15,10 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 {
 	public class UserRepository : BaseRepository<User>, IUserRepository {
 		private ThaiTuanERP2025DbContext DbContext => (ThaiTuanERP2025DbContext)_context;
-		public UserRepository(ThaiTuanERP2025DbContext context) : base(context)
+		public UserRepository(ThaiTuanERP2025DbContext context, IConfigurationProvider configurationProvider) 
+			: base(context, configurationProvider)
 		{
+
 		}
 
 		public override async Task<User?> GetByIdAsync(Guid id) {
