@@ -29,10 +29,20 @@ namespace ThaiTuanERP2025.Application.Account.Queries.Users.GetCurrentUser
 				?? throw new AppException("Không tìm thấy ID người dùng");
 			if (!Guid.TryParse(userIdClaim.Value, out Guid userId))
 				throw new AppException("Id người dùng không hợp lệ");
+
 			var user = await _unitOfWork.Users.GetByIdAsync(userId)
 				?? throw new NotFoundException("Người dùng không tồn tại");
 
-			return _mapper.Map<UserDto>(user);
+			var dto = _mapper.Map<UserDto>(user);
+			if (user.AvatarFileId.HasValue)
+			{
+				var storedFile = await _unitOfWork.StoredFiles.GetByIdAsync(user.AvatarFileId.Value);
+				if (storedFile != null)
+				{
+					dto.AvatarFileObjectKey = storedFile.ObjectKey;
+				}
+			}
+			return dto;
 		}
 	}
 }
