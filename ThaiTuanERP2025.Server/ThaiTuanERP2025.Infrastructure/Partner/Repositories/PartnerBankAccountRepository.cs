@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace ThaiTuanERP2025.Infrastructure.Partner.Repositories
 {
 	public class PartnerBankAccountRepository : BaseRepository<PartnerBankAccount>, IPartnerBankAccountRepository
 	{
-		public PartnerBankAccountRepository(ThaiTuanERP2025DbContext dbContext) : base(dbContext) { }
+		public PartnerBankAccountRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider) { }
 
 		public Task<PartnerBankAccount?> GetBySupplierIdAsync(Guid supplierId, CancellationToken cancellationToken = default) {
 			return _dbSet.FirstOrDefaultAsync(x => x.SupplierId == supplierId, cancellationToken);

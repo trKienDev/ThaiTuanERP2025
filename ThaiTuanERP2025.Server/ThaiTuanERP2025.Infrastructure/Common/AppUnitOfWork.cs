@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Account.Repositories;
 using ThaiTuanERP2025.Application.Common.Persistence;
+using ThaiTuanERP2025.Application.Expense.Repositories;
 using ThaiTuanERP2025.Application.Files.Repositories;
 using ThaiTuanERP2025.Application.Finance.Repositories;
 using ThaiTuanERP2025.Application.Partner.Repositories;
@@ -34,16 +35,23 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			IBudgetCodeRepository budgetCodes,
 			IBankAccountRepository bankAccounts,
 			IBankAccountReadRepository bankAccountRead,
-			ISupplierRepository suppliers,
 			ILedgerAccountRepository ledgerAccounts,
 			ILedgerAccountTypeRepository ledgerAccountTypes,
 			ITaxRepository taxes,
+			IWithholdingTaxTypeRepository withholdingTaxTypes,
 			ICashoutCodeRepository cashoutCodes,
 			ICashoutGroupRepository cashoutGroups,
 
+			// Expense
+			IInvoiceRepository invoices,
+			IInvoiceLineRepository invoiceLines,
+			IInvoiceFileRepository invoiceFiles,
+			IInvoiceFollowerRepository invoiceFollowers,
+
 			// Partner
-			IPartnerBankAccountRepository partnerBankAccount
-			
+			IPartnerBankAccountRepository partnerBankAccount,
+			ISupplierRepository suppliers
+
 		) {
 			_dbContext = dbContext;
 
@@ -66,10 +74,16 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			LedgerAccountTypes = ledgerAccountTypes;
 			LedgerAccounts = ledgerAccounts;
 			Taxes = taxes;
+			WithholdingTaxTypes = withholdingTaxTypes;
 			CashoutCodes = cashoutCodes;
 			CashoutGroups = cashoutGroups;
 
 			PartnerBankAccounts = partnerBankAccount;
+
+			Invoices = invoices;
+			InvoiceLines = invoiceLines;
+			InvoiceFiles = invoiceFiles;
+			InvoiceFollowers = invoiceFollowers;
 		}
 
 		public IStoredFilesRepository StoredFiles { get; }
@@ -91,8 +105,15 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		public ILedgerAccountRepository LedgerAccounts { get; }
 		public ILedgerAccountTypeRepository LedgerAccountTypes { get; }
 		public ITaxRepository Taxes { get; }
+		public IWithholdingTaxTypeRepository WithholdingTaxTypes { get; }
 		public ICashoutCodeRepository CashoutCodes { get; }
 		public ICashoutGroupRepository CashoutGroups { get; }
+
+		// Expense
+		public IInvoiceRepository Invoices { get; }
+		public IInvoiceLineRepository InvoiceLines { get; }
+		public IInvoiceFileRepository InvoiceFiles { get; }
+		public IInvoiceFollowerRepository InvoiceFollowers { get; }
 
 		public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{

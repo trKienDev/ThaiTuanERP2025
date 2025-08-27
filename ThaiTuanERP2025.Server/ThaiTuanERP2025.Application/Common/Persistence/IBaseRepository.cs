@@ -27,6 +27,8 @@ namespace ThaiTuanERP2025.Application.Common.Persistence
 		Task<List<T>> GetAllAsync();
 		Task<List<T>> GetAllIncludingAsync(params Expression<Func<T, object>>[] includes);
 
+		Task<TDto?> GetByIdProjectedAsync<TDto>(Guid id, CancellationToken cancellationToken = default);
+
 		Task AddAsync(T entity);
 		
 		void Update(T entity);

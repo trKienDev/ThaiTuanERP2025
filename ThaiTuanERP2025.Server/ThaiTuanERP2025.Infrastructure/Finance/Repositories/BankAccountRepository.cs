@@ -17,7 +17,7 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Repositories
 {
 	public class BankAccountRepository : BaseRepository<BankAccount>, IBankAccountRepository 
 	{
-		public BankAccountRepository(ThaiTuanERP2025DbContext dbContext) : base(dbContext) {}
+		public BankAccountRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider) {}
 
 		public Task<bool> ExistsDuplicateAsync(string accounNumber, string bankName, string? ownerName, Guid? excludeId = null, CancellationToken cancellationToken = default) {
 			var query = _dbSet.AsNoTracking().Where(x =>
