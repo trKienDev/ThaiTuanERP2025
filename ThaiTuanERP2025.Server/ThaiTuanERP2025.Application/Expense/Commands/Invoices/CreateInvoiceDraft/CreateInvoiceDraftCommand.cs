@@ -19,7 +19,7 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.Invoices.CreateInvoiceDra
 		string? BuyerName,
 		string? BuyerTaxCode,
 		string? BuyerAddress,
-		Guid MainFileId
+		Guid? MainFileId
 	);
 
 	public sealed record CreateInvoiceDraftCommand(CreateInvoiceDraftRequest Request) : IRequest<InvoiceDto>;
