@@ -37,7 +37,6 @@ export class AccountProfileComponent implements OnInit {
       }
 
       get avatarSrc(): string {
-            console.log('user: ', this.user);
             if (this.user?.avatarFileObjectKey) {
                   return this.baseUrl + '/files/public/' + this.user.avatarFileObjectKey;
             }

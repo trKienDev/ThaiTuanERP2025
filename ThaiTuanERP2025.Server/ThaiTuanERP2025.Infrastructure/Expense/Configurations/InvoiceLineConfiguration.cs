@@ -26,15 +26,13 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 			builder.Property(l => l.DiscountRate).HasColumnType("decimal(5, 2)");
 			builder.Property(l => l.DiscountAmount).HasColumnType("decimal(18, 2)");	
 			builder.Property(l => l.NetAmount).HasColumnType("decimal(18, 2)");
+
+			builder.Property(l => l.TaxRatePercent).HasColumnType("decimal(5, 2)").IsRequired(false);
+
 			builder.Property(l => l.VATAmount).HasColumnType("decimal(18, 2)");
 			builder.Property(l => l.WHTAmount).HasColumnType("decimal(18, 2)");
 			builder.Property(l => l.LineTotal).HasColumnType("decimal(18, 2)");
 
-			// Relationships
-			builder.HasOne(l => l.Tax)
-				.WithMany()
-				.HasForeignKey(l => l.TaxId)
-				.OnDelete(DeleteBehavior.Restrict);	
 			builder.HasOne(l => l.WHTType)
 				.WithMany()
 				.HasForeignKey(l => l.WHTTypeId)

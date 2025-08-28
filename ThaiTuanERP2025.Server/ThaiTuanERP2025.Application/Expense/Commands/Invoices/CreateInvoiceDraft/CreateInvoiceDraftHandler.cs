@@ -43,14 +43,16 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.Invoices.CreateInvoiceDra
 			await _unitOfWork.Invoices.AddAsync(invoice);
 
 			// Attach main file if provided
-			var mainLink = new InvoiceFile
-			{
-				Id = Guid.NewGuid(),
-				InvoiceId = invoice.Id,
-				FileId = request.Request.MainFileId,
-				IsMain = true
-			};
-			await _unitOfWork.InvoiceFiles.AddAsync(mainLink);
+			if(request.Request.MainFileId.HasValue) {
+				var mainLink = new InvoiceFile
+				{
+					Id = Guid.NewGuid(),
+					InvoiceId = invoice.Id,
+					FileId = request.Request.MainFileId.Value,
+					IsMain = true
+				};
+				await _unitOfWork.InvoiceFiles.AddAsync(mainLink);
+			}
 
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 

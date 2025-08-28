@@ -32,7 +32,7 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories
 			if (!string.IsNullOrWhiteSpace(keyword))
 			{
 				var kw = keyword.Trim().ToLower();
-				query = query.Where(i => i.InvoiceName.Contains(kw) || i.InvoiceNumber.Contains(kw) || i.SellerName.Contains(kw));
+				query = query.Where(i => i.InvoiceName.Contains(kw) || i.InvoiceNumber.Contains(kw));
 			}
 
 			var total = await query.CountAsync(cancellationToken);

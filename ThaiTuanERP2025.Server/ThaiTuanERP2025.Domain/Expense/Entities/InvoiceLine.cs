@@ -21,8 +21,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public decimal? DiscountAmount { get; set; } // VND
 		public decimal? NetAmount { get; set; } // tính tại handler hoặc service
 
-		public Guid? TaxId { get; set; }
-		public Tax? Tax { get; set; } // Navigation
+		public decimal? TaxRatePercent { get; set; }
 		public decimal? VATAmount { get; set; } // tính tại handler hoặc service
 
 		public Guid? WHTTypeId { get; set; }

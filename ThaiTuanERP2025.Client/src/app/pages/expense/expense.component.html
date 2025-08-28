@@ -7,6 +7,12 @@
                               <span class="expense-navbar__name">Nhà cung cấp</span>
                         </a>
                   </li>
+                  <li class="expense-navbar__item">
+                        <a class="expense-navbar__link" routerLink="/expense/invoice" routerLinkActive="selected"  [routerLinkActiveOptions]="{ exact: true }">
+                              <span class="expense-navbar__icon material-icons-round">receipt_long</span>
+                              <span class="expense-navbar__name">Hóa đơn</span>
+                        </a>
+                  </li>
             </ul>
       </nav>
 </div>

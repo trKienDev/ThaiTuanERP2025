@@ -9,7 +9,7 @@
 		public DateTime? PaymentDate { get; init; }
 
 		// Seller 
-		public string SellerName { get; init; } = default!;
+		public string? SellerName { get; init; }
 		public string SellerTaxCode { get; init; } = default!;
 		public string? SellerAddress { get; init; }
 

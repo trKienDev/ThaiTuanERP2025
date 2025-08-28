@@ -18,7 +18,7 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 			builder.Property(x => x.InvoiceNumber).IsRequired().HasMaxLength(50);
 			builder.Property(x => x.InvoiceName).IsRequired().HasMaxLength(250);
 			builder.Property(x => x.InvoiceNumber).IsRequired().HasMaxLength(50);
-			builder.Property(x => x.SellerName).IsRequired().HasMaxLength(250);
+			builder.Property(x => x.SellerName).IsRequired(false).HasMaxLength(250);
 			builder.Property(x => x.SellerTaxCode).IsRequired().HasMaxLength(50);
 			builder.Property(x => x.SellerAddress).HasMaxLength(500);
 			builder.Property(x => x.BuyerName).HasMaxLength(250);

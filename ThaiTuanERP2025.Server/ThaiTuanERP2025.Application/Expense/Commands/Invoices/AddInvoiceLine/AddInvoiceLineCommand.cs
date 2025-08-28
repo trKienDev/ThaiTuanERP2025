@@ -16,7 +16,7 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.Invoices.AddInvoiceLine
 		decimal UnitPrice,
 		decimal? DiscountRate,
 		decimal? DiscountAmount,
-		Guid? TaxId,
+		decimal? TaxRatePercent,
 		Guid? WHTTypeId
 	);
 	public sealed record AddInvoiceLineCommand(AddInvoiceLineRequest Request) : IRequest<InvoiceDto>;

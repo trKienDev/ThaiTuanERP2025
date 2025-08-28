@@ -1,9 +1,4 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Application.Expense.Dtos;
 using ThaiTuanERP2025.Domain.Exceptions;
@@ -34,7 +29,7 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.Invoices.AddInvoiceLine
 				UnitPrice = request.UnitPrice,
 				DiscountRate = request.DiscountRate,
 				DiscountAmount = request.DiscountAmount,
-				TaxId = request.TaxId,
+				TaxRatePercent = request.TaxRatePercent,
 				WHTTypeId = request.WHTTypeId
 			};
 
@@ -43,12 +38,9 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.Invoices.AddInvoiceLine
 			var discountAmount = request.DiscountAmount ?? (request.DiscountRate.HasValue ? Math.Round(grossAmount * request.DiscountRate.Value / 100m, 2) : 0m);
 			line.NetAmount = Math.Round(grossAmount - discountAmount, 2);
 
-			if (request.TaxId.HasValue)
-			{
-				var tax = await _unitOfWork.Taxes.GetByIdAsync(request.TaxId.Value) ?? throw new NotFoundException("Không tìm thấy thuế đã chọn"); ;
-				line.VATAmount = Math.Round(line.NetAmount.Value * tax.Rate / 100m, 2);
-			}
-			if(request.WHTTypeId.HasValue)
+			line.VATAmount = line.TaxRatePercent.HasValue ? Math.Round(line.NetAmount.Value * line.TaxRatePercent.Value / 100m, 2) : 0m;
+
+			if (request.WHTTypeId.HasValue)
 			{
 				var whtType = await _unitOfWork.WithholdingTaxTypes.GetByIdAsync(request.WHTTypeId.Value) ?? throw new NotFoundException("Không tìm thấy thuế TNCN đã chọn");
 				line.WHTAmount = Math.Round(line.NetAmount.Value * whtType.Rate / 100m, 2);
