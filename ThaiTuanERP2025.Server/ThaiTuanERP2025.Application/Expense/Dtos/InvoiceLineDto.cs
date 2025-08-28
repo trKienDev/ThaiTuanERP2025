@@ -10,7 +10,7 @@
 		 public decimal? DiscountRate { get; init; }
 		 public decimal? DiscountAmount { get; init; }
 		 public decimal NetAmount { get; init; }	
-		 public Guid? TaxId { get; init; }
+		 public decimal? TaxRatePercent {  get; init; }
 		 public decimal? VATAmount { get; init; }	
 		 public Guid? WHTTypeId { get; init; }
 		 public decimal? WHTAmount { get; init; }

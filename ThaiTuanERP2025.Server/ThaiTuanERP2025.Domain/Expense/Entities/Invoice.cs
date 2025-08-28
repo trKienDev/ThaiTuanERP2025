@@ -10,7 +10,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public DateTime? PaymentDate { get; set; }
 
 		// Seller
-		public string SellerName { get; set; } = default!;
+		public string? SellerName { get; set; }
 		public string SellerTaxCode { get; set; } = default!;
 		public string? SellerAddress { get; set; }
 

@@ -15,7 +15,6 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.Invoices.CreateInvoiceDra
 			RuleFor(x => x.IssueDate).NotEmpty();
 			RuleFor(x => x.SellerName).NotEmpty().MaximumLength(255);
 			RuleFor(x => x.SellerTaxCode).NotEmpty().MaximumLength(50);
-			RuleFor(x => x.MainFileId).NotEmpty();
 		}
 	}
 }
