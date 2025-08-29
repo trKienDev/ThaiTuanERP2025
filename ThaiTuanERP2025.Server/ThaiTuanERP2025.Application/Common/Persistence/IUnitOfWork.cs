@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ThaiTuanERP2025.Application.Account.Repositories;
+﻿using ThaiTuanERP2025.Application.Account.Repositories;
 using ThaiTuanERP2025.Application.Expense.Repositories;
 using ThaiTuanERP2025.Application.Files.Repositories;
 using ThaiTuanERP2025.Application.Finance.Repositories;
-using ThaiTuanERP2025.Application.Partner.Repositories;
 
 namespace ThaiTuanERP2025.Application.Common.Persistence
 {
@@ -20,11 +14,6 @@ namespace ThaiTuanERP2025.Application.Common.Persistence
 		IDepartmentRepository Departments { get; }
 		IGroupRepository Groups { get; }
 		IUserGroupRepository UserGroups { get; }
-		IBankAccountRepository BankAccounts { get; }
-		IBankAccountReadRepository BankAccountRead { get; }
-
-		// Partner
-		ISupplierRepository Suppliers { get; }
 
 		// Finance
 		IBudgetCodeRepository BudgetCodes { get; }
@@ -32,7 +21,6 @@ namespace ThaiTuanERP2025.Application.Common.Persistence
 		IBudgetPeriodRepository BudgetPeriods { get; }
 		IBudgetPlanRepository BudgetPlans { get; }
 		
-		IPartnerBankAccountRepository PartnerBankAccounts { get; }
 		ILedgerAccountRepository LedgerAccounts { get; }
 		ILedgerAccountTypeRepository LedgerAccountTypes { get; }
 		ITaxRepository Taxes { get; }
@@ -46,6 +34,8 @@ namespace ThaiTuanERP2025.Application.Common.Persistence
 		IInvoiceLineRepository InvoiceLines { get; }
 		IInvoiceFileRepository InvoiceFiles { get; }
 		IInvoiceFollowerRepository InvoiceFollowers { get; }
+		ISupplierRepository Suppliers { get; }	
+		IBankAccountRepository BankAccounts { get; }
 
 		Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 	}

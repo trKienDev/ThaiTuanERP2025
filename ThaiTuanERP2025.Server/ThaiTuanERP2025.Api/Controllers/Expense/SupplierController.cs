@@ -1,0 +1,45 @@
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using ThaiTuanERP2025.Api.Common;
+using ThaiTuanERP2025.Application.Expense.Commands.Suppliers.CreateSupplier;
+using ThaiTuanERP2025.Application.Expense.Commands.Suppliers.UpdateSupplier;
+using ThaiTuanERP2025.Application.Expense.Dtos;
+using ThaiTuanERP2025.Application.Expense.Queries.Suppliers.GetSupplierById;
+using ThaiTuanERP2025.Application.Expense.Queries.Suppliers.GetSuppliers;
+
+namespace ThaiTuanERP2025.Api.Controllers.Expense
+{
+	[Authorize]
+	[ApiController]
+	[Route("api/suppliers")]
+	public class SupplierController : ControllerBase
+	{
+		private readonly IMediator _meidator;
+		public SupplierController(IMediator mediator) => _meidator = mediator;
+
+		[HttpGet]
+		public async Task<ActionResult<IReadOnlyList<SupplierDto>>> GetAll([FromQuery] string? keyword, CancellationToken cancellationToken) {
+			var result = await _meidator.Send(new GetSuppliersQuery(keyword), cancellationToken);
+			return Ok(ApiResponse<IReadOnlyList<SupplierDto>>.Success(result));
+		}
+
+		[HttpGet("{id:guid}")]
+		public async Task<ActionResult<SupplierDto>> GetById(Guid id, CancellationToken cancellationToken) {
+			var result = await _meidator.Send(new GetSupplierByIdQuery(id), cancellationToken);
+			return Ok(ApiResponse<SupplierDto>.Success(result));	
+		}
+
+		[HttpPost]
+		public async Task<ActionResult<SupplierDto>> Create([FromBody] CreateSupplierRequest body, CancellationToken cancellationToken) {
+			var result = await _meidator.Send(new CreateSupplierCommand(body), cancellationToken);
+			return Ok(ApiResponse<SupplierDto>.Success(result));
+		}
+
+		[HttpPut("{id:guid}")]
+		public async Task<ActionResult<SupplierDto>> Update(Guid id, [FromBody] UpdateSupplierRequest body, CancellationToken cancellationToken) {
+			var result = await _meidator.Send(new UpdateSupplierCommand(id, body), cancellationToken);
+			return Ok(ApiResponse<SupplierDto>.Success(result));
+		}
+	}
+}
