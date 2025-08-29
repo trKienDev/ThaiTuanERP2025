@@ -15,8 +15,8 @@ export class InvoiceService {
 
       // POST /api/invoices/draft
       createDraft(body: CreateInvoiceDraftRequest): Observable<invoiceDto> {
-      return this.http.post<ApiResponse<invoiceDto>>(`${this.API_URL}/draft`, body)
-            .pipe(handleApiResponse$<invoiceDto>());
+            return this.http.post<ApiResponse<invoiceDto>>(`${this.API_URL}/draft`, body)
+                  .pipe(handleApiResponse$<invoiceDto>());
       }
 
 

@@ -5,6 +5,7 @@ using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Expense.Commands.Suppliers.CreateSupplier;
 using ThaiTuanERP2025.Application.Expense.Commands.Suppliers.UpdateSupplier;
 using ThaiTuanERP2025.Application.Expense.Dtos;
+using ThaiTuanERP2025.Application.Expense.Queries.Suppliers.CheckSupplierNameAvailable;
 using ThaiTuanERP2025.Application.Expense.Queries.Suppliers.GetSupplierById;
 using ThaiTuanERP2025.Application.Expense.Queries.Suppliers.GetSuppliers;
 
@@ -18,7 +19,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
 		private readonly IMediator _meidator;
 		public SupplierController(IMediator mediator) => _meidator = mediator;
 
-		[HttpGet]
+		[HttpGet("all")]
 		public async Task<ActionResult<IReadOnlyList<SupplierDto>>> GetAll([FromQuery] string? keyword, CancellationToken cancellationToken) {
 			var result = await _meidator.Send(new GetSuppliersQuery(keyword), cancellationToken);
 			return Ok(ApiResponse<IReadOnlyList<SupplierDto>>.Success(result));
@@ -28,6 +29,12 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
 		public async Task<ActionResult<SupplierDto>> GetById(Guid id, CancellationToken cancellationToken) {
 			var result = await _meidator.Send(new GetSupplierByIdQuery(id), cancellationToken);
 			return Ok(ApiResponse<SupplierDto>.Success(result));	
+		}
+
+		[HttpGet("check-available")]
+		public async Task<ActionResult<ApiResponse<bool>>> CheckNameAvailable([FromQuery] string name, [FromQuery] Guid? excludeId, CancellationToken cancellationToken) {
+			var available = await _meidator.Send(new CheckSupplierNameAvailableQuery(name, excludeId), cancellationToken);
+			return Ok(ApiResponse<bool>.Success(available));
 		}
 
 		[HttpPost]

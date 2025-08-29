@@ -13,7 +13,8 @@ export class TaxService extends BaseCrudService<TaxDto, CreateTaxRequest, Update
             super(http, `${environment.apiUrl}/taxes`);
       }
 
-      checkAvailable(policyName: string, excludeId?: string): Observable<boolean> {
+      // excludeId: dùng khi update để server bỏ qua id ExcludeId khi check trùng
+      checkAvailable(policyName: string, excludeId?: string): Observable<boolean> { 
             let params = new HttpParams().set('policyName', policyName);
             if(excludeId) params = params.set('excludeId', excludeId);
             
