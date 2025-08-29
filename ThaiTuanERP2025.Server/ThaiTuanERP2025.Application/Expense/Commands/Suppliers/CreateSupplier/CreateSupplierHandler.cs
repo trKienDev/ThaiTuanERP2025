@@ -21,7 +21,7 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.Suppliers.CreateSupplier
 		{
 			var request = command.Request;
 			// chống trùng tên (case-insensitive)
-			if (await _unitOfWork.Suppliers.ExistsByNameAsync(request.Name, cancellationToken))
+			if (await _unitOfWork.Suppliers.ExistsByNameAsync(request.Name))
 				throw new ConflictException("Tên nhà cung cấp này đã tồn tại");
 
 			var entity = new Supplier(request.Name, request.TaxCode);

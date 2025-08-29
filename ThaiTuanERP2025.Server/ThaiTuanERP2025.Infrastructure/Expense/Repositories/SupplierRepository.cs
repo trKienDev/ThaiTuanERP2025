@@ -1,10 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Expense.Repositories;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Infrastructure.Common;
@@ -16,9 +11,11 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories
 	{
 		public SupplierRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider) { }
 
-		public async Task<bool> ExistsByNameAsync(string name, CancellationToken cancellationToken)
+		public Task<bool> ExistsByNameAsync(string name, Guid? excludeId = null, CancellationToken cancellationToken = default)
 		{
-			return await _dbSet.AnyAsync(x => x.Name.ToLower() == name.ToLower(), cancellationToken);
+			var query = _dbSet.AsNoTracking().Where(x => x.Name == name);
+			if(excludeId.HasValue) query = query.Where(x => x.Id != excludeId.Value);
+			return query.AnyAsync(cancellationToken);
 		}
 
 		public async Task<IReadOnlyList<Supplier>> SearchAsync(string? keyword, CancellationToken cancellationToken)
