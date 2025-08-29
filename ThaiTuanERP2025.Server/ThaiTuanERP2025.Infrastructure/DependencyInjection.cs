@@ -9,14 +9,12 @@ using ThaiTuanERP2025.Application.Common.Services;
 using ThaiTuanERP2025.Application.Expense.Repositories;
 using ThaiTuanERP2025.Application.Files.Repositories;
 using ThaiTuanERP2025.Application.Finance.Repositories;
-using ThaiTuanERP2025.Application.Partner.Repositories;
 using ThaiTuanERP2025.Infrastructure.Account.Repositories;
 using ThaiTuanERP2025.Infrastructure.Authentication;
 using ThaiTuanERP2025.Infrastructure.Common;
 using ThaiTuanERP2025.Infrastructure.Common.Services;
 using ThaiTuanERP2025.Infrastructure.Expense.Repositories;
 using ThaiTuanERP2025.Infrastructure.Finance.Repositories;
-using ThaiTuanERP2025.Infrastructure.Partner.Repositories;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 using ThaiTuanERP2025.Infrastructure.StoredFiles.Configurations;
 using ThaiTuanERP2025.Infrastructure.StoredFiles.FileStorage;
@@ -51,10 +49,6 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IBudgetGroupRepository, BudgetGroupRepository>();
 			services.AddScoped<IBudgetPeriodRepository, BudgetPeriodRepository>();
 			services.AddScoped<IBudgetPlanRepository, BudgetPlanRepository>();
-			services.AddScoped<IBankAccountRepository, BankAccountRepository>();
-			services.AddScoped<IBankAccountReadRepository, BankAccountReadRepository>();
-			services.AddScoped<ISupplierRepository, SupplierRepository>();
-			services.AddScoped<IPartnerBankAccountRepository, PartnerBankAccountRepository>();
 			services.AddScoped<ILedgerAccountTypeRepository, LedgerAccountTypeRepository>();
 			services.AddScoped<ILedgerAccountRepository, LedgerAccountRepository>();
 			services.AddScoped<ICashoutCodeRepository, CashoutCodeRepository>();
@@ -65,6 +59,8 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IInvoiceLineRepository, InvoiceLineRepository>();
 			services.AddScoped<IInvoiceFollowerRepository, InvoiceFollowerRepository>();
 			services.AddScoped<IInvoiceFileRepository, InvoiceFileRepository>();
+			services.AddScoped<ISupplierRepository, SupplierRepository>();
+			services.AddScoped<IBankAccountRepository, BankAccountRepository>();
 
 
 			// ========= File Storage (MinIO) =========

@@ -11,4 +11,8 @@
     <None Remove="Finance\Entities\BudgetCode.cs~RF89f545a.TMP" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Partner\" />
+  </ItemGroup>
+
 </Project>
