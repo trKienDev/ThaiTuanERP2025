@@ -12,8 +12,8 @@ using ThaiTuanERP2025.Application.Expense.Commands.Invoices.RemoveInvoiceFollowe
 using ThaiTuanERP2025.Application.Expense.Commands.Invoices.RemoveInvoiceLine;
 using ThaiTuanERP2025.Application.Expense.Commands.Invoices.ReplaceMainInvoiceFile;
 using ThaiTuanERP2025.Application.Expense.Dtos;
-using ThaiTuanERP2025.Application.Expense.Queries.GetInvoiceById;
-using ThaiTuanERP2025.Application.Expense.Queries.GetInvoicesPaged;
+using ThaiTuanERP2025.Application.Expense.Queries.Invoices.GetInvoiceById;
+using ThaiTuanERP2025.Application.Expense.Queries.Invoices.GetInvoicesPaged;
 
 namespace ThaiTuanERP2025.Api.Controllers.Expense
 {

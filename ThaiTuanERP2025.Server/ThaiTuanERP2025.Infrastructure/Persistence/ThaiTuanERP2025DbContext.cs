@@ -13,7 +13,6 @@ using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Files.Entities;
 using ThaiTuanERP2025.Domain.Finance.Entities;
-using ThaiTuanERP2025.Domain.Partner.Entities;
 
 namespace ThaiTuanERP2025.Infrastructure.Persistence
 {
@@ -32,7 +31,6 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<Department> Departments => Set<Department>();
 		public DbSet<Group> Groups => Set<Group>();
 		public DbSet<UserGroup> UserGroups => Set<UserGroup>();
-		public DbSet<PartnerBankAccount> PartnerBankAccounts => Set<PartnerBankAccount>();
 		public DbSet<NumberSeries> NumberSeries => Set<NumberSeries>();
 		public DbSet<LedgerAccountType> LedgerAccountTypes => Set<LedgerAccountType>();
 		public DbSet<LedgerAccount> LedgerAccounts => Set<LedgerAccount>();
@@ -48,65 +46,12 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<InvoiceFile> InvoiceFiles => Set<InvoiceFile>();
 		public DbSet<InvoiceFollwer> InvoiceFollwers => Set<InvoiceFollwer>();	
 
+
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			modelBuilder.ApplyConfigurationsFromAssembly(typeof(ThaiTuanERP2025DbContext).Assembly);
-			ConfigureFinance(modelBuilder);
-			ConfigurePartner(modelBuilder);
 			ApplySoftDeleteFilters(modelBuilder);
 			ConfigureNumberSeries(modelBuilder);
-		}
-
-		private void ConfigureFinance(ModelBuilder modelBuilder) {
-
-			modelBuilder.Entity<BankAccount>(builder =>
-			{
-				builder.HasKey(e => e.Id);
-				builder.Property(e => e.AccountNumber).IsRequired().HasMaxLength(50);
-				builder.Property(e => e.BankName).IsRequired().HasMaxLength(100);
-				builder.Property(e => e.AccountHolder).IsRequired().HasMaxLength(100);
-				builder.Property(e => e.EmployeeCode).HasMaxLength(50);
-				builder.Property(e => e.Note).HasMaxLength(500);
-				builder.Property(e => e.OwnerName).HasMaxLength(250);
-
-				builder.HasOne(e => e.CreatedByUser)
-					.WithMany().HasForeignKey(e => e.CreatedByUserId)
-					.OnDelete(DeleteBehavior.Restrict);
-				builder.HasOne(e => e.ModifiedByUser)
-					.WithMany().HasForeignKey(e => e.ModifiedByUserId)
-					.OnDelete(DeleteBehavior.Restrict);
-				builder.HasOne(e => e.DeletedByUser)
-					.WithMany().HasForeignKey(e => e.DeletedByUserId)
-					.OnDelete(DeleteBehavior.Restrict);
-			});
-		}
-
-		private void ConfigurePartner(ModelBuilder modelBuilder) {
-			modelBuilder.Entity<PartnerBankAccount>(b =>
-			{
-				b.ToTable("PartnerBankAccounts");
-				b.HasKey(x => x.Id);
-
-				b.HasIndex(x => x.SupplierId).IsUnique(); // ép 1–1
-
-				b.Property(x => x.AccountNumber).IsRequired().HasMaxLength(50);
-				b.Property(x => x.BankName).IsRequired().HasMaxLength(150);
-				b.Property(x => x.AccountHolder).HasMaxLength(150);
-				b.Property(x => x.SwiftCode).HasMaxLength(11); // BIC 8 hoặc 11 ký tự
-				b.Property(x => x.Branch).HasMaxLength(150);
-				b.Property(x => x.Note).HasMaxLength(500);
-
-				// Quan hệ 1–1 với Supplier
-				b.HasOne(p => p.Supplier)
-					.WithOne(s => s.BankAccount) // hoặc .WithOne(s => s.BankAccount) nếu bạn thêm navigation ở Supplier
-					.HasForeignKey<PartnerBankAccount>(p => p.SupplierId)
-					.OnDelete(DeleteBehavior.Restrict);
-
-				// Audit FK nếu bạn đang áp dụng tương tự các entity khác:
-				b.HasOne(e => e.CreatedByUser).WithMany().HasForeignKey(e => e.CreatedByUserId).OnDelete(DeleteBehavior.Restrict);
-				b.HasOne(e => e.ModifiedByUser).WithMany().HasForeignKey(e => e.ModifiedByUserId).OnDelete(DeleteBehavior.Restrict);
-				b.HasOne(e => e.DeletedByUser).WithMany().HasForeignKey(e => e.DeletedByUserId).OnDelete(DeleteBehavior.Restrict);
-			});
 		}
 		
 		private void ConfigureNumberSeries(ModelBuilder modelBuilder) {
