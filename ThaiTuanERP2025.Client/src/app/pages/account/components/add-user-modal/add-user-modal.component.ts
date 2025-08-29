@@ -9,8 +9,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from '@angular/material/button';
 import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
-import { DepartmentModel } from "../../models/department.model";
 import { CreateUserRequest, UserDto } from "../../models/user.model";
+import { DepartmentDto } from "../../models/department.model";
 
 @Component({
       selector: 'add-user-modal',
@@ -43,8 +43,8 @@ export class AddUserModalComponent {
             department: undefined,
             position: '',
       };
-      departments: DepartmentModel[] = [];
-      filteredDepartments: DepartmentModel[] = [];
+      departments: DepartmentDto[] = [];
+      filteredDepartments: DepartmentDto[] = [];
       selectedDepartmentName: string = '';
       showPassword = false;
 

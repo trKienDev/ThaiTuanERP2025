@@ -10,6 +10,6 @@ import { RouterLink } from "@angular/router";
       templateUrl: './invoice.component.html',
       styleUrl: './invoice.component.scss',
 })
-export class ExpenseInvoiceComponen {
+export class ExpenseInvoiceComponent {
       
 }

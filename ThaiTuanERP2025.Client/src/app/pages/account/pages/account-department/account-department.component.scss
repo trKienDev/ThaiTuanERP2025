@@ -1,8 +1,8 @@
 .file-uploader {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
 }
 
 .file-input { display: none; } /* ẩn input gốc */
@@ -13,10 +13,10 @@
 .btn-link { background: transparent; border: none; text-decoration: underline; padding: 0; }
 
 .file-name {
-  max-width: 320px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+      max-width: 320px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
 }
 .file-name.muted { color: #888; }
 

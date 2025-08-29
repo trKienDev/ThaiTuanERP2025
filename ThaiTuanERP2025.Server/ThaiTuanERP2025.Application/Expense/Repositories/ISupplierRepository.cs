@@ -10,7 +10,7 @@ namespace ThaiTuanERP2025.Application.Expense.Repositories
 {
 	public interface ISupplierRepository : IBaseRepository<Supplier>
 	{
-		Task<bool> ExistsByNameAsync(string name, CancellationToken cancellationToken);
+		Task<bool> ExistsByNameAsync(string name, Guid? excludeId = null, CancellationToken cancellationToken = default);
 		Task<IReadOnlyList<Supplier>> SearchAsync(string? keywordm,  CancellationToken cancellationToken);
 	}
 }

@@ -16,7 +16,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
 {
 	[Authorize]
 	[ApiController]
-	[Route("api/bank-account")]
+	[Route("api/bank-accounts")]
 	public class BankAccountController : ControllerBase
 	{
 		private readonly IMediator _mediator;

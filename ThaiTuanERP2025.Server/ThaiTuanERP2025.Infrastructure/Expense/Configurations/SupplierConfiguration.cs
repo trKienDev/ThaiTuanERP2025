@@ -12,7 +12,7 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 			builder.HasKey(x => x.Id);
 
 			builder.Property(x => x.Name).IsRequired().HasMaxLength(256);
-			builder.Property(x => x.TaxCode).IsRequired().HasMaxLength(32);
+			builder.Property(x => x.TaxCode).IsRequired(false).HasMaxLength(32);
 			builder.Property(x => x.IsActive).HasDefaultValue(true);
 
 			builder.HasIndex(x => x.Name);
