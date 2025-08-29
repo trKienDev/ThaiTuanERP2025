@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>Thêm Nhà cung cấp mới</h2>
+
+<div mat-dialog-content [formGroup]="supplierForm">
+      <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Tên nhà cung cấp</mat-label>
+            <input matInput formControlName="name" placeholder="Tên nhà cung cấp">
+            <mat-error *ngIf="supplierRequestForm.name.hasError('required')">Bắt buộc</mat-error>
+            <mat-error *ngIf="supplierRequestForm.name.hasError('maxlength')">Tối đa 256 ký tự</mat-error>
+            <mat-error *ngIf="supplierRequestForm.name.hasError('nameTaken')">Tên nhà cung cấp đã tồn tại</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Mã số thuế</mat-label>
+            <input matInput formControlName="taxCode" rows="3"/>
+      </mat-form-field>
+
+      <mat-checkbox formControlName="isActive">Kích hoạt</mat-checkbox>
+
+      <div *ngIf="errorMessages.length" class="mt-2">
+            <div *ngFor="let msg of errorMessages" class="text-red-600 text-sm">• {{ msg }}</div>
+      </div>
+</div>
+
+<div mat-dialog-actions align="end">
+      <button mat-button (click)="cancel()" [disabled]="saving">Hủy</button>
+      <button mat-raised-button color="primary" (click)="submit()" [disabled]="saving || supplierForm.invalid">
+            {{ saving ? 'Đang lưu...' : 'Lưu' }}
+      </button>
+</div>

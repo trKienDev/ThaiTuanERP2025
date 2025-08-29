@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,10 +17,12 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 	{
 		protected readonly DbContext _context;
 		protected readonly DbSet<T> _dbSet;
-		public BaseRepository(ThaiTuanERP2025DbContext context)
+		private readonly IConfigurationProvider _configurationProvider;
+		public BaseRepository(ThaiTuanERP2025DbContext context, IConfigurationProvider configurationProvider)
 		{
 			_context = context ?? throw new ArgumentNullException(nameof(context));
 			_dbSet = _context.Set<T>();
+			_configurationProvider = configurationProvider ?? throw new ArgumentNullException(nameof(configurationProvider));
 		}
 
 		public virtual Task<List<T>> ListAsync(Func<IQueryable<T>, IQueryable<T>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default)
@@ -139,6 +143,14 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 				// fallback: hard delete
 				_dbSet.Remove(entity);
 			}
+		}
+
+		public async Task<TDto?> GetByIdProjectedAsync<TDto>(Guid id, CancellationToken cancellationToken = default)
+		{
+			return await Query() // AsNoTracking mặc định
+				.Where(e => EF.Property<Guid>(e, "Id") == id)
+				.ProjectTo<TDto>(_configurationProvider)
+				.SingleOrDefaultAsync(cancellationToken);
 		}
 	}
 }

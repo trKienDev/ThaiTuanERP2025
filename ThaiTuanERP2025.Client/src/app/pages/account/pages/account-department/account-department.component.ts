@@ -4,9 +4,9 @@ import { FormsModule } from "@angular/forms";
 import { ExcelImportService } from "../../../../shared/services/excel/excel-import.service";
 import { DepartmentService } from "../../services/department.service";
 import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
-import { DepartmentModel } from "../../models/department.model";
 import { EditDepartmentModalComponent } from "../../components/edit-department-modal/edit-department-modal.component";
 import { finalize } from "rxjs";
+import { DepartmentDto } from "../../models/department.model";
 
 @Component({
       selector: 'account-department',
@@ -18,10 +18,10 @@ import { finalize } from "rxjs";
 export class AccountDepartmentComponent implements OnInit {
       newDepartment = { code: '', name: '', };
       successMessage: string | null = null;
-      departments: (DepartmentModel & { selected: boolean })[] = [];
-      importedDepartments: DepartmentModel[] = [];
+      departments: (DepartmentDto & { selected: boolean })[] = [];
+      importedDepartments: DepartmentDto[] = [];
       isEditing = false;
-      selectedDepartment: DepartmentModel = { id: '', code: '', name: '' };
+      selectedDepartment: DepartmentDto = { id: '', code: '', name: '' };
       isImporting = false;
       fileName = '';
 
@@ -124,7 +124,7 @@ export class AccountDepartmentComponent implements OnInit {
             return this.departments.length > 0 && this.departments.every(d => d.selected);
       }
 
-      onDelete(dept: DepartmentModel): void {     
+      onDelete(dept: DepartmentDto): void {     
             if (!dept.id) {
                   alert('ID không hợp lệ');
                   return;
@@ -142,7 +142,7 @@ export class AccountDepartmentComponent implements OnInit {
             }
       }
 
-      openEditModal(dept: DepartmentModel): void {
+      openEditModal(dept: DepartmentDto): void {
             this.selectedDepartment = { ...dept };            
             this.isEditing = true;
       }
@@ -152,7 +152,7 @@ export class AccountDepartmentComponent implements OnInit {
             this.selectedDepartment = { id: '', code: '', name: '' };
       }
 
-      updateDepartment(updated: DepartmentModel): void {
+      updateDepartment(updated: DepartmentDto): void {
             if (!updated.id) {
                   alert('ID phòng ban không hợp lệ');
                   return;

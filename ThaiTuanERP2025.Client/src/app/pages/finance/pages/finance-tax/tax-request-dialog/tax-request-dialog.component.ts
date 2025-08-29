@@ -19,7 +19,8 @@ import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from "@angular/ma
       selector: 'tax-request-dialog',
       standalone: true,
       imports: [CommonModule, ReactiveFormsModule, MatDialogModule,
-            MatFormFieldModule, MatInputModule, MatCheckboxModule, MatButtonModule, MatSelectModule, MatAutocompleteModule, FormsModule, MatInputModule
+            MatFormFieldModule, MatInputModule, MatCheckboxModule, MatButtonModule, MatSelectModule, 
+            MatAutocompleteModule, FormsModule, MatInputModule
       ],
       templateUrl: './tax-request-dialog.component.html',
       styleUrl: './tax-request-dialog.component.scss',
@@ -47,7 +48,7 @@ export class TaxRequestDialogComponent implements OnInit {
             this.bindingLedgerLookup();
       }
 
-      // Async validator kiểm tra trùng policyName (optional nhưng nên có)
+                  // Async validator kiểm tra trùng policyName (optional nhưng nên có)
       private policyNameAvailableValidator: AsyncValidatorFn = (control: AbstractControl): Observable<any> => {
             const value = (control.value ?? '').trim();
             if(!value) return of(null);
@@ -63,6 +64,48 @@ export class TaxRequestDialogComponent implements OnInit {
                   first()
             );
       };
+
+      form = this.formBuilder.group({
+            policyName: ['', {
+                  validators: [Validators.required, Validators.maxLength(200)],
+                  asyncValidators: [ this.policyNameAvailableValidator ],
+                  updateOn: 'blur' // check khi rời field
+            }],
+            rate: [0, [Validators.required, Validators.min(0), Validators.max(1)]],
+            postingLedgerAccountId: ['', [Validators.required]],
+            description: [''],
+            isActive: [true]
+      });
+
+      get taxRequestForm() { return this.form.controls; }
+
+      submit(): void {
+            this.errorMessages = [];
+            if(this.form.invalid) {
+                  this.form.markAllAsTouched();
+                  return;
+            }
+
+            const payload = this.form.getRawValue() as CreateTaxRequest;
+
+            this.saving = true;
+            this.taxService.create(payload).pipe(
+                  catchError(err => {
+                        this.errorMessages = handleHttpError(err);
+                        this.saving = false;
+                        return of(null);
+                  })
+            ).subscribe((created) => {
+                  if(!created) return;
+                  this.dialogRef.close('created');
+            });
+      }
+
+      cancel(): void {
+            this.dialogRef.close();
+      }
+
+
 
       private loadLedgerAccounts() {
             this.ledgerAccountLoading = true;
@@ -114,44 +157,4 @@ export class TaxRequestDialogComponent implements OnInit {
             const found = this.ledgerAccountOptions.find(x => x.id === id);
             return found ? `${found.number} — ${found.name}` : '';
       };
-
-      form = this.formBuilder.group({
-            policyName: ['', {
-                  validators: [Validators.required, Validators.maxLength(200)],
-                  asyncValidators: [ this.policyNameAvailableValidator ],
-                  updateOn: 'blur' // check khi rời field
-            }],
-            rate: [0, [Validators.required, Validators.min(0), Validators.max(1)]],
-            postingLedgerAccountId: ['', [Validators.required]],
-            description: [''],
-            isActive: [true]
-      });
-
-      get taxRequestForm() { return this.form.controls; }
-
-      submit(): void {
-            this.errorMessages = [];
-            if(this.form.invalid) {
-                  this.form.markAllAsTouched();
-                  return;
-            }
-
-            const payload = this.form.getRawValue() as CreateTaxRequest;
-
-            this.saving = true;
-            this.taxService.create(payload).pipe(
-                  catchError(err => {
-                        this.errorMessages = handleHttpError(err);
-                        this.saving = false;
-                        return of(null);
-                  })
-            ).subscribe((created) => {
-                  if(!created) return;
-                  this.dialogRef.close('created');
-            });
-      }
-
-      cancel(): void {
-            this.dialogRef.close();
-      }
 }

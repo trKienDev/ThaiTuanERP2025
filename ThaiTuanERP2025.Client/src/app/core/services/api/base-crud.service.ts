@@ -12,8 +12,7 @@ export abstract class BaseCrudService<TDto, TCreate, TUpdate> {
       ) {}
 
       getAll(): Observable<TDto[]> {
-            return this.http
-                  .get<ApiResponse<TDto[]>>(this.endpoint)
+            return this.http.get<ApiResponse<TDto[]>>(`${this.endpoint}/all`)
                   .pipe(
                         handleApiResponse$<TDto[]>(),
                         catchError(err => throwError(() => err))
