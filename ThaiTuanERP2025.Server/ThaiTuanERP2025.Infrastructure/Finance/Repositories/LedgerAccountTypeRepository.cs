@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Repositories
 {
 	public class LedgerAccountTypeRepository : BaseRepository<LedgerAccountType>, ILedgerAccountTypeRepository
 	{
-		public LedgerAccountTypeRepository(ThaiTuanERP2025DbContext dbContext) : base(dbContext) { }
+		public LedgerAccountTypeRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider) { }
 
 		public async Task<bool> CodeExistsAsync(string code, Guid? excludeId = null, CancellationToken cancellationToken = default)
 		{

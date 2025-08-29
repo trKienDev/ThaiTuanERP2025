@@ -2,6 +2,8 @@
 using System.Security.Cryptography.X509Certificates;
 using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Account.Enums;
+using ThaiTuanERP2025.Domain.Finance.Entities;
+using ThaiTuanERP2025.Domain.Expense.Entities;
 
 namespace ThaiTuanERP2025.Domain.Account.Entities
 {
@@ -30,6 +32,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public bool IsSuperAdmin { get; private set; } = false;
 		public bool IsActive { get; private set; } = true;
 
+		public BankAccount? BankAccount { get; private set; }
 		// EF Core cần constructor mặc định
 		private User() {
 			UserGroups = new List<UserGroup>();

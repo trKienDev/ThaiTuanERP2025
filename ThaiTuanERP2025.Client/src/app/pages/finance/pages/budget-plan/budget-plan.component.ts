@@ -8,11 +8,11 @@ import { BudgetCodeService } from "../../services/budget-code.service";
 import { BudgetPeriodService } from "../../services/budget-period.service";
 import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
 import { FormsModule } from "@angular/forms";
-import { DepartmentModel } from "../../../account/models/department.model";
 import { BudgetPeriodModel } from "../../models/budget-period.model";
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { DepartmentDto } from "../../../account/models/department.model";
 
 @Component({
       selector: 'finance-budget-plan',
@@ -24,8 +24,8 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
 export class BudgetPlanComponent implements OnInit {
       budgetPlans: (BudgetPlanModel & { selected: boolean })[] = [];
 
-      departments: DepartmentModel[] = [];
-      filteredDepartments: DepartmentModel[] = [];
+      departments: DepartmentDto[] = [];
+      filteredDepartments: DepartmentDto[] = [];
 
       budgetCodes: BudgetCodeModel[] = [];
       budgetPeriods: BudgetPeriodModel[] = [];

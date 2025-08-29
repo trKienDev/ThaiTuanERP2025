@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Application.Finance.Repositories;
 using ThaiTuanERP2025.Domain.Finance.Entities;
@@ -9,7 +10,7 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Repositories
 {
 	public class LedgerAccountRepository : BaseRepository<LedgerAccount>, ILedgerAccountRepository
 	{
-		public LedgerAccountRepository(ThaiTuanERP2025DbContext dbContext) : base(dbContext) { }
+		public LedgerAccountRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider) { }
 
 		public Task<bool> NumberExistsAsync(string number, Guid? excludeId = null, CancellationToken cancellationToken = default)
 		{

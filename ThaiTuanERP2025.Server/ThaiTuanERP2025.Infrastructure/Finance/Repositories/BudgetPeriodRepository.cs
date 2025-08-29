@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Repositories
 {
 	public class BudgetPeriodRepository : BaseRepository<BudgetPeriod>, IBudgetPeriodRepository 
 	{
-		public BudgetPeriodRepository(ThaiTuanERP2025DbContext dbContext) : base(dbContext)
+		public BudgetPeriodRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider)
 		{
 			// Constructor logic if needed
 		}

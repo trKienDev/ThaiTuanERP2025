@@ -50,7 +50,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 		public async Task<ActionResult<ApiResponse<bool>>> CheckPolicyNameAvailable(
 			[FromQuery] string policyName, [FromQuery] Guid? excludeId, CancellationToken cancellationToken
 		) {
-			var available = await _mediator.Send(new CheckPolicyNameAvailableQuery(policyName), cancellationToken);
+			var available = await _mediator.Send(new CheckPolicyNameAvailableQuery(policyName, excludeId), cancellationToken);
 			return Ok(ApiResponse<bool>.Success(available));
 		}
 

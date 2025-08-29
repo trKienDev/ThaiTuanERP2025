@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DepartmentModel } from "../../models/department.model";
+import { DepartmentDto } from '../../models/department.model';
 
 @Component({
   selector: 'app-edit-department-modal',
@@ -11,10 +11,10 @@ import { DepartmentModel } from "../../models/department.model";
   imports: [CommonModule, FormsModule],
 })
 export class EditDepartmentModalComponent {
-  @Input() selectedDepartment: DepartmentModel = { id: '', code: '', name: '' };
+  @Input() selectedDepartment: DepartmentDto = { id: '', code: '', name: '' };
   @Input() visible: boolean = false;
 
-  @Output() submitUpdate = new EventEmitter<DepartmentModel>();
+  @Output() submitUpdate = new EventEmitter<DepartmentDto>();
   @Output() cancel = new EventEmitter<void>();
 
   onSubmit(): void {
