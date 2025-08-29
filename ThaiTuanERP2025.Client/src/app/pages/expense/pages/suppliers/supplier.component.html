@@ -1,0 +1,30 @@
+<button mat-raised-button color="primary" (click)="openCreateSupplierDialog()">+ Thêm Nhà cung cấp</button>
+
+<mat-drawer-container class="supplier-drawer-container">
+      <mat-drawer-content style="height: 100vh;">
+            <table class="table-suppliers">
+                  <thead>
+                        <tr>
+                              <th>Tên nhà cung cấp</th>
+                              <th>Mã số thuế</th>
+                              <th></th>
+                        </tr>
+                  </thead>
+                  <tbody>
+                        <tr *ngFor="let supplier of suppliers">
+                              <td>{{ supplier.name }}</td>
+                              <td>{{ supplier?.taxCode }}</td>
+                              <td>
+                                    <button class="btn" title="thêm tài khoản ngân hàng" (click)="openBankAcountDrawerForSupplier(supplier.id)">
+                                          <span class="material-icons-outlined">add_card</span>
+                                    </button>
+                              </td>
+                        </tr>
+                  </tbody>
+            </table>
+      </mat-drawer-content>
+
+      <mat-drawer #drawer mode="over" position="end" class="w-96 p-4">
+            <bank-account-request *ngIf="selectedOwnerId" ownerType="supplier" [ownerId]="selectedOwnerId" (closed)="onDrawerClosed($event)"></bank-account-request>
+      </mat-drawer>
+</mat-drawer-container>

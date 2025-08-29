@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Account.Repositories;
 using ThaiTuanERP2025.Application.Common.Persistence;
+using ThaiTuanERP2025.Application.Expense.Repositories;
 using ThaiTuanERP2025.Application.Files.Repositories;
 using ThaiTuanERP2025.Application.Finance.Repositories;
-using ThaiTuanERP2025.Application.Partner.Repositories;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Common
@@ -32,18 +32,21 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			IBudgetPeriodRepository budgetPeriods,
 			IBudgetPlanRepository budgetPlans,
 			IBudgetCodeRepository budgetCodes,
-			IBankAccountRepository bankAccounts,
-			IBankAccountReadRepository bankAccountRead,
-			ISupplierRepository suppliers,
 			ILedgerAccountRepository ledgerAccounts,
 			ILedgerAccountTypeRepository ledgerAccountTypes,
 			ITaxRepository taxes,
+			IWithholdingTaxTypeRepository withholdingTaxTypes,
 			ICashoutCodeRepository cashoutCodes,
 			ICashoutGroupRepository cashoutGroups,
 
-			// Partner
-			IPartnerBankAccountRepository partnerBankAccount
-			
+			// Expense
+			IInvoiceRepository invoices,
+			IInvoiceLineRepository invoiceLines,
+			IInvoiceFileRepository invoiceFiles,
+			IInvoiceFollowerRepository invoiceFollowers,
+			ISupplierRepository suppliers,
+			IBankAccountRepository bankAccounts
+
 		) {
 			_dbContext = dbContext;
 
@@ -59,17 +62,19 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			BudgetPlans = budgetPlans;
 			BudgetCodes = budgetCodes;
 
-			BankAccounts = bankAccounts;
-			BankAccountRead = bankAccountRead;
-			Suppliers = suppliers;
-
 			LedgerAccountTypes = ledgerAccountTypes;
 			LedgerAccounts = ledgerAccounts;
 			Taxes = taxes;
+			WithholdingTaxTypes = withholdingTaxTypes;
 			CashoutCodes = cashoutCodes;
 			CashoutGroups = cashoutGroups;
 
-			PartnerBankAccounts = partnerBankAccount;
+			Invoices = invoices;
+			InvoiceLines = invoiceLines;
+			InvoiceFiles = invoiceFiles;
+			InvoiceFollowers = invoiceFollowers;
+			Suppliers = suppliers;
+			BankAccounts = bankAccounts;
 		}
 
 		public IStoredFilesRepository StoredFiles { get; }
@@ -84,15 +89,20 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		public IBudgetPeriodRepository BudgetPeriods { get; }
 		public IBudgetPlanRepository BudgetPlans { get; }
 		public IBudgetCodeRepository BudgetCodes { get; }
-		public IBankAccountRepository BankAccounts { get; }
-		public IBankAccountReadRepository BankAccountRead { get; }
-		public ISupplierRepository Suppliers { get; }
-		public IPartnerBankAccountRepository PartnerBankAccounts { get; }
 		public ILedgerAccountRepository LedgerAccounts { get; }
 		public ILedgerAccountTypeRepository LedgerAccountTypes { get; }
 		public ITaxRepository Taxes { get; }
+		public IWithholdingTaxTypeRepository WithholdingTaxTypes { get; }
 		public ICashoutCodeRepository CashoutCodes { get; }
 		public ICashoutGroupRepository CashoutGroups { get; }
+
+		// Expense
+		public IInvoiceRepository Invoices { get; }
+		public IInvoiceLineRepository InvoiceLines { get; }
+		public IInvoiceFileRepository InvoiceFiles { get; }
+		public IInvoiceFollowerRepository InvoiceFollowers { get; }
+		public ISupplierRepository Suppliers { get; }
+		public IBankAccountRepository BankAccounts { get; }
 
 		public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{
