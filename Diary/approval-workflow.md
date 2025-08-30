@@ -7,7 +7,9 @@
 
 # CQRS
 - SubmitApprovalCommand *(3)*
-
+- ApproveStepCommand *(4)*
+- RejectStepCommand *(5)*
+- CommentOnStepCommand *(6)*
 
 # Services
 - ApproverResolverService *(2)*
@@ -16,3 +18,5 @@
 
 # Repository
 - ApprovalFlowDefinitionRepository *(3)*
+- ApprovalFlowInstanceRepository *(3)*
+- ApprovalActionRepsitory *(4)*
