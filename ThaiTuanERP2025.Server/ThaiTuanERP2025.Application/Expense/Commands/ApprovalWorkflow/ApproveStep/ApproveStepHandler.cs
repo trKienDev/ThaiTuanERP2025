@@ -33,7 +33,7 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ApprovalWorkflow.ApproveS
 
 			// 2) Kiểm tra trạng thái step
 			if (stepInstance.Status != ApprovalStepStatus.InProgress)
-				throw new InvalidOperationException("Step is not in progess");
+				throw new InvalidOperationException("Step is not in progress");
 			if (stepInstance.ApprovedCount >= stepInstance.RequiredCount || stepInstance.ApprovedByUserId is not null)
 				throw new InvalidOperationException("Step already approved");
 
