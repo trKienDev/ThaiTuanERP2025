@@ -40,6 +40,7 @@ namespace ThaiTuanERP2025.Application.Common.Persistence
 		// Approval
 		IApprovalFlowInstanceRepository ApprovalFlowInstances { get; }
 		IApprovalFlowDefinitionRepository ApprovalFlowDefinitions { get; }
+		IApprovalActionRepository ApprovalActions { get; }
 
 		Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 	}
