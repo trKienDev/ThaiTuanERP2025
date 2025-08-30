@@ -11,6 +11,8 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 using ThaiTuanERP2025.Infrastructure;
 using Microsoft.Extensions.FileProviders;
+using ThaiTuanERP2025.Application.Expense.Services.Interfaces;
+using ThaiTuanERP2025.Application.Expense.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddScoped<IApproverResolverService, ApproverResolverService>();
 
 // Application services (MediatR, FluentValidation, AutoMapper…)
 builder.Services.AddApplication();

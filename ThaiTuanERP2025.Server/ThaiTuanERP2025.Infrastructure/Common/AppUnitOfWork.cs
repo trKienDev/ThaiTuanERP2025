@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ThaiTuanERP2025.Application.Account.Repositories;
+﻿using ThaiTuanERP2025.Application.Account.Repositories;
 using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Application.Expense.Repositories;
 using ThaiTuanERP2025.Application.Files.Repositories;
@@ -45,7 +40,11 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			IInvoiceFileRepository invoiceFiles,
 			IInvoiceFollowerRepository invoiceFollowers,
 			ISupplierRepository suppliers,
-			IBankAccountRepository bankAccounts
+			IBankAccountRepository bankAccounts,
+
+			// Approval
+			IApprovalFlowDefinitionRepository approvalFlowDefinitions,
+			IApprovalFlowInstanceRepository approvalFlowInstances
 
 		) {
 			_dbContext = dbContext;
@@ -75,6 +74,9 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			InvoiceFollowers = invoiceFollowers;
 			Suppliers = suppliers;
 			BankAccounts = bankAccounts;
+
+			ApprovalFlowDefinitions = approvalFlowDefinitions;
+			ApprovalFlowInstances = approvalFlowInstances;
 		}
 
 		public IStoredFilesRepository StoredFiles { get; }
@@ -103,6 +105,10 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		public IInvoiceFollowerRepository InvoiceFollowers { get; }
 		public ISupplierRepository Suppliers { get; }
 		public IBankAccountRepository BankAccounts { get; }
+
+		// Approval
+		public IApprovalFlowDefinitionRepository ApprovalFlowDefinitions { get; }
+		public IApprovalFlowInstanceRepository ApprovalFlowInstances { get; }
 
 		public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{
