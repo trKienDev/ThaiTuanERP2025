@@ -10,5 +10,5 @@ namespace ThaiTuanERP2025.Domain.Expense.Enums
 	public enum ApprovalFlowStatus { Draft, Pending, InProgress, Approved, Rejected, Canceled }
 	public enum ApprovalStepStatus { Pending, InProgress, Approved, Rejected, Skipped }
 	public enum ApprovalActionType { Approve, Reject, Comment }
-	public enum ApprovalResolveType {  FixedUser = 1, UserPickFromList = 2, UserList = 3 }	
+	public enum ApprovalResolverType {  FixedUser = 1, UserPickFromList = 2, UserList = 3 }	
 }

@@ -7,9 +7,12 @@ using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Application.Common.Services;
 using ThaiTuanERP2025.Application.Expense.Repositories;
+using ThaiTuanERP2025.Application.Expense.Services;
+using ThaiTuanERP2025.Application.Expense.Services.Interfaces;
 using ThaiTuanERP2025.Application.Files.Repositories;
 using ThaiTuanERP2025.Application.Finance.Repositories;
 using ThaiTuanERP2025.Infrastructure.Account.Repositories;
+using ThaiTuanERP2025.Infrastructure.Approval.Repositories;
 using ThaiTuanERP2025.Infrastructure.Authentication;
 using ThaiTuanERP2025.Infrastructure.Common;
 using ThaiTuanERP2025.Infrastructure.Common.Services;
@@ -61,11 +64,13 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IInvoiceFileRepository, InvoiceFileRepository>();
 			services.AddScoped<ISupplierRepository, SupplierRepository>();
 			services.AddScoped<IBankAccountRepository, BankAccountRepository>();
+			services.AddScoped<IApprovalFlowDefinitionRepository, ApprovalFlowDefinitionRepository>();
+			services.AddScoped<IApprovalFlowInstanceRepository, ApprovalFlowInstanceRepository>();
 
 
 			// ========= File Storage (MinIO) =========
 			services.Configure<FileStorageOptions>(cfg.GetSection("Minio"));
-			services.AddScoped<IFileStorage, LocalFileStorage>();	
+			services.AddScoped<IFileStorage, LocalFileStorage>();
 
 			return services;
 		}
