@@ -6,10 +6,13 @@
 - ApprovalStepInstance *(1)*
 
 # CQRS
-- SubmitApprovalCommand *(3)*
-- ApproveStepCommand *(4)*
-- RejectStepCommand *(5)*
+- SubmitApprovalCommand *(3)* : submit chứng từ
+- ApproveStepCommand *(4)* : đóng step & mở step tiếp theo
+- RejectStepCommand *(5)* : 
 - CommentOnStepCommand *(6)*
+- GetStepActionsQuery *(7)*
+- GetFlowInstanceByDocumentQuery *(8)*
+- GetMyPendingApprovalQuery *(9)*
 
 # Services
 - ApproverResolverService *(2)*
