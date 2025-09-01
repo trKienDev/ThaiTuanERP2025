@@ -18,5 +18,12 @@ namespace ThaiTuanERP2025.Infrastructure.Approval.Repositories
 				.OrderBy(a => a.OccuredAt)
 				.ToListAsync(cancellationToken);
 		}
+
+		public async Task<IReadOnlyList<ApprovalAction>> ListByStepIdsAsync(IEnumerable<Guid> stepIds, CancellationToken cancellationToken = default) {
+			return await Query(asNoTracking: true) 
+				.Where(a => stepIds.Contains(a.StepInstanceId))
+				.OrderBy(a => a.OccuredAt)	
+				.ToListAsync(cancellationToken);
+		} 
 	}
 }

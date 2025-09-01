@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ThaiTuanERP2025.Application.Common.Persistence;
+﻿using ThaiTuanERP2025.Application.Common.Persistence;
+using ThaiTuanERP2025.Application.Expense.Dtos;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 
 namespace ThaiTuanERP2025.Application.Expense.Repositories
@@ -18,5 +14,12 @@ namespace ThaiTuanERP2025.Application.Expense.Repositories
 
 		/// Lấy bước Pending kế tiếp theo OrderIndex trong 1 flow (tracking để cập nhật ngay).
 		Task<ApprovalStepInstance?> GetNextPendingStepAsync(Guid flowInstanceId, int currentOrderIndex, CancellationToken ct = default);
+
+		/// <summary>
+		/// Lấy FlowInstance theo document, kèm Steps (đã tracking = false vì chỉ đọc)
+		/// </summary>
+		Task<ApprovalFlowInstance?> GetByDocumentWithStepsAsync(string documentType, Guid DocumentId, CancellationToken cancellationToken = default);
+
+		Task<IReadOnlyList<StepWithFlow>> ListInProgressStepsWithFlowAsync(CancellationToken cancellationToken = default);
 	}
 }

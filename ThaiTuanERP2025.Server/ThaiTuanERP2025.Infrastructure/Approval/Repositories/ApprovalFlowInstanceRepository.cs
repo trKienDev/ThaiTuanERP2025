@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ThaiTuanERP2025.Application.Expense.Dtos;
 using ThaiTuanERP2025.Application.Expense.Repositories;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Expense.Enums;
@@ -34,5 +30,24 @@ namespace ThaiTuanERP2025.Infrastructure.Approval.Repositories
 				.OrderBy(si => si.OrderIndex)
 				.FirstOrDefaultAsync(cancellationToken);
 		}
- 	}
+
+		public async Task<ApprovalFlowInstance?> GetByDocumentWithStepsAsync(string documentType, Guid DocumentId, CancellationToken cancellationToken = default) {
+			return await Query(asNoTracking: true)
+				.Where(fi => fi.DocumentType == documentType && fi.DocumentId == DocumentId)
+				.Include(fi => fi.Steps)
+				.FirstOrDefaultAsync(cancellationToken);
+		}
+
+		public async Task<IReadOnlyList<StepWithFlow>> ListInProgressStepsWithFlowAsync(CancellationToken cancellationToken = default)
+		{
+			var rows = await _dbSet
+				.Include(fi => fi.Steps)
+				.SelectMany(fi => fi.Steps
+					.Where(si => si.Status == ApprovalStepStatus.InProgress)
+					.Select(si => new StepWithFlow(si, fi)))  
+			    .ToListAsync(cancellationToken);                  
+
+			return rows;
+		}
+	}
 }
