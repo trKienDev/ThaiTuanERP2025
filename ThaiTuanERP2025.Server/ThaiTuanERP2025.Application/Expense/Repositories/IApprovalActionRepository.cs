@@ -11,5 +11,9 @@ namespace ThaiTuanERP2025.Application.Expense.Repositories
 	public interface IApprovalActionRepository : IBaseRepository<ApprovalAction>
 	{
 		Task<IReadOnlyList<ApprovalAction>> ListByStepAsync(Guid stepInstanceId, CancellationToken cancellationToken);
+
+
+		/// Lấy toàn bộ actions theo danh sách stepIds (để query 1 lần)
+		Task<IReadOnlyList<ApprovalAction>> ListByStepIdsAsync(IEnumerable<Guid> stepIds, CancellationToken cancellationToken = default);
 	}
 }
