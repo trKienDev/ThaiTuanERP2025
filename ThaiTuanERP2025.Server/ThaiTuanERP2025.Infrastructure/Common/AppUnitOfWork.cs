@@ -41,11 +41,8 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			IInvoiceFollowerRepository invoiceFollowers,
 			ISupplierRepository suppliers,
 			IBankAccountRepository bankAccounts,
+			IApprovalWorkflowRepository approvalWorkflows
 
-			// Approval
-			IApprovalFlowDefinitionRepository approvalFlowDefinitions,
-			IApprovalFlowInstanceRepository approvalFlowInstances,
-			IApprovalActionRepository approvalActions
 
 		) {
 			_dbContext = dbContext;
@@ -75,10 +72,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			InvoiceFollowers = invoiceFollowers;
 			Suppliers = suppliers;
 			BankAccounts = bankAccounts;
-
-			ApprovalFlowDefinitions = approvalFlowDefinitions;
-			ApprovalFlowInstances = approvalFlowInstances;
-			ApprovalActions = approvalActions;
+			ApprovalWorkflows = approvalWorkflows;
 		}
 
 		public IStoredFilesRepository StoredFiles { get; }
@@ -107,11 +101,9 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		public IInvoiceFollowerRepository InvoiceFollowers { get; }
 		public ISupplierRepository Suppliers { get; }
 		public IBankAccountRepository BankAccounts { get; }
+		public IApprovalWorkflowRepository ApprovalWorkflows { get; }
 
 		// Approval
-		public IApprovalFlowDefinitionRepository ApprovalFlowDefinitions { get; }
-		public IApprovalFlowInstanceRepository ApprovalFlowInstances { get; }
-		public IApprovalActionRepository ApprovalActions { get; }
 
 		public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{

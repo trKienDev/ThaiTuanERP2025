@@ -1,0 +1,14 @@
+<h2 mat-dialog-title>Đặt tên luồng duyệt</h2>
+<form [formGroup]="form" (ngSubmit)="confirm()" class="p-4">
+      <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Đặt tên</mat-label>
+            <input matInput formControlName="name" placeholder="Tên luồng duyệt">
+            <mat-error *ngIf="form.get('name')?.hasError('required')">Bắt buộc</mat-error>
+            <mat-error *ngIf="form.get('name')?.hasError('maxlength')">Tối đa 256 ký tự</mat-error>
+      </mat-form-field>
+
+      <div class="mt-4 flex gap-2 justify-end">
+            <button type="button" mat-button (click)="dialogRef.close()">Hủy</button>
+            <button type="submit" mat-flat-button color="primary">Xác nhận</button>
+      </div>
+</form>

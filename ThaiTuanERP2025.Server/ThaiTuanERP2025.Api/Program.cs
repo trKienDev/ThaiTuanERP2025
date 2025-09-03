@@ -11,11 +11,6 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 using ThaiTuanERP2025.Infrastructure;
 using Microsoft.Extensions.FileProviders;
-using ThaiTuanERP2025.Application.Expense.Services.Interfaces;
-using ThaiTuanERP2025.Application.Expense.Services;
-using ThaiTuanERP2025.Infrastructure.Auth.Requirements;
-using Microsoft.AspNetCore.Authorization;
-using ThaiTuanERP2025.Infrastructure.Auth.Handlers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,15 +18,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
-builder.Services.AddScoped<IApproverResolverService, ApproverResolverService>();
-
-builder.Services.AddAuthorization(options =>
-{
-	options.AddPolicy("CanApproveStep", p => p.Requirements.Add(new CanApproveStepRequirement()));
-	options.AddPolicy("CanCommentStep", p => p.Requirements.Add(new CanCommentStepRequirement()));
-});
-builder.Services.AddScoped<IAuthorizationHandler, CanApproveStepHandler>();
-builder.Services.AddScoped<IAuthorizationHandler, CanCommentStepHandler>();
 
 // Application services (MediatR, FluentValidation, AutoMapper…)
 builder.Services.AddApplication();
