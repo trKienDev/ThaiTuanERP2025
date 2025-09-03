@@ -33,7 +33,7 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 				return new List<Department>();
 
 			var guidList = departmentIds.Select(id => $"'{id}'").ToList();
-			var sql = $"SELECT * FROM Departments WHERE Id IN ({string.Join(",", guidList)})";
+			var sql = $"SELECT * FROM Core.Departments WHERE Id IN ({string.Join(",", guidList)})";
 
 			return await _dbContext.Departments
 			    .FromSqlRaw(sql)
