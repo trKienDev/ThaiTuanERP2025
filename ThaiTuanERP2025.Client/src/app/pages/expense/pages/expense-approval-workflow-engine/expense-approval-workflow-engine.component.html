@@ -23,7 +23,7 @@
                   <div class="start-node">Gửi xử lý</div>
 
                   <!-- Nút '+' để thêm bước duyệt đầu tiên hoặc thêm giữa các bước -->
-                  <button class="add-connector" (click)="openStepModal()" title="Thêm bước duyệt">+</button>
+                  <button class="add-connector" (click)="openStepDialog()" title="Thêm bước duyệt">+</button>
 
                   <!-- Các bước duyệt tạo ra sau khi bấm '+' -->
                   <ng-container *ngFor="let step of steps(); let i = index">
@@ -36,65 +36,9 @@
                               <span *ngIf="step.slaHours">SLA {{ step.slaHours }} h</span>
                         </div>
                         <!-- Nút '+' ở sau mỗi bước -->
-                        <button class="add-connector" (click)="openStepModal()" title="Thêm bước duyệt">+</button>
+                        <button class="add-connector" (click)="openStepDialog()" title="Thêm bước duyệt">+</button>
                   </ng-container>
             </div>
-      </div>
-
-      <!-- MODAL THÊM KHỐI DUYỆT -->
-      <div class="modal-backdrop" *ngIf="isStepModalOpen()" (click)="closeStepModal()"></div>
-      <div class="modal" *ngIf="isStepModalOpen()" (keydown.escape)="closeStepModal()" role="dialog" aria-modal="true">
-            <div class="modal__header">
-                  <div class="modal__title">Thêm khối duyệt</div>
-                  <button class="modal__close" (click)="closeStepModal()" title="Đóng"></button>
-            </div>
-            <form class="modal__body" [formGroup]="stepForm" (ngSubmit)="saveStep()">
-                  <!-- Tên -->
-                  <label class="form-label">Tên <span class="req">*</span></label>
-                  <input class="form-input" formControlName="title" placeholder="Duyệt: Quản lý trực tiếp">
-                  <div class="error" *ngIf="stepForm.get('title')?.touched && stepForm.get('title')?.invalid">Bắt buộc nhập tên</div>
-
-                  <!-- Người duyệt (autocomplete + chips) -->
-                  <label class="form-label">Người duyệt <span class="req">*</span></label>
-                  <mat-form-field appearance="outline" class="form-field">
-                        <mat-chip-grid #chipGrid aria-label="Selected approvers">
-                              <mat-chip-row *ngFor="let u of selectedApprovers()" (removed)="removeApprover(u.id)">
-                                    {{ u.fullName}} ({{ u.username}}) - {{ u.position }}
-                                    <button matChipRemove [attr.aria-label]="'remove ' + u.fullName">
-                                          <mat-icon>close</mat-icon>
-                                    </button>
-                              </mat-chip-row>
-
-                              <input placeholder="Tìm theo tên, username, chức vụ" [matChipInputFor]="chipGrid" [matAutocomplete]="auto" [formControl]="approverSearchCtrl" />
-                        </mat-chip-grid>
-
-                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectApprover($event.option.value)">
-                              <mat-option *ngFor="let u of filteredUsers()" [value]="u">
-                                    {{ u.fullName}} ({{ u.username}}) - {{ u.position }}
-                              </mat-option>
-                        </mat-autocomplete>
-                  </mat-form-field>
-                  <div class="error" *ngIf="stepForm.get('approverIds')?.touched && stepForm.get('approverIds')?.invalid">
-                        Bắt buộc chọn ít nhất 1 người duyệt.
-                  </div>
-                  <!-- Luồng duyệt -->
-                  <label class="form-label">Luồng duyệt <span class="req">*</span></label>
-                  <select class="form-input" formControlName="flowType">
-                        <option value="any">Chỉ cần 1 người duyệt</option>
-                        <option value="sequential">Lần lượt</option>
-                        <option value="all">Tất cả cùng duyệt</option>
-                  </select>
-
-                  <!-- SLA -->
-                  <label class="form-label">SLA (giờ)</label>
-                  <input class="form-input" type="number" min="0" step="1" formControlName="slaHours" (keydown)="allowOnlyNumberKeys($event)" placeholder="Mặc định 8">
-
-                  <!-- footer -->
-                  <div class="modal__footer">
-                        <button type="button" class="btn ghost" (click)="closeStepModal()">Hủy</button>
-                        <button type="submit" class="btn primary">Lưu lại</button>
-                  </div>
-            </form>
       </div>
 
 </div>

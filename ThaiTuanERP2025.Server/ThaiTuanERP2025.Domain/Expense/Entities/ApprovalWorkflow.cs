@@ -8,7 +8,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public bool IsActive { get; set; } = true;
 
 		private readonly List<ApprovalStep> _steps = new();
-		public IReadOnlyCollection<ApprovalStep> Steps => _steps;
+		public ICollection<ApprovalStep> Steps => _steps;
 
 		public void AddStep(ApprovalStep step) {
 			if(step is null) 

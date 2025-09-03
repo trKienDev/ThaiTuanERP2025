@@ -1,11 +1,12 @@
 ﻿using FluentValidation;
 using ThaiTuanERP2025.Application.Expense.Requests;
 
-namespace ThaiTuanERP2025.Application.Expense.Validators
+namespace ThaiTuanERP2025.Application.Expense.Commands.ApprovalWorkflows.CreateApprovalWorkflow
 {
 	public class CreateApprovalWorkflowRequestValidator : AbstractValidator<CreateApprovalWorkflowRequest>
 	{
-		public CreateApprovalWorkflowRequestValidator() {
+		public CreateApprovalWorkflowRequestValidator()
+		{
 			RuleFor(x => x.Name)
 				.NotEmpty().WithMessage("Tên không được để trống")
 				.MaximumLength(256).WithMessage("Tên không được vượt quá 256 ký tự");

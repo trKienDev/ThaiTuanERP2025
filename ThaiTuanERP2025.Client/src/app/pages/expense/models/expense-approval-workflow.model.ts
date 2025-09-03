@@ -15,6 +15,12 @@ export interface CreateExpenseApprovalWorkflowRequest {
       steps: WorkflowStepRequest[];
 }
 
+export interface UpdateExpenseApprovalWorkflowRequest {
+      name: string;
+      isActive: boolean;
+      steps: WorkflowStepRequest[];
+}
+
 export interface ExpenseApprovalWorkflowDto {
       id: string;
       name: string;
