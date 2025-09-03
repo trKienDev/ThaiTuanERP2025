@@ -45,12 +45,8 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<InvoiceLine> InvoiceLines => Set<InvoiceLine>();
 		public DbSet<InvoiceFile> InvoiceFiles => Set<InvoiceFile>();
 		public DbSet<InvoiceFollwer> InvoiceFollwers => Set<InvoiceFollwer>();	
-		public DbSet<ApprovalFlowDefinition> ApprovalFlowDefinitions => Set<ApprovalFlowDefinition>();	
-		public DbSet<ApprovalStepDefinition> ApprovalStepDefinitions => Set<ApprovalStepDefinition>();
-		public DbSet<ApprovalFlowInstance> ApprovalFlowInstance => Set<ApprovalFlowInstance>();
-		public DbSet<ApprovalStepInstance> ApprovalStepInstances => Set<ApprovalStepInstance>();
-		public DbSet<ApprovalAction> ApprovalActions => Set<ApprovalAction>();
-
+		public DbSet<ApprovalWorkflow> ApprovalWorkflows => Set<ApprovalWorkflow>();
+		public DbSet<ApprovalStep> ApprovalSteps => Set<ApprovalStep>();
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

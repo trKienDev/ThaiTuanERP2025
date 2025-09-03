@@ -1,11 +1,12 @@
-# Entity & Schema Definition
+# BE
+## Entity & Schema Definition
 - ApprovalAction *(1)*
 - ApprovalFlowDefinition *(1)*
 - ApprovalFlowInstance *(1)*
 - ApprovalStepDefinition *(1)*
 - ApprovalStepInstance *(1)*
 
-# Controllers
+## Controllers
 - Reject *(10)*
 - GetFlowForDocument *(10)*
 - GetMyPending *(10)*
@@ -13,7 +14,7 @@
 - Comment *(10)*
 
 
-# CQRS
+## CQRS
 - SubmitApprovalCommand *(3)* : submit chứng từ
 - ApproveStepCommand *(4)* : đóng step & mở step tiếp theo
 - RejectStepCommand *(5)* : 
@@ -22,18 +23,30 @@
 - GetFlowInstanceByDocumentQuery *(8)*
 - GetMyPendingApprovalQuery *(9)*
 
-# Auth
+## Auth
 - CanApproveStepCommand *(10)*
 - CanCommenttOnStepCommand *(10)*
 
-# Services
+## Services
 - ApproverResolverService *(2)*
 
-# Auth
+## Auth
 - CanApproveStepRequirement *(10)*
 - CanCommentStepRequirement *(10)*
 
-# Repository
+## Repository
 - ApprovalFlowDefinitionRepository *(3)*
 - ApprovalFlowInstanceRepository *(3)*
 - ApprovalActionRepsitory *(4)*
+
+=========================================================================
+# FE
+## Approval-workflow
+### Model
+- WorkflowStepRequest
+- CreateApprovalWorkflowRequest
+- ApprovalWorkflowDto
+### Service
+- ApprovalWorkflowService
+### Component
+- ExpenseApprovalWorkflowEngineComponent
