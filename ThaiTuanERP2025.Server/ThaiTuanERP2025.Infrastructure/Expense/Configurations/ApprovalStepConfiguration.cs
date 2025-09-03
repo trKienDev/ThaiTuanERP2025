@@ -30,7 +30,11 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 			builder.HasIndex(x => new { x.ApprovalWorkflowId, x.Order })
 				.IsUnique();
 
-
+			builder.ToTable(t =>
+			{
+				t.HasCheckConstraint("CK_ApprovalStep_Order_Positive", "[Order] > 0");
+				t.HasCheckConstraint("CK_ApprovalStep_SlaHours_NonNegative", "[SlaHours] >= 0");
+			});
 		}
 	}
 }
