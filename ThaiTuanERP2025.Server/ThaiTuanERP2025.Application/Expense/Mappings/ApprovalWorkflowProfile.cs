@@ -23,17 +23,9 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 				.ForMember(d => d.CandidateUserIds, opt => opt.Ignore())
 				.AfterMap((src, dest) =>
 				{
-					if (string.IsNullOrWhiteSpace(src.CandidateJson))
-					{
-						dest.CandidateUserIds = Array.Empty<string>();
-						return;
-					}
-
 					try
 					{
-						// Parse JSON dạng List<Guid>; nếu JSON xấu, fallback = []
 						var list = JsonSerializer.Deserialize<List<Guid>>(src.CandidateJson, (JsonSerializerOptions?)null) ?? new List<Guid>();
-
 						dest.CandidateUserIds = list.Select(g => g.ToString()).ToArray();
 					}
 					catch
