@@ -5,7 +5,7 @@
 @import url('./styles/_cards.scss');
 @import url('./styles/_toggle-switch.scss');
 @import url('./app/shared/components/messages/_message.scss');
-@import url('./styles/_custom-angular-material.scss');
+
 
 :root {
       --cadmium-red: #D22B2B;
@@ -84,6 +84,13 @@ html, body { height: 100%; margin: 0; }
       color: black !important;
 }
 
+// .cdk-overlay-pane .mat-mdc-dialog-surface {
+//       border-radius: 10px !important;
+//       /* hoặc: --mdc-dialog-container-shape: 10px; */
+// }
 
-
-
+/* target đúng nơi Material render (overlay) */
+.cdk-overlay-pane .mat-mdc-dialog-surface {
+      border-radius: 10px !important;
+      padding: 10px;
+}
