@@ -30,6 +30,7 @@ export interface ExpenseApprovalWorkflowDto {
             title: string;
             order: number;
             flowType: StepFlowType;
+            candidateUserIds: string[];
             slaHours?: number | null;
       }>;
 }

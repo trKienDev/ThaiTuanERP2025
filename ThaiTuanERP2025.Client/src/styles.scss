@@ -5,7 +5,7 @@
 @import url('./styles/_cards.scss');
 @import url('./styles/_toggle-switch.scss');
 @import url('./app/shared/components/messages/_message.scss');
-
+@import url('./styles/_custom-angular-material.scss');
 
 :root {
       --cadmium-red: #D22B2B;
@@ -83,5 +83,7 @@ html, body { height: 100%; margin: 0; }
       background-color: var(--gold-color) !important;
       color: black !important;
 }
+
+
 
 

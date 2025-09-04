@@ -11,6 +11,7 @@ namespace ThaiTuanERP2025.Application.Expense.Repositories
 {
 	public interface IApprovalWorkflowRepository : IBaseRepository<ApprovalWorkflow>
 	{
+		Task<IReadOnlyList<ApprovalWorkflow>> ListAllIncludingAsync(CancellationToken cancellationToken);
 		Task<ApprovalWorkflow?> SingleOrDefaultIncludingAsync(Guid id, CancellationToken cancellationToken = default);
 		Task<ApprovalWorkflowDto> AddAndReturnDtoAsync(ApprovalWorkflow entity, CancellationToken cancellationToken = default);
 	}
