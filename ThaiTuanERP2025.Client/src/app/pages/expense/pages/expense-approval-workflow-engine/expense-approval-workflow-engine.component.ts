@@ -88,6 +88,7 @@ export class ExpenseApprovalWorkflowEngineComponent implements OnInit {
       // dialog đặt tên (giữ nguyên)
       openNameDialog() {
             const ref = this.dialog.open(NamingExpenseApprovalWorkflowDialogComponent, {
+                  panelClass: 'custom-mat-dialog',
                   data: { defaultName: this.workflowName || '' }, // sửa 'defaulName' -> 'defaultName' nếu dialog nhận prop này
                   width: '480px',
                   disableClose: true,
@@ -103,7 +104,7 @@ export class ExpenseApprovalWorkflowEngineComponent implements OnInit {
       openStepDialog() {
             this.dialog.open(EAFStepEditorDialogComponent, {
                   width: '640px',
-                  panelClass: 'custom-dialog-modal',
+                  panelClass: 'custom-mat-dialog',
                   disableClose: true,
                   data: {
                         initial: {
