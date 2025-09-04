@@ -21,6 +21,13 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories
 			_mapper = mapper;
 		}
 
+		public async Task<IReadOnlyList<ApprovalWorkflow>> ListAllIncludingAsync(CancellationToken cancellationToken) {
+			return await _dbSet.AsNoTracking()
+				.Include(w => w.Steps)
+				.OrderBy(w => w.CreatedDate)
+				.ToListAsync(cancellationToken);
+		}
+
 		public async Task<ApprovalWorkflow?> SingleOrDefaultIncludingAsync(Guid id, CancellationToken cancellationToken = default)
 		{
 			return await _dbSet.Include(x => x.Steps).SingleOrDefaultAsync(x => x.Id == id, cancellationToken);	

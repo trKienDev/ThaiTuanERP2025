@@ -25,7 +25,6 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 			var nav = builder.Metadata.FindNavigation(nameof(ApprovalWorkflow.Steps))!;
 			nav.SetField("_steps");
 			nav.SetPropertyAccessMode(PropertyAccessMode.Field);
-
 		}
 	}
 }
