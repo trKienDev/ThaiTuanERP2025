@@ -1,45 +1,41 @@
 <!-- step-editor-dialog.component.html -->
-<h3 class="mb-3">Thêm / Sửa khối duyệt</h3>
+<h3>Thêm / Sửa khối duyệt</h3>
 
-<form [formGroup]="form" (ngSubmit)="save()" class="grid gap-3">
-  <label>Tên <span class="text-red-600">*</span></label>
-  <input matInput formControlName="title" placeholder="Duyệt: Quản lý trực tiếp" />
+<form [formGroup]="form" (ngSubmit)="save()">
+      <label>Tên <span class="text-red-600">*</span></label>
+      <input matInput formControlName="title" placeholder="Duyệt: Quản lý trực tiếp" />
 
-  <label>Người duyệt <span class="text-red-600">*</span></label>
-  <mat-form-field appearance="outline">
-    <mat-chip-grid #chipGrid>
-      <mat-chip-row *ngFor="let u of selectedApprovers" (removed)="removeApprover(u.id)">
-        {{ u.fullName }} ({{ u.username }}) - {{ u.position }}
-        <button matChipRemove aria-label="remove"><mat-icon>close</mat-icon></button>
-      </mat-chip-row>
-      <input placeholder="Tìm theo tên, username, chức vụ"
-             [matChipInputFor]="chipGrid"
-             [matAutocomplete]="auto"
-             [formControl]="approverSearchCtrl" />
-    </mat-chip-grid>
+      <label>Người duyệt <span class="text-red-600">*</span></label>
+      <mat-form-field appearance="outline">
+            <mat-chip-grid #chipGrid>
+                  <mat-chip-row *ngFor="let u of selectedApprovers" (removed)="removeApprover(u.id)">
+                        {{ u.fullName }} ({{ u.username }}) - {{ u.position }}
+                        <button matChipRemove aria-label="remove"><mat-icon>close</mat-icon></button>
+                  </mat-chip-row>
+                  <input placeholder="Tìm theo tên, username, chức vụ" [matChipInputFor]="chipGrid" [matAutocomplete]="auto" [formControl]="approverSearchCtrl" />
+            </mat-chip-grid>
 
-    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectApprover($event.option.value)">
-      <mat-option *ngFor="let u of filteredUsers" [value]="u">
-        {{ u.fullName }} ({{ u.username }}) - {{ u.position }}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
-  <div class="text-sm text-red-600" *ngIf="form.get('approverIds')?.touched && form.get('approverIds')?.invalid">
-    Bắt buộc chọn ít nhất 1 người duyệt.
-  </div>
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectApprover($event.option.value)">
+                  <mat-option *ngFor="let u of filteredUsers" [value]="u">
+                        {{ u.fullName }} ({{ u.username }}) - {{ u.position }}
+                  </mat-option>
+            </mat-autocomplete>
+      </mat-form-field>
 
-  <label>Luồng duyệt <span class="text-red-600">*</span></label>
-  <select matNativeControl formControlName="flowType">
-    <option value="any">Chỉ cần 1 người duyệt</option>
-    <option value="sequential">Lần lượt</option>
-    <option value="all">Tất cả cùng duyệt</option>
-  </select>
+      <div class="text-sm text-red-600" *ngIf="form.get('approverIds')?.touched && form.get('approverIds')?.invalid"> Bắt buộc chọn ít nhất 1 người duyệt. </div>
 
-  <label>SLA (giờ)</label>
-  <input matInput type="number" min="0" step="1" formControlName="slaHours" (keydown)="allowOnlyNumberKeys($event)" placeholder="Mặc định 8">
+      <label>Luồng duyệt <span class="text-red-600">*</span></label>
+      <select matNativeControl formControlName="flowType">
+            <option value="any">Chỉ cần 1 người duyệt</option>
+            <option value="sequential">Lần lượt</option>
+            <option value="all">Tất cả cùng duyệt</option>
+      </select>
 
-  <div class="flex justify-end gap-2 mt-4">
-    <button type="button" mat-button (click)="cancel()">Hủy</button>
-    <button type="submit" mat-raised-button color="primary">Lưu</button>
-  </div>
+      <label>SLA (giờ)</label>
+      <input matInput type="number" min="0" step="1" formControlName="slaHours" (keydown)="allowOnlyNumberKeys($event)" placeholder="Mặc định 8">
+
+      <div class="flex justify-end">
+            <button type="button" mat-button (click)="cancel()">Hủy</button>
+            <button type="submit" mat-raised-button color="primary">Lưu</button>
+      </div>
 </form>

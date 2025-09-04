@@ -1,10 +1,5 @@
 ﻿using AutoMapper;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Application.Expense.Dtos;
 
@@ -22,7 +17,7 @@ namespace ThaiTuanERP2025.Application.Expense.Queries.ApprovalWorkflows.GetAllAp
 
 		public async Task<IReadOnlyList<ApprovalWorkflowDto>> Handle(GetAllApprovalWorkflowQuery request, CancellationToken cancellationToken)
 		{
-			var workflows = await _unitOfWork.ApprovalWorkflows.GetAllAsync();
+			var workflows = await _unitOfWork.ApprovalWorkflows.ListAllIncludingAsync(cancellationToken);
 			return _mapper.Map<IReadOnlyList<ApprovalWorkflowDto>>(workflows);
 		}
 	}
