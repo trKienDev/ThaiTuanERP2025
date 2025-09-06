@@ -8,7 +8,7 @@ import { FileService } from "../../../../../core/services/api/file.service";
 import { InvoiceService } from "../../../services/invoice.service";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { firstValueFrom, forkJoin, lastValueFrom } from "rxjs";
-import { AddInvoiceLineRequest, ReplaceMainInvoiceFileRequest } from "../../../models/invoice.model";
+import { AddInvoiceLineRequest } from "../../../models/invoice.model";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MoneyFormatDirective } from "../../../../../shared/directives/money/money-format.directive";
 

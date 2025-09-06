@@ -2,7 +2,7 @@ import { DepartmentDto } from "./department.model";
 import { UserRole } from "./user-roles.enum";
 
 export interface UserDto {
-      id?: string;
+      id: string;
       fullName: string;
       username: string;
       employeeCode: string;

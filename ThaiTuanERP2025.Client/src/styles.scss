@@ -5,6 +5,9 @@
 @import url('./styles/_cards.scss');
 @import url('./styles/_toggle-switch.scss');
 @import url('./app/shared/components/messages/_message.scss');
+@import url('./styles/_input.scss');
+@import url('./styles/_alert.scss');
+@import url('./styles/_dropdown.scss');
 
 
 :root {
@@ -18,7 +21,13 @@
       --main-theme-fg: #f8e1e1;
       --default-border: #d1d9e0b3;
       --gold-color: #FFD700;
+      --platinum: #E5E4E2;
+
+
       --logo-size: 250px;
+
+
+      --main-border-radius: 8px;
 
 }
 
@@ -84,13 +93,12 @@ html, body { height: 100%; margin: 0; }
       color: black !important;
 }
 
-// .cdk-overlay-pane .mat-mdc-dialog-surface {
-//       border-radius: 10px !important;
-//       /* hoặc: --mdc-dialog-container-shape: 10px; */
-// }
-
 /* target đúng nơi Material render (overlay) */
 .cdk-overlay-pane .mat-mdc-dialog-surface {
       border-radius: 10px !important;
       padding: 10px;
+}
+
+.mat-mdc-form-field-infix {
+      font-family: 'Lexend';
 }

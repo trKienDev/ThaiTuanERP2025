@@ -1,4 +1,4 @@
-<button mat-raised-button color="primary" (click)="openCreateSupplierDialog()">+ Thêm Nhà cung cấp</button>
+<button class="button button-github" (click)="openCreateSupplierDialog()">Thêm Nhà cung cấp</button>
 
 <mat-drawer-container class="supplier-drawer-container">
       <mat-drawer-content style="height: 100vh;">
@@ -15,8 +15,8 @@
                               <td>{{ supplier.name }}</td>
                               <td>{{ supplier?.taxCode }}</td>
                               <td>
-                                    <button class="btn" title="thêm tài khoản ngân hàng" (click)="openBankAcountDrawerForSupplier(supplier.id)">
-                                          <span class="material-icons-outlined">add_card</span>
+                                    <button class="button icon-button"  title="thêm tài khoản ngân hàng" (click)="openBankAcountDrawerForSupplier(supplier.id)">
+                                          <span class="text material-icons-outlined">account_balance</span>
                                     </button>
                               </td>
                         </tr>

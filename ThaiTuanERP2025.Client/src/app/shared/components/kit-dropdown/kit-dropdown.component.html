@@ -1,0 +1,14 @@
+<div class="kit-dropdown" role="combobox" [attr.aria-expanded]="isOpen" aria-haspopup="listbox" tabindex="0" [style.width]="computedWidth">
+      <div class="kit-dropdown-select" (click)="onToggle()">
+            <span>{{ selectedLabel || placeholder }}</span>
+      </div>
+
+      <ul class="kit-dropdown-menu" role="listbox" [@slide]="isOpen ? 'open' : 'closed'">
+            <li #optRef role="option" *ngFor="let opt of options; let i = index"
+                  [attr.aria-selected]="i === focusedIndex"
+                  [class.active]="i === focusedIndex"
+                  (click)="selectOption(opt)">
+            {{ opt.label }}
+            </li>
+      </ul>
+</div>
