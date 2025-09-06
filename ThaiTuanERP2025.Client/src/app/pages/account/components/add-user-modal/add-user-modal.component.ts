@@ -32,6 +32,7 @@ export class AddUserModalComponent {
       readonly roles = Object.values(UserRole);
 
       user: UserDto = {
+            id: '',
             fullName: '',
             username: '',
             employeeCode: '',

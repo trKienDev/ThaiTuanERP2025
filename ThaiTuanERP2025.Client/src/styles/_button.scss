@@ -63,3 +63,12 @@ button, .button {
 .cancel-button:active { background-color: #D33A2C; box-shadow: rgba(0, 0, 0, 0.12) 0 1px 3px 0 inset; color: #FFFFFF; }
 .cancel-button:hover { background-color: #FFE3E3; border: 2px solid #FAA4A4; }
 .cancel-button:active:hover, .cancel-button:focus:hover, .cancel-button:focus { background-color: #D33A2C; box-shadow: rgba(0, 0, 0, 0.12) 0 1px 3px 0 inset; color: #FFFFFF; }
+
+/*** icon-button ***/
+.icon-button { background-color: #007ACC; outline: 2px #007ACC solid; outline-offset: -2px; border-radius: 5px; border: none; cursor: pointer; transition: 400ms; }
+.icon-button .text { color: white; font-size: 22px; transition: 400ms; }
+.icon-button:hover { background-color: transparent; }
+.icon-button:hover .text { color: #007ACC; }
+
+.text-button { background-color: transparent; border-color: transparent; color: var(--ultramarin); }
+.text-button:hover { cursor: pointer; text-decoration: underline;}

@@ -1,0 +1,67 @@
+.kit-dropdown {
+      width: 120px;
+      display: inline-block;
+      background-color: #fff;
+      border-radius: 2px;
+      box-shadow: 0 0 2px rgb(204, 204, 204);
+      transition: all .5s ease;
+      position: relative;
+      color: #474747;
+      text-align: left;
+}
+
+.kit-dropdown .kit-dropdown-select {
+      cursor: pointer;
+      display: block;
+      padding: 10px;
+}
+
+.kit-dropdown .kit-dropdown-select > i {
+      color: #888;
+      cursor: pointer;
+      transition: all .3s ease-in-out;
+      float: right;
+      line-height: 20px;
+}
+
+.kit-dropdown:hover, .kit-dropdown.active {
+      box-shadow: 0 0 4px rgb(204, 204, 204);
+      background-color: #f8f8f8;
+}
+
+.kit-dropdown.active .kit-dropdown-select > i {
+      transform: rotate(-90deg);
+}
+
+.kit-dropdown .kit-dropdown-menu {
+      position: absolute;
+      background-color: #fff;
+      width: 100%;
+      left: 0;
+      margin-top: 1px;
+      box-shadow: 0 1px 2px rgb(204, 204, 204);
+      border-radius: 0 1px 2px 2px;
+      overflow-y: auto;
+      z-index: 9;
+}
+
+.kit-dropdown .kit-dropdown-menu li {
+      padding: 10px;
+      transition: background-color .2s ease-in-out;
+      cursor: pointer;
+}
+.kit-dropdown .kit-dropdown-menu li:hover { background-color: #f2f2f2; }
+.kit-dropdown .kit-dropdown-menu li:active { 
+      outline: none;  
+      background: #f2f2f2; 
+}
+
+.kit-dropdown .kit-dropdown-menu li.active, .kit-dropdown .kit-dropdown-menu li[aria-selected="true"] {
+      background-color: #f2f2f2;
+}
+
+/* hover vẫn hoạt động như cũ, có thể sáng hơn chút */
+.kit-dropdown .kit-dropdown-menu li[aria-selected="true"]:hover {
+      background-color: #f2f2f2;
+}
+

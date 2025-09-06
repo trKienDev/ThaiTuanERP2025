@@ -67,6 +67,4 @@ export class ExpenseSupplierComponent implements OnInit {
                   }
             })
       }
-
-      
 }
