@@ -42,7 +42,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
 		public async Task<ActionResult<ApiResponse<ApprovalWorkflowDto>>> Create([FromBody] CreateApprovalWorkflowRequest request, CancellationToken cancellationToken)
 		{
 			var result = await _mediator.Send(new CreateApprovalWorkflowCommand(request) , cancellationToken);
-			return Ok(ApiResponse<ApprovalWorkflowDto>.Success(result));
+			return CreatedAtAction(nameof(GetById), new { id = result.Id }, ApiResponse<ApprovalWorkflowDto>.Success(result));
 		}
 
 		[HttpPut("{id:guid}")]	

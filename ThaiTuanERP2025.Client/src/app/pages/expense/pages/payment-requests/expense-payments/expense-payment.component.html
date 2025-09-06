@@ -1,0 +1,35 @@
+<h1>Tạo chi phí thanh toán mới</h1>
+
+<form class="expense-payment-form" [formGroup]="form">
+
+      <div class="input-wrapper">
+            <div class="form-input">
+                  <input class="" type="text" formControlName="name" autocomplete="on" required/>
+                  <label for="name">Tên chi phí</label>
+            </div>
+      </div>
+
+      <div class="input-wrapper">
+            <div class="alert dark-alert w-50"> 🔒 ĐỀ NGHỊ THANH TOÁN</div>
+      </div>
+
+      <div class="payee-container d-flex gap-10p">
+            <div class="payee-type-wrapper">
+                  <span>Công ty trả cho</span>
+                  <kit-dropdown [options]="payeeOptions" placeholder="Chọn đối tượng" (selectionChange)="onPayeeSelected($event)" [width]="120"></kit-dropdown>
+            </div>
+            <div class="payee-selection">
+                  <div class="supplier-selection" *ngIf="selectedPayee === 'supplier'">
+                        <kit-dropdown [options]="supplierOptions" (selectionChange)="onSupplierSelected($event)" [width]="320" [placeholder]="'chọn nhà cung cấp thụ hưởng'"></kit-dropdown>
+                        <button class="text-button">Thêm nhà cung cấp mới</button>
+                  </div>
+                  <div class="employee-selection" *ngIf="selectedPayee === 'employee'">
+                        <kit-dropdown [options]="userOptions" (selectionChange)="onUserSelected($event)" [width]="200" [placeholder]="'chọn nhân viên thụ hưởng'"></kit-dropdown>
+                  </div>
+            </div>
+      </div>
+
+      <div class="bank-account-input-container">
+            
+      </div>
+</form>
