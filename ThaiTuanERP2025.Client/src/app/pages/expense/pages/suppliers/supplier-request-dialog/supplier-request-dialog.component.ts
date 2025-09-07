@@ -49,7 +49,6 @@ export class SupplierRequestDialogComponent {
             name: ['', {
                   validators: [ Validators.required, Validators.maxLength(256)],
                   asyncValidators: [ this.supplierNameAvailableValidator ],
-                  updateOn: 'blur'
             }],
             taxCode: [''],
             isActive: [true],
@@ -66,6 +65,7 @@ export class SupplierRequestDialogComponent {
             const payload = this.supplierForm.getRawValue() as CreateSupplierRequest;
 
             this.saving = true;
+
             this.supplierService.create(payload).pipe(
                   catchError(err => {
                         this.errorMessages = handleHttpError(err);
@@ -74,7 +74,7 @@ export class SupplierRequestDialogComponent {
                   })
             ).subscribe((created) => {
                   if(!created) return;
-                  this.dialogRef.close('created');
+                  this.dialogRef.close(created);
             })
       }
 
