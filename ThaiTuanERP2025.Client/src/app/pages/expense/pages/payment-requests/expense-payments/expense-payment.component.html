@@ -20,8 +20,8 @@
             </div>
             <div class="payee-selection">
                   <div class="supplier-selection" *ngIf="selectedPayee === 'supplier'">
-                        <kit-dropdown [options]="supplierOptions" (selectionChange)="onSupplierSelected($event)" [width]="320" [placeholder]="'chọn nhà cung cấp thụ hưởng'"></kit-dropdown>
-                        <button class="text-button">Thêm nhà cung cấp mới</button>
+                        <kit-dropdown formControlName="supplierId" [options]="supplierOptions" (selectionChange)="onSupplierSelected($event)" [width]="320" [placeholder]="'chọn nhà cung cấp thụ hưởng'"></kit-dropdown>
+                        <button class="button link-button" (click)="openCreateSupplierDialog()">Thêm nhà cung cấp mới</button>
                   </div>
                   <div class="employee-selection" *ngIf="selectedPayee === 'employee'">
                         <kit-dropdown [options]="userOptions" (selectionChange)="onUserSelected($event)" [width]="200" [placeholder]="'chọn nhân viên thụ hưởng'"></kit-dropdown>
@@ -29,7 +29,81 @@
             </div>
       </div>
 
-      <div class="bank-account-input-container">
-            
+      <div class="bank-account-input-container d-flex gap-10p">
+
+            <div class="input-wrapper">
+                  <div class="form-input">
+                        <input class="" type="text" formControlName="bankName" autocomplete="on" required/>
+                        <label for="name">Tên ngân hàng</label>
+                  </div>
+            </div>
+
+            <div class="input-wrapper">
+                  <div class="form-input">
+                        <input class="" type="text" formControlName="accountNumber" autocomplete="on" required/>
+                        <label for="name">Số tài khoản</label>
+                  </div>
+            </div>
+
+            <div class="input-wrapper">
+                  <div class="form-input">
+                        <input class="" type="text" formControlName="beneficiaryName" autocomplete="on" required/>
+                        <label for="name">Người thụ hưởng</label>
+                  </div>
+            </div>
+      </div>
+
+      <div class="payment-categories">
+            <table class="payment-category-table">
+                  <thead>
+                        <tr>
+                              <th>#</th>
+                              <th>Hạng mục</th>
+                              <th>Hóa đơn</th>
+                              <th>Số lượng</th>
+                              <th>Đơn giá</th>
+                              <th>Thành tiền</th>
+                              <th>Thuế</th>
+                              <th>Số tiền thuế</th>
+                              <th>Số tiền có thuế</th>
+                              <th>Ngân sách</th>
+                              <th>Mã dòng tiền ra</th>
+                        </tr>
+                  </thead>
+                  <tbody>
+                        <tr>
+                              <td>1</td>
+                              <td>
+                                    <input type="text" formControlName="itemName" />
+                              </td>
+                              <td>
+                                    <button type="button" class="button">📄 Chọn hóa đơn</button>
+                              </td>
+                              <td>
+                                    <input type="number" formControlName="quantity" />
+                              </td>
+                              <td>
+                                    <input type="number" formControlName="unitPrice" />
+                              </td>
+                              <td></td>
+                              <td>
+                                    <select formControlName="taxRate">
+                                          <option value="0">0%</option>
+                                          <option value="0.05">5%</option>
+                                          <option value="0.08">8%</option>
+                                          <option value="0.10">10%</option>
+                                    </select>
+                              </td>
+                              <td></td>
+                              <td></td>
+                              <td>
+                                    <span>Chọn ngân sách</span>
+                              </td>
+                              <td>
+                                    <span>Chọn mã dòng tiền ra</span>
+                              </td>
+                        </tr>
+                  </tbody>
+            </table>
       </div>
 </form>
