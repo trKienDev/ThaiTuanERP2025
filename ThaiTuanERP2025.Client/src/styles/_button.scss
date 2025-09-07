@@ -2,22 +2,13 @@ button, .button {
       font-family: 'Lexend', sans-serif; 
       font-size: 12px; 
       padding: 7px 10px;
-      border-radius: 8px;
+      border-radius: 3px;
 }
 
 // *** button-1 ***
 .button-1 { border: none; display: flex; background-color: #488aec; color: #ffffff; font-weight: 700; text-align: center; cursor: pointer; vertical-align: middle; align-items: center; border-radius: 0.5rem; user-select: none; gap: 0.75rem; box-shadow: 0 4px 6px -1px #488aec31, 0 2px 4px -1px #488aec17; transition: all 0.6s ease; }
 .button-1:hover { box-shadow: 0 10px 15px -3px #488aec4f, 0 4px 6px -2px #488aec17; }
 .button-1:focus, .button-1:active { opacity: 0.85; box-shadow: none; }
-
-// *** primary-button ***
-.save-button { padding: 0.5em 2em; border: transparent; background: dodgerblue; color: white; border-radius: 4px; }
-.save-button:hover { background: rgb(2,0,36); background: linear-gradient(90deg, rgba(30,144,255,1) 0%, rgba(0,212,255,1) 100%); cursor: pointer;}
-// .primary-button:active { transform: translate(0em, 0.2em); }
-
-.danger-button { padding: 0.5em 2em; border: transparent; box-shadow: 2px 2px 4px rgba(0,0,0,0.4); background: rgb(245, 11, 11); color: white; border-radius: 4px; }
-.danger-button:hover { background: rgb(2,0,36); background: linear-gradient(90deg, rgb(255, 64, 30) 0%, rgb(255, 153, 0) 100%); cursor: pointer;}
-.danger-button:active { transform: translate(0em, 0.2em); }
 
 // *** button-github ***
 .button-github { appearance: none; background-color: #FAFBFC; border: 1px solid rgba(27, 31, 35, 0.15); border-radius: 6px; box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset; box-sizing: border-box; color: #24292E; cursor: pointer; display: inline-block; font-weight: 500; list-style: none; position: relative; transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1); user-select: none; -webkit-user-select: none; touch-action: manipulation; vertical-align: middle; white-space: nowrap; word-wrap: break-word; }
@@ -58,11 +49,11 @@ button, .button {
 .button-noor:hover { background-color: #1C84FF; }
 
 /*** cancel-button ***/
-.cancel-button { align-items: center; background-color: #FFE7E7; background-position: 0 0; border: 1px solid #FEE0E0; border-radius: 5px; box-sizing: border-box; color: #D33A2C; cursor: pointer; display: flex ; font-weight: 700; text-align: left; text-decoration: none; text-shadow: none; text-underline-offset: 1px; transition: border .2s ease-in-out,box-shadow .2s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: manipulation; white-space: nowrap; word-break: break-word; border: 2px solid transparent; transition: all ease 0.5s; }
-.cancel-button:active, .cancel-button:hover, .cancel-button:focus { outline: 0; }
-.cancel-button:active { background-color: #D33A2C; box-shadow: rgba(0, 0, 0, 0.12) 0 1px 3px 0 inset; color: #FFFFFF; }
-.cancel-button:hover { background-color: #FFE3E3; border: 2px solid #FAA4A4; }
-.cancel-button:active:hover, .cancel-button:focus:hover, .cancel-button:focus { background-color: #D33A2C; box-shadow: rgba(0, 0, 0, 0.12) 0 1px 3px 0 inset; color: #FFFFFF; }
+.danger-button { align-items: center; background-color: #FFE7E7; background-position: 0 0; border: 1px solid #FEE0E0; border-radius: 5px; box-sizing: border-box; color: #D33A2C; cursor: pointer; display: flex ; font-weight: 700; text-align: left; text-decoration: none; text-shadow: none; text-underline-offset: 1px; transition: border .2s ease-in-out,box-shadow .2s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: manipulation; white-space: nowrap; word-break: break-word; border: 2px solid transparent; transition: all ease 0.5s; }
+.danger-button:active, .danger-button:hover, .danger-button:focus { outline: 0; }
+.danger-button:active { background-color: #D33A2C; box-shadow: rgba(0, 0, 0, 0.12) 0 1px 3px 0 inset; color: #FFFFFF; }
+.danger-button:hover { background-color: #FFE3E3; border: 2px solid #FAA4A4; }
+.danger-button:active:hover, .danger-button:focus:hover, .danger-button:focus { background-color: #D33A2C; box-shadow: rgba(0, 0, 0, 0.12) 0 1px 3px 0 inset; color: #FFFFFF; }
 
 /*** icon-button ***/
 .icon-button { background-color: #007ACC; outline: 2px #007ACC solid; outline-offset: -2px; border-radius: 5px; border: none; cursor: pointer; transition: 400ms; }
@@ -70,5 +61,50 @@ button, .button {
 .icon-button:hover { background-color: transparent; }
 .icon-button:hover .text { color: #007ACC; }
 
-.text-button { background-color: transparent; border-color: transparent; color: var(--ultramarin); }
-.text-button:hover { cursor: pointer; text-decoration: underline;}
+/*** icon-button ***/
+.link-button { color: var(--ultramarin); background-color: var(--light-blue-color); border-color: none; border: none; border-bottom: 2px solid var(--ultramarin); border-radius: unset; border-top-left-radius: 5px; border-top-right-radius: 5px; }
+.link-button:hover { cursor: pointer; background-color: azure;}
+
+/* CSS */
+.cancel-button { 
+      border: none; background: #6E6D70;
+      box-shadow: 0px 0.5px 1px rgba(0, 0, 0, 0.1), inset 0px 0.5px 0.5px rgba(255, 255, 255, 0.5), 0px 0px 0px 0.5px rgba(0, 0, 0, 0.12); 
+      color: white; user-select: none; -webkit-user-select: none; touch-action: manipulation; 
+}
+.cancel-button:focus { box-shadow: inset 0px 0.8px 0px -0.25px rgba(255, 255, 255, 0.2), 0px 0.5px 1px rgba(0, 0, 0, 0.1), 0px 0px 0px 3.5px rgba(58, 108, 217, 0.5); outline: 0; }
+.cancel-button:hover { cursor: pointer; opacity: 0.8; }
+
+
+/* CSS */   
+.save-button {
+  align-items: center;
+  appearance: button;
+  background-color: #0276FF;
+  border-style: none;
+  box-shadow: rgba(255, 255, 255, 0.26) 0 1px 2px inset;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  flex-shrink: 0;
+  font-family: "RM Neue",sans-serif;
+  font-size: 100%;
+  line-height: 1.15;
+  margin: 0;
+  padding: 10px 21px;
+  text-align: center;
+  text-transform: none;
+  transition: color .13s ease-in-out,background .13s ease-in-out,opacity .13s ease-in-out,box-shadow .13s ease-in-out;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.save-button:active {
+  background-color: #006AE8;
+}
+
+.save-button:hover {
+  background-color: #1C84FF;
+}

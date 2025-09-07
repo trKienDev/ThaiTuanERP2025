@@ -120,7 +120,7 @@ app.UseAuthorization();
 app.MapControllers();
 app.UseStaticFiles(new StaticFileOptions
 {
-	FileProvider = new PhysicalFileProvider("E:\\KIEN\\task\\ThaiTuanERP2025.drive"),
+	FileProvider = new PhysicalFileProvider("D:\\ERP-Files"),
 	RequestPath = "/files/public"
 });
 

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, HostListener, Input, Output, QueryList, ViewChildren } from '@angular/core';
+import { Component, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnChanges, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 export type KitDropdownOption = { id: string; label: string };
 
@@ -18,8 +19,13 @@ export type KitDropdownOption = { id: string; label: string };
                   transition('open => closed', [ animate('300ms ease') ]),
             ]),
       ],
+      providers: [{
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => KitDropdownComponent),
+            multi: true
+      }]
 })
-export class KitDropdownComponent {
+export class KitDropdownComponent implements ControlValueAccessor, OnChanges {
       @Input() options: KitDropdownOption[] = [];
       @Input() placeholder = 'chọn ....';
       @Input() width: string | number | null = null;
@@ -32,11 +38,41 @@ export class KitDropdownComponent {
 
       isOpen = false;
       selectedLabel: string | null = null;
+      disabled = false;
+
+      private _value: string | null = null;
       
       focusedIndex = -1;
       @ViewChildren('optRef') optionItems!: QueryList<ElementRef<HTMLLIElement>>;
 
       constructor(private eRef: ElementRef<HTMLElement>) {}
+
+      // ===== CVA =====
+      private onChange: (val: string | null) => void = () => {};
+      private onTouched: () => void = () => {};
+
+      writeValue(value: string | null): void {
+            this._value = value;
+            this.syncLabelFromValue();
+      }
+
+      registerOnChange(fn: (val: string | null) => void): void {
+            this.onChange = fn;
+      }
+
+      registerOnTouched(fn: () => void): void {
+            this.onTouched = fn;
+      }
+
+      setDisabledState(isDisabled: boolean): void {
+            this.disabled = isDisabled;
+      }
+
+      // Đồng bộ label mỗi khi options thay đổi (ví dụ: load async)
+      ngOnChanges(changes: SimpleChanges): void {
+            if (changes['options']) this.syncLabelFromValue();
+      }
+
 
       onToggle() {
             this.isOpen = !this.isOpen;
@@ -50,8 +86,13 @@ export class KitDropdownComponent {
       }
 
       selectOption(opt: KitDropdownOption) {
+            if(this.disabled) return;
+            this._value = opt.id;
             this.selectedLabel = opt.label;
             this.isOpen = false;
+
+            this.onChange(this._value);
+            this.onTouched();
             this.selectionChange.emit(opt);
       }
 
@@ -120,5 +161,15 @@ export class KitDropdownComponent {
             const items = this.optionItems?.toArray();
             if (!items || this.focusedIndex < 0 || this.focusedIndex >= items.length) return;
             items[this.focusedIndex].nativeElement.scrollIntoView({ block: 'nearest' });
+      }
+
+      private syncLabelFromValue() {
+            if(!this._value) {
+                  this.selectedLabel = null;
+                  return;
+            }
+
+            const opt = this.options.find(o => o.id === this._value);
+            this.selectedLabel = opt ? opt.label : null;
       }
 }
