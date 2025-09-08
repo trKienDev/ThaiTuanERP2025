@@ -1,6 +1,9 @@
 // align-items
 .align-items-center { align-items: center; }
 
+// align-content
+.align-content-center { align-content: center; }
+
 // cursort
 .cursor-pointer { cursor: pointer; }
 
@@ -9,7 +12,9 @@
 .fl-wrap { flex-wrap: wrap;}
 .d-none { display: none; }
 
-// font-family
+// margin
+.mar-top-10 { margin-top: 10px; }
+.mar-top-20 { margin-top: 20px; }
 
 // justify-content
 .justify-content-center { justify-content: center; }
@@ -20,6 +25,12 @@
 .gap-5p { gap: 5px; }
 .gap-10p { gap: 10px; }
 .gap-20p { gap: 20px; }
+
+// text
+.text-align-center { text-align: center !important; }
+
+// padding
+.pad-10p { padding: 10px; }
 
 // user-select
 .user-select-none { user-select: none; }
@@ -38,3 +49,4 @@
 .mw-100 { max-width: 100%;}
 // min-width
 .minw-340px { min-width: 340px;}
+.width-fit-content { width: fit-content; }

@@ -13,10 +13,10 @@
             <div class="alert dark-alert w-50"> 🔒 ĐỀ NGHỊ THANH TOÁN</div>
       </div>
 
-      <div class="payee-container d-flex gap-10p">
+      <div class="payee-container d-flex gap-10p pad-10p">
             <div class="payee-type-wrapper">
                   <span>Công ty trả cho</span>
-                  <kit-dropdown [options]="payeeOptions" placeholder="Chọn đối tượng" (selectionChange)="onPayeeSelected($event)" [width]="120"></kit-dropdown>
+                  <kit-dropdown [options]="payeeOptions" placeholder="chọn đối tượng" (selectionChange)="onPayeeSelected($event)" [width]="120"></kit-dropdown>
             </div>
             <div class="payee-selection">
                   <div class="supplier-selection" *ngIf="selectedPayee === 'supplier'">
@@ -29,7 +29,7 @@
             </div>
       </div>
 
-      <div class="bank-account-input-container d-flex gap-10p">
+      <div class="bank-account-input-container d-flex gap-10p mar-top-20">
 
             <div class="input-wrapper">
                   <div class="form-input">
@@ -53,57 +53,84 @@
             </div>
       </div>
 
-      <div class="payment-categories">
-            <table class="payment-category-table">
-                  <thead>
-                        <tr>
-                              <th>#</th>
-                              <th>Hạng mục</th>
-                              <th>Hóa đơn</th>
-                              <th>Số lượng</th>
-                              <th>Đơn giá</th>
-                              <th>Thành tiền</th>
-                              <th>Thuế</th>
-                              <th>Số tiền thuế</th>
-                              <th>Số tiền có thuế</th>
-                              <th>Ngân sách</th>
-                              <th>Mã dòng tiền ra</th>
-                        </tr>
-                  </thead>
-                  <tbody>
-                        <tr>
-                              <td>1</td>
-                              <td>
-                                    <input type="text" formControlName="itemName" />
-                              </td>
-                              <td>
-                                    <button type="button" class="button">📄 Chọn hóa đơn</button>
-                              </td>
-                              <td>
-                                    <input type="number" formControlName="quantity" />
-                              </td>
-                              <td>
-                                    <input type="number" formControlName="unitPrice" />
-                              </td>
-                              <td></td>
-                              <td>
-                                    <select formControlName="taxRate">
-                                          <option value="0">0%</option>
-                                          <option value="0.05">5%</option>
-                                          <option value="0.08">8%</option>
-                                          <option value="0.10">10%</option>
-                                    </select>
-                              </td>
-                              <td></td>
-                              <td></td>
-                              <td>
-                                    <span>Chọn ngân sách</span>
-                              </td>
-                              <td>
-                                    <span>Chọn mã dòng tiền ra</span>
-                              </td>
-                        </tr>
-                  </tbody>
-            </table>
+      <div class="payment-categories mar-top-20 pad-10p">
+            <div class="payment-categories-heading d-flex gap-10p">
+                  <div class="payment-categories-title align-content-center">
+                        <span>Bảng hạng mục</span><span style="color: red;">  *</span>
+                  </div>
+                  <div class="payment-categories-currency">
+                        <!-- <kit-dropdown formControlName="currencyId" [options]="currencyOptions" [width]="100" placeholder="VND"></kit-dropdown> -->
+                  </div>
+            </div>
+            <div class="payment-categories-body">
+                  <table class="table payment-category-table mar-top-10">
+                        <thead>
+                              <tr>
+                                    <th style="width: 1%;">#</th>
+                                    <th>Hạng mục <span style="color: red;">  *</span></th>
+                                    <th class="head-quanity">Số lượng <span style="color: red;">  *</span></th>
+                                    <th>Đơn giá</th>
+                                    <th>Thành tiền</th>
+                                    <th class="head-tax">Thuế</th>
+                                    <th>Số tiền thuế</th>
+                                    <th>Số tiền có thuế</th>
+                                    <th class="head-extension">Mở rộng</th>
+                                    <th class="head-invoice">Hóa đơn</th>
+                                    <th>Xóa</th>
+                              </tr>
+                        </thead>
+                        <tbody formArrayName="items">
+                              <tr *ngFor="let row of items.controls; let i = index; trackBy: trackByIndex" [formGroupName]="i">
+                                    <td>{{ i + 1 }}</td>
+                                    <td>
+                                          <input type="text" formControlName="itemName" placeholder="Tên hạng mục"/>
+                                    </td>
+                                    <td>
+                                          <input type="text" formControlName="quantity" inputmode="decimal" appMoney [appMoneyDecimals]="0" />
+                                    </td>
+                                    <td>
+                                          <input type="text" formControlName="unitPrice" inputmode="decimal" appMoney [appMoneyDecimals]="0"  />
+                                    </td>
+                                    <td> {{ row.get('amount')?.value | number:'1.0-2' }} </td>
+                                    <td>
+                                          <kit-dropdown [options]="taxOptions" (selectionChange)="onTaxSelected($event, i)" [width]="115" [placeholder]="'chọn mức thuế'"></kit-dropdown>
+                                    </td>
+                                    <td>
+                                          <input type="text" formControlName="taxAmount" inputmode="decimal" appMoney [appMoneyDecimals]="0">
+                                    </td>
+                                    <td>{{ row.get('totalWithTax')?.value | number:'1.0-2' }}</td>
+                                    <td class="text-align-center">
+                                          <button type="button" class="button icon-button" (click)="openExtensionDialog(i)">
+                                                <span class="text material-icons-outlined">tune</span>
+                                          </button>
+                                    </td>
+                                    <td class="text-align-center">
+                                          <button type="button" class="button invoice-button" (click)="openMiniInvoiceRequestDialog(i)">
+                                                <span class="text material-icons-round">receipt_long</span>
+                                          </button>
+                                    </td>
+                                    <td class="d-flex justify-content-center">
+                                          <button type="button" class="button danger-button" (click)="removeItem(i)" aria-label="Xóa dòng">
+                                                <span class="material-icons-outlined">close</span>
+                                          </button>
+                                    </td>
+                              </tr>
+                              <tr class="tr-non-hover">
+                                    <td colspan="12"><button type="button" class="text-button" (click)="addItem()">Thêm hạng mục</button></td>
+                              </tr>
+                        </tbody>
+                        <!-- Tổng -->
+                        <tfoot *ngIf="items.length">
+                              <tr class="total-row">
+                                    <td colspan="4" class=""><strong>Tổng</strong></td>
+                                    <td>{{ totalAmount | number: '1.0-2'}}</td>
+                                    <td></td>
+                                    <td>{{ totalTax | number: '1.0-2'}}</td>
+                                    <td>{{ totalWithTax | number: '1.0-2'}}</td>
+                                    <td colspan="4"></td>
+                              </tr>
+                        </tfoot>
+                  </table>
+            </div>
       </div>
 </form>

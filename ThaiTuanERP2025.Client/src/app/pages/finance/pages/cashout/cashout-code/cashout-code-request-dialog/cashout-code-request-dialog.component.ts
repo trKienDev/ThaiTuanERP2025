@@ -7,7 +7,6 @@ import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
-import { CashOutCodeService } from "../../../../services/cashout-code.service";
 import { CashoutGroupDto } from "../../../../models/cashout-group.model";
 import { LedgerAccountDto } from "../../../../models/ledger-account.model";
 import { CashoutGroupService } from "../../../../services/cashout-group.service";
@@ -15,6 +14,7 @@ import { LedgerAccountService } from "../../../../services/ledger-account.servic
 import { handleHttpError } from "../../../../../../core/utils/handle-http-errors.util";
 import { CreateCashoutCodeRequest } from "../../../../models/cashout-code.model";
 import { catchError, of } from "rxjs";
+import { CashoutCodeService } from "../../../../services/cashout-code.service";
 
 
 @Component({
@@ -28,7 +28,7 @@ import { catchError, of } from "rxjs";
 export class CashoutCodeRequestDialogComponent implements OnInit {
       private formBuilder = inject(FormBuilder);
       private dialogRef = inject(MatDialogRef<CashoutCodeRequestDialogComponent>);
-      private cashoutCodeService = inject(CashOutCodeService);
+      private cashoutCodeService = inject(CashoutCodeService);
 
       saving = false;
       errorMessages: string[] = [];

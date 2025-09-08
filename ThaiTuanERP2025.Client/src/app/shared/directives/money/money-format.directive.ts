@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostListener, input, Input, OnDestroy } from "@angular/core";
+import { Directive, ElementRef, HostListener, Input, OnDestroy } from "@angular/core";
 import { NgControl } from "@angular/forms";
 import { Subscription } from "rxjs";
 
@@ -12,13 +12,18 @@ export class MoneyFormatDirective implements OnDestroy {
 
       private subscription?: Subscription;
       private composing = false;
+      private updatingView = false;
 
       constructor(private element: ElementRef<HTMLInputElement>, private ngControl: NgControl) {
             // Nếu value thay đổi từ code, format lại display
             this.subscription = this.ngControl.control?.valueChanges.subscribe(v => {
-                  // Tránh vòng lặp khi do chính directive set
-                  if(this.element.nativeElement !== document.activeElement) {
-                        this.element.nativeElement.value = this.formatFromNumber(v);
+                  if (this.element.nativeElement !== document.activeElement) {
+                        // chạy sau khi Angular đã writeValue để không bị ghi đè
+                        Promise.resolve().then(() => {
+                              this.updatingView = true;                              // <-- bật cờ
+                              this.element.nativeElement.value = this.formatFromNumber(v);
+                              this.updatingView = false;                             // <-- tắt cờ
+                        });
                   }
             });
       }
@@ -30,29 +35,37 @@ export class MoneyFormatDirective implements OnDestroy {
       
       @HostListener('input', ['$event'])
       onInput(event: Event) {
-            if(this.composing) return;
+            if (this.composing || this.updatingView) return;            // <-- CHẶN tái nhập
 
             const input = this.element.nativeElement;
             const prev = input.value;
             const selectionStart = input.selectionStart ?? prev.length;
+            const unitsBeforeCaret = this.countUnits(prev.slice(0, selectionStart)); // Đếm "đơn vị đếm caret" (digit + dấu thập phân nếu cho phép) trước caret cũ
 
-            // Đếm "đơn vị đếm caret" (digit + dấu thập phân nếu cho phép) trước caret cũ
-            const unitsBeforeCaret = this.countUnits(prev.slice(0, selectionStart));
-
-            // Chuẩn hóa chuỗi (chỉ còn số và (.) nếu decimals>0) + giới hạn số lẻ
-            const normalized = this.normalize(prev);
+            const normalized = this.normalize(prev); // Chuẩn hóa chuỗi (chỉ còn số và (.) nếu decimals>0) + giới hạn số lẻ
 
             // Cập nhật FormControl với number
             const numeric = this.toNumber(normalized);
             this.ngControl.control?.setValue(numeric, { emitEvent: true });
 
+            // 🔒 Chỉ set vào FormControl nếu giá trị THỰC SỰ khác,
+            // tránh set đè trùng với DefaultValueAccessor
+            const ctrl = this.ngControl.control;
+            Promise.resolve().then(() => {
+                  if (ctrl && ctrl.value !== numeric) {
+                        ctrl.setValue(numeric, { emitEvent: true });
+                  }
+            });
+
             // Format hiển thị với dấu phẩy
             const formatted = this.formatFromString(normalized);
-            input.value = formatted;
 
+            this.updatingView = true;                                   // <-- bật cờ
+            input.value = formatted;
             // Đặt lại caret dựa trên số "đơn vị" trước caret
             const newCaret = this.indexFromUnits(formatted, unitsBeforeCaret);
             input.setSelectionRange(newCaret, newCaret);
+            this.updatingView = false;                                  // <-- tắt cờ
       }
 
       @HostListener('focus')
@@ -64,11 +77,14 @@ export class MoneyFormatDirective implements OnDestroy {
 
       @HostListener('blur')
       onBlur() {
-            const input = this.element.nativeElement;
-            const normalized = this.normalize(input.value);
-            const numeric = this.toNumber(normalized);
-            this.ngControl.control?.setValue(numeric, { emitEvent: true });
-            input.value = this.formatFromNumber(numeric);
+            const current = Number(this.ngControl.control?.value ?? this.element.nativeElement.value);
+            const rounded = (this.decimals === 0) ? Math.round(current) : Number(current.toFixed(this.decimals));
+
+            this.ngControl.control?.setValue(rounded, { emitEvent: true });
+            this.updatingView = true;                                   // <-- bật cờ
+
+            this.element.nativeElement.value = this.formatFromNumber(rounded);
+            this.updatingView = false;                                  // <-- tắt cờ
       }
 
       @HostListener('compositionstart') onCompStart() { this.composing = true; }
@@ -164,21 +180,4 @@ export class MoneyFormatDirective implements OnDestroy {
             }
             return formatted.length;
       }
-
-      // private parse(text: any): number {
-      //       if(text == null) return 0;
-      //       const normalized = String(text).replace(/,/g, '').trim();
-      //       if(normalized === '') return 0;
-      //       const number = Number(normalized);
-      //       return isNaN(number) ? 0 : number; 
-      // } 
-
-      // private format(value: any): string {
-      //       const number = Number(value);
-      //       if(isNaN(number)) return '';
-      //       return new Intl.NumberFormat('en-US', {
-      //             minimumFractionDigits: this.decimals,
-      //             maximumFractionDigits: this.decimals,
-      //       }).format(number);
-      // }
 }

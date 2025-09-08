@@ -61,9 +61,13 @@ button, .button {
 .icon-button:hover { background-color: transparent; }
 .icon-button:hover .text { color: #007ACC; }
 
-/*** icon-button ***/
+/*** link-button ***/
 .link-button { color: var(--ultramarin); background-color: var(--light-blue-color); border-color: none; border: none; border-bottom: 2px solid var(--ultramarin); border-radius: unset; border-top-left-radius: 5px; border-top-right-radius: 5px; }
-.link-button:hover { cursor: pointer; background-color: azure;}
+.link-button:hover { cursor: pointer; background-color: azure; }
+
+/*** text-button ***/
+.text-button { color: var(--ultramarin); background-color: transparent; border: none;}
+.text-button:hover { text-decoration: underline; cursor: pointer;}
 
 /* CSS */
 .cancel-button { 
@@ -74,37 +78,7 @@ button, .button {
 .cancel-button:focus { box-shadow: inset 0px 0.8px 0px -0.25px rgba(255, 255, 255, 0.2), 0px 0.5px 1px rgba(0, 0, 0, 0.1), 0px 0px 0px 3.5px rgba(58, 108, 217, 0.5); outline: 0; }
 .cancel-button:hover { cursor: pointer; opacity: 0.8; }
 
-
 /* CSS */   
-.save-button {
-  align-items: center;
-  appearance: button;
-  background-color: #0276FF;
-  border-style: none;
-  box-shadow: rgba(255, 255, 255, 0.26) 0 1px 2px inset;
-  box-sizing: border-box;
-  color: #fff;
-  cursor: pointer;
-  display: flex;
-  flex-direction: row;
-  flex-shrink: 0;
-  font-family: "RM Neue",sans-serif;
-  font-size: 100%;
-  line-height: 1.15;
-  margin: 0;
-  padding: 10px 21px;
-  text-align: center;
-  text-transform: none;
-  transition: color .13s ease-in-out,background .13s ease-in-out,opacity .13s ease-in-out,box-shadow .13s ease-in-out;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-}
-
-.save-button:active {
-  background-color: #006AE8;
-}
-
-.save-button:hover {
-  background-color: #1C84FF;
-}
+.save-button { align-items: center; appearance: button; background-color: #0276FF; border-style: none; box-shadow: rgba(255, 255, 255, 0.26) 0 1px 2px inset; box-sizing: border-box; color: #fff; cursor: pointer; display: flex; flex-direction: row; flex-shrink: 0; font-family: "Lexend",sans-serif; font-size: 100%; line-height: 1.15; margin: 0; padding: 10px 21px; text-align: center; text-transform: none; transition: color .13s ease-in-out,background .13s ease-in-out,opacity .13s ease-in-out,box-shadow .13s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+.save-button:active { background-color: #006AE8; }
+.save-button:hover { background-color: #1C84FF; }

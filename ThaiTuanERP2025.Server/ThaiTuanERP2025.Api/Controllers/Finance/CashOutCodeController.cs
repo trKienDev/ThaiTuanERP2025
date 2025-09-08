@@ -24,7 +24,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 			_mediator = mediator;
 		}
 
-		[HttpGet]
+		[HttpGet("all")]
 		public async Task<ActionResult> GetAll() {
 			var list = await _mediator.Send(new GetAllCashoutCodesQuery());
 			return Ok(ApiResponse<List<CashoutCodeDto>>.Success(list));

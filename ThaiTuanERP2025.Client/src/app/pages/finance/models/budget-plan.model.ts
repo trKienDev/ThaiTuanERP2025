@@ -1,4 +1,4 @@
-export interface BudgetPlanModel {
+export interface BudgetPlanDto {
       id: string;
       amount: number;
       status: string;
@@ -6,9 +6,12 @@ export interface BudgetPlanModel {
       budgetCodeName: string;
       budgetPeriodName: string;
 }
-export interface CreateBudgetPlanModel {
+export interface CreateBudgetPlanRequest {
       departmentId: string;
       budgetCodeId: string;
       budgetPeriodId: string;
       amount: number;
+}
+export interface UpdateBudgetPlanRequest extends CreateBudgetPlanRequest {
+      id: string;
 }
