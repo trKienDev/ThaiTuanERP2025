@@ -1,6 +1,6 @@
 <h2 class="modal-title">Thêm Nhà cung cấp mới</h2>
 
-<div class="popup-modal" [formGroup]="supplierForm">
+<div [formGroup]="supplierForm">
       
       <div class="input-wrapper">
             <div class="form-input">
@@ -11,7 +11,7 @@
 
       <div class="input-wrapper">
             <div class="form-input">
-                  <input class="" type="text" formControlName="taxCode" autocomplete="on" />
+                  <input class="" type="text" formControlName="taxCode" autocomplete="on" required />
                   <label for="name">Mã số thuế</label>
             </div>
       </div>

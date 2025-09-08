@@ -1,0 +1,53 @@
+<h2 class="dialog-title">Thêm nhanh hóa đơn mới</h2>
+<div class="dialog-body">
+
+      <div class="dialog-field">
+            <div class="input-wrapper">
+                  <div class="form-input">
+                        <input class="" type="text" formControlName="invoiceName" autocomplete="on" required/>
+                        <label for="name">Tên hóa đơn <span style="color: red;">  *</span></label>
+                  </div>
+            </div>
+      </div>
+
+      <div class="dialog-field">
+            <div class="input-wrapper">
+                  <div class="form-input">
+                        <input class="" type="text" formControlName="invoiceNumber" autocomplete="on" required/>
+                        <label for="name">Số hóa đơn <span style="color: red;">  *</span></label>
+                  </div>
+            </div>
+      </div>
+
+      <div class="dialog-field">
+            <div class="input-wrapper">
+                  <div class="form-input">
+                        <input class="" type="text" formControlName="sellerTaxNumber" autocomplete="on" required/>
+                        <label for="name">Mã số thuế người bán <span style="color: red;">  *</span></label>
+                  </div>
+            </div>
+      </div>
+
+      <div class="dialog-field">
+            <div class="input-wrapper">
+                  <div class="d-flex gap-10p">
+                        <label class="w-40 align-content-center" for="name">Ngày lập hóa đơn <span style="color: red;">  *</span></label>
+                        <input class="" type="date" formControlName="invoiceDate" autocomplete="on" required/>
+                  </div>
+            </div>
+      </div>
+
+      <div class="dialog-field">
+            <div class="input-wrapper">
+                  <div class="d-flex gap-10p">
+                        <label class="w-40 align-content-center" for="name">Tệp hóa đơn <span style="color: red;">  *</span></label>
+                        <input class="" type="file" formControlName="invoiceFile" autocomplete="on" required/>
+                  </div>
+            </div>
+      </div>
+
+      <div class="actions d-flex gap-10p mar-top-20">
+            <button class="w-50 button cancel-button" (click)="close()">Hủy</button>
+            <button class="w-50 button save-button d-flex justify-content-center">Lưu</button>
+      </div>
+</div>

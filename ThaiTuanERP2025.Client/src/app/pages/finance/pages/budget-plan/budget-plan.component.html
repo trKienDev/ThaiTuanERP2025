@@ -29,7 +29,7 @@
             </option>
       </select>
 
-      <input type="number" [(ngModel)]="formData.amount" name="amount" placeholder="Số tiền" required>
+      <input type="text" [(ngModel)]="formData.amount" name="amount" placeholder="Số tiền" appMoney [appMoneyDecimals]="0" required>
 
       <button type="submit">Tạo</button>
 </form>

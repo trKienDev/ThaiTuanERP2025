@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnDestroy, OnInit } from "@angular/core";
-import { FormBuilder, NonNullableFormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
+import { FormArray, FormBuilder, FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { KitDropdownComponent, KitDropdownOption } from "../../../../../shared/components/kit-dropdown/kit-dropdown.component";
@@ -12,12 +12,33 @@ import { startWith, switchMap, takeUntil } from "rxjs/operators"; // <-- thêm
 import { of, Subject } from "rxjs";
 import { BankAccountService } from "../../../services/bank-account.service";
 import { BankAccountDto } from "../../../models/bank-account.model";
+import { MoneyFormatDirective } from "../../../../../shared/directives/money/money-format.directive";
+import { TaxService } from "../../../../finance/services/tax.service";
+import { handleHttpError } from "../../../../../core/utils/handle-http-errors.util";
+
+import { BudgetCodeService } from "../../../../finance/services/budget-code.service";
+import { CashoutCodeService } from "../../../../finance/services/cashout-code.service";
+import { ExpensePaymentExtensionComponent, ExpensePaymentExtensionData } from "./expense-payment-extension/expense-payment-extension.component";
+import { MiniInvoiceRequestDialogComponent } from "../../invoices/invoice-request/mini-invoice-request-dialog/mini-invoice-request-dialog.component";
+
+type PaymentItem = {
+      itemName: FormControl<string>;
+      invoiceId: FormControl<string | null>;
+      quantity: FormControl<number | null>;
+      unitPrice: FormControl<number | null>;
+      taxRate: FormControl<number>;
+      amount: FormControl<number>; // readonly
+      taxAmount: FormControl<number>; // readonly
+      totalWithTax: FormControl<number>; // readonly
+      budgetCodeId: FormControl<string | null>; 
+      cashoutCodeId: FormControl<string | null>;
+};
 
 @Component({
       selector: 'expense-payment',
       standalone: true,
       imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule,
-            KitDropdownComponent, MatDialogModule
+            KitDropdownComponent, MatDialogModule, MoneyFormatDirective
 
       ],
       templateUrl: './expense-payment.component.html',
@@ -26,9 +47,14 @@ import { BankAccountDto } from "../../../models/bank-account.model";
 export class ExpensePaymentComponent implements OnInit, OnDestroy {
       private destroy$ = new Subject<void>();
       private formBuilder = inject(FormBuilder);
+      private taxRateById: Record<string, number> = {};
       
       supplierOptions: KitDropdownOption[] = [];
       userOptions: KitDropdownOption[] = [];
+      currencyOptions: KitDropdownOption[] = [];
+      taxOptions: KitDropdownOption[] = [];
+      budgetCodeOptiopns: KitDropdownOption[] = [];
+      cashoutCodeOptions: KitDropdownOption[] = [];
 
       supplierBankAccounts: BankAccountDto[] = [];
       selectedBankAccount: BankAccountDto | null = null;
@@ -37,6 +63,9 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             private supplierService: SupplierService,
             private userService: UserService,
             private bankAccountService: BankAccountService,
+            private taxService: TaxService,
+            private budegetCodeService: BudgetCodeService,
+            private cashoutCodeService: CashoutCodeService,
             private dialog: MatDialog,
       ) {}
 
@@ -47,11 +76,15 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             bankName: this.formBuilder.control<string>('', { nonNullable: true, validators: [Validators.required] }),
             accountNumber: this.formBuilder.control<string>('', { nonNullable: true, validators: [Validators.required] }),
             beneficiaryName: this.formBuilder.control<string>('', { nonNullable: true, validators: [Validators.required] }),
-      })
+            items: this.formBuilder.array<FormGroup<PaymentItem>>([ this.newItemGroup() ]),
+      });
 
       ngOnInit(): void {
             this.loadSuppliers();
             this.loadUsers();
+            this.loadTaxes();
+            this.loadBudgetCodes();
+            this.loadCashoutCodeOptions();
 
             // Khi supplierId đổi → load bank accounts → chọn mặc định → patch vào form
             this.form.get('supplierId')!.valueChanges.pipe(
@@ -63,6 +96,10 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
                   this.selectedBankAccount = this.pickDefulatBankAccount(this.supplierBankAccounts);
                   this.applyBankAccountToForm(this.selectedBankAccount);
             });
+
+            this.currencyOptions = [
+                  { id: 'vnd', label: 'VND' }
+            ]
       }
 
       // Ưu tiên account đang active, không có thì lấy cái đầu
@@ -100,9 +137,9 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       loadUsers(): void {
             this.userService.getAllUsers().subscribe({
                   next: (users) => {
-                        this.userOptions = users.map(s => ({
-                              id: s.id,
-                              label: s.fullName,
+                        this.userOptions = users.map(u => ({
+                              id: u.id,
+                              label: u.fullName,
                         }));
                   }
             })
@@ -111,7 +148,94 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             alert(`Bạn đã chọn: ${opt.label} (id = ${opt.id})`);
       }
 
+      loadTaxes(): void {
+            this.taxService.getAll().subscribe({
+                  next: (taxes) => {
+                        this.taxOptions = taxes.map(t => ({ id: t.id, label: t.policyName, }));
+                        this.taxRateById = Object.fromEntries(taxes.map(t => [t.id, t.rate ]));
+                  }, 
+                  error: (err => handleHttpError(err))
+            })
+      }
+      onTaxSelected(opt: KitDropdownOption, rowIndex: number) {
+           const rate = this.taxRateById[opt.id];
+           if(rate === undefined) return;
+           
+           const row = this.items.at(rowIndex);
+           row.get('taxRate')!.setValue(rate);
+      }
 
+      loadBudgetCodes(): void {
+            this.budegetCodeService.getAll().subscribe({
+                  next: (budgetCodes) => {
+                        this.budgetCodeOptiopns = budgetCodes.map(bc => ({
+                              id: bc.id,
+                              label: bc.name
+                        }));
+                  }, 
+                  error: (err => handleHttpError(err))
+            })
+      }
+      // onBudgetCodeSelected(opt: KitDropdownOption, rowIndex: number) {
+      //       const row = this.items.at(rowIndex);
+      //       row.patchValue({ budgetCodeId: opt.id });
+      // }
+
+      loadCashoutCodeOptions(): void {
+            this.cashoutCodeService.getAll().subscribe({
+                  next: (cashoutCodes) => {
+                        this.cashoutCodeOptions = cashoutCodes.map(co => ({
+                              id: co.id,
+                              label: co.name
+                        }));
+                  },
+                  error: (err => handleHttpError(err))
+            })
+      }
+      // onCashoutCodeSelected(opt: KitDropdownOption, rowIndex: number) {
+      //       const row = this.items.at(rowIndex);
+      //       row.patchValue({ cashoutCodeId: opt.id });
+      // }
+
+      labelOf = (opts: KitDropdownOption[], id: string | null): string => {
+            if(!id) return '';
+            return opts.find(o => o.id === id)?.label ?? '';
+      }
+      openExtensionDialog(rowIndex: number) {
+            const row = this.items.at(rowIndex);
+            const data: ExpensePaymentExtensionData = {
+                  budgetCodeOptions: this.budgetCodeOptiopns,
+                  cashoutCodeOptions: this.cashoutCodeOptions,
+                  budgetCodeId: row.get('budgetCodeId')?.value ?? null,
+                  cashoutCodeId: row.get('cashoutCodeId')?.value ?? null
+            };
+
+            const ref = this.dialog.open(ExpensePaymentExtensionComponent, {
+                  width: '520px',
+                  data,
+                  disableClose: true
+            });
+
+            ref.afterClosed().subscribe(result => {
+                  if(!result) return;
+                  row.patchValue({
+                        budgetCodeId: result.budgetCodeId ?? null,
+                        cashoutCodeId: result.cashoutCodeId ?? null,
+                  }, { emitEvent: true });
+            })
+      }
+
+      openMiniInvoiceRequestDialog(rowIndex: number) {
+            const row = this.items.at(rowIndex);
+            const ref = this.dialog.open(MiniInvoiceRequestDialogComponent, {
+                  width: '520px',
+                  disableClose: true
+            });
+
+            ref.afterClosed().subscribe(result => {
+                        
+            })
+      }
 
       payeeOptions: KitDropdownOption[] = [
             { id: 'supplier', label: 'Nhà cung cấp' },
@@ -146,4 +270,71 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
                   }
             })
       }
+
+      newItemGroup(): FormGroup<PaymentItem> {
+            const group = this.formBuilder.group<PaymentItem>({
+                  itemName: this.formBuilder.nonNullable.control<string>('', [Validators.required, Validators.maxLength(256)]),
+                  invoiceId: this.formBuilder.control<string | null>(null),
+                  quantity: this.formBuilder.control<number | null>(null, { validators: [Validators.required, Validators.pattern('^[0-9]+$'), Validators.min(1)] }),
+                  unitPrice: this.formBuilder.control<number | null>(null, { validators: [Validators.required, Validators.min(0)] }),
+                  taxRate: this.formBuilder.nonNullable.control<number>(0), // mặc định 10%
+                  amount: this.formBuilder.nonNullable.control<number>(0),
+                  taxAmount: this.formBuilder.nonNullable.control<number>(0),
+                  totalWithTax: this.formBuilder.nonNullable.control<number>(0),
+                  budgetCodeId: this.formBuilder.control<string | null>(null),
+                  cashoutCodeId: this.formBuilder.control<string | null>(null),
+            });
+
+            // Tính tự động nhưng KHÔNG đè giá trị user đã sửa (dựa theo .dirty)
+            group.valueChanges.subscribe(v => {
+                  const quantity = Number(v.quantity ?? 0);
+                  const price = Number(v.unitPrice ?? 0);
+                  const rate = Number(v.taxRate ?? 0);
+
+                  const amount = quantity * price;
+                  // const suggestedTax = amount * rate;
+                  const suggestedTax = Math.round(amount * rate); 
+
+                  group.controls.amount.setValue(amount, { emitEvent: false });
+
+                  // Nếu người dùng CHƯA sửa taxAmount (control chưa dirty) → cập nhật theo gợi ý
+                  const taxCtrl = group.controls.taxAmount;
+                  if (!taxCtrl.dirty && Number(taxCtrl.value ?? 0) !== suggestedTax) {
+                        // emitEvent: true để appMoney bắt valueChanges và format ngay
+                        taxCtrl.setValue(suggestedTax, { emitEvent: true });
+                  }
+
+                  // totalWithTax = amount + taxAmount (dù là auto hay user sửa tay)
+                  const taxVal = Number(taxCtrl.value ?? 0);
+                  group.controls.totalWithTax.setValue(amount + taxVal, { emitEvent: false });
+            });
+
+            // các cột tính toán chỉ hiển thị (không cho nhập)
+            group.controls.amount.disable({ emitEvent: false });
+            group.controls.totalWithTax.disable({ emitEvent: false });
+
+            return group;
+      }
+
+      get items(): FormArray<FormGroup<PaymentItem>> {
+            return this.form.controls.items;
+      }
+      get totalAmount(): number {
+            return this.items.controls.reduce((s, g) => s + (Number(g.get('amount')?.value) || 0), 0);
+      }
+      get totalTax(): number {
+            return this.items.controls.reduce((s, g) => s + (Number(g.get('taxAmount')?.value) || 0), 0);
+      }
+      get totalWithTax(): number {
+            return this.items.controls.reduce((s, g) => s + (Number(g.get('totalWithTax')?.value) || 0), 0);
+      }
+
+      addItem(): void {
+            this.items.push(this.newItemGroup());
+      }
+      removeItem(i: number): void {
+            this.items.removeAt(i);
+      }
+      trackByIndex = (_: number, __: any) => _;
+
 }

@@ -8,6 +8,8 @@
 @import url('./styles/_input.scss');
 @import url('./styles/_alert.scss');
 @import url('./styles/_checkbox.scss');
+@import url('./styles/_table.scss');
+@import url('./styles/_dialog.scss');
 
 
 :root {
@@ -23,6 +25,7 @@
       --default-border: #d1d9e0b3;
       --gold-color: #FFD700;
       --platinum: #E5E4E2;
+      --kelly-green-color: #4CBB17;
 
 
       --logo-size: 250px;
@@ -101,3 +104,7 @@ html, body { height: 100%; margin: 0; }
       overflow-y: unset;
 }
 
+/* Chrome, Safari, Edge, Opera */
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+/* Firefox */
+input[type=number] { -moz-appearance: textfield; }

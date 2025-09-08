@@ -1,0 +1,17 @@
+<h3 class="modal-title">Hạng mục mở rộng</h3>
+<div class="dialog-body">
+      <div class="field">
+            <label for="">Mã ngân sách</label>
+            <kit-dropdown [options]="data.budgetCodeOptions" [placeholder]="'chọn mã ngân sách'" (selectionChange)="budgetCodeId = $event.id" [width]="250"></kit-dropdown>
+      </div>
+
+      <div class="field mar-top-10">
+            <label for="">Mã dòng tiền ra</label>
+            <kit-dropdown [options]="data.cashoutCodeOptions" [placeholder]="'chọn mã dòng tiền ra'" (selectionChange)="cashoutCodeId = $event.id" [width]="250"></kit-dropdown>
+      </div>
+
+      <div class="actions d-flex gap-10p mar-top-20">
+            <button class="w-50 button cancel-button" (click)="close()">Hủy</button>
+            <button class="w-50 button save-button d-flex justify-content-center" (click)="save()">Lưu</button>
+      </div>
+</div>
