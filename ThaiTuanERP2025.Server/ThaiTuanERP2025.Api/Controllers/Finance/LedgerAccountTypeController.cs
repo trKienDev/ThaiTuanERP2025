@@ -23,7 +23,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 			_mediator = mediator;
 		}
 
-		[HttpGet]
+		[HttpGet("all")]
 		public async Task<ActionResult> GetAll() {
 			var list = await _mediator.Send(new GetAllLedgerAccountTypesQuery());
 			return Ok(ApiResponse<List<LedgerAccountTypeDto>>.Success(list));

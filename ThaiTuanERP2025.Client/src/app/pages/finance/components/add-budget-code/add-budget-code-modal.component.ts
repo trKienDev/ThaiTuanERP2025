@@ -1,14 +1,13 @@
 import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Output } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { BudgetCodeModel, CreateBudgetCodeModel } from "../../models/budget-code.model";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { BudgetGroupModel } from "../../models/budget-group.model";
 import { BudgetGroupService } from "../../services/budget-group.service";
-import { handleApiResponse } from "../../../../core/utils/handle-api-response.utils";
 import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
+import { CreateBudgetCodeRequest } from "../../models/budget-code.model";
 
 @Component({
       selector: 'add-budget-code-modal',
@@ -22,11 +21,11 @@ import { handleHttpError } from "../../../../core/utils/handle-http-errors.util"
 export class AddBudgetCodeModalComponent {
       @Output() close = new EventEmitter<void>();
       @Output() save = new EventEmitter<{
-            budgetCode: CreateBudgetCodeModel,
+            budgetCode: CreateBudgetCodeRequest,
             callback: (ok: boolean, message?: string) => void
       }>();
 
-      budgetCode: CreateBudgetCodeModel = {
+      budgetCode: CreateBudgetCodeRequest = {
             code: '',
             name: '',
             budgetGroupId: '',

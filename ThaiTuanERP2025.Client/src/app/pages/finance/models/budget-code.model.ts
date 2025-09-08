@@ -1,4 +1,4 @@
-export interface BudgetCodeModel {
+export interface BudgetCodeDto {
       id: string;
       code: string;
       name: string;
@@ -6,8 +6,11 @@ export interface BudgetCodeModel {
       isActive: boolean;
       createdDate: string;
 }
-export interface CreateBudgetCodeModel {
+export interface CreateBudgetCodeRequest {
       code: string;
       name: string;
       budgetGroupId: string;
+}
+export interface UpdateBudgetCodeRequest extends CreateBudgetCodeRequest {
+      id: string;
 }

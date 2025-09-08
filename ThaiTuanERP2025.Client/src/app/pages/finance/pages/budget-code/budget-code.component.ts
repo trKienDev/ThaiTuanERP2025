@@ -1,10 +1,10 @@
 import { CommonModule } from "@angular/common";
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
-import { BudgetCodeModel, CreateBudgetCodeModel } from "../../models/budget-code.model";
 import { BudgetCodeService } from "../../services/budget-code.service";
 import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
 import { AddBudgetCodeModalComponent } from "../../components/add-budget-code/add-budget-code-modal.component";
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { BudgetCodeDto, CreateBudgetCodeRequest } from "../../models/budget-code.model";
 
 @Component({
       selector: 'finance-budget-code',
@@ -18,8 +18,8 @@ export class BudgetCodeComponent implements OnInit {
       newBudgetCode = { code: '', name: '' };
       successMessage: string | null = null;
       errorMessages: string[] = [];
-      budgetCodes: (BudgetCodeModel & { selected: boolean})[] = [];
-      importedBudgetCodes: BudgetCodeModel[] = [];
+      budgetCodes: (BudgetCodeDto & { selected: boolean})[] = [];
+      importedBudgetCodes: BudgetCodeDto[] = [];
 
       @ViewChild('masterCheckbox', { static: false}) masterCheckbox!: ElementRef<HTMLInputElement>;
 
@@ -40,7 +40,7 @@ export class BudgetCodeComponent implements OnInit {
       }
 
       createBudgetCode({ budgetCode, callback}: {
-            budgetCode: CreateBudgetCodeModel,
+            budgetCode: CreateBudgetCodeRequest,
             callback: (ok: boolean, message?: string) => void
       }) {
             this.budgetCodeService.create(budgetCode).subscribe({
@@ -73,11 +73,11 @@ export class BudgetCodeComponent implements OnInit {
             return this.budgetCodes.length > 0 && this.budgetCodes.every(bc => bc.selected);
       }
 
-      onToggleStatus(budgetCode: BudgetCodeModel): void {
+      onToggleStatus(budgetCode: BudgetCodeDto): void {
             const oldValue = budgetCode.isActive;
             budgetCode.isActive = !oldValue;
 
-            this.budgetCodeService.updateStatus(budgetCode.id, budgetCode.isActive).subscribe({
+            this.budgetCodeService.toggleActive(budgetCode.id, budgetCode.isActive).subscribe({
                   next: () => {},
                   error: err => {
                         budgetCode.isActive = !budgetCode.isActive;

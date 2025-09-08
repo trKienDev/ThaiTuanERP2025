@@ -8,7 +8,7 @@ import { ApiResponse } from "../../../core/models/api-response.model";
 import { handleApiResponse$ } from "../../../core/utils/handle-api-response.operator";
 
 @Injectable({ providedIn: 'root' })
-export class CashOutCodeService extends BaseCrudService<CashoutCodeDto, CreateCashoutCodeRequest, UpdateCashoutCodeRequest> {
+export class CashoutCodeService extends BaseCrudService<CashoutCodeDto, CreateCashoutCodeRequest, UpdateCashoutCodeRequest> {
       constructor(http: HttpClient) {
             super(http, `${environment.apiUrl}/cashout-codes`);
       }
