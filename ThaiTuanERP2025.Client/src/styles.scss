@@ -31,7 +31,7 @@
       --logo-size: 250px;
 
 
-      --main-border-radius: 8px;
+      --main-border-radius: 5px;
 
 }
 
@@ -108,3 +108,20 @@ html, body { height: 100%; margin: 0; }
 input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 /* Firefox */
 input[type=number] { -moz-appearance: textfield; }
+
+
+/* mat-calendar */
+.mat-datepicker-content .mat-calendar { width: 300px !important; height: unset !important; }
+.kit-datepicker { background-color: var(--main-bg-color); border-bottom-left-radius: var(--main-border-radius); border-bottom-right-radius: var(--main-border-radius); }
+.kit-datepicker .mat-calendar-controls { margin: unset !important; }
+.kit-datepicker .mat-calendar-header { background: #1976d2;  color: #fff; border-top-left-radius: var(--main-border-radius); border-top-right-radius: var(--main-border-radius); padding: unset;}
+.kit-datepicker .mat-calendar-table-header th { padding: unset; font-weight: bold; opacity: 0.5;}
+.kit-datepicker .mat-calendar-body-label { display: table-cell !important; visibility: hidden; padding: 0 !important; width: 0; height: 0; }
+.kit-datepicker .mat-calendar-content { padding: unset; }
+.kit-datepicker .mat-calendar-arrow { fill: white; }
+.kit-datepicker .mat-calendar-previous-button:hover, .kit-datepicker .mat-calendar-next-button:hover { opacity: 0.8; }
+.kit-datepicker .mat-calendar-body-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical), .kit-datepicker .mat-calendar-body-cell-content:hover { background-color: white !important; color: #1976d2;  }
+.kit-datepicker .mat-calendar-body-cell-content { border-radius: var(--main-border-radius); }
+.kit-datepicker .mat-calendar-body-selected { background-color: #1976d2; color: white; }
+.kit-datepicker .mat-calendar-body-row { display: table-row !important; }
+.kit-datepicker .mat-calendar-body-cell { display: table-cell !important; }
