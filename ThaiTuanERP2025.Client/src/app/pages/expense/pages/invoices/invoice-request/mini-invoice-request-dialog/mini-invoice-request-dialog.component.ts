@@ -10,7 +10,7 @@ import { FormBuilder, Validators, FormsModule, ReactiveFormsModule } from "@angu
 import { FileService } from "../../../../../../core/services/api/file.service";
 import { InvoiceService } from "../../../../services/invoice.service";
 import { firstValueFrom } from "rxjs";
-import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { handleHttpError } from "../../../../../../core/utils/handle-http-errors.util";
 import { ToastService } from "../../../../../../core/services/ui/toast/toast.service";
 
