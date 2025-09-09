@@ -1,0 +1,10 @@
+<div class="kit-snack-row" role="status" aria-live="polite">
+      <mat-icon class="kit-snack-icon">{{ icon }}</mat-icon>
+      <div class="kit-snack-text">
+            <!-- <div class="kit-snack-title" *ngIf="data.title">{{ data.title }}</div> -->
+            <div class="kit-snack-msg">{{ data.message }}</div>
+      </div>
+      <div class="kit-snack-progress" *ngIf="hasProgress">
+            <span class="bar" [style.animation-duration]="progressDuration"></span>
+      </div>
+</div>

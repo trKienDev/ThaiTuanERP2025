@@ -10,11 +10,16 @@ import { FormBuilder, Validators, FormsModule, ReactiveFormsModule } from "@angu
 import { FileService } from "../../../../../../core/services/api/file.service";
 import { InvoiceService } from "../../../../services/invoice.service";
 import { firstValueFrom } from "rxjs";
+import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
+import { handleHttpError } from "../../../../../../core/utils/handle-http-errors.util";
+import { ToastService } from "../../../../../../core/services/ui/toast/toast.service";
 
 @Component({
       selector: 'mini-invoice-request-dialog',
       standalone: true,
-      imports: [CommonModule, MatInputModule, MatDatepickerModule, MatButtonModule, FormsModule, ReactiveFormsModule],
+      imports: [CommonModule, MatInputModule, MatDatepickerModule, MatButtonModule, FormsModule, 
+            ReactiveFormsModule, MatSnackBarModule
+      ],
       templateUrl: './mini-invoice-request-dialog.component.html',
       styleUrl: './mini-invoice-request-dialog.component.scss',
       providers: [...provideMondayFirstDateAdapter() ]
@@ -25,6 +30,7 @@ export class MiniInvoiceRequestDialogComponent {
       private formBuilder = inject(FormBuilder);
       private fileService = inject(FileService);
       private invoiceService = inject(InvoiceService);
+      private toast = inject(ToastService);
 
       // ============ UI state ============
       submitting = false;
@@ -78,6 +84,7 @@ export class MiniInvoiceRequestDialogComponent {
       async save(): Promise<void> {
             if (this.form.invalid) {
                   this.form.markAllAsTouched();
+                  this.toast.warning('Vui lòng điền đầy đủ thông tin bắt buộc');
                   return;
             }
             this.submitting = true;
@@ -91,11 +98,9 @@ export class MiniInvoiceRequestDialogComponent {
                         invoiceName: v.invoiceName!,              // required
                         issueDate: this.toIsoDate(v.issueDate)!,  // required ISO string
                         paymentDate: this.toIsoDate(v.paymentDate) || null,
-
                         sellerName: v.sellerName || "",
                         sellerTaxCode: v.sellerTaxCode!,          // required
                         sellerAddress: v.sellerAddress || null,
-
                         buyerName: v.buyerName || null,
                         buyerTaxCode: v.buyerTaxCode || null,
                         buyerAddress: v.buyerAddress || null,
@@ -107,18 +112,18 @@ export class MiniInvoiceRequestDialogComponent {
 
                   // 2) Nếu chọn file → upload rồi replace main
                   if (this.pendingFile) {
-                        const up = await firstValueFrom(
-                        this.fileService.uploadFile(this.pendingFile, 'Expense', 'Invoice', invoiceId, false)
-                        );
+                        const up = await firstValueFrom(this.fileService.uploadFile(this.pendingFile, 'Expense', 'Invoice', invoiceId, false));
                         const fileId = (up as any).id ?? (up as any).data?.id;
                         await firstValueFrom(this.invoiceService.replaceMainFile(invoiceId, { newFileId: fileId }));
                   }
 
                   // 3) mini-dialog không có invoiceLines, nên kết thúc ở đây
                   // Trả về kết quả để caller có thể refresh list hoặc mở trang chi tiết
+                  this.toast.successRich('Lưu hóa đơn thành công', 'Thành công', { duration: 3000 });
                   this.close({ success: true, invoiceId });
             } catch (err) {
-                  console.error(err);
+                  const msgs = handleHttpError(err);
+                  this.toast.errorRich(msgs, 'Lỗi'); 
                   this.close({ success: false, error: err });
             } finally {
                   this.submitting = false;
