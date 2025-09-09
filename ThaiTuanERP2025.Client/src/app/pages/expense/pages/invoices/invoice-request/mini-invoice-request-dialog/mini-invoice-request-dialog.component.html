@@ -32,8 +32,11 @@
             <div class="input-wrapper">
                   <div class="d-flex gap-10p">
                         <label class="w-40 align-content-center" for="name">Ngày lập hóa đơn <span style="color: red;">  *</span></label>
-                        <input class="" type="date" formControlName="invoiceDate" autocomplete="on" required/>
+                        <input class="invoice-date" id="invoiceDate" matInput [matDatepicker]="picker" formControlName="invoiceDate" placeholder="chọn ngày/tháng/năm"
+                              (focus)="picker.open()" (click)="picker.open()" (keydown.enter)="picker.open()" (keydown.arrowDown)="picker.open()" 
+                        required/>
                   </div>
+                  <mat-datepicker #picker panelClass="kit-datepicker"></mat-datepicker>
             </div>
       </div>
 
