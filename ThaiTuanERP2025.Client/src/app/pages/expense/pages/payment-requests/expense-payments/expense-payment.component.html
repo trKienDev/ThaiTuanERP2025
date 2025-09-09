@@ -105,9 +105,23 @@
                                           </button>
                                     </td>
                                     <td class="text-align-center">
-                                          <button type="button" class="button invoice-button" (click)="openMiniInvoiceRequestDialog(i)">
-                                                <span class="text material-icons-round">receipt_long</span>
-                                          </button>
+                                          <div class="invoice-menu dropdown-menu">
+                                                <button type="button" class="button invoice-button" aria-label="Hóa đơn" cdkOverlayOrigin #invoiceOrigin="cdkOverlayOrigin" (click)="toggleInvoiceMenu(i, $event)">
+                                                      <span class="text material-icons-round">receipt_long</span>
+                                                </button>
+                                                
+                                                <!-- Menu dạng overlay (chỉ mở khi click) -->
+                                                <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="invoiceOrigin" [cdkConnectedOverlayOpen]="invoiceMenuOpenIndex === i" 
+                                                      [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayBackdropClass]="'cdk-overlay-transparent-backdrop'" 
+                                                      (backdropClick)="onMenuClosed()" (overlayOutsideClick)="onMenuClosed()" [cdkConnectedOverlayPositions]="invoiceMenuOverlayPosition"
+                                                >
+                                                <div class="invoice-menu-panel dropdown-menu-panel" role="menu" aria-label="invoice actions" (keydown.escape)="onMenuClosed()" tabindex="0">
+                                                      <button type="button" class="dropdown-menu-item">Chọn hóa đơn đã tải</button>
+                                                      <button type="button" class="dropdown-menu-item" (click)="openMiniInvoiceRequestDialog(i); onMenuClosed()">Tải hóa đơn mới</button>
+                                                      <button type="button" class="dropdown-menu-item" disabled>Xóa hóa đơn đã liên kết</button>
+                                                </div>
+                                                </ng-template>
+                                          </div>
                                     </td>
                                     <td class="d-flex justify-content-center">
                                           <button type="button" class="button danger-button" (click)="removeItem(i)" aria-label="Xóa dòng">

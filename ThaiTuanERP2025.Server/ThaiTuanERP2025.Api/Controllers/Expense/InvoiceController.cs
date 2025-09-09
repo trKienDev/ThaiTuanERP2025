@@ -14,6 +14,7 @@ using ThaiTuanERP2025.Application.Expense.Commands.Invoices.ReplaceMainInvoiceFi
 using ThaiTuanERP2025.Application.Expense.Dtos;
 using ThaiTuanERP2025.Application.Expense.Queries.Invoices.GetInvoiceById;
 using ThaiTuanERP2025.Application.Expense.Queries.Invoices.GetInvoicesPaged;
+using ThaiTuanERP2025.Application.Expense.Queries.Invoices.GetMyInvoices;
 
 namespace ThaiTuanERP2025.Api.Controllers.Expense
 {
@@ -44,6 +45,14 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
 		[HttpGet]
 		public async Task<ActionResult<ApiResponse<PagedResult<InvoiceDto>>>> GetPaged([FromQuery] int page = 1, [FromQuery] int pageSize = 20, [FromQuery] string? keyword = null) {
 			var result = await _mediator.Send(new GetInvoicesPagedQuery(page, pageSize, keyword));
+			return Ok(ApiResponse<PagedResult<InvoiceDto>>.Success(result));
+		}
+
+		[Authorize]
+		[HttpGet("mine")]
+		public async Task<ActionResult<PagedResult<InvoiceDto>>> GetMine([FromQuery] int page = 1, [FromQuery] int pageSize = 20, CancellationToken cancellationToken = default)
+		{
+			var result = await _mediator.Send(new GetMyInvoicesQuery(page, pageSize), cancellationToken);
 			return Ok(ApiResponse<PagedResult<InvoiceDto>>.Success(result));
 		}
 
