@@ -3,7 +3,7 @@
 .form-input { font-family: 'Lexend', sans-serif; position: relative; }
 .form-input input { padding: 0.8em; outline: none; border: 1px solid var(--default-border); background-color: transparent; }
 .form-input label { font-size: 100%; position: absolute; left: 0; padding: 0.8em; margin-left: 0.5em; pointer-events: none; transition: all 0.3s ease; color: rgb(100, 100, 100); }
-.form-input :is(input:focus, input:valid)~label { transform: translateY(-50%) scale(.9); margin: 0em; margin-left: 1.3em; padding: 0.4em; background-color: white; color: var(--ultramarin); }
+.form-input :is(input:focus, input:valid)~label { transform: translateY(-50%) scale(.9); margin: 0em; margin-left: 1.3em; padding: 0.4em; background-color: white; }
 .form-input :is(input:focus, input:valid) { border: 1px solid var(--default-border) !important; box-shadow: 0 0 4px rgba(29, 33, 252, 0.5) !important; }
 
 /* disable-input */ 
