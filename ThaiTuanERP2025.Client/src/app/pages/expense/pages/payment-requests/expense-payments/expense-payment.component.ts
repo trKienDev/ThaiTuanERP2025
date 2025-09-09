@@ -21,6 +21,7 @@ import { CashoutCodeService } from "../../../../finance/services/cashout-code.se
 import { ExpensePaymentExtensionComponent, ExpensePaymentExtensionData } from "./expense-payment-extension/expense-payment-extension.component";
 import { MiniInvoiceRequestDialogComponent } from "../../invoices/invoice-request/mini-invoice-request-dialog/mini-invoice-request-dialog.component";
 import { ConnectedPosition, OverlayModule } from "@angular/cdk/overlay";
+import { MyInvoicesDialogComponent } from "../../invoices/my-invoices-dialog/my-invoices-dialog.component";
 
 type PaymentItem = {
       itemName: FormControl<string>;
@@ -226,6 +227,17 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             const ref = this.dialog.open(MiniInvoiceRequestDialogComponent, {
                   width: '520px',
                   disableClose: true,
+            });
+
+            ref.afterClosed().subscribe(result => {
+
+            })
+      }
+
+      openMyInvoicesDialog(rowIndex: number) {
+            const ref = this.dialog.open(MyInvoicesDialogComponent, {
+                  width: '520px',
+                  disableClose: true
             });
 
             ref.afterClosed().subscribe(result => {

@@ -1,48 +1,43 @@
 ﻿using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Infrastructure.StoredFiles.Configurations;
 
 namespace ThaiTuanERP2025.Infrastructure.StoredFiles.FileStorage
 {
-	public sealed class LocalFileStorage : IFileStorage, IFileStorageInfo
- 	{
-		private readonly string _basePath;
-		private readonly int _expirySeconds;
-		public string BucketName => "local-files";
-		public LocalFileStorage(IOptions<FileStorageOptions> options) {
-			_basePath = options.Value.BasePath ?? "E:\\KIEN\\task\\ThaiTuanERP2025.drive";
-			_expirySeconds = options.Value.PresignedExpirySeconds;
-		}
+	public sealed class LocalFileStorage : IFileStorage
+	{
+		private readonly IOptionsMonitor<FileStorageOptions> _opts;
+
+		public LocalFileStorage(IOptionsMonitor<FileStorageOptions> opts)
+		    => _opts = opts;
 
 		public Task EnsureReadyAsync(CancellationToken cancellationToken)
 		{
-			Directory.CreateDirectory(_basePath);
+			Directory.CreateDirectory(_opts.CurrentValue.BasePath);
 			return Task.CompletedTask;
 		}
 
-		public async Task UploadAsync(string objectKey, Stream content, string conentType, CancellationToken cancellationToken) {
-			var path = Path.Combine(_basePath, objectKey.Replace("/", "\\"));
+		public async Task UploadAsync(string objectKey, Stream content, string contentType, CancellationToken cancellationToken)
+		{
+			var basePath = _opts.CurrentValue.BasePath;
+			var path = Path.Combine(basePath, objectKey.Replace("/", Path.DirectorySeparatorChar.ToString()));
 			Directory.CreateDirectory(Path.GetDirectoryName(path)!);
-			using var fileStream = new FileStream(path, FileMode.Create, FileAccess.Write);	
+			using var fileStream = new FileStream(path, FileMode.Create, FileAccess.Write);
 			await content.CopyToAsync(fileStream, cancellationToken);
 		}
 
 		public Task<string> GetPresignedGetUrlAsync(string objectKey, CancellationToken cancellationToken)
 		{
-			var url = $"/files/public/{objectKey}";
+			var reqPath = _opts.CurrentValue.PublicRequestPath?.TrimEnd('/') ?? "/files/public";
+			var url = $"{reqPath}/{objectKey.Replace("\\", "/")}";
 			return Task.FromResult(url);
 		}
 
 		public Task RemoveAsync(string objectKey, CancellationToken cancellationToken)
 		{
-			var path = Path.Combine(_basePath, objectKey.Replace("/", "\\"));
-			if(File.Exists(path))
-				File.Delete(path);
+			var basePath = _opts.CurrentValue.BasePath;
+			var path = Path.Combine(basePath, objectKey.Replace("/", Path.DirectorySeparatorChar.ToString()));
+			if (File.Exists(path)) File.Delete(path);
 			return Task.CompletedTask;
 		}
 	}
