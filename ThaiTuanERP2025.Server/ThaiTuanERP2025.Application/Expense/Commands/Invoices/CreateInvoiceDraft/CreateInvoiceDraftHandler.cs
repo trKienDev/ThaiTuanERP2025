@@ -1,12 +1,4 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ThaiTuanERP2025.Application.Common.Interfaces;
+﻿using MediatR;
 using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Application.Expense.Dtos;
 using ThaiTuanERP2025.Domain.Exceptions;
@@ -37,7 +29,7 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.Invoices.CreateInvoiceDra
 				BuyerName = request.Request.BuyerName,
 				BuyerTaxCode = request.Request.BuyerTaxCode,
 				BuyerAddress = request.Request.BuyerAddress,
-				IsDraft = true,
+				IsDraft = false,
 			};
 
 			await _unitOfWork.Invoices.AddAsync(invoice);

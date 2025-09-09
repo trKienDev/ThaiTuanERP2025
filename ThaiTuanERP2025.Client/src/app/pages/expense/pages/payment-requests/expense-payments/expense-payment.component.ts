@@ -20,6 +20,7 @@ import { BudgetCodeService } from "../../../../finance/services/budget-code.serv
 import { CashoutCodeService } from "../../../../finance/services/cashout-code.service";
 import { ExpensePaymentExtensionComponent, ExpensePaymentExtensionData } from "./expense-payment-extension/expense-payment-extension.component";
 import { MiniInvoiceRequestDialogComponent } from "../../invoices/invoice-request/mini-invoice-request-dialog/mini-invoice-request-dialog.component";
+import { ConnectedPosition, OverlayModule } from "@angular/cdk/overlay";
 
 type PaymentItem = {
       itemName: FormControl<string>;
@@ -38,7 +39,7 @@ type PaymentItem = {
       selector: 'expense-payment',
       standalone: true,
       imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule,
-            KitDropdownComponent, MatDialogModule, MoneyFormatDirective
+            KitDropdownComponent, MatDialogModule, MoneyFormatDirective, OverlayModule
       ],
       templateUrl: './expense-payment.component.html',
       styleUrl: './expense-payment.component.scss',
@@ -332,4 +333,18 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       }
       trackByIndex = (_: number, __: any) => _;
 
+
+      invoiceMenuOpenIndex: number | null = null;
+      invoiceMenuOverlayPosition: ConnectedPosition[] = [
+            { originX: 'center', originY: 'bottom', overlayX: 'center', overlayY: 'top', offsetY: 8 },
+            { originX: 'end', originY: 'top',    overlayX: 'end',    overlayY: 'bottom', offsetY: -8 },
+      ]
+      toggleInvoiceMenu(i: number, ev: MouseEvent) {
+      ev.stopPropagation();
+            this.invoiceMenuOpenIndex = (this.invoiceMenuOpenIndex === i) ? null : i;
+      }
+
+      onMenuClosed() {
+            this.invoiceMenuOpenIndex = null;
+      }
 }

@@ -26,6 +26,15 @@ export class InvoiceService {
                   .pipe(handleApiResponse$<invoiceDto>());
       }
 
+      getMine(page = 1, pageSize = 20): Observable<PagedResult<invoiceDto>> {
+            const params = new URLSearchParams();
+            params.set('page', String(page));
+            params.set('pageSize', String(pageSize));
+
+            return this.http.get<ApiResponse<PagedResult<invoiceDto>>>(`${this.API_URL}/mine?${params.toString()}`)
+                  .pipe(handleApiResponse$<PagedResult<invoiceDto>>());
+      }
+
       // GET /api/invoices?page=&pageSize=&keyword=
       getPaged(page = 1, pageSize = 20, keyword?: string | null): Observable<PagedResult<invoiceDto>> {
             const params = new URLSearchParams();
@@ -36,6 +45,7 @@ export class InvoiceService {
             return this.http.get<ApiResponse<PagedResult<invoiceDto>>>(`${this.API_URL}?${params.toString()}`)
                   .pipe(handleApiResponse$<PagedResult<invoiceDto>>());
       }
+
 
       // POST /api/invoices/{id}/lines
       addLine(invoiceId: string, body: AddInvoiceLineRequest): Observable<invoiceDto> {
