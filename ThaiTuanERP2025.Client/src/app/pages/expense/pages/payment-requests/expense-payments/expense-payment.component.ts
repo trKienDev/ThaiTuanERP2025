@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { Component, EnvironmentInjector, inject, Injector, OnDestroy, OnInit } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
@@ -39,7 +39,6 @@ type PaymentItem = {
       standalone: true,
       imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule,
             KitDropdownComponent, MatDialogModule, MoneyFormatDirective
-
       ],
       templateUrl: './expense-payment.component.html',
       styleUrl: './expense-payment.component.scss',
@@ -48,6 +47,7 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       private destroy$ = new Subject<void>();
       private formBuilder = inject(FormBuilder);
       private taxRateById: Record<string, number> = {};
+      private dialog = inject(MatDialog);
       
       supplierOptions: KitDropdownOption[] = [];
       userOptions: KitDropdownOption[] = [];
@@ -66,7 +66,6 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             private taxService: TaxService,
             private budegetCodeService: BudgetCodeService,
             private cashoutCodeService: CashoutCodeService,
-            private dialog: MatDialog,
       ) {}
 
       // reactive form
@@ -192,10 +191,6 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
                   error: (err => handleHttpError(err))
             })
       }
-      // onCashoutCodeSelected(opt: KitDropdownOption, rowIndex: number) {
-      //       const row = this.items.at(rowIndex);
-      //       row.patchValue({ cashoutCodeId: opt.id });
-      // }
 
       labelOf = (opts: KitDropdownOption[], id: string | null): string => {
             if(!id) return '';
@@ -229,11 +224,11 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             const row = this.items.at(rowIndex);
             const ref = this.dialog.open(MiniInvoiceRequestDialogComponent, {
                   width: '520px',
-                  disableClose: true
+                  disableClose: true,
             });
 
             ref.afterClosed().subscribe(result => {
-                        
+
             })
       }
 
