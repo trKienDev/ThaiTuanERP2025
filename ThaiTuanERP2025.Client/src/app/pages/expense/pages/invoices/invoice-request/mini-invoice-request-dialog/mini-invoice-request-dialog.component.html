@@ -1,6 +1,6 @@
 <h2 class="dialog-title">Thêm nhanh hóa đơn mới</h2>
-<div class="dialog-body">
-
+<form class="dialog-body" [formGroup]="form" (ngSubmit)="save()">
+      <!-- Tên hóa đơn -->
       <div class="dialog-field">
             <div class="input-wrapper">
                   <div class="form-input">
@@ -10,6 +10,7 @@
             </div>
       </div>
 
+      <!-- Số hóa đơn -->
       <div class="dialog-field">
             <div class="input-wrapper">
                   <div class="form-input">
@@ -19,20 +20,22 @@
             </div>
       </div>
 
+      <!-- Mã số thuế người bán -->
       <div class="dialog-field">
             <div class="input-wrapper">
                   <div class="form-input">
-                        <input class="" type="text" formControlName="sellerTaxNumber" autocomplete="on" required/>
+                        <input class="" type="text" formControlName="sellerTaxCode" autocomplete="on" required/>
                         <label for="name">Mã số thuế người bán <span style="color: red;">  *</span></label>
                   </div>
             </div>
       </div>
 
+      <!-- Ngày lập hóa đơn -->
       <div class="dialog-field">
             <div class="input-wrapper">
                   <div class="d-flex gap-10p">
                         <label class="w-40 align-content-center" for="name">Ngày lập hóa đơn <span style="color: red;">  *</span></label>
-                        <input class="invoice-date" id="invoiceDate" matInput [matDatepicker]="picker" formControlName="invoiceDate" placeholder="chọn ngày/tháng/năm"
+                        <input class="invoice-date" formControlName="issueDate" matInput [matDatepicker]="picker" placeholder="chọn ngày/tháng/năm"
                               (focus)="picker.open()" (click)="picker.open()" (keydown.enter)="picker.open()" (keydown.arrowDown)="picker.open()" 
                         required/>
                   </div>
@@ -40,17 +43,24 @@
             </div>
       </div>
 
+      <!-- File hóa đơn (file/ảnh) -->
       <div class="dialog-field">
-            <div class="input-wrapper">
-                  <div class="d-flex gap-10p">
-                        <label class="w-40 align-content-center" for="name">Tệp hóa đơn <span style="color: red;">  *</span></label>
-                        <input class="" type="file" formControlName="invoiceFile" autocomplete="on" required/>
+            <div class="file-uploader pad-10p">
+                  <input #invoiceFile id="invoiceFile" type="file" class="file-input d-none" accept="application/pdf,image/*" (change)="onFileSelected($event)" />
+                  <div class="button button-github">
+                        <label for="invoiceFile" class="cursor-pointer">Chọn file (PDF/Ảnh)</label>
                   </div>
+                  <span class="file-name" *ngIf="fileName; else noFile" style="margin-left: 10px;">{{ fileName }}</span>
+                  <ng-template #noFile>
+                        <span class="file-name muted" style="color: #888; margin-left: 10px;">Chưa chọn file</span>
+                  </ng-template>
             </div>
       </div>
 
       <div class="actions d-flex gap-10p mar-top-20">
-            <button class="w-50 button cancel-button" (click)="close()">Hủy</button>
-            <button class="w-50 button save-button d-flex justify-content-center">Lưu</button>
+            <button type="button" class="w-50 button cancel-button" (click)="close()">Hủy</button>
+            <button type="submit" class="w-50 button save-button d-flex justify-content-center" [disabled]="submitting">
+                  {{ submitting ? 'Đang lưu...' : 'Lưu' }}
+            </button>
       </div>
-</div>
+</form>
