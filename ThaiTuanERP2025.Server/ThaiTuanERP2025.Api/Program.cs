@@ -11,6 +11,8 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 using ThaiTuanERP2025.Infrastructure;
 using Microsoft.Extensions.FileProviders;
+using ThaiTuanERP2025.Infrastructure.StoredFiles.Configurations;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -94,6 +96,16 @@ builder.Services.AddControllers().AddJsonOptions(options => {
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.WebHost.CaptureStartupErrors(true);
 
+builder.Services.AddOptions<FileStorageOptions>()
+	.Bind(builder.Configuration.GetSection(FileStorageOptions.SectionName))
+	.ValidateDataAnnotations()
+	.Validate(o => !string.IsNullOrWhiteSpace(o.BasePath), "BasePath is required")
+	.PostConfigure(o =>
+	{
+		// Chuẩn hoá path tuyệt đối (dùng forward/backward đều OK)
+		o.BasePath = Path.GetFullPath(o.BasePath);
+	});
+
 var app = builder.Build();
 
 // Seed
@@ -118,10 +130,14 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+var storageOpt = app.Services.GetRequiredService<IOptions<FileStorageOptions>>().Value;
+Directory.CreateDirectory(storageOpt.BasePath); // đảm bảo tồn tại
+
 app.UseStaticFiles(new StaticFileOptions
 {
-	FileProvider = new PhysicalFileProvider("E:\\KIEN\\Task\\ThaiTuanERP2025.drive"),
-	RequestPath = "/files/public"
+	FileProvider = new PhysicalFileProvider(storageOpt.BasePath),
+	RequestPath = storageOpt.PublicRequestPath
 });
 
 app.Run();
