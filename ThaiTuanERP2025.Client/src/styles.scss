@@ -26,12 +26,10 @@
       --gold-color: #FFD700;
       --platinum: #E5E4E2;
       --kelly-green-color: #4CBB17;
-
-
       --logo-size: 250px;
-
-
       --main-border-radius: 5px;
+
+
 
 }
 
@@ -126,3 +124,61 @@ input[type=number] { -moz-appearance: textfield; }
 .kit-datepicker .mat-calendar-body-selected { background-color: #1976d2; color: white; }
 .kit-datepicker .mat-calendar-body-row { display: table-row !important; }
 .kit-datepicker .mat-calendar-body-cell { display: table-cell !important; }
+
+/* mat-snackbar */
+/* Bọc MDC surface: bo góc + shadow + padding đẹp hơn */
+.mat-mdc-snack-bar-container.kit-snack { margin: 16px; }
+.mat-mdc-snack-bar-container.kit-snack .mdc-snackbar__surface { border-radius: 5px; box-shadow: 0 10px 24px rgba(2, 6, 23, 0.18), 0 2px 6px rgba(2, 6, 23, 0.08); animation: kit-snack-in 160ms ease-out; } 
+@keyframes kit-snack-in {
+      from { transform: translateY(-6px); opacity: 0; } 
+      to   { transform: translateY(0);    opacity: 1; } 
+}
+
+
+/* Màu theo loại: dùng CSS vars MDC để an toàn */
+.mat-mdc-snack-bar-container.kit-snack.kit-snack--success { --mdc-snackbar-container-color: rgba(50, 212, 132); --mdc-snackbar-supporting-text-color: #ffffff; }
+
+.mat-mdc-snack-bar-container.kit-snack.kit-snack--error { --mdc-snackbar-container-color: rgba(255, 103, 87); --mdc-snackbar-supporting-text-color: #ffffff; box-shadow: inset 4px 0 0 #b91c1c; }
+.mat-mdc-snack-bar-container.kit-snack.kit-snack--warning { --mdc-snackbar-container-color: rgba(253, 175, 34); --mdc-snackbar-supporting-text-color: white; /* gray-900 */ box-shadow: inset 4px 0 0 #d97706; }
+.mat-mdc-snack-bar-container.kit-snack.kit-snack--info { --mdc-snackbar-container-color: rgba(250, 248, 253); --mdc-snackbar-supporting-text-color: black; box-shadow: inset 4px 0 0 #1d4ed8; }
+/* Layout cho ToastComponent */
+.kit-snack-row { display: flex; align-items: center; gap: 10px; color: var(--mdc-snackbar-supporting-text-color); position: relative; padding-bottom: 6px; }
+.kit-snack-icon { font-size: 24px; height: 24px; width: 24px; line-height: 24px; color: var(--mdc-snackbar-supporting-text-color); }
+.kit-snack-text { display: grid; gap: 2px; }
+.kit-snack-title { font-weight: 700; line-height: 1.1; }
+.kit-snack-msg { line-height: 1.2; white-space: pre-line; }
+.mdc-snackbar__surface { width: fit-content !important; min-width: unset !important; max-width: unset !important; }
+
+.kit-snack-progress {
+  position: absolute;
+  left: -14px;          /* bù đúng padding-x của surface */
+  right: -14px;
+  bottom: -10px;        /* bù đúng padding-bottom của surface */
+  height: 3px;
+  background: rgba(255,255,255,0.22);  /* track */
+  overflow: hidden;
+  border-radius: 0 0 12px 12px;
+}
+
+/* thanh chạy */
+.kit-snack-progress .bar {
+  display: block;
+  height: 100%;
+  width: 0%;
+  /* màu thanh: trắng cho success/info/error (nền đậm), đen cho warning (nền sáng) */
+  background: rgba(255,255,255,0.9);
+  animation-name: kit-snack-progress-line;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+/* warning có text tối → dùng thanh tối */
+.mat-mdc-snack-bar-container.kit-snack.kit-snack--warning .kit-snack-progress .bar {
+  background: #111827; /* gray-900 */
+}
+
+/* keyframes chạy ngang */
+@keyframes kit-snack-progress-line {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
