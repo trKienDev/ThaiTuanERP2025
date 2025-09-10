@@ -51,7 +51,7 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.CashoutCodes.CreateCashou
 				Code = code,
 				Name = name,
 				CashoutGroupId = request.CashoutGroupId,
-				PostingLedegerAccoutnId = request.PostingLedgerAccountId,
+				PostingLedgerAccountId = request.PostingLedgerAccountId,
 				Description = request.Description,
 				IsActive = true
 			};

@@ -49,7 +49,7 @@ namespace ThaiTuanERP2025.Application.Finance.Mappings
 			CreateMap<CashoutCode, CashoutCodeDto>()
 				.ForMember(d => d.CashoutGroupCode, o => o.MapFrom(s => s.CashoutGroup.Code))
 				.ForMember(d => d.CashoutGroupName, o => o.MapFrom(s => s.CashoutGroup.Name))
-				.ForMember(d => d.PostingLedgerAccountId, o => o.MapFrom(s => s.PostingLedegerAccoutnId))
+				.ForMember(d => d.PostingLedgerAccountId, o => o.MapFrom(s => s.PostingLedgerAccountId))
 				.ForMember(d => d.PostingLedgerAccountNumber, o => o.MapFrom(s => s.PostingLedgerAccount.Number))
 				.ForMember(d => d.PostingLedgerAccountName, o => o.MapFrom(s => s.PostingLedgerAccount.Name));
 		}
