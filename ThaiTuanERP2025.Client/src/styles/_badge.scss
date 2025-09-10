@@ -2,9 +2,13 @@
       padding: 0.25rem 0.45rem;
       border-radius: 0.25rem;
       color: #fff;
-      font-size: 10px;
+      font-size: 12px;
       text-align: center;
       width: fit-content;
+      min-height: 21px;   // ép badge cao bằng cell
+      display: flex;
+      align-items: center; 
+      user-select: none;
 }
 
 .primary-badge { background-color: var(--bright-blue-color); }
@@ -66,6 +70,6 @@
 }
 .dark-outline-badge {
       background-color: white;
-      border: 1px solid var(---platinum);
+      border: 1px solid var(--platinum);
       color: var(--platinum);
 }
