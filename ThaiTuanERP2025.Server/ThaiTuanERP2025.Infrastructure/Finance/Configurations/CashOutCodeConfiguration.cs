@@ -1,10 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ThaiTuanERP2025.Domain.Finance.Entities;
 
 namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
@@ -26,10 +21,13 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 				.WithMany(x => x.CashoutCodes)
 				.HasForeignKey(x => x.CashoutGroupId)
 				.OnDelete(DeleteBehavior.Restrict);
+
 			builder.HasOne(x => x.PostingLedgerAccount)
-				.WithMany()
-				.HasForeignKey(x => x.PostingLedegerAccoutnId)
+				.WithOne(a => a.CashoutCode)
+				.HasForeignKey<CashoutCode>(x => x.PostingLedgerAccountId)
 				.OnDelete(DeleteBehavior.Restrict);
+
+			builder.HasIndex(x => x.PostingLedgerAccountId).IsUnique();
 		}
 	}
 }

@@ -250,6 +250,8 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             const ref = this.dialog.open(MyInvoicesDialogComponent, {
                   width: 'fit-content',
                   height: 'fit-content',
+                  maxWidth: '90vw',   
+                  maxHeight: '80vh',
                   disableClose: true,
             });
 

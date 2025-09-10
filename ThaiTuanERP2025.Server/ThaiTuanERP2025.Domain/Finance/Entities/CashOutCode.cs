@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ThaiTuanERP2025.Domain.Common;
+﻿using ThaiTuanERP2025.Domain.Common;
 
 namespace ThaiTuanERP2025.Domain.Finance.Entities
 {
@@ -13,7 +8,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public string Name { get; set; } = null!;	
 
 		public Guid CashoutGroupId { get; set; }	
-		public Guid PostingLedegerAccoutnId { get; set; }
+		public Guid PostingLedgerAccountId { get; set; }
 
 		public string? Description { get; set; }
 		public bool IsActive { get; set; } = true;
