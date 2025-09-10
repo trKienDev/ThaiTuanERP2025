@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
-import { Component, EnvironmentInjector, inject, Injector, OnDestroy, OnInit } from "@angular/core";
-import { FormArray, FormBuilder, FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
+import { Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { KitDropdownComponent, KitDropdownOption } from "../../../../../shared/components/kit-dropdown/kit-dropdown.component";
@@ -15,13 +15,14 @@ import { BankAccountDto } from "../../../models/bank-account.model";
 import { MoneyFormatDirective } from "../../../../../shared/directives/money/money-format.directive";
 import { TaxService } from "../../../../finance/services/tax.service";
 import { handleHttpError } from "../../../../../core/utils/handle-http-errors.util";
-
 import { BudgetCodeService } from "../../../../finance/services/budget-code.service";
 import { CashoutCodeService } from "../../../../finance/services/cashout-code.service";
 import { ExpensePaymentExtensionComponent, ExpensePaymentExtensionData } from "./expense-payment-extension/expense-payment-extension.component";
 import { MiniInvoiceRequestDialogComponent } from "../../invoices/invoice-request/mini-invoice-request-dialog/mini-invoice-request-dialog.component";
 import { ConnectedPosition, OverlayModule } from "@angular/cdk/overlay";
 import { MyInvoicesDialogComponent } from "../../invoices/my-invoices-dialog/my-invoices-dialog.component";
+import { ToastService } from "../../../../../core/services/ui/toast/toast.service";
+import { ConfirmService } from "../../../../../shared/services/confirm.service";
 
 type PaymentItem = {
       itemName: FormControl<string>;
@@ -40,8 +41,7 @@ type PaymentItem = {
       selector: 'expense-payment',
       standalone: true,
       imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule,
-            KitDropdownComponent, MatDialogModule, MoneyFormatDirective, OverlayModule
-      ],
+    KitDropdownComponent, MatDialogModule, MoneyFormatDirective, OverlayModule ],
       templateUrl: './expense-payment.component.html',
       styleUrl: './expense-payment.component.scss',
 })
@@ -50,6 +50,7 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       private formBuilder = inject(FormBuilder);
       private taxRateById: Record<string, number> = {};
       private dialog = inject(MatDialog);
+      private toast = inject(ToastService);
       
       supplierOptions: KitDropdownOption[] = [];
       userOptions: KitDropdownOption[] = [];
@@ -68,6 +69,7 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             private taxService: TaxService,
             private budegetCodeService: BudgetCodeService,
             private cashoutCodeService: CashoutCodeService,
+            private confirmService: ConfirmService,
       ) {}
 
       // reactive form
@@ -177,10 +179,6 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
                   error: (err => handleHttpError(err))
             })
       }
-      // onBudgetCodeSelected(opt: KitDropdownOption, rowIndex: number) {
-      //       const row = this.items.at(rowIndex);
-      //       row.patchValue({ budgetCodeId: opt.id });
-      // }
 
       loadCashoutCodeOptions(): void {
             this.cashoutCodeService.getAll().subscribe({
@@ -222,27 +220,46 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             })
       }
 
-      openMiniInvoiceRequestDialog(rowIndex: number) {
+      async openMiniInvoiceRequestDialog(rowIndex: number) {
             const row = this.items.at(rowIndex);
+            const oldId = row.get('invoiceId')!.value;
+
+            const ok = await this.confirmService.confirmReplaceInvoice(!!oldId);
+            if(!ok) return;
+
             const ref = this.dialog.open(MiniInvoiceRequestDialogComponent, {
-                  width: '520px',
+                  width: 'fit-content',
                   disableClose: true,
             });
 
-            ref.afterClosed().subscribe(result => {
-
-            })
+            ref.afterClosed().subscribe((result: { success?: boolean; invoiceId?: string } | undefined) => {
+                  if (result?.success && result.invoiceId) {
+                        if (oldId === result.invoiceId) return;
+                        row.patchValue({ invoiceId: result.invoiceId }, { emitEvent: true });
+                  }
+            });
       }
 
-      openMyInvoicesDialog(rowIndex: number) {
+      async openMyInvoicesDialog(rowIndex: number) {
+            const row = this.items.at(rowIndex);
+            const oldId = row.get('invoiceId')!.value;
+
+            const ok = await this.confirmService.confirmReplaceInvoice(!!oldId);
+            if(!ok) return;
+
             const ref = this.dialog.open(MyInvoicesDialogComponent, {
-                  width: '520px',
-                  disableClose: true
+                  width: 'fit-content',
+                  height: 'fit-content',
+                  disableClose: true,
             });
 
-            ref.afterClosed().subscribe(result => {
-
-            })
+            ref.afterClosed().subscribe((result: { success?: boolean; invoiceId?: string } | undefined) => {
+                  if (!result?.success || !result.invoiceId) return;
+                  
+                  if (oldId === result.invoiceId) return;
+                  row.patchValue({ invoiceId: result.invoiceId }, { emitEvent: true });
+                  this.toast.successRich('Đã chọn hóa đơn');
+            });
       }
 
       payeeOptions: KitDropdownOption[] = [
@@ -358,5 +375,21 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
 
       onMenuClosed() {
             this.invoiceMenuOpenIndex = null;
+      }
+
+      unlinkInvoice(i: number) {
+            console.log('unlink Invoice');
+            const row = this.items.at(i);
+            const current = row.get('invoiceId')!.value;
+
+            if (!current) {
+                  console.log('dòng này chưa liên kết hóa đơn');
+                  this.toast.info?.('Dòng này chưa liên kết hóa đơn');    // ToastService đã inject sẵn :contentReference[oaicite:1]{index=1}
+                  return;
+            }
+            row.patchValue({ invoiceId: null }, { emitEvent: true });
+
+            this.onMenuClosed?.(); 
+            this.toast.successRich?.('Đã gỡ liên kết hóa đơn');  
       }
 }

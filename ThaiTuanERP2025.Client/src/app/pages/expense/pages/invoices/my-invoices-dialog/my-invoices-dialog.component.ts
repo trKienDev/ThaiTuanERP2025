@@ -3,28 +3,47 @@ import { Component, inject, OnInit } from "@angular/core";
 import { InvoiceService } from "../../../services/invoice.service";
 import { invoiceDto } from "../../../models/invoice.model";
 import { handleHttpError } from "../../../../../core/utils/handle-http-errors.util";
+import { InvoiceStatusPipe } from "../../../pipes/invoice-status.pipe";
+import { MatDialogRef } from "@angular/material/dialog";
 
 @Component({
       selector: 'my-invoices-dialog',
       standalone: true,
-      imports: [ CommonModule ],
+      imports: [ CommonModule, InvoiceStatusPipe ],
       templateUrl: './my-invoices-dialog.component.html',
+      styleUrl: './my-invoices-dialog.component.scss',
 })
 export class MyInvoicesDialogComponent implements OnInit {
       private invoiceService = inject(InvoiceService);
-      invoices: invoiceDto[] = [];
-      item: invoiceDto[] = [];
+      private ref = inject(MatDialogRef<MyInvoicesDialogComponent>);
+
+      myInvoices: invoiceDto[] = [];
       total: number = 0;
 
       ngOnInit(): void {
+            this.loadMyInvoices();
+      }
+
+      loadMyInvoices(): void {
             this.invoiceService.getMine(1, 20).subscribe({
                   next: (page) => {
-                        console.log('page: ', page);
-                        this.item = page.items;
                         this.total = page.totalCount;
+                        this.myInvoices = page.items;
                   },
                   error: (err) => handleHttpError(err)
             });
       }
-      
+
+      close(): void {
+            this.ref.close();
+      }
+
+      selectInvoice(inv: invoiceDto) {
+            this.ref.close({
+                  success: true,
+                  invoiceId: inv.id,
+                  invoiceNumber: inv.invoiceNumber,
+                  invoiceName: inv.invoiceName
+            });
+      }
 }

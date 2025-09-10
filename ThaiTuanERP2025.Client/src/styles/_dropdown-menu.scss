@@ -7,7 +7,8 @@
 /* Panel nổi – dùng chung cho mọi menu */
 .dropdown-menu-panel {
       width: fit-content;;
-      background: #fff; border-radius: 10px;
+      background: #fff;
+      border-radius: 5px;
       box-shadow: 0 12px 30px rgba(0,0,0,.14);
       display: flex; flex-direction: column;
 }
