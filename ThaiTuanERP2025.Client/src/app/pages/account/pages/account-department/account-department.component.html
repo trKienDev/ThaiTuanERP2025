@@ -62,7 +62,7 @@
             <tbody>
                   <tr *ngFor="let dept of departments">
                         <td>
-                        <input type="checkbox" [(ngModel)]="dept.selected" (change)="updateMasterCheckboxState()" />
+                              <input type="checkbox" [(ngModel)]="dept.selected" (change)="updateMasterCheckboxState()" />
                         </td>
                         <td>{{ dept.code }}</td>
                         <td>{{ dept.name }}</td>

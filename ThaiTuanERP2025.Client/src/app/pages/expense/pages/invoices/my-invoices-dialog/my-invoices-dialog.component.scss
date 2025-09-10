@@ -1,0 +1,6 @@
+.table-my-invoices thead th {
+      position: sticky;
+      top: 0;
+      background: #fff;   /* hoặc màu nền dialog */
+      z-index: 2;         /* để nổi lên trên nội dung */
+}

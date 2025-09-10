@@ -11,11 +11,14 @@
 @import url('./styles/_table.scss');
 @import url('./styles/_dialog.scss');
 @import url('./styles/_dropdown-menu.scss');
-
+@import url('./styles/_badge.scss');
 
 :root {
       --cadmium-red: #D22B2B;
+      --neon-red-color: #FF3131;
       --ultramarin: #0437F2;
+      --neon-blue-color: #1F51FF;
+      --bright-blue-color: #0096FF;
       --light-blue-color: #F2F9F9;
       --main-bg-color: #f6f8fa;
       --sub-bg-color: #f6f8fa;
