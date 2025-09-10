@@ -106,19 +106,29 @@
                                     </td>
                                     <td class="text-align-center">
                                           <div class="invoice-menu dropdown-menu">
-                                                <button type="button" class="button invoice-button" aria-label="Hóa đơn" cdkOverlayOrigin #invoiceOrigin="cdkOverlayOrigin" (click)="toggleInvoiceMenu(i, $event)">
+                                                <button type="button"
+                                                            [ngClass]="{
+                                                                  'button': true,
+                                                                  'non-invoice-button': !row.get('invoiceId')?.value,
+                                                                  'invoice-button': !!row.get('invoiceId')?.value
+                                                            }"
+                                                      aria-label="Hóa đơn" cdkOverlayOrigin #invoiceOrigin="cdkOverlayOrigin" (click)="toggleInvoiceMenu(i, $event)"
+                                                >
                                                       <span class="text material-icons-round">receipt_long</span>
                                                 </button>
-                                                
+
                                                 <!-- Menu dạng overlay (chỉ mở khi click) -->
                                                 <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="invoiceOrigin" [cdkConnectedOverlayOpen]="invoiceMenuOpenIndex === i" 
                                                       [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayBackdropClass]="'cdk-overlay-transparent-backdrop'" 
                                                       (backdropClick)="onMenuClosed()" (overlayOutsideClick)="onMenuClosed()" [cdkConnectedOverlayPositions]="invoiceMenuOverlayPosition"
                                                 >
                                                 <div class="invoice-menu-panel dropdown-menu-panel" role="menu" aria-label="invoice actions" (keydown.escape)="onMenuClosed()" tabindex="0">
-                                                      <button type="button" class="dropdown-menu-item" (click)="openMyInvoicesDialog(i)">Chọn hóa đơn đã tải</button>
+                                                      <button type="button" class="dropdown-menu-item" (click)="openMyInvoicesDialog(i); onMenuClosed()">Chọn hóa đơn đã tải</button>
                                                       <button type="button" class="dropdown-menu-item" (click)="openMiniInvoiceRequestDialog(i); onMenuClosed()">Tải hóa đơn mới</button>
-                                                      <button type="button" class="dropdown-menu-item" disabled>Xóa hóa đơn đã liên kết</button>
+                                                      <button type="button" class="dropdown-menu-item" 
+                                                            [disabled]="!row.get('invoiceId')?.value" 
+                                                            [ngStyle]="{ color: row.get('invoiceId')?.value ? 'red' : 'unset' }"
+                                                            (click)="unlinkInvoice(i)">Gỡ hóa đơn đã liên kết</button>
                                                 </div>
                                                 </ng-template>
                                           </div>

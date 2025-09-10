@@ -12,6 +12,9 @@
 .fl-wrap { flex-wrap: wrap;}
 .d-none { display: none; }
 
+// font-weight 
+.font-weight-bold { font-weight: bold; }
+
 // margin
 .mar-top-10 { margin-top: 10px; }
 .mar-top-20 { margin-top: 20px; }
@@ -25,6 +28,9 @@
 .gap-5p { gap: 5px; }
 .gap-10p { gap: 10px; }
 .gap-20p { gap: 20px; }
+
+// overflow-y
+.overflow-y-scroll { overflow-y: scroll; }
 
 // text
 .text-align-center { text-align: center !important; }
