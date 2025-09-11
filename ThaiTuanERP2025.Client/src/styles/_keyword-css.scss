@@ -41,19 +41,22 @@
 // user-select
 .user-select-none { user-select: none; }
 
+// text
+.text-no-wrap { text-wrap: nowrap; }
+
 // width
 .w-15 { width: 15%; }
 .w-25 { width: 25%; }
 .w-30 { width: 30%; }
 .w-40 { width: 40%; }
-.w-50 { width: 50%; }
+.width-50pt { width: 50%; }
 .w-60 { width: 60%; }
 .w-70 { width: 70%; }
 .w-75 { width: 75%; }
 .w-90 { width: 90%; }
-.w-100 { width: 100%; }
+.width-100pt { width: 100%; }
+.width-fit-content { width: fit-content; }
 //max-width 
 .mw-100 { max-width: 100%;}
 // min-width
 .minw-340px { min-width: 340px;}
-.width-fit-content { width: fit-content; }

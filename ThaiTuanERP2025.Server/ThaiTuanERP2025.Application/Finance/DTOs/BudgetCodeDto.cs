@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.InteropServices.Marshalling;
 
 namespace ThaiTuanERP2025.Application.Finance.DTOs
 {
@@ -12,7 +8,21 @@ namespace ThaiTuanERP2025.Application.Finance.DTOs
 		public string Code { get; set; } = null!;
 		public string Name { get; set; } = null!;
 		public Guid BudgetGroupId { get; set; }
+
+		public string? BudgetGroupName { get; set; }
+
 		public bool IsActive { get; set; } = true;
 		public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 	}
+
+	public record BudgetCodeWithAmountDto (
+		Guid Id, 
+		string Code, 
+		string Name, 
+		int Year,
+		int Month,
+		Guid? BudgetPlanId,
+		decimal? Amount,
+		string? BudgetGroupName
+	);
 }
