@@ -12,7 +12,7 @@ import { InvoiceService } from "../../../../services/invoice.service";
 import { firstValueFrom } from "rxjs";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { handleHttpError } from "../../../../../../core/utils/handle-http-errors.util";
-import { ToastService } from "../../../../../../core/services/ui/toast/toast.service";
+import { ToastService } from "../../../../../../shared/components/toast/toast.service";
 
 @Component({
       selector: 'mini-invoice-request-dialog',
@@ -54,10 +54,6 @@ export class MiniInvoiceRequestDialogComponent {
       });
 
       // ============ Handlers ============
-      close(result?: unknown) {
-            this.ref.close(result);
-      }
-
       onFileSelected(event: Event): void {
             const file = (event.target as HTMLInputElement).files?.[0] ?? null;
             this.pendingFile = file;
@@ -128,5 +124,9 @@ export class MiniInvoiceRequestDialogComponent {
             } finally {
                   this.submitting = false;
             }
+      }
+
+      close(result?: unknown) {
+            this.ref.close(result);
       }
 }

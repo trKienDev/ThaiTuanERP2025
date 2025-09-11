@@ -23,8 +23,18 @@
       tbody tr:hover {
             background-color: #f5f7fa; 
       }
+
       .tr-non-hover {
             background-color: inherit !important;
+      }
+
+      tr.selected {
+            background-color: #e6f7ff !important;
+      }
+
+      button.selected {
+            background-color: #1890ff;
+            color: #fff;
       }
 }
 
@@ -39,3 +49,4 @@ thead, tr, td {
             text-align: center;
       }
 }
+

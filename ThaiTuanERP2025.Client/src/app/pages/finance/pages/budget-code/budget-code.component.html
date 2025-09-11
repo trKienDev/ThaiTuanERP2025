@@ -1,14 +1,12 @@
-<h2>Ngân sách</h2>
+<button class="button button-github" (click)="openAddBudgetCodeRequestDialog()">Thêm ngân sách</button>
 
-<button (click)="showModal = true">Thêm ngân sách</button>
-<add-budget-code-modal *ngIf="showModal" (close)="showModal = false" (save)="createBudgetCode($event)"></add-budget-code-modal>
-
-<table class="table-budget-codes">
+<table class=" table table-budget-codes mar-top-20">
       <thead>
             <tr>
                   <th>
                         <input #masterCheckbox type="checkbox">
                   </th>
+                  <th>Nhóm ngân sách</th>
                   <th>Mã ngân sách</th>
                   <th>Tên ngân sách</th>
                   <th>Hiệu lực</th>
@@ -17,6 +15,7 @@
       <tbody>
             <tr *ngFor="let budgetCode of budgetCodes" [ngClass]="{ 'inactive-budget-code': !budgetCode.isActive}">
                   <td><input type="checkbox"></td>
+                  <td>{{ budgetCode.budgetGroupName }}</td>
                   <td>{{ budgetCode.code }}</td>
                   <td>
                         {{ budgetCode.name }}
@@ -28,8 +27,6 @@
                               <span class="slider"></span>
                         </label>
                   </td>
-                  <td></td>
-                  <td></td>
             </tr>
       </tbody>
 </table>

@@ -17,12 +17,16 @@ import { TaxService } from "../../../../finance/services/tax.service";
 import { handleHttpError } from "../../../../../core/utils/handle-http-errors.util";
 import { BudgetCodeService } from "../../../../finance/services/budget-code.service";
 import { CashoutCodeService } from "../../../../finance/services/cashout-code.service";
-import { ExpensePaymentExtensionComponent, ExpensePaymentExtensionData } from "./expense-payment-extension/expense-payment-extension.component";
 import { MiniInvoiceRequestDialogComponent } from "../../invoices/invoice-request/mini-invoice-request-dialog/mini-invoice-request-dialog.component";
 import { ConnectedPosition, OverlayModule } from "@angular/cdk/overlay";
 import { MyInvoicesDialogComponent } from "../../invoices/my-invoices-dialog/my-invoices-dialog.component";
-import { ToastService } from "../../../../../core/services/ui/toast/toast.service";
+import { ToastService } from "../../../../../shared/components/toast/toast.service";
 import { ConfirmService } from "../../../../../shared/services/confirm.service";
+import { ExpenseBudgetCodeDialogComponent } from "./expense-budget-code/expense-budget-code.component";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { DateAdapter } from "@angular/material/core";
+import { provideMondayFirstDateAdapter } from "../../../../../shared/date/provide-monday-first-date-adapter";
 
 type PaymentItem = {
       itemName: FormControl<string>;
@@ -41,9 +45,12 @@ type PaymentItem = {
       selector: 'expense-payment',
       standalone: true,
       imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule,
-    KitDropdownComponent, MatDialogModule, MoneyFormatDirective, OverlayModule ],
+            KitDropdownComponent, MatDialogModule, MoneyFormatDirective, OverlayModule, MatSnackBarModule,
+            MatDatepickerModule
+      ],
       templateUrl: './expense-payment.component.html',
       styleUrl: './expense-payment.component.scss',
+      providers: [...provideMondayFirstDateAdapter() ]
 })
 export class ExpensePaymentComponent implements OnInit, OnDestroy {
       private destroy$ = new Subject<void>();
@@ -51,6 +58,7 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       private taxRateById: Record<string, number> = {};
       private dialog = inject(MatDialog);
       private toast = inject(ToastService);
+      private adapter = inject<DateAdapter<Date>>(DateAdapter as any);
       
       supplierOptions: KitDropdownOption[] = [];
       userOptions: KitDropdownOption[] = [];
@@ -80,6 +88,10 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             accountNumber: this.formBuilder.control<string>('', { nonNullable: true, validators: [Validators.required] }),
             beneficiaryName: this.formBuilder.control<string>('', { nonNullable: true, validators: [Validators.required] }),
             items: this.formBuilder.array<FormGroup<PaymentItem>>([ this.newItemGroup() ]),
+            totalAmount: this.formBuilder.nonNullable.control<number>(0),
+            totalTax: this.formBuilder.nonNullable.control<number>(0),
+            totalWithTax: this.formBuilder.nonNullable.control<number>(0),
+            paymentDate: [ null as unknown as string | null, [ Validators.required ]],
       });
 
       ngOnInit(): void {
@@ -90,6 +102,10 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             this.loadCashoutCodeOptions();
 
             // Khi supplierId đổi → load bank accounts → chọn mặc định → patch vào form
+            this.form.get('totalAmount')!.disable({ emitEvent: false });
+            this.form.get('totalTax')!.disable({ emitEvent: false });
+            this.form.get('totalWithTax')!.disable({ emitEvent: false });
+            
             this.form.get('supplierId')!.valueChanges.pipe(
                   startWith(this.form.get('supplierId')!.value), 
                   switchMap(id => id ? this.bankAccountService.listBySupplier(id) : of([])),
@@ -99,10 +115,24 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
                   this.selectedBankAccount = this.pickDefulatBankAccount(this.supplierBankAccounts);
                   this.applyBankAccountToForm(this.selectedBankAccount);
             });
+            
 
+            this.form.get('items')!.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
+                  console.log('change');
+                  const totalAmount = this.totalAmount;
+                  this.form.get('totalAmount')!.setValue(totalAmount, { emitEvent: false })
+
+                  const totalTax = this.totalTax;
+                  this.form.get('totalTax')!.setValue(totalTax, { emitEvent: false });
+                  
+                  const totalWithTax = this.totalWithTax;
+                  this.form.get('totalWithTax')!.setValue(totalWithTax, { emitEvent: false });
+            })
+            
             this.currencyOptions = [
                   { id: 'vnd', label: 'VND' }
             ]
+            
       }
 
       // Ưu tiên account đang active, không có thì lấy cái đầu
@@ -173,7 +203,7 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
                   next: (budgetCodes) => {
                         this.budgetCodeOptiopns = budgetCodes.map(bc => ({
                               id: bc.id,
-                              label: bc.name
+                              label: `${bc.code} - ${bc.name}`
                         }));
                   }, 
                   error: (err => handleHttpError(err))
@@ -196,47 +226,28 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             if(!id) return '';
             return opts.find(o => o.id === id)?.label ?? '';
       }
-      openExtensionDialog(rowIndex: number) {
-            const row = this.items.at(rowIndex);
-            const data: ExpensePaymentExtensionData = {
-                  budgetCodeOptions: this.budgetCodeOptiopns,
-                  cashoutCodeOptions: this.cashoutCodeOptions,
-                  budgetCodeId: row.get('budgetCodeId')?.value ?? null,
-                  cashoutCodeId: row.get('cashoutCodeId')?.value ?? null
-            };
-
-            const ref = this.dialog.open(ExpensePaymentExtensionComponent, {
-                  width: '520px',
-                  data,
-                  disableClose: true
-            });
-
-            ref.afterClosed().subscribe(result => {
-                  if(!result) return;
-                  row.patchValue({
-                        budgetCodeId: result.budgetCodeId ?? null,
-                        cashoutCodeId: result.cashoutCodeId ?? null,
-                  }, { emitEvent: true });
-            })
-      }
 
       async openMiniInvoiceRequestDialog(rowIndex: number) {
             const row = this.items.at(rowIndex);
             const oldId = row.get('invoiceId')!.value;
 
-            const ok = await this.confirmService.confirmReplaceInvoice(!!oldId);
-            if(!ok) return;
+            this.confirmService.confirmReplaceInvoice$(!!oldId).subscribe(ok => {
+                  if (!ok) return;
 
-            const ref = this.dialog.open(MiniInvoiceRequestDialogComponent, {
-                  width: 'fit-content',
-                  disableClose: true,
-            });
+                  const ref = this.dialog.open(MiniInvoiceRequestDialogComponent, {
+                        width: 'fit-content',
+                        height: 'fit-content',
+                        maxWidth: '90vw',
+                        maxHeight: '80vh',
+                        disableClose: true,
+                  });
 
-            ref.afterClosed().subscribe((result: { success?: boolean; invoiceId?: string } | undefined) => {
-                  if (result?.success && result.invoiceId) {
-                        if (oldId === result.invoiceId) return;
-                        row.patchValue({ invoiceId: result.invoiceId }, { emitEvent: true });
-                  }
+                  ref.afterClosed().subscribe((result?: { success?: boolean; invoiceId?: string }) => {
+                        if (result?.success && result.invoiceId) {
+                              if (oldId === result.invoiceId) return;
+                              row.patchValue({ invoiceId: result.invoiceId }, { emitEvent: true });
+                        }
+                  });
             });
       }
 
@@ -244,24 +255,26 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             const row = this.items.at(rowIndex);
             const oldId = row.get('invoiceId')!.value;
 
-            const ok = await this.confirmService.confirmReplaceInvoice(!!oldId);
-            if(!ok) return;
+            this.confirmService.confirmReplaceInvoice$(!!oldId).subscribe(ok => {
+                  if(!ok) return;
 
-            const ref = this.dialog.open(MyInvoicesDialogComponent, {
-                  width: 'fit-content',
-                  height: 'fit-content',
-                  maxWidth: '90vw',   
-                  maxHeight: '80vh',
-                  disableClose: true,
+                  const ref = this.dialog.open(MyInvoicesDialogComponent, {
+                        width: 'fit-content',
+                        height: 'fit-content',
+                        maxWidth: '90vw',   
+                        maxHeight: '80vh',
+                        disableClose: true,
+                  });
+
+                  ref.afterClosed().subscribe((result: { success?: boolean; invoiceId?: string } | undefined) => {
+                        if (!result?.success || !result.invoiceId) return;
+                        
+                        if (oldId === result.invoiceId) return;
+                        row.patchValue({ invoiceId: result.invoiceId }, { emitEvent: true });
+                        this.toast.successRich('Đã chọn hóa đơn');
+                  });
             });
 
-            ref.afterClosed().subscribe((result: { success?: boolean; invoiceId?: string } | undefined) => {
-                  if (!result?.success || !result.invoiceId) return;
-                  
-                  if (oldId === result.invoiceId) return;
-                  row.patchValue({ invoiceId: result.invoiceId }, { emitEvent: true });
-                  this.toast.successRich('Đã chọn hóa đơn');
-            });
       }
 
       payeeOptions: KitDropdownOption[] = [
@@ -296,6 +309,26 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
                         this.loadSuppliers();
                   }
             })
+      }
+
+      openExpenseBudgetCodeDialog(rowIndex: number): void {
+            const row = this.items.at(rowIndex);
+            const selectedId = row.get('budgetCodeId')?.value;
+
+            const dialogRef = this.dialog.open(ExpenseBudgetCodeDialogComponent, {
+                  width: 'fit-content',
+                  height: 'fit-content',
+                  maxWidth: '90vw',   
+                  maxHeight: '80vh',
+                  disableClose: true,
+                  data: { selectedBudgetCodeId: selectedId },
+            });
+
+            dialogRef.afterClosed().subscribe((result: { success?: boolean, budgetCodeId?: string } | undefined) => {
+                  if(!result?.success || !result.budgetCodeId) return;
+                  row.patchValue({ budgetCodeId: result.budgetCodeId }, { emitEvent: true });
+                  this.toast.successRich('Đã chọn mã ngân sách');
+            });
       }
 
       newItemGroup(): FormGroup<PaymentItem> {

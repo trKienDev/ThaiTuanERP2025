@@ -10,7 +10,7 @@
       </div>
 
       <div class="input-wrapper">
-            <div class="alert dark-alert w-50"> 🔒 ĐỀ NGHỊ THANH TOÁN</div>
+            <div class="alert dark-alert width-50pt"> 🔒 ĐỀ NGHỊ THANH TOÁN</div>
       </div>
 
       <div class="payee-container d-flex gap-10p pad-10p">
@@ -63,7 +63,7 @@
                   </div>
             </div>
             <div class="payment-categories-body">
-                  <table class="table payment-category-table mar-top-10">
+                  <table class="table table-center-text mar-top-10">
                         <thead>
                               <tr>
                                     <th style="width: 1%;">#</th>
@@ -74,7 +74,7 @@
                                     <th class="head-tax">Thuế</th>
                                     <th>Số tiền thuế</th>
                                     <th>Số tiền có thuế</th>
-                                    <th class="head-extension">Mở rộng</th>
+                                    <th class="head-extension">Ngân sách</th>
                                     <th class="head-invoice">Hóa đơn</th>
                                     <th>Xóa</th>
                               </tr>
@@ -100,8 +100,15 @@
                                     </td>
                                     <td>{{ row.get('totalWithTax')?.value | number:'1.0-2' }}</td>
                                     <td class="text-align-center">
-                                          <button type="button" class="button button-github" (click)="openExtensionDialog(i)">
-                                                <span class="material-icons-outlined">tune</span>
+                                          <button type="button" (click)="openExpenseBudgetCodeDialog(i)"
+                                                [ngClass]="{
+                                                      'button': true,
+                                                      'non-linked-button': !row.get('budgetCodeId')?.value,
+                                                      'linked-button': !!row.get('budgetCodeId')?.value
+                                                }"
+                                                aria-label="Chọn ngân sách"
+                                          >
+                                                <span class="text material-icons-outlined">attach_money</span>
                                           </button>
                                     </td>
                                     <td class="text-align-center">
@@ -109,8 +116,8 @@
                                                 <button type="button"
                                                             [ngClass]="{
                                                                   'button': true,
-                                                                  'non-invoice-button': !row.get('invoiceId')?.value,
-                                                                  'invoice-button': !!row.get('invoiceId')?.value
+                                                                  'non-linked-button': !row.get('invoiceId')?.value,
+                                                                  'linked-button': !!row.get('invoiceId')?.value
                                                             }"
                                                       aria-label="Hóa đơn" cdkOverlayOrigin #invoiceOrigin="cdkOverlayOrigin" (click)="toggleInvoiceMenu(i, $event)"
                                                 >
@@ -155,6 +162,24 @@
                               </tr>
                         </tfoot>
                   </table>
+            </div>
+      </div>
+
+      <div class="input-wrapper d-flex gap-20p">
+            <div class="width-50pt">
+                  <div class="d-flex gap-10p">
+                        <label class="width-fit-content text-no-wrap align-content-center" for="name">Tổng thanh toán 🔒</label>
+                        <input class="dark dark-alert user-select-none" [value]="form.get('totalWithTax')?.value | number:'1.0-2'" disabled />
+                  </div>
+            </div>
+            <div class="width-50pt">
+                  <div class="d-flex gap-10p">
+                              <label class="width-fit-content text-no-wrap align-content-center" for="name">Hạn thanh toán <span style="color: red;">  *</span></label>
+                              <input class="invoice-date" formControlName="paymentDate" matInput [matDatepicker]="picker" placeholder="chọn ngày/tháng/năm"
+                                    (focus)="picker.open()" (click)="picker.open()" (keydown.enter)="picker.open()" (keydown.arrowDown)="picker.open()" 
+                              required/>
+                        </div>
+                  <mat-datepicker #picker panelClass="kit-datepicker"></mat-datepicker>
             </div>
       </div>
 </form>

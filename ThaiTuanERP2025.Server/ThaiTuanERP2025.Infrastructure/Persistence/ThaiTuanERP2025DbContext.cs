@@ -1,13 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Common.Interfaces;
-using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Expense.Entities;
@@ -47,6 +40,10 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<InvoiceFollwer> InvoiceFollwers => Set<InvoiceFollwer>();	
 		public DbSet<ApprovalWorkflow> ApprovalWorkflows => Set<ApprovalWorkflow>();
 		public DbSet<ApprovalStep> ApprovalSteps => Set<ApprovalStep>();
+		public DbSet<BudgetCode> BudgetCodes => Set<BudgetCode>();
+		public DbSet<BudgetGroup> BudgetGroups => Set<BudgetGroup>();
+		public DbSet<BudgetPeriod> BudgetPeriods => Set<BudgetPeriod>();
+		public DbSet<BudgetPlan> BudgetPlans => Set<BudgetPlan>();
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

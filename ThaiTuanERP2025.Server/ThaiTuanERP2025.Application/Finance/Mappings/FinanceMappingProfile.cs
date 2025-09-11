@@ -10,7 +10,8 @@ namespace ThaiTuanERP2025.Application.Finance.Mappings
 		public FinanceMappingProfile() { 
 			CreateMap<BudgetGroup, BudgetGroupDto>();
 
-			CreateMap<BudgetCode, BudgetCodeDto>();
+			CreateMap<BudgetCode, BudgetCodeDto>()
+				.ForMember(d => d.BudgetGroupName, o => o.MapFrom(s => s.BudgetGroup.Name)); ;
 
 			CreateMap<BudgetPeriod, BudgetPeriodDto>();
 

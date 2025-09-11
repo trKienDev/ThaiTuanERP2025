@@ -5,10 +5,10 @@
 
       <ul class="kit-dropdown-menu" role="listbox" [@slide]="isOpen ? 'open' : 'closed'">
             <li #optRef role="option" *ngFor="let opt of options; let i = index"
-                  [attr.aria-selected]="i === focusedIndex"
-                  [class.active]="i === focusedIndex"
-                  (click)="selectOption(opt)">
-            {{ opt.label }}
+            [attr.aria-selected]="i === focusedIndex"
+            [class.active]="i === focusedIndex"
+            (click)="selectOption(opt)">
+                  {{ opt.label }}
             </li>
       </ul>
 </div>

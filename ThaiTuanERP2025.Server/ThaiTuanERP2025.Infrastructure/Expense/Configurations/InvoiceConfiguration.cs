@@ -1,10 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 
 namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
@@ -25,7 +20,10 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 			builder.Property(x => x.BuyerTaxCode).HasMaxLength(50);
 			builder.Property(x => x.BuyerAddress).HasMaxLength(500);
 			builder.Property(x => x.IsDraft).HasDefaultValue(true);
-		
+			builder.Property(x => x.TotalAmount).HasPrecision(18, 2);
+			builder.Property(x => x.TotalTax).HasPrecision(18, 2);
+			builder.Property(x => x.TotalWithTax).HasPrecision(18, 2);
+
 			// Relationship
 			builder.HasMany(x => x.Lines)
 				.WithOne(l => l.Invoice)

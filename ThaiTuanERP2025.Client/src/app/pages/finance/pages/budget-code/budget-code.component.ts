@@ -1,19 +1,22 @@
 import { CommonModule } from "@angular/common";
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, inject, OnInit, ViewChild } from "@angular/core";
 import { BudgetCodeService } from "../../services/budget-code.service";
 import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
-import { AddBudgetCodeModalComponent } from "../../components/add-budget-code/add-budget-code-modal.component";
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { BudgetCodeDto, CreateBudgetCodeRequest } from "../../models/budget-code.model";
+import { BudgetCodeDto } from "../../models/budget-code.model";
+import { MatDialog } from "@angular/material/dialog";
+import { AddBudgetCodeRequestDialogComponent } from "./add-budget-code-request/add-budget-code-request.component";
 
 @Component({
       selector: 'finance-budget-code',
       standalone: true,
-      imports: [CommonModule, AddBudgetCodeModalComponent, MatTooltipModule ],
+      imports: [CommonModule,  MatTooltipModule ],
       templateUrl: './budget-code.component.html',
       styleUrl: './budget-code.component.scss',
 })
 export class BudgetCodeComponent implements OnInit {
+      private dialog = inject(MatDialog);
+
       showModal = false;
       newBudgetCode = { code: '', name: '' };
       successMessage: string | null = null;
@@ -37,22 +40,6 @@ export class BudgetCodeComponent implements OnInit {
                   },
                   error: err => alert(handleHttpError(err).join('\n'))
             });
-      }
-
-      createBudgetCode({ budgetCode, callback}: {
-            budgetCode: CreateBudgetCodeRequest,
-            callback: (ok: boolean, message?: string) => void
-      }) {
-            this.budgetCodeService.create(budgetCode).subscribe({
-                  next: () => {
-                              this.loadBudgetCodes();
-                              callback(true);
-                        },
-                  error: err => {
-                        const messages = handleHttpError(err);
-                        callback(false, messages.join(', '));
-                  }
-            })
       }
 
       toggleAll(event: Event): void {
@@ -84,5 +71,14 @@ export class BudgetCodeComponent implements OnInit {
                         this.errorMessages = handleHttpError(err);
                   }
             })
+      }
+
+      openAddBudgetCodeRequestDialog() {
+            const ref = this.dialog.open(AddBudgetCodeRequestDialogComponent, {
+                  width: 'fit-content',
+            });
+
+            ref.afterClosed().subscribe((result: { success?: boolean;} | undefined ) => {
+            });
       }
 }
