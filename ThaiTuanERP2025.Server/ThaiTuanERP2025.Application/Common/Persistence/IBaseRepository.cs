@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
+
 
 namespace ThaiTuanERP2025.Application.Common.Persistence
 {
@@ -28,6 +23,7 @@ namespace ThaiTuanERP2025.Application.Common.Persistence
 		Task<List<T>> GetAllIncludingAsync(params Expression<Func<T, object>>[] includes);
 
 		Task<TDto?> GetByIdProjectedAsync<TDto>(Guid id, CancellationToken cancellationToken = default);
+		Task<List<TDto>> ListProjectedAsync<TDto>(Func<IQueryable<T>, IQueryable<TDto>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default);
 
 		Task AddAsync(T entity);
 		

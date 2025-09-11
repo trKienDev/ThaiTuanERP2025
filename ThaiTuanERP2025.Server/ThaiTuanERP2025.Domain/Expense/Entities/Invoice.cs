@@ -21,6 +21,10 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		public bool IsDraft { get; set; } = true;
 
+		public decimal TotalAmount { get; private set; } // tổng trước thuế
+		public decimal TotalTax { get; private set; } // tổng thuế
+		public decimal TotalWithTax { get; private set; } // tổng sau thuế
+
 		// Navigation
 		public ICollection<InvoiceLine> Lines { get; set; } = new List<InvoiceLine>();
 		public ICollection<InvoiceFile> Files { get; set; } = new List<InvoiceFile>();

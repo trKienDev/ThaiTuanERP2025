@@ -4,14 +4,14 @@
       margin-left: 10px;
 }
 
-.non-invoice-button { background-color: var(--platinum); outline: 2px var(--platinum) solid; outline-offset: -2px; border-radius: 5px; border: none; cursor: pointer; transition: 400ms; }
-.non-invoice-button .text { color: black; font-size: 22px; transition: 400ms; }
-.non-invoice-button:hover { background-color: transparent; }
+.non-linked-button { background-color: var(--platinum); outline: 2px var(--platinum) solid; outline-offset: -2px; border-radius: 5px; border: none; cursor: pointer; transition: 400ms; }
+.non-linked-button .text { color: black; font-size: 22px; transition: 400ms; }
+.non-linked-button:hover { background-color: transparent; }
 
-.invoice-button { background-color: var(--kelly-green-color); outline: 2px var(--kelly-green-color) solid; outline-offset: -2px; border-radius: 5px; border: none; cursor: pointer; transition: 400ms; }
-.invoice-button .text { color: white; font-size: 22px; transition: 400ms; }
-.invoice-button:hover { background-color: transparent; }
-.invoice-button:hover .text { color: var(--kelly-green-color); }
+.linked-button { background-color: var(--kelly-green-color); outline: 2px var(--kelly-green-color) solid; outline-offset: -2px; border-radius: 5px; border: none; cursor: pointer; transition: 400ms; }
+.linked-button .text { color: white; font-size: 22px; transition: 400ms; }
+.linked-button:hover { background-color: transparent; }
+.linked-button:hover .text { color: var(--kelly-green-color); }
 
 
 .payment-category-table {
