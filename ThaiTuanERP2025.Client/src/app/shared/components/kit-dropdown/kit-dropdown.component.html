@@ -1,7 +1,28 @@
 <div class="kit-dropdown" role="combobox" [attr.aria-expanded]="isOpen" [attr.aria-disabled]="disabled" aria-haspopup="listbox" tabindex="0" [style.width]="computedWidth">
+      <!-- SINGLE  -->
       <div class="kit-dropdown-select" (click)="onToggle()">
-            <img *ngIf="!multiple && selectedImgUrl" [src]="selectedImgUrl" class="option-img" />
-            <span>{{ selectedText }}</span>
+            <ng-container *ngIf="!multiple; else multiSelected">
+                  <img *ngIf="selectedImgUrl" [src]="selectedImgUrl" class="option-img" />
+                  <span>{{ selectedText }}</span>
+            </ng-container>
+
+            <!-- MULTIPLE -->
+            <ng-template #multiSelected>
+                  <ng-container *ngIf="selectedOptions.length; else placeholderTpl">
+                        <span class="multi-selected" *ngFor="let opt of selectedOptions" 
+                        role="button" tabindex="0"
+                        (click)="remove(opt.id); $event.stopPropagation()" 
+                        (keydown.enter)="remove(opt.id); $event.stopPropagation()"
+                        (keydown.space)="remove(opt.id); $event.preventDefault(); $event.stopPropagation()">
+                              <img *ngIf="opt.imgUrl" [src]="opt.imgUrl" class="option-img" />
+                              <span class="">{{ opt.label }}</span>
+                        </span>
+                  </ng-container>
+
+                  <ng-template #placeholderTpl>
+                        <span class="">{{ placeholder }}</span>
+                  </ng-template>
+            </ng-template>
       </div>
 
       <ul class="kit-dropdown-menu" role="listbox" [@slide]="isOpen ? 'open' : 'closed'">
@@ -21,7 +42,7 @@
             [class.active]="i === focusedIndex"
             [class.selected] = "isSelected(opt.id)"
             (click)="selectOption(opt)">
-                  <span class="check" *ngIf="multiple">{{ isSelected(opt.id) ? '✔' : '' }}</span>
+                  <span  class="check" *ngIf="multiple" [class.d-none]="!isSelected(opt.id)">{{ isSelected(opt.id) ? '✔' : '' }}</span>
                   <img *ngIf="opt.imgUrl" [src]="opt.imgUrl" class="option-img" />
                   <span>{{ opt.label }}</span>
             </li>
