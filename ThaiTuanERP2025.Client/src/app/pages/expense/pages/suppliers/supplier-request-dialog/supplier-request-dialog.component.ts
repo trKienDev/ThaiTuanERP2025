@@ -10,7 +10,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { SupplierService } from "../../../services/supplier.service";
 import { CreateSupplierRequest } from "../../../models/supplier.model";
 import { catchError, debounceTime, distinctUntilChanged, first, map, Observable, of, switchMap } from "rxjs";
-import { handleHttpError } from "../../../../../core/utils/handle-http-errors.util";
+import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 
 @Component({

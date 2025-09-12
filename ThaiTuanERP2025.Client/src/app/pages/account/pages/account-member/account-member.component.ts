@@ -3,7 +3,7 @@ import { Component, OnInit } from "@angular/core";
 import { AddUserModalComponent } from "../../components/add-user-modal/add-user-modal.component";
 import { UserService } from "../../services/user.service";
 import { DepartmentService } from "../../services/department.service";
-import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
+import { handleHttpError } from "../../../../shared/utils/handle-http-errors.util";
 import { CreateUserRequest, UserDto } from "../../models/user.model";
 
 @Component({

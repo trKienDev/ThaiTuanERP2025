@@ -14,7 +14,7 @@ import { BankAccountService } from "../../../services/bank-account.service";
 import { BankAccountDto } from "../../../models/bank-account.model";
 import { MoneyFormatDirective } from "../../../../../shared/directives/money/money-format.directive";
 import { TaxService } from "../../../../finance/services/tax.service";
-import { handleHttpError } from "../../../../../core/utils/handle-http-errors.util";
+import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
 import { BudgetCodeService } from "../../../../finance/services/budget-code.service";
 import { CashoutCodeService } from "../../../../finance/services/cashout-code.service";
 import { MiniInvoiceRequestDialogComponent } from "../../invoices/invoice-request/mini-invoice-request-dialog/mini-invoice-request-dialog.component";
@@ -25,8 +25,9 @@ import { ConfirmService } from "../../../../../shared/services/confirm.service";
 import { ExpenseBudgetCodeDialogComponent } from "./expense-budget-code/expense-budget-code.component";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
-import { DateAdapter } from "@angular/material/core";
 import { provideMondayFirstDateAdapter } from "../../../../../shared/date/provide-monday-first-date-adapter";
+import { resolveAvatarUrl } from "../../../../../shared/utils/avatar.utils";
+import { environment } from "../../../../../../environments/environment";
 
 type PaymentItem = {
       itemName: FormControl<string>;
@@ -58,7 +59,8 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       private taxRateById: Record<string, number> = {};
       private dialog = inject(MatDialog);
       private toast = inject(ToastService);
-      private adapter = inject<DateAdapter<Date>>(DateAdapter as any);
+      private baseUrl = environment.baseUrl; 
+      
       
       supplierOptions: KitDropdownOption[] = [];
       userOptions: KitDropdownOption[] = [];
@@ -170,9 +172,11 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       loadUsers(): void {
             this.userService.getAllUsers().subscribe({
                   next: (users) => {
+                        console.log('users: ', users);
                         this.userOptions = users.map(u => ({
                               id: u.id,
                               label: u.fullName,
+                              imgUrl: resolveAvatarUrl(this.baseUrl, u),
                         }));
                   }
             })
@@ -404,7 +408,7 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             { originX: 'end', originY: 'top',    overlayX: 'end',    overlayY: 'bottom', offsetY: -8 },
       ]
       toggleInvoiceMenu(i: number, ev: MouseEvent) {
-      ev.stopPropagation();
+            ev.stopPropagation();
             this.invoiceMenuOpenIndex = (this.invoiceMenuOpenIndex === i) ? null : i;
       }
 

@@ -2,10 +2,10 @@ import { Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { Observable, switchMap } from "rxjs";
-import { ApiResponse } from "../../../core/models/api-response.model";
+import { ApiResponse } from "../../../shared/models/api-response.model";
 import {  CreateUserRequest, UpdateUserRequest, UserDto } from "../models/user.model";
-import { handleApiResponse$ } from "../../../core/utils/handle-api-response.operator";
-import { FileService } from "../../../core/services/api/file.service";
+import { FileService } from "../../../core/services/file.service";
+import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
 
 @Injectable({ providedIn: 'root'})
 export class UserService {

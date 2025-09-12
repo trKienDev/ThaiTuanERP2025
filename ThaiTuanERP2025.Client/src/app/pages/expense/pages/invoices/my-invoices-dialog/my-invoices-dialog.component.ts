@@ -2,7 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component, inject, OnInit } from "@angular/core";
 import { InvoiceService } from "../../../services/invoice.service";
 import { invoiceDto } from "../../../models/invoice.model";
-import { handleHttpError } from "../../../../../core/utils/handle-http-errors.util";
+import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
 import { InvoiceStatusPipe } from "../../../pipes/invoice-status.pipe";
 import { MatDialogRef } from "@angular/material/dialog";
 

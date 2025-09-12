@@ -1,5 +1,6 @@
 :root {
       --table-border-color: #e2e8ee;
+      --total-amount-line-color: #F4FFEA;
 }
 
 .table {
@@ -36,6 +37,10 @@
             background-color: #1890ff;
             color: #fff;
       }
+
+      .total-row {
+            background-color: var(--total-amount-line-color);
+      }
 }
 
 thead, tr, td {
@@ -49,4 +54,6 @@ thead, tr, td {
             text-align: center;
       }
 }
+
+
 

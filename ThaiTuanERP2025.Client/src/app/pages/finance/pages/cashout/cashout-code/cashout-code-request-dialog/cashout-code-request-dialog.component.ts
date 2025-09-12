@@ -11,7 +11,7 @@ import { CashoutGroupDto } from "../../../../models/cashout-group.model";
 import { LedgerAccountDto } from "../../../../models/ledger-account.model";
 import { CashoutGroupService } from "../../../../services/cashout-group.service";
 import { LedgerAccountService } from "../../../../services/ledger-account.service";
-import { handleHttpError } from "../../../../../../core/utils/handle-http-errors.util";
+import { handleHttpError } from "../../../../../../shared/utils/handle-http-errors.util";
 import { CreateCashoutCodeRequest } from "../../../../models/cashout-code.model";
 import { catchError, of } from "rxjs";
 import { CashoutCodeService } from "../../../../services/cashout-code.service";

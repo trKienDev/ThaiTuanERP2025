@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { Component, ElementRef, inject, OnInit, ViewChild } from "@angular/core";
 import { BudgetCodeService } from "../../services/budget-code.service";
-import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
+import { handleHttpError } from "../../../../shared/utils/handle-http-errors.util";
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BudgetCodeDto } from "../../models/budget-code.model";
 import { MatDialog } from "@angular/material/dialog";

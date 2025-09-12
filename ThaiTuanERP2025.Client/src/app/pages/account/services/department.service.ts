@@ -2,9 +2,9 @@ import { Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { ApiResponse } from "../../../core/models/api-response.model";
-import { handleApiResponse$ } from "../../../core/utils/handle-api-response.operator";
+import { ApiResponse } from "../../../shared/models/api-response.model";
 import { DepartmentDto } from "../models/department.model";
+import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
 
 @Injectable({ providedIn: 'root' }) 
 export class DepartmentService {

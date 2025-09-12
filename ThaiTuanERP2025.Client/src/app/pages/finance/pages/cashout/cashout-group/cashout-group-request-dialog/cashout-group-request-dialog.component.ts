@@ -8,7 +8,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { CashoutGroupDto, CreateCashoutGroupRequest } from "../../../../models/cashout-group.model";
 import { catchError, of } from "rxjs";
-import { handleHttpError } from "../../../../../../core/utils/handle-http-errors.util";
+import { handleHttpError } from "../../../../../../shared/utils/handle-http-errors.util";
 import { MatSelectModule } from "@angular/material/select";
 import { CashoutGroupService } from "../../../../services/cashout-group.service";
 
