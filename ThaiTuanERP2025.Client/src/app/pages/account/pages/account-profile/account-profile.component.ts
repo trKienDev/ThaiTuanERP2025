@@ -21,6 +21,7 @@ export class AccountProfileComponent implements OnInit {
       constructor(private userService: UserService, private snackBar: MatSnackBar) {}
 
       ngOnInit(): void {
+            console.log('url', this.baseUrl);
             this.loadCurrentUser();
       }
 

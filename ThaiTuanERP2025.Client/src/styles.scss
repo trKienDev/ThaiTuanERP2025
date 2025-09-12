@@ -101,7 +101,7 @@ html, body { height: 100%; margin: 0; }
 
 /* target đúng nơi Material render (overlay) */
 .cdk-overlay-pane .mat-mdc-dialog-surface {
-      border-radius: 10px !important;
+      border-radius: 5px !important;
       padding: 10px;
       overflow-y: unset;
 }

@@ -4,7 +4,7 @@ import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule
 import { MatButtonModule } from "@angular/material/button";
 import { MatInputModule } from "@angular/material/input";
 import { Router } from "@angular/router";
-import { FileService } from "../../../../../core/services/api/file.service";
+import { FileService } from "../../../../../core/services/file.service";
 import { InvoiceService } from "../../../services/invoice.service";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { firstValueFrom, forkJoin, lastValueFrom } from "rxjs";

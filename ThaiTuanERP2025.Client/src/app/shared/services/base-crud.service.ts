@@ -1,9 +1,9 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { catchError, Observable, throwError } from "rxjs";
-import { ApiResponse } from "../../models/api-response.model";
-import { handleApiResponse$ } from "../../utils/handle-api-response.operator";
-import { PagedRequest } from "../../models/paged-request.model";
-import { PagedResult } from "../../models/paged-result.model";
+import { ApiResponse } from "../models/api-response.model";
+import { PagedRequest } from "../models/paged-request.model";
+import { PagedResult } from "../models/paged-result.model";
+import { handleApiResponse$ } from "../operators/handle-api-response.operator";
 
 export abstract class BaseCrudService<TDto, TCreate, TUpdate> {
       protected constructor(

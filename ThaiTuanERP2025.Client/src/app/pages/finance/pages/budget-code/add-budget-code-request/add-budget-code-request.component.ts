@@ -4,7 +4,7 @@ import { BudgetCodeService } from "../../../services/budget-code.service";
 import { MatDialogRef } from "@angular/material/dialog";
 import { KitDropdownOption, KitDropdownComponent } from "../../../../../shared/components/kit-dropdown/kit-dropdown.component";
 import { BudgetGroupService } from "../../../services/budget-group.service";
-import { handleHttpError } from "../../../../../core/utils/handle-http-errors.util";
+import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ToastService } from "../../../../../shared/components/toast/toast.service";
 import { MatInputModule } from "@angular/material/input";

@@ -12,8 +12,9 @@
 
 .kit-dropdown .kit-dropdown-select {
       cursor: pointer;
-      display: block;
       padding: 10px;
+      display: flex;
+      align-items: center;
 }
 
 .kit-dropdown .kit-dropdown-select > i {
@@ -49,6 +50,9 @@
       padding: 10px;
       transition: background-color .2s ease-in-out;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
 }
 .kit-dropdown .kit-dropdown-menu li:hover { background-color: #f2f2f2; }
 .kit-dropdown .kit-dropdown-menu li:active { 
@@ -64,4 +68,9 @@
 .kit-dropdown .kit-dropdown-menu li[aria-selected="true"]:hover {
       background-color: #f2f2f2;
 }
-
+.kit-dropdown .option-img {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      margin-right: 8px;
+}

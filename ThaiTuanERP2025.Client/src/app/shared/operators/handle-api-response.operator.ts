@@ -1,6 +1,6 @@
 import { map } from 'rxjs/operators';
-import { ApiResponse } from '../models/api-response.model';
 import { Observable } from 'rxjs';
+import { ApiResponse } from '../models/api-response.model';
 
 export function handleApiResponse$<T>() {
       return (source$: Observable<ApiResponse<T>>): Observable<T> =>

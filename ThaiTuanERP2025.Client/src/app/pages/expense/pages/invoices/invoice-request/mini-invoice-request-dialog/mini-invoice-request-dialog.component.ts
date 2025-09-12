@@ -7,11 +7,11 @@ import { provideMondayFirstDateAdapter } from "../../../../../../shared/date/pro
 import { DateAdapter } from "@angular/material/core";
 import { MatButtonModule } from "@angular/material/button";
 import { FormBuilder, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { FileService } from "../../../../../../core/services/api/file.service";
+import { FileService } from "../../../../../../core/services/file.service";
 import { InvoiceService } from "../../../../services/invoice.service";
 import { firstValueFrom } from "rxjs";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
-import { handleHttpError } from "../../../../../../core/utils/handle-http-errors.util";
+import { handleHttpError } from "../../../../../../shared/utils/handle-http-errors.util";
 import { ToastService } from "../../../../../../shared/components/toast/toast.service";
 
 @Component({

@@ -5,7 +5,7 @@ import { UserService } from "../../services/user.service";
 import { GroupService } from "../../services/group.service";
 import { trigger, transition, style, animate } from '@angular/animations';
 import { forkJoin } from 'rxjs';
-import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
+import { handleHttpError } from "../../../../shared/utils/handle-http-errors.util";
 import { CreateGroupModel, GroupModel } from "../../models/group.model";
 import { UserDto } from "../../models/user.model";
 
