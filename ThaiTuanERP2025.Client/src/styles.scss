@@ -38,6 +38,20 @@
 }
 
 body, input { font-family: 'Lexend', sans-serif; font-size: 13px; }
+textarea { 
+      font-family: "Lexend", sans-serif;
+      font-size: 13px;
+      width: 100%;
+      min-height: 100px;
+      height: fit-content;
+      border: 1px solid var(--default-border);
+      border-radius: var(--main-border-radius);
+      box-sizing: border-box;
+      padding: 10px;
+      outline: none;
+      resize: none;
+      line-height: 1.6;
+}
 
 
 ul, ol {

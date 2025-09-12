@@ -1,7 +1,7 @@
 <div class="kit-dropdown" role="combobox" [attr.aria-expanded]="isOpen" [attr.aria-disabled]="disabled" aria-haspopup="listbox" tabindex="0" [style.width]="computedWidth">
       <div class="kit-dropdown-select" (click)="onToggle()">
-            <img *ngIf="selectedImgUrl" [src]="selectedImgUrl" class="option-img" />
-            <span>{{ selectedLabel || placeholder }}</span>
+            <img *ngIf="!multiple && selectedImgUrl" [src]="selectedImgUrl" class="option-img" />
+            <span>{{ selectedText }}</span>
       </div>
 
       <ul class="kit-dropdown-menu" role="listbox" [@slide]="isOpen ? 'open' : 'closed'">
@@ -12,13 +12,16 @@
                   (input)="onFilterInput($event)"
                   (keydown)="onFilterKeydown($event)" />
             </li>
+
             <!-- No result state -->
             <li class="no-result" *ngIf="filteredOptions.length === 0">Không tìm thấy kết quả</li>
 
             <li #optRef role="option" *ngFor="let opt of filteredOptions; let i = index"
             [attr.aria-selected]="i === focusedIndex"
             [class.active]="i === focusedIndex"
+            [class.selected] = "isSelected(opt.id)"
             (click)="selectOption(opt)">
+                  <span class="check" *ngIf="multiple">{{ isSelected(opt.id) ? '✔' : '' }}</span>
                   <img *ngIf="opt.imgUrl" [src]="opt.imgUrl" class="option-img" />
                   <span>{{ opt.label }}</span>
             </li>

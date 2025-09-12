@@ -93,7 +93,7 @@
                                     </td>
                                     <td> {{ row.get('amount')?.value | number:'1.0-2' }} </td>
                                     <td>
-                                          <kit-dropdown [options]="taxOptions" (selectionChange)="onTaxSelected($event, i)" [width]="115" [placeholder]="'chọn mức thuế'"></kit-dropdown>
+                                          <kit-dropdown [options]="taxOptions" (selectionChange)="onTaxSelected($event, i)" [width]="115" [placeholder]="'chọn mức thuế'" [enableFilter]="false"></kit-dropdown>
                                     </td>
                                     <td>
                                           <input type="text" formControlName="taxAmount" inputmode="decimal" appMoney [appMoneyDecimals]="0">
@@ -182,4 +182,14 @@
                   <mat-datepicker #picker panelClass="kit-datepicker"></mat-datepicker>
             </div>
       </div>
+
+      <div class="input-wrapper">
+            <span class="display-block">Nội dung thanh toán <span style="color: red;">*</span></span>
+            <textarea class="mar-top-10" name="" id="" placeholder="Trình bày nội dung ở đây"></textarea>
+      </div>
+
+      <div class="input-wrapper">
+            <kit-dropdown [multiple]="true" [options]="followerOptions" (selectionChange)="onFollowerSelected($event)" [width]="'100%'" [placeholder]="'Thêm người theo dõi'"></kit-dropdown>
+      </div>
+
 </form>
