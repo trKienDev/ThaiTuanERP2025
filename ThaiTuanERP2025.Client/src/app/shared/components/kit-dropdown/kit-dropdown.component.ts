@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnChanges, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { Component, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnChanges, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -29,6 +29,15 @@ export class KitDropdownComponent implements ControlValueAccessor, OnChanges {
       @Input() options: KitDropdownOption[] = [];
       @Input() placeholder = 'chọn ....';
       @Input() width: string | number | null = null;
+
+      /** Bật/tắt ô filter và placeholder của nó */
+      @Input() enableFilter = true;
+      @Input() filterPlaceholder = 'Tìm...';
+      /** Có phân biệt hoa/thường không */
+      @Input() caseSensitive = false;
+      /** Khi mở menu, tự động focus vào ô filter */
+      @Input() autoFocusFilter = true;
+
       get computedWidth(): string | null {
             if(this.width === null || this.width === undefined) 
                   return null;
@@ -43,8 +52,11 @@ export class KitDropdownComponent implements ControlValueAccessor, OnChanges {
 
       private _value: string | null = null;
       
+      filterText = '';  // Filter state
+      
       focusedIndex = -1;
       @ViewChildren('optRef') optionItems!: QueryList<ElementRef<HTMLLIElement>>;
+      @ViewChild('filterInput') filterInput?: ElementRef<HTMLInputElement>;
 
       constructor(private eRef: ElementRef<HTMLElement>) {}
 
@@ -57,32 +69,56 @@ export class KitDropdownComponent implements ControlValueAccessor, OnChanges {
             this.syncLabelFromValue();
       }
 
-      registerOnChange(fn: (val: string | null) => void): void {
-            this.onChange = fn;
-      }
-
-      registerOnTouched(fn: () => void): void {
-            this.onTouched = fn;
-      }
-
-      setDisabledState(isDisabled: boolean): void {
-            this.disabled = isDisabled;
-      }
+      registerOnChange(fn: (val: string | null) => void): void { this.onChange = fn; }
+      registerOnTouched(fn: () => void): void { this.onTouched = fn; }
+      setDisabledState(isDisabled: boolean): void { this.disabled = isDisabled; }
 
       // Đồng bộ label mỗi khi options thay đổi (ví dụ: load async)
       ngOnChanges(changes: SimpleChanges): void {
             if (changes['options']) this.syncLabelFromValue();
       }
 
-
+      // ===== Filtering =====
+      get filteredOptions(): KitDropdownOption[] {
+            const text = this.caseSensitive ? this.filterText : this.filterText.toLowerCase();
+            if (!this.enableFilter || !text) return this.options;
+            return this.options.filter(o => {
+                  const label = this.caseSensitive ? o.label : o.label.toLowerCase();
+                  return label.includes(text);
+            });
+      }
+      onFilterInput(event: Event) {
+            const input = event.target as HTMLInputElement | null;
+            this.filterText = input?.value ?? '';
+      }
+      clearFilter() {
+            if (!this.enableFilter) return;
+            this.filterText = '';
+            // Sau khi xóa filter, đảm bảo focusedIndex hợp lệ
+            this.focusedIndex = this.filteredOptions.length > 0 ? 0 : -1;
+            this.ensureItemVisible();
+      }
       onToggle() {
+            if (this.disabled) return;
             this.isOpen = !this.isOpen;
             if (this.isOpen) {
-                  this.focusedIndex = this.options.length > 0 ? 0 : -1;
-                  // focus vào host để nhận phím Arrow/Enter/Space
+                  // Reset vị trí focus theo danh sách đã filter
+                  this.focusedIndex = this.filteredOptions.length > 0 ? 0 : -1;
+
+                  // focus host để nghe phím mũi tên/enter/space
                   this.eRef.nativeElement.focus();
-                  // chờ render xong rồi ensure visible
-                  setTimeout(() => this.ensureItemVisible());
+
+                  // Chờ render xong rồi ensure visible + (tùy chọn) focus filter
+                  setTimeout(() => {
+                        this.ensureItemVisible();
+                        if (this.enableFilter && this.autoFocusFilter) {
+                              this.filterInput?.nativeElement.focus();
+                              this.filterInput?.nativeElement.select();
+                        }
+                  });
+            } else {
+                  // Đóng menu thì giữ lại filterText hay xóa? — ở đây xóa cho tiện
+                  this.clearFilter();
             }
       }
 
@@ -96,6 +132,8 @@ export class KitDropdownComponent implements ControlValueAccessor, OnChanges {
             this.onChange(this._value);
             this.onTouched();
             this.selectionChange.emit(opt);
+
+            this.clearFilter(); // Đóng menu rồi thì dọn filter
       }
 
       // Click ra ngoài thì đóng
@@ -103,6 +141,7 @@ export class KitDropdownComponent implements ControlValueAccessor, OnChanges {
             onClickOutside(event: Event) {
             if (this.isOpen && !this.eRef.nativeElement.contains(event.target as Node)) {
                   this.isOpen = false;
+                  this.clearFilter();
             }
       }
 
@@ -111,6 +150,7 @@ export class KitDropdownComponent implements ControlValueAccessor, OnChanges {
       onEsc(event: KeyboardEvent) {
             if (this.isOpen) {
                   this.isOpen = false;
+                  this.clearFilter();
                   event.stopPropagation();
             }
       }
@@ -120,7 +160,8 @@ export class KitDropdownComponent implements ControlValueAccessor, OnChanges {
       onKeydown(event: KeyboardEvent) {
             if (!this.isOpen) return;
 
-            const len = this.options.length;
+            const list = this.filteredOptions;         // ⟵ dùng filteredOptions
+            const len = list.length;
             if (len === 0) return;
 
             if (event.key === 'ArrowDown') {
@@ -140,7 +181,9 @@ export class KitDropdownComponent implements ControlValueAccessor, OnChanges {
             if (event.key === 'Enter' || event.key === ' ') {
                   event.preventDefault();
                   const idx = this.focusedIndex;
-                  if (idx >= 0 && idx < len) this.selectOption(this.options[idx]);
+
+                  if (idx >= 0 && idx < len) 
+                        this.selectOption(this.options[idx]);
                   return;
             }
 
@@ -159,6 +202,11 @@ export class KitDropdownComponent implements ControlValueAccessor, OnChanges {
             }
       }
 
+      // Ngăn phím mũi tên trong ô filter “lọt” ra host (tránh cuộn focus)
+      onFilterKeydown(ev: KeyboardEvent) {
+            ev.stopPropagation();
+      }
+
       private ensureItemVisible() {
             const items = this.optionItems?.toArray();
             if (!items || this.focusedIndex < 0 || this.focusedIndex >= items.length) return;
@@ -168,10 +216,12 @@ export class KitDropdownComponent implements ControlValueAccessor, OnChanges {
       private syncLabelFromValue() {
             if(!this._value) {
                   this.selectedLabel = null;
+                  this.selectedImgUrl = null;
                   return;
             }
 
             const opt = this.options.find(o => o.id === this._value);
             this.selectedLabel = opt ? opt.label : null;
+            this.selectedImgUrl = opt?.imgUrl ?? null;
       }
 }
