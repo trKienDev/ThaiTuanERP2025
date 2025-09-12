@@ -30,8 +30,8 @@
             transition: 0.3s all;
       }
       .multi-selected:hover {
-            color: white;
-            background-color: red;
+            color: red;
+            border: 1px solid red;
       }
 }
 
@@ -64,6 +64,7 @@
       z-index: 9;
 
       .selected { background: #f5f7fa !important;  }
+      .selected:hover { color: red; }
       .check { width: 14px; display: inline-block; color: var(--bright-blue-color); }
 }
 
