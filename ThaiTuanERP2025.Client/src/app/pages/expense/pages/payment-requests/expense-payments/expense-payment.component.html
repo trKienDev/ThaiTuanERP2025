@@ -16,7 +16,7 @@
       <div class="payee-container d-flex gap-10p pad-10p">
             <div class="payee-type-wrapper">
                   <span>Công ty trả cho</span>
-                  <kit-dropdown [options]="payeeOptions" placeholder="chọn đối tượng" (selectionChange)="onPayeeSelected($event)" [width]="120"></kit-dropdown>
+                  <kit-dropdown [options]="payeeOptions" placeholder="chọn đối tượng" [enableFilter]="false" (selectionChange)="onPayeeSelected($event)" [width]="120"></kit-dropdown>
             </div>
             <div class="payee-selection">
                   <div class="supplier-selection" *ngIf="selectedPayee === 'supplier'">
