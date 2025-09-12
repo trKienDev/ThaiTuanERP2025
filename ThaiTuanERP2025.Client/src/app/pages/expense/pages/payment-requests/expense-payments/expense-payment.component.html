@@ -192,4 +192,17 @@
             <kit-dropdown [multiple]="true" [options]="followerOptions" (selectionChange)="onFollowerSelected($event)" [width]="'100%'" [placeholder]="'Thêm người theo dõi'"></kit-dropdown>
       </div>
 
+      <div class="">
+            <div class="file-uploader pad-10p">
+                  <input #invoiceFile id="invoiceFile" type="file" class="file-input d-none" accept="application/pdf,image/*" (change)="onFileSelected($event)" />
+                  <div class="button button-github">
+                        <label for="invoiceFile" class="cursor-pointer">Chọn file (PDF/Ảnh)</label>
+                  </div>
+                  <span class="file-name" *ngIf="fileName; else noFile" style="margin-left: 10px;">{{ fileName }}</span>
+                  <ng-template #noFile>
+                        <span class="file-name muted" style="color: #888; margin-left: 10px;">Chưa chọn file</span>
+                  </ng-template>
+            </div>
+      </div>
+
 </form>

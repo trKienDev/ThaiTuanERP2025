@@ -72,6 +72,9 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       supplierBankAccounts: BankAccountDto[] = [];
       selectedBankAccount: BankAccountDto | null = null;
 
+      fileName = '';
+      pendingFile: File | null = null;
+
       constructor(
             private supplierService: SupplierService,
             private userService: UserService,
@@ -435,5 +438,11 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
 
             this.onMenuClosed?.(); 
             this.toast.successRich?.('Đã gỡ liên kết hóa đơn');  
+      }
+
+      onFileSelected(event: Event): void {
+            const file = (event.target as HTMLInputElement).files?.[0] ?? null;
+            this.pendingFile = file;
+            this.fileName = file?.name ?? '';
       }
 }
