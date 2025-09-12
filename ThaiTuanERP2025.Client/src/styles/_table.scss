@@ -39,7 +39,9 @@
       }
 
       .total-row {
-            background-color: var(--total-amount-line-color);
+            background-color: var(--main-bg-color);
+            color: #2d842d;
+            font-weight: 800;
       }
 }
 
