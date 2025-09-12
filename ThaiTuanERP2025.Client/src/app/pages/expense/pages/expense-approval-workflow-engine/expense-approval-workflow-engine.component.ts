@@ -9,7 +9,7 @@ import { CreateExpenseApprovalWorkflowRequest, ExpenseApprovalWorkflowDto, Workf
 import { NamingExpenseApprovalWorkflowDialogComponent } from "./naming-approval-workflow-dialog/naming-approval-workflow-dialog.component";
 import { EAFStepEditorDialogComponent, StepEditorResult } from "./step-editor-dialog/step-editor-dialog.component";
 import { catchError, of } from "rxjs";
-import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
+import { handleHttpError } from "../../../../shared/utils/handle-http-errors.util";
 
 type StepFlowType = 'any' | 'sequential' | 'all';
 interface Step {

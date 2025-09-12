@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
-import { environment } from "../../../../environments/environment";
+import { environment } from "../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { ApiResponse } from "../../models/api-response.model";
-import { UploadFileResult } from "../../models/upload-file-result.model";
-import { handleApiResponse$ } from "../../utils/handle-api-response.operator";
+import { ApiResponse } from "../../shared/models/api-response.model";
+import { UploadFileResult } from "../../shared/models/upload-file-result.model";
+import { handleApiResponse$ } from "../../shared/operators/handle-api-response.operator";
 
 @Injectable({ providedIn: 'root' }) 
 export class FileService {

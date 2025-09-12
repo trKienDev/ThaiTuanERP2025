@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { BaseCrudService } from "../../../core/services/api/base-crud.service";
+import { BaseCrudService } from "../../../shared/services/base-crud.service";
 import { CreateLedgerAccountTypeRequest, LedgerAccountTypeDto, UpdateLedgerAccountTypeRequest } from "../../finance/models/ledger-account-type.dto";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "../../../../environments/environment";

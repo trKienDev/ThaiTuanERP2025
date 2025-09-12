@@ -4,7 +4,7 @@ import { BudgetPlanService } from "../../services/budget-plan.service";
 import { DepartmentService } from "../../../account/services/department.service";
 import { BudgetCodeService } from "../../services/budget-code.service";
 import { BudgetPeriodService } from "../../services/budget-period.service";
-import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
+import { handleHttpError } from "../../../../shared/utils/handle-http-errors.util";
 import { FormsModule } from "@angular/forms";
 import { BudgetPeriodModel } from "../../models/budget-period.model";
 import { MatInputModule } from "@angular/material/input";

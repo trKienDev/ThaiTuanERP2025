@@ -1,9 +1,9 @@
 import { CommonModule } from "@angular/common";
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { ExcelImportService } from "../../../../shared/services/excel/excel-import.service";
+import { ExcelImportService } from "../../../../shared/services/excel-import.service";
 import { DepartmentService } from "../../services/department.service";
-import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
+import { handleHttpError } from "../../../../shared/utils/handle-http-errors.util";
 import { EditDepartmentModalComponent } from "../../components/edit-department-modal/edit-department-modal.component";
 import { finalize } from "rxjs";
 import { DepartmentDto } from "../../models/department.model";

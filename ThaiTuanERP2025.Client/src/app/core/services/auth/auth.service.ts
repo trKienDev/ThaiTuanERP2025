@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { ApiResponse } from '../../models/api-response.model';
-import { LoginResponse } from '../../models/login-response.model';
+import { ApiResponse } from '../../../shared/models/api-response.model';
+import { LoginResponse } from '../../../shared/models/login-response.model';
 
 
 @Injectable({ providedIn: 'root' })

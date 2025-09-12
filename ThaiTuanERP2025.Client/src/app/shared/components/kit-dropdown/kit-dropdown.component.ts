@@ -3,7 +3,7 @@ import { Component, ElementRef, EventEmitter, forwardRef, HostListener, Input, O
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-export type KitDropdownOption = { id: string; label: string };
+export type KitDropdownOption = { id: string; label: string, imgUrl?: string };
 
 @Component({
       selector: 'kit-dropdown',
@@ -38,6 +38,7 @@ export class KitDropdownComponent implements ControlValueAccessor, OnChanges {
 
       isOpen = false;
       selectedLabel: string | null = null;
+      selectedImgUrl: string | null = null;
       disabled = false;
 
       private _value: string | null = null;
@@ -89,6 +90,7 @@ export class KitDropdownComponent implements ControlValueAccessor, OnChanges {
             if(this.disabled) return;
             this._value = opt.id;
             this.selectedLabel = opt.label;
+            this.selectedImgUrl = opt.imgUrl ?? null;
             this.isOpen = false;
 
             this.onChange(this._value);
