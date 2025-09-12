@@ -10,7 +10,7 @@
       text-align: left;
 }
 
-.kit-dropdown .kit-dropdown-select {
+.kit-dropdown-select {
       cursor: pointer;
       padding: 10px;
       display: flex;
@@ -74,3 +74,13 @@
       border-radius: 50%;
       margin-right: 8px;
 }
+.kit-dropdown-filter {
+      padding: unset !important;
+}
+.kit-dropdown-filter input[type="text"] {
+      outline: none;
+      border: none;
+      padding: 10px;
+}
+
+
