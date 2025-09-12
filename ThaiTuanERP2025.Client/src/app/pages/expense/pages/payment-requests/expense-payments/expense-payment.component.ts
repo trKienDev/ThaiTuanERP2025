@@ -61,9 +61,9 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       private toast = inject(ToastService);
       private baseUrl = environment.baseUrl; 
       
-      
       supplierOptions: KitDropdownOption[] = [];
       userOptions: KitDropdownOption[] = [];
+      followerOptions: KitDropdownOption[] = [];
       currencyOptions: KitDropdownOption[] = [];
       taxOptions: KitDropdownOption[] = [];
       budgetCodeOptiopns: KitDropdownOption[] = [];
@@ -178,12 +178,17 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
                               label: u.fullName,
                               imgUrl: resolveAvatarUrl(this.baseUrl, u),
                         }));
+                        this.followerOptions = this.userOptions;
                   }
             })
       }
       onUserSelected(opt: KitDropdownOption) {
             alert(`Bạn đã chọn: ${opt.label} (id = ${opt.id})`);
       }
+      onFollowerSelected(opt: KitDropdownOption) {
+            alert(`Bạn đã chọn: ${opt.label} (id = ${opt.id})`);
+      }
+
 
       loadTaxes(): void {
             this.taxService.getAll().subscribe({
