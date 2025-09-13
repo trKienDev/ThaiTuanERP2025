@@ -8,21 +8,23 @@
       width: 100%;
       border-collapse: separate; /* thay cho collapse */
       border-spacing: 0;
+      border-radius: 5px;
 
       th, td {
-            border: 1px solid #e2e8ee;
-            padding: 8px 12px;
-            text-align: left;
-      }
-
-      thead th {
-            background-color: #f9fafb; 
-            font-weight: 600;
+            border-bottom: 1px solid #e2e8ee;
+            padding: 15px 25px;
             text-align: center;
       }
 
+      thead th {
+            background-color: var(--main-bg-color); 
+            font-weight: 600;
+            text-align: center;
+            color: #4c607a;
+      }
+
       tbody tr:hover {
-            background-color: #f5f7fa; 
+            background-color: var(--main-bg-color); 
       }
 
       .tr-non-hover {
@@ -51,11 +53,6 @@ thead, tr, td {
       border-width: 0;
 }
 
-.table-center-text {
-      th, td {
-            text-align: center;
-      }
-}
 
 
 

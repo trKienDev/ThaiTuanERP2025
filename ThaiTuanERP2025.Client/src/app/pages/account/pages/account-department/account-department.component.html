@@ -25,7 +25,7 @@
                   <div class="card-body">
                         <div class="file-uploader">
                               <input #excelFile id="excelFile" type="file" class="file-input" (change)="onFileSelected($event)" accept=".xlsx,.xls" />
-                              <div class="button button-github">
+                              <div class="button default-button">
                                     <label for="excelFile" class="cursor-pointer">Chọn file</label>
                               </div>
                               <span class="file-name" *ngIf="fileName; else noFile">{{ fileName }}</span>
