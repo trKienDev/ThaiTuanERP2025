@@ -1,15 +1,1 @@
-<div class="cashouts-shell">
-      <aside class="cashouts-shell__sidebar">
-            <a class="sidebar__item" [class.active]="view === 'code'" (click)="selectView('code')">Mã dòng tiền ra</a>
-            <a class="sidebar__item" [class.active]="view === 'group'" (click)="selectView('group')">Nhóm dòng tiền ra</a>
-      </aside>
-
-      <main class="cashouts-shell__content">
-            <section *ngIf="view === 'code'" class="panel">
-                  <cashout-code-panel></cashout-code-panel>
-            </section>
-            <section *ngIf="view === 'group'" class="panel">
-                  <cashout-group-panel></cashout-group-panel>
-            </section>
-      </main>
-</div>
+<kit-shell-tabs [tabs]="tabs"></kit-shell-tabs>

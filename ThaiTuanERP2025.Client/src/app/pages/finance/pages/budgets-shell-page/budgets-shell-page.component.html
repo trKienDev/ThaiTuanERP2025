@@ -1,15 +1,1 @@
-<div class="budgets-shell">
-      <aside class="budgets-shell__sidebar">
-            <a class="sidebar__item" [class.active]="view === 'code'" (click)="selectView('code')">Mã ngân sách</a>
-            <a class="sidebar__item" [class.active]="view === 'group'" (click)="selectView('group')">Nhóm ngân sách</a>
-      </aside>
-
-      <main class="budgets-shell__content">
-            <section *ngIf="view === 'code'" class="panel">
-                  <budget-code-panel></budget-code-panel>
-            </section>
-            <section *ngIf="view === 'group'" class="panel">
-                  <budget-groups-panel></budget-groups-panel>
-            </section>
-      </main>
-</div>
+<kit-shell-tabs [tabs]="tabs"></kit-shell-tabs>
