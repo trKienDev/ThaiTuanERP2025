@@ -1,22 +1,25 @@
+:root {
+      --button-default-bgColor-rest: #f6f8fa;
+      --button-default-shadow-resting: 0px 1px 0px 0px #1f23280a;
+      --button-default-color-rest: #25292e;
+
+}
+
 button, .button { 
       font-family: 'Lexend', sans-serif; 
       font-size: 12px; 
       padding: 7px 10px;
-      border-radius: 3px;
+      border-radius: 5px;
 }
+
+// *** default button ***
+.default-button { background-color: #f6f8fa; box-shadow: 0px 1px 0px 0px #1f23280a; color: #696e75; cursor: pointer; user-select: none; border: 1px solid #d1d9e0; }
+.default-button:hover { transition-duration: 80ms; background-color: #eff2f5; color: #25292e;}
 
 // *** button-1 ***
 .button-1 { border: none; display: flex; background-color: #488aec; color: #ffffff; font-weight: 700; text-align: center; cursor: pointer; vertical-align: middle; align-items: center; border-radius: 0.5rem; user-select: none; gap: 0.75rem; box-shadow: 0 4px 6px -1px #488aec31, 0 2px 4px -1px #488aec17; transition: all 0.6s ease; }
 .button-1:hover { box-shadow: 0 10px 15px -3px #488aec4f, 0 4px 6px -2px #488aec17; }
 .button-1:focus, .button-1:active { opacity: 0.85; box-shadow: none; }
-
-// *** button-github ***
-.button-github { appearance: none; background-color: #FAFBFC; border: 1px solid rgba(27, 31, 35, 0.15); border-radius: 6px; box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset; box-sizing: border-box; color: #24292E; cursor: pointer; display: inline-block; font-weight: 500; list-style: none; position: relative; transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1); user-select: none; -webkit-user-select: none; touch-action: manipulation; vertical-align: middle; white-space: nowrap; word-wrap: break-word; }
-.button-github:hover { background-color: #F3F4F6; text-decoration: none; transition-duration: 0.1s; cursor: pointer; }
-.button-github:active { background-color: #EDEFF2; box-shadow: rgba(225, 228, 232, 0.2) 0 1px 0 inset; transition: none 0s; }
-.button-github:focus { outline: 1px transparent; }
-.button-github:before { display: none; }
-.button-github:-webkit-details-marker { display: none; }
 
 // *** button-login ***
 // .button-login { font-family: 'Lexend', 'Courier New', Courier, monospace; border: none; outline: none; color: rgb(255, 255, 255); background: rgb(77, 76, 76); cursor: pointer; position: relative; z-index: 0; border-radius: 10px; user-select: none; -webkit-user-select: none; touch-action: manipulation; }

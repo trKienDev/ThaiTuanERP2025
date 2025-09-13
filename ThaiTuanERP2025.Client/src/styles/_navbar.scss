@@ -1,7 +1,7 @@
 // _navbar.scss
 .navbar {
-      background-color: var(--sub-bg-color, #f8f9fa);
-      padding: 0 1rem;
+      background: linear-gradient(181deg,rgb(255, 255, 255) 0%, rgb(242, 247, 247) 55%, rgb(245, 250, 252) 100%);
+      padding: 0 10px;
       display: flex;
       justify-content: flex-start;
       position: relative;
@@ -44,14 +44,14 @@
                   background-color: white;
                   color: #000;
                   opacity: 1;
-                  border: 1px solid var(--default-border, #ccc);
+                  border: 1px solid var(--default-border-color, #ccc);
                   border-bottom: 1px solid #fff; 
             }
 
             &.selected {
                   background-color: #fff;
                   color: var(--main-foreground-hover);
-                  border: 1px solid var(--default-border, #ccc);
+                  border: 1px solid var(--default-border-color, #ccc);
                   border-bottom: 1px solid #fff; 
                   z-index: 2;
                   position: relative;
@@ -67,7 +67,7 @@
       }
 
       &__content {
-            padding: 1rem;
+            padding: 10px;
             height: 100%;
             position: relative;
             overflow-y: scroll;

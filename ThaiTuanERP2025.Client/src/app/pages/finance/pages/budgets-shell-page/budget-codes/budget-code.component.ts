@@ -1,20 +1,18 @@
 import { CommonModule } from "@angular/common";
-import { Component, ElementRef, inject, OnInit, ViewChild } from "@angular/core";
-import { BudgetCodeService } from "../../services/budget-code.service";
-import { handleHttpError } from "../../../../shared/utils/handle-http-errors.util";
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { BudgetCodeDto } from "../../models/budget-code.model";
-import { MatDialog } from "@angular/material/dialog";
+import { Component, ElementRef, inject, ViewChild } from "@angular/core";
 import { AddBudgetCodeRequestDialogComponent } from "./add-budget-code-request/add-budget-code-request.component";
+import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
+import { BudgetCodeDto } from "../../../models/budget-code.model";
+import { BudgetCodeService } from "../../../services/budget-code.service";
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
-      selector: 'finance-budget-code',
+      selector: 'budget-code-panel',
       standalone: true,
-      imports: [CommonModule,  MatTooltipModule ],
-      templateUrl: './budget-code.component.html',
-      styleUrl: './budget-code.component.scss',
+      imports: [ CommonModule ],
+      templateUrl: './budget-code.component.html'
 })
-export class BudgetCodeComponent implements OnInit {
+export class BudgetCodePanelComponent {
       private dialog = inject(MatDialog);
 
       showModal = false;

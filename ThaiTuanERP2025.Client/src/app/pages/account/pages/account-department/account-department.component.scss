@@ -9,7 +9,7 @@
 
 .btn { padding: .5rem 1rem; border-radius: 8px; cursor: pointer; }
 .btn-primary { background: #6c5ce7; color: #fff; border: none; }
-.btn-outline { background: transparent; border: 1px solid var(--default-border, #ccc); }
+.btn-outline { background: transparent; border: 1px solid var(--default-border-color, #ccc); }
 .btn-link { background: transparent; border: none; text-decoration: underline; padding: 0; }
 
 .file-name {
