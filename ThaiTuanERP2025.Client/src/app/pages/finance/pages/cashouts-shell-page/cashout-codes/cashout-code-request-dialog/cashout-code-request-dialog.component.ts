@@ -15,6 +15,8 @@ import { handleHttpError } from "../../../../../../shared/utils/handle-http-erro
 import { CreateCashoutCodeRequest } from "../../../../models/cashout-code.model";
 import { catchError, of } from "rxjs";
 import { CashoutCodeService } from "../../../../services/cashout-code.service";
+import { ToastService } from "../../../../../../shared/components/toast/toast.service";
+import { KitDropdownOption } from "../../../../../../shared/components/kit-dropdown/kit-dropdown.component";
 
 
 @Component({
@@ -29,15 +31,14 @@ export class CashoutCodeRequestDialogComponent implements OnInit {
       private formBuilder = inject(FormBuilder);
       private dialogRef = inject(MatDialogRef<CashoutCodeRequestDialogComponent>);
       private cashoutCodeService = inject(CashoutCodeService);
-
-      saving = false;
-      errorMessages: string[] = [];
-
-      cashoutGroupOptions: CashoutGroupDto[] = [];
       private cashoutGroupService = inject(CashoutGroupService);
-      
-      ledgerAccountOptions: LedgerAccountDto[] = [];
       private ledgerAccountService = inject(LedgerAccountService);
+      private toast = inject(ToastService);
+
+      cashoutGroupOptions: KitDropdownOption[] = [];
+      postingLedgerAccountOptions: KitDropdownOption[] = [];
+
+      submitting = false;
 
       form = this.formBuilder.group({
             name: ['', { validators: [Validators.required, Validators.maxLength(250)], updateOn: 'blur' }],
@@ -56,42 +57,35 @@ export class CashoutCodeRequestDialogComponent implements OnInit {
 
       loadCashoutGroupOptions(): void {
             this.cashoutGroupService.getAll().subscribe({
-                  next: (data) => {
-                        this.cashoutGroupOptions = data;
+                  next: (cashoutGroups) => {
+                        this.cashoutGroupOptions = cashoutGroups.map(cg => ({
+                              id: cg.id,
+                              label: `${cg.code} - ${cg.name}`
+                        }))
                   }, 
-                  error: err => alert(handleHttpError(err).join('\n'))
+                  error: (err => handleHttpError(err))
             })
       }
+      onCashoutGroupSelected(opt: KitDropdownOption) {
+            this.form.patchValue({ cashoutGroupId: opt.id });
+      }
+
       loadLedgerAccountOptions(): void {
             this.ledgerAccountService.getAll().subscribe({
-                  next: (data) => {
-                        this.ledgerAccountOptions = data;
-                  }, 
-                  error: err => alert(handleHttpError(err).join('\n'))
+                  next: (ledgerAccounts) => {
+                        this.postingLedgerAccountOptions = ledgerAccounts.map(la => ({
+                              id: la.id, 
+                              label: la.name
+                        }))
+                  },
+                  error: (err => handleHttpError(err))
             })
       }
-
-      submit(): void {
-            this.errorMessages = [];
-            if(this.form.invalid) {
-                  this.form.markAllAsTouched();
-                  return;
-            }
-
-            const payload = this.form.getRawValue() as CreateCashoutCodeRequest;
-
-            this.saving = true;
-            this.cashoutCodeService.create(payload).pipe(
-                  catchError(err => {
-                        this.errorMessages = handleHttpError(err);
-                        this.saving = false;
-                        return of(null);
-                  })
-            ).subscribe((created) => {
-                  if(!created) return;
-                  this.dialogRef.close('created');
-            })
+      onLedgerAccountsSelected(opt: KitDropdownOption) {
+            this.form.patchValue({ postingLedgerAccountId: opt.id })
       }
+
+      async save(): 
 
       cancel(): void {
             this.dialogRef.close();
