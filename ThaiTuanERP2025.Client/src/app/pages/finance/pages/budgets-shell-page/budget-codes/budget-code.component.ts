@@ -5,11 +5,12 @@ import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.
 import { BudgetCodeDto } from "../../../models/budget-code.model";
 import { BudgetCodeService } from "../../../services/budget-code.service";
 import { MatDialog } from "@angular/material/dialog";
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
       selector: 'budget-code-panel',
       standalone: true,
-      imports: [ CommonModule ],
+      imports: [ CommonModule, MatTooltipModule ],
       templateUrl: './budget-code.component.html'
 })
 export class BudgetCodePanelComponent {
@@ -35,6 +36,7 @@ export class BudgetCodePanelComponent {
                   next: (data) => {
                         this.budgetCodes = data.map(bc => ({ ...bc, selected: false }));
                         this.updateMasterCheckboxState();
+                        console.log('budget codes: ', this.budgetCodes);
                   },
                   error: err => alert(handleHttpError(err).join('\n'))
             });

@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { CashoutCodeRequestDialogComponent } from "./cashout-code-request-dialog/cashout-code-request-dialog.component";
+import { CashoutCodeRequestDialogComponent } from "../../cashouts-shell-page/cashout-codes/cashout-code-request-dialog/cashout-code-request-dialog.component";
 
 @Component({
       selector: 'finance-cashout-code',
