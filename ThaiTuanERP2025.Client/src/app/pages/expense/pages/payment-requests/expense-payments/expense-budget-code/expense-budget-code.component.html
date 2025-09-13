@@ -31,7 +31,7 @@
                               <td>{{ bc.month }}/{{ bc.year }}</td>
                               <td>{{ bc.amount == null ? '—' : (bc.amount | number:'1.0-2') }}</td>
                               <td>
-                                    <button type="button" class="button button-github" 
+                                    <button type="button" class="button default-button" 
                                     (click)="selectBudgetCode(bc)"
                                     (keydown.enter)="selectBudgetCode(bc)"
                                     (keydown.space)="selectBudgetCode(bc); $event.preventDefault()"

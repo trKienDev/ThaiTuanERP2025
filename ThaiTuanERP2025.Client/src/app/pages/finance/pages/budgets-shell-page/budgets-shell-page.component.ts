@@ -1,20 +1,20 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { ActivatedRoute, Route, Router } from "@angular/router";
 import { Subject, takeUntil } from "rxjs";
-import { CashoutGroupComponent } from "./cashout-group/cashout-group.component";
-import { CashoutCodeComponent } from "./cashout-code/cashout-code.component";
+import { ActivatedRoute, Router } from "@angular/router";
+import { BudgetCodePanelComponent } from "./budget-codes/budget-code.component";
+import { BudgetGroupPanelComponent } from "./budget-groups/budget-group.component";
 
-type ViewTab = 'code' | 'group';
+type ViewTab = 'code' | 'group' | 'plan' | 'period';
 
 @Component({
-      selector: 'finance-cashout-shell-page',
+      selector: 'budgets-shell-page',
       standalone: true,
-      imports: [ CommonModule, CashoutGroupComponent, CashoutCodeComponent ],
-      templateUrl: './cashout-shell-page.component.html',
-      styleUrl: './cashout-shell-page.component.scss',
+      imports: [CommonModule, BudgetCodePanelComponent, BudgetGroupPanelComponent ],
+      templateUrl: './budgets-shell-page.component.html',
+      styleUrl: './budgets-shell-page.component.scss'
 })
-export class CashoutShellPageComponent implements OnInit, OnDestroy {
+export class BudgetShellPageComponent implements OnInit, OnDestroy {
       view: ViewTab = 'code';
       private destroy$ = new Subject<void>();
 
@@ -23,7 +23,7 @@ export class CashoutShellPageComponent implements OnInit, OnDestroy {
       ngOnInit(): void {
             this.route.queryParamMap.pipe(takeUntil(this.destroy$))
                   .subscribe(q => {
-                        this.view = (q.get('view') as ViewTab) ?? 'type';
+                        this.view = (q.get('view') as ViewTab) ?? 'code';
                   });
       }
 

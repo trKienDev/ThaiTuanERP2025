@@ -1,19 +1,17 @@
 import { CommonModule } from "@angular/common";
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
-import { BudgetGroupService } from "../../services/budget-group.service";
+import { Component, ElementRef, ViewChild } from "@angular/core";
+import { BudgetGroupModel } from "../../../models/budget-group.model";
+import { BudgetGroupService } from "../../../services/budget-group.service";
+import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
 import { FormsModule } from "@angular/forms";
-import { handleApiResponse } from "../../../../shared/utils/handle-api-response.utils";
-import { handleHttpError } from "../../../../shared/utils/handle-http-errors.util";
-import { BudgetGroupModel } from "../../models/budget-group.model";
 
 @Component({
-      selector: 'finance-budget-group',
+      selector: 'budget-groups-panel',
       standalone: true,
       imports: [ CommonModule, FormsModule ],
-      templateUrl: './budget-group.component.html',
-      styleUrl: './budget-group.component.scss',
+      templateUrl: './budget-group.component.html'
 })
-export class BudgetGroupComponent implements OnInit {
+export class BudgetGroupPanelComponent {
       newBudgetGroup = { code: '', name: '' };
       successMessage: string | null = null;
       errorMessages: string[] = [];

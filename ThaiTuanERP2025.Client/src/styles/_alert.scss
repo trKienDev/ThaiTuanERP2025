@@ -3,7 +3,7 @@
       --dark-rgb: 10, 10, 10;
 }
 
-.alert { padding: 10px; border-radius: var(--main-border-radius); }
+.alert { padding: 10px; border-radius: var(--default-border-color-radius); }
 
 .alert-warning { 
       background-color: rgba(var(--warning-rgb), 0.1); 
