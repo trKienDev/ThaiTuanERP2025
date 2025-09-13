@@ -1,46 +1,17 @@
-<h2 mat-dialog-title>Mã dòng tiền ra mới</h2>
-<div mat-dialog-content [formGroup]="form">
-      <mat-form-field appearance="outline">
-            <mat-label>Tên nhóm dòng tiền ra</mat-label>
-            <input matInput formControlName="name" placeholder="Tên nhóm dòng tiền ra">
-            <mat-error *ngIf="cashoutCodeRequestForm.name.hasError('required')">Bắt buộc</mat-error>
-            <mat-error *ngIf="cashoutCodeRequestForm.name.hasError('maxlength')">Tối đa 200 ký tự</mat-error>
-            <mat-error *ngIf="cashoutCodeRequestForm.name.hasError('nameToken')">Tên nhóm đã tồn tại</mat-error>
-      </mat-form-field>
+<div class="cashout-code-request-dialog">
+      <div class="dialog-container">
+            <div class="dialog-title">Thêm mã dòng tiền ra mới</div>
+            <form class="dialog-body" [formGroup]="form">
+                  <div class="dialog-field">
+                        <div class="form-input">
+                              <input class="" type="text" formControlName="name" autocomplete="on" required/>
+                              <label for="name">Tên mã dòng tiền ra <span style="color: red;">  *</span></label>
+                        </div>
+                  </div>
 
-      <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Nhóm (vui lòng chọn)</mat-label>
-            <mat-select formControlName="cashoutGroupId">
-                  <mat-option [value]="null">-- Không có nhóm cha --</mat-option>
-                  <mat-option *ngFor="let group of cashoutGroupOptions" [value]="group.id">
-                        {{ group.name }}
-                  </mat-option>
-            </mat-select>
-      </mat-form-field>
 
-      <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Tài khoản kế toán</mat-label>
-            <mat-select formControlName="postingLedgerAccountId">
-                  <mat-option [value]="null">-- Không có nhóm cha --</mat-option>
-                  <mat-option *ngFor="let acc of ledgerAccountOptions" [value]="acc.id">
-                        {{ acc.name }}
-                  </mat-option>
-            </mat-select>
-      </mat-form-field>
+            </form>
 
-      <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Mô tả</mat-label>
-            <textarea matInput formControlName="description" rows="3"></textarea>
-      </mat-form-field>
-
-      <mat-checkbox formControlName="isActive">Kích hoạt</mat-checkbox>
-      <div *ngIf="errorMessages.length" class="mt-2">
-            <div *ngFor="let msg of errorMessages" class="text-red-600 text-sm">• {{ msg }}</div>
       </div>
-</div>
-<div mat-dialog-actions align="end">
-      <button mat-button (click)="cancel()" [disabled]="saving">Hủy</button>
-      <button mat-raised-button color="primary" (click)="submit()" [disabled]="saving">
-            {{ saving ? 'Đang lưu...' : 'Lưu' }}
-      </button>
+
 </div>
