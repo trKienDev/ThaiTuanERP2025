@@ -1,0 +1,32 @@
+<div class="cashout-group-request-dialog" style="width: 520px;">
+      <div class="dialog-container">
+            <h2 class="dialog-title">Nhóm dòng tiền ra mới</h2>
+
+            <form class="dialog-body" [formGroup]="form" (ngSubmit)="submit()">
+
+                  <div class="dialog-field">
+                        <div class="form-input">
+                              <input class="" type="text" formControlName="name" autocomplete="on" required/>
+                              <label for="name">Tên nhóm dòng tiền ra <span style="color: red;">  *</span></label>
+                        </div>
+                  </div>
+
+                  <div class="dialog-field">
+                        <div class="form-input">
+                              <textarea formControlName="description" id="" placeholder="Mô tả (nếu có)"></textarea>
+                        </div>
+                  </div>
+
+                  <div class="dialog-field">
+                        <kit-dropdown [options]="parentOptions" (selectionChange)="(onParentsSelected($event))" [placeholder]="'Chọn nhóm tài khoản cha (nếu có)'" [width]="'100%'"></kit-dropdown>
+                  </div>
+
+                  <div class="actions d-flex gap-10p mar-top-20">
+                        <button type="button" class="width-50pt button cancel-button" (click)="close()">Hủy</button>
+                        <button type="submit" class="width-50pt button save-button d-flex justify-content-center" [disabled]="saving">
+                              {{ saving ? 'Đang lưu...' : 'Lưu' }}
+                        </button>
+                  </div>
+            </form>
+      </div>
+</div>
