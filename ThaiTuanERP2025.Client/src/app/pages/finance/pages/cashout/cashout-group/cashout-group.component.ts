@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { CashoutGroupRequestDialogComponent } from "./cashout-group-request-dialog/cashout-group-request-dialog.component";
+import { CashoutGroupRequestDialogComponent } from "../../cashouts-shell-page/cashout-groups/cashout-group-request-dialog/cashout-group-request-dialog.component";
 import { MatButton } from "@angular/material/button";
 import { CashoutGroupDto } from "../../../models/cashout-group.model";
 import { CashoutGroupService } from "../../../services/cashout-group.service";

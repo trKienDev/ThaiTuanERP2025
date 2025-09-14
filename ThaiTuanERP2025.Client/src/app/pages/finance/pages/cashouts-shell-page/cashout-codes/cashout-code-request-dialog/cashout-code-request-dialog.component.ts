@@ -16,16 +16,15 @@ import { CreateCashoutCodeRequest } from "../../../../models/cashout-code.model"
 import { catchError, of } from "rxjs";
 import { CashoutCodeService } from "../../../../services/cashout-code.service";
 import { ToastService } from "../../../../../../shared/components/toast/toast.service";
-import { KitDropdownOption } from "../../../../../../shared/components/kit-dropdown/kit-dropdown.component";
+import { KitDropdownOption, KitDropdownComponent } from "../../../../../../shared/components/kit-dropdown/kit-dropdown.component";
 
 
 @Component({
       selector: 'cashout-code-request-dialog',
       standalone: true,
-      imports: [ CommonModule, ReactiveFormsModule, MatDialogModule, MatFormFieldModule,
-            MatInputModule, MatCheckboxModule, MatButtonModule, MatSelectModule ],
-      templateUrl: './cashout-code-request-dialog.component.html',
-      styleUrl: './cashout-code-request-dialog.component.scss',
+      imports: [CommonModule, ReactiveFormsModule, MatDialogModule, MatFormFieldModule,
+    MatInputModule, MatCheckboxModule, MatButtonModule, MatSelectModule, KitDropdownComponent],
+      templateUrl: './cashout-code-request-dialog.component.html'
 })
 export class CashoutCodeRequestDialogComponent implements OnInit {
       private formBuilder = inject(FormBuilder);
@@ -41,14 +40,13 @@ export class CashoutCodeRequestDialogComponent implements OnInit {
       submitting = false;
 
       form = this.formBuilder.group({
-            name: ['', { validators: [Validators.required, Validators.maxLength(250)], updateOn: 'blur' }],
-            cashoutGroupId: [''],
-            cashoutGroupName: [''],
-            postingLedgerAccountId: [''],
+            name: this.formBuilder.control<string>('', { validators: [Validators.required, Validators.maxLength(250)], updateOn: 'blur' }),
+            cashoutGroupId: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
+            cashoutGroupName: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
+            postingLedgerAccountId: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
             description: [''],
             isActive: [true]
       });
-      get cashoutCodeRequestForm() { return this.form.controls };
 
       ngOnInit(): void {
             this.loadCashoutGroupOptions();
@@ -63,7 +61,11 @@ export class CashoutCodeRequestDialogComponent implements OnInit {
                               label: `${cg.code} - ${cg.name}`
                         }))
                   }, 
-                  error: (err => handleHttpError(err))
+                  error: (err => {
+                              const message = handleHttpError(err);
+                              this.toast.errorRich(message);
+                        }
+                  )
             })
       }
       onCashoutGroupSelected(opt: KitDropdownOption) {
@@ -85,7 +87,6 @@ export class CashoutCodeRequestDialogComponent implements OnInit {
             this.form.patchValue({ postingLedgerAccountId: opt.id })
       }
 
-      async save(): 
 
       cancel(): void {
             this.dialogRef.close();

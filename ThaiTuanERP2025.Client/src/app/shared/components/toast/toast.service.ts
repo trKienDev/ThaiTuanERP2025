@@ -35,7 +35,9 @@ export class ToastService {
       warning(msg: string, cfg?: MatSnackBarConfig) { this.open(msg, 'warning', this.withDefaultDuration(cfg, 4000)); }
       info(msg: string,    cfg?: MatSnackBarConfig) { this.open(msg, 'info',    this.withDefaultDuration(cfg, 3000)); }
 
-      successRich(msg: string, title = 'Thành công', cfg?: MatSnackBarConfig) { this.openRich('success', msg, title, this.withDefaultDuration(cfg, 2500)); }
+      successRich(msg: string, title = 'Thành công', cfg?: MatSnackBarConfig) { 
+            this.openRich('success', msg, title, this.withDefaultDuration(cfg, 2500)); 
+      }
       errorRich(msg: string | string[], title = 'Lỗi', cfg?: MatSnackBarConfig) {
             const text = Array.isArray(msg) ? msg.join('\n• ') : msg;
             this.openRich('error', text, title, this.withDefaultDuration(cfg, 5000));

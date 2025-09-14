@@ -92,7 +92,6 @@ export class AddBudgetCodeRequestDialogComponent implements OnInit {
             } catch(error) {
                   const messages = handleHttpError(error);
                   this.toast.errorRich(messages);
-                  this.close();
             } finally {
                   this.submitting = false;
             }
