@@ -1,0 +1,100 @@
+import { CommonModule } from "@angular/common";
+import { Component, inject, OnInit } from "@angular/core";
+import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { CashoutGroupDto, CreateCashoutGroupRequest } from "../../../../models/cashout-group.model";
+import { catchError, firstValueFrom, of } from "rxjs";
+import { handleHttpError } from "../../../../../../shared/utils/handle-http-errors.util";
+import { MatSelectModule } from "@angular/material/select";
+import { CashoutGroupService } from "../../../../services/cashout-group.service";
+import { KitDropdownOption, KitDropdownComponent } from "../../../../../../shared/components/kit-dropdown/kit-dropdown.component";
+import { ToastService } from "../../../../../../shared/components/toast/toast.service";
+
+@Component({
+      selector: 'cashout-group-request-dialog',
+      standalone: true,
+      imports: [CommonModule, ReactiveFormsModule, MatDialogModule, MatFormFieldModule,
+    MatInputModule, MatCheckboxModule, MatButtonModule, MatSelectModule, KitDropdownComponent],
+      templateUrl: './cashout-group-request-dialog.component.html',
+})
+export class CashoutGroupRequestDialogComponent implements OnInit {
+      private formBuilder = inject(FormBuilder);
+      private dialogRef = inject(MatDialogRef<CashoutGroupRequestDialogComponent>);
+      private cashoutGroupService = inject(CashoutGroupService);
+      private toast = inject(ToastService);
+
+      saving = false;
+      errorMessages: string[] = [];
+
+      parentOptions: KitDropdownOption[] = [];
+
+      ngOnInit(): void {
+            this.loadCashoutGroups();
+      }
+
+
+      form = this.formBuilder.group({
+            name: this.formBuilder.control<string>('', { validators: [Validators.required, Validators.maxLength(200)], updateOn: 'blur' }),
+            description: this.formBuilder.control<string>(''),
+            isActive: [true],
+            parentId: this.formBuilder.control<string>(''),
+      });
+
+      get cashoutGroupRequestForm() {
+            return this.form.controls;
+      }
+
+      loadCashoutGroups(): void {
+            this.cashoutGroupService.getAll().subscribe({
+                  next: (parents) => {
+                        this.parentOptions = parents.map(p => ({
+                              id: p.id,
+                              label: p.name
+                        }));
+                  }, 
+                  error: (err => {
+                        const message = handleHttpError(err);
+                        console.log('error: ', err);
+                        this.toast.errorRich(message, 'Lỗi khi tải nhóm cha');
+                  })
+            })
+      }
+      onParentsSelected(opt: KitDropdownOption) {
+            this.form.patchValue({ parentId: opt.id });
+      }
+
+
+      async submit(): Promise<void> {
+            this.errorMessages = [];
+            if(this.form.invalid) {
+                  this.form.markAllAsTouched();
+                  return;
+            }
+
+
+            this.saving = true;
+            
+            try {
+                  const payload: CreateCashoutGroupRequest = this.form.getRawValue() as CreateCashoutGroupRequest;
+                  console.log('payload: ', payload);
+                  const created = await firstValueFrom(this.cashoutGroupService.create(payload));
+                  this.toast.successRich('Thêm nhóm dòng tiền ra thành công');
+                  this.dialogRef.close(true);
+            } catch(error) {  
+                  const message = handleHttpError(error);
+                  console.log(error);
+                  console.log(message);
+                  this.toast.errorRich(message);
+            } finally {
+                  this.saving = false;
+            }
+      }
+
+      close(): void {
+            this.dialogRef.close();
+      }
+}

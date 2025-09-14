@@ -9,6 +9,9 @@
                         </div>
                   </div>
 
+                  <div class="dialog-field">
+                        <kit-dropdown [options]="cashoutGroupOptions" (selectionChange)="onCashoutGroupSelected($event)" [placeholder]="'Chọn nhóm dòng tiền ra'" [width]="'100%'"></kit-dropdown>
+                  </div>
 
             </form>
 
