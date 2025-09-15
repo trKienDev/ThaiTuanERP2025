@@ -7,13 +7,11 @@ import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
-import { CashoutGroupDto } from "../../../../models/cashout-group.model";
-import { LedgerAccountDto } from "../../../../models/ledger-account.model";
 import { CashoutGroupService } from "../../../../services/cashout-group.service";
 import { LedgerAccountService } from "../../../../services/ledger-account.service";
 import { handleHttpError } from "../../../../../../shared/utils/handle-http-errors.util";
 import { CreateCashoutCodeRequest } from "../../../../models/cashout-code.model";
-import { catchError, of } from "rxjs";
+import { firstValueFrom } from "rxjs";
 import { CashoutCodeService } from "../../../../services/cashout-code.service";
 import { ToastService } from "../../../../../../shared/components/toast/toast.service";
 import { KitDropdownOption, KitDropdownComponent } from "../../../../../../shared/components/kit-dropdown/kit-dropdown.component";
@@ -34,17 +32,20 @@ export class CashoutCodeRequestDialogComponent implements OnInit {
       private ledgerAccountService = inject(LedgerAccountService);
       private toast = inject(ToastService);
 
+      private isSuccess: boolean = false;
+
       cashoutGroupOptions: KitDropdownOption[] = [];
       postingLedgerAccountOptions: KitDropdownOption[] = [];
 
       submitting = false;
+      errorMessages: string[] = [];
 
       form = this.formBuilder.group({
             name: this.formBuilder.control<string>('', { validators: [Validators.required, Validators.maxLength(250)], updateOn: 'blur' }),
             cashoutGroupId: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
             cashoutGroupName: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
             postingLedgerAccountId: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
-            description: [''],
+            description: this.formBuilder.control<string>(''),
             isActive: [true]
       });
 
@@ -58,7 +59,7 @@ export class CashoutCodeRequestDialogComponent implements OnInit {
                   next: (cashoutGroups) => {
                         this.cashoutGroupOptions = cashoutGroups.map(cg => ({
                               id: cg.id,
-                              label: `${cg.code} - ${cg.name}`
+                              label: cg.name
                         }))
                   }, 
                   error: (err => {
@@ -87,8 +88,33 @@ export class CashoutCodeRequestDialogComponent implements OnInit {
             this.form.patchValue({ postingLedgerAccountId: opt.id })
       }
 
+      async submit(): Promise<void> {
+            this.errorMessages = [];
+            // if(this.form.invalid) {
+            //       this.form.markAllAsTouched();
+            //       return;
+            // }
 
-      cancel(): void {
-            this.dialogRef.close();
+            this.submitting = true;
+
+            try {
+                  const payload: CreateCashoutCodeRequest = this.form.getRawValue() as CreateCashoutCodeRequest;
+                  console.log('payload: ', payload);
+                  const created = await firstValueFrom(this.cashoutCodeService.create(payload));
+                  this.toast.successRich('Thêm dòng tiền ra thành công');
+                  this.dialogRef.close(this.isSuccess = true);
+            } catch(error) {
+                  const msg = handleHttpError(error);
+                  const message = Array.isArray(msg) ? msg.join('\n') : String(msg);
+                  console.log(error);
+                  console.log(message);
+                  this.toast.errorRich(message);
+            } finally {
+                  this.submitting = false;
+            }
+      }
+
+      close(result: boolean): void {
+            this.dialogRef.close(result);
       }
 }

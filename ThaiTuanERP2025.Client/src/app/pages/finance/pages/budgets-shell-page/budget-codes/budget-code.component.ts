@@ -79,6 +79,9 @@ export class BudgetCodePanelComponent {
             });
 
             ref.afterClosed().subscribe((result: { success?: boolean;} | undefined ) => {
+                  if(result) {
+                        this.loadBudgetCodes();
+                  }
             });
       }
 }

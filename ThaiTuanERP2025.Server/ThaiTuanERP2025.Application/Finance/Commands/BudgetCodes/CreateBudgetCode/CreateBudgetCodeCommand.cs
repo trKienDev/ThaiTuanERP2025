@@ -8,5 +8,6 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.BudgetCodes.CreateBudgetC
 		public string Code { get; set; } = null!;
 		public string Name { get; set; } = null!;
 		public Guid BudgetGroupId { get; set; }
+		public Guid CashoutCodeId { get; set; }
 	}
 }

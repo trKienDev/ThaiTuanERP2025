@@ -192,7 +192,8 @@
             <kit-dropdown [multiple]="true" [options]="followerOptions" (selectionChange)="onFollowerSelected($event)" [width]="'100%'" [placeholder]="'Thêm người theo dõi'"></kit-dropdown>
       </div>
 
-      <div class="">
+      <div class="mar-top-20">
+            <span class="input-wrapper">Tệp đính kèm chi phí    </span>
             <div class="file-uploader pad-10p">
                   <input #invoiceFile id="invoiceFile" type="file" class="file-input d-none" accept="application/pdf,image/*" (change)="onFileSelected($event)" />
                   <div class="button default-button">
