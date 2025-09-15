@@ -8,11 +8,9 @@
 .alert-warning { 
       background-color: rgba(var(--warning-rgb), 0.1); 
       color: rgba(var(--warning-rgb));
-      border: 1px solid rgba(var(--warning-rgb));
 }
 
 .dark-alert {
       background-color: rgba(var(--dark-rgb), 0.1); 
       color: black;
-      border: 1px solid rgba(var(--dark-rgb), 0.1);
 }
