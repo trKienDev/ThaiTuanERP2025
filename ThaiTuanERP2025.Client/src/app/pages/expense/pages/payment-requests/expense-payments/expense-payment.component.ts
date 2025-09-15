@@ -120,6 +120,7 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             totalTax: this.formBuilder.nonNullable.control<number>(0),
             totalWithTax: this.formBuilder.nonNullable.control<number>(0),
             paymentDate: [ null as unknown as string | null, [ Validators.required ]],
+            hasGoodsReceipt: this.formBuilder.nonNullable.control<boolean>(false),
       });
 
       ngOnInit(): void {
@@ -331,6 +332,15 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             }
       }
 
+      goodsReceiptOptions: KitDropdownOption[] = [
+            { id: 'hasGoodsReceipt', label: 'Có nhập kho' },
+            { id: 'noGoodsReceipt', label: 'Không nhập kho' },
+      ]
+      selectedGoodsReceipt: 'hasGoodsReceipt' | 'noGoodsReceipt' | null = null;
+      onGoodsReceiptSelected(opt: KitDropdownOption) {
+            this.selectedGoodsReceipt = opt.id === 'hasGoodsReceipt' ? 'hasGoodsReceipt' : 'noGoodsReceipt';
+      }
+
       openCreateSupplierDialog(): void {
             const dialogRef = this.dialog.open(SupplierRequestDialogComponent, {
                   width: '520px',
@@ -509,6 +519,8 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
                               console.log('progressing');
                               item.progress = Math.min(100, Math.max(0, Math.round(evt.percent)));
                         } else if(evt.type === 'done') {
+                              item.progress = 100;
+                              setTimeout(() => item.status = 'done', 400);
                               const data = evt.data; // UploadFileResult | undefined
                               // map kết quả tuỳ cấu trúc UploadFileResult của bạn
                               item.objectKey = data?.objectKey ?? data?.objectKey ?? data?.id ?? item.objectKey;
