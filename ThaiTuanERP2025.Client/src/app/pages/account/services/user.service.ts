@@ -4,8 +4,9 @@ import { HttpClient } from "@angular/common/http";
 import { Observable, switchMap } from "rxjs";
 import { ApiResponse } from "../../../shared/models/api-response.model";
 import {  CreateUserRequest, UpdateUserRequest, UserDto } from "../models/user.model";
-import { FileService } from "../../../core/services/file.service";
+
 import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
+import { FileService } from "../../../shared/services/file.service";
 
 @Injectable({ providedIn: 'root'})
 export class UserService {
@@ -46,7 +47,7 @@ export class UserService {
             return this.fileService.uploadFile(file, 'account', 'user', userId, false).pipe(
                   switchMap((uploadResult) => {
                         console.log('upload result: ', uploadResult);
-                        const body = { fileId: uploadResult.id };
+                        const body = { fileId: uploadResult.data?.id };
                         return this.http.put<ApiResponse<string>>(`${this.API_URL}/${userId}/avatar`, body)
                               .pipe(handleApiResponse$<string>());
                   })

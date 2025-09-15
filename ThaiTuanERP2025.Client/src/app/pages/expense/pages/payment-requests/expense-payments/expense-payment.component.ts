@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { Component, inject, input, OnDestroy, OnInit } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
@@ -28,6 +28,21 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { provideMondayFirstDateAdapter } from "../../../../../shared/date/provide-monday-first-date-adapter";
 import { resolveAvatarUrl } from "../../../../../shared/utils/avatar.utils";
 import { environment } from "../../../../../../environments/environment";
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { FileService } from "../../../../../shared/services/file.service";
+
+type UploadStatus = 'queued' | 'uploading' | 'done' | 'error';
+type UploadItem = {
+      file: File;
+      name: string;
+      size: number;
+      progress: number;    // 0..100
+      status: UploadStatus;
+      objectKey?: string;  // trả về từ server khi thành công
+      fileId?: string;
+      url?: string;
+};
+
 
 type PaymentItem = {
       itemName: FormControl<string>;
@@ -47,7 +62,7 @@ type PaymentItem = {
       standalone: true,
       imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule,
             KitDropdownComponent, MatDialogModule, MoneyFormatDirective, OverlayModule, MatSnackBarModule,
-            MatDatepickerModule
+            MatDatepickerModule, HttpClientModule
       ],
       templateUrl: './expense-payment.component.html',
       styleUrl: './expense-payment.component.scss',
@@ -60,6 +75,15 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       private dialog = inject(MatDialog);
       private toast = inject(ToastService);
       private baseUrl = environment.baseUrl; 
+      private http = inject(HttpClient);
+      private fileService = inject(FileService);
+
+      private readonly uploadMeta = {
+            module: 'expense',
+            entity: 'payment-attachment',
+            entityId: undefined as string | undefined,
+            isPublic: false
+      }
       
       supplierOptions: KitDropdownOption[] = [];
       userOptions: KitDropdownOption[] = [];
@@ -72,8 +96,7 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       supplierBankAccounts: BankAccountDto[] = [];
       selectedBankAccount: BankAccountDto | null = null;
 
-      fileName = '';
-      pendingFile: File | null = null;
+      uploads: UploadItem[] = [];
 
       constructor(
             private supplierService: SupplierService,
@@ -441,8 +464,86 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       }
 
       onFileSelected(event: Event): void {
-            const file = (event.target as HTMLInputElement).files?.[0] ?? null;
-            this.pendingFile = file;
-            this.fileName = file?.name ?? '';
+            const input = event.target as HTMLInputElement;
+            const files = Array.from((event.target as HTMLInputElement).files ?? []);
+            if(!files.length) return;
+
+            let invalidCount = 0;
+
+            // tạo item và upload từng file
+            for (const f of files) {
+                  if(!f.size || f.size <= 0) {
+                        invalidCount++;
+                        this.toast.errorRich('File không hợp lệ');
+                        continue;
+                  }
+
+                  const item: UploadItem = {
+                        file: f,
+                        name: f.name,
+                        size: f.size,
+                        progress: 0,
+                        status: 'queued'
+                  };
+                  this.uploads.push(item);
+                  this.uploadOne(item);
+            }
+
+            // reset input để có thể chọn lại cùng tên file lần sau
+            (event.target as HTMLInputElement).value = '';
+            input.value = '';
+      }
+
+      private uploadOne(item: UploadItem): void {
+            // có nơi khác push UploadItem thẳng vào this.uploads, thêm guard đầu hàm:
+            if (!item.size || item.size <= 0) {
+                  item.status = 'error';
+                  this.toast.errorRich('file không hợp lệ');
+                  return;
+            }
+            
+            item.status = 'uploading';
+            this.fileService.uploadFileWithProgress$(item.file, this.uploadMeta).subscribe({
+                  next: (evt) => {
+                        if(evt.type === 'progress') {
+                              console.log('progressing');
+                              item.progress = Math.min(100, Math.max(0, Math.round(evt.percent)));
+                        } else if(evt.type === 'done') {
+                              const data = evt.data; // UploadFileResult | undefined
+                              // map kết quả tuỳ cấu trúc UploadFileResult của bạn
+                              item.objectKey = data?.objectKey ?? data?.objectKey ?? data?.id ?? item.objectKey;
+                              (item as any).fileId = (data as any)?.id ?? (item as any).fileId;
+                              (item as any).url = (data as any)?.url ?? (item as any).url;
+
+                              item.progress = 100;
+                              item.status = 'done';
+                              this.toast?.successRich?.('Tải tệp thành công');
+                        }
+                  },
+                  error: (err) => {
+                        console.error('Upload error: ', err);
+                        item.status = 'error';
+                        this.toast.errorRich('Up file thất bại');
+                  }
+            });
+      }
+
+      removeUpload(index: number): void {
+            const item = this.uploads[index];
+            if(item.status === 'uploading') return;
+            console.log('item: ', item);
+            const fileId = item.fileId;
+            if(fileId) {
+                  this.fileService.hardDelete$(fileId).subscribe({
+                        next: () => this.toast.successRich('Đã xóa tệp'),
+                        error:(err) => {
+                              const msg = handleHttpError(err);
+                              const message = Array.isArray(msg) ? msg.join('\n') : String(msg);
+                              console.log('message: ', message);
+                              this.toast.errorRich('Không xóa được tệp')
+                        } 
+                  });
+            }
+            this.uploads.splice(index, 1);
       }
 }

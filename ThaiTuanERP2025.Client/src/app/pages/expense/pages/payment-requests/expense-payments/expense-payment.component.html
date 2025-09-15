@@ -68,7 +68,7 @@
                               <tr>
                                     <th style="width: 1%;">#</th>
                                     <th>Hạng mục <span style="color: red;">  *</span></th>
-                                    <th class="head-quanity">Số lượng <span style="color: red;">  *</span></th>
+                                    <th class="head-quanity" style="width: 7%;">Số lượng <span style="color: red;">  *</span></th>
                                     <th>Đơn giá <span style="color: red;">  *</span></th>
                                     <th>Thành tiền</th>
                                     <th class="head-tax">Thuế</th>
@@ -195,14 +195,46 @@
       <div class="mar-top-20">
             <span class="input-wrapper">Tệp đính kèm chi phí    </span>
             <div class="file-uploader pad-10p">
-                  <input #invoiceFile id="invoiceFile" type="file" class="file-input d-none" accept="application/pdf,image/*" (change)="onFileSelected($event)" />
+                  <!-- input ẩn: cho phép chọn nhiều file -->
+                  <input #invoiceFile id="invoiceFile" type="file" class="file-input d-none" accept="application/pdf,image/*" (change)="onFileSelected($event)" multiple/>
+
+                  <!-- nút chọn file -->
                   <div class="button default-button">
                         <label for="invoiceFile" class="cursor-pointer">Chọn file (PDF/Ảnh)</label>
                   </div>
-                  <span class="file-name" *ngIf="fileName; else noFile" style="margin-left: 10px;">{{ fileName }}</span>
-                  <ng-template #noFile>
-                        <span class="file-name muted" style="color: #888; margin-left: 10px;">Chưa chọn file</span>
-                  </ng-template>
+
+                  <span *ngIf="!(uploads?.length)" class="file-name muted" style="color:#888; margin-left:10px;">
+                        Chưa chọn file
+                  </span>
+            </div>
+
+            <div class="" style="padding: 0 10px;">
+                  <!-- Danh sách file đã chọn/đang upload -->
+                  <ul class="uploader-list"  *ngIf="uploads?.length">
+                        <li class="uploader-item" *ngFor="let u of uploads; let i = index">
+                              <div class="file-row">
+                                    <div class="file-meta">
+                                          <span class="file-name">{{ u.name }}</span>
+                                    </div>
+                                    <div class="status-line" [ngClass]="u.status">
+                                          <ng-container [ngSwitch]="u.status">
+                                                <span *ngSwitchCase="'queued'">Đang chờ...</span>
+                                                <span *ngSwitchCase="'uploading'">Đang tải lên: {{ u.progress | number:'1.0-0' }}%</span>
+                                                <span *ngSwitchCase="'done'">✔ Đã tải</span>
+                                                <span *ngSwitchCase="'error'">✖ Lỗi</span>
+                                          </ng-container>
+                                    </div>
+                                    <button type="button" class="d-flex close-button" (click)="removeUpload(i)" [disabled]="u.status === 'uploading'">
+                                          <span class="text material-icons-outlined" style="font-size: 15px;">close</span>
+                                    </button>
+                              </div>
+
+                              <!-- Progress bar -->
+                              <div class="progress" *ngIf="u.status !== 'done' && u.status !== 'error'">
+                                    <div class="progress-bar" [style.width.%]="u.progress"></div>
+                              </div>
+                        </li>
+                  </ul>
             </div>
       </div>
 
