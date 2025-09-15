@@ -1,4 +1,10 @@
-<h1>Tạo chi phí thanh toán mới</h1>
+<div class="input-wrapper d-flex justify-content-between">
+      <span>Tạo chi phí mới</span>
+      <div class="process-button-container d-flex gap-10p">
+            <button class="button cancel-button">Hủy</button>
+            <button class="button save-button">Gửi xử lý</button>
+      </div>
+</div>
 
 <form class="expense-payment-form" [formGroup]="form">
 
@@ -9,8 +15,13 @@
             </div>
       </div>
 
-      <div class="input-wrapper">
-            <div class="alert dark-alert width-50pt"> 🔒 ĐỀ NGHỊ THANH TOÁN</div>
+      <div class="input-wrapper d-flex gap-10p">
+            <div class="width-50pt">
+                  <div class="alert dark-alert"> 🔒 ĐỀ NGHỊ THANH TOÁN</div>
+            </div>
+            <div class="width-50pt">
+                  <kit-dropdown [options]="goodsReceiptOptions" [placeholder]="'Nhập kho hay không ?'" [enableFilter]="false" (selectionChange)="onGoodsReceiptSelected($event)" [width]="'100%'"></kit-dropdown>
+            </div>
       </div>
 
       <div class="payee-container d-flex gap-10p pad-10p">
@@ -211,7 +222,7 @@
             <div class="" style="padding: 0 10px;">
                   <!-- Danh sách file đã chọn/đang upload -->
                   <ul class="uploader-list"  *ngIf="uploads?.length">
-                        <li class="uploader-item" *ngFor="let u of uploads; let i = index">
+                        <li class="uploader-item" *ngFor="let u of uploads; let i = index" [ngClass]="u.status">
                               <div class="file-row">
                                     <div class="file-meta">
                                           <span class="file-name">{{ u.name }}</span>
@@ -230,7 +241,7 @@
                               </div>
 
                               <!-- Progress bar -->
-                              <div class="progress" *ngIf="u.status !== 'done' && u.status !== 'error'">
+                              <div class="progress" *ngIf="u.status === 'uploading'">
                                     <div class="progress-bar" [style.width.%]="u.progress"></div>
                               </div>
                         </li>
