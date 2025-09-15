@@ -84,13 +84,6 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 						entry.Entity.DateModified = DateTime.UtcNow;
 						entry.Entity.ModifiedByUserId = currentUserId;
 						break;
-					case EntityState.Deleted:
-						// Thay vì xóa thực tế, đánh dấu là đã xóa
-						entry.Entity.IsDeleted = true;
-						entry.Entity.DeletedDate = DateTime.UtcNow;
-						entry.Entity.DeletedByUserId = currentUserId;
-						entry.State = EntityState.Modified; // Chuyển sang trạng thái Modified để lưu lại thông tin xóa
-						break;
 				}
 			}
 			return base.SaveChangesAsync(cancellationToken);
