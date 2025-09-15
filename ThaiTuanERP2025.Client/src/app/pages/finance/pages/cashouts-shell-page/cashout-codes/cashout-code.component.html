@@ -1,1 +1,19 @@
 <button class="button default-button" (click)="openCreateCashoutCodeModal()">Thêm mã dòng tiền ra mới</button>
+
+<table class="table mar-top-20">
+      <thead>
+            <tr>
+                  <th>Mã dòng tiền ra</th>
+                  <th>Tài khoản kế toán</th>
+                  <th>Mô tả</th>
+            </tr>
+      </thead>
+      <tbody>
+            <tr *ngFor="let cashoutCode of cashoutCodes">
+                  <td>{{ cashoutCode.name }}</td>
+                  <td>{{ cashoutCode.postingLedgerAccountName }}</td>
+                  <td>{{ cashoutCode.description }}</td>
+            </tr>
+
+      </tbody>
+</table>

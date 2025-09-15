@@ -9,6 +9,7 @@ export interface CashoutCodeDto {
       cashoutGroupName?: string;
 
       postingLedgerAccountId: string;
+      postingLedgerAccountName: string;
 }
 export interface CreateCashoutCodeRequest {
       name: string;

@@ -25,6 +25,7 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.BudgetCodes.CreateBudgetC
 				Code = request.Code,
 				Name = request.Name,
 				BudgetGroupId = request.BudgetGroupId,
+				CashoutCodeId = request.CashoutCodeId,
 				CreatedDate = DateTime.UtcNow,
 				IsActive = true
 			};

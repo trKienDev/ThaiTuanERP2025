@@ -12,6 +12,7 @@ export interface CreateBudgetCodeRequest {
       code: string;
       name: string;
       budgetGroupId: string;
+      cashoutCodeId: string;
 }
 
 export interface UpdateBudgetCodeRequest extends CreateBudgetCodeRequest {

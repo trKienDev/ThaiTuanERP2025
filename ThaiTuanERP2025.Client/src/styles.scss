@@ -41,6 +41,8 @@
       // border-radius
       --default-border-color: #d1d9e0b3;
       --default-border-color-radius: 5px;
+
+      --topbar-height: 64px;
 }
 
 body, input { font-family: 'Lexend', sans-serif; font-size: 13px; }
@@ -153,11 +155,7 @@ input[type=number] { -moz-appearance: textfield; }
 /* Bọc MDC surface: bo góc + shadow + padding đẹp hơn */
 .mat-mdc-snack-bar-container.kit-snack { margin: 16px; }
 .mat-mdc-snack-bar-container.kit-snack .mdc-snackbar__surface { border-radius: 5px; box-shadow: 0 10px 24px rgba(2, 6, 23, 0.18), 0 2px 6px rgba(2, 6, 23, 0.08); animation: kit-snack-in 160ms ease-out; } 
-@keyframes kit-snack-in {
-      from { transform: translateY(-6px); opacity: 0; } 
-      to   { transform: translateY(0);    opacity: 1; } 
-}
-
+@keyframes kit-snack-in { from { transform: translateY(-6px); opacity: 0; }  to   { transform: translateY(0);    opacity: 1; }  }
 
 /* Màu theo loại: dùng CSS vars MDC để an toàn */
 .mat-mdc-snack-bar-container.kit-snack.kit-snack--success { --mdc-snackbar-container-color: #4CBB17; --mdc-snackbar-supporting-text-color: #ffffff; }
@@ -172,36 +170,12 @@ input[type=number] { -moz-appearance: textfield; }
 .kit-snack-msg { line-height: 1.2; white-space: pre-line; }
 .mdc-snackbar__surface { width: fit-content !important; min-width: unset !important; max-width: unset !important; }
 
-.kit-snack-progress {
-  position: absolute;
-  left: -14px;          /* bù đúng padding-x của surface */
-  right: -14px;
-  bottom: -10px;        /* bù đúng padding-bottom của surface */
-  height: 3px;
-  background: rgba(255,255,255,0.22);  /* track */
-  overflow: hidden;
-  border-radius: 0 0 12px 12px;
-}
+.kit-snack-progress { position: absolute; left: -14px; right: -14px;bottom: -10px; height: 3px; background: rgba(255,255,255,0.22); overflow: hidden; border-radius: 0 0 12px 12px; }
+.kit-snack-progress .bar { display: block; height: 100%; width: 0%; background: rgba(255,255,255,0.9); animation-name: kit-snack-progress-line; animation-timing-function: linear; animation-fill-mode: forwards; }
+.mat-mdc-snack-bar-container.kit-snack.kit-snack--warning .kit-snack-progress .bar { background: #111827; }
+@keyframes kit-snack-progress-line { from { width: 0%; } to   { width: 100%; } }
 
-/* thanh chạy */
-.kit-snack-progress .bar {
-  display: block;
-  height: 100%;
-  width: 0%;
-  /* màu thanh: trắng cho success/info/error (nền đậm), đen cho warning (nền sáng) */
-  background: rgba(255,255,255,0.9);
-  animation-name: kit-snack-progress-line;
-  animation-timing-function: linear;
-  animation-fill-mode: forwards;
-}
-
-/* warning có text tối → dùng thanh tối */
-.mat-mdc-snack-bar-container.kit-snack.kit-snack--warning .kit-snack-progress .bar {
-  background: #111827; /* gray-900 */
-}
-
-/* keyframes chạy ngang */
-@keyframes kit-snack-progress-line {
-  from { width: 0%; }
-  to   { width: 100%; }
-}
+.file-uploader { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.file-input { display: none; } /* ẩn input gốc */
+.file-name { max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file-name.muted { color: #888; }

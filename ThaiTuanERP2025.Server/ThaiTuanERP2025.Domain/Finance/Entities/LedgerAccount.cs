@@ -22,6 +22,6 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public LedgerAccountBalanceType LedgerAccountBalanceType { get; set; }
 		public ICollection<LedgerAccount> Children { get; set; } = new List<LedgerAccount>();
 
-		public CashoutCode? CashoutCode { get; set; }
+		public ICollection<CashoutCode> CashoutCodes { get; set; } = new List<CashoutCode>();
 	}
 }

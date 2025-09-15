@@ -23,11 +23,11 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 				.OnDelete(DeleteBehavior.Restrict);
 
 			builder.HasOne(x => x.PostingLedgerAccount)
-				.WithOne(a => a.CashoutCode)
-				.HasForeignKey<CashoutCode>(x => x.PostingLedgerAccountId)
+				.WithMany(a => a.CashoutCodes)
+				.HasForeignKey(x => x.PostingLedgerAccountId)
 				.OnDelete(DeleteBehavior.Restrict);
 
-			builder.HasIndex(x => x.PostingLedgerAccountId).IsUnique();
+			builder.HasIndex(x => x.PostingLedgerAccountId);
 		}
 	}
 }
