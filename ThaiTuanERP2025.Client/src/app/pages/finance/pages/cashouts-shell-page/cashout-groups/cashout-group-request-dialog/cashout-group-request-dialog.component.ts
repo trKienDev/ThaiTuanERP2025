@@ -41,7 +41,7 @@ export class CashoutGroupRequestDialogComponent implements OnInit {
             name: this.formBuilder.control<string>('', { validators: [Validators.required, Validators.maxLength(200)], updateOn: 'blur' }),
             description: this.formBuilder.control<string>(''),
             isActive: [true],
-            parentId: this.formBuilder.control<string>(''),
+            parentId: this.formBuilder.control<string | null>(null),
       });
 
       get cashoutGroupRequestForm() {
@@ -64,7 +64,7 @@ export class CashoutGroupRequestDialogComponent implements OnInit {
             })
       }
       onParentsSelected(opt: KitDropdownOption) {
-            this.form.patchValue({ parentId: opt.id });
+            this.form.patchValue({ parentId: opt?.id ?? null });
       }
 
 
@@ -75,17 +75,21 @@ export class CashoutGroupRequestDialogComponent implements OnInit {
                   return;
             }
 
-
             this.saving = true;
             
             try {
-                  const payload: CreateCashoutGroupRequest = this.form.getRawValue() as CreateCashoutGroupRequest;
+                  const raw = this.form.getRawValue(); // { name, description, isActive, parentId }
+                  const payload = {
+                        ...raw,
+                        parentId: raw.parentId || null, // quan trọng: '' -> null
+                  } as CreateCashoutGroupRequest;
                   console.log('payload: ', payload);
                   const created = await firstValueFrom(this.cashoutGroupService.create(payload));
                   this.toast.successRich('Thêm nhóm dòng tiền ra thành công');
                   this.dialogRef.close(true);
             } catch(error) {  
-                  const message = handleHttpError(error);
+                  const msg = handleHttpError(error);
+                  const message = Array.isArray(msg) ? msg.join('\n') : String(msg);
                   console.log(error);
                   console.log(message);
                   this.toast.errorRich(message);

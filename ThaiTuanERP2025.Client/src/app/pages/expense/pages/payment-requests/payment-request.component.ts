@@ -8,7 +8,6 @@ import { RouterLink } from "@angular/router";
       standalone: true,
       imports: [ CommonModule, MatButtonModule, RouterLink ],
       templateUrl: './payment-request.component.html',
-      styleUrl: './payment-request.component.scss',
 })
 export class ExpensePaymentRequestComponent {
       

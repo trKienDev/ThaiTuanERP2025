@@ -15,5 +15,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 
 		public CashoutGroup CashoutGroup { get; set; } = null!;
 		public LedgerAccount PostingLedgerAccount { get; set; } = null!;
+
+		public ICollection<BudgetCode> BudgetCodes { get; set; } = new List<BudgetCode>();
 	}
 }

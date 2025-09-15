@@ -64,7 +64,7 @@ export class AddBudgetCodeRequestDialogComponent implements OnInit {
                   next: (cashoutCodes) => {
                         this.cashoutCodeOptions = cashoutCodes.map(co => ({
                               id: co.id,
-                              label: `${co.code} - ${co.name}`,
+                              label: co.name,
                         }))
                   }, 
                   error: (err => handleHttpError(err))

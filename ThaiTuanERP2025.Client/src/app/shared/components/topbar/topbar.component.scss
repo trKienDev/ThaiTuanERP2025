@@ -1,8 +1,7 @@
 $topbar-padding: 1.5rem;
 
-
 .topbar {
-      height: 64px;
+      height: var(--topbar-height);
       background-color: var(--main-bg-color);
       color: black;
       display: flex;
