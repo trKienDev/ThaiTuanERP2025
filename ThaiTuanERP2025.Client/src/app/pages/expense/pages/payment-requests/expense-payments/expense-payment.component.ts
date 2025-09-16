@@ -30,6 +30,7 @@ import { resolveAvatarUrl } from "../../../../../shared/utils/avatar.utils";
 import { environment } from "../../../../../../environments/environment";
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FileService } from "../../../../../shared/services/file.service";
+import { CreateExpensePaymentRequest, ExpensePaymentAttachment, ExpensePaymentItemRequest } from "../../../models/expense-payment.model";
 
 type UploadStatus = 'queued' | 'uploading' | 'done' | 'error';
 type UploadItem = {
@@ -215,7 +216,6 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       onFollowerSelected(opt: KitDropdownOption) {
             alert(`Bạn đã chọn: ${opt.label} (id = ${opt.id})`);
       }
-
 
       loadTaxes(): void {
             this.taxService.getAll().subscribe({
@@ -484,7 +484,7 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             for (const f of files) {
                   if(!f.size || f.size <= 0) {
                         invalidCount++;
-                        this.toast.errorRich('File không hợp lệ', { sticky: true });
+                        this.toast.errorRich('File không hợp lệ');
                         continue;
                   }
 
@@ -529,7 +529,7 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
 
                               item.progress = 100;
                               item.status = 'done';
-                              this.toast.successRich('Tải tệp thành công', { sticky: true });
+                              this.toast.successRich('Tải tệp thành công');
                         }
                   },
                   error: (err) => {
@@ -557,5 +557,90 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
                   });
             }
             this.uploads.splice(index, 1);
+      }
+
+      buildCreateExpensePaymentRequest(
+            form: FormGroup, 
+            uploads: Array<{
+                  objectKey?: string;
+                  fileId?: string;
+                  name: string;
+                  size: number;
+                  url?: string;
+                  status: 'queued'|'uploading'|'done'|'error';
+            }>,
+            selectedPayee: 'supplier' | 'employee' | null,
+            followerIds?: string[]
+      ): CreateExpensePaymentRequest {
+      // getRawValue để lấy cả control disabled (totalAmount/totalTax/totalWithTax)
+            const raw = form.getRawValue() as {
+                  name: string;
+                  supplierId: string | null;
+                  bankName: string;
+                  accountNumber: string;
+                  beneficiaryName: string;
+                  items: Array<{
+                        itemName: string;
+                        invoiceId: string | null;
+                        quantity: number | null;
+                        unitPrice: number | null;
+                        taxRate: number;
+                        amount: number;
+                        taxAmount: number;
+                        totalWithTax: number;
+                        budgetCodeId: string | null;
+                        cashoutCodeId: string | null;
+                  }>;
+                  totalAmount: number;
+                  totalTax: number;
+                  totalWithTax: number;
+                  paymentDate: string | null;
+                  hasGoodsReceipt: boolean;
+            };
+
+            const items = (raw.items ?? []).map(it => ({
+                  itemName: it.itemName,
+                  invoiceId: it.invoiceId ?? null,
+                  quantity: Number(it.quantity ?? 0),
+                  unitPrice: Number(it.unitPrice ?? 0),
+                  taxRate: Number(it.taxRate ?? 0),
+                  amount: Number(it.amount ?? 0),
+                  taxAmount: Number(it.taxAmount ?? 0),
+                  totalWithTax: Number(it.totalWithTax ?? 0),
+                  budgetCodeId: it.budgetCodeId ?? null,
+                  cashoutCodeId: it.cashoutCodeId ?? null,
+            })) as ExpensePaymentItemRequest[];
+
+            const attachments = uploads.filter(u => u.status === 'done' && (u.objectKey || u.fileId))
+                  .map(u => ({
+                        objectKey: u.objectKey!,           // ưu tiên objectKey
+                        fileId: u.fileId,
+                        fileName: u.name,
+                        size: u.size,
+                        url: u.url,
+                  })) as ExpensePaymentAttachment[];
+
+            return {
+                  name: raw.name,
+                  payeeType: selectedPayee ?? 'supplier',
+                  supplierId: selectedPayee === 'supplier' ? (raw.supplierId ?? null) : null,
+
+                  bankName: raw.bankName,
+                  accountNumber: raw.accountNumber,
+                  beneficiaryName: raw.beneficiaryName,
+
+                  // đảm bảo paymentDate là ISO (tuỳ bạn mapping ở nơi khác nếu dùng Date)
+                  paymentDate: raw.paymentDate ?? '',
+
+                  hasGoodsReceipt: !!raw.hasGoodsReceipt,
+
+                  items,
+                  totalAmount: Number(raw.totalAmount ?? 0),
+                  totalTax: Number(raw.totalTax ?? 0),
+                  totalWithTax: Number(raw.totalWithTax ?? 0),
+
+                  followerIds: followerIds ?? [],
+                  attachments,
+            };
       }
 }

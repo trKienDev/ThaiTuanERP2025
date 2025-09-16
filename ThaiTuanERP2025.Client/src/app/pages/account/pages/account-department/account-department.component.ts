@@ -1,22 +1,29 @@
 import { CommonModule } from "@angular/common";
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
-import { FormsModule } from "@angular/forms";
+import { Component, ElementRef, inject, OnInit, ViewChild } from "@angular/core";
+import { FormBuilder, FormsModule, Validators, ReactiveFormsModule } from "@angular/forms";
 import { ExcelImportService } from "../../../../shared/services/excel-import.service";
 import { DepartmentService } from "../../services/department.service";
 import { handleHttpError } from "../../../../shared/utils/handle-http-errors.util";
 import { EditDepartmentModalComponent } from "../../components/edit-department-modal/edit-department-modal.component";
-import { finalize } from "rxjs";
+import { finalize, firstValueFrom } from "rxjs";
 import { DepartmentDto } from "../../models/department.model";
+import { DivisionService } from "../../services/division.service";
+import { ToastService } from "../../../../shared/components/toast/toast.service";
+import { KitDropdownOption} from "../../../../shared/components/kit-dropdown/kit-dropdown.component";
+import { UserService } from "../../services/user.service";
+import { CreateDivisionRequest } from "../../models/division.model";
+import { MatDialog } from "@angular/material/dialog";
+import { CreateDivisionRequestComponent } from "../account-division/create-division-request/create-division-request.component";
 
 @Component({
       selector: 'account-department',
       standalone: true,
-      imports: [ CommonModule, FormsModule, EditDepartmentModalComponent ],
+      imports: [CommonModule, FormsModule, EditDepartmentModalComponent, ReactiveFormsModule],
       templateUrl: './account-department.component.html',
-      styleUrl: './account-department.component.scss'
 })
 export class AccountDepartmentComponent implements OnInit {
       newDepartment = { code: '', name: '', };
+      newDivision = { name: '', description: '', headUserId: '' };
       successMessage: string | null = null;
       departments: (DepartmentDto & { selected: boolean })[] = [];
       importedDepartments: DepartmentDto[] = [];
@@ -24,6 +31,19 @@ export class AccountDepartmentComponent implements OnInit {
       selectedDepartment: DepartmentDto = { id: '', code: '', name: '' };
       isImporting = false;
       fileName = '';
+      
+      private divisionService = inject(DivisionService);
+      private toastService = inject(ToastService);
+      private formBuilder = inject(FormBuilder);
+      private dialog = inject(MatDialog);
+
+      userOptions: KitDropdownOption[] = [];
+      
+      divisionForm = this.formBuilder.group({
+            name: this.formBuilder.control<string>('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(250)]}),
+            description: this.formBuilder.control<string>(''),
+            headUserId: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
+      })
 
       @ViewChild('masterCheckbox', { static: false }) masterCheckbox!: ElementRef<HTMLInputElement>;
       @ViewChild('excelFile', { static: false }) excelFile!: ElementRef<HTMLInputElement>;
@@ -58,6 +78,10 @@ export class AccountDepartmentComponent implements OnInit {
                   },
                   error: err => alert(handleHttpError(err).join('\n'))
             });
+      }
+
+      createDivision(): void {
+            // this.divisionService.create()
       }
 
       async onFileSelected(event: Event): Promise<void> {

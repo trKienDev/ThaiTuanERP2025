@@ -26,6 +26,12 @@
                         </a>
                   </li>
                   <li class="account-navbar__item" *ngIf="isAdmin">
+                        <a class="account-navbar__link" routerLink="/account/divisions" routerLinkActive="selected">
+                              <span class="account-navbar__icon material-icons-round">border_all</span>
+                              <span class="account-navbar__name">Khối</span>
+                        </a>
+                  </li>
+                  <li class="account-navbar__item" *ngIf="isAdmin">
                         <a class="account-navbar__link" routerLink="/account/departments" routerLinkActive="selected">
                               <span class="account-navbar__icon material-icons-round">hub</span>
                               <span class="account-navbar__name">Phòng ban</span>

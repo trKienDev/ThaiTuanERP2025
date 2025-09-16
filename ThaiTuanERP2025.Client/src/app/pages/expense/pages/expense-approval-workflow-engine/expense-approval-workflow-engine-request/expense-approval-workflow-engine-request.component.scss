@@ -1,0 +1,11 @@
+.approval-workflow-wrapper {
+      margin-top: 25px;
+      padding: 50px;
+      background-color: var(--main-bg-color);
+      border-radius: 5px;
+      width: 100%;
+      height: 100%;
+      //background-color: #fff; /* nền trắng */
+      background-image: radial-gradient(#d9d9d9 1px, transparent 1px);
+      background-size: 20px 20px; /* kích thước ô lưới, có thể chỉnh */
+}

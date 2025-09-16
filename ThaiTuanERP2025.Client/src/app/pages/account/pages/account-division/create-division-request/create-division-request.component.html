@@ -1,0 +1,25 @@
+<div class="dialog">
+      <h2 class="dialog-title">Thêm khối mới</h2>
+      <form class="dialog-body" [formGroup]="form">
+
+            <div class="dialog-field">
+                  <div class="form-input">
+                        <input class="" type="text" formControlName="name" autocomplete="on" required/>
+                        <label for="name">Tên khối <span style="color: red;">  *</span></label>
+                  </div>
+            </div>
+            <div class="dialog-field">
+                  <span class="display-block">Mô tả</span>
+                  <textarea class="mar-top-10" formControlName="description" placeholder="Trình bày nội dung ở đây"></textarea>
+            </div>
+            <div class="dialog-field">
+                  <kit-dropdown [options]="userOptions" (selectionChange)="onUserSelected($event)" [placeholder]="'Chọn trưởng khối'" [width]="'100%'"></kit-dropdown>
+            </div>
+            <div class="dialog-field d-flex gap-10p">
+                  <button type="button" class="width-50pt button cancel-button" (click)="close()">Hủy</button>
+                  <button type="submit" class="width-50pt button save-button d-flex justify-content-center" [disabled]="submitting">
+                        {{ submitting ? 'Đang lưu...' : 'Lưu' }}
+                  </button>
+            </div>
+      </form>
+</div>

@@ -8,7 +8,6 @@ import { RouterLink } from "@angular/router";
       standalone: true,
       imports: [CommonModule, MatButtonModule, RouterLink],
       templateUrl: './invoice.component.html',
-      styleUrl: './invoice.component.scss',
 })
 export class ExpenseInvoiceComponent {
       
