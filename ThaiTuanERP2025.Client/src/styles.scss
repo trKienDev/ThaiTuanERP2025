@@ -154,27 +154,28 @@ input[type=number] { -moz-appearance: textfield; }
 /* mat-snackbar */
 /* Bọc MDC surface: bo góc + shadow + padding đẹp hơn */
 .mat-mdc-snack-bar-container.kit-snack { margin: 16px; }
-.mat-mdc-snack-bar-container.kit-snack .mdc-snackbar__surface { border-radius: 5px; box-shadow: 0 10px 24px rgba(2, 6, 23, 0.18), 0 2px 6px rgba(2, 6, 23, 0.08); animation: kit-snack-in 160ms ease-out; } 
+.mat-mdc-snack-bar-container.kit-snack .mdc-snackbar__surface { border-radius: 5px; box-shadow: 0 10px 24px rgba(2, 6, 23, 0.18), 0 2px 6px rgba(2, 6, 23, 0.08); animation: kit-snack-in 160ms ease-out; position: relative; overflow: visible; padding-bottom: 4px;  } 
 @keyframes kit-snack-in { from { transform: translateY(-6px); opacity: 0; }  to   { transform: translateY(0);    opacity: 1; }  }
+.mdc-snackbar__label { padding: 5px !important; }
 
 /* Màu theo loại: dùng CSS vars MDC để an toàn */
 .mat-mdc-snack-bar-container.kit-snack.kit-snack--success { --mdc-snackbar-container-color: #4CBB17; --mdc-snackbar-supporting-text-color: #ffffff; }
-.mat-mdc-snack-bar-container.kit-snack.kit-snack--error { --mdc-snackbar-container-color: rgba(255, 103, 87); --mdc-snackbar-supporting-text-color: #ffffff; box-shadow: inset 4px 0 0 #b91c1c; }
-.mat-mdc-snack-bar-container.kit-snack.kit-snack--warning { --mdc-snackbar-container-color: rgba(253, 175, 34); --mdc-snackbar-supporting-text-color: white; /* gray-900 */ box-shadow: inset 4px 0 0 #d97706; }
-.mat-mdc-snack-bar-container.kit-snack.kit-snack--info { --mdc-snackbar-container-color: rgba(250, 248, 253); --mdc-snackbar-supporting-text-color: black; box-shadow: inset 4px 0 0 #1d4ed8; }
+.mat-mdc-snack-bar-container.kit-snack.kit-snack--error { --mdc-snackbar-container-color: #FF3131; --mdc-snackbar-supporting-text-color: #ffffff; }
+.mat-mdc-snack-bar-container.kit-snack.kit-snack--warning { --mdc-snackbar-container-color: var(--gold-color); --mdc-snackbar-supporting-text-color: black;  }
+.mat-mdc-snack-bar-container.kit-snack.kit-snack--info { --mdc-snackbar-container-color: rgba(250, 248, 253); --mdc-snackbar-supporting-text-color: black; }
 /* Layout cho ToastComponent */
-.kit-snack-row { display: flex; align-items: center; gap: 10px; color: var(--mdc-snackbar-supporting-text-color); position: relative; padding-bottom: 6px; }
-.kit-snack-icon { font-size: 24px; height: 24px; width: 24px; line-height: 24px; color: var(--mdc-snackbar-supporting-text-color); }
+.kit-snack-row { display: flex; align-items: center; gap: 10px; color: var(--mdc-snackbar-supporting-text-color); position: sticky; }
+.kit-snack-icon { display: flex !important; align-items: center; justify-content: center; line-height: 20px; color: var(--mdc-snackbar-supporting-text-color); }
 .kit-snack-text { display: grid; gap: 2px; }
 .kit-snack-title { font-weight: 700; line-height: 1.1; }
-.kit-snack-msg { line-height: 1.2; white-space: pre-line; }
+.kit-snack-msg { line-height: 1.2; white-space: pre-line; user-select: none; }
 .mdc-snackbar__surface { width: fit-content !important; min-width: unset !important; max-width: unset !important; }
-
-.kit-snack-progress { position: absolute; left: -14px; right: -14px;bottom: -10px; height: 3px; background: rgba(255,255,255,0.22); overflow: hidden; border-radius: 0 0 12px 12px; }
+.kit-snack-progress { position: absolute; left: 0px; right: 0px; bottom: 0px; height: 3px; background: rgba(255,255,255,0.22); overflow: hidden; border-radius: 0 0 5px 5px; z-index: 1; }
 .kit-snack-progress .bar { display: block; height: 100%; width: 0%; background: rgba(255,255,255,0.9); animation-name: kit-snack-progress-line; animation-timing-function: linear; animation-fill-mode: forwards; }
 .mat-mdc-snack-bar-container.kit-snack.kit-snack--warning .kit-snack-progress .bar { background: #111827; }
 @keyframes kit-snack-progress-line { from { width: 0%; } to   { width: 100%; } }
 
+/* file uploader */
 .file-uploader { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .file-input { display: none; } /* ẩn input gốc */
 .file-name { max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

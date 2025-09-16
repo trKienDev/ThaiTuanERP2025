@@ -36,7 +36,7 @@ export class CashoutCodePanelComponent implements OnInit {
                         const message = Array.isArray(msg) ? msg.join('\n') : String(msg);
                         console.log(err);
                         console.log(message);
-                        this.toastService.errorRich(message);
+                        this.toastService.errorRich('Lỗi lấy mã dòng tiền ra');
                   })
             })
       }

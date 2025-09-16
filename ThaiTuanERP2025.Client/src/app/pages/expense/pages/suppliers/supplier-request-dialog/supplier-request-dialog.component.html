@@ -5,20 +5,15 @@
       <div class="input-wrapper">
             <div class="form-input">
                   <input class="" type="text" formControlName="name" autocomplete="on" required/>
-                  <label for="name">Tên nhà cung cấp</label>
+                  <label for="name">Tên nhà cung cấp <span style="color: red;">  *</span></label>
             </div>
       </div>
 
       <div class="input-wrapper">
             <div class="form-input">
                   <input class="" type="text" formControlName="taxCode" autocomplete="on" required />
-                  <label for="name">Mã số thuế</label>
+                  <label for="name">Mã số thuế <span style="color: red;">  *</span></label>
             </div>
-      </div>
-
-      <div class="input-wrapper d-flex align-items-center gap-5p">
-            <input type="checkbox" class="ui-checkbox" formControlName="isActive">
-            <div>Hiệu lực</div>
       </div>
 
       <div *ngIf="errorMessages.length" class="mt-2">
