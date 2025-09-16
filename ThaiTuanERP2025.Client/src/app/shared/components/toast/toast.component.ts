@@ -4,7 +4,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MAT_SNACK_BAR_DATA } from "@angular/material/snack-bar";
 
 type ToastType = 'success' | 'error' | 'warning' | 'info';
-export interface ToastData { type: ToastType; title?: string; message: string; durationMs?: number; }
+export interface ToastData { type: ToastType; title?: string; message: string; durationMs?: number; sticky?: boolean; }
 
 @Component({
       standalone: true,

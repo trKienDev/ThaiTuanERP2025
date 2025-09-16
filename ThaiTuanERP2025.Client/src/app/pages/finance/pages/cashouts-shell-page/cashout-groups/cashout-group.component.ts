@@ -33,7 +33,7 @@ export class CashoutGroupPanelComponent implements OnInit {
                   }, 
                   error: (err => {
                         const message = handleHttpError(err);
-                        this.toastService.errorRich(message);
+                        this.toastService.errorRich('Lỗi tải nhóm dòng tiền ra');
                   })
             })
       }
