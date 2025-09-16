@@ -2,7 +2,7 @@
       <span>Tạo chi phí mới</span>
       <div class="process-button-container d-flex gap-10p">
             <button class="button cancel-button">Hủy</button>
-            <button class="button save-button">Gửi xử lý</button>
+            <button class="button save-button">Gửi phê duyệt</button>
       </div>
 </div>
 
@@ -20,7 +20,7 @@
                   <div class="alert dark-alert"> 🔒 ĐỀ NGHỊ THANH TOÁN</div>
             </div>
             <div class="width-50pt">
-                  <kit-dropdown [options]="goodsReceiptOptions" [placeholder]="'Nhập kho hay không ?'" [enableFilter]="false" (selectionChange)="onGoodsReceiptSelected($event)" [width]="'100%'"></kit-dropdown>
+                  <kit-dropdown [options]="goodsReceiptOptions" [placeholder]="'Nhập kho hay không ❓'" [enableFilter]="false" (selectionChange)="onGoodsReceiptSelected($event)" [width]="'174px'"></kit-dropdown>
             </div>
       </div>
 

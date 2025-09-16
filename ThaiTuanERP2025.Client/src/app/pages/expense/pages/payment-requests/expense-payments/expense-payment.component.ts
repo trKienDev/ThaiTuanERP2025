@@ -484,7 +484,7 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             for (const f of files) {
                   if(!f.size || f.size <= 0) {
                         invalidCount++;
-                        this.toast.errorRich('File không hợp lệ');
+                        this.toast.errorRich('File không hợp lệ', { sticky: true });
                         continue;
                   }
 
@@ -508,7 +508,7 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             // có nơi khác push UploadItem thẳng vào this.uploads, thêm guard đầu hàm:
             if (!item.size || item.size <= 0) {
                   item.status = 'error';
-                  this.toast.errorRich('file không hợp lệ');
+                  this.toast.errorRich('file không hợp lệ', { sticky: true });
                   return;
             }
             
@@ -529,7 +529,7 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
 
                               item.progress = 100;
                               item.status = 'done';
-                              this.toast?.successRich?.('Tải tệp thành công');
+                              this.toast.successRich('Tải tệp thành công', { sticky: true });
                         }
                   },
                   error: (err) => {

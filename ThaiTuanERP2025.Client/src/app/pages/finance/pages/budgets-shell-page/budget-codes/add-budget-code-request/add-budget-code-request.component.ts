@@ -91,7 +91,7 @@ export class AddBudgetCodeRequestDialogComponent implements OnInit {
                   this.ref.close(true);
             } catch(error) {
                   const messages = handleHttpError(error);
-                  this.toast.errorRich(messages);
+                  this.toast.errorRich('Thêm ngân sách thất bại');
             } finally {
                   this.submitting = false;
             }

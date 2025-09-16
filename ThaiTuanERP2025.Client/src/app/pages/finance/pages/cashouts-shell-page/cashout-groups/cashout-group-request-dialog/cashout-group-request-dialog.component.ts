@@ -59,7 +59,7 @@ export class CashoutGroupRequestDialogComponent implements OnInit {
                   error: (err => {
                         const message = handleHttpError(err);
                         console.log('error: ', err);
-                        this.toast.errorRich(message, 'Lỗi khi tải nhóm cha');
+                        this.toast.errorRich('Lỗi khi tải nhóm cha');
                   })
             })
       }

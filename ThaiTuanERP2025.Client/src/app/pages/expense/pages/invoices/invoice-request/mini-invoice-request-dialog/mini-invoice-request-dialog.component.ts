@@ -119,7 +119,7 @@ export class MiniInvoiceRequestDialogComponent {
                   this.close({ success: true, invoiceId });
             } catch (err) {
                   const msgs = handleHttpError(err);
-                  this.toast.errorRich(msgs, 'Lỗi'); 
+                  this.toast.errorRich('Lưu hóa đơn thất bại'); 
                   this.close({ success: false, error: err });
             } finally {
                   this.submitting = false;

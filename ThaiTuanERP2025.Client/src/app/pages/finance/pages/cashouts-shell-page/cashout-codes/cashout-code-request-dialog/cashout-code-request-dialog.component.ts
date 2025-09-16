@@ -64,7 +64,7 @@ export class CashoutCodeRequestDialogComponent implements OnInit {
                   }, 
                   error: (err => {
                               const message = handleHttpError(err);
-                              this.toast.errorRich(message);
+                              this.toast.errorRich('Lỗi tải nhóm dòng tiền ra');
                         }
                   )
             })
@@ -108,7 +108,7 @@ export class CashoutCodeRequestDialogComponent implements OnInit {
                   const message = Array.isArray(msg) ? msg.join('\n') : String(msg);
                   console.log(error);
                   console.log(message);
-                  this.toast.errorRich(message);
+                  this.toast.errorRich('Lỗi thêm nhóm dòng tiền ra');
             } finally {
                   this.submitting = false;
             }
