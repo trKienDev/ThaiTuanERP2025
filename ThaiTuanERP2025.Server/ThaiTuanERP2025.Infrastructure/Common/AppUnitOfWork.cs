@@ -19,6 +19,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			// Account
 			IUserRepository users,
 			IDepartmentRepository departments,
+			IDivisionRepository divisions,
 			IGroupRepository groups,
 			IUserGroupRepository userGroups,
 
@@ -51,6 +52,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 
 			Users = users;
 			Departments = departments;
+			Divisions = divisions;
 			Groups = groups;
 			UserGroups = userGroups;
 
@@ -79,6 +81,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		// Account
 		public IUserRepository Users { get; }
 		public IDepartmentRepository Departments { get; }
+		public IDivisionRepository Divisions { get; }
 		public IGroupRepository Groups { get; }
 		public IUserGroupRepository UserGroups { get; }
 

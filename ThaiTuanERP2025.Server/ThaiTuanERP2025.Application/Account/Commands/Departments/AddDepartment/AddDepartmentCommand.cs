@@ -1,11 +1,7 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ThaiTuanERP2025.Domain.Account.Enums;
 
 namespace ThaiTuanERP2025.Application.Account.Commands.Departments.AddDepartment
 {
-	public record AddDepartmentCommand(string Name, string Code) : IRequest<Unit>;
+	public record AddDepartmentCommand(string Name, string Code, Region Region, Guid? divisionId = null, Guid? ManagerId = null) : IRequest<Unit>;
 }
