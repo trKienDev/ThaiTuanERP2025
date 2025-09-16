@@ -23,7 +23,7 @@ namespace ThaiTuanERP2025.Application.Account.Commands.Departments.BulkAddDepart
 			var departments = new List<Department>();
 			foreach (var dto in request.Departments)
 			{
-				var dept = new Department(dto.Name, dto.Code);
+				var dept = new Department(dto.Name, dto.Code, dto.Region, dto.DivisionId, dto.ManagerId);
 				departments.Add(dept);
 			}
 

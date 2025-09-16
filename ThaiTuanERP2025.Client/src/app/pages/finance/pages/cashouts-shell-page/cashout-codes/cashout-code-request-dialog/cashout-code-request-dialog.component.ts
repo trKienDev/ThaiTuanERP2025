@@ -99,7 +99,6 @@ export class CashoutCodeRequestDialogComponent implements OnInit {
 
             try {
                   const payload: CreateCashoutCodeRequest = this.form.getRawValue() as CreateCashoutCodeRequest;
-                  console.log('payload: ', payload);
                   const created = await firstValueFrom(this.cashoutCodeService.create(payload));
                   this.toast.successRich('Thêm dòng tiền ra thành công');
                   this.dialogRef.close(this.isSuccess = true);

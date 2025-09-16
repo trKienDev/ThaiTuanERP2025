@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ThaiTuanERP2025.Domain.Account.Enums;
 using ThaiTuanERP2025.Domain.Common;
 
 namespace ThaiTuanERP2025.Domain.Account.Entities
@@ -11,24 +7,35 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 	{
 		public string Name { get;  set; } = string.Empty;
 		public string Code { get;  set; } = string.Empty;
+		public bool IsActive { get; set; } = true;
 
 		public ICollection<User> Users { get; private set; }
 
-		public bool IsActive { get; set; } = true;
 		public User CreatedByUser { get; set; } = null!;
 		public User? ModifiedByUser { get; set; }
 		public User? DeletedByUser { get; set; }
 
+		public Region Region { get; set; } = Region.None;
+
+		public Guid? DivisionId { get; private set; }	
+		public Division? Division { get; private set; }
+
+		public Guid? ManagerUserId { get; private set; }	
+		public User? ManagerUser { get; private set; }
+
 		private Department() {
 			Users = new List<User>();
 		} // EF
-		public Department(string name, string code) {
+		public Department(string name, string code, Region region, Guid? divisionId = null, Guid? managerUserId = null) {
 			if(string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException("Tên phòng ban không được trống");
 			if(string.IsNullOrWhiteSpace(code)) throw new ArgumentNullException("Mã phòng ban không được trống");
 
 			Id = Guid.NewGuid();
 			Name = name.Trim();
 			Code = code.ToUpperInvariant();
+			Region = region;
+			DivisionId = divisionId;
+			ManagerUserId = managerUserId;
 			Users = new List<User>();
 		}
 
@@ -36,5 +43,9 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			if (string.IsNullOrWhiteSpace(newName)) throw new ArgumentNullException("Tên mới không hợp lệ");
 			Name = newName.Trim();
 		}
+
+		public void MoveToDivision(Guid? divisionId) => DivisionId = divisionId;	
+		public void SetRegion(Region region) => Region = region;	
+		public void SetManager(Guid? userId) => ManagerUserId = userId;
 	}
 }

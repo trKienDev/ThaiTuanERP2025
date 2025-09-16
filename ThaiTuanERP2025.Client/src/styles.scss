@@ -114,25 +114,18 @@ input {
 }
 html, body { height: 100%; margin: 0; }
 
-.mat-mdc-tooltip-surface {
-      font-family: 'Lexend' !important;
-      user-select: none;
-      background-color: var(--gold-color) !important;
-      color: black !important;
-}
+.default-title { font-size: 20px; font-weight: 900; color: var(--main-foreground-hover); }
 
-/* target đúng nơi Material render (overlay) */
-.cdk-overlay-pane .mat-mdc-dialog-surface {
-      border-radius: 5px !important;
-      padding: 10px;
-      overflow-y: unset;
-}
+
 
 /* Chrome, Safari, Edge, Opera */
 input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 /* Firefox */
 input[type=number] { -moz-appearance: textfield; }
 
+.mat-mdc-tooltip-surface { font-family: 'Lexend' !important; user-select: none; background-color: var(--gold-color) !important; color: black !important; }
+/* target đúng nơi Material render (overlay) */
+.cdk-overlay-pane .mat-mdc-dialog-surface { border-radius: 5px !important; padding: 10px; overflow-y: unset; }
 
 /* mat-calendar */
 .mat-datepicker-content .mat-calendar { width: 300px !important; height: unset !important; border-top-left-radius: var(--default-border-color-radius); border-top-right-radius: var(--default-border-color-radius); }

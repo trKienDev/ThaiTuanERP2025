@@ -1,109 +1,24 @@
 <!-- ====== Thanh công cụ + nút tạo mới ====== -->
-<div class="list-toolbar">
-      <div class="left">
-            <h2>Loại chi phí</h2>
+<div class="container">
+      
+      <div class="d-flex justify-content-between">
+            <div class="left align-content-center">
+                  <span class="">Luồng duyệt hiện tại</span>
+            </div>
+            <div class="right">
+                  <button type="button" class="button default-button" [routerLink]="['approval-workflow-engine-request']">Tạo luồng duyệt</button>
+            </div>
       </div>
-      <div class="right">
-            <button class="btn btn-primary" (click)="open()">+ Tạo luồng duyệt</button>
-      </div>
-</div>
-
-<!-- ====== Bảng danh sách workflow ====== -->
-<div class="card">
-      <div class="card-body">
-            <div *ngIf="loading()">Đang tải ...</div>
-            <table class="table" *ngIf="!loading()">
+      
+      <div class="table-wrapper mar-top-20">
+            <table class="table">
                   <thead>
                         <tr>
-                              <th style="width: 72px;">#</th>
-                              <th>Loại chi phí</th>
-                              <th style="width: 160px; text-align: center;">Trạng thái</th>
-                              <th style="width:140px; text-align:right;">HÀNH ĐỘNG</th>
+                              <th>Luồng duyệt</th>
+
                         </tr>
                   </thead>
-                  <tbody>
-                        <tr *ngFor="let wf of workflows(); let i = index">
-                              <td>{{ (i+1) | number: '2.0'}}</td>
-                              <td>
-                                    <div class="wf-name">{{ wf.name }}</div>
-                              </td>
-                              <td style="text-align:center;">
-                                    <!-- toggle đơn giản; có thể đổi sang mat-slide-toggle nếu bạn dùng Angular Material -->
-                                    <label class="switch">
-                                          <input type="checkbox" [checked]="wf.isActive" disabled>
-                                          <span class="slider"></span>
-                                    </label>
-                              </td>
-                              <td style="text-align:right;">
-                                    <button class="btn btn-link" (click)="editWorkflow(wf)">Sửa</button>
-                              </td>
-                        </tr>
-                        <tr *ngIf="workflows().length === 0">
-                              <td colspan="4" style="text-align: : center; color: #888">Chưa có luồng duyệt nào</td>
-                        </tr>
-                  </tbody>
             </table>
       </div>
 </div>
 
-<!-- Canvas full-screen -->
-<div class="canvas-overlay" *ngIf="isOpen()">
-      <!-- Thanh tiêu đề -->
-      <div class="header">
-            <div class="title">Tạo luồng duyệt chi phí</div>
-            <div class="tools">
-                  <button class="icon-btn" title="thu nhỏ">-</button>
-                  <span class="zoom">65%</span>
-                  <button class="icon-btn" title="phóng to">+</button>
-                  <button class="btn-save" (click)="openNameDialog()">Lưu luồng</button>
-                  <button class="close-btn" (click)="close()" title="Đóng">x</button>
-            </div>
-      </div>
-
-      <!-- Khu vực vẽ (grid nền dạng chấm) -->
-      <div class="canvas">
-            <!-- Hàng sơ đồ: Start -> (các bước) -->
-            <div class="flow-row">
-                  <!-- Shape 'Gửi xử lý' -->
-                  <div class="start-node">Gửi xử lý</div>
-
-                  <!-- Nút '+' để thêm bước duyệt đầu tiên hoặc thêm giữa các bước -->
-                  <button class="add-connector" (click)="openStepDialog()" title="Thêm bước duyệt">+</button>
-
-                  <!-- Các bước duyệt tạo ra sau khi bấm '+' -->
-                  <ng-container *ngFor="let step of steps(); let i = index">
-                        <div class="arrow"></div>
-                        <div class="step-card d-flex" (dblclick)="editStep(i)" title="Double-click step để sửa">
-                              <div class="step-title">{{ step.title }}</div>
-                              
-                              <!-- Kebab button (3 chấm) + menu -->
-                              <button class="kebab" mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger" (mouseenter)="menuTrigger.openMenu()" title="Tùy chọn">
-                                    <mat-icon>more_vert</mat-icon>
-                              </button>
-                              <!-- Menu cho từng step -->
-                              <mat-menu #menu="matMenu" xPosition="after" yPosition="below">
-                                    <button mat-menu-item (click)="editStep(i)">
-                                          <mat-icon>edit</mat-icon>
-                                          <span>Sửa</span>
-                                    </button>
-                                    <button mat-menu-item (click)="removeStep(i)">
-                                          <mat-icon>delete</mat-icon>
-                                          <span class="danger">Xóa</span>
-                                    </button>
-                              </mat-menu>
-                        </div>
-
-                        <div class="step-sub">
-                              {{ step.flowType === 'any' ? 'Chỉ cần chọn 1 người duyệt' : step.flowType === 'all' ? 'Tất cả duyệt' : 'Lần lượt' }}
-                              <span *ngIf="step.slaHours">SLA {{ step.slaHours }} h</span>
-                        </div>
-                        <!-- Nút '+' ở sau mỗi bước -->
-                        <button class="add-connector" (click)="openStepDialog()" title="Thêm bước duyệt">+</button>
-                  </ng-container>
-            </div>
-      </div>
-
-</div>
-
-
-<h1 class="sr-only">Approval workflow Engine</h1>
