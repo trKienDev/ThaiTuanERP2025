@@ -9,6 +9,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, provideNativeDateAdapte
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MondayFirstDateAdapter } from './shared/date/monday-first-date-adapter';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
+import { MAT_DIALOG_DEFAULT_OPTIONS, MatDialogConfig } from '@angular/material/dialog';
 
 export const appConfig: ApplicationConfig = {
       providers: [
@@ -30,11 +31,26 @@ export const appConfig: ApplicationConfig = {
                   }
             },
             { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { subscriptSizing: 'dynamic' } },
+
             // mat-snackbar
             { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {
                   horizontalPosition: 'end',
                   verticalPosition: 'top',
                   duration: 3000
-            }}
+            }}, 
+            
+            // mat-dialog
+            {
+                  provide: MAT_DIALOG_DEFAULT_OPTIONS, 
+                  useValue: <MatDialogConfig> {
+                        width: 'fit-content',
+                        height: 'fit-content',
+                        maxWidth: '90vw',
+                        maxHeight: '80vh',
+                        disableClose: true,
+                        autoFocus: false,
+                        restoreFocus: false,
+                  }
+            }
       ]
 };

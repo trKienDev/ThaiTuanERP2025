@@ -1,0 +1,32 @@
+<div class="dialog">
+      <div class="dialog-container">
+            <div class="dialog-heading">
+                  <div class="dialog-title">Thêm bước duyệt</div>
+                  <div class="close-button">
+                        <button type="button" class="close-button">
+                              <span class="text material-icons-outlined">close</span>
+                        </button>
+                  </div>
+            </div>
+            <div class="dialog-body">
+                  <div class="dialog-row">
+                        <div class="form-input">
+                              <input class="" type="text" formControlName="name" autocomplete="on" required/>
+                              <label for="name">Tên bước <span style="color: red;">  *</span></label>
+                        </div>
+                  </div>
+                  <div class="dialog-row">
+                        <kit-dropdown [options]="userOptions" [placeholder]="'Chọn người duyệt'" [multiple]="true" (selectionChange)="onApproverSelected($event)" [width]="'100%'"></kit-dropdown>
+                  </div>
+            </div>
+
+            <div class="dialog-row">
+                  <div class="dialog-buttons">
+                        <button type="button" class="width-50pt button cancel-button">Hủy</button>
+                        <button type="button" class="width-50pt button save-button d-flex justify-content-center">
+                              {{ submitting ? 'Đang lưu...' : 'Lưu' }}
+                        </button>
+                  </div>
+            </div>
+      </div>
+</div>

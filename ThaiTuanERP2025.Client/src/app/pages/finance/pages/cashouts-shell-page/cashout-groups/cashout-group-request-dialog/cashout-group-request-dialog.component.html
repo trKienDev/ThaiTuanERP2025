@@ -4,20 +4,20 @@
 
             <form class="dialog-body" [formGroup]="form" (ngSubmit)="submit()">
 
-                  <div class="dialog-field">
+                  <div class="dialog-row">
                         <div class="form-input">
                               <input class="" type="text" formControlName="name" autocomplete="on" required/>
                               <label for="name">Tên nhóm dòng tiền ra <span style="color: red;">  *</span></label>
                         </div>
                   </div>
 
-                  <div class="dialog-field">
+                  <div class="dialog-row">
                         <div class="form-input">
                               <textarea formControlName="description" id="" placeholder="Mô tả (nếu có)"></textarea>
                         </div>
                   </div>
 
-                  <div class="dialog-field">
+                  <div class="dialog-row">
                         <kit-dropdown [options]="parentOptions" (selectionChange)="(onParentsSelected($event))" [placeholder]="'Chọn nhóm tài khoản cha (nếu có)'" [width]="'100%'"></kit-dropdown>
                   </div>
 
