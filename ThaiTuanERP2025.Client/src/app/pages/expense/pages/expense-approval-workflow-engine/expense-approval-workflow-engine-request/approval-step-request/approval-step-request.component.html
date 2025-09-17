@@ -4,11 +4,11 @@
                   <div class="dialog-title">Thêm bước duyệt</div>
                   <div class="close-button">
                         <button type="button" class="close-button">
-                              <span class="text material-icons-outlined">close</span>
+                              <span class="text material-icons-outlined" (click)="close()">close</span>
                         </button>
                   </div>
             </div>
-            <div class="dialog-body">
+            <form class="dialog-body" [formGroup]="form">
                   <div class="dialog-row">
                         <div class="form-input">
                               <input class="" type="text" formControlName="name" autocomplete="on" required/>
@@ -16,17 +16,25 @@
                         </div>
                   </div>
                   <div class="dialog-row">
-                        <kit-dropdown [options]="userOptions" [placeholder]="'Chọn người duyệt'" [multiple]="true" (selectionChange)="onApproverSelected($event)" [width]="'100%'"></kit-dropdown>
+                        <kit-dropdown [options]="userOptions" [placeholder]="'Chọn người duyệt'" [multiple]="true"  (selectionChange)="onApproverSelected($event)" [width]="'100%'"></kit-dropdown>
                   </div>
-            </div>
-
-            <div class="dialog-row">
-                  <div class="dialog-buttons">
-                        <button type="button" class="width-50pt button cancel-button">Hủy</button>
-                        <button type="button" class="width-50pt button save-button d-flex justify-content-center">
-                              {{ submitting ? 'Đang lưu...' : 'Lưu' }}
-                        </button>
+                  <div class="dialog-row">
+                        <kit-dropdown [options]="flowTypeOptions" [placeholder]="'Chọn luồng duyệt'" (selectionChange)="onFlowTypeSelected($event)" [width]="'100%'"></kit-dropdown>
                   </div>
-            </div>
+                  <div class="dialog-row">
+                        <div class="form-input">
+                              <input class="" type="number" formControlName="sla" placeholder="" autocomplete="on" required/>
+                              <label for="name">SLA</label>
+                        </div>
+                  </div>
+                  <div class="dialog-row">
+                        <div class="dialog-buttons">
+                              <button type="button" class="width-50pt button cancel-button" (click)="close()">Hủy</button>
+                              <button type="button" class="width-50pt button save-button d-flex justify-content-center" (click)="save()">
+                                    {{ submitting ? 'Đang lưu...' : 'Lưu' }}
+                              </button>
+                        </div>
+                  </div>
+            </form>
       </div>
 </div>
