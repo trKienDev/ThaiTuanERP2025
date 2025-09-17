@@ -44,7 +44,6 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IUserRepository, UserRepository>();
 			services.AddScoped<IUserReadRepository, UserReadRepository>();
 			services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-			services.AddScoped<IDivisionRepository, DivisionRepository>();
 			services.AddScoped<IGroupRepository, GroupRepository>();
 			services.AddScoped<IUserGroupRepository, UserGroupRepository>();
 			services.AddScoped<IBudgetCodeRepository, BudgetCodeRepository>();

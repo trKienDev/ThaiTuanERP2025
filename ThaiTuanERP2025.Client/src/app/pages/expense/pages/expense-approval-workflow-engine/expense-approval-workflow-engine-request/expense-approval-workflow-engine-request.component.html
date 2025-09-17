@@ -4,8 +4,31 @@
       </div>
       <div class="approval-workflow-wrapper">
             <div class="approval-workflow-process">
-                  <div class="begin-step">
-                        Bắt đầu
+                  <div class="step begin-step">Bắt đầu</div>
+
+                  <ng-container *ngFor="let s of steps; let i = index">
+                        <!-- khe nối trước mỗi step -->
+                        <div class="connector-slot">
+                              <div class="connector-line"></div>
+                              <div class="inline-add" (mouseenter)="openMenu = i" (mouseleave)="openMenu = null">
+                                    <button type="button" class="plus-button plus-button--small" aria-haspopup="menu" aria-label="Thêm"></button>
+                                    <div [class.show]="openMenu === i">
+                                          <button (click)="addApproverBlockAfter(i)">Thêm khối duyệt</button>
+                                    </div>
+                              </div>
+                        </div>
+
+                        <div class="step">
+                              <div class="step-inner"><span class="title">{{ s.title }}</span></div>
+                        </div>
+                  </ng-container>
+
+                  <!-- nút + sau step cuối -->
+                  <div class="tail-add" (mouseenter)="openMenu = steps.length" (mouseleave)="openMenu = null">
+                        <button type="button" class="plus-button plus-button--small" aria-haspopup="menu" aria-label="Thêm"></button>
+                        <div class="add-menu" [class.show]="openMenu === steps.length">
+                              <button class="menu-item" (click)="addApproverBlockAfter(steps.length - 1)">Thêm khối duyệt</button>
+                        </div>
                   </div>
             </div>
       </div>

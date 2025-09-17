@@ -21,11 +21,6 @@ export const accountRoutes: Routes = [
                         canActivate: [adminGuard], 
                         loadComponent: () => import('./pages/account-department/account-department.component').then((m) => m.AccountDepartmentComponent )
                   }, 
-                  {
-                        path: 'divisions',
-                        canActivate: [adminGuard],
-                        loadComponent: () => import('./pages/account-division/account-division.component').then((m) => m.AccountDivisionComponent )
-                  }
             ],
       },
 ];
