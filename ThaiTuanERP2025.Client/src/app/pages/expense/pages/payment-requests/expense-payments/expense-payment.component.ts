@@ -321,13 +321,16 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       }
 
       goodsReceiptOptions: KitDropdownOption[] = [
-            { id: 'hasGoodsReceipt', label: 'Có nhập kho' },
-            { id: 'noGoodsReceipt', label: 'Không nhập kho' },
+            { id: 'true', label: 'Có nhập kho' },
+            { id: 'false', label: 'Không nhập kho' },
       ]
-      selectedGoodsReceipt: 'hasGoodsReceipt' | 'noGoodsReceipt' | null = null;
       onGoodsReceiptSelected(opt: KitDropdownOption) {
-            this.selectedGoodsReceipt = opt.id === 'hasGoodsReceipt' ? 'hasGoodsReceipt' : 'noGoodsReceipt';
-      }
+            if(opt.id === 'true') {
+                  this.form.patchValue({ hasGoodsReceipt: true });
+            } else {
+                  this.form.patchValue({ hasGoodsReceipt: false });
+            }
+      } 
 
       openCreateSupplierDialog(): void {
             const dialogRef = this.dialog.open(SupplierRequestDialogComponent);
