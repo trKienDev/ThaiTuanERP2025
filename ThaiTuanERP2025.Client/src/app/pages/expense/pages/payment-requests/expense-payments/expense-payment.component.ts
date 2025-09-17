@@ -452,7 +452,6 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             ev.stopPropagation();
             this.invoiceMenuOpenIndex = (this.invoiceMenuOpenIndex === i) ? null : i;
       }
-
       onMenuClosed() {
             this.invoiceMenuOpenIndex = null;
       }

@@ -10,11 +10,26 @@
                         <!-- khe nối trước mỗi step -->
                         <div class="connector-slot">
                               <div class="connector-line"></div>
-                              <div class="inline-add" (mouseenter)="openMenu = i" (mouseleave)="openMenu = null">
-                                    <button type="button" class="plus-button plus-button--small" aria-haspopup="menu" aria-label="Thêm"></button>
-                                    <div [class.show]="openMenu === i">
-                                          <button (click)="addApproverBlockAfter(i)">Thêm khối duyệt</button>
-                                    </div>
+                              <div class="inline-add dropdown-menu">
+                                    <button type="button" class="plus-button plus-button--small"  aria-label="thêm bước duyệt" 
+                                          cdkOverlayOrigin #stepOrigin="cdkOverlayOrigin" 
+                                          [attr.aria-expanded]="stepMenuOpenIndex === i"
+                                          (click)="toggleStepMenu(i, $event)"></button>
+                                    <ng-template cdkConnectedOverlay 
+                                          [cdkConnectedOverlayOrigin]="stepOrigin" 
+                                          [cdkConnectedOverlayOpen]="stepMenuOpenIndex === i" 
+                                          [cdkConnectedOverlayHasBackdrop]="true" 
+                                          [cdkConnectedOverlayBackdropClass]="'cdk-overlay-transparent-backdrop'" 
+                                          (backdropClick)="onMenuClosed()" 
+                                          (overlayOutsideClick)="onMenuClosed()" 
+                                          [cdkConnectedOverlayPositions]="stepMenuOverlayPosition">
+                                          <div class="dropdown-menu-panel" role="menu" aria-label="step actions" (keydown.escape)="onMenuClosed()" tabindex="0">
+                                                <button type="button" class="dropdown-menu-item" 
+                                                      (click)="addApproverBlockAfter(steps.length - 1); onMenuClosed()">
+                                                      Thêm khối duyệt
+                                                </button>                                          
+                                          </div>
+                                    </ng-template>
                               </div>
                         </div>
 
@@ -24,11 +39,26 @@
                   </ng-container>
 
                   <!-- nút + sau step cuối -->
-                  <div class="tail-add" (mouseenter)="openMenu = steps.length" (mouseleave)="openMenu = null">
-                        <button type="button" class="plus-button plus-button--small" aria-haspopup="menu" aria-label="Thêm"></button>
-                        <div class="add-menu" [class.show]="openMenu === steps.length">
-                              <button class="menu-item" (click)="addApproverBlockAfter(steps.length - 1)">Thêm khối duyệt</button>
-                        </div>
+                  <div class="tail-add dropdown-menu">
+                        <button type="button" class="plus-button plus-button--small"  aria-label="thêm bước duyệt" 
+                              aria-haspopup="menu"
+                              [attr.aria-expanded]="stepMenuOpenIndex === -1"
+                              cdkOverlayOrigin #endOrigin="cdkOverlayOrigin" 
+                              (click)="toggleStepMenu(-1, $event)">
+                        </button>
+                        <ng-template cdkConnectedOverlay 
+                              [cdkConnectedOverlayOrigin]="endOrigin" 
+                              [cdkConnectedOverlayOpen]="stepMenuOpenIndex === -1" 
+                              [cdkConnectedOverlayHasBackdrop]="true" 
+                              [cdkConnectedOverlayBackdropClass]="'cdk-overlay-transparent-backdrop'" 
+                              (backdropClick)="onMenuClosed()" 
+                              (overlayOutsideClick)="onMenuClosed()" 
+                              [cdkConnectedOverlayPositions]="stepMenuOverlayPosition">
+                              <div class="dropdown-menu-panel" role="menu" aria-label="step actions" (keydown.escape)="onMenuClosed()" tabindex="0">
+                                    <button type="button" class="dropdown-menu-item" (click)="addApproverBlockAfter(steps.length - 1); onMenuClosed()">Thêm khối duyệt</button>    
+                                    <button type="button" class="dropdown-menu-item" (click)="onMenuClosed()" style="color: red;">Kết thúc</button>                                          
+                              </div>
+                        </ng-template>
                   </div>
             </div>
       </div>

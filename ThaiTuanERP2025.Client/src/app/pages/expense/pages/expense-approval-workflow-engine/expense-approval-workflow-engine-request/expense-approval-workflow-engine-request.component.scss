@@ -10,13 +10,13 @@
       box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 }
 .approval-workflow-process {
-  --gap: 140px;                 /* độ dài khe nối */
-  --arrow-thick: 2px;
-  --arrow-head: 12px;
+      --gap: 140px;                 /* độ dài khe nối */
+      --arrow-thick: 2px;
+      --arrow-head: 12px;
 
-  display: flex;
-  align-items: center;
-  gap: 0;                      /* không dùng flex gap nữa */
+      display: flex;
+      align-items: center;
+      gap: 0;                      /* không dùng flex gap nữa */
 }
 
 .step { 
@@ -30,6 +30,11 @@
       user-select: none;
       position: relative; 
       z-index: 1; 
+      transition: all 80ms ease;
+
+      &:hover {
+            box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+      }
 }
 .begin-step {
       background-image: linear-gradient(to top, #0d03e5, #002cee, #0042f5, #0054fa, #0265ff);
@@ -76,16 +81,3 @@
 /* Nút + sau step cuối (không có mũi tên) */
 .tail-add { position: relative; width: 44px; margin-left: 12px; }
 
-/* Menu nhỏ gọn */
-.add-menu {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, calc(-50% - 40px));
-      background: #fff; border: 1px solid #e5e7eb; border-radius: 10px;
-      padding: 6px; box-shadow: 0 12px 24px rgba(2,6,23,.12);
-      white-space: nowrap; opacity: 0; visibility: hidden; pointer-events: none;
-      transition: opacity .12s ease, transform .12s ease;
-}
-.add-menu.show { opacity: 1; visibility: visible; pointer-events: auto; }
-.menu-item { background: none; border: 0; padding: 8px 12px; border-radius: 8px; cursor: pointer; }
-.menu-item:hover { background: #f3f4f6; }
