@@ -12,5 +12,11 @@ import { ExpenseApprovalWorkflowService } from "../../../services/expense-approv
 export class ExpenseApprovalWorkflowEngineRequest {
       private readonly approvalWorkflowService = inject(ExpenseApprovalWorkflowService);
 
+      steps = [{ title: 'Duyệt: Mặc định' }];
+      openMenu: number | null = null;
 
+      addApproverBlockAfter(index: number) {
+            this.steps.splice(index + 1, 0, { title: 'Bước duyệt mới'});
+            this.openMenu = null;
+      }
 }
