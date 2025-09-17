@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Account.Commands.Departments.AddDepartment;
-using ThaiTuanERP2025.Application.Account.Commands.Departments.BulkAddDepartmentCommand;
 using ThaiTuanERP2025.Application.Account.Commands.Departments.DeleteDepartment;
 using ThaiTuanERP2025.Application.Account.Commands.Departments.UpdateDepartment;
 using ThaiTuanERP2025.Application.Account.Dtos;
@@ -38,16 +37,6 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 
 			var departmentId = await _mediator.Send(command);
 			return Ok(ApiResponse<object>.Success( new {departmentId }));
-		}
-
-		[HttpPost("bulk")]
-		public async Task<IActionResult> BulkImport([FromBody] BulkAddDepartmentsCommand command)
-		{
-			if (command == null || command.Departments == null || !command.Departments.Any())
-				return BadRequest(ApiResponse<object>.Fail("Dữ liệu rộng hoặc không hợp lệ !"));
-
-			var addCount = await _mediator.Send(command);
-			return Ok(ApiResponse<object>.Success(new { added = addCount }, "Import thành công"));
 		}
 
 		[HttpPost("by-ids")]

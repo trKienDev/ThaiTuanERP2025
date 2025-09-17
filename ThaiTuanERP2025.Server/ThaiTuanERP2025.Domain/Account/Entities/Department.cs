@@ -8,8 +8,13 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public string Name { get;  set; } = string.Empty;
 		public string Code { get;  set; } = string.Empty;
 		public bool IsActive { get; set; } = true;
+		public int Level { get; set; }
 
 		public ICollection<User> Users { get; private set; }
+		
+		public Guid? ParentId { get; set; }
+		public Department? Parent { get; set; }
+		public ICollection<Department> Children { get; private set; } = new List<Department>();	
 
 		public User CreatedByUser { get; set; } = null!;
 		public User? ModifiedByUser { get; set; }
@@ -18,15 +23,14 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public Region Region { get; set; } = Region.None;
 
 		public Guid? DivisionId { get; private set; }	
-		public Division? Division { get; private set; }
 
-		public Guid? ManagerUserId { get; private set; }	
-		public User? ManagerUser { get; private set; }
+		public Guid? ManagerUserId { get; set; }	
+		public User? ManagerUser { get; set; }
 
 		private Department() {
 			Users = new List<User>();
 		} // EF
-		public Department(string name, string code, Region region, Guid? divisionId = null, Guid? managerUserId = null) {
+		public Department(string name, string code, Region region, Guid? managerUserId = null) {
 			if(string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException("Tên phòng ban không được trống");
 			if(string.IsNullOrWhiteSpace(code)) throw new ArgumentNullException("Mã phòng ban không được trống");
 
@@ -34,7 +38,6 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			Name = name.Trim();
 			Code = code.ToUpperInvariant();
 			Region = region;
-			DivisionId = divisionId;
 			ManagerUserId = managerUserId;
 			Users = new List<User>();
 		}

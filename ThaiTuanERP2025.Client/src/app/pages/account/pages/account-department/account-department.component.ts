@@ -7,13 +7,10 @@ import { handleHttpError } from "../../../../shared/utils/handle-http-errors.uti
 import { EditDepartmentModalComponent } from "../../components/edit-department-modal/edit-department-modal.component";
 import { finalize, firstValueFrom } from "rxjs";
 import { DepartmentDto } from "../../models/department.model";
-import { DivisionService } from "../../services/division.service";
 import { ToastService } from "../../../../shared/components/toast/toast.service";
 import { KitDropdownOption} from "../../../../shared/components/kit-dropdown/kit-dropdown.component";
 import { UserService } from "../../services/user.service";
-import { CreateDivisionRequest } from "../../models/division.model";
 import { MatDialog } from "@angular/material/dialog";
-import { CreateDivisionRequestComponent } from "../account-division/create-division-request/create-division-request.component";
 
 @Component({
       selector: 'account-department',
@@ -32,7 +29,6 @@ export class AccountDepartmentComponent implements OnInit {
       isImporting = false;
       fileName = '';
       
-      private divisionService = inject(DivisionService);
       private toastService = inject(ToastService);
       private formBuilder = inject(FormBuilder);
       private dialog = inject(MatDialog);

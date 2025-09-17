@@ -4,10 +4,10 @@ using ThaiTuanERP2025.Application.Account.Repositories;
 
 namespace ThaiTuanERP2025.Application.Account.Queries.Departments.GetAllDepartments
 {
-	public class GetAllDepartmentsQueryHandler : IRequestHandler<GetAllDepartmentsQuery, List<DepartmentDto>>
+	public class GetAllDepartmentsHandler : IRequestHandler<GetAllDepartmentsQuery, List<DepartmentDto>>
 	{
 		private readonly IDepartmentRepository _departmentRepository;
-		public GetAllDepartmentsQueryHandler(IDepartmentRepository departmentRepository)
+		public GetAllDepartmentsHandler(IDepartmentRepository departmentRepository)
 		{
 			_departmentRepository = departmentRepository ?? throw new ArgumentNullException(nameof(departmentRepository));
 		}
@@ -19,7 +19,8 @@ namespace ThaiTuanERP2025.Application.Account.Queries.Departments.GetAllDepartme
 			{
 				Id = d.Id,
 				Name = d.Name,
-				Code = d.Code
+				Code = d.Code,
+				
 			}).ToList();
 		}
 	}

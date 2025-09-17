@@ -27,7 +27,6 @@ export class ToastComponent {
       }
 
       get hasProgress(): boolean {
-            console.log('progress: ', typeof this.data.durationMs === 'number' && this.data.durationMs > 0);
             return typeof this.data.durationMs === 'number' && this.data.durationMs > 0;
       }
 
