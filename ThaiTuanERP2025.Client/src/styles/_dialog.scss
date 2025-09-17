@@ -1,9 +1,14 @@
 .dialog {
-      width: 520px;
+      width: 520px;  
 }
 
 .dialog-container {
-      padding: 10px;
+      padding: 20px;
+}
+
+.dialog-heading {
+      display: flex;
+      justify-content: space-between;
 }
 
 .dialog-title { 
@@ -11,6 +16,11 @@
       justify-content: center;
 }
 
-.dialog-field {
-      padding: 10px;
+.dialog-row {
+      padding: 10px 0px;
+} 
+
+.dialog-buttons {
+      display: flex;
+      gap: 10px;
 }

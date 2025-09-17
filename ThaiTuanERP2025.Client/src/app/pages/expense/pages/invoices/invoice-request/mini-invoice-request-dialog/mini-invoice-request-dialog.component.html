@@ -2,7 +2,7 @@
       <h2 class="dialog-title">Thêm nhanh hóa đơn mới</h2>
       <form class="dialog-body" [formGroup]="form" (ngSubmit)="save()">
             <!-- Tên hóa đơn -->
-            <div class="dialog-field">
+            <div class="dialog-row">
                   <div class="input-wrapper">
                         <div class="form-input">
                               <input class="" type="text" formControlName="invoiceName" autocomplete="on" required/>
@@ -12,7 +12,7 @@
             </div>
 
             <!-- Số hóa đơn -->
-            <div class="dialog-field">
+            <div class="dialog-row">
                   <div class="input-wrapper">
                         <div class="form-input">
                               <input class="" type="text" formControlName="invoiceNumber" autocomplete="on" required/>
@@ -22,7 +22,7 @@
             </div>
 
             <!-- Mã số thuế người bán -->
-            <div class="dialog-field">
+            <div class="dialog-row">
                   <div class="input-wrapper">
                         <div class="form-input">
                               <input class="" type="text" formControlName="sellerTaxCode" autocomplete="on" required/>
@@ -32,7 +32,7 @@
             </div>
 
             <!-- Ngày lập hóa đơn -->
-            <div class="dialog-field">
+            <div class="dialog-row">
                   <div class="input-wrapper">
                         <div class="d-flex gap-10p">
                               <label class="w-40 align-content-center" for="name">Ngày lập hóa đơn <span style="color: red;">  *</span></label>
@@ -45,7 +45,7 @@
             </div>
 
             <!-- File hóa đơn (file/ảnh) -->
-            <div class="dialog-field">
+            <div class="dialog-row">
                   <div class="file-uploader pad-10p">
                         <input #invoiceFile id="invoiceFile" type="file" class="file-input d-none" accept="application/pdf,image/*" (change)="onFileSelected($event)" />
                         <div class="button default-button">
