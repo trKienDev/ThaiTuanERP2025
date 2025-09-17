@@ -56,7 +56,7 @@
       left: 0;
       right: var(--arrow-thick);     /* chừa chỗ cho đầu mũi tên */
       height: var(--arrow-thick);
-      background: #111827;
+      background: var(--dark-gray); 
       transform: translateY(-50%);
 }
 .connector-line::after {
@@ -65,7 +65,7 @@
       top: 50%;
       right: -2px;
       transform: translateY(-50%);
-      border-left: var(--arrow-head) solid #111827;
+      border-left: var(--arrow-head) solid var(--dark-gray);
       border-top: calc(var(--arrow-head)/2) solid transparent;
       border-bottom: calc(var(--arrow-head)/2) solid transparent;
 }

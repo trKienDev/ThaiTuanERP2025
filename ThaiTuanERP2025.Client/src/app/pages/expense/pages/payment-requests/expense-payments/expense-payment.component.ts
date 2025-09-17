@@ -270,13 +270,7 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             this.confirmService.confirmReplaceInvoice$(!!oldId).subscribe(ok => {
                   if (!ok) return;
 
-                  const ref = this.dialog.open(MiniInvoiceRequestDialogComponent, {
-                        width: 'fit-content',
-                        height: 'fit-content',
-                        maxWidth: '90vw',
-                        maxHeight: '80vh',
-                        disableClose: true,
-                  });
+                  const ref = this.dialog.open(MiniInvoiceRequestDialogComponent);
 
                   ref.afterClosed().subscribe((result?: { success?: boolean; invoiceId?: string }) => {
                         if (result?.success && result.invoiceId) {
@@ -294,13 +288,7 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             this.confirmService.confirmReplaceInvoice$(!!oldId).subscribe(ok => {
                   if(!ok) return;
 
-                  const ref = this.dialog.open(MyInvoicesDialogComponent, {
-                        width: 'fit-content',
-                        height: 'fit-content',
-                        maxWidth: '90vw',   
-                        maxHeight: '80vh',
-                        disableClose: true,
-                  });
+                  const ref = this.dialog.open(MyInvoicesDialogComponent);
 
                   ref.afterClosed().subscribe((result: { success?: boolean; invoiceId?: string } | undefined) => {
                         if (!result?.success || !result.invoiceId) return;
@@ -342,10 +330,7 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       }
 
       openCreateSupplierDialog(): void {
-            const dialogRef = this.dialog.open(SupplierRequestDialogComponent, {
-                  width: '520px',
-                  disableClose: true,
-            });
+            const dialogRef = this.dialog.open(SupplierRequestDialogComponent);
 
             dialogRef.afterClosed().subscribe((created) => {
                   if(created?.id) {
@@ -361,11 +346,6 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             const selectedId = row.get('budgetCodeId')?.value;
 
             const dialogRef = this.dialog.open(ExpenseBudgetCodeDialogComponent, {
-                  width: 'fit-content',
-                  height: 'fit-content',
-                  maxWidth: '90vw',   
-                  maxHeight: '80vh',
-                  disableClose: true,
                   data: { selectedBudgetCodeId: selectedId },
             });
 
