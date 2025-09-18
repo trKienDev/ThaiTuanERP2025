@@ -24,7 +24,13 @@
                         </div>
                   </div>
                   <div class="dialog-row">
-                        <kit-dropdown [options]="managerOptions" [placeholder]="'Chọn quản lý'" [width]="'100%'" (selectionChange)="onManagerSelected($event)"></kit-dropdown>
+                        <kit-dropdown [options]="(managerOptions$ | async) ?? []" [placeholder]="'Chọn quản lý (nếu có)'" (selectionChange)="onManagerSelected($event)"></kit-dropdown>
+                  </div>
+                  <div class="dialog-row">
+                        <kit-dropdown [options]="(departmentOptions$ | async) ?? []" [placeholder]="'Phòng ban cha (nếu có)'" (selectionChange)="onDepartmentSelected($event)"></kit-dropdown>
+                  </div>
+                  <div class="dialog-row">
+                        <kit-dropdown [options]="regionOptions" [placeholder]="'Chọn vùng miền (nếu có)'" (selectionChange)="onRegionSelected($event)"></kit-dropdown>
                   </div>
             </div>
             <div class="dialog-row">

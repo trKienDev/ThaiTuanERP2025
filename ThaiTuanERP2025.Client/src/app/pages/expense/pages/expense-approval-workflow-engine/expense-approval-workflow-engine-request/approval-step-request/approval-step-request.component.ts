@@ -1,18 +1,12 @@
 import { CommonModule } from "@angular/common";
 import { Component, Inject, inject, OnInit } from "@angular/core";
-import { UserService } from "../../../../../account/services/user.service";
 import { KitDropdownOption, KitDropdownComponent } from "../../../../../../shared/components/kit-dropdown/kit-dropdown.component";
-import { resolveAvatarUrl } from "../../../../../../shared/utils/avatar.utils";
-import { environment } from "../../../../../../../environments/environment";
 import { handleHttpError } from "../../../../../../shared/utils/handle-http-errors.util";
 import { ToastService } from "../../../../../../shared/components/toast/toast.service";
 import { FormBuilder, FormsModule, Validators, ReactiveFormsModule } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { ApprovalStepRequest, FlowType } from "../../../../models/expense-approval-workflow.model";
-import { mapToDropdownOptions } from "../../../../../../shared/components/kit-dropdown/kit-dropdown-options.adapter";
-import { toDropdownOptions } from "../../../../../../shared/components/kit-dropdown/kit-dropdown-to-options.operator";
-import { UserDto } from "../../../../../account/models/user.model";
-import { UserOptionsStore } from "../../../../../../shared/data-access/user-options.store";
+import { UserOptionStore } from "../../../../../account/options/user-dropdown-options.store";
 
 @Component({
       selector: 'approval-step-request-dialog',
@@ -21,12 +15,10 @@ import { UserOptionsStore } from "../../../../../../shared/data-access/user-opti
       templateUrl: './approval-step-request.component.html'
 })
 export class ApprovalStepRequestDialog implements OnInit {
-      private readonly baseUrl = environment.baseUrl;
-      private readonly userService = inject(UserService);
       private readonly toastService = inject(ToastService);
       private formBuilder = inject(FormBuilder);
       private dialog = inject(MatDialogRef<ApprovalStepRequestDialog>);
-      private userOptionsStore = inject(UserOptionsStore);
+      private userOptionsStore = inject(UserOptionStore);
 
       constructor(
             @Inject(MAT_DIALOG_DATA) public data?: { step?: ApprovalStepRequest }
@@ -34,7 +26,7 @@ export class ApprovalStepRequestDialog implements OnInit {
 
       formTitle: string = 'Thêm bước duyệt';
       submitting: boolean = false;
-      userOptions$ = this.userOptionsStore.options$;
+      userOptions$ = this.userOptionsStore.option$;
 
       form = this.formBuilder.group({
             name: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
@@ -57,7 +49,6 @@ export class ApprovalStepRequestDialog implements OnInit {
                   });
             }
       }
-
 
       onApproverSelected(opt: KitDropdownOption) {
             const id = typeof opt === 'string' ? opt : opt.id;

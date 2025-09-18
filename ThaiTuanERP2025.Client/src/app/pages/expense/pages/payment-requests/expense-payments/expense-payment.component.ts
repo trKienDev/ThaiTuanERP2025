@@ -26,11 +26,12 @@ import { ExpenseBudgetCodeDialogComponent } from "./expense-budget-code/expense-
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { provideMondayFirstDateAdapter } from "../../../../../shared/date/provide-monday-first-date-adapter";
-import { resolveAvatarUrl } from "../../../../../shared/utils/avatar.utils";
-import { environment } from "../../../../../../environments/environment";
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { FileService } from "../../../../../shared/services/file.service";
 import { CreateExpensePaymentRequest, ExpensePaymentAttachment, ExpensePaymentItemRequest } from "../../../models/expense-payment.model";
+import { UserOptionStore } from "../../../../account/options/user-dropdown-options.store";
+import { SupplierOptionStore } from "../../../options/supplier-dropdown-option.store";
+import { SupplierFacade } from "../../../facades/supplier.facade";
 
 type UploadStatus = 'queued' | 'uploading' | 'done' | 'error';
 type UploadItem = {
@@ -75,8 +76,10 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       private taxRateById: Record<string, number> = {};
       private dialog = inject(MatDialog);
       private toast = inject(ToastService);
-      private baseUrl = environment.baseUrl; 
       private fileService = inject(FileService);
+      private userOptionsStore = inject(UserOptionStore);
+      private supplierOptionStore = inject(SupplierOptionStore);
+      private supplierFacade = inject(SupplierFacade);
 
       private readonly uploadMeta = {
             module: 'expense',
@@ -84,9 +87,13 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             entityId: undefined as string | undefined,
             isPublic: false
       }
+
+      userOptions$ = this.userOptionsStore.option$;
+      
+      supplierOptions$ = this.supplierOptionStore.option$;
+      suppliers$ = this.supplierFacade.suppliers$;
       
       supplierOptions: KitDropdownOption[] = [];
-      userOptions: KitDropdownOption[] = [];
       followerOptions: KitDropdownOption[] = [];
       currencyOptions: KitDropdownOption[] = [];
       taxOptions: KitDropdownOption[] = [];
@@ -99,8 +106,6 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       uploads: UploadItem[] = [];
 
       constructor(
-            private supplierService: SupplierService,
-            private userService: UserService,
             private bankAccountService: BankAccountService,
             private taxService: TaxService,
             private budegetCodeService: BudgetCodeService,
@@ -124,8 +129,6 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       });
 
       ngOnInit(): void {
-            this.loadSuppliers();
-            this.loadUsers();
             this.loadTaxes();
             this.loadBudgetCodes();
             this.loadCashoutCodeOptions();
@@ -182,32 +185,11 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             this.destroy$.complete();
       }
 
-      loadSuppliers(): void {
-            this.supplierService.getAll().subscribe({
-                  next: (suppliers) =>  {
-                        this.supplierOptions = suppliers.map(s => ({
-                              id: s.id,
-                              label: s.name,
-                        }));
-                  }
-            });
-      }
+
       onSupplierSelected(opt: KitDropdownOption) {
             this.form.patchValue({ supplierId: opt.id });
       }
 
-      loadUsers(): void {
-            this.userService.getAll().subscribe({
-                  next: (users) => {
-                        this.userOptions = users.map(u => ({
-                              id: u.id,
-                              label: u.fullName,
-                              imgUrl: resolveAvatarUrl(this.baseUrl, u),
-                        }));
-                        this.followerOptions = this.userOptions;
-                  }
-            })
-      }
       onUserSelected(opt: KitDropdownOption) {
             alert(`Bạn đã chọn: ${opt.label} (id = ${opt.id})`);
       }
@@ -337,7 +319,6 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
                   if(created?.id) {
                         this.selectedPayee = 'supplier';
                         this.form.patchValue({ supplierId: created.id });
-                        this.loadSuppliers();
                   }
             })
       }
