@@ -76,7 +76,6 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       private dialog = inject(MatDialog);
       private toast = inject(ToastService);
       private baseUrl = environment.baseUrl; 
-      private http = inject(HttpClient);
       private fileService = inject(FileService);
 
       private readonly uploadMeta = {
@@ -198,9 +197,8 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       }
 
       loadUsers(): void {
-            this.userService.getAllUsers().subscribe({
+            this.userService.getAll().subscribe({
                   next: (users) => {
-                        console.log('users: ', users);
                         this.userOptions = users.map(u => ({
                               id: u.id,
                               label: u.fullName,

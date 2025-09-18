@@ -1,15 +1,13 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
-import { AddUserModalComponent } from "../../components/add-user-modal/add-user-modal.component";
 import { UserService } from "../../services/user.service";
 import { DepartmentService } from "../../services/department.service";
-import { handleHttpError } from "../../../../shared/utils/handle-http-errors.util";
-import { CreateUserRequest, UserDto } from "../../models/user.model";
+import { UserDto } from "../../models/user.model";
 
 @Component({
       selector: 'account-member',
       standalone: true,
-      imports: [CommonModule, AddUserModalComponent],
+      imports: [CommonModule, ],
       templateUrl: './account-member.component.html',
       styleUrl: './account-member.component.scss',
 }) 
@@ -24,50 +22,8 @@ export class AccountMemberComponent implements OnInit {
       ){}
 
       ngOnInit(): void {
-            this.loadUsers();
+
       }
 
-      loadUsers(): void {
-            this.userService.getAllUsers().subscribe({
-                  next: (users) => {
-                        this.users = users;
 
-                        const departmentIds = [...new Set(
-                              users.map(u => u.departmentId).filter((id): id is string => !!id)
-                        )];
-
-                        if(departmentIds.length === 0) {
-                              this.departmentMap = {};
-                              return;
-                        }
-
-                        this.departmentService.getByIds(departmentIds).subscribe({
-                              next: (departments) => {
-                                    this.departmentMap = {};
-                                    for(const dept of departments) {
-                                          if(dept.id) this.departmentMap[dept.id] = dept.name;
-                                    }
-                              },   
-                              error: err => alert(handleHttpError(err).join('\n'))
-                        });
-                  },
-                  error: err => alert(handleHttpError(err).join('\n'))
-            });
-      }
-
-      addUser({ user, callback}: {
-            user: CreateUserRequest,
-            callback: (ok: boolean, message?: string) => void
-      }) {
-            this.userService.createUser(user).subscribe({
-                  next: () => {
-                              this.loadUsers();
-                              callback(true);
-                        },
-                  error: err => {
-                        const messages = handleHttpError(err);
-                        callback(false, messages.join(', '));
-                  }
-            })
-      };
 }

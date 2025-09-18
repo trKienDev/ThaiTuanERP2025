@@ -9,6 +9,10 @@ import { ToastService } from "../../../../../../shared/components/toast/toast.se
 import { FormBuilder, FormsModule, Validators, ReactiveFormsModule } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { ApprovalStepRequest, FlowType } from "../../../../models/expense-approval-workflow.model";
+import { mapToDropdownOptions } from "../../../../../../shared/components/kit-dropdown/kit-dropdown-options.adapter";
+import { toDropdownOptions } from "../../../../../../shared/components/kit-dropdown/kit-dropdown-to-options.operator";
+import { UserDto } from "../../../../../account/models/user.model";
+import { UserOptionsStore } from "../../../../../../shared/data-access/user-options.store";
 
 @Component({
       selector: 'approval-step-request-dialog',
@@ -22,6 +26,7 @@ export class ApprovalStepRequestDialog implements OnInit {
       private readonly toastService = inject(ToastService);
       private formBuilder = inject(FormBuilder);
       private dialog = inject(MatDialogRef<ApprovalStepRequestDialog>);
+      private userOptionsStore = inject(UserOptionsStore);
 
       constructor(
             @Inject(MAT_DIALOG_DATA) public data?: { step?: ApprovalStepRequest }
@@ -29,7 +34,7 @@ export class ApprovalStepRequestDialog implements OnInit {
 
       formTitle: string = 'Thêm bước duyệt';
       submitting: boolean = false;
-      userOptions: KitDropdownOption[] = [];
+      userOptions$ = this.userOptionsStore.options$;
 
       form = this.formBuilder.group({
             name: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
@@ -40,7 +45,6 @@ export class ApprovalStepRequestDialog implements OnInit {
       });
 
       ngOnInit(): void {
-            this.loadUsers();
             if(this.data?.step) {
                   this.formTitle = 'Sửa bước duyệt'
                   const s = this.data.step;
@@ -54,21 +58,7 @@ export class ApprovalStepRequestDialog implements OnInit {
             }
       }
 
-      loadUsers(): void {
-            this.userService.getAllUsers().subscribe({
-                  next: (users) => {
-                        this.userOptions = users.map(u => ({
-                              id: u.id,
-                              label: u.fullName,
-                              imgUrl: resolveAvatarUrl(this.baseUrl, u)
-                        }));
-                  },
-                  error: (err) => {
-                        const messages = handleHttpError(err).join('\n');
-                        this.toastService.errorRich(messages || 'Tải danh sách user thất bại');
-                  }
-            })
-      }
+
       onApproverSelected(opt: KitDropdownOption) {
             const id = typeof opt === 'string' ? opt : opt.id;
             const ctrl = this.form.controls.approverIds;
