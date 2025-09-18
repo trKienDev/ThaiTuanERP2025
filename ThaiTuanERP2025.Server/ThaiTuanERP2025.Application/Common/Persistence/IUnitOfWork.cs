@@ -37,8 +37,6 @@ namespace ThaiTuanERP2025.Application.Common.Persistence
 		ISupplierRepository Suppliers { get; }	
 		IBankAccountRepository BankAccounts { get; }
 
-		IApprovalWorkflowRepository ApprovalWorkflows { get; }
-
 		Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 	}
 }

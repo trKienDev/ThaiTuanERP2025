@@ -38,12 +38,12 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<InvoiceLine> InvoiceLines => Set<InvoiceLine>();
 		public DbSet<InvoiceFile> InvoiceFiles => Set<InvoiceFile>();
 		public DbSet<InvoiceFollwer> InvoiceFollwers => Set<InvoiceFollwer>();	
-		public DbSet<ApprovalWorkflow> ApprovalWorkflows => Set<ApprovalWorkflow>();
-		public DbSet<ApprovalStep> ApprovalSteps => Set<ApprovalStep>();
 		public DbSet<BudgetCode> BudgetCodes => Set<BudgetCode>();
 		public DbSet<BudgetGroup> BudgetGroups => Set<BudgetGroup>();
 		public DbSet<BudgetPeriod> BudgetPeriods => Set<BudgetPeriod>();
 		public DbSet<BudgetPlan> BudgetPlans => Set<BudgetPlan>();
+		public DbSet<ApprovalStep> ApprovalSteps => Set<ApprovalStep>();
+		public DbSet<ApprovalWorkflow> ApprovalFlows => Set<ApprovalWorkflow>();
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

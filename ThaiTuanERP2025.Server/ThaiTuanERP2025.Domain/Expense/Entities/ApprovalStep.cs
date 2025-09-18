@@ -3,17 +3,26 @@ using ThaiTuanERP2025.Domain.Expense.Enums;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
-	public class ApprovalStep : AuditableEntity
+	public class ApprovalStep : BaseEntity
 	{
-		public Guid ApprovalWorkflowId { get; set; }
-		public ApprovalWorkflow ApprovalWorkflow { get; set; } = default!;
+		public string Name { get; private set; } = string.Empty;
+		public int SlaHours { get; private set; }
+		public FlowType FlowType { get; private set; }
+		public int Order { get; private set; }
 
-		public string Title { get; set; } = default!;	
-		public int Order { get; set; }	
-		public ApprovalStepFlowType FlowType { get; set; }
-		public int SlaHours { get; set; } = 8;
+		public List<Guid> ApproverIds { get; private set; } = new List<Guid>();
+		private ApprovalStep() { }
 
-		public string CandidateJson { get; set; } = "[]";
-		public string? Description { get; set; }
+		public ApprovalStep(string name, int slaHours, FlowType flowType, List<Guid> approverIds, int order)
+		{
+			Name = name;
+			SlaHours = slaHours;
+			FlowType = flowType;
+			ApproverIds = approverIds;
+			Order = order;
+		}
+		public void UpdateOrder(int newOrder) {
+			Order = newOrder;
+		}
 	}
 }

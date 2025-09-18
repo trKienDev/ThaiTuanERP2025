@@ -40,9 +40,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			IInvoiceFileRepository invoiceFiles,
 			IInvoiceFollowerRepository invoiceFollowers,
 			ISupplierRepository suppliers,
-			IBankAccountRepository bankAccounts,
-			IApprovalWorkflowRepository approvalWorkflows
-
+			IBankAccountRepository bankAccounts
 
 		) {
 			_dbContext = dbContext;
@@ -72,7 +70,6 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			InvoiceFollowers = invoiceFollowers;
 			Suppliers = suppliers;
 			BankAccounts = bankAccounts;
-			ApprovalWorkflows = approvalWorkflows;
 		}
 
 		public IStoredFilesRepository StoredFiles { get; }
@@ -101,7 +98,6 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		public IInvoiceFollowerRepository InvoiceFollowers { get; }
 		public ISupplierRepository Suppliers { get; }
 		public IBankAccountRepository BankAccounts { get; }
-		public IApprovalWorkflowRepository ApprovalWorkflows { get; }
 
 		// Approval
 

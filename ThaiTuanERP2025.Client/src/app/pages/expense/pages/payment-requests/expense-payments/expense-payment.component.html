@@ -32,7 +32,7 @@
                   <kit-dropdown [options]="payeeOptions" placeholder="chọn đối tượng" [enableFilter]="false" (selectionChange)="onPayeeSelected($event)" [width]="120"></kit-dropdown>
             </div>
             <div class="payee-selection">
-                  <div class="supplier-selection" *ngIf="selectedPayee === 'supplier'">
+                  <div class="supplier-selection  display-inline-flex" *ngIf="selectedPayee === 'supplier'">
                         <kit-dropdown formControlName="supplierId" [options]="supplierOptions" (selectionChange)="onSupplierSelected($event)" [width]="320" [placeholder]="'chọn nhà cung cấp thụ hưởng'"></kit-dropdown>
                         <button class="button link-button" (click)="openCreateSupplierDialog()">Thêm nhà cung cấp mới</button>
                   </div>
