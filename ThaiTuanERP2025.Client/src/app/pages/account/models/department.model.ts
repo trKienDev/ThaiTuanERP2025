@@ -4,7 +4,7 @@ export interface DepartmentDto {
       name: string;
       managerId?: string | null;
       parentId?: string | null;
-      region: number | null;
+      region: number;
 }
 
 export interface CreateDepartmentRequest {
@@ -12,7 +12,7 @@ export interface CreateDepartmentRequest {
       name: string;
       managerId?: string | null;
       parentId?: string | null;
-      region: number | null;
+      region: number;
 }
 
 export interface UpdateDepartmentRequest extends CreateDepartmentRequest {

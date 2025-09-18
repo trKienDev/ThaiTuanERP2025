@@ -1,14 +1,10 @@
 import { CommonModule } from "@angular/common";
-import { Component, inject, OnInit } from "@angular/core";
-import { DepartmentService } from "../../../services/department.service";
+import { Component, inject } from "@angular/core";
 import { MatDialogRef } from "@angular/material/dialog";
-import { UserService } from "../../../services/user.service";
 import { KitDropdownOption, KitDropdownComponent } from "../../../../../shared/components/kit-dropdown/kit-dropdown.component";
-import { resolveAvatarUrl } from "../../../../../shared/utils/avatar.utils";
-import { environment } from "../../../../../../environments/environment";
 import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
 import { ToastService } from "../../../../../shared/components/toast/toast.service";
-import { FormBuilder, Validators } from "@angular/forms";
+import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { UserOptionStore } from "../../../options/user-dropdown-options.store";
 import { DepartmentOptionStore } from "../../../options/department-dropdown-options.option";
 import { CreateDepartmentRequest } from "../../../models/department.model";
@@ -18,7 +14,7 @@ import { DepartmentFacade } from "../../../facades/department.facade";
 @Component({
       selector: 'department-request-dialog',
       standalone: true,
-      imports: [CommonModule, KitDropdownComponent],
+      imports: [CommonModule, ReactiveFormsModule, KitDropdownComponent],
       templateUrl: './department-request.component.html',
 })
 export class DepartmentRequestDialog {
@@ -27,13 +23,13 @@ export class DepartmentRequestDialog {
       private formBuilder = inject(FormBuilder);
       private userOptionStore = inject(UserOptionStore);
       private departmentOptionStore = inject(DepartmentOptionStore);
-      private departmentFacde = inject(DepartmentFacade);
+      private departmentFacade = inject(DepartmentFacade);
 
       dialogTitle = 'Thêm phòng ban mới';
       submitting = false;
       managerOptions$ = this.userOptionStore.option$;
 
-      department$ = this.departmentFacde.department$;
+      department$ = this.departmentFacade.department$;
       departmentOptions$ = this.departmentOptionStore.option$;
 
       regionOptions: KitDropdownOption[] = [
@@ -47,31 +43,35 @@ export class DepartmentRequestDialog {
       form = this.formBuilder.group({
             name: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required, Validators.max(200)] }),
             code: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required] }),
-            parentId: this.formBuilder.control<string>(''),
-            managerId: this.formBuilder.control<string>(''),
-            region: this.formBuilder.control<number | null>(null, { nonNullable: false })
+            parentId: this.formBuilder.control<string | null>(null),
+            managerId: this.formBuilder.control<string | null>(null),
+            region: this.formBuilder.control<number>(0, { nonNullable: true })
       })
 
-      onManagerSelected(opt: KitDropdownOption) {
-            this.form.patchValue({ managerId: opt.id });
+      onManagerSelected(opt: KitDropdownOption | null) {
+            this.form.patchValue({ managerId: opt?.id ?? null });
       }
-      onRegionSelected(opt: KitDropdownOption) {
-            this.form.patchValue({ region: Number(opt.id) });
+      onRegionSelected(opt: KitDropdownOption | null) {
+            this.form.patchValue({ region: Number(opt?.id ?? null) });
       }
-      onDepartmentSelected(opt: KitDropdownOption) {
-            this.form.patchValue({ parentId: opt.id });
+      onDepartmentSelected(opt: KitDropdownOption | null) {
+            this.form.patchValue({ parentId: opt?.id ?? null });
       }
 
 
       async submit(): Promise<void> {
             this.form.markAllAsTouched();
-            if(this.form.invalid) return;
+            console.log('form: ', this.form);
+            if(this.form.invalid) {
+                  console.error('Error');
+                  return;
+            }
 
             this.submitting = true;
 
             try {
                   const payload: CreateDepartmentRequest = this.form.getRawValue();
-                  const created = await firstValueFrom(this.departmentFacde.create(payload));
+                  const created = await firstValueFrom(this.departmentFacade.create(payload));
                   this.toastService.successRich('Thêm phòng ban thành công');
                   this.dialogRef.close({ isSuccess: true, result: created });
             } catch(error) {
