@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, inject, OnInit } from "@angular/core";
+import { Component, Inject, inject, OnInit } from "@angular/core";
 import { UserService } from "../../../../../account/services/user.service";
 import { KitDropdownOption, KitDropdownComponent } from "../../../../../../shared/components/kit-dropdown/kit-dropdown.component";
 import { resolveAvatarUrl } from "../../../../../../shared/utils/avatar.utils";
@@ -7,7 +7,8 @@ import { environment } from "../../../../../../../environments/environment";
 import { handleHttpError } from "../../../../../../shared/utils/handle-http-errors.util";
 import { ToastService } from "../../../../../../shared/components/toast/toast.service";
 import { FormBuilder, FormsModule, Validators, ReactiveFormsModule } from "@angular/forms";
-import { MatDialogRef } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { ApprovalStepRequest, FlowType } from "../../../../models/expense-approval-workflow.model";
 
 @Component({
       selector: 'approval-step-request-dialog',
@@ -22,18 +23,35 @@ export class ApprovalStepRequestDialog implements OnInit {
       private formBuilder = inject(FormBuilder);
       private dialog = inject(MatDialogRef<ApprovalStepRequestDialog>);
 
+      constructor(
+            @Inject(MAT_DIALOG_DATA) public data?: { step?: ApprovalStepRequest }
+      ) {}
+
+      formTitle: string = 'Thêm bước duyệt';
       submitting: boolean = false;
       userOptions: KitDropdownOption[] = [];
 
       form = this.formBuilder.group({
             name: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
             approverIds: this.formBuilder.control<string[]>([], { nonNullable: true, validators: [ Validators.required ]}),
-            sla: this.formBuilder.control<number>(8, { validators: [ Validators.min(1)]}),
-            flowType: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ] }),
-      })
+            sla: this.formBuilder.control<number>(1, { nonNullable: true, validators: [ Validators.min(1) ]}),
+            flowType: this.formBuilder.control<FlowType>('single', { nonNullable: true, validators: [ Validators.required ] }),
+            order: this.formBuilder.control<number>(1, { nonNullable: true })
+      });
 
       ngOnInit(): void {
             this.loadUsers();
+            if(this.data?.step) {
+                  this.formTitle = 'Sửa bước duyệt'
+                  const s = this.data.step;
+                  this.form.patchValue({
+                  name: s.name,
+                  approverIds: s.approverIds,
+                  flowType: s.flowType,
+                  sla: s.sla,
+                  order: s.order ?? 1,
+                  });
+            }
       }
 
       loadUsers(): void {
@@ -74,12 +92,6 @@ export class ApprovalStepRequestDialog implements OnInit {
       onFlowTypeSelected(opt: KitDropdownOption) {
             if(opt.id === 'single') {
                   this.form.patchValue({ flowType: 'single' });
-
-                  // nếu đã chọn >1 người thì cắt xuống còn 1
-                  const approvers = this.form.controls.approverIds.getRawValue() ?? [];
-                  if(approvers.length > 1) {
-                        this.form.controls.approverIds.setValue([approvers[approvers.length - 1]]);
-                  }
             } else {
                   this.form.patchValue({ flowType: 'one-of-n'});
             }
@@ -91,9 +103,8 @@ export class ApprovalStepRequestDialog implements OnInit {
 
             this.submitting = true;
             try {
-                  const payload = this.form.getRawValue();
-                  console.log('payload: ', payload);
-                  this.close(true);
+                  const payload: ApprovalStepRequest = this.form.getRawValue();
+                  this.close({ isSuccess: true, step: payload });
             } catch(err) {
                   const messages = handleHttpError(err).join('\n');
                   this.toastService.errorRich(messages || 'Lỗi khi thêm bước duyệt');
@@ -102,7 +113,7 @@ export class ApprovalStepRequestDialog implements OnInit {
             }
       }
 
-      close(isSuccess: boolean = false): void {
-            this.dialog.close(isSuccess);
+      close(result?: any): void {
+            this.dialog.close(result);
       }
 }
