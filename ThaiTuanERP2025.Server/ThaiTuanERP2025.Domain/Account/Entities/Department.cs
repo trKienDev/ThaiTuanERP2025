@@ -22,8 +22,6 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 
 		public Region Region { get; set; } = Region.None;
 
-		public Guid? DivisionId { get; private set; }	
-
 		public Guid? ManagerUserId { get; set; }	
 		public User? ManagerUser { get; set; }
 
@@ -47,7 +45,6 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			Name = newName.Trim();
 		}
 
-		public void MoveToDivision(Guid? divisionId) => DivisionId = divisionId;	
 		public void SetRegion(Region region) => Region = region;	
 		public void SetManager(Guid? userId) => ManagerUserId = userId;
 	}

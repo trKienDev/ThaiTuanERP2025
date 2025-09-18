@@ -1,5 +1,6 @@
 .dialog {
       width: 520px;  
+      box-shadow: rgba(255, 255, 255, 0.77) 0px 10px 36px 0px, rgba(255, 255, 255, 0.09) 0px 0px 0px 1px
 }
 
 .dialog-container {
@@ -20,7 +21,16 @@
       padding: 10px 0px;
 } 
 
+.dialog-close {
+      display: flex;
+      justify-content: center;
+}
+
 .dialog-buttons {
       display: flex;
       gap: 10px;
+
+      button {
+            width: 50%;
+      }
 }

@@ -9,7 +9,6 @@ import { handleApiResponse$ } from "../../../shared/operators/handle-api-respons
 
 @Injectable({ providedIn: 'root' })
 export class LedgerAccountService extends BaseCrudService<LedgerAccountDto, CreateLedgerAccountRequest, UpdateLedgerAccountRequest> {
-      private readonly base = `${environment.apiUrl}/ledger-accounts`;
       constructor(http: HttpClient) {
             super(http, `${environment.apiUrl}/ledger-accounts`);
       }
