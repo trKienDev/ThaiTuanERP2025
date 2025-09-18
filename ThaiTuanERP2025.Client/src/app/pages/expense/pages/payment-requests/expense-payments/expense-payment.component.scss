@@ -1,7 +1,7 @@
 .link-button {
       padding: 9px 10px;
-      font-size: 13px;
       margin-left: 10px;
+      max-height: 36px;
 }
 
 .non-linked-button { background-color: var(--platinum); outline: 2px var(--platinum) solid; outline-offset: -2px; border-radius: 5px; border: none; cursor: pointer; transition: 400ms; }
