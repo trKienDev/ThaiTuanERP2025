@@ -2,17 +2,17 @@ export interface DepartmentDto {
       id: string;
       code: string;
       name: string;
-      managerId?: string;
-      parentId?: string;
-      region: number;
+      managerId?: string | null;
+      parentId?: string | null;
+      region: number | null;
 }
 
 export interface CreateDepartmentRequest {
       code: string;
       name: string;
-      managerId?: string;
-      parentId?: string;
-      region: number;
+      managerId?: string | null;
+      parentId?: string | null;
+      region: number | null;
 }
 
 export interface UpdateDepartmentRequest extends CreateDepartmentRequest {
