@@ -1,8 +1,8 @@
 <div class="dialog">
       <div class="dialog-container">
             <div class="dialog-heading">
-                  <div class="dialog-title">{{ formTitle }}</div>
-                  <div class="close-button">
+                  <h1 class="dialog-title">{{ formTitle }}</h1>
+                  <div class="dialog-close">
                         <button type="button" class="close-button">
                               <span class="text material-icons-outlined" (click)="close()">close</span>
                         </button>
@@ -19,7 +19,7 @@
                         <kit-dropdown [options]="flowTypeOptions" [placeholder]="'Chọn luồng duyệt'" formControlName="flowType" (selectionChange)="onFlowTypeSelected($event)" [width]="'100%'"></kit-dropdown>
                   </div>
                   <div class="dialog-row">
-                        <kit-dropdown [options]="userOptions" [placeholder]="'Chọn người duyệt'" [multiple]="true" formControlName="approverIds" (selectionChange)="onApproverSelected($event)" [width]="'100%'"></kit-dropdown>
+                        <kit-dropdown [options]="(userOptions$ | async) ?? []" [placeholder]="'Chọn người duyệt'" [multiple]="true" formControlName="approverIds" (selectionChange)="onApproverSelected($event)" [width]="'100%'"></kit-dropdown>
                   </div>
                   <div class="dialog-row">
                         <div class="form-input">
