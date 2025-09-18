@@ -7,11 +7,11 @@ import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
-import { SupplierService } from "../../../services/supplier.service";
-import { CreateSupplierRequest } from "../../../models/supplier.model";
+import { CreateSupplierRequest, SupplierDto } from "../../../models/supplier.model";
 import { catchError, of } from "rxjs";
 import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { SupplierFacade } from "../../../facades/supplier.facade";
 
 @Component({
       selector: 'supplier-request-dialog',
@@ -25,11 +25,10 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
 export class SupplierRequestDialogComponent {
       private formBuilder = inject(FormBuilder);
       private dialogRef = inject(MatDialogRef<SupplierRequestDialogComponent>);
-      private supplierService = inject(SupplierService);
+      private supplierFacade = inject(SupplierFacade);
 
       saving = false;
       errorMessages: string[] = [];
-
 
       supplierForm = this.formBuilder.group({
             name: ['', {
@@ -51,7 +50,7 @@ export class SupplierRequestDialogComponent {
 
             this.saving = true;
 
-            this.supplierService.create(payload).pipe(
+            this.supplierFacade.create(payload).pipe(
                   catchError(err => {
                         this.errorMessages = handleHttpError(err);
                         this.saving = false;
@@ -59,7 +58,7 @@ export class SupplierRequestDialogComponent {
                   })
             ).subscribe((created) => {
                   if(!created) return;
-                  this.dialogRef.close(true);
+                  this.dialogRef.close(created);
             })
       }
 

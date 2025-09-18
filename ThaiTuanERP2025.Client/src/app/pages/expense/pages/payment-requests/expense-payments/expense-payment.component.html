@@ -33,11 +33,11 @@
             </div>
             <div class="payee-selection">
                   <div class="supplier-selection  display-inline-flex" *ngIf="selectedPayee === 'supplier'">
-                        <kit-dropdown formControlName="supplierId" [options]="supplierOptions" (selectionChange)="onSupplierSelected($event)" [width]="320" [placeholder]="'chọn nhà cung cấp thụ hưởng'"></kit-dropdown>
+                        <kit-dropdown formControlName="supplierId" [options]="(supplierOptions$ | async) ?? []" (selectionChange)="onSupplierSelected($event)" [width]="320" [placeholder]="'chọn nhà cung cấp thụ hưởng'"></kit-dropdown>
                         <button class="button link-button" (click)="openCreateSupplierDialog()">Thêm nhà cung cấp mới</button>
                   </div>
                   <div class="employee-selection" *ngIf="selectedPayee === 'employee'">
-                        <kit-dropdown [options]="userOptions" (selectionChange)="onUserSelected($event)" [width]="200" [placeholder]="'chọn nhân viên thụ hưởng'"></kit-dropdown>
+                        <kit-dropdown [options]="(userOptions$ | async) ?? []" (selectionChange)="onUserSelected($event)" [width]="200" [placeholder]="'chọn nhân viên thụ hưởng'"></kit-dropdown>
                   </div>
             </div>
       </div>
