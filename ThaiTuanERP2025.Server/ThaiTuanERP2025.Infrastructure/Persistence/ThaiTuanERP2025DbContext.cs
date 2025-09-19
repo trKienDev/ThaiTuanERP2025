@@ -21,6 +21,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 
 		// DbSet
 		public DbSet<User> Users => Set<User>();
+		public DbSet<UserManagerAssignment> UserManagerAssignments => Set<UserManagerAssignment>();
 		public DbSet<Department> Departments => Set<Department>();
 		public DbSet<Group> Groups => Set<Group>();
 		public DbSet<UserGroup> UserGroups => Set<UserGroup>();

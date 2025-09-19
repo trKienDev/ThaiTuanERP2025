@@ -1,12 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.Intrinsics.X86;
 using ThaiTuanERP2025.Application.Account.Dtos;
-using ThaiTuanERP2025.Application.Account.Repositories;
 using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Application.Common.Security;
 using ThaiTuanERP2025.Domain.Account.Entities;
@@ -45,9 +40,27 @@ namespace ThaiTuanERP2025.Application.Account.Commands.Users.CreateUser
 					phone: phone
 				);
 
-				var departmentExists = await _unitOfWork.Departments.ExistAsync(user.DepartmentId);
-				if (!departmentExists)
+				var department = await _unitOfWork.Departments.GetByIdAsync(request.DepartmentId);
+				if (department is null)
 					throw new Exception("Phòng ban không tồn tại trong DB");
+				if (department.ManagerUserId is Guid mgrId)
+				{
+					var manager = await _unitOfWork.Users.GetByIdAsync(mgrId);
+					if (manager is not null)
+					{
+						// assignment nguồn chính
+						var assignment = new UserManagerAssignment
+						{
+							UserId = user.Id,
+							User = user,
+							ManagerId = manager.Id,
+							IsPrimary = true,
+							AssignedAt = DateTime.UtcNow
+						};
+						user.DirectReportsAssignments.Add(assignment); // :contentReference[oaicite:4]{index=4}:contentReference[oaicite:5]{index=5}
+						user.AssignManager(mgrId); // chặn self-management trong domain :contentReference[oaicite:6]{index=6}
+					}
+				}
 
 				await _unitOfWork.Users.AddAsync(user);
 

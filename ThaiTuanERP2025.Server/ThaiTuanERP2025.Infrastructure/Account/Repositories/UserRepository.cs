@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Application.Account.Repositories;
 using ThaiTuanERP2025.Domain.Account.Entities;
-using ThaiTuanERP2025.Domain.Account.Enums;
 using ThaiTuanERP2025.Infrastructure.Common;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
@@ -43,6 +41,50 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 			return await DbContext.Users
 			      .Include(u => u.UserGroups).ThenInclude(ug => ug.Group)
 			      .FirstOrDefaultAsync(u => u.EmployeeCode == employeeCode);
+		}
+
+		public async Task<List<Guid>> GetManagerIdsAsync(Guid userId, CancellationToken cancellationToken = default)
+		{
+			var ids = await DbContext.UserManagerAssignments.AsNoTracking()
+				.Where(x => x.UserId == userId && x.RevokedAt == null)
+				.OrderByDescending(x => x.IsPrimary)
+				.ThenBy(x => x.AssignedAt)
+				.Select(x => x.ManagerId)
+				.ToListAsync(cancellationToken);
+
+			if (ids.Count == 0) {
+				var primary = await DbContext.Users.AsNoTracking()
+					.Where(u => u.Id == userId && u.ManagerId != null)
+					.Select(u => u.ManagerId!.Value)
+					.FirstOrDefaultAsync(cancellationToken);
+
+				if(primary != Guid.Empty) ids.Add(primary);	
+			}
+
+			return ids;
+		}
+
+		public async Task<List<User>> GetManagersAsync(Guid userId, CancellationToken cancellationToken = default)
+		{
+			var managers = await DbContext.UserManagerAssignments.AsNoTracking()
+				.Where(x => x.UserId == userId && x.RevokedAt == null)
+				.OrderByDescending(x => x.IsPrimary)
+				.ThenBy(x => x.AssignedAt)
+				.Select(x => x.Manager)   // navigation tới User (manager)
+				.ToListAsync(cancellationToken);
+
+			// (tuỳ chọn) fallback
+			if (managers.Count == 0)
+			{
+				var fallback = await DbContext.Users.AsNoTracking()
+					.Where(u => u.Id == userId && u.ManagerId != null)
+					.Select(u => u.Manager!)
+					.FirstOrDefaultAsync(cancellationToken);
+
+				if (fallback is not null) managers.Add(fallback);
+			}
+
+			return managers;
 		}
 	}
 }

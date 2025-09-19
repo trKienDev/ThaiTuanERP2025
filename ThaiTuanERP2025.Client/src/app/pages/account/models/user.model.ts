@@ -13,30 +13,25 @@ export interface UserDto {
       avatarFileObjectKey?: string;
 
       role: UserRole;
-      phone?: string;
+      phone?: number | null;
       departmentId?: string;  
       department?: DepartmentDto;
       position: string;
+
+      managerId?: string;
+      manager?: UserDto;
 }
 
 export interface CreateUserRequest {
       fullName: string;
       username: string;
       employeeCode: string;
-      email?: string;
+      email?: string | null;
       password: string;
       role: string;
-      phone?: string;
-      departmentId?: string;
+      phone?: number | null;
+      departmentId?: string | null;
       position: string;
 }
 
-export interface UpdateUserRequest {
-      fullName?: string;
-      email?: string;
-      phone?: string;
-      position?: string;
-      role?: UserRole;
-      departmentId?: string;
-      avatarFileId?: string;
-}
+export interface UpdateUserRequest extends CreateUserRequest {}

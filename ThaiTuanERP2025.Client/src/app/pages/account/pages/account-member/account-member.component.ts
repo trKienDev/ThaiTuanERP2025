@@ -1,29 +1,54 @@
 import { CommonModule } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { UserService } from "../../services/user.service";
 import { DepartmentService } from "../../services/department.service";
 import { UserDto } from "../../models/user.model";
+import { MatDialog } from "@angular/material/dialog";
+import { UserFacade } from "../../facades/user.facade";
+import { MemberRequestDialog } from "./member-request-dialog/member-request-dialog.component";
+import { ConnectedPosition, OverlayModule } from "@angular/cdk/overlay";
+import { MemberManagerDialog } from "./member-manager-dialog/member-manager-dialog.component";
 
 @Component({
       selector: 'account-member',
       standalone: true,
-      imports: [CommonModule, ],
+      imports: [CommonModule, OverlayModule ],
       templateUrl: './account-member.component.html',
-      styleUrl: './account-member.component.scss',
 }) 
-export class AccountMemberComponent implements OnInit {
-      showModal = false;
-      users: UserDto[] = [];
-      departmentMap: { [id: string]: string } = {}; 
+export class AccountMemberComponent {
+      private dialog = inject(MatDialog);
+      private userFacade = inject(UserFacade);
 
-      constructor(
-            private userService: UserService,
-            private departmentService: DepartmentService
-      ){}
+      users$ = this.userFacade.users$;
+      trackById(index: number, item: UserDto) { return item.id; }
 
-      ngOnInit(): void {
-
+      openUserRequestDialog(): void {
+            const dialog = this.dialog.open(MemberRequestDialog);
+            dialog.afterClosed().subscribe();
       }
 
+      editUser(user: UserDto): void {
+            const dialogRef = this.dialog.open(MemberRequestDialog, {
+                  data: user
+            });
+      }
+
+      addUserManager(user: UserDto): void {
+            const dialogRef = this.dialog.open(MemberManagerDialog, { data: user });
+      }
+
+      openUserMenu: number | null = null;
+      userMenuOpenIndex: number | null = null;
+      stepMenuOverlayPosition: ConnectedPosition[] = [
+            { originX: 'center', originY: 'bottom', overlayX: 'center', overlayY: 'top', offsetY: 8 },
+            { originX: 'end', originY: 'top',    overlayX: 'end',    overlayY: 'bottom', offsetY: -8 },
+      ]
+      toggleUserMenu(i: number, ev: MouseEvent) {
+            ev.stopPropagation();
+            this.userMenuOpenIndex = (this.userMenuOpenIndex === i) ? null : i;
+      }
+      onUserMenuClosed() {
+            this.userMenuOpenIndex = null;
+      }
 
 }
