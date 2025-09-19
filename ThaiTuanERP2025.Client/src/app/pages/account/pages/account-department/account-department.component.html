@@ -3,16 +3,23 @@
 <table class="table mar-top-20">
       <thead>
             <tr>
+                  <th>#</th>
                   <th>Mã phòng ban</th>
                   <th>Tên phòng ban</th>
                   <th>Trường bộ phận</th>
+                  <th></th>
             </tr>
       </thead>
       <tbody>
-            <tr *ngFor="let dept of (department$ | async) ?? []; trackBy: trackById">
+            <tr *ngFor="let dept of (department$ | async) ?? []; trackBy: trackById; let i = index;">
+                  <td>{{ i + 1 }}</td>
                   <td>{{ dept.code }}</td>
                   <td>{{ dept.name }}</td>
                   <td></td>
+                  <td>
+                        <button type="button" class="text-button" (click)="editDepartment(dept)">Sửa</button>
+                        <button type="button" class="text-button" style="color: red !important;">Xóa</button>
+                  </td>
             </tr>
       </tbody>
 </table>

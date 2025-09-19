@@ -7,7 +7,7 @@
 
 button, .button { 
       font-family: 'Lexend', sans-serif; 
-      font-size: 12px; 
+      font-size: 13px; 
       padding: 7px 10px;
       border-radius: 5px;
 }
@@ -94,7 +94,8 @@ button, .button {
 .save-button:hover { background-color: #1C84FF; }
 
 /* close-button */
-.close-button { padding: unset !important; border: none !important; background-color: unset !important; transition: 0.1s all ease-in-out;}
+.close-button { padding: unset !important; border: none !important; background-color: unset !important; transition: 0.1s all ease-in-out; }
+.close-button span { font-weight: bold; }
 .close-button:hover { color: red !important; cursor: pointer; }
 
 /* plus-button */

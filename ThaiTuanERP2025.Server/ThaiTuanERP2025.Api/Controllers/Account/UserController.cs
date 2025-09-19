@@ -10,6 +10,8 @@ using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Application.Account.Queries.Users.GetAllUsers;
 using ThaiTuanERP2025.Application.Account.Queries.Users.GetCurrentUser;
 using ThaiTuanERP2025.Application.Account.Queries.Users.GetUserById;
+using ThaiTuanERP2025.Application.Account.Queries.Users.GetUserManagerIds;
+using ThaiTuanERP2025.Application.Account.Queries.Users.GetUserManagers;
 
 namespace ThaiTuanERP2025.Api.Controllers.Account
 {
@@ -47,6 +49,18 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 		public async Task<IActionResult> GetMe() {
 			var user = await _mediator.Send(new GetCurrentUserQuery(User));
 			return Ok(ApiResponse<UserDto>.Success(user));
+		}
+
+		[HttpGet("{id:guid}/managers/ids")]
+		public async Task<IActionResult> GetMangerIds(Guid Id, CancellationToken cancellationToken) {
+			var result = await _mediator.Send(new GetUserManagerIdsQuery(Id), cancellationToken);
+			return Ok(ApiResponse<List<Guid>>.Success(result));
+		}
+
+		[HttpGet("{id:guid}/managers")]
+		public async Task<ActionResult<List<UserDto>>> GetManagers(Guid id, CancellationToken cancellationToken) {
+			var result = await _mediator.Send(new GetUserManagersQuery(id), cancellationToken);
+			return Ok(ApiResponse<List<UserDto>>.Success(result));
 		}
 
 		/// <summary>

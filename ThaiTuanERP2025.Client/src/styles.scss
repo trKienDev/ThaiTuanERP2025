@@ -115,6 +115,12 @@ input {
 }
 html, body { height: 100%; margin: 0; }
 
+.page-heading { display: flex; justify-content: space-between; }
+.page-title { display: flex; gap: 10px; font-size: 20px; margin-bottom: 20px;
+      h3 { margin: 0px; }
+      .title { line-height: 1.6; user-select: none; }
+}
+
 .default-title { font-size: 20px; font-weight: 900; color: var(--main-foreground-hover); }
 .ahref-non-decoration { text-decoration: none; color: black; }
 .ahref-non-decoration:hover { color: var(--bright-blue-color); text-decoration: underline; cursor: pointer;}

@@ -41,11 +41,11 @@ export class ApprovalStepRequestDialog implements OnInit {
                   this.formTitle = 'Sửa bước duyệt'
                   const s = this.data.step;
                   this.form.patchValue({
-                  name: s.name,
-                  approverIds: s.approverIds,
-                  flowType: s.flowType,
-                  sla: s.sla,
-                  order: s.order ?? 1,
+                        name: s.name,
+                        approverIds: s.approverIds,
+                        flowType: s.flowType,
+                        sla: s.sla,
+                        order: s.order ?? 1,
                   });
             }
       }
