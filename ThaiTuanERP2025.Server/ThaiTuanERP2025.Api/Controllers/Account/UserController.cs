@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Api.Contracts.Users;
 using ThaiTuanERP2025.Application.Account.Commands.Users.CreateUser;
+using ThaiTuanERP2025.Application.Account.Commands.Users.SetUserManagers;
 using ThaiTuanERP2025.Application.Account.Commands.Users.UpdateUser;
 using ThaiTuanERP2025.Application.Account.Commands.Users.UpdateUserAvatarFileId;
 using ThaiTuanERP2025.Application.Account.Dtos;
@@ -85,6 +86,15 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 		public async Task<ActionResult<ApiResponse<string>>> SetAvatar(Guid id, [FromBody] SetUserAvatarRequest request, CancellationToken cancellationToken) {
 			await _mediator.Send(new UpdateUserAvatarFileIdCommand(id, request.FileId), cancellationToken);
 			return Ok(ApiResponse<string>.Success("Cập nhật avatar thành công"));
+		}
+
+		[Authorize(Roles = "Admin")]
+		[HttpPut("{id:guid}/managers")]
+		public async Task<IActionResult> SetManagers(Guid id, [FromBody] SetUserManagerRequest request, CancellationToken cancellationToken)
+		{
+			var command = new SetUserManagersCommand(id, request.ManagerIds ?? new List<Guid>(), request.PrimaryManagerId);
+			await _mediator.Send(command, cancellationToken);
+			return Ok(ApiResponse<string>.Success("Cập nhật người quản lý thành công"));
 		}
 	}
 }

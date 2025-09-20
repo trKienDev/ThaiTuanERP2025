@@ -11,17 +11,19 @@
                   </div>
             </div>
             <div class="dialog-body">
-                  <form [formGroup]="form">
-                        <kit-dropdown [options]="(managerOptions$ | async) ?? []" [placeholder]="'Chọn quản lý'" (selectionChange)="onManagerSelected($event)" [multiple]="true"></kit-dropdown>
+                  <form [formGroup]="form" (ngSubmit)="submit()">
+                        <div class="dialog-row">
+                              <kit-dropdown [options]="(managerOptions$ | async) ?? []" [placeholder]="'Chọn quản lý'" formControlName="managerIds" (selectionChange)="onManagerSelected($event)" [multiple]="true"></kit-dropdown>
+                        </div>
+                        <div class="dialog-row">
+                              <div class="dialog-buttons">
+                                    <button type="button" class="button cancel-button" (click)="close()" [disabled]="submitting">Hủy</button>
+                                    <button type="submit" class="button save-button d-flex justify-content-center" [disabled]="submitting">
+                                          {{ submitting ? 'Đang lưu...' : 'Lưu' }}
+                                    </button>
+                              </div>
+                        </div>
                   </form>
-            </div>
-            <div class="dialog-row">
-                  <div class="dialog-buttons">
-                        <button type="button" class="button cancel-button" (click)="close()" [disabled]="submitting">Hủy</button>
-                        <button type="submit" class="button save-button d-flex justify-content-center" [disabled]="submitting">
-                              {{ submitting ? 'Đang lưu...' : 'Lưu' }}
-                        </button>
-                  </div>
             </div>
       </div>
 </div>

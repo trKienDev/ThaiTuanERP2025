@@ -3,7 +3,7 @@ import { environment } from "../../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { Observable, switchMap } from "rxjs";
 import { ApiResponse } from "../../../shared/models/api-response.model";
-import {  CreateUserRequest, UpdateUserRequest, UserDto } from "../models/user.model";
+import {  CreateUserRequest, SetUserManagerRequest, UpdateUserRequest, UserDto } from "../models/user.model";
 
 import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
 import { FileService } from "../../../shared/services/file.service";
@@ -31,5 +31,20 @@ export class UserService extends BaseCrudService<UserDto, CreateUserRequest, Upd
                               .pipe(handleApiResponse$<string>());
                   })
             );
+      }
+
+      getManagerIds(id: string): Observable<string[]> {
+            return this.http.get<ApiResponse<string[]>>(`${this.endpoint}/${id}/managers/ids`)
+                  .pipe(handleApiResponse$<string[]>());
+      }
+
+      getManagers(id: string): Observable<UserDto[]> {
+            return this.http.get<ApiResponse<UserDto[]>>(`${this.endpoint}/managers`)
+                  .pipe(handleApiResponse$<UserDto[]>());
+      }
+
+      setManagers(id: string, request: SetUserManagerRequest): Observable<string> {
+            return this.http.put<ApiResponse<string>>(`${this.endpoint}/${id}/managers`, request)
+                  .pipe(handleApiResponse$<string>());
       }
 }

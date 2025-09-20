@@ -18,6 +18,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 
 			// Account
 			IUserRepository users,
+			IUserManagerAssignmentRepository userManagerAssignments,
 			IDepartmentRepository departments,
 			IGroupRepository groups,
 			IUserGroupRepository userGroups,
@@ -48,6 +49,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			StoredFiles = storedFiles;
 
 			Users = users;
+			UserManagerAssignments = userManagerAssignments;
 			Departments = departments;
 			Groups = groups;
 			UserGroups = userGroups;
@@ -75,6 +77,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		public IStoredFilesRepository StoredFiles { get; }
 		// Account
 		public IUserRepository Users { get; }
+		public IUserManagerAssignmentRepository UserManagerAssignments { get; }
 		public IDepartmentRepository Departments { get; }
 		public IGroupRepository Groups { get; }
 		public IUserGroupRepository UserGroups { get; }

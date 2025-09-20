@@ -10,4 +10,6 @@ export class UserFacade extends BaseCrudFacade<UserDto, CreateUserRequest, Updat
             super(inject(UserService));
       }
       readonly users$: Observable<UserDto[]> = this.list$;
+
+      
 }
