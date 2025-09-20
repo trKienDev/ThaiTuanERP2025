@@ -13,6 +13,7 @@ using ThaiTuanERP2025.Infrastructure;
 using Microsoft.Extensions.FileProviders;
 using ThaiTuanERP2025.Infrastructure.StoredFiles.Configurations;
 using Microsoft.Extensions.Options;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,22 +61,33 @@ builder.Services.AddSwaggerGen(options =>
 // JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var secretKey = jwtSettings["Key"];
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {
-	options.TokenValidationParameters = new TokenValidationParameters
-	{
-		ValidateIssuer = true,
-		ValidateAudience = true,
-		ValidateLifetime = true,
-		ValidateIssuerSigningKey = true,
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+	.AddJwtBearer(options => {
+		options.TokenValidationParameters = new TokenValidationParameters
+		{
+			ValidateIssuer = true,
+			ValidateAudience = true,
+			ValidateLifetime = true,
+			ValidateIssuerSigningKey = true,
 
-		ValidIssuer = jwtSettings["Issuer"],
-		ValidAudience = jwtSettings["Audience"],
-		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!)),
+			ValidIssuer = jwtSettings["Issuer"],
+			ValidAudience = jwtSettings["Audience"],
+			IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!)),
 
-		ClockSkew = TimeSpan.Zero // không trễ thời gian
-	};
+			RoleClaimType = ClaimTypes.Role,
+			NameClaimType = ClaimTypes.NameIdentifier,
+
+			ClockSkew = TimeSpan.Zero // không trễ thời gian
+		};
+	}
+);
+builder.Services.AddAuthorization(options => {
+	// Chính sách chỉ Admin
+	options.AddPolicy("AdminOnly", p => p.RequireRole("Admin"));
+
+	// chính sách nhieefuu role
+	options.AddPolicy("CanManagerUser", p => p.RequireRole("Admin", "HR"));
 });
-builder.Services.AddAuthorization();
 
 // CORS
 builder.Services.AddCors(options =>
@@ -108,7 +120,7 @@ builder.Services.AddOptions<FileStorageOptions>()
 
 var app = builder.Build();
 
-// Seed
+// Seed roles + admin user
 using (var scope = app.Services.CreateScope())
 {
 	var dbContext = scope.ServiceProvider.GetRequiredService<ThaiTuanERP2025DbContext>();

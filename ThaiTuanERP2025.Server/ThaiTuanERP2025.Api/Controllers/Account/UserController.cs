@@ -74,7 +74,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			return Ok(ApiResponse<UserDto>.Success(result));
 		}
 
-		[Authorize(Roles = "Admin")]
+		[Authorize(Roles = "admin")]
 		[HttpPut("{id:guid}")]
 		public async Task<IActionResult> Update(Guid id, [FromBody] UpdateUserCommand command) {
 			if(id != command.Id) return BadRequest(ApiResponse<string>.Fail("ID không khớp"));
@@ -88,7 +88,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			return Ok(ApiResponse<string>.Success("Cập nhật avatar thành công"));
 		}
 
-		[Authorize(Roles = "Admin")]
+		[Authorize(Roles = "admin")]
 		[HttpPut("{id:guid}/managers")]
 		public async Task<IActionResult> SetManagers(Guid id, [FromBody] SetUserManagerRequest request, CancellationToken cancellationToken)
 		{
