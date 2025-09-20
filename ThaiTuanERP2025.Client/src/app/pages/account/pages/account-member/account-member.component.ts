@@ -1,7 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, inject, OnInit } from "@angular/core";
-import { UserService } from "../../services/user.service";
-import { DepartmentService } from "../../services/department.service";
+import { Component, inject } from "@angular/core";
 import { UserDto } from "../../models/user.model";
 import { MatDialog } from "@angular/material/dialog";
 import { UserFacade } from "../../facades/user.facade";
