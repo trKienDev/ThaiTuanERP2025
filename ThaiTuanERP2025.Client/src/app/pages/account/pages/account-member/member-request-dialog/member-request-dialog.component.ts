@@ -81,20 +81,8 @@ export class MemberRequestDialog implements OnInit {
 
       async submit(): Promise<void> {
             this.form.markAllAsTouched();
-            console.log('form: ', this.form.getRawValue());
             if(this.form.invalid) {
                   alert('error');
-                  console.log('errors:', {
-                        fullName: this.form.get('fullName')?.errors,
-                        username: this.form.get('username')?.errors,
-                        employeeCode: this.form.get('employeeCode')?.errors,
-                        email: this.form.get('email')?.errors,
-                        password: this.form.get('password')?.errors,
-                        role: this.form.get('role')?.errors,
-                        phone: this.form.get('phone')?.errors,
-                        departmentId: this.form.get('departmentId')?.errors,
-                        position: this.form.get('position')?.errors,
-                  });
                   return;
             }
             

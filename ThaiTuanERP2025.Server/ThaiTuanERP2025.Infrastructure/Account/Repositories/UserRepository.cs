@@ -86,5 +86,16 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 
 			return managers;
 		}
+
+		public async Task<List<UserManagerAssignment>> GetActiveManagerAssignmentsAsync(Guid userId, CancellationToken cancellationToken = default) {
+			return await DbContext.UserManagerAssignments.AsNoTracking()
+				      .Where(x => x.UserId == userId && x.RevokedAt == null)
+				      .ToListAsync(cancellationToken);
+		}
+
+		public Task AddAssignmentsAsync(IEnumerable<UserManagerAssignment> assignments, CancellationToken cancellationToken = default) {
+			DbContext.UserManagerAssignments.AddRange(assignments);
+			return Task.CompletedTask;
+		}
 	}
 }

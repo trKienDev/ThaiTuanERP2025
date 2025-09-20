@@ -11,6 +11,7 @@ namespace ThaiTuanERP2025.Application.Common.Persistence
 
 		// Account
 		IUserRepository Users { get; }
+		IUserManagerAssignmentRepository UserManagerAssignments { get; }
 		IDepartmentRepository Departments { get; }
 		IGroupRepository Groups { get; }
 		IUserGroupRepository UserGroups { get; }
