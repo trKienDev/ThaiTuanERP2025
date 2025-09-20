@@ -17,7 +17,7 @@ namespace ThaiTuanERP2025.Application.Account.Commands.Users.SetUserManagers
 		{
 			// 1 ) User có tồn tại
 			var user = await _unitOfWork.Users.GetByIdAsync(request.UserId);
-			if (user is not null)
+			if (user is null)
 				throw new NotFoundException("Người dùng không tồn tại");
 
 			// 2 ) Chuẩn bị dữ liệu
