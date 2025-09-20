@@ -28,28 +28,7 @@
                         <td>{{ user.department?.name }}</td>
                         <td>{{ user.manager?.fullName }}</td>
                         <td>
-                              <div class="dropdown-menu">
-                                    <button type="button" class="non-decorated-button"  aria-label="thêm bước duyệt" 
-                                          cdkOverlayOrigin #userMenuOrigin="cdkOverlayOrigin" 
-                                          [attr.aria-expanded]="userMenuOpenIndex === i"
-                                          (click)="toggleUserMenu(i, $event)">
-                                          <span class="material-icons-outlined" style="font-size: initial;">more_horiz</span>
-                                    </button>
-                                    <ng-template cdkConnectedOverlay 
-                                          [cdkConnectedOverlayOrigin]="userMenuOrigin" 
-                                          [cdkConnectedOverlayOpen]="userMenuOpenIndex === i" 
-                                          [cdkConnectedOverlayHasBackdrop]="true" 
-                                          [cdkConnectedOverlayBackdropClass]="'cdk-overlay-transparent-backdrop'" 
-                                          (backdropClick)="onUserMenuClosed()" 
-                                          (overlayOutsideClick)="onUserMenuClosed()" 
-                                          [cdkConnectedOverlayPositions]="stepMenuOverlayPosition">
-                                          <div class="dropdown-menu-panel" role="menu" aria-label="step actions" (keydown.escape)="onUserMenuClosed()" tabindex="0">
-                                                <button type="button" class="dropdown-menu-item" (click)="addUserManager(user); onUserMenuClosed()"> 👨🏻‍💼 Chỉnh sửa quản lý </button>     
-                                                <button type="button" class="dropdown-menu-item" (click)="editUser(user); onUserMenuClosed()"> ⚙️ Sửa </button>                  
-                                                <button type="button" class="dropdown-menu-item" (click)="onUserMenuClosed();" style="color: red;"> ⛔ Xóa </button>   
-                                          </div>
-                                    </ng-template>
-                              </div>
+                              <kit-action-menu [actions]="buildUserActions(user)"></kit-action-menu>
                         </td>
                   </tr>
             </tbody>

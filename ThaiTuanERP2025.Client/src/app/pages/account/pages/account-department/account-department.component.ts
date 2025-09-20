@@ -4,12 +4,14 @@ import { MatDialog } from "@angular/material/dialog";
 import { DepartmentRequestDialog } from "./department-request/department-request.component";
 import { DepartmentFacade } from "../../facades/department.facade";
 import { DepartmentDto } from "../../models/department.model";
-import { ConnectedPosition, OverlayModule } from "@angular/cdk/overlay";
+import { ActionMenuOption } from "../../../../shared/components/kit-action-menu/kit-action-menu.model";
+import { KitActionMenuComponent } from "../../../../shared/components/kit-action-menu/kit-action-menu.component";
+import { DepartmentManagerDialogComponent } from "./department-manager-dialog/department-manager-dialog.component";
 
 @Component({
       selector: 'account-department',
       standalone: true,
-      imports: [CommonModule, OverlayModule ],
+      imports: [CommonModule, KitActionMenuComponent],
       templateUrl: './account-department.component.html',
 })
 export class AccountDepartmentComponent {      
@@ -24,23 +26,24 @@ export class AccountDepartmentComponent {
             dialog.afterClosed().subscribe();
       }
 
+      addDepartmentManager(dept: DepartmentDto): void {
+            console.log("dept: ", dept);
+            const dialogRef = this.dialog.open(DepartmentManagerDialogComponent, {
+                  data: dept
+            })
+      }
+
       editDepartment(department: DepartmentDto): void {
             const dialogRef = this.dialog.open(DepartmentRequestDialog, {
                   data: department
             });            
       }
 
-      openDepartmentMenu: number | null = null;
-      departmentMenuOpenIndex: number | null = null;
-      departmentMenuOverlayPosition: ConnectedPosition[] = [
-            { originX: 'center', originY: 'bottom', overlayX: 'center', overlayY: 'top', offsetY: 8 },
-            { originX: 'end', originY: 'top',    overlayX: 'end',    overlayY: 'bottom', offsetY: -8 },
-      ]
-      toggleDepartmentMenu(i: number, ev: MouseEvent) {
-            ev.stopPropagation();
-            this.departmentMenuOpenIndex = ( this.departmentMenuOpenIndex === i ) ? null : i;
-      }
-      onDepartmentMenuClosed() {
-            this.departmentMenuOpenIndex = null;
+      buildDepartmentActions(dept: DepartmentDto) : ActionMenuOption[] {
+            return [
+                  { label: '👨🏻‍💼 Quản lý', action: () => this.addDepartmentManager(dept) },
+                  { label: '⚙️ Sửa', action: () => this.editDepartment(dept) },
+                  { label: '⛔ Xóa', color: 'red' },
+            ]
       }
 }

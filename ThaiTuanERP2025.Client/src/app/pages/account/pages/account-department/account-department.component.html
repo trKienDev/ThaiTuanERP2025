@@ -17,28 +17,7 @@
                   <td>{{ dept.name }}</td>
                   <td></td>
                   <td>
-                        <div class="dropdown-menu">
-                              <button type="button" class="non-decorated-button"  aria-label="thêm bước duyệt" 
-                                    cdkOverlayOrigin #departmentMenuOrigin="cdkOverlayOrigin" 
-                                    [attr.aria-expanded]="departmentMenuOpenIndex === i"
-                                    (click)="toggleDepartmentMenu(i, $event)">
-                                    <span class="material-icons-outlined" style="font-size: initial;">more_horiz</span>
-                              </button>
-                              <ng-template cdkConnectedOverlay 
-                                    [cdkConnectedOverlayOrigin]="departmentMenuOrigin" 
-                                    [cdkConnectedOverlayOpen]="departmentMenuOpenIndex === i" 
-                                    [cdkConnectedOverlayHasBackdrop]="true" 
-                                    [cdkConnectedOverlayBackdropClass]="'cdk-overlay-transparent-backdrop'" 
-                                    (backdropClick)="onDepartmentMenuClosed()" 
-                                    (overlayOutsideClick)="onDepartmentMenuClosed()" 
-                                    [cdkConnectedOverlayPositions]="departmentMenuOverlayPosition">
-                                    <div class="dropdown-menu-panel" role="menu" aria-label="step actions" (keydown.escape)="onDepartmentMenuClosed()" tabindex="0">
-                                          <button type="button" class="dropdown-menu-item" (click)="onDepartmentMenuClosed()"> 👨🏻‍💼 Chỉnh sửa quản lý </button>     
-                                          <button type="button" class="dropdown-menu-item" (click)="onDepartmentMenuClosed()"> ⚙️ Sửa </button>                  
-                                          <button type="button" class="dropdown-menu-item" (click)="onDepartmentMenuClosed()" style="color: red;"> ⛔ Xóa </button>   
-                                    </div>
-                              </ng-template>
-                        </div>
+                        <kit-action-menu [actions]="buildDepartmentActions(dept)"></kit-action-menu>
                   </td>
             </tr>
       </tbody>

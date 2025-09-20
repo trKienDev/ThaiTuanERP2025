@@ -1,0 +1,29 @@
+<div class="dialog">
+      <div class="dialog-container">
+            <div class="dialog-heading">
+                  <div class="dialog-title">
+                        <h3>Quản lý của {{ depatment.name }}</h3>
+                  </div>
+                  <div class="dialog-close">
+                        <button type="button" class="close-button" (click)="close()">
+                              <span class="text material-icons-outlined">close</span>
+                        </button>
+                  </div>
+            </div>
+            <div class="dialog-body">
+                  <form [formGroup]="form" (ngSubmit)="submit()">
+                        <div class="dialog-row">
+                              <kit-dropdown [options]="(managerOptions$ | async) ?? []" [placeholder]="'Chọn quản lý'" formControlName="managerId" (selectionChange)="onManagerSelected($event)"></kit-dropdown>
+                        </div>
+                        <div class="dialog-row">
+                              <div class="dialog-buttons">
+                                    <button type="button" class="button cancel-button" (click)="close()" [disabled]="submitting">Hủy</button>
+                                    <button type="submit" class="button save-button d-flex justify-content-center" [disabled]="submitting">
+                                          {{ submitting ? 'Đang lưu...' : 'Lưu' }}
+                                    </button>
+                              </div>
+                        </div>
+                  </form>
+            </div>
+      </div>
+</div>

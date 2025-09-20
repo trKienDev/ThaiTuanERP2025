@@ -25,3 +25,8 @@ export enum DepartmentRegion {
       middle = 2,
       south = 3,
 }
+
+export interface SetDepartmentManagerRequest {
+      departmentId: string;
+      managerId: string;
+}

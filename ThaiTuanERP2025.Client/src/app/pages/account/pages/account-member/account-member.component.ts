@@ -4,13 +4,14 @@ import { UserDto } from "../../models/user.model";
 import { MatDialog } from "@angular/material/dialog";
 import { UserFacade } from "../../facades/user.facade";
 import { MemberRequestDialog } from "./member-request-dialog/member-request-dialog.component";
-import { ConnectedPosition, OverlayModule } from "@angular/cdk/overlay";
 import { MemberManagerDialog } from "./member-manager-dialog/member-manager-dialog.component";
+import { KitActionMenuComponent } from "../../../../shared/components/kit-action-menu/kit-action-menu.component";
+import { ActionMenuOption } from "../../../../shared/components/kit-action-menu/kit-action-menu.model";
 
 @Component({
       selector: 'account-member',
       standalone: true,
-      imports: [CommonModule, OverlayModule ],
+      imports: [CommonModule, KitActionMenuComponent],
       templateUrl: './account-member.component.html',
 }) 
 export class AccountMemberComponent {
@@ -35,18 +36,16 @@ export class AccountMemberComponent {
             const dialogRef = this.dialog.open(MemberManagerDialog, { data: user });
       }
 
-      openUserMenu: number | null = null;
-      userMenuOpenIndex: number | null = null;
-      stepMenuOverlayPosition: ConnectedPosition[] = [
-            { originX: 'center', originY: 'bottom', overlayX: 'center', overlayY: 'top', offsetY: 8 },
-            { originX: 'end', originY: 'top',    overlayX: 'end',    overlayY: 'bottom', offsetY: -8 },
-      ]
-      toggleUserMenu(i: number, ev: MouseEvent) {
-            ev.stopPropagation();
-            this.userMenuOpenIndex = (this.userMenuOpenIndex === i) ? null : i;
+      buildUserActions(user: UserDto) : ActionMenuOption[] {
+            return [
+                  { label: '👨🏻‍💼 Chỉnh sửa quản lý', action: () => this.addUserManager(user) },
+                  { label: '⚙️ Sửa', action: () => this.editUser(user) },
+                  { label: '⛔ Xóa', color: 'red' },
+            ]
       }
-      onUserMenuClosed() {
-            this.userMenuOpenIndex = null;
+
+      deleteUser(): void {
+
       }
 
 }
