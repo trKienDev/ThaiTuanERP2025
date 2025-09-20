@@ -9,5 +9,7 @@ namespace ThaiTuanERP2025.Application.Account.Repositories
 		Task<User?> GetByEmployeeCode(string employeeCode);
 		Task<List<Guid>> GetManagerIdsAsync(Guid userId, CancellationToken cancellationToken = default);
 		Task< List<User>> GetManagersAsync(Guid userId, CancellationToken cancellationToken = default);
+		Task<List<UserManagerAssignment>> GetActiveManagerAssignmentsAsync(Guid userId, CancellationToken cancellationToken = default);
+		Task AddAssignmentsAsync(IEnumerable<UserManagerAssignment> assignments, CancellationToken cancellationToken = default);
 	}
 }

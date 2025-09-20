@@ -35,3 +35,8 @@ export interface CreateUserRequest {
 }
 
 export interface UpdateUserRequest extends CreateUserRequest {}
+
+export interface SetUserManagerRequest {
+      managerIds: string[];
+      primaryManagerId?: string | null;
+}

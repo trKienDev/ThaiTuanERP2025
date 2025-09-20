@@ -66,6 +66,10 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			return query;
 		}
 
+		public virtual Task<bool> ExistAsync(Guid id, CancellationToken cancellationToken = default)
+		{
+			return _dbSet.AsNoTracking().AnyAsync(e => EF.Property<Guid>(e, "Id") == id, cancellationToken);
+		}
 		public virtual async Task<T?> GetByIdAsync(Guid id)
 		{
 			return await _dbSet.FindAsync(id);
