@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Account.Commands.Departments.AddDepartment;
 using ThaiTuanERP2025.Application.Account.Commands.Departments.DeleteDepartment;
+using ThaiTuanERP2025.Application.Account.Commands.Departments.SetDepartmentManager;
 using ThaiTuanERP2025.Application.Account.Commands.Departments.UpdateDepartment;
 using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Application.Account.Queries.Departments.GetAllDepartments;
@@ -46,6 +47,15 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 
 			await _mediator.Send(body);
 			return Ok(ApiResponse<string>.Success("Cập nhật department thành công"));
+		}
+
+		[HttpPut("{id:guid}/manager")]
+		public async Task<IActionResult> SetManager([FromRoute] Guid id, [FromBody] SetDepartmentManagerCommand command)
+		{
+			if (command == null || command.DepartmentId == Guid.Empty || id != command.DepartmentId)
+				return BadRequest(ApiResponse<string>.Fail("Dữ liệu rộng hoặc không hợp lệ !"));
+			await _mediator.Send(command);
+			return Ok(ApiResponse<string>.Success("Cập nhật quản lý phòng ban thành công"));
 		}
 
 		[HttpDelete("{id}")]

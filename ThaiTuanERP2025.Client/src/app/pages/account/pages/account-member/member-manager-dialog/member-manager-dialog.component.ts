@@ -64,7 +64,6 @@ export class MemberManagerDialog implements OnInit {
       }
 
       async submit(): Promise<void> {
-            console.log('raw form value: ', this.form.getRawValue());
             this.form.markAllAsTouched();
             if(this.form.invalid) {
                   alert('error');
