@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
-import { Component, Inject, inject, OnInit } from "@angular/core";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { Component, inject } from "@angular/core";
+import {  MatDialogRef } from "@angular/material/dialog";
 import { KitDropdownOption, KitDropdownComponent } from "../../../../../shared/components/kit-dropdown/kit-dropdown.component";
 import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
 import { ToastService } from "../../../../../shared/components/toast/toast.service";
@@ -10,7 +10,6 @@ import { DepartmentOptionStore } from "../../../options/department-dropdown-opti
 import { CreateDepartmentRequest } from "../../../models/department.model";
 import { firstValueFrom } from "rxjs";
 import { DepartmentFacade } from "../../../facades/department.facade";
-import { UpdateUserRequest } from "../../../models/user.model";
 
 @Component({
       selector: 'department-request-dialog',
@@ -25,7 +24,6 @@ export class DepartmentRequestDialog {
       private userOptionStore = inject(UserOptionStore);
       private departmentOptionStore = inject(DepartmentOptionStore);
       private departmentFacade = inject(DepartmentFacade);
-
 
 
       dialogTitle = 'Thêm phòng ban mới';

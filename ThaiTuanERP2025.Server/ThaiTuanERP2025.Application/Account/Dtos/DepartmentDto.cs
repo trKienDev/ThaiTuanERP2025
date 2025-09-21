@@ -9,5 +9,7 @@ namespace ThaiTuanERP2025.Application.Account.Dtos
 		public Region Region { get; init; }
 		public Guid? ParentId { get; init; }
 
+		public Guid? ManagerUserId { get; init; }
+		public UserDto? Manager { get; init; }
 	};
 }
