@@ -30,6 +30,17 @@ namespace ThaiTuanERP2025.Application.Account.Commands.Departments.SetDepartment
 				return Unit.Value;
 
 			department.SetManager(command.ManagerId);
+
+			var users = await _unitOfWork.Users.FindIncludingAsync(u =>
+				u.DepartmentId == department.Id &&
+				u.Role == Domain.Account.Enums.UserRole.user &&
+				u.Id != command.ManagerId
+			);
+
+			foreach(var u in users) {
+				u.AssignManager(command.ManagerId);
+			}
+
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 			return Unit.Value;
 		}

@@ -18,8 +18,18 @@
                   <div class="dialog-row">
                         <kit-dropdown [options]="flowTypeOptions" [placeholder]="'Chọn luồng duyệt'" formControlName="flowType" (selectionChange)="onFlowTypeSelected($event)" [width]="'100%'"></kit-dropdown>
                   </div>
-                  <div class="dialog-row">
-                        <kit-dropdown [options]="(userOptions$ | async) ?? []" [placeholder]="'Chọn người duyệt'" [multiple]="true" formControlName="approverIds" (selectionChange)="onApproverSelected($event)" [width]="'100%'"></kit-dropdown>
+                  <div class="dialog-row" *ngIf="approverType === 'standard'">
+                        <kit-dropdown [options]="(userOptions$ | async) ?? []" 
+                              [placeholder]="'Chọn người duyệt'" [multiple]="true" 
+                              formControlName="approverIds" (selectionChange)="onApproverSelected($event)" 
+                              [width]="'100%'">
+                        </kit-dropdown>
+                  </div>
+                  <div class="dialog-row" *ngIf="approverType === 'condition'">
+                        <kit-dropdown [options]="approverTypeSelection"
+                              [placeholder]="'Chọn điều kiện'"
+                              (selectionChange)="onApproverTypeSelected($event)">
+                        </kit-dropdown>
                   </div>
                   <div class="dialog-row">
                         <div class="form-input">

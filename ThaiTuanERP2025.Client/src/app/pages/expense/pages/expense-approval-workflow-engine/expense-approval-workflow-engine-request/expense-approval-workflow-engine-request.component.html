@@ -11,7 +11,8 @@
                         <div class="connector-slot">
                               <div class="connector-line"></div>
                               <div class="inline-add">
-                                    <button type="button" class="plus-button plus-button--small"  aria-label="thêm bước duyệt" (click)="openApprovalStepRequestDialog()"></button>
+                                    <!-- <button type="button" class="plus-button plus-button--small"  aria-label="thêm bước duyệt" (click)="openApprovalStepRequestDialog()"></button> -->
+                                    <kit-action-menu [actions]="buildStepActtions(i)"></kit-action-menu>
                               </div>
                         </div>
 
@@ -19,35 +20,15 @@
                               <div class="step-inner" style="line-height: 1.4;">
                                     <a class="ahref-non-decoration" (click)="editStep(i); $event.preventDefault()">{{ s.name }}</a>
                               </div>
-                              <div class="dropdown-menu">
-                                    <button type="button" class="non-decorated-button"  aria-label="thêm bước duyệt" 
-                                          cdkOverlayOrigin #stepOrigin="cdkOverlayOrigin" 
-                                          [attr.aria-expanded]="stepMenuOpenIndex === i"
-                                          (click)="toggleStepMenu(i, $event)">
-                                          <span class="material-icons-outlined" style="font-size: initial;">more_vert</span>
-                                    </button>
-                                    <ng-template cdkConnectedOverlay 
-                                          [cdkConnectedOverlayOrigin]="stepOrigin" 
-                                          [cdkConnectedOverlayOpen]="stepMenuOpenIndex === i" 
-                                          [cdkConnectedOverlayHasBackdrop]="true" 
-                                          [cdkConnectedOverlayBackdropClass]="'cdk-overlay-transparent-backdrop'" 
-                                          (backdropClick)="onStepMenuClosed()" 
-                                          (overlayOutsideClick)="onStepMenuClosed()" 
-                                          [cdkConnectedOverlayPositions]="stepMenuOverlayPosition">
-                                          <div class="dropdown-menu-panel" role="menu" aria-label="step actions" (keydown.escape)="onStepMenuClosed()" tabindex="0">
-                                                <button type="button" class="dropdown-menu-item" (click)="editStep(i); onStepMenuClosed()">⚙️ Sửa</button>      
-                                                <button type="button" class="dropdown-menu-item" (click)="moveUp(i); onStepMenuClosed();" [disabled]="i === 0" aria-label="move up">⬅️ Về trước</button>
-                                                <button type="button" class="dropdown-menu-item" (click)="moveDown(i); onStepMenuClosed();" [disabled]="i === steps.length - 1" aria-label="move down">➡️ Về sau</button>
-                                                <button type="button" class="dropdown-menu-item" (click)="removeStep(i); onStepMenuClosed();" style="color: red;">⛔ Xóa</button>                                            
-                                          </div>
-                                    </ng-template>
+                              <div> 
+                                    <kit-action-menu [actions]="buildStepActtions(i)"></kit-action-menu>
                               </div>
                         </div>
                   </ng-container>
 
                   <!-- nút + sau step cuối -->
                   <div class="tail-add">
-                        <button type="button" class="plus-button plus-button--small"  aria-label="thêm bước duyệt" (click)="openApprovalStepRequestDialog()"></button>
+                        <kit-action-menu [icon]="'add'" [actions]="buildAddStepAction()"></kit-action-menu>
                   </div>
             </div>
       </div>

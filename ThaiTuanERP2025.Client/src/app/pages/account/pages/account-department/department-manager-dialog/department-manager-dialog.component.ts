@@ -9,6 +9,7 @@ import { DepartmentDto, SetDepartmentManagerRequest } from "../../../models/depa
 import { DepartmentService } from "../../../services/department.service";
 import { firstValueFrom } from "rxjs";
 import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
+import { DepartmentFacade } from "../../../facades/department.facade";
 
 @Component({
       selector: 'department-manager-dialog',
@@ -20,7 +21,7 @@ export class DepartmentManagerDialogComponent implements OnInit {
       private toastService = inject(ToastService);
       private dialogRef = inject(MatDialogRef<DepartmentManagerDialogComponent>);
       private formBuilder = inject(FormBuilder);
-      private departmentService = inject(DepartmentService);
+      private readonly departmentFacade = inject(DepartmentFacade);
 
       depatment!: DepartmentDto;
 
@@ -41,8 +42,8 @@ export class DepartmentManagerDialogComponent implements OnInit {
             console.log('data: ', this.data);
             if(this.data) {
                   this.depatment = this.data;
-                  if(this.depatment.managerId) {
-                        this.form.patchValue({ managerId: this.depatment.managerId });
+                  if(this.depatment.managerUserId) {
+                        this.form.patchValue({ managerId: this.depatment.managerUserId });
                   }
             }
       }
@@ -65,7 +66,7 @@ export class DepartmentManagerDialogComponent implements OnInit {
                         managerId: raw.managerId,
                         departmentId: this.depatment.id
                   };
-                  const result = await firstValueFrom(this.departmentService.setManager(this.depatment.id, payload));
+                  const result = await firstValueFrom(this.departmentFacade.setManager(this.depatment.id, payload));
                   this.toastService.successRich("Thiết lập quản lý thành công");
                   this.dialogRef.close({ isSuccess: true, response: result });
             } catch(error) {
