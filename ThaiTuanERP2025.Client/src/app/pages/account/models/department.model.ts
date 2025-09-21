@@ -1,8 +1,11 @@
+import { UserDto } from "./user.model";
+
 export interface DepartmentDto {
       id: string;
       code: string;
       name: string;
-      managerId?: string | null;
+      managerUserId?: string | null;
+      manager: UserDto;
       parentId?: string | null;
       region: number;
 }

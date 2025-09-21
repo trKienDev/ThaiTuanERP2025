@@ -7,7 +7,8 @@ import { ActionMenuOption } from "./kit-action-menu.model";
       selector: 'kit-action-menu',
       standalone: true,
       imports: [ CommonModule, OverlayModule ],
-      templateUrl: './kit-action-menu.component.html'
+      templateUrl: './kit-action-menu.component.html',
+      styleUrl: './kit-action-menu.component.scss'
 })
 export class KitActionMenuComponent {
       @Input() actions: ActionMenuOption[] = [];

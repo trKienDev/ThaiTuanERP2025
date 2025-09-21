@@ -7,7 +7,6 @@
                   <th>Mã phòng ban</th>
                   <th>Tên phòng ban</th>
                   <th>Trường bộ phận</th>
-                  <th></th>
             </tr>
       </thead>
       <tbody>
@@ -15,7 +14,6 @@
                   <td>{{ i + 1 }}</td>
                   <td>{{ dept.code }}</td>
                   <td>{{ dept.name }}</td>
-                  <td></td>
                   <td>
                         <kit-action-menu [actions]="buildDepartmentActions(dept)"></kit-action-menu>
                   </td>

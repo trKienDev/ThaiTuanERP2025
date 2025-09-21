@@ -24,7 +24,7 @@ namespace ThaiTuanERP2025.Application.Account.Commands.Groups.CreateGroup
 
 		public async Task<GroupDto> Handle(CreateGroupCommand request, CancellationToken cancellationToken)
 		{
-			var group = new Domain.Account.Entities.Group(request.Name, request.Description);
+			var group = new Domain.Account.Entities.Group(request.Name, request.Slug, request.Description);
 			group.SetAdmin(request.AdminUserId);
 
 			var userGroup = new UserGroup(request.AdminUserId, group.Id);

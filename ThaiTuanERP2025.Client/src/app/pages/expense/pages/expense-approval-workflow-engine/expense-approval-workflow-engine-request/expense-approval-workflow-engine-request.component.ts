@@ -4,49 +4,42 @@ import { ConnectedPosition, OverlayModule } from "@angular/cdk/overlay";
 import { MatDialog } from "@angular/material/dialog";
 import { ApprovalStepRequestDialog } from "./approval-step-request/approval-step-request.component";
 import { ApprovalStepRequest } from "../../../models/expense-approval-workflow.model";
+import { ActionMenuOption } from "../../../../../shared/components/kit-action-menu/kit-action-menu.model";
+import { KitActionMenuComponent } from "../../../../../shared/components/kit-action-menu/kit-action-menu.component";
 
 @Component({
       selector: 'expense-approval-workflow-engine-request',
       standalone: true,
-      imports: [CommonModule, OverlayModule ],
+      imports: [CommonModule, OverlayModule, KitActionMenuComponent],
       templateUrl: './expense-approval-workflow-engine-request.component.html',
       styleUrl: './expense-approval-workflow-engine-request.component.scss',
 })
 export class ExpenseApprovalWorkflowEngineRequest {
       private readonly dialog = inject(MatDialog);
+      private static readonly END = -1; // sential cho nút add cuối cùng
 
       steps: ApprovalStepRequest[] = [];
       
-      openMenu: number | null = null;
-      stepMenuOpenIndex: number | null = null;
-      stepMenuOverlayPosition: ConnectedPosition[] = [
-            { originX: 'center', originY: 'bottom', overlayX: 'center', overlayY: 'top', offsetY: 8 },
-            { originX: 'end', originY: 'top',    overlayX: 'end',    overlayY: 'bottom', offsetY: -8 },
-      ]
-      toggleStepMenu(i: number, ev: MouseEvent) {
-            ev.stopPropagation();
-            this.stepMenuOpenIndex = (this.stepMenuOpenIndex === i) ? null : i;
-      }
-      onStepMenuClosed() {
-            this.stepMenuOpenIndex = null;
+      buildStepActtions(index: number): ActionMenuOption[] {
+            return [
+                  { label: '⚙️ Sửa', action: () => this.editStep(index) },
+                  { label: '⬅️ Về trước', action: () => this.moveUp(index), disabled: index === 0 },
+                  { label: '➡️ Về sau', action:() => this.moveDown(index), disabled: index === this.steps.length - 1 },
+                  { label: '⛔ Xóa', color: 'red', action: () => this.removeStep(index)},
+            ]
       }
 
-      private static readonly END = -1; // sential cho nút add cuối cùng
-      addStepMenuOpenIndex: number | null = null;
-      addStepMenuOverlayPosition: ConnectedPosition[] = [
-            { originX: 'center', originY: 'bottom', overlayX: 'center', overlayY: 'top', offsetY: 8 },
-            { originX: 'end', originY: 'top',    overlayX: 'end',    overlayY: 'bottom', offsetY: -8 },
-      ]
-      toggleAddStepMenu(i: number, ev: MouseEvent) {
-            ev.stopPropagation();
-            this.addStepMenuOpenIndex = (this.addStepMenuOpenIndex === i) ? null : i;
-      }
-      onAddStepMenuClosed() {
-            this.addStepMenuOpenIndex = null;
+      buildAddStepAction(): ActionMenuOption[] {
+            return [
+                  { label: 'Thêm bước duyệt thông thường', action: () => this.openApprovalStepRequestDialog('standard') },
+                  { label: 'Thêm bước duyệt theo điều kiện', action: () => this.openApprovalStepRequestDialog('condition') }
+            ]
       }
 
-      openApprovalStepRequestDialog(): void {
-            const dialogRef = this.dialog.open(ApprovalStepRequestDialog);
+      openApprovalStepRequestDialog(approverType?: 'standard' | 'condition'): void {
+            const dialogRef = this.dialog.open(ApprovalStepRequestDialog, {
+                  data: { approverType }
+            });
 
             dialogRef.afterClosed().subscribe((result?: { isSuccess?: boolean, step?: Omit<ApprovalStepRequest, 'order'> }) => {
                   console.log('result: ', result);

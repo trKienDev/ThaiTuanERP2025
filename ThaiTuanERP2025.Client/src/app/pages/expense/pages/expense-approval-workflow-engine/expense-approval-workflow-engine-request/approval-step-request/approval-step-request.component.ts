@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, Inject, inject, OnInit } from "@angular/core";
+import { Component, Inject, inject, Input, OnInit } from "@angular/core";
 import { KitDropdownOption, KitDropdownComponent } from "../../../../../../shared/components/kit-dropdown/kit-dropdown.component";
 import { handleHttpError } from "../../../../../../shared/utils/handle-http-errors.util";
 import { ToastService } from "../../../../../../shared/components/toast/toast.service";
@@ -20,8 +20,13 @@ export class ApprovalStepRequestDialog implements OnInit {
       private dialog = inject(MatDialogRef<ApprovalStepRequestDialog>);
       private userOptionsStore = inject(UserOptionStore);
 
+      @Input() approverType: 'standard' | 'condition' = 'standard';
+
       constructor(
-            @Inject(MAT_DIALOG_DATA) public data?: { step?: ApprovalStepRequest }
+            @Inject(MAT_DIALOG_DATA) public data?: { 
+                  step?: ApprovalStepRequest;
+                  approverType?: 'standard' | 'condition'; 
+            }
       ) {}
 
       formTitle: string = 'Thêm bước duyệt';
@@ -33,10 +38,14 @@ export class ApprovalStepRequestDialog implements OnInit {
             approverIds: this.formBuilder.control<string[]>([], { nonNullable: true, validators: [ Validators.required ]}),
             sla: this.formBuilder.control<number>(1, { nonNullable: true, validators: [ Validators.min(1) ]}),
             flowType: this.formBuilder.control<FlowType>('single', { nonNullable: true, validators: [ Validators.required ] }),
-            order: this.formBuilder.control<number>(1, { nonNullable: true })
+            order: this.formBuilder.control<number>(1, { nonNullable: true }),
       });
 
       ngOnInit(): void {
+            if(this.data?.approverType) {
+                  this.approverType = this.data.approverType;
+            }
+
             if(this.data?.step) {
                   this.formTitle = 'Sửa bước duyệt'
                   const s = this.data.step;
@@ -76,6 +85,13 @@ export class ApprovalStepRequestDialog implements OnInit {
             } else {
                   this.form.patchValue({ flowType: 'one-of-n'});
             }
+      }
+
+      approverTypeSelection: KitDropdownOption[] = [
+            { id: 'manager-department', label: 'Chọn quản lý theo phòng ban' }
+      ];
+      onApproverTypeSelected(opt: KitDropdownOption) {
+            
       }
 
       async save(): Promise<void> {

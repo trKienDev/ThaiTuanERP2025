@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices.Marshalling;
-
-namespace ThaiTuanERP2025.Application.Finance.DTOs
+﻿namespace ThaiTuanERP2025.Application.Finance.DTOs
 {
 	public class BudgetCodeDto
 	{

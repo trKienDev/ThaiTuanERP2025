@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ThaiTuanERP2025.Application.Account.Dtos;
+﻿using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Domain.Account.Entities;
 using AutoMapper;
 
@@ -18,9 +13,10 @@ namespace ThaiTuanERP2025.Application.Account.Mappings
 				.ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Phone != null ? src.Phone.Value : null))
 				.ForMember(dest => dest.AvatarFileId, opt => opt.MapFrom(src => src.AvatarFileId))
 				.ForMember(dest => dest.AvatarFileObjectKey, opt => opt.Ignore());
-
+				
 			// Nested mapping (nếu cần)
-			CreateMap<Department, DepartmentDto>();
+			CreateMap<Department, DepartmentDto>()
+				.ForMember(dest => dest.Manager, opt => opt.MapFrom(src => src.ManagerUser));
 
 			CreateMap<Group, GroupDto>()
 				.ForMember(dest => dest.Members, opt => opt.MapFrom(

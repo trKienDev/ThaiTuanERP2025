@@ -1,12 +1,12 @@
 import { CommonModule } from "@angular/common";
-import { Component, inject } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { DepartmentRequestDialog } from "./department-request/department-request.component";
 import { DepartmentFacade } from "../../facades/department.facade";
 import { DepartmentDto } from "../../models/department.model";
+import { DepartmentManagerDialogComponent } from "./department-manager-dialog/department-manager-dialog.component";
 import { ActionMenuOption } from "../../../../shared/components/kit-action-menu/kit-action-menu.model";
 import { KitActionMenuComponent } from "../../../../shared/components/kit-action-menu/kit-action-menu.component";
-import { DepartmentManagerDialogComponent } from "./department-manager-dialog/department-manager-dialog.component";
 
 @Component({
       selector: 'account-department',
@@ -14,11 +14,20 @@ import { DepartmentManagerDialogComponent } from "./department-manager-dialog/de
       imports: [CommonModule, KitActionMenuComponent],
       templateUrl: './account-department.component.html',
 })
-export class AccountDepartmentComponent {      
+export class AccountDepartmentComponent implements OnInit {      
       private dialog = inject(MatDialog);
       private departmentFacade = inject(DepartmentFacade);
 
       department$ = this.departmentFacade.department$;
+      
+      ngOnInit(): void {
+            this.department$.subscribe({
+                  next: (departments) =>{
+                        console.log('departments: ', departments);
+                  }
+            })
+      }
+
       trackById(index: number, item: DepartmentDto) { return item.id; }
 
       openDeparmentRequestDialog(): void {
@@ -27,7 +36,6 @@ export class AccountDepartmentComponent {
       }
 
       addDepartmentManager(dept: DepartmentDto): void {
-            console.log("dept: ", dept);
             const dialogRef = this.dialog.open(DepartmentManagerDialogComponent, {
                   data: dept
             })
@@ -39,11 +47,12 @@ export class AccountDepartmentComponent {
             });            
       }
 
-      buildDepartmentActions(dept: DepartmentDto) : ActionMenuOption[] {
+      buildDepartmentActions(dept: DepartmentDto): ActionMenuOption[] {
             return [
-                  { label: '👨🏻‍💼 Quản lý', action: () => this.addDepartmentManager(dept) },
-                  { label: '⚙️ Sửa', action: () => this.editDepartment(dept) },
+                  { label: '👨🏻‍💼 Chỉnh sửa quản lý', action: () => this.addDepartmentManager(dept) },
+                  { label: '⚙️ Sửa' },
                   { label: '⛔ Xóa', color: 'red' },
             ]
       }
+
 }

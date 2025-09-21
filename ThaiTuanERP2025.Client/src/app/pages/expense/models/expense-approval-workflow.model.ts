@@ -5,4 +5,6 @@ export interface ApprovalStepRequest {
       flowType: FlowType;
       sla: number;
       order: number;
+
 }
+

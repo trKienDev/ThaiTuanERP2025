@@ -1,10 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ThaiTuanERP2025.Domain.Account.Entities;
 
 namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
@@ -15,6 +10,9 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 			builder.ToTable("Group", "Core").HasKey(x => x.Id);
 			builder.Property(g => g.Name).IsRequired().HasMaxLength(100);
 			builder.Property(g => g.Description).HasMaxLength(255);
+			builder.Property(g => g.Slug).IsRequired().HasMaxLength(100);
+			builder.HasIndex(g => g.Slug).IsUnique();
+			builder.ToTable(t => t.HasCheckConstraint("CK_Group_Slug_NoSpace", "CHARINDEX(' ', [Slug]) = 0"));
 
 			builder.HasIndex(x => x.Name).IsUnique();
 
