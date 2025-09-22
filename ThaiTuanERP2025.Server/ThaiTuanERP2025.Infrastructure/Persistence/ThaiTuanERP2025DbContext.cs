@@ -45,6 +45,8 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<BudgetPlan> BudgetPlans => Set<BudgetPlan>();
 		public DbSet<ApprovalWorkflowTemplate> ApprovalWorkflowTemplates => Set<ApprovalWorkflowTemplate>();
 		public DbSet<ApprovalStepTemplate> ApproverStepTemplates => Set<ApprovalStepTemplate>();
+		public DbSet<ApprovalWorkflowInstance> ApprovalWorkflowInstances => Set<ApprovalWorkflowInstance>();
+		public DbSet<ApprovalStepInstance> ApprovalStepInstances => Set<ApprovalStepInstance>();
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
