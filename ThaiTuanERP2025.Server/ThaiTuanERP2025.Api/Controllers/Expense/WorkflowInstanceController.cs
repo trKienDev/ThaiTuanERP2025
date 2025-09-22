@@ -9,7 +9,7 @@ using ThaiTuanERP2025.Domain.Expense.Enums;
 namespace ThaiTuanERP2025.Api.Controllers.Expense
 {
 	[ApiController]
-	[Route("api/workflows-instance")]
+	[Route("api/workflows")]
 	public class WorkflowInstanceController : ControllerBase
 	{
 		private readonly IMediator _mediator;
