@@ -2,6 +2,7 @@
 using MediatR;
 using System.Text.Json;
 using ThaiTuanERP2025.Application.Common.Persistence;
+using ThaiTuanERP2025.Application.Expense.Contracts.Resolvers;
 using ThaiTuanERP2025.Application.Expense.Dtos;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Entities;
@@ -9,16 +10,6 @@ using ThaiTuanERP2025.Domain.Expense.Enums;
 
 namespace ThaiTuanERP2025.Application.Expense.Commands.ApprovalWorkflows.CreateApprovalWorkflowInstance
 {
-	public interface IApproverResolverRegistry {
-		IApproverResolver? Get(string resolverKey);
-	}
-	public interface IApproverResolver {
-		Task<(IReadOnlyList<Guid> Candidates, Guid? Default)> ResolveAsync(ResolverContext context, CancellationToken cancellationToken);
-	}
-	public sealed record ResolverContext (
-		Guid CreatorId, decimal? Amount, string? BudgetCode, string? CostCenter, string DocumentType
-	);
-
 	public sealed class CreateApprovalWorkflowInstanceHandler : IRequestHandler<CreateApprovalWorkflowInstanceCommand, ApprovalWorkflowInstanceDto>
 	{
 		private readonly IUnitOfWork _unitOfWork;

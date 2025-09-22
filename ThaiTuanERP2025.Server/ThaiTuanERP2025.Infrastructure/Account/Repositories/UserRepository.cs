@@ -43,6 +43,13 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 			      .FirstOrDefaultAsync(u => u.EmployeeCode == employeeCode);
 		}
 
+		public async Task<Guid?> GetManagerIdAsync(Guid userId, CancellationToken cancellationToken = default) {
+			var managerId = await DbContext.Users.Where(u => u.Id == userId)
+				.Select(u => u.ManagerId)
+				.FirstOrDefaultAsync(cancellationToken);
+			return managerId;
+		}
+
 		public async Task<List<Guid>> GetManagerIdsAsync(Guid userId, CancellationToken cancellationToken = default)
 		{
 			var ids = await DbContext.UserManagerAssignments.AsNoTracking()
