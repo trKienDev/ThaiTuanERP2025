@@ -3,11 +3,10 @@
       padding: 5px 10px; 
       border: 1px solid var(--default-border-color);
       border-radius: 5px; 
-      background-color: var(--main-bg-color); 
+      background-color: white; 
       transition: duration ease 80ms;
 	&:hover {
 		color: var(--bright-blue-color);
-            background-color: white ;
 		cursor: pointer;
 	}
 }
