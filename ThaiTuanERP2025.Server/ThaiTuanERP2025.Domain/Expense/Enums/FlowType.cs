@@ -1,8 +1,8 @@
 ﻿namespace ThaiTuanERP2025.Domain.Expense.Enums
 {
-	public enum FlowType
+	public enum FlowType : byte
 	{	
-		Single = 1,
-		OneOfN = 2
+		Single = 0,
+		OneOfN = 1
 	}
 }
