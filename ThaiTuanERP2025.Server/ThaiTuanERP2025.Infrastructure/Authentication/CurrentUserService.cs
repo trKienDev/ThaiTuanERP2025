@@ -11,15 +11,22 @@ namespace ThaiTuanERP2025.Infrastructure.Authentication
 		{
 			_httpContextAccessor = httpContextAccessor;
 		}
+
+		public ClaimsPrincipal? Principal => _httpContextAccessor.HttpContext?.User;
+
 		public Guid? UserId
 		{
 			get
 			{
-				var user = _httpContextAccessor.HttpContext?.User;
-				var userIdClaim = user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+				var sub = Principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value
+					?? Principal?.FindFirst("sub")?.Value;
 
-				return Guid.TryParse(userIdClaim, out var userId) ? userId : null;
+				return Guid.TryParse(sub, out var id) ? id : null;
 			}
 		}
+
+		public bool IsInRole(string role) => Principal?.IsInRole(role) ?? false;
+
+		public Guid GetUserIdOrThrow() => UserId ?? throw new UnauthorizedAccessException("user chưa được phân quyền");
 	}
 }

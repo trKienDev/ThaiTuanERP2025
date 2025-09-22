@@ -14,6 +14,8 @@ using Microsoft.Extensions.FileProviders;
 using ThaiTuanERP2025.Infrastructure.StoredFiles.Configurations;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
+using ThaiTuanERP2025.Application.Expense.Contracts.Resolvers;
+using ThaiTuanERP2025.Infrastructure.Expense.Contracts.Resolvers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +23,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
-
+builder.Services.AddScoped<IApproverResolver, CreatorManagerResolver>();
+builder.Services.AddScoped<IApproverResolverRegistry, ApproverResolverRegistry>();
 // Application services (MediatR, FluentValidation, AutoMapper…)
 builder.Services.AddApplication();
 

@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Minio;
 using ThaiTuanERP2025.Application.Account.Repositories;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Common.Persistence;
@@ -63,7 +62,7 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IInvoiceFileRepository, InvoiceFileRepository>();
 			services.AddScoped<ISupplierRepository, SupplierRepository>();
 			services.AddScoped<IBankAccountRepository, BankAccountRepository>();
-			services.AddScoped<IApprovalWorkflowTemplateRepository, IApprovalWorkflowTemplateRepository>();
+			services.AddScoped<IApprovalWorkflowTemplateRepository, ApprovalWorkflowTemplateRepository>();
 			services.AddScoped<IApprovalStepTemplateRepository, ApprovalStepTemplateRepository>();
 			services.AddScoped<IApprovalStepInstanceRepository, ApprovalStepInstanceRepository>();
 			services.AddScoped<IApprovalWorkflowInstanceRepository, ApprovalWorkflowInstanceRepository>();

@@ -1,16 +1,15 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using ThaiTuanERP2025.Domain.Account.Entities;
-using ThaiTuanERP2025.Domain.Account.Enums;
+using ThaiTuanERP2025.Application.Expense.Repositories;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Infrastructure.Common;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories
 {
-	public class ApproverWorkflowTemplateRepository : BaseRepository<ApprovalWorkflowTemplate>
+	public class ApprovalWorkflowTemplateRepository : BaseRepository<ApprovalWorkflowTemplate>, IApprovalWorkflowTemplateRepository
 	{
-		public ApproverWorkflowTemplateRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider)
+		public ApprovalWorkflowTemplateRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider)
 		{
 		}
 
