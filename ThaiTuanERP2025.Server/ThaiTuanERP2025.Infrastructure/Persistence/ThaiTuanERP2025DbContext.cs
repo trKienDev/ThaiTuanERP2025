@@ -43,8 +43,8 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<BudgetGroup> BudgetGroups => Set<BudgetGroup>();
 		public DbSet<BudgetPeriod> BudgetPeriods => Set<BudgetPeriod>();
 		public DbSet<BudgetPlan> BudgetPlans => Set<BudgetPlan>();
-		public DbSet<ApprovalStep> ApprovalSteps => Set<ApprovalStep>();
-		public DbSet<ApprovalWorkflow> ApprovalFlows => Set<ApprovalWorkflow>();
+		public DbSet<ApprovalWorkflowTemplate> ApprovalWorkflowTemplates => Set<ApprovalWorkflowTemplate>();
+		public DbSet<ApprovalStepTemplate> ApproverStepTemplates => Set<ApprovalStepTemplate>();
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

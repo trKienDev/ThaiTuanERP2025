@@ -63,6 +63,8 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IInvoiceFileRepository, InvoiceFileRepository>();
 			services.AddScoped<ISupplierRepository, SupplierRepository>();
 			services.AddScoped<IBankAccountRepository, BankAccountRepository>();
+			services.AddScoped<IApprovalWorkflowTemplateRepository, IApprovalWorkflowTemplateRepository>();
+			services.AddScoped<IApprovalStepTemplateRepository, ApprovalStepTemplateRepository>();
 
 			// ========= File Storage (MinIO) =========
 			services.Configure<FileStorageOptions>(cfg.GetSection("Minio"));

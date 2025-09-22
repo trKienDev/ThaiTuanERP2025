@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Expense\Commands\BankAccounts\NewFolder\" />
     <Folder Include="Finance\Validators\" />
   </ItemGroup>
 
