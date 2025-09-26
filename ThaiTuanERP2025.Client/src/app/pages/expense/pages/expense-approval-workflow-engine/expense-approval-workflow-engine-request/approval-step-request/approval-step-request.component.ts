@@ -5,8 +5,8 @@ import { handleHttpError } from "../../../../../../shared/utils/handle-http-erro
 import { ToastService } from "../../../../../../shared/components/toast/toast.service";
 import { FormBuilder, FormsModule, Validators, ReactiveFormsModule } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { ApprovalStepRequest, FlowType } from "../../../../models/expense-approval-workflow.model";
 import { UserOptionStore } from "../../../../../account/options/user-dropdown-options.store";
+import { CreateApprovalStepTemplateRequest, FlowType } from "../../../../models/approval-step-template.model";
 
 @Component({
       selector: 'approval-step-request-dialog',
@@ -24,7 +24,7 @@ export class ApprovalStepRequestDialog implements OnInit {
 
       constructor(
             @Inject(MAT_DIALOG_DATA) public data?: { 
-                  step?: ApprovalStepRequest;
+                  step?: CreateApprovalStepTemplateRequest;
                   approverType?: 'standard' | 'condition'; 
             }
       ) {}
@@ -53,7 +53,7 @@ export class ApprovalStepRequestDialog implements OnInit {
                         name: s.name,
                         approverIds: s.approverIds,
                         flowType: s.flowType,
-                        sla: s.sla,
+                        sla: s.slaHours,
                         order: s.order ?? 1,
                   });
             }
@@ -98,16 +98,16 @@ export class ApprovalStepRequestDialog implements OnInit {
             this.form.markAllAsTouched();
             if(this.form.invalid) return;
 
-            this.submitting = true;
-            try {
-                  const payload: ApprovalStepRequest = this.form.getRawValue();
-                  this.close({ isSuccess: true, step: payload });
-            } catch(err) {
-                  const messages = handleHttpError(err).join('\n');
-                  this.toastService.errorRich(messages || 'Lỗi khi thêm bước duyệt');
-            } finally {
-                  this.submitting = false;
-            }
+            // this.submitting = true;
+            // try {
+            //       const payload: CreateApprovalStepTemplateRequest = this.form.getRawValue();
+            //       this.close({ isSuccess: true, step: payload });
+            // } catch(err) {
+            //       const messages = handleHttpError(err).join('\n');
+            //       this.toastService.errorRich(messages || 'Lỗi khi thêm bước duyệt');
+            // } finally {
+            //       this.submitting = false;
+            // }
       }
 
       close(result?: any): void {

@@ -36,4 +36,9 @@
 		// Optional: allow client to request immediate start (activate first step)
 		public bool StartImmediately { get; init; } = true;
 	};
+
+	public sealed class ApprovalWorkflowInstanceDetailDto {
+		public ApprovalWorkflowInstanceDto WorkflowInstance { get; init; } = default!;
+		public IReadOnlyList<ApprovalStepInstanceDto> Steps { get; init; } = Array.Empty<ApprovalStepInstanceDto>();
+	}
 }

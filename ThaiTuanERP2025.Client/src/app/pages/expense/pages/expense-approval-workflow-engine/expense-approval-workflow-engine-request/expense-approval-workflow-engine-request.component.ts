@@ -1,11 +1,11 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject } from "@angular/core";
-import { ConnectedPosition, OverlayModule } from "@angular/cdk/overlay";
+import { OverlayModule } from "@angular/cdk/overlay";
 import { MatDialog } from "@angular/material/dialog";
 import { ApprovalStepRequestDialog } from "./approval-step-request/approval-step-request.component";
-import { ApprovalStepRequest } from "../../../models/expense-approval-workflow.model";
 import { ActionMenuOption } from "../../../../../shared/components/kit-action-menu/kit-action-menu.model";
 import { KitActionMenuComponent } from "../../../../../shared/components/kit-action-menu/kit-action-menu.component";
+import { ApprovalStepTemplateDto, CreateApprovalStepTemplateRequest, UpdateApprovalStepTemplateRequest } from "../../../models/approval-step-template.model";
 
 @Component({
       selector: 'expense-approval-workflow-engine-request',
@@ -18,7 +18,7 @@ export class ExpenseApprovalWorkflowEngineRequest {
       private readonly dialog = inject(MatDialog);
       private static readonly END = -1; // sential cho nút add cuối cùng
 
-      steps: ApprovalStepRequest[] = [];
+      steps: CreateApprovalStepTemplateRequest[] = [];
       
       buildStepActtions(index: number): ActionMenuOption[] {
             return [
@@ -41,11 +41,11 @@ export class ExpenseApprovalWorkflowEngineRequest {
                   data: { approverType }
             });
 
-            dialogRef.afterClosed().subscribe((result?: { isSuccess?: boolean, step?: Omit<ApprovalStepRequest, 'order'> }) => {
+            dialogRef.afterClosed().subscribe((result?: { isSuccess?: boolean, step?: Omit<CreateApprovalStepTemplateRequest, 'order'> }) => {
                   console.log('result: ', result);
                   if (result?.isSuccess === true && result.step ) {
                         const order = this.steps.length + 1;
-                        const newStep: ApprovalStepRequest = {
+                        const newStep: CreateApprovalStepTemplateRequest = {
                               ...result.step,
                               order
                         };
@@ -61,7 +61,7 @@ export class ExpenseApprovalWorkflowEngineRequest {
             const dialogRef = this.dialog.open(ApprovalStepRequestDialog, {
                   data: { step: current }
             });
-            dialogRef.afterClosed().subscribe((result?: { isSuccess?: boolean, step?: ApprovalStepRequest}) => {
+            dialogRef.afterClosed().subscribe((result?: { isSuccess?: boolean, step?: UpdateApprovalStepTemplateRequest}) => {
                   if(result?.isSuccess && result.step) {
                         const updated = { ...result.step, order: current.order };
                         this.steps[i] = updated;
@@ -76,6 +76,7 @@ export class ExpenseApprovalWorkflowEngineRequest {
       moveUp(i: number): void {
             if(i <= 0) return;
             [this.steps[i-1], this.steps[i]] = [this.steps[i], this.steps[i - 1]];
+            this.recomputeOrders();
       }
       moveDown(i: number): void {
             if(i >= this.steps.length - 1) return;
