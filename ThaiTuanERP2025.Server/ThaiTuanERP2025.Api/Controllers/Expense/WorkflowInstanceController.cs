@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Expense.Commands.ApprovalWorkflows.CreateApprovalWorkflowInstance;
 using ThaiTuanERP2025.Application.Expense.Dtos;
+using ThaiTuanERP2025.Application.Expense.Queries.ApprovalWorkflow.GetApprovalWorkflowInstanceDetail;
 using ThaiTuanERP2025.Application.Expense.Queries.ApprovalWorkflow.GetApprovalWorkflowInstancesByFilter;
 using ThaiTuanERP2025.Domain.Expense.Enums;
 
@@ -33,6 +34,12 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
 			), cancellationToken);
 
 			return Ok(ApiResponse<IReadOnlyList<ApprovalWorkflowInstanceDto>>.Success(result));
+		}
+
+		[HttpGet("{id:guid}")]
+		public async Task<IActionResult> GetDetail(Guid id, CancellationToken cancellationToken) {
+			var result = await _mediator.Send(new GetApprovalWorkflowInstanceDetailQuery(id), cancellationToken);
+			return Ok(ApiResponse<ApprovalWorkflowInstanceDetailDto>.Success(result));
 		}
 
 		[HttpPost]

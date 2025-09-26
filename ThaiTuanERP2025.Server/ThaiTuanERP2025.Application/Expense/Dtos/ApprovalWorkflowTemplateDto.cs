@@ -16,5 +16,11 @@
 		int Version,
 		bool IsActive
 	);
+
+	public sealed class ApprovalWorkflowTemplateDetailDto
+	{
+		public ApprovalWorkflowTemplateDto Template { get; init; } = default!;
+		public IReadOnlyList<ApprovalStepTemplateDto> Steps { get; init; } = Array.Empty<ApprovalStepTemplateDto>();
+	}
 }
 

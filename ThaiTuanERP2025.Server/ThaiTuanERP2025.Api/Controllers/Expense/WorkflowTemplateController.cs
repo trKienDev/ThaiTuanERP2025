@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Expense.Commands.ApprovalWorkflows.CreateApprovalWorkflowTemplate;
 using ThaiTuanERP2025.Application.Expense.Dtos;
+using ThaiTuanERP2025.Application.Expense.Queries.ApprovalWorkflow.GetApprovalWorkflowTemplateDetail;
 using ThaiTuanERP2025.Application.Expense.Queries.ApprovalWorkflow.GetWorkflowTemplateById;
 using ThaiTuanERP2025.Application.Expense.Queries.ApprovalWorkflow.GetWorkflowTemplatesByFilter;
 
@@ -31,6 +32,14 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
 		{
 			var result = await _mediator.Send(new GetWorkflowTemplatesByFilterQuery(documentType, isActive), cancellationToken);
 			return Ok(ApiResponse<IReadOnlyList<ApprovalWorkflowTemplateDto>>.Success(result));
+		}
+
+		[HttpGet("{id:guid}/detail")]
+		public async Task<IActionResult> GetDetail(Guid id, CancellationToken cancellationToken) {
+			var result = await _mediator.Send(new GetApprovalWorkflowTemplateDetailQuery(id), cancellationToken);
+			if (result is null)
+				return BadRequest(ApiResponse<string>.Fail("Không tìm thấy workflow template detail"));
+			return Ok(ApiResponse<ApprovalWorkflowTemplateDetailDto>.Success(result));
 		}
 
 		[HttpPost]
