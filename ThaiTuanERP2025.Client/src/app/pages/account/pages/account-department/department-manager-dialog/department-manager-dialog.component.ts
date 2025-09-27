@@ -6,7 +6,6 @@ import { ToastService } from "../../../../../shared/components/toast/toast.servi
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { UserOptionStore } from "../../../options/user-dropdown-options.store";
 import { DepartmentDto, SetDepartmentManagerRequest } from "../../../models/department.model";
-import { DepartmentService } from "../../../services/department.service";
 import { firstValueFrom } from "rxjs";
 import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
 import { DepartmentFacade } from "../../../facades/department.facade";

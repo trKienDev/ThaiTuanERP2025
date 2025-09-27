@@ -5,20 +5,34 @@ import { MatDialog } from "@angular/material/dialog";
 import { ApprovalStepRequestDialog } from "./approval-step-request/approval-step-request.component";
 import { ActionMenuOption } from "../../../../../shared/components/kit-action-menu/kit-action-menu.model";
 import { KitActionMenuComponent } from "../../../../../shared/components/kit-action-menu/kit-action-menu.component";
-import { ApprovalStepTemplateDto, CreateApprovalStepTemplateRequest, UpdateApprovalStepTemplateRequest } from "../../../models/approval-step-template.model";
+import { CreateApprovalStepTemplateRequest, UpdateApprovalStepTemplateRequest } from "../../../models/approval-step-template.model";
+import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
+import { ToastService } from "../../../../../shared/components/toast/toast.service";
+import { CreateApprovalWorkflowTemplateRequest } from "../../../models/approval-workflow-template.model";
+import { firstValueFrom } from "rxjs";
+import { ApprovalWorkflowTemplateService } from "../../../services/approval-workflow-template.service";
 
 @Component({
       selector: 'expense-approval-workflow-engine-request',
       standalone: true,
-      imports: [CommonModule, OverlayModule, KitActionMenuComponent],
+      imports: [CommonModule, OverlayModule, KitActionMenuComponent, ReactiveFormsModule],
       templateUrl: './expense-approval-workflow-engine-request.component.html',
       styleUrl: './expense-approval-workflow-engine-request.component.scss',
 })
 export class ExpenseApprovalWorkflowEngineRequest {
       private readonly dialog = inject(MatDialog);
+      private readonly formBuilder = inject(FormBuilder);
+      private readonly toastService = inject(ToastService);
+      private readonly approvalWorkflowTemplateService = inject(ApprovalWorkflowTemplateService);
+
       private static readonly END = -1; // sential cho nút add cuối cùng
 
       steps: CreateApprovalStepTemplateRequest[] = [];
+
+      form = this.formBuilder.group({
+            name: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
+            version: this.formBuilder.control<number>(0, { nonNullable: true }),
+      })
       
       buildStepActtions(index: number): ActionMenuOption[] {
             return [
@@ -36,13 +50,12 @@ export class ExpenseApprovalWorkflowEngineRequest {
             ]
       }
 
-      openApprovalStepRequestDialog(approverType?: 'standard' | 'condition'): void {
+      openApprovalStepRequestDialog(approverMode?: 'standard' | 'condition'): void {
             const dialogRef = this.dialog.open(ApprovalStepRequestDialog, {
-                  data: { approverType }
+                  data: { approverMode }
             });
 
             dialogRef.afterClosed().subscribe((result?: { isSuccess?: boolean, step?: Omit<CreateApprovalStepTemplateRequest, 'order'> }) => {
-                  console.log('result: ', result);
                   if (result?.isSuccess === true && result.step ) {
                         const order = this.steps.length + 1;
                         const newStep: CreateApprovalStepTemplateRequest = {
@@ -51,7 +64,6 @@ export class ExpenseApprovalWorkflowEngineRequest {
                         };
 
                         this.steps.push(newStep);
-                        console.log('steps: ', this.steps);
                   }
             });
       }
@@ -86,5 +98,23 @@ export class ExpenseApprovalWorkflowEngineRequest {
       removeStep(i: number): void {
             this.steps.splice(i, 1);
             this.recomputeOrders();
+      }
+
+      async saveTemplate(): Promise<void> {
+            this.steps = this.steps.map((s, i) => ({ ...s, order: i + 1}));
+            if(!this.steps.length) {
+                  return;
+            }
+
+            const value = this.form.getRawValue();
+
+            const payload: CreateApprovalWorkflowTemplateRequest = {
+                  name: value.name!.trim(),
+                  version: value.version,
+                  steps: this.steps
+            };
+            console.log('payload: ', payload);
+            const result = await firstValueFrom(this.approvalWorkflowTemplateService.create(payload));
+            console.log('result: ', result);
       }
 }

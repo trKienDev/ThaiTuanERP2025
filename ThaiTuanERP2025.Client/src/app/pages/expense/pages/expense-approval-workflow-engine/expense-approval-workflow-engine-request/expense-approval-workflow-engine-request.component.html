@@ -2,6 +2,35 @@
       <div class="">
             <span class="default-title">Tạo luồng duyệt mới</span>
       </div>
+
+      <form class="template-header" [formGroup]="form" (ngSubmit)="saveTemplate()">
+    <div class="row" style="display:flex; gap:12px; align-items:flex-end; margin: 12px 0;">
+      <div style="flex:1;">
+        <label for="wf-name">Tên template <span style="color:red">*</span></label>
+        <input id="wf-name" type="text" formControlName="name" placeholder="Nhập tên template" />
+        <div *ngIf="form.controls.name.touched && form.controls.name.invalid">
+          <small *ngIf="form.controls.name.errors?.['required']" style="color:#d32f2f;">
+            Tên template không được bỏ trống
+          </small>
+        </div>
+      </div>
+
+      <div style="width:140px;">
+        <label for="wf-version">Version</label>
+        <input id="wf-version" type="number" formControlName="version" />
+      </div>
+
+      <div>
+        <button
+          type="submit"
+          [disabled]="form.invalid || !steps.length"
+          title="Cần nhập tên và có ít nhất 1 bước">
+          Lưu template
+        </button>
+      </div>
+    </div>
+  </form>
+
       <div class="approval-workflow-wrapper">
             <div class="approval-workflow-process">
                   <div class="step begin-step">Bắt đầu</div>
@@ -12,11 +41,11 @@
                               <div class="connector-line"></div>
                               <div class="inline-add">
                                     <!-- <button type="button" class="plus-button plus-button--small"  aria-label="thêm bước duyệt" (click)="openApprovalStepRequestDialog()"></button> -->
-                                    <kit-action-menu [actions]="buildStepActtions(i)"></kit-action-menu>
+                                    <kit-action-menu [icon]="'add'" [actions]="buildStepActtions(i)"></kit-action-menu>
                               </div>
                         </div>
 
-                        <div class="step d-flex gap-10p" cdkDrag>
+                        <div class="step d-flex align-items-center gap-10p" cdkDrag>
                               <div class="step-inner" style="line-height: 1.4;">
                                     <a class="ahref-non-decoration" (click)="editStep(i); $event.preventDefault()">{{ s.name }}</a>
                               </div>
