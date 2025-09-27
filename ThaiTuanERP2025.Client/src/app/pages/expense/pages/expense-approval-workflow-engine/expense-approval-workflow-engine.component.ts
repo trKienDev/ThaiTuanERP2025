@@ -4,19 +4,11 @@ import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { catchError, of } from "rxjs";
-import { handleHttpError } from "../../../../shared/utils/handle-http-errors.util";
 import { ToastService } from "../../../../shared/components/toast/toast.service";
 import { RouterLink } from "@angular/router";
+import { ApprovalWorkflowTemplateService } from "../../services/approval-workflow-template.service";
+import { ApprovalWorkflowTemplateDto } from "../../models/approval-workflow-template.model";
 
-type StepFlowType = 'any' | 'sequential' | 'all';
-interface Step {
-      id: string;
-      title: string;
-      approverIds: string[];
-      flowType: StepFlowType;
-      slaHours: number | null;
-}
 
 @Component({
       selector: 'expense-approval-workflow-engine',
@@ -24,8 +16,19 @@ interface Step {
       imports: [CommonModule, MatDialogModule, MatMenuModule, MatIconModule, MatButtonModule, RouterLink],
       templateUrl: './expense-approval-workflow-engine.component.html',
 })
-export class ExpenseApprovalWorkflowEngineComponent {
+export class ExpenseApprovalWorkflowEngineComponent implements OnInit {
       private readonly toastService = inject(ToastService);
+      private readonly WfTemplateSer = inject(ApprovalWorkflowTemplateService);
+      wfTemplates: ApprovalWorkflowTemplateDto[] = [];
+
+      loadApprovalWorkflowTemplates(): void {
+            this.WfTemplateSer.getAll().subscribe({
+                  next: (wfs) => {
+                        this.wfTemplates = wfs;
+                  },
+                  error: 
+            })
+      }
 
       errorMessages:string[] = [];
       

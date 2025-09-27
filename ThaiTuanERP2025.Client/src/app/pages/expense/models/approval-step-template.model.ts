@@ -16,14 +16,14 @@ export interface ApprovalStepTemplateDto {
 }
 
 export interface CreateApprovalStepTemplateRequest {
-      workflowTemplateId: string;
       name: string;
       order: number;
       flowType: FlowType;
       slaHours: number;
-      approverIds: string[];
-      resolverKey?: string;
-      resolverParams?: object;
+      approverIds: string[] | null;
+      approverMode: ApproverMode;
+      resolverKey?: string | null;
+      resolverParams?: any | null;
       allowOverride?: boolean;
 }
 

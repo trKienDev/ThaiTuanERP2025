@@ -1,3 +1,5 @@
+import { CreateApprovalStepTemplateRequest } from "./approval-step-template.model";
+
 export interface ApprovalWorkflowTemplateDto {
       id: string;
       name: string;
@@ -8,9 +10,8 @@ export interface ApprovalWorkflowTemplateDto {
 
 export interface CreateApprovalWorkflowTemplateRequest {
       name: string;
-      documentType: string;
       version: number;
-      isActive: boolean;
+      steps: CreateApprovalStepTemplateRequest[];
 }
 
 export interface UpdateApprovalWorkflowTemplateRequest extends CreateApprovalWorkflowTemplateRequest {
