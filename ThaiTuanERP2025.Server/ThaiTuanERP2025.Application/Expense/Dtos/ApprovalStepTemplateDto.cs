@@ -20,7 +20,6 @@
 	}
 
 	public sealed record ApprovalStepTemplateRequest(
-		Guid WorkflowTemplateId,
 		string Name,
 		int Order,
 		string FlowType,
@@ -28,7 +27,7 @@
 		string ApproverMode,
 
 		// Standard
-		Guid[]? ApproverIds,
+		List<Guid>? ApproverIds,
 
 		// Condition
 		string? ResolverKey,

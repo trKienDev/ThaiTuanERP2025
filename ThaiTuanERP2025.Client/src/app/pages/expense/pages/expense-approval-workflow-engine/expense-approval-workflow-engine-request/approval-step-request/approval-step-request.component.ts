@@ -1,12 +1,12 @@
 import { CommonModule } from "@angular/common";
 import { Component, Inject, inject, Input, OnInit } from "@angular/core";
 import { KitDropdownOption, KitDropdownComponent } from "../../../../../../shared/components/kit-dropdown/kit-dropdown.component";
-import { handleHttpError } from "../../../../../../shared/utils/handle-http-errors.util";
 import { ToastService } from "../../../../../../shared/components/toast/toast.service";
 import { FormBuilder, FormsModule, Validators, ReactiveFormsModule } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { UserOptionStore } from "../../../../../account/options/user-dropdown-options.store";
-import { CreateApprovalStepTemplateRequest, FlowType } from "../../../../models/approval-step-template.model";
+import { ApproverMode, CreateApprovalStepTemplateRequest, FlowType } from "../../../../models/approval-step-template.model";
+import { logFormErrors } from "../../../../../../shared/utils/form.utils";
 
 @Component({
       selector: 'approval-step-request-dialog',
@@ -20,12 +20,12 @@ export class ApprovalStepRequestDialog implements OnInit {
       private dialog = inject(MatDialogRef<ApprovalStepRequestDialog>);
       private userOptionsStore = inject(UserOptionStore);
 
-      @Input() approverType: 'standard' | 'condition' = 'standard';
+      @Input() approverMode: 'standard' | 'condition' = 'standard';
 
       constructor(
             @Inject(MAT_DIALOG_DATA) public data?: { 
                   step?: CreateApprovalStepTemplateRequest;
-                  approverType?: 'standard' | 'condition'; 
+                  approverMode?: 'standard' | 'condition'; 
             }
       ) {}
 
@@ -35,25 +35,30 @@ export class ApprovalStepRequestDialog implements OnInit {
 
       form = this.formBuilder.group({
             name: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
-            approverIds: this.formBuilder.control<string[]>([], { nonNullable: true, validators: [ Validators.required ]}),
-            sla: this.formBuilder.control<number>(1, { nonNullable: true, validators: [ Validators.min(1) ]}),
+            approverMode: this.formBuilder.control<string>('standard' as ApproverMode, Validators.required ),
+            approverIds: this.formBuilder.control<string[]>([]),
+            slaHours: this.formBuilder.control<number>(1, { nonNullable: true, validators: [ Validators.min(1) ]}),
             flowType: this.formBuilder.control<FlowType>('single', { nonNullable: true, validators: [ Validators.required ] }),
             order: this.formBuilder.control<number>(1, { nonNullable: true }),
+            allowOverride: this.formBuilder.control<boolean>(true),
+            resolverKey: this.formBuilder.control<string>(''),
+            resolverParams: this.formBuilder.control<any | null>(null),
       });
 
       ngOnInit(): void {
-            if(this.data?.approverType) {
-                  this.approverType = this.data.approverType;
+            if(this.data?.approverMode) {
+                  this.approverMode = this.data.approverMode;
+                  this.form.patchValue({ approverMode: this.data.approverMode });
             }
 
             if(this.data?.step) {
                   this.formTitle = 'Sửa bước duyệt'
-                  const s = this.data.step;
+                  const s = this.data.step;     
                   this.form.patchValue({
                         name: s.name,
-                        approverIds: s.approverIds,
+                        approverIds: s.approverIds ?? [],
                         flowType: s.flowType,
-                        sla: s.slaHours,
+                        slaHours: s.slaHours,
                         order: s.order ?? 1,
                   });
             }
@@ -91,23 +96,35 @@ export class ApprovalStepRequestDialog implements OnInit {
             { id: 'manager-department', label: 'Chọn quản lý theo phòng ban' }
       ];
       onApproverTypeSelected(opt: KitDropdownOption) {
-            
+            this.form.patchValue({ resolverKey: opt.id });
       }
 
       async save(): Promise<void> {
             this.form.markAllAsTouched();
-            if(this.form.invalid) return;
+            if(this.form.invalid) {
+                  logFormErrors(this.form);
+                  console.log('form: ', this.form.getRawValue());
+                  return;
+            }
 
-            // this.submitting = true;
-            // try {
-            //       const payload: CreateApprovalStepTemplateRequest = this.form.getRawValue();
-            //       this.close({ isSuccess: true, step: payload });
-            // } catch(err) {
-            //       const messages = handleHttpError(err).join('\n');
-            //       this.toastService.errorRich(messages || 'Lỗi khi thêm bước duyệt');
-            // } finally {
-            //       this.submitting = false;
-            // }
+            const value = this.form.getRawValue();
+            const flowType = value.flowType === 'single' ? 'single' : 'one-of-n';
+            console.log('approverMode: ', value.approverMode);
+            const approverMode = value.approverMode === 'standard' ? 'standard' : 'condition';
+
+            const payload: CreateApprovalStepTemplateRequest = {
+                  name: value.name!.trim(),
+                  order: value.order ?? 1,
+                  flowType,
+                  slaHours: Number(value.slaHours) || 0,
+                  approverMode,
+                  approverIds:  approverMode === 'standard' ? (value.approverIds ?? []) : null,
+                  resolverKey: approverMode === 'condition' ? (value.resolverKey || null) : null,
+                  resolverParams: approverMode === 'condition' ? (value.resolverParams ?? null) : null,
+                  allowOverride: approverMode === 'condition' ? !!value.allowOverride : false,
+            };
+
+            this.dialog.close({ isSuccess: true, step: payload });
       }
 
       close(result?: any): void {

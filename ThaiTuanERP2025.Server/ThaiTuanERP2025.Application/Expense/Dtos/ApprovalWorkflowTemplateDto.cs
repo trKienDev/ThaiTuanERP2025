@@ -9,12 +9,11 @@
 		bool IsActive
 	);
 
-	public sealed record class ApprovalWorkflowTemplateRequest
+	public sealed record ApprovalWorkflowTemplateRequest
 	(
 		string Name,
-		string DocumentType,
 		int Version,
-		bool IsActive
+		List<ApprovalStepTemplateRequest> Steps
 	);
 
 	public sealed class ApprovalWorkflowTemplateDetailDto

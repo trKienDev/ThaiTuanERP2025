@@ -25,16 +25,13 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public ICollection<ApprovalStepTemplate> Steps { get; private set; } = new List<ApprovalStepTemplate>();
 
 		private ApprovalWorkflowTemplate() { }
-		public ApprovalWorkflowTemplate(string name, string documentType, int version = 1)
+		public ApprovalWorkflowTemplate(string name, int version = 1)
 		{
 			if (string.IsNullOrWhiteSpace(name))
 				throw new ArgumentException("Name cannot be null or empty.", nameof(name));
-			if (string.IsNullOrWhiteSpace(documentType))
-				throw new ArgumentException("DocumentType cannot be null or empty.", nameof(documentType));
 			if (version < 1)
 				throw new ArgumentOutOfRangeException(nameof(version), "Version must be at least 1.");
 			Name = name;
-			DocumentType = documentType;
 			Version = version;
 		}
 

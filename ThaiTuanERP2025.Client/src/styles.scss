@@ -181,3 +181,8 @@ input[type=number] { -moz-appearance: textfield; }
 .file-input { display: none; } /* ẩn input gốc */
 .file-name { max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .file-name.muted { color: #888; }
+
+/* form error messages */
+.error small { color: #d32f2f; }
+[aria-invalid="true"] { outline: 1px solid #d32f2f; }
+.form-summary-error { margin-top: 8px; color: #d32f2f; }

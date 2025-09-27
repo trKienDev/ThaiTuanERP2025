@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
-using ThaiTuanERP2025.Application.Expense.Commands.ApprovalSteps.ApproveStep;
 using ThaiTuanERP2025.Application.Expense.Commands.ApprovalSteps.OverrideApprover;
 using ThaiTuanERP2025.Application.Expense.Commands.ApprovalSteps.RejectStep;
 using ThaiTuanERP2025.Application.Expense.Commands.ApprovalSteps.ReopenStep;
@@ -19,13 +18,6 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
 		public WorkflowStepInstancesController(IMediator mediator)
 		{
 			_mediator = mediator;
-		}
-
-		[HttpPost("{stepId:guid}/approve")]
-		public async Task<IActionResult> Approve(Guid workflowId, Guid stepId, [FromBody] ApproveStepRequest body, CancellationToken cancellationToken)
-		{
-			var result = await _mediator.Send(new ApproveStepCommand(workflowId, stepId, body ?? new()), cancellationToken);
-			return Ok(ApiResponse<ApprovalStepInstanceDto>.Success(result, "Approved"));
 		}
 
 		[HttpPost("{stepId:guid}/reject")]
