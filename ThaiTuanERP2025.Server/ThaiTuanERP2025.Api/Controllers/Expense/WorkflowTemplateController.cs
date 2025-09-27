@@ -27,7 +27,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
 			return Ok(ApiResponse<ApprovalWorkflowTemplateDto>.Success(result));
 		}
 
-		[HttpGet] 
+		[HttpGet("all")] 
 		public async Task<IActionResult> GetList([FromQuery] string? documentType, [FromQuery] bool? isActive, CancellationToken cancellationToken)
 		{
 			var result = await _mediator.Send(new GetWorkflowTemplatesByFilterQuery(documentType, isActive), cancellationToken);

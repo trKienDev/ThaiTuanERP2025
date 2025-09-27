@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, inject, OnInit, signal } from "@angular/core";
+import { Component, inject, signal } from "@angular/core";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,6 +8,8 @@ import { ToastService } from "../../../../shared/components/toast/toast.service"
 import { RouterLink } from "@angular/router";
 import { ApprovalWorkflowTemplateService } from "../../services/approval-workflow-template.service";
 import { ApprovalWorkflowTemplateDto } from "../../models/approval-workflow-template.model";
+import { ApprovalWorkflowTemplateFacade } from "../../facades/approval-workflow-template.facade";
+import { SaveApprovalWorkflowTemplateComponent } from "./expense-approval-workflow-engine-request/save-approval-workflow-template/save-approval-workflow-template.component";
 
 
 @Component({
@@ -16,25 +18,19 @@ import { ApprovalWorkflowTemplateDto } from "../../models/approval-workflow-temp
       imports: [CommonModule, MatDialogModule, MatMenuModule, MatIconModule, MatButtonModule, RouterLink],
       templateUrl: './expense-approval-workflow-engine.component.html',
 })
-export class ExpenseApprovalWorkflowEngineComponent implements OnInit {
+export class ExpenseApprovalWorkflowEngineComponent{
       private readonly toastService = inject(ToastService);
       private readonly WfTemplateSer = inject(ApprovalWorkflowTemplateService);
+      private readonly dialog = inject(MatDialog);
+      private readonly approvalWorkflowTemplateFacade = inject(ApprovalWorkflowTemplateFacade);
+      wfTemplates$ = this.approvalWorkflowTemplateFacade.approvalWorkflowTemplates$;
       wfTemplates: ApprovalWorkflowTemplateDto[] = [];
-
-      loadApprovalWorkflowTemplates(): void {
-            this.WfTemplateSer.getAll().subscribe({
-                  next: (wfs) => {
-                        this.wfTemplates = wfs;
-                  },
-                  error: 
-            })
-      }
 
       errorMessages:string[] = [];
       
       loading = signal(false);
 
-
+      trackById(index: number, item: ApprovalWorkflowTemplateDto) { return item.id; }
 
 
 }
