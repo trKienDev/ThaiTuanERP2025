@@ -109,7 +109,6 @@ export class ApprovalStepRequestDialog implements OnInit {
 
             const value = this.form.getRawValue();
             const flowType = value.flowType === 'single' ? 'single' : 'one-of-n';
-            console.log('approverMode: ', value.approverMode);
             const approverMode = value.approverMode === 'standard' ? 'standard' : 'condition';
 
             const payload: CreateApprovalStepTemplateRequest = {

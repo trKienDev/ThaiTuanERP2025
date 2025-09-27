@@ -4,8 +4,6 @@ import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Va
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { KitDropdownComponent, KitDropdownOption } from "../../../../../shared/components/kit-dropdown/kit-dropdown.component";
-import { SupplierService } from "../../../services/supplier.service";
-import { UserService } from "../../../../account/services/user.service";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { SupplierRequestDialogComponent } from "../../suppliers/supplier-request-dialog/supplier-request-dialog.component";
 import { startWith, switchMap, takeUntil } from "rxjs/operators"; // <-- thêm
@@ -44,7 +42,6 @@ type UploadItem = {
       fileId?: string;
       url?: string;
 };
-
 
 type PaymentItem = {
       itemName: FormControl<string>;
