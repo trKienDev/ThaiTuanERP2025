@@ -11,6 +11,7 @@ import { ToastService } from "../../../../../shared/components/toast/toast.servi
 import { CreateApprovalWorkflowTemplateRequest } from "../../../models/approval-workflow-template.model";
 import { firstValueFrom } from "rxjs";
 import { ApprovalWorkflowTemplateService } from "../../../services/approval-workflow-template.service";
+import { SaveApprovalWorkflowTemplateComponent } from "./save-approval-workflow-template/save-approval-workflow-template.component";
 
 @Component({
       selector: 'expense-approval-workflow-engine-request',
@@ -100,21 +101,10 @@ export class ExpenseApprovalWorkflowEngineRequest {
             this.recomputeOrders();
       }
 
-      async saveTemplate(): Promise<void> {
-            this.steps = this.steps.map((s, i) => ({ ...s, order: i + 1}));
-            if(!this.steps.length) {
-                  return;
-            }
-
-            const value = this.form.getRawValue();
-
-            const payload: CreateApprovalWorkflowTemplateRequest = {
-                  name: value.name!.trim(),
-                  version: value.version,
-                  steps: this.steps
-            };
-            console.log('payload: ', payload);
-            const result = await firstValueFrom(this.approvalWorkflowTemplateService.create(payload));
-            console.log('result: ', result);
+      openSaveApprovalWorkflowTemplate(): void {
+            console.log('steps: ', this.steps);
+            const dialogRef = this.dialog.open(SaveApprovalWorkflowTemplateComponent, {
+                  data: { steps: this.steps }
+            });
       }
 }
