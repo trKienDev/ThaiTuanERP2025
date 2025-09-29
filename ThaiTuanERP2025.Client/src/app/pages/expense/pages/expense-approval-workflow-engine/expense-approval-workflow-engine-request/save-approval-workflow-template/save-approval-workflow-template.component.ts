@@ -49,7 +49,6 @@ export class SaveApprovalWorkflowTemplateComponent implements OnInit {
       }
 
       async saveTemplate(): Promise<void> {
-            alert('save template');
             if(this.form.invalid || this.stepCount === 0 || this.submitting) return;
 
             this.submitting = true;
