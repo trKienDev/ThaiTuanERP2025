@@ -3,12 +3,12 @@ import { environment } from "../../../../environments/environment";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { ApiResponse } from "../../../shared/models/api-response.model";
-import { BudgetCodeDto, BudgetCodeWithAmountDto, CreateBudgetCodeRequest, UpdateBudgetCodeRequest } from "../models/budget-code.model";
+import { BudgetCodeDto, BudgetCodeRequest, BudgetCodeWithAmountDto } from "../models/budget-code.model";
 import { BaseCrudService } from "../../../shared/services/base-crud.service";
 import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
 
 @Injectable({ providedIn: 'root' })
-export class BudgetCodeService extends BaseCrudService<BudgetCodeDto, CreateBudgetCodeRequest, UpdateBudgetCodeRequest> {
+export class BudgetCodeService extends BaseCrudService<BudgetCodeDto, BudgetCodeRequest > {
       constructor(http: HttpClient) {
             super(http, `${environment.apiUrl}/budget-code`);
       }

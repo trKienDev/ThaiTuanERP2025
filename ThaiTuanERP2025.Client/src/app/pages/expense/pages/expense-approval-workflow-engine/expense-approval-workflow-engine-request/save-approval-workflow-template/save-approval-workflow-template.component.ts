@@ -1,10 +1,10 @@
 import { CommonModule } from "@angular/common";
 import { Component, Inject, inject, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { CreateApprovalStepTemplateRequest } from "../../../../models/approval-step-template.model";
+import { ApprovalStepTemplateRequest } from "../../../../models/approval-step-template.model";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ToastService } from "../../../../../../shared/components/toast/toast.service";
-import { CreateApprovalWorkflowTemplateRequest } from "../../../../models/approval-workflow-template.model";
+import { ApprovalWorkflowTemplateRequest } from "../../../../models/approval-workflow-template.model";
 import { firstValueFrom } from "rxjs";
 import { ApprovalWorkflowTemplateService } from "../../../../services/approval-workflow-template.service";
 
@@ -23,7 +23,7 @@ export class SaveApprovalWorkflowTemplateComponent implements OnInit {
       submitting: boolean = false;
       dialogTitle: string = 'Lưu luồng duyệt 2';
 
-      stepTemplateRequest: CreateApprovalStepTemplateRequest[] = [];
+      stepTemplateRequest: ApprovalStepTemplateRequest[] = [];
 
       form = this.formBuilder.group({
             name: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
@@ -32,7 +32,7 @@ export class SaveApprovalWorkflowTemplateComponent implements OnInit {
 
       constructor(
             @Inject(MAT_DIALOG_DATA) public input?: {
-                  steps?: CreateApprovalStepTemplateRequest[];
+                  steps?: ApprovalStepTemplateRequest[];
             } 
       ) { }
 
@@ -55,7 +55,7 @@ export class SaveApprovalWorkflowTemplateComponent implements OnInit {
             try {
                   const steps = (this.input?.steps ?? []).map((s, i) => ({ ...s, order: i + 1 }));
                   const raw = this.form.getRawValue();
-                  const payload: CreateApprovalWorkflowTemplateRequest = {
+                  const payload: ApprovalWorkflowTemplateRequest = {
                         name: raw.name!.trim(),
                         version: raw.version,
                         steps

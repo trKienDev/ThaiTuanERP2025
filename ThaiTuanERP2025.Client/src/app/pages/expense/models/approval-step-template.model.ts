@@ -15,7 +15,7 @@ export interface ApprovalStepTemplateDto {
       allowOverride: boolean;
 }
 
-export interface CreateApprovalStepTemplateRequest {
+export interface ApprovalStepTemplateRequest {
       name: string;
       order: number;
       flowType: FlowType;
@@ -25,8 +25,4 @@ export interface CreateApprovalStepTemplateRequest {
       resolverKey?: string | null;
       resolverParams?: any | null;
       allowOverride?: boolean;
-}
-
-export interface UpdateApprovalStepTemplateRequest extends CreateApprovalStepTemplateRequest {
-      id: string;
 }

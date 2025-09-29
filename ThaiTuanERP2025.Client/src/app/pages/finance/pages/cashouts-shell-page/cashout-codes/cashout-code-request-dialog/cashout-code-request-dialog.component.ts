@@ -10,7 +10,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { CashoutGroupService } from "../../../../services/cashout-group.service";
 import { LedgerAccountService } from "../../../../services/ledger-account.service";
 import { handleHttpError } from "../../../../../../shared/utils/handle-http-errors.util";
-import { CreateCashoutCodeRequest } from "../../../../models/cashout-code.model";
+import { CashoutCodeRequest } from "../../../../models/cashout-code.model";
 import { firstValueFrom } from "rxjs";
 import { CashoutCodeService } from "../../../../services/cashout-code.service";
 import { ToastService } from "../../../../../../shared/components/toast/toast.service";
@@ -98,7 +98,7 @@ export class CashoutCodeRequestDialogComponent implements OnInit {
             this.submitting = true;
 
             try {
-                  const payload: CreateCashoutCodeRequest = this.form.getRawValue() as CreateCashoutCodeRequest;
+                  const payload: CashoutCodeRequest = this.form.getRawValue() as CashoutCodeRequest;
                   const created = await firstValueFrom(this.cashoutCodeService.create(payload));
                   this.toast.successRich('Thêm dòng tiền ra thành công');
                   this.dialogRef.close(this.isSuccess = true);

@@ -47,7 +47,10 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			IApprovalStepTemplateRepository approvalStepTemplates,
 			IApprovalWorkflowTemplateRepository approvalWorkflowTemplates,
 			IApprovalStepInstanceRepository approvalStepInstances,
-			IApprovalWorkflowInstanceRepository approvalWorkflowInstances
+			IApprovalWorkflowInstanceRepository approvalWorkflowInstances,
+
+			// Expense Payment
+			IExpensePaymentRepository expensePayments
 		)
 		{
 			_dbContext = dbContext;
@@ -83,6 +86,8 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			ApprovalWorkflowTemplates = approvalWorkflowTemplates;
 			ApprovalStepInstances = approvalStepInstances;
 			ApprovalWorkflowInstances = approvalWorkflowInstances;
+
+			ExpensePayments = expensePayments;
 		}
 
 		public IStoredFilesRepository StoredFiles { get; }
@@ -118,6 +123,9 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		public IApprovalStepTemplateRepository ApprovalStepTemplates { get; }
 		public IApprovalWorkflowInstanceRepository ApprovalWorkflowInstances { get; }
 		public IApprovalStepInstanceRepository ApprovalStepInstances { get; }
+
+		// Expense Payment
+		public IExpensePaymentRepository ExpensePayments { get; }
 
 		public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{

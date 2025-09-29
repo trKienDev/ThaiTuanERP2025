@@ -5,13 +5,9 @@ export interface CashoutGroupDto {
       isActive: boolean;
       description?: string;
 }
-export interface CreateCashoutGroupRequest {
+export interface CashoutGroupRequest {
       name: string;
       description?: string | null;
       isActive: boolean;
       parentId?: string | null;
-}
-export interface UpdateCashoutGroupRequest extends CreateCashoutGroupRequest {
-      id: string;
-      code: string;
 }

@@ -26,10 +26,10 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { provideMondayFirstDateAdapter } from "../../../../../shared/date/provide-monday-first-date-adapter";
 import { HttpClientModule } from '@angular/common/http';
 import { FileService } from "../../../../../shared/services/file.service";
-import { CreateExpensePaymentRequest, ExpensePaymentAttachment, ExpensePaymentItemRequest } from "../../../models/expense-payment.model";
 import { UserOptionStore } from "../../../../account/options/user-dropdown-options.store";
 import { SupplierOptionStore } from "../../../options/supplier-dropdown-option.store";
 import { SupplierFacade } from "../../../facades/supplier.facade";
+import { ExpensePaymentRequest } from "../../../models/expense-payment.model";
 
 type UploadStatus = 'queued' | 'uploading' | 'done' | 'error';
 type UploadItem = {
@@ -99,6 +99,7 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       supplierBankAccounts: BankAccountDto[] = [];
       selectedBankAccount: BankAccountDto | null = null;
 
+
       uploads: UploadItem[] = [];
 
       constructor(
@@ -120,8 +121,9 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             totalAmount: this.formBuilder.nonNullable.control<number>(0),
             totalTax: this.formBuilder.nonNullable.control<number>(0),
             totalWithTax: this.formBuilder.nonNullable.control<number>(0),
-            paymentDate: [ null as unknown as string | null, [ Validators.required ]],
+            paymentDate: this.formBuilder.nonNullable.control<Date>(new Date(), { validators: [Validators.required] }),
             hasGoodsReceipt: this.formBuilder.nonNullable.control<boolean>(false),
+            followerIds: this.formBuilder.nonNullable.control<string[]>([])
       });
 
       ngOnInit(): void {
@@ -188,7 +190,13 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             alert(`Bạn đã chọn: ${opt.label} (id = ${opt.id})`);
       }
       onFollowerSelected(opt: KitDropdownOption) {
-            alert(`Bạn đã chọn: ${opt.label} (id = ${opt.id})`);
+            const id = typeof opt === 'string' ? opt : opt.id;
+            const ctrl = this.form.controls.followerIds;
+            const current = ctrl.getRawValue() ?? [];
+            if (!current.includes(id)) ctrl.setValue([...current, id]);
+
+            ctrl.markAsDirty();
+            ctrl.updateValueAndValidity();
       }
 
       loadBudgetCodes(): void {
@@ -515,89 +523,57 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             this.uploads.splice(index, 1);
       }
 
-      buildCreateExpensePaymentRequest(
-            form: FormGroup, 
-            uploads: Array<{
-                  objectKey?: string;
-                  fileId?: string;
-                  name: string;
-                  size: number;
-                  url?: string;
-                  status: 'queued'|'uploading'|'done'|'error';
-            }>,
-            selectedPayee: 'supplier' | 'employee' | null,
-            followerIds?: string[]
-      ): CreateExpensePaymentRequest {
-      // getRawValue để lấy cả control disabled (totalAmount/totalTax/totalWithTax)
-            const raw = form.getRawValue() as {
-                  name: string;
-                  supplierId: string | null;
-                  bankName: string;
-                  accountNumber: string;
-                  beneficiaryName: string;
-                  items: Array<{
-                        itemName: string;
-                        invoiceId: string | null;
-                        quantity: number | null;
-                        unitPrice: number | null;
-                        taxRate: number;
-                        amount: number;
-                        taxAmount: number;
-                        totalWithTax: number;
-                        budgetCodeId: string | null;
-                        cashoutCodeId: string | null;
-                  }>;
-                  totalAmount: number;
-                  totalTax: number;
-                  totalWithTax: number;
-                  paymentDate: string | null;
-                  hasGoodsReceipt: boolean;
-            };
+      async Submit(): Promise<void> {
+            if(this.form.invalid) {
+                  this.toast.errorRich('Vui lòng nhập đầy đủ thông tin');
+                  return;
+            }
 
+            const raw = this.form.getRawValue();
             const items = (raw.items ?? []).map(it => ({
+                  expensePaymentId: '',
                   itemName: it.itemName,
-                  invoiceId: it.invoiceId ?? null,
+                  invoiceId: it.invoiceId ?? undefined,
+                  budgetCodeId: it.budgetCodeId ?? undefined,
+                  cashoutCodeId: it.cashoutCodeId ?? undefined,
                   quantity: Number(it.quantity ?? 0),
                   unitPrice: Number(it.unitPrice ?? 0),
                   taxRate: Number(it.taxRate ?? 0),
                   amount: Number(it.amount ?? 0),
                   taxAmount: Number(it.taxAmount ?? 0),
                   totalWithTax: Number(it.totalWithTax ?? 0),
-                  budgetCodeId: it.budgetCodeId ?? null,
-                  cashoutCodeId: it.cashoutCodeId ?? null,
-            })) as ExpensePaymentItemRequest[];
+            }));
 
-            const attachments = uploads.filter(u => u.status === 'done' && (u.objectKey || u.fileId))
+            const attachments = this.uploads.filter(u => u.status === 'done' && (u.objectKey || u.fileId))
                   .map(u => ({
-                        objectKey: u.objectKey!,           // ưu tiên objectKey
+                        expensePaymentId: '', // backend sẽ gán sau
                         fileId: u.fileId,
+                        objectKey: u.objectKey!,
                         fileName: u.name,
                         size: u.size,
                         url: u.url,
-                  })) as ExpensePaymentAttachment[];
-
-            return {
+                  }));
+            
+            const payload: ExpensePaymentRequest = {
                   name: raw.name,
-                  payeeType: selectedPayee ?? 'supplier',
-                  supplierId: selectedPayee === 'supplier' ? (raw.supplierId ?? null) : null,
-
+                  payeeType: this.selectedPayee ?? 'supplier',
+                  supplierId: this.selectedPayee === 'supplier' ? raw.supplierId ?? undefined : undefined,
+                  supplier: {} as any, // nếu backend không cần supplier object thì có thể bỏ field này khỏi interface
                   bankName: raw.bankName,
                   accountNumber: raw.accountNumber,
                   beneficiaryName: raw.beneficiaryName,
-
-                  // đảm bảo paymentDate là ISO (tuỳ bạn mapping ở nơi khác nếu dùng Date)
-                  paymentDate: raw.paymentDate ?? '',
-
-                  hasGoodsReceipt: !!raw.hasGoodsReceipt,
-
-                  items,
+                  paymentDate: raw.paymentDate,
+                  hasGoodReceipt: raw.hasGoodsReceipt ?? false,
                   totalAmount: Number(raw.totalAmount ?? 0),
                   totalTax: Number(raw.totalTax ?? 0),
                   totalWithTax: Number(raw.totalWithTax ?? 0),
-
-                  followerIds: followerIds ?? [],
+                  status: 1, // ExpensePaymentStatus.submitted
+                  items,
                   attachments,
-            };
+                  followerIds: raw.followerIds,
+            }
+
+            console.log('payload: ', payload);
       }
 
 }

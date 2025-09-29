@@ -12,7 +12,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { DepartmentDto } from "../../../account/models/department.model";
 import { MoneyFormatDirective } from "../../../../shared/directives/money/money-format.directive";
-import { BudgetPlanDto, CreateBudgetPlanRequest } from "../../models/budget-plan.model";
+import { BudgetPlanDto, BudgetPlanRequest } from "../../models/budget-plan.model";
 import { BudgetCodeDto } from "../../models/budget-code.model";
 
 @Component({
@@ -22,7 +22,6 @@ import { BudgetCodeDto } from "../../models/budget-code.model";
             MoneyFormatDirective
       ],
       templateUrl: './budget-plan.component.html',
-      styleUrl: './budget-plan.component.scss',
 })
 export class BudgetPlanComponent implements OnInit {
       budgetPlans: (BudgetPlanDto & { selected: boolean })[] = [];
@@ -34,7 +33,7 @@ export class BudgetPlanComponent implements OnInit {
       budgetPeriods: BudgetPeriodModel[] = [];
       successMessage: string | null = null;
 
-      formData: CreateBudgetPlanRequest = {
+      formData: BudgetPlanRequest = {
             departmentId: '',
             budgetCodeId: '',
             budgetPeriodId: '',

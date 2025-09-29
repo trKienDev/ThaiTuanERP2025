@@ -1,50 +1,62 @@
+import { UserDto } from "../../account/models/user.model";
+import { ExpensePaymentAttachmentDto, ExpensePaymentAttachmentRequest } from "./expense-payment-attachment.model";
+import { ExpensePaymentFollowerDto } from "./expense-payment-followers.model";
+import { ExpensePaymentItemDto, ExpensePaymentItemRequest } from "./expense-paymnet-item.model";
+import { SupplierDto } from "./supplier.model";
+
 export type PayeeType = 'supplier' | 'employee';
-
-export interface ExpensePaymentItemRequest {
-      itemName: string;               // bắt buộc
-      invoiceId?: string | null;      // có thể null nếu chưa gắn hoá đơn
-      quantity: number;               // >= 1 (số nguyên)
-      unitPrice: number;              // >= 0
-      taxRate: number;                // ví dụ 0.1 = 10%
-      amount: number;                 // quantity * unitPrice (server có thể tự tính lại)
-      taxAmount: number;              // gợi ý hoặc người dùng override
-      totalWithTax: number;           // amount + taxAmount
-      budgetCodeId?: string | null;   // id mã ngân sách
-      cashoutCodeId?: string | null;  // id mã dòng tiền ra (nếu có)
+export enum ExpensePaymentStatus {
+      draft = 0,
+      submitted = 1,
+      approved = 2,
+      rejected = 3,
+      cancelled = 4,
+      paid = 5,
 }
 
-export interface ExpensePaymentAttachment {
-      objectKey: string;              // khóa truy xuất file (bắt buộc để tải/ngầm định)
-      fileId?: string;                // id bản ghi StoredFile (nếu backend có)
-      fileName?: string;              // tên hiển thị
-      size?: number;                  // byte
-      url?: string;                   // link truy cập (nếu public / có signed-url)
-}
-
-export interface CreateExpensePaymentRequest {
-      // Thông tin chung
-      name: string;                   // bắt buộc
-      payeeType: PayeeType;           // 'supplier' | 'employee'
-      supplierId?: string | null;     // chỉ có khi payeeType='supplier'
-
-      // Tài khoản thụ hưởng (khi trả NCC thì auto-fill theo NCC; trả nhân viên có thể để trống/nhập tay tuỳ rule)
+export interface ExpensePaymentDto {
+      id: string;
+      name: string;
+      payeeType: PayeeType;
+      supplierId?: string;
+      supplier: SupplierDto;
+      
       bankName: string;
       accountNumber: string;
       beneficiaryName: string;
-
-      // Hạn thanh toán và cờ nhập kho
-      paymentDate: string;            // ISO date string, khuyến nghị 'YYYY-MM-DD'
-      hasGoodsReceipt: boolean;
-
-      // Chi tiết hạng mục
-      items: ExpensePaymentItemRequest[];  // tối thiểu 1 dòng
-
-      // Tổng (server vẫn nên recalculation để đảm bảo toàn vẹn)
+      
+      paymentDate: Date;
+      hasGoodReceipt: boolean;
       totalAmount: number;
       totalTax: number;
       totalWithTax: number;
 
-      // Bổ sung (không thấy lưu trong form hiện tại nhưng thường cần)
-      followerIds?: string[];         // danh sách user id theo dõi
-      attachments?: ExpensePaymentAttachment[]; // file đính kèm
+      status: ExpensePaymentStatus;
+
+      items: ExpensePaymentItemDto[];
+      attachments: ExpensePaymentAttachmentDto[];
+      followers: ExpensePaymentFollowerDto[];
+}
+
+export interface ExpensePaymentRequest {
+      name: string;
+      payeeType: PayeeType;
+      supplierId?: string;
+      supplier: SupplierDto;
+      
+      bankName: string;
+      accountNumber: string;
+      beneficiaryName: string;
+      
+      paymentDate: Date;
+      hasGoodReceipt: boolean;
+      totalAmount: number;
+      totalTax: number;
+      totalWithTax: number;
+
+      status: ExpensePaymentStatus;
+
+      items: ExpensePaymentItemRequest[];
+      attachments: ExpensePaymentAttachmentRequest[];
+      followerIds: string[];
 }
