@@ -50,6 +50,7 @@ type PaymentItem = {
       unitPrice: FormControl<number | null>;
       taxRate: FormControl<number>;
       amount: FormControl<number>; // readonly
+      taxRatePercent: FormControl<string>;
       taxAmount: FormControl<number>; // readonly
       totalWithTax: FormControl<number>; // readonly
       budgetCodeId: FormControl<string | null>; 
@@ -91,9 +92,7 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       suppliers$ = this.supplierFacade.suppliers$;
       
       supplierOptions: KitDropdownOption[] = [];
-      followerOptions: KitDropdownOption[] = [];
       currencyOptions: KitDropdownOption[] = [];
-      taxOptions: KitDropdownOption[] = [];
       budgetCodeOptiopns: KitDropdownOption[] = [];
       cashoutCodeOptions: KitDropdownOption[] = [];
 
@@ -126,7 +125,6 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       });
 
       ngOnInit(): void {
-            this.loadTaxes();
             this.loadBudgetCodes();
             this.loadCashoutCodeOptions();
 
@@ -147,7 +145,6 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             
 
             this.form.get('items')!.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
-                  console.log('change');
                   const totalAmount = this.totalAmount;
                   this.form.get('totalAmount')!.setValue(totalAmount, { emitEvent: false })
 
@@ -192,23 +189,6 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       }
       onFollowerSelected(opt: KitDropdownOption) {
             alert(`Bạn đã chọn: ${opt.label} (id = ${opt.id})`);
-      }
-
-      loadTaxes(): void {
-            this.taxService.getAll().subscribe({
-                  next: (taxes) => {
-                        this.taxOptions = taxes.map(t => ({ id: t.id, label: t.policyName, }));
-                        this.taxRateById = Object.fromEntries(taxes.map(t => [t.id, t.rate ]));
-                  }, 
-                  error: (err => handleHttpError(err))
-            })
-      }
-      onTaxSelected(opt: KitDropdownOption, rowIndex: number) {
-           const rate = this.taxRateById[opt.id];
-           if(rate === undefined) return;
-           
-           const row = this.items.at(rowIndex);
-           row.get('taxRate')!.setValue(rate);
       }
 
       loadBudgetCodes(): void {
@@ -342,6 +322,7 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
                   quantity: this.formBuilder.control<number | null>(null, { validators: [Validators.required, Validators.pattern('^[0-9]+$'), Validators.min(1)] }),
                   unitPrice: this.formBuilder.control<number | null>(null, { validators: [Validators.required, Validators.min(0)] }),
                   taxRate: this.formBuilder.nonNullable.control<number>(0), // mặc định 10%
+                  taxRatePercent: this.formBuilder.nonNullable.control<string>('0'),  
                   amount: this.formBuilder.nonNullable.control<number>(0),
                   taxAmount: this.formBuilder.nonNullable.control<number>(0),
                   totalWithTax: this.formBuilder.nonNullable.control<number>(0),
@@ -349,7 +330,24 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
                   cashoutCodeId: this.formBuilder.control<string | null>(null),
             });
 
-            // Tính tự động nhưng KHÔNG đè giá trị user đã sửa (dựa theo .dirty)
+            // đồng bộ: khi user gõ %
+            group.controls.taxRatePercent.valueChanges.subscribe(txt => {
+                  if (txt == null || txt.trim() === '') {
+                        group.controls.taxRate.setValue(0, { emitEvent: false });
+                        return;
+                  }
+                  const raw = Number(txt);
+                  if (isNaN(raw)) return;
+                  const frac = Math.max(0, Math.min(1, raw / 100));
+                  group.controls.taxRate.setValue(frac, { emitEvent: true });
+            });
+
+            group.controls.taxRate.valueChanges.subscribe(frac => {
+                  const percent = Math.round(frac * 100 * 100) / 100; // 2 số thập phân
+                  group.controls.taxRatePercent.setValue(String(percent), { emitEvent: false });
+            });
+
+                        // Tính tự động nhưng KHÔNG đè giá trị user đã sửa (dựa theo .dirty)
             group.valueChanges.subscribe(v => {
                   const quantity = Number(v.quantity ?? 0);
                   const price = Number(v.unitPrice ?? 0);
@@ -372,7 +370,6 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
                   const taxVal = Number(taxCtrl.value ?? 0);
                   group.controls.totalWithTax.setValue(amount + taxVal, { emitEvent: false });
             });
-
             // các cột tính toán chỉ hiển thị (không cho nhập)
             group.controls.amount.disable({ emitEvent: false });
             group.controls.totalWithTax.disable({ emitEvent: false });
@@ -513,6 +510,7 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
                               this.toast.errorRich('Không xóa được tệp')
                         } 
                   });
+
             }
             this.uploads.splice(index, 1);
       }
@@ -601,4 +599,7 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
                   attachments,
             };
       }
+
 }
+
+

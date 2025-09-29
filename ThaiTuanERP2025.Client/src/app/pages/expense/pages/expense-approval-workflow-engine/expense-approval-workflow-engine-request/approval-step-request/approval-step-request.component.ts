@@ -37,7 +37,7 @@ export class ApprovalStepRequestDialog implements OnInit {
             name: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
             approverMode: this.formBuilder.control<string>('standard' as ApproverMode, Validators.required ),
             approverIds: this.formBuilder.control<string[]>([]),
-            slaHours: this.formBuilder.control<number>(1, { nonNullable: true, validators: [ Validators.min(1) ]}),
+            slaHours: this.formBuilder.control<number>(8, { nonNullable: true, validators: [ Validators.min(1) ]}),
             flowType: this.formBuilder.control<FlowType>('single', { nonNullable: true, validators: [ Validators.required ] }),
             order: this.formBuilder.control<number>(1, { nonNullable: true }),
             allowOverride: this.formBuilder.control<boolean>(true),

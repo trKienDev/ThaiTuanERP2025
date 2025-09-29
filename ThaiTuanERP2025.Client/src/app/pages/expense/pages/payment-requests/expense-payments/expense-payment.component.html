@@ -1,5 +1,8 @@
 <div class="input-wrapper d-flex justify-content-between">
-      <span>Tạo chi phí mới</span>
+      <div class="page-title">
+            <h3 class="icon">💸</h3>
+            <h3 class="title">Tạo chi phí thanh toán mới</h3>
+      </div>
       <div class="process-button-container d-flex gap-10p">
             <button class="button cancel-button">Hủy</button>
             <button class="button save-button">Gửi phê duyệt</button>
@@ -84,7 +87,7 @@
                                     <th class="head-quanity" style="width: 7%;">Số lượng <span style="color: red;">  *</span></th>
                                     <th>Đơn giá <span style="color: red;">  *</span></th>
                                     <th>Thành tiền</th>
-                                    <th class="head-tax">Thuế</th>
+                                    <th class="head-tax" style="width: 6%;">Thuế</th>
                                     <th>Số tiền thuế</th>
                                     <th>Số tiền có thuế</th>
                                     <th class="head-extension">Ngân sách <span style="color: red;">  *</span></th>
@@ -106,7 +109,12 @@
                                     </td>
                                     <td> {{ row.get('amount')?.value | number:'1.0-2' }} </td>
                                     <td>
-                                          <kit-dropdown [options]="taxOptions" (selectionChange)="onTaxSelected($event, i)" [width]="115" [placeholder]="'chọn mức thuế'" [enableFilter]="false"></kit-dropdown>
+                                          <div class="percent-field">
+                                                <input type="text" inputmode="decimal" class="tax-rate-input"
+                                                formControlName="taxRatePercent" placeholder="%"
+                                                title="Nhập % thuế, ví dụ 10 hoặc 10.5"/>
+                                                <span class="unit" aria-hidden="true">%</span>
+                                          </div>
                                     </td>
                                     <td>
                                           <input type="text" formControlName="taxAmount" inputmode="decimal" appMoney [appMoneyDecimals]="0">
@@ -200,7 +208,7 @@
       </div>
 
       <div class="input-wrapper">
-            <kit-dropdown [multiple]="true" [options]="followerOptions" (selectionChange)="onFollowerSelected($event)" [width]="'100%'" [placeholder]="'Thêm người theo dõi'"></kit-dropdown>
+            <kit-dropdown [multiple]="true" [options]="(userOptions$ | async) ?? []"  (selectionChange)="onFollowerSelected($event)" [width]="'100%'" [placeholder]="'Thêm người theo dõi'"></kit-dropdown>
       </div>
 
       <div class="mar-top-20">
