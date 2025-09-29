@@ -2,13 +2,13 @@ import { Injectable } from "@angular/core";
 import { BaseCrudService } from "../../../shared/services/base-crud.service";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { environment } from "../../../../environments/environment";
-import { CreateTaxRequest, TaxDto, UpdateTaxRequest } from "../models/tax.model";
+import { TaxRequest, TaxDto } from "../models/tax.model";
 import { catchError, Observable, throwError } from "rxjs";
 import { ApiResponse } from "../../../shared/models/api-response.model";
 import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
 
 @Injectable({ providedIn: 'root'})
-export class TaxService extends BaseCrudService<TaxDto, CreateTaxRequest, UpdateTaxRequest> {
+export class TaxService extends BaseCrudService<TaxDto, TaxRequest> {
       constructor(http: HttpClient) {
             super(http, `${environment.apiUrl}/taxes`);
       }

@@ -3,14 +3,14 @@ import { environment } from "../../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { Observable, switchMap } from "rxjs";
 import { ApiResponse } from "../../../shared/models/api-response.model";
-import {  CreateUserRequest, SetUserManagerRequest, UpdateUserRequest, UserDto } from "../models/user.model";
+import { SetUserManagerRequest, UserDto, UserRequest } from "../models/user.model";
 
 import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
 import { FileService } from "../../../shared/services/file.service";
 import { BaseCrudService } from "../../../shared/services/base-crud.service";
 
 @Injectable({ providedIn: 'root'})
-export class UserService extends BaseCrudService<UserDto, CreateUserRequest, UpdateUserRequest> {
+export class UserService extends BaseCrudService<UserDto, UserRequest> {
       constructor(http: HttpClient) {
             super(http, `${environment.apiUrl}/user`);
       }

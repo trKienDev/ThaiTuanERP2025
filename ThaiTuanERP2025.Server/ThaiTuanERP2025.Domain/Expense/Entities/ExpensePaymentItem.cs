@@ -8,8 +8,9 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		private ExpensePaymentItem() { } // EF
 
 		internal ExpensePaymentItem(Guid paymentId, string itemName, int quantity, decimal unitPrice,
-					    decimal taxRate, Guid? budgetCodeId, Guid? cashoutCodeId,
-					    Guid? invoiceId, decimal? overrideTaxAmount)
+			decimal taxRate, Guid? budgetCodeId, Guid? cashoutCodeId,
+			Guid? invoiceId, decimal? overrideTaxAmount
+		)
 		{
 			Id = Guid.NewGuid();
 			ExpensePaymentId = paymentId;

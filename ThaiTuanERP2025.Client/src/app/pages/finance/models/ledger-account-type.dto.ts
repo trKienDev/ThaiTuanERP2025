@@ -7,11 +7,9 @@ export interface LedgerAccountTypeDto {
       description?: string | null;
 }
 
-export interface CreateLedgerAccountTypeRequest {
+export interface LedgerAccountTypeRequest {
       code: string;
       name: string;
       ledgerAccountTypeKind: number;
       description?: string | null;
 }
-
-export interface UpdateLedgerAccountTypeRequest extends CreateLedgerAccountTypeRequest {}

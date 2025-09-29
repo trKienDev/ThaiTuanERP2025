@@ -7,7 +7,7 @@ import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
-import { CreateSupplierRequest, SupplierDto } from "../../../models/supplier.model";
+import { SupplierRequest, SupplierDto } from "../../../models/supplier.model";
 import { catchError, of } from "rxjs";
 import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
@@ -46,7 +46,7 @@ export class SupplierRequestDialogComponent {
                   return;
             }
 
-            const payload = this.supplierForm.getRawValue() as CreateSupplierRequest;
+            const payload = this.supplierForm.getRawValue() as SupplierRequest;
 
             this.saving = true;
 

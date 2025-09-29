@@ -112,6 +112,11 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public void Cancel() => Status = ExpensePaymentStatus.Cancelled;
 		public void MarkPaid() => Status = ExpensePaymentStatus.Paid;
 
+		public void AddAttachment(string objectKey, string fileName, long size, string? url, Guid? fileId)
+		{
+			_attachments.Add(new ExpensePaymentAttachment(Id, objectKey, fileName, size, url, fileId));
+		}
+
 		public void AddFollower(Guid userId)
 		{
 			if (_followers.Any(f => f.UserId == userId)) return;

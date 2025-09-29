@@ -6,7 +6,7 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
-import { CashoutGroupDto, CreateCashoutGroupRequest } from "../../../../models/cashout-group.model";
+import { CashoutGroupDto, CashoutGroupRequest } from "../../../../models/cashout-group.model";
 import { catchError, firstValueFrom, of } from "rxjs";
 import { handleHttpError } from "../../../../../../shared/utils/handle-http-errors.util";
 import { MatSelectModule } from "@angular/material/select";
@@ -82,7 +82,7 @@ export class CashoutGroupRequestDialogComponent implements OnInit {
                   const payload = {
                         ...raw,
                         parentId: raw.parentId || null, // quan trọng: '' -> null
-                  } as CreateCashoutGroupRequest;
+                  } as CashoutGroupRequest;
                   console.log('payload: ', payload);
                   const created = await firstValueFrom(this.cashoutGroupService.create(payload));
                   this.toast.successRich('Thêm nhóm dòng tiền ra thành công');

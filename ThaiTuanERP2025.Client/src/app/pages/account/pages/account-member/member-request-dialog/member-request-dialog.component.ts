@@ -5,11 +5,11 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { UserOptionStore } from "../../../options/user-dropdown-options.store";
 import { DepartmentOptionStore } from "../../../options/department-dropdown-options.option";
 import { KitDropdownComponent, KitDropdownOption } from "../../../../../shared/components/kit-dropdown/kit-dropdown.component";
-import { CreateUserRequest, UpdateUserRequest } from "../../../models/user.model";
 import { firstValueFrom } from "rxjs";
 import { UserFacade } from "../../../facades/user.facade";
 import { ToastService } from "../../../../../shared/components/toast/toast.service";
 import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
+import { UserRequest } from "../../../models/user.model";
 
 @Component({
       selector: 'member-request-dialog',
@@ -30,7 +30,7 @@ export class MemberRequestDialog implements OnInit {
       departmentOptions$ = this.departmentOptionStore.option$;
 
       constructor(
-            @Inject(MAT_DIALOG_DATA) public data?: { user?: UpdateUserRequest }
+            @Inject(MAT_DIALOG_DATA) public data?: { user?: UserRequest }
       ) {}
 
       dialogTitle = 'Thêm người dùng mới';
@@ -89,7 +89,7 @@ export class MemberRequestDialog implements OnInit {
             this.submitting = true;
 
             try {
-                  const payload: CreateUserRequest = this.form.getRawValue();
+                  const payload: UserRequest = this.form.getRawValue();
                   console.log('payload: ', payload);
                   const created = await firstValueFrom(this.userFacade.create(payload));
                   this.toastService.successRich('Thêm người dùng thành công');

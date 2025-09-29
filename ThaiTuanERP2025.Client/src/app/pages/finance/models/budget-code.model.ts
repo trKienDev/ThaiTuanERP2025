@@ -8,15 +8,11 @@ export interface BudgetCodeDto {
       createdDate: string;
 }
 
-export interface CreateBudgetCodeRequest {
+export interface BudgetCodeRequest {
       code: string;
       name: string;
       budgetGroupId: string;
       cashoutCodeId: string;
-}
-
-export interface UpdateBudgetCodeRequest extends CreateBudgetCodeRequest {
-      id: string;
 }
 
 export interface BudgetCodeWithAmountDto {

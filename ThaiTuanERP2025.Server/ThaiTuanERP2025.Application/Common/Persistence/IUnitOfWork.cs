@@ -44,6 +44,9 @@ namespace ThaiTuanERP2025.Application.Common.Persistence
 		IApprovalWorkflowInstanceRepository ApprovalWorkflowInstances { get; }	
 		IApprovalStepInstanceRepository ApprovalStepInstances { get; }
 
+		// Expense Payment
+		IExpensePaymentRepository ExpensePayments { get; }
+
 		Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 	}
 }

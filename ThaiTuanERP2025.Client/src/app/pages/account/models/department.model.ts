@@ -10,16 +10,12 @@ export interface DepartmentDto {
       region: number;
 }
 
-export interface CreateDepartmentRequest {
+export interface DepartmentRequest {
       code: string;
       name: string;
       managerId?: string | null;
       parentId?: string | null;
       region: number;
-}
-
-export interface UpdateDepartmentRequest extends CreateDepartmentRequest {
-      id: string;
 }
 
 export enum DepartmentRegion {
