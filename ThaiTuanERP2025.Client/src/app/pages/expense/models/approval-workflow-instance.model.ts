@@ -17,7 +17,7 @@ export interface ApprovalWorkflowInstanceDto {
       costCenter?: string;
 }
 
-export interface CreateApprovalWorkflowInstanceRequest {
+export interface ApprovalWorkflowInstanceRequest {
       templateId: string;
       documenID: string;
       documentType: string;

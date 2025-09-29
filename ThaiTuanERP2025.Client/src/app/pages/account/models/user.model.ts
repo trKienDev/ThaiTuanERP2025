@@ -22,7 +22,7 @@ export interface UserDto {
       manager?: UserDto;
 }
 
-export interface CreateUserRequest {
+export interface UserRequest {
       fullName: string;
       username: string;
       employeeCode: string;
@@ -33,8 +33,6 @@ export interface CreateUserRequest {
       departmentId?: string | null;
       position: string;
 }
-
-export interface UpdateUserRequest extends CreateUserRequest {}
 
 export interface SetUserManagerRequest {
       managerIds: string[];

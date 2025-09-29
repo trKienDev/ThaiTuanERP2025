@@ -47,6 +47,10 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<ApprovalStepTemplate> ApproverStepTemplates => Set<ApprovalStepTemplate>();
 		public DbSet<ApprovalWorkflowInstance> ApprovalWorkflowInstances => Set<ApprovalWorkflowInstance>();
 		public DbSet<ApprovalStepInstance> ApprovalStepInstances => Set<ApprovalStepInstance>();
+		public DbSet<ExpensePayment> ExpensePayments => Set<ExpensePayment>();	
+		public DbSet<ExpensePaymentItem> ExpensePaymentItems => Set<ExpensePaymentItem>();
+		public DbSet<ExpensePaymentAttachment> ExpensePaymentAttachments => Set<ExpensePaymentAttachment>();
+		public DbSet<ExpensePaymentFollower> ExpensePaymentFollowers => Set<ExpensePaymentFollower>();	
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

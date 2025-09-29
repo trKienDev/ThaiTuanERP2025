@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { BaseCrudService } from "../../../shared/services/base-crud.service";
-import { CreateLedgerAccountRequest, LedgerAccountDto, LedgerAccountLookupDto, LedgerAccountTreeDto, UpdateLedgerAccountRequest } from "../models/ledger-account.model";
+import { LedgerAccountDto, LedgerAccountLookupDto, LedgerAccountRequest } from "../models/ledger-account.model";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { environment } from "../../../../environments/environment";
 import { catchError, Observable, throwError } from "rxjs";
@@ -8,7 +8,7 @@ import { ApiResponse } from "../../../shared/models/api-response.model";
 import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
 
 @Injectable({ providedIn: 'root' })
-export class LedgerAccountService extends BaseCrudService<LedgerAccountDto, CreateLedgerAccountRequest, UpdateLedgerAccountRequest> {
+export class LedgerAccountService extends BaseCrudService<LedgerAccountDto, LedgerAccountRequest> {
       constructor(http: HttpClient) {
             super(http, `${environment.apiUrl}/ledger-accounts`);
       }

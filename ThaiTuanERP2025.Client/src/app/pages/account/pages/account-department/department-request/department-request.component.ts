@@ -7,7 +7,7 @@ import { ToastService } from "../../../../../shared/components/toast/toast.servi
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { UserOptionStore } from "../../../options/user-dropdown-options.store";
 import { DepartmentOptionStore } from "../../../options/department-dropdown-options.option";
-import { CreateDepartmentRequest } from "../../../models/department.model";
+import { DepartmentRequest } from "../../../models/department.model";
 import { firstValueFrom } from "rxjs";
 import { DepartmentFacade } from "../../../facades/department.facade";
 
@@ -71,7 +71,7 @@ export class DepartmentRequestDialog {
             this.submitting = true;
 
             try {
-                  const payload: CreateDepartmentRequest = this.form.getRawValue();
+                  const payload: DepartmentRequest = this.form.getRawValue();
                   const created = await firstValueFrom(this.departmentFacade.create(payload));
                   this.toastService.successRich('Thêm phòng ban thành công');
                   this.dialogRef.close({ isSuccess: true, result: created });

@@ -5,7 +5,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { ApprovalStepRequestDialog } from "./approval-step-request/approval-step-request.component";
 import { ActionMenuOption } from "../../../../../shared/components/kit-action-menu/kit-action-menu.model";
 import { KitActionMenuComponent } from "../../../../../shared/components/kit-action-menu/kit-action-menu.component";
-import { CreateApprovalStepTemplateRequest, UpdateApprovalStepTemplateRequest } from "../../../models/approval-step-template.model";
+import {  ApprovalStepTemplateRequest } from "../../../models/approval-step-template.model";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ToastService } from "../../../../../shared/components/toast/toast.service";
 import { ApprovalWorkflowTemplateService } from "../../../services/approval-workflow-template.service";
@@ -26,7 +26,7 @@ export class ExpenseApprovalWorkflowEngineRequest {
 
       private static readonly END = -1; // sential cho nút add cuối cùng
 
-      steps: CreateApprovalStepTemplateRequest[] = [];
+      steps: ApprovalStepTemplateRequest[] = [];
 
       form = this.formBuilder.group({
             name: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
@@ -54,10 +54,10 @@ export class ExpenseApprovalWorkflowEngineRequest {
                   data: { approverMode }
             });
 
-            dialogRef.afterClosed().subscribe((result?: { isSuccess?: boolean, step?: Omit<CreateApprovalStepTemplateRequest, 'order'> }) => {
+            dialogRef.afterClosed().subscribe((result?: { isSuccess?: boolean, step?: Omit<ApprovalStepTemplateRequest, 'order'> }) => {
                   if (result?.isSuccess === true && result.step ) {
                         const order = this.steps.length + 1;
-                        const newStep: CreateApprovalStepTemplateRequest = {
+                        const newStep: ApprovalStepTemplateRequest = {
                               ...result.step,
                               order
                         };
@@ -72,7 +72,7 @@ export class ExpenseApprovalWorkflowEngineRequest {
             const dialogRef = this.dialog.open(ApprovalStepRequestDialog, {
                   data: { step: current }
             });
-            dialogRef.afterClosed().subscribe((result?: { isSuccess?: boolean, step?: UpdateApprovalStepTemplateRequest}) => {
+            dialogRef.afterClosed().subscribe((result?: { isSuccess?: boolean, step?: ApprovalStepTemplateRequest}) => {
                   if(result?.isSuccess && result.step) {
                         const updated = { ...result.step, order: current.order };
                         this.steps[i] = updated;

@@ -11,7 +11,7 @@ import { CashoutCodeService } from "../../../../services/cashout-code.service";
 import { ToastService } from "../../../../../../shared/components/toast/toast.service";
 import { KitDropdownComponent, KitDropdownOption } from "../../../../../../shared/components/kit-dropdown/kit-dropdown.component";
 import { handleHttpError } from "../../../../../../shared/utils/handle-http-errors.util";
-import { CreateBudgetCodeRequest } from "../../../../models/budget-code.model";
+import { BudgetCodeRequest } from "../../../../models/budget-code.model";
 
 @Component({
       selector: 'add-budget-code-request',
@@ -84,7 +84,7 @@ export class AddBudgetCodeRequestDialogComponent implements OnInit {
             this.submitting = true;
 
             try {
-                  const payload: CreateBudgetCodeRequest = this.form.getRawValue() as CreateBudgetCodeRequest;
+                  const payload: BudgetCodeRequest = this.form.getRawValue() as BudgetCodeRequest;
 
                   const created = await firstValueFrom(this.budgetCodeService.create(payload));
                   this.toast.successRich('Thêm ngân sách thành công');

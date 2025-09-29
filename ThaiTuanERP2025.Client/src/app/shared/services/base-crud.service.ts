@@ -5,7 +5,7 @@ import { PagedRequest } from "../models/paged-request.model";
 import { PagedResult } from "../models/paged-result.model";
 import { handleApiResponse$ } from "../operators/handle-api-response.operator";
 
-export abstract class BaseCrudService<TDto, TCreate, TUpdate> {
+export abstract class BaseCrudService<TDto, TRequest> {
       protected constructor(
             protected http: HttpClient,
             protected readonly endpoint: string// e.g. `${environment.apiUrl}/api/taxes`
@@ -49,7 +49,7 @@ export abstract class BaseCrudService<TDto, TCreate, TUpdate> {
                   );
       }
 
-      create(payload: TCreate): Observable<TDto> {
+      create(payload: TRequest): Observable<TDto> {
             return this.http
                   .post<ApiResponse<TDto>>(this.endpoint, payload)
                   .pipe(
@@ -58,7 +58,7 @@ export abstract class BaseCrudService<TDto, TCreate, TUpdate> {
                   );
       }
 
-      update(id: string, payload: TUpdate): Observable<TDto> {
+      update(id: string, payload: TRequest): Observable<TDto> {
             return this.http
                   .put<ApiResponse<TDto>>(`${this.endpoint}/${id}`, payload)
                   .pipe(

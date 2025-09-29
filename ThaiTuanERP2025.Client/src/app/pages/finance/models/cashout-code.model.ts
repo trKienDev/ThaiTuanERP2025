@@ -11,13 +11,9 @@ export interface CashoutCodeDto {
       postingLedgerAccountId: string;
       postingLedgerAccountName: string;
 }
-export interface CreateCashoutCodeRequest {
+export interface CashoutCodeRequest {
       name: string;
       cashoutGroupId: string;
       postingLedgerAccountId: string;
       description?: string | null;
-}
-export interface UpdateCashoutCodeRequest extends CreateCashoutCodeRequest {
-      id: string;
-      code: string;
 }

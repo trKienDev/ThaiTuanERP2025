@@ -12,7 +12,7 @@ export interface LedgerAccountDto {
       isActive: boolean;
 }
 
-export interface CreateLedgerAccountRequest {
+export interface LedgerAccountRequest {
       number: string;
       name: string;
       ledgerAccountTypeId: string;
@@ -21,8 +21,6 @@ export interface CreateLedgerAccountRequest {
       description?: string | null;
       isActive: boolean;
 }
-
-export interface UpdateLedgerAccountRequest extends CreateLedgerAccountRequest {}
 
 export interface LedgerAccountTreeDto {
       id: string;

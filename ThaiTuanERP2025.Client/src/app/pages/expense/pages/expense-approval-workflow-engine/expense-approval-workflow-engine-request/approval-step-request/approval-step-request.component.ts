@@ -5,7 +5,7 @@ import { ToastService } from "../../../../../../shared/components/toast/toast.se
 import { FormBuilder, FormsModule, Validators, ReactiveFormsModule } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { UserOptionStore } from "../../../../../account/options/user-dropdown-options.store";
-import { ApproverMode, CreateApprovalStepTemplateRequest, FlowType } from "../../../../models/approval-step-template.model";
+import { ApproverMode, ApprovalStepTemplateRequest, FlowType } from "../../../../models/approval-step-template.model";
 import { logFormErrors } from "../../../../../../shared/utils/form.utils";
 
 @Component({
@@ -24,7 +24,7 @@ export class ApprovalStepRequestDialog implements OnInit {
 
       constructor(
             @Inject(MAT_DIALOG_DATA) public data?: { 
-                  step?: CreateApprovalStepTemplateRequest;
+                  step?: ApprovalStepTemplateRequest;
                   approverMode?: 'standard' | 'condition'; 
             }
       ) {}
@@ -111,7 +111,7 @@ export class ApprovalStepRequestDialog implements OnInit {
             const flowType = value.flowType === 'single' ? 'single' : 'one-of-n';
             const approverMode = value.approverMode === 'standard' ? 'standard' : 'condition';
 
-            const payload: CreateApprovalStepTemplateRequest = {
+            const payload: ApprovalStepTemplateRequest = {
                   name: value.name!.trim(),
                   order: value.order ?? 1,
                   flowType,
