@@ -8,8 +8,6 @@ import { KitActionMenuComponent } from "../../../../../shared/components/kit-act
 import { CreateApprovalStepTemplateRequest, UpdateApprovalStepTemplateRequest } from "../../../models/approval-step-template.model";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ToastService } from "../../../../../shared/components/toast/toast.service";
-import { CreateApprovalWorkflowTemplateRequest } from "../../../models/approval-workflow-template.model";
-import { firstValueFrom } from "rxjs";
 import { ApprovalWorkflowTemplateService } from "../../../services/approval-workflow-template.service";
 import { SaveApprovalWorkflowTemplateComponent } from "./save-approval-workflow-template/save-approval-workflow-template.component";
 

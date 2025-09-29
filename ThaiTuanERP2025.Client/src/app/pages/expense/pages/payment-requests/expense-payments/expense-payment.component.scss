@@ -94,3 +94,22 @@
       &.error { color: #d93025; }    /* đỏ khi lỗi */
 }
 
+.percent-field {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+}
+
+.percent-field input {
+      padding-right: 18px; // chừa chỗ cho dấu %
+}
+
+.percent-field .unit {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;     // không chặn click/drag con trỏ
+      color: #666;              // tuỳ theme
+      font-size: 0.95em;
+}
