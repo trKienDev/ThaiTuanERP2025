@@ -186,3 +186,7 @@ input[type=number] { -moz-appearance: textfield; }
 .error small { color: #d32f2f; }
 [aria-invalid="true"] { outline: 1px solid #d32f2f; }
 .form-summary-error { margin-top: 8px; color: #d32f2f; }
+
+/* mat-dialog  */
+.mat-mdc-dialog-surface { min-width: fit-content !important; }
+.cdk-overlay-pane, .mat-mdc-dialog-container, .mat-mdc-dialog-inner-container { min-width: fit-content !important; }

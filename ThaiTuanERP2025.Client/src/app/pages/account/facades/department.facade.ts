@@ -10,7 +10,7 @@ export class DepartmentFacade extends BaseCrudFacade<DepartmentDto, DepartmentRe
       constructor() {
             super(inject(DepartmentService));
       }
-      readonly department$: Observable<DepartmentDto[]> = this.list$;
+      readonly departments$: Observable<DepartmentDto[]> = this.list$;
 
       setManager(id: string, req: SetDepartmentManagerRequest): Observable<string> {
             return this.departmentService.setManager(id, req).pipe(

@@ -25,12 +25,11 @@ export class DepartmentRequestDialog {
       private departmentOptionStore = inject(DepartmentOptionStore);
       private departmentFacade = inject(DepartmentFacade);
 
-
       dialogTitle = 'Thêm phòng ban mới';
       submitting = false;
       managerOptions$ = this.userOptionStore.option$;
 
-      department$ = this.departmentFacade.department$;
+      departments$ = this.departmentFacade.departments$;
       departmentOptions$ = this.departmentOptionStore.option$;
 
       regionOptions: KitDropdownOption[] = [

@@ -10,7 +10,7 @@
             </tr>
       </thead>
       <tbody>
-            <tr *ngFor="let dept of (department$ | async) ?? []; trackBy: trackById; let i = index;">
+            <tr *ngFor="let dept of (departments$ | async) ?? []; trackBy: trackById; let i = index;">
                   <td>{{ i + 1 }}</td>
                   <td>{{ dept.code }}</td>
                   <td>{{ dept.name }}</td>
