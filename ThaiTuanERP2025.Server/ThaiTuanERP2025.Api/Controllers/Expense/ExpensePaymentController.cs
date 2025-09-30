@@ -20,7 +20,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
 		public async Task<IActionResult> CreateExpensePayment([FromBody] ExpensePaymentRequest request, CancellationToken cancellationToken)
 		{
 			var result = await _mediator.Send(new CreateExpensePaymentCommand(request), cancellationToken);
-			return Ok(ApiResponse<Unit>.Success(result));
+			return Ok(ApiResponse<Guid>.Success(result));
 		}
 	}
 }
