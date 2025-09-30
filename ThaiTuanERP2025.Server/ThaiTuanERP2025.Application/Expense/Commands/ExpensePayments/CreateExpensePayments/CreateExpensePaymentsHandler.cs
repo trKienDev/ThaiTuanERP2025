@@ -1,19 +1,22 @@
 ﻿using MediatR;
 using ThaiTuanERP2025.Application.Common.Persistence;
+using ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Expense.Enums;
 
 namespace ThaiTuanERP2025.Application.Expense.Commands.ExpensePayments.CreateExpensePayments
 {
-	public sealed class CreateExpensePaymentsHandler : IRequestHandler<CreateExpensePaymentCommand, Unit>
+	public sealed class CreateExpensePaymentsHandler : IRequestHandler<CreateExpensePaymentCommand, Guid>
 	{
 		private readonly IUnitOfWork _unitOfWork;
-		public CreateExpensePaymentsHandler(IUnitOfWork unitOfWork)
+		private readonly ApprovalWorkflowService _approvalWorkflowService;
+		public CreateExpensePaymentsHandler(IUnitOfWork unitOfWork, ApprovalWorkflowService approvalWorkflowService)
 		{
 			_unitOfWork = unitOfWork;
+			_approvalWorkflowService = approvalWorkflowService;
 		}
 
-		public async Task<Unit> Handle(CreateExpensePaymentCommand command, CancellationToken cancellationToken)
+		public async Task<Guid> Handle(CreateExpensePaymentCommand command, CancellationToken cancellationToken)
 		{
 			var request = command.Request;
 
@@ -51,7 +54,16 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ExpensePayments.CreateExp
 			await _unitOfWork.ExpensePayments.AddAsync(payment);
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-			return Unit.Value;
+			await _approvalWorkflowService.CreateInstanceForExpensePaymentAsync(
+				paymentId: payment.Id,
+				workflowTemplateId: Guid.Parse("5EB2210A-C649-4532-A5D1-C7443F65C9EA"),
+				overrides: null,
+				autoStart: false,
+				linkToPayment: true,
+				cancellationToken: cancellationToken
+			);
+
+			return payment.Id;
 		}
 	}
 }
