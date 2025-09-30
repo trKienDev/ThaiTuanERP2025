@@ -54,6 +54,9 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		private readonly List<ExpensePaymentFollower> _followers = new();
 		public IReadOnlyCollection<ExpensePaymentFollower> Followers => _followers;
 
+		// Workflow instance id (nếu có)
+		public Guid? CurrentWorkflowInstanceId { get; private set; }
+		public ApprovalWorkflowInstance? CurrentWorkflowInstance { get; private set; }
 
 		// ==== HÀM NGHIỆP VỤ ====
 		public void SetSupplier(Guid? supplierId)
@@ -137,5 +140,8 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 				if (!_followers.Any(f => f.UserId == uid))
 					_followers.Add(new ExpensePaymentFollower(Id, uid));
 		}
+
+		public void LinkWorkflow(Guid instanceId) => CurrentWorkflowInstanceId = instanceId;
+		public void UnlinkWorkflow() => CurrentWorkflowInstanceId = null;
 	}
 }
