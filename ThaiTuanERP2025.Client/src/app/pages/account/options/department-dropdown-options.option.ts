@@ -7,7 +7,7 @@ import { shareReplay } from "rxjs";
 export class DepartmentOptionStore {
       private readonly facade = inject(DepartmentFacade);
 
-      readonly option$ = this.facade.department$.pipe(
+      readonly option$ = this.facade.departments$.pipe(
             toDropdownOptions({
                   id: 'id',
                   label: 'name',

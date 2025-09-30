@@ -18,10 +18,10 @@ export class AccountDepartmentComponent implements OnInit {
       private dialog = inject(MatDialog);
       private departmentFacade = inject(DepartmentFacade);
 
-      department$ = this.departmentFacade.department$;
+      departments$ = this.departmentFacade.departments$;
       
       ngOnInit(): void {
-            this.department$.subscribe({
+            this.departments$.subscribe({
                   next: (departments) =>{
                         console.log('departments: ', departments);
                   }

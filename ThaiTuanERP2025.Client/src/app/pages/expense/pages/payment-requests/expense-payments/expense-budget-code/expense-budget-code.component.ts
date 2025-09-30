@@ -35,6 +35,7 @@ export class ExpenseBudgetCodeDialogComponent implements OnInit {
             this.loading = true;
             this.budgetCodeService.getWithAmount().subscribe({
                   next: (list) => {
+                        console.log('list: ', list);
                         this.budgetCodes = list ?? [];
                         this.loading = false;
                         this.cdr.markForCheck();
