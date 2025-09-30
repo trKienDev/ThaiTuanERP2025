@@ -7,7 +7,7 @@ import { KitDropdownComponent, KitDropdownOption } from "../../../../../shared/c
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { SupplierRequestDialogComponent } from "../../suppliers/supplier-request-dialog/supplier-request-dialog.component";
 import { startWith, switchMap, takeUntil } from "rxjs/operators"; // <-- thêm
-import { of, Subject } from "rxjs";
+import { firstValueFrom, of, Subject } from "rxjs";
 import { BankAccountService } from "../../../services/bank-account.service";
 import { BankAccountDto } from "../../../models/bank-account.model";
 import { MoneyFormatDirective } from "../../../../../shared/directives/money/money-format.directive";
@@ -30,6 +30,7 @@ import { UserOptionStore } from "../../../../account/options/user-dropdown-optio
 import { SupplierOptionStore } from "../../../options/supplier-dropdown-option.store";
 import { SupplierFacade } from "../../../facades/supplier.facade";
 import { ExpensePaymentRequest } from "../../../models/expense-payment.model";
+import { ExpensePaymentService } from "../../../services/expense-payment.service";
 
 type UploadStatus = 'queued' | 'uploading' | 'done' | 'error';
 type UploadItem = {
@@ -78,6 +79,8 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       private userOptionsStore = inject(UserOptionStore);
       private supplierOptionStore = inject(SupplierOptionStore);
       private supplierFacade = inject(SupplierFacade);
+      private submitting = false;
+      private readonly expensePaymentService = inject(ExpensePaymentService);
 
       private readonly uploadMeta = {
             module: 'expense',
@@ -573,7 +576,17 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
                   followerIds: raw.followerIds,
             }
 
-            console.log('payload: ', payload);
+            this.submitting = true;
+            try {
+                  const result = await firstValueFrom(this.expensePaymentService.create(payload));
+                  this.toast.successRich('Gửi phê duyệt thành công');
+            } catch(error) {
+                  console.error('Gửi phê duyệt thất bại', error);
+                  this.toast.errorRich('Gửi phê duyệt thất bại');
+            } finally {
+                  this.submitting = false;
+            }
+            
       }
 
 }
