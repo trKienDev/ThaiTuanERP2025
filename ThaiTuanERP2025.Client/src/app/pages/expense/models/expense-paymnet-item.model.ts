@@ -15,7 +15,6 @@ export interface ExpensePaymentItemDto {
 }
 
 export interface ExpensePaymentItemRequest {
-      expensePaymentId: string;
       invoiceId?: string;
       budgetCodeId?: string;
       cashoutCodeId?: string;

@@ -18,7 +18,7 @@
 	}
 
 	public sealed record ExpensePaymentItemRequest {
-		public Guid ExpensePaymentId { get; init; }
+		public Guid? ExpensePaymentId { get; init; }
 		public Guid? InvoiceId { get; init; }
 		public Guid? BudgetCodeId { get; init; }
 		public Guid? CashoutCodeId { get; init; }

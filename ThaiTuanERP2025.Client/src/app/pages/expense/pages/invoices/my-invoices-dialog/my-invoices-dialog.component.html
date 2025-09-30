@@ -1,46 +1,47 @@
-<div class="my-invoices-dialog-container">
-      <div class="dialog-heading d-flex justify-content-between">
-            <div class="align-content-center">
-                  <span class="font-weight-bold">Hóa đơn của bạn</span>
+<div class="dialog">
+      <div class="dialog-container">
+            <div class="dialog-heading">
+                  <div class="dialog-title">
+                        <h1>Hóa đơn của bạn</h1>
+                  </div>
+                  <div class="dialog-close">
+                        <button type="button" class="close-button" (click)="close()">
+                              <span class="text material-icons-outlined">close</span>
+                        </button>
+                  </div>
             </div>
-            <div class="close-button">
-                  <button type="button" class="close-button" (click)="close()">
-                        <span class="text material-icons-outlined">close</span>
-                  </button>
+            <div class="dialog-body overflow-y-scroll">
+                  <table class="table table-center-text table-my-invoices mar-top-20">
+                        <thead>
+                              <tr>
+                                    <th>Tên hóa đơn</th>
+                                    <th>Số hóa đơn</th>
+                                    <th>Ngày lập hóa đơn</th>
+                                    <th>Trạng thái</th>
+                                    <th></th>
+                              </tr>
+                        </thead>
+                        <tbody>
+                              <tr *ngIf="myInvoices.length === 0">
+                                    <td colspan="5" class="text-center">
+                                          Không có hóa đơn nào
+                                    </td>
+                              </tr>
+                              <tr *ngFor="let inv of myInvoices">
+                                    <td>{{ inv.invoiceName }}</td>
+                                    <td>{{ inv.invoiceNumber }}</td>
+                                    <td>{{ inv.issueDate | date: 'dd/MM/yyyy' }}</td>
+                                    <td class="d-flex justify-content-center">
+                                          <div class="badge" [ngClass]="inv.isDraft ? 'dark-outline-badge' : 'primary-outline-badge'">
+                                                {{ inv.isDraft | invoiceStatus }}
+                                          </div>
+                                    </td>
+                                    <td>
+                                          <button type="button" class="button default-button" (click)="selectInvoice(inv)">Chọn</button>
+                                    </td>
+                              </tr>
+                        </tbody>
+                  </table>
             </div>
-      </div>
-      
-      <div class="dialog-body overflow-y-scroll">
-            <table class="table table-center-text table-my-invoices mar-top-20">
-                  <thead>
-                        <tr>
-                              <th>Tên hóa đơn</th>
-                              <th>Số hóa đơn</th>
-                              <th>Ngày lập hóa đơn</th>
-                              <th>Trạng thái</th>
-                              <th></th>
-                        </tr>
-                  </thead>
-                  <tbody>
-                        <tr *ngIf="myInvoices.length === 0">
-                              <td colspan="5" class="text-center">
-                                    Không có hóa đơn nào
-                              </td>
-                        </tr>
-                        <tr *ngFor="let inv of myInvoices">
-                              <td>{{ inv.invoiceName }}</td>
-                              <td>{{ inv.invoiceNumber }}</td>
-                              <td>{{ inv.issueDate | date: 'dd/MM/yyyy' }}</td>
-                              <td class="d-flex justify-content-center">
-                                    <div class="badge" [ngClass]="inv.isDraft ? 'dark-outline-badge' : 'primary-outline-badge'">
-                                          {{ inv.isDraft | invoiceStatus }}
-                                    </div>
-                              </td>
-                              <td>
-                                    <button type="button" class="button default-button" (click)="selectInvoice(inv)">Chọn</button>
-                              </td>
-                        </tr>
-                  </tbody>
-            </table>
       </div>
 </div>
