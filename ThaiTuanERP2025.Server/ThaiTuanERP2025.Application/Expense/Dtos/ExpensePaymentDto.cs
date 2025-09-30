@@ -35,7 +35,6 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 
 		public PayeeType PayeeType { get; init; }
 		public Guid? SupplierId { get; init; }
-		public Supplier? Supplier { get; init; }
 
 		public string BankName { get; init; } = string.Empty;
 		public string AccountNumber { get; init; } = string.Empty;

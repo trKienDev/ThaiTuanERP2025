@@ -50,6 +50,7 @@ export abstract class BaseCrudService<TDto, TRequest> {
       }
 
       create(payload: TRequest): Observable<TDto> {
+            console.log('endpoint: ', this.endpoint);
             return this.http
                   .post<ApiResponse<TDto>>(this.endpoint, payload)
                   .pipe(

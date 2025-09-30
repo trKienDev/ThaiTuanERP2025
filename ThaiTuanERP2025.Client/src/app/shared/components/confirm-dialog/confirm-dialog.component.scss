@@ -1,17 +1,21 @@
+.confirm-dialog {
+      padding: 20px;
+}
+
 .warning-icon {
-  display: inline-block;
-  width: 100px;
-  height: 100px;
+      display: inline-block;
+      width: 100px;
+      height: 100px;
 
-  background: url('/assets/icons/alert-warning.png') no-repeat center;
-  background-size: contain;
+      background: url('/assets/icons/alert-warning.png') no-repeat center;
+      background-size: contain;
 
-  /* hoạt ảnh nhấp nháy */
-  animation: pulseWarning 1.2s infinite;
+      /* hoạt ảnh nhấp nháy */
+      animation: pulseWarning 1.2s infinite;
 }
 
 @keyframes pulseWarning {
-  0%   { transform: scale(1); opacity: 1; }
-  50%  { transform: scale(1.2); opacity: 0.7; }
-  100% { transform: scale(1); opacity: 1; }
+      0%   { transform: scale(1); opacity: 1; }
+      50%  { transform: scale(1.2); opacity: 0.7; }
+      100% { transform: scale(1); opacity: 1; }
 }
