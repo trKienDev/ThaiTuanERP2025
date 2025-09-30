@@ -4,7 +4,11 @@ import { ExpensePaymentFollowerDto } from "./expense-payment-followers.model";
 import { ExpensePaymentItemDto, ExpensePaymentItemRequest } from "./expense-paymnet-item.model";
 import { SupplierDto } from "./supplier.model";
 
-export type PayeeType = 'supplier' | 'employee';
+export enum PayeeType {
+      supplier = 1,
+      employee = 2,
+}
+
 export enum ExpensePaymentStatus {
       draft = 0,
       submitted = 1,
@@ -42,14 +46,13 @@ export interface ExpensePaymentRequest {
       name: string;
       payeeType: PayeeType;
       supplierId?: string;
-      supplier: SupplierDto;
       
       bankName: string;
       accountNumber: string;
       beneficiaryName: string;
       
       paymentDate: Date;
-      hasGoodReceipt: boolean;
+      hasGoodsReceipt: boolean;
       totalAmount: number;
       totalTax: number;
       totalWithTax: number;

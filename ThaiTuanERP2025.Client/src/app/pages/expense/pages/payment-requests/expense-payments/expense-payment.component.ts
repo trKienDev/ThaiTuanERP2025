@@ -29,7 +29,7 @@ import { FileService } from "../../../../../shared/services/file.service";
 import { UserOptionStore } from "../../../../account/options/user-dropdown-options.store";
 import { SupplierOptionStore } from "../../../options/supplier-dropdown-option.store";
 import { SupplierFacade } from "../../../facades/supplier.facade";
-import { ExpensePaymentRequest } from "../../../models/expense-payment.model";
+import { ExpensePaymentRequest, PayeeType } from "../../../models/expense-payment.model";
 import { ExpensePaymentService } from "../../../services/expense-payment.service";
 
 type UploadStatus = 'queued' | 'uploading' | 'done' | 'error';
@@ -273,16 +273,11 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             { id: 'supplier', label: 'Nhà cung cấp' },
             { id: 'employee', label: 'Nhân viên' },
       ];
-      selectedPayee: 'supplier' | 'employee' | null = null;
+      selectedPayee: PayeeType | null = null;
       onPayeeSelected(opt: KitDropdownOption) {
-            this.selectedPayee = opt.id === 'supplier' ? 'supplier' : 'employee';
-            if (this.selectedPayee === 'employee') {
-                  this.form.patchValue({
-                        supplierId: null,
-                        bankName: '',
-                        accountNumber: '',
-                        beneficiaryName: ''
-                  }, { emitEvent: false });
+            this.selectedPayee = opt.id === 'supplier' ? PayeeType.supplier : PayeeType.employee;
+            if (this.selectedPayee === PayeeType.employee) {
+                  this.form.patchValue({ supplierId: null, bankName:'', accountNumber:'', beneficiaryName:'' }, { emitEvent:false });
                   this.supplierBankAccounts = [];
                   this.selectedBankAccount = null;
             }
@@ -305,7 +300,7 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
 
             dialogRef.afterClosed().subscribe((created) => {
                   if(created?.id) {
-                        this.selectedPayee = 'supplier';
+                        this.selectedPayee = PayeeType.supplier;
                         this.form.patchValue({ supplierId: created.id });
                   }
             })
@@ -534,7 +529,6 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
 
             const raw = this.form.getRawValue();
             const items = (raw.items ?? []).map(it => ({
-                  expensePaymentId: '',
                   itemName: it.itemName,
                   invoiceId: it.invoiceId ?? undefined,
                   budgetCodeId: it.budgetCodeId ?? undefined,
@@ -559,14 +553,13 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             
             const payload: ExpensePaymentRequest = {
                   name: raw.name,
-                  payeeType: this.selectedPayee ?? 'supplier',
-                  supplierId: this.selectedPayee === 'supplier' ? raw.supplierId ?? undefined : undefined,
-                  supplier: {} as any, // nếu backend không cần supplier object thì có thể bỏ field này khỏi interface
+                  payeeType: this.selectedPayee ?? PayeeType.supplier,
+                  supplierId: this.selectedPayee === PayeeType.supplier ? raw.supplierId ?? undefined : undefined,
                   bankName: raw.bankName,
                   accountNumber: raw.accountNumber,
                   beneficiaryName: raw.beneficiaryName,
                   paymentDate: raw.paymentDate,
-                  hasGoodReceipt: raw.hasGoodsReceipt ?? false,
+                  hasGoodsReceipt: raw.hasGoodsReceipt ?? false,
                   totalAmount: Number(raw.totalAmount ?? 0),
                   totalTax: Number(raw.totalTax ?? 0),
                   totalWithTax: Number(raw.totalWithTax ?? 0),
@@ -578,6 +571,7 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
 
             this.submitting = true;
             try {
+                  console.log('payload: ', payload);
                   const result = await firstValueFrom(this.expensePaymentService.create(payload));
                   this.toast.successRich('Gửi phê duyệt thành công');
             } catch(error) {
