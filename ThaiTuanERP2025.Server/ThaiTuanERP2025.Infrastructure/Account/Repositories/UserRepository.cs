@@ -29,7 +29,6 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 				.Include(u => u.UserGroups).ThenInclude(ug => ug.Group)
 				.ToListAsync();
 		}
-
 		public async Task<User?> GetByUsernameAsync(string username)
 		{
 			return await DbContext.Users

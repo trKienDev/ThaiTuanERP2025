@@ -29,8 +29,8 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 					return new[] { payment.CreatedByUserId };
 				case "creator-manager":
 					return await ResolveCreatorManagerAsync(payment, ct);
-				case "creator-department-manager":
-					return await ResolveCreatorDepartmentManagerAsync(payment, ct);
+				case "manager-department":
+					return await ResolveManagerDepartmentAsync(payment, ct);
 				case "user-list":
 					{
 						var p = Deserialize<UserListParams>(resolverParamsJson);
@@ -69,21 +69,25 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 			return Array.Empty<Guid>();
 		}
 
-		private async Task<IReadOnlyList<Guid>> ResolveCreatorDepartmentManagerAsync(ExpensePayment payment, CancellationToken cancellationToken)
+		private async Task<IReadOnlyList<Guid>> ResolveManagerDepartmentAsync(ExpensePayment payment, CancellationToken cancellationToken)
 		{
-			// Giả định: User có DepartmentId, Department có ManagerId
+			// Ưu tiên ManagerApproverId gắn trực tiếp trong phiếu
+			if (payment.ManagerApproverId != Guid.Empty)
+				return new[] { payment.ManagerApproverId };
+
+			// Fallback: lấy manager theo Department của creator
 			var creator = await _unitOfWork.Users.SingleOrDefaultIncludingAsync(u => u.Id == payment.CreatedByUserId);
-			if (creator == null) 
+			if (creator == null)
 				return Array.Empty<Guid>();
 
-			Guid? deptId = creator.DepartmentId; // nếu bạn dùng bảng trung gian UserDepartment, hãy điều chỉnh logic lấy dept
-			if (deptId == null) 
+			Guid? deptId = creator.DepartmentId;
+			if (deptId == null)
 				return Array.Empty<Guid>();
 
 			var dept = await _unitOfWork.Departments.SingleOrDefaultIncludingAsync(d => d.Id == deptId.Value);
-			if (dept?.ManagerUserId is Guid m && m != Guid.Empty) 
+			if (dept?.ManagerUserId is Guid m && m != Guid.Empty)
 				return new[] { m };
-			
+
 			return Array.Empty<Guid>();
 		}
 

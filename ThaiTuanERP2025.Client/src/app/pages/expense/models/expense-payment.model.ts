@@ -62,4 +62,6 @@ export interface ExpensePaymentRequest {
       items: ExpensePaymentItemRequest[];
       attachments: ExpensePaymentAttachmentRequest[];
       followerIds: string[];
+
+      managerApproverId: string;
 }

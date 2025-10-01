@@ -10,7 +10,6 @@ export interface ExpensePaymentAttachmentDto {
 }
 
 export interface ExpensePaymentAttachmentRequest {
-      expensePaymentId: string;
       fileId?: string;
 
       objectKey: string;
