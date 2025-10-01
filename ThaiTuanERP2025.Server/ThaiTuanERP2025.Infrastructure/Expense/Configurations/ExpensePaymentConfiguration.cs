@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 
 namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
@@ -51,10 +52,16 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 				.OnDelete(DeleteBehavior.SetNull);
 			builder.HasIndex(p => p.CurrentWorkflowInstanceId);
 
+			builder.HasOne<User>()           
+				.WithMany()
+				.HasForeignKey(p => p.ManagerApproverId)
+				.OnDelete(DeleteBehavior.Restrict);
+
 			// Indexes
 			builder.HasIndex(x => x.SupplierId);
 			builder.HasIndex(x => x.PaymentDate);
 			builder.HasIndex(x => x.Status);
+			builder.HasIndex(p => p.ManagerApproverId);
 		}
 	}
 }

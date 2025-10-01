@@ -7,7 +7,7 @@ import { KitDropdownComponent, KitDropdownOption } from "../../../../../shared/c
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { SupplierRequestDialogComponent } from "../../suppliers/supplier-request-dialog/supplier-request-dialog.component";
 import { startWith, switchMap, takeUntil } from "rxjs/operators"; // <-- thêm
-import { firstValueFrom, of, Subject } from "rxjs";
+import { firstValueFrom, Observable, of, Subject } from "rxjs";
 import { BankAccountService } from "../../../services/bank-account.service";
 import { BankAccountDto } from "../../../models/bank-account.model";
 import { MoneyFormatDirective } from "../../../../../shared/directives/money/money-format.directive";
@@ -31,6 +31,9 @@ import { SupplierOptionStore } from "../../../options/supplier-dropdown-option.s
 import { SupplierFacade } from "../../../facades/supplier.facade";
 import { ExpensePaymentRequest, PayeeType } from "../../../models/expense-payment.model";
 import { ExpensePaymentService } from "../../../services/expense-payment.service";
+import { ManagerOptionStore } from "../../../../account/options/user-manager-option.store";
+import { UserFacade } from "../../../../account/facades/user.facade";
+import { UserDto } from "../../../../account/models/user.model";
 
 type UploadStatus = 'queued' | 'uploading' | 'done' | 'error';
 type UploadItem = {
@@ -78,6 +81,8 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       private fileService = inject(FileService);
       private userOptionsStore = inject(UserOptionStore);
       private supplierOptionStore = inject(SupplierOptionStore);
+      private managerOptionStore = inject(ManagerOptionStore);
+      private userFacade = inject(UserFacade);
       private supplierFacade = inject(SupplierFacade);
       private submitting = false;
       private readonly expensePaymentService = inject(ExpensePaymentService);
@@ -90,10 +95,13 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       }
 
       userOptions$ = this.userOptionsStore.option$;
-      
+     
+
       supplierOptions$ = this.supplierOptionStore.option$;
       suppliers$ = this.supplierFacade.suppliers$;
-      
+      currentUser$ = this.userFacade.currentUser$;
+      currentUser: UserDto | null = null;
+      managerOptions$!: Observable<KitDropdownOption[]>;
       supplierOptions: KitDropdownOption[] = [];
       currencyOptions: KitDropdownOption[] = [];
       budgetCodeOptiopns: KitDropdownOption[] = [];
@@ -102,8 +110,8 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       supplierBankAccounts: BankAccountDto[] = [];
       selectedBankAccount: BankAccountDto | null = null;
 
-
       uploads: UploadItem[] = [];
+      
 
       constructor(
             private bankAccountService: BankAccountService,
@@ -126,10 +134,14 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             totalWithTax: this.formBuilder.nonNullable.control<number>(0),
             paymentDate: this.formBuilder.nonNullable.control<Date>(new Date(), { validators: [Validators.required] }),
             hasGoodsReceipt: this.formBuilder.nonNullable.control<boolean>(false),
-            followerIds: this.formBuilder.nonNullable.control<string[]>([])
+            followerIds: this.formBuilder.nonNullable.control<string[]>([]),
+            managerApproverId: this.formBuilder.nonNullable.control<string>('', { validators: Validators.required })
       });
 
-      ngOnInit(): void {
+      async ngOnInit(): Promise<void> {
+            this.currentUser = await firstValueFrom(this.currentUser$);
+            this.managerOptions$ = this.managerOptionStore.getManagerOptions$(this.currentUser.id);
+
             this.loadBudgetCodes();
             this.loadCashoutCodeOptions();
 
@@ -163,7 +175,6 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             this.currencyOptions = [
                   { id: 'vnd', label: 'VND' }
             ]
-            
       }
 
       // Ưu tiên account đang active, không có thì lấy cái đầu
@@ -201,6 +212,10 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             ctrl.markAsDirty();
             ctrl.updateValueAndValidity();
       }
+      onManagerApproverSelected(opt: KitDropdownOption) {
+            this.form.patchValue({ managerApproverId: opt.id });
+      }
+
 
       loadBudgetCodes(): void {
             this.budegetCodeService.getAll().subscribe({
@@ -543,7 +558,6 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
 
             const attachments = this.uploads.filter(u => u.status === 'done' && (u.objectKey || u.fileId))
                   .map(u => ({
-                        expensePaymentId: '', // backend sẽ gán sau
                         fileId: u.fileId,
                         objectKey: u.objectKey!,
                         fileName: u.name,
@@ -567,6 +581,7 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
                   items,
                   attachments,
                   followerIds: raw.followerIds,
+                  managerApproverId: raw.managerApproverId,
             }
 
             this.submitting = true;

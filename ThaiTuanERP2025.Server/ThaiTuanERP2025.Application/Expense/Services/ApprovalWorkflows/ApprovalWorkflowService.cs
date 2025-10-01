@@ -37,8 +37,7 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 			var payment = await _unitOfWork.ExpensePayments.SingleOrDefaultIncludingAsync(p => p.Id == paymentId)
 				?? throw new NotFoundException("ExpensePayment not found");
 
-			var tpl = await _unitOfWork.ApprovalWorkflowTemplates
-				.SingleOrDefaultIncludingAsync(t => t.Id == workflowTemplateId && t.IsActive)
+			var tpl = await _unitOfWork.ApprovalWorkflowTemplates.SingleOrDefaultIncludingAsync(t => t.Id == workflowTemplateId && t.IsActive, includes: t => t.Steps)
 				?? throw new ConflictException("Workflow template not found or inactive");
 			if (tpl.Steps == null || !tpl.Steps.Any())
 				throw new ConflictException("Workflow template has no steps");

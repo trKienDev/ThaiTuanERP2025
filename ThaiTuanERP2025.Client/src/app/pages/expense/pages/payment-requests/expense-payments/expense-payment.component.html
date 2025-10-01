@@ -205,8 +205,13 @@
             <textarea class="mar-top-10" name="" id="" placeholder="Trình bày nội dung ở đây"></textarea>
       </div>
 
-      <div class="input-wrapper">
-            <kit-dropdown [multiple]="true" [options]="(userOptions$ | async) ?? []"  (selectionChange)="onFollowerSelected($event)" [width]="'100%'" [placeholder]="'Thêm người theo dõi'"></kit-dropdown>
+      <div class="input-wrapper d-flex gap-10p">
+            <div style="width: 70%;">
+                  <kit-dropdown [multiple]="true" [options]="(userOptions$ | async) ?? []"  (selectionChange)="onFollowerSelected($event)" [width]="'100%'" [placeholder]="'Thêm người theo dõi'"></kit-dropdown>
+            </div>
+            <div style="width: 30%;">
+                  <kit-dropdown [options]="(managerOptions$ | async) ?? []"  [width]="'100%'" (selectionChange)="onManagerApproverSelected($event)" [placeholder]="'Chọn quản lý duyệt'"></kit-dropdown>
+            </div>
       </div>
 
       <div class="mar-top-20">

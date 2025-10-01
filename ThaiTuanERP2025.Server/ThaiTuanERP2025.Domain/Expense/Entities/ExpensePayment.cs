@@ -9,9 +9,10 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		private ExpensePayment() { } // EF
 
-		public ExpensePayment(string name, PayeeType payeeType, DateTime paymentDate)
+		public ExpensePayment(string name, PayeeType payeeType, DateTime paymentDate, string managerApproverId)
 		{
 			Id = Guid.NewGuid();
+			ManagerApproverId = Guid.Parse(managerApproverId);
 			Name = name.Trim();
 			PayeeType = payeeType;
 			PaymentDate = paymentDate;
@@ -57,6 +58,8 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		// Workflow instance id (nếu có)
 		public Guid? CurrentWorkflowInstanceId { get; private set; }
 		public ApprovalWorkflowInstance? CurrentWorkflowInstance { get; private set; }
+
+		public Guid ManagerApproverId { get; private set; }
 
 		// ==== HÀM NGHIỆP VỤ ====
 		public void SetSupplier(Guid? supplierId)
