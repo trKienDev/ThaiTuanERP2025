@@ -94,9 +94,7 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             isPublic: false
       }
 
-      userOptions$ = this.userOptionsStore.option$;
-     
-
+      userOptions$ = this.userOptionsStore.option$; 
       supplierOptions$ = this.supplierOptionStore.option$;
       suppliers$ = this.supplierFacade.suppliers$;
       currentUser$ = this.userFacade.currentUser$;
