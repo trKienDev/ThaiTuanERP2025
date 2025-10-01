@@ -21,7 +21,7 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ExpensePayments.CreateExp
 			var request = command.Request;
 
 			// payment
-			var payment = new ExpensePayment(request.Name, request.PayeeType, request.PaymentDate);
+			var payment = new ExpensePayment(request.Name, request.PayeeType, request.PaymentDate, request.ManagerApproverId);
 			payment.SetSupplier(request.PayeeType == PayeeType.Supplier ? request.SupplierId : null);
 			payment.SetBankInfo(request.BankName, request.AccountNumber, request.BeneficiaryName);
 			payment.SetGoodsReceipt(request.HasGoodsReceipt);
@@ -56,7 +56,7 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ExpensePayments.CreateExp
 
 			await _approvalWorkflowService.CreateInstanceForExpensePaymentAsync(
 				paymentId: payment.Id,
-				workflowTemplateId: Guid.Parse("5EB2210A-C649-4532-A5D1-C7443F65C9EA"),
+				workflowTemplateId: Guid.Parse("77B4F0E4-91DE-4377-9AC3-C2A8A69EDF6E"),
 				overrides: null,
 				autoStart: false,
 				linkToPayment: true,

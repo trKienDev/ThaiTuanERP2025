@@ -4,7 +4,6 @@ import { HttpClient } from "@angular/common/http";
 import { Observable, switchMap } from "rxjs";
 import { ApiResponse } from "../../../shared/models/api-response.model";
 import { SetUserManagerRequest, UserDto, UserRequest } from "../models/user.model";
-
 import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
 import { FileService } from "../../../shared/services/file.service";
 import { BaseCrudService } from "../../../shared/services/base-crud.service";
@@ -39,7 +38,7 @@ export class UserService extends BaseCrudService<UserDto, UserRequest> {
       }
 
       getManagers(id: string): Observable<UserDto[]> {
-            return this.http.get<ApiResponse<UserDto[]>>(`${this.endpoint}/managers`)
+            return this.http.get<ApiResponse<UserDto[]>>(`${this.endpoint}/${id}/managers`)
                   .pipe(handleApiResponse$<UserDto[]>());
       }
 

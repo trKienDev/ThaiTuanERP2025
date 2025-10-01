@@ -30,7 +30,8 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 		public IReadOnlyCollection<ExpensePaymentFollower> Followers { get; init; } = [];
 	}
 
-	public sealed record ExpensePaymentRequest {
+	public sealed record ExpensePaymentRequest
+	{
 		public string Name { get; init; } = string.Empty;
 
 		public PayeeType PayeeType { get; init; }
@@ -52,5 +53,7 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 		public IReadOnlyCollection<ExpensePaymentItemRequest> Items { get; init; } = [];
 		public IReadOnlyCollection<ExpensePaymentAttachmentRequest> Attachments { get; init; } = [];
 		public IReadOnlyCollection<Guid> FollowerIds { get; init; } = [];
+
+		public string ManagerApproverId { get; init; } = default!;
 	}
 }
