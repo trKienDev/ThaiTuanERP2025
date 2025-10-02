@@ -1,19 +1,28 @@
-﻿using System.Net;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using System.Net;
 using System.Text.Json;
 using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Domain.Exceptions;
+using FVValidationException = FluentValidation.ValidationException;
+using DomainValidationException = ThaiTuanERP2025.Domain.Exceptions.ValidationException;
 
 namespace ThaiTuanERP2025.Api.Middleware
 {
 	public class ExceptionHandlingMiddleware
 	{
 		private readonly RequestDelegate _next;
-		private readonly ILogger<ExceptionHandlingMiddleware> _logger;	
+		private readonly ILogger<ExceptionHandlingMiddleware> _logger;
+		private readonly JsonSerializerOptions _jsonSerializeOptions;
 
-		public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
-		{
+		public ExceptionHandlingMiddleware(
+			RequestDelegate next, 
+			ILogger<ExceptionHandlingMiddleware> logger,
+			IOptions<JsonOptions> jsonOptions
+		) {
 			_next = next;
 			_logger = logger;
+			_jsonSerializeOptions = jsonOptions.Value.JsonSerializerOptions; // lấy JsonSerializerOptions từ DI(đã camelCase) và truyền vào Serialize.
 		}
 
 		public async Task Invoke(HttpContext context)
@@ -30,37 +39,51 @@ namespace ThaiTuanERP2025.Api.Middleware
 
 		private async Task HandleExceptionAsync(HttpContext context, Exception exception) {
 			context.Response.ContentType = "application/json";
+			var traceId = context.TraceIdentifier;
 
-			ApiResponse<string> response;
 			int statusCode;
+			object? data = null;
+			string message;
+			string[]? errors = null;
 
 			switch(exception) {
-				case NotFoundException: 
-					statusCode = (int)HttpStatusCode.NotFound; 
-					response = ApiResponse<string>.Fail(exception.Message);
+				case ConflictException ce:
+					statusCode = ce.StatusCode;
+					message = ce.Message;
 					break;
-				case UnauthorizedException:
-					statusCode = (int)HttpStatusCode.Unauthorized;
-					response = ApiResponse<string>.Fail("Bạn chưa đăng nhập hoặc token đã hết hạn");
+				case DomainValidationException dv:
+					statusCode = 422; // Unprocessable Entity
+					message = "Dữ liệu không hợp lệ";
+					errors = dv.Errors?.SelectMany(kv => kv.Value ?? Array.Empty<string>()).ToArray();
 					break;
-				case ForbiddenException:
-					statusCode = (int)HttpStatusCode.Forbidden;
-					response = ApiResponse<string>.Fail("Bạn không có quyền truy cập chức năng này");
+				case AppException appEx:
+					statusCode = appEx.StatusCode;
+					message = appEx.Message;
 					break;
-				case AppException:
+				case FVValidationException fv:
 					statusCode = (int)HttpStatusCode.BadRequest;
-					response = ApiResponse<string>.Fail(exception.Message);
+					message = "Dữ liệu không hợp lệ";
+					errors = fv.Errors.Select(e => e.ErrorMessage).ToArray();
 					break;
-				default:
+				default: 
 					statusCode = (int)HttpStatusCode.InternalServerError;
-					_logger.LogError(exception, "Unhandled Exception");
-					response = ApiResponse<string>.Fail("Đã xảy ra lỗi hệ thống, vui lòng thử lại sau");
+					message = "Đã xảy ra lỗi hệ thống, vui lòng thử lại sau";
+					_logger.LogError(exception, "Unhandled Exception. TraceId: {TraceId}", traceId);
 					break;
 			}
 
-			context.Response.StatusCode = statusCode;	
-			var result = JsonSerializer.Serialize(response);
-			await context.Response.WriteAsync(result);
+			var fullMessage = message;
+
+			// gán traceId vào header
+			context.Response.Headers["X-Trace-Id"] = traceId;
+
+			var response = ApiResponse<object>.Fail(fullMessage, errors ?? Array.Empty<string>());
+			response.Data = data;
+
+			context.Response.StatusCode = statusCode;
+			var json = JsonSerializer.Serialize(response, _jsonSerializeOptions);
+			await context.Response.WriteAsync(json);
 		}
 	}
 }
+	

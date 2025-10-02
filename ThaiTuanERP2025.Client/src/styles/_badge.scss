@@ -1,0 +1,75 @@
+.badge {
+      padding: 0.25rem 0.45rem;
+      border-radius: 0.25rem;
+      color: #fff;
+      font-size: 12px;
+      text-align: center;
+      width: fit-content;
+      min-height: 21px;   // ép badge cao bằng cell
+      display: flex;
+      align-items: center; 
+      user-select: none;
+}
+
+.primary-badge { background-color: var(--bright-blue-color); }
+.success-bagde { background-color: var(--kelly-green-color); }
+.danger-badge { background-color: var(--neon-red-color); }
+.warning-badge { background-color: var(--gold-color); }
+.infor-badge { background-color: var(--main-bg-color); }
+.dark-badge { background-color: var(--platinum); }
+
+.primary-light-badge { 
+      background-color: rgba(var(--bright-blue-color), 0.1) !important;
+      color: var(--bright-blue-color) !important;
+}
+.success-light-bagde {
+      background-color: rgba(var(--kelly-green-color), 0.1) !important;
+      color: var(--kelly-green-color) !important;
+}
+.danger-light-badge {
+      background-color: rgba(var(--neon-red-color), 0.1) !important;
+      color: var(--neon-red-color) !important;
+}
+.warning-light-badge {
+      background-color: rgba(var(--gold-color), 0.1) !important;
+      color: var(--gold-color) !important;
+}
+.infor-light-badge {
+      background-color: rgba(var(--main-bg-color), 0.1) !important;
+      color: var(--main-bg-color) !important;
+}
+.dark-light-badge {
+      background-color: rgba(var(--platinum), 0.1) !important;
+      color: var(--platinum) !important;
+}
+
+.primary-outline-badge {
+      background-color: white;
+      border: 1px solid var(--bright-blue-color);
+      color: var(--bright-blue-color);
+}
+.success-outline-badge {
+      background-color: white;
+      border: 1px solid var(--kelly-green-color);
+      color: var(--kelly-green-color);
+}
+.danger-outline-badge {
+      background-color: white;
+      border: 1px solid var(--neon-red-color);
+      color: var(--neon-red-color);
+}
+.warning-outline-bagde {
+      background-color: white;
+      border: 1px solid var(--gold-color);
+      color: var(--gold-color);
+}
+.infor-outline-badge {
+      background-color: white;
+      border: 1px solid var(--default-border-color);
+      color: black;
+}
+.dark-outline-badge {
+      background-color: white;
+      border: 1px solid var(--platinum);
+      color: var(--platinum);
+}

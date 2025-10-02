@@ -1,0 +1,53 @@
+<div class="user-profile">
+      <div class="user-profile-container d-flex">
+            <div class="col-left">
+                  <div class="username-wrapper">
+                        <div class="username">&#64;{{ currentUser?.username || '---' }}</div>
+                  </div>
+                  <div class="avatar-img-wrapper">
+                        <img class="avatar-img" [src]="avatarSrc" alt="avatar user"
+                              (click)="triggerAvatarUpload()" style="cursor: pointer;"/>
+                        <input type="file" id="avatar-input" hidden accept="image/png, image/jpeg, image/jpg" (change)="onAvatarSelected($event)">
+                  </div>
+                  <div class="save-avatar-wrapper d-flex justify-content-center">
+                        <button class="button-1" (click)="uploadAvatar()" [disabled]="isUploading">
+                              {{ isUploading ? 'Đang tải' : 'Cập nhật avatar' }}
+                        </button>
+                  </div>
+            </div>
+            <div class="col-right">
+                  <div class="primary-card">
+                        <div class="card-header">Thông tin cá nhân</div>
+                        <div class="card-body">
+                              <div class="d-flex fl-wrap">
+                                    <div class="row fullname-wrapper width-50pt">
+                                          <label for="user-fullname">Họ tên</label>
+                                          <div class="card-box user-fullname">{{ currentUser?.fullName || '---' }}</div>
+                                    </div>
+                                    <div class="row employee-code-wrapper width-50pt">
+                                          <label for="employee-code">Mã nhân viên</label>
+                                          <div class="card-box employee-code">{{ currentUser?.employeeCode || '---' }}</div>
+                                    </div>
+                                    <div class="row user-email-wrapper width-50pt">
+                                          <label for="user-email">Email</label>
+                                          <div class="card-box user-email">{{ currentUser?.email || '---' }}</div>
+                                    </div>
+                                    <div class="row user-phone-wrapper width-50pt">
+                                          <label for="user-phone">Số điện thoại</label>
+                                          <div class="card-box user-phone">{{ currentUser?.phone || '---' }}</div>
+                                    </div>
+                                    <div class="row user-department-wrapper width-50pt">
+                                          <label for="user-department">Phòng ban</label>
+                                          <div class="card-box user-department">{{ currentUser?.department?.name || '---' }}</div>
+                                    </div>
+                                    <div class="row user-position-wrapper width-50pt">
+                                          <label for="user-position">Chức vụ</label>
+                                          <div class="card-box user-position">{{ currentUser?.position || '---' }}</div>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+
+            </div>
+      </div>
+</div>

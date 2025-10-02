@@ -1,0 +1,48 @@
+$topbar-padding: 1.5rem;
+
+.topbar {
+      height: var(--topbar-height);
+      // background-color: var(--main-bg-color);
+      // background-image: url('/assets/heading-background.jpg');
+      // background-size: cover;
+      // background-position: center;
+      background-image: linear-gradient(to right top, #ffffff, #fafaff, #f4f6ff, #edf2ff, #e5eeff);
+      color: black;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 $topbar-padding;
+      font-size: 1rem;
+      // box-shadow: inset 0 calc(0.0625rem*-1) #d9d1e0;
+}
+.topbar-icon-wrapper {
+      border: 1px solid var(--default-border-color);
+      border-radius: 50%;
+      height: 38px;
+      width: 38px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: white;
+      color: var(--default-border-color);
+}
+.topbar-icon { font-size: 20px; user-select: none; }
+.thaituan-topbar-logo {
+      height: 50px;
+      width: auto;
+      margin-left: -$topbar-padding;
+}
+
+.title {
+      font-weight: bold;
+      font-size: 1.2rem;
+}
+
+.user-section {
+      font-size: 0.95rem;
+}
+.user-avatar {
+      height: 40px;
+      width: 40px;
+      border-radius: 50%;
+}

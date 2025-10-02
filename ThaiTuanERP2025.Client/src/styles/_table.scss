@@ -1,0 +1,59 @@
+:root {
+      --table-border-color: #e2e8ee;
+      --total-amount-line-color: #F4FFEA;
+}
+
+.table {
+      border: 1px solid var(--table-border-color);
+      width: 100%;
+      border-collapse: separate; /* thay cho collapse */
+      border-spacing: 0;
+      border-radius: 5px;
+
+      th, td {
+            border-bottom: 1px solid #e2e8ee;
+            padding: 15px 25px;
+            text-align: center;
+            text-wrap: nowrap;
+      }
+
+      thead th {
+            background-color: var(--main-bg-color); 
+            font-weight: 600;
+            text-align: center;
+            color: #4c607a;
+      }
+
+      tbody tr:hover {
+            background-color: var(--main-bg-color); 
+      }
+
+      .tr-non-hover {
+            background-color: inherit !important;
+      }
+
+      tr.selected {
+            background-color: #e6f7ff !important;
+      }
+
+      button.selected {
+            background-color: #1890ff;
+            color: #fff;
+      }
+
+      .total-row {
+            background-color: var(--main-bg-color);
+            color: #00c100;
+            font-weight: 800;
+      }
+}
+
+thead, tr, td {
+      border-color: inherit;
+      border-style: solid;
+      border-width: 0;
+}
+
+
+
+

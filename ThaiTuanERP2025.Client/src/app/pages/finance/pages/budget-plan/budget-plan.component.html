@@ -1,0 +1,60 @@
+<h2>Budget Plan</h2>
+
+<form (ngSubmit)="create()">
+      <div class="">
+            <mat-form-field appearance="fill">
+                  <mat-label>Phòng ban</mat-label>
+                  <input type="text"
+                        matInput [matAutocomplete]="auto"
+                        [(ngModel)]="formData.departmentId"
+                        (ngModelChange)="onDepartmentInputChange($event)"
+                        name="department" required/>
+                  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayDepartmentFn">
+                        <mat-option *ngFor="let dept of filteredDepartments" [value]="dept.id">
+                              {{ dept.code }} - {{ dept.name }}
+                        </mat-option>
+                  </mat-autocomplete>
+            </mat-form-field>
+      </div>
+
+      <select name="budgetCodeId" [(ngModel)]="formData.budgetCodeId" required>
+            <option value="" selected disabled>-- Chọn mã ngân sách --</option>
+            <option *ngFor="let code of budgetCodes" [value]="code.id">{{ code.code }} - {{ code.name }}</option>
+      </select>
+
+      <select name="budgPeriodId" [(ngModel)]="formData.budgetPeriodId" required>
+            <option value="" selected disabled>-- Chọn kỳ ngân sách --</option>
+            <option *ngFor="let period of budgetPeriods" [value]="period.id">
+                  {{ period.month}} / {{ period.year}}
+            </option>
+      </select>
+
+      <input type="text" [(ngModel)]="formData.amount" name="amount" placeholder="Số tiền" appMoney [appMoneyDecimals]="0" required>
+
+      <button type="submit">Tạo</button>
+</form>
+
+<table>
+      <thead>
+            <tr>
+                  <th>Phòng ban</th>
+                  <th>Mã ngân sách</th>
+                  <th>Kỳ</th>
+                  <th>Số tiền</th>
+                  <th>Trạng thái</th>
+                  <th></th>
+            </tr>
+      </thead>
+      <tbody>
+            <tr *ngFor="let plan of budgetPlans">
+                  <td>{{ plan.departmentName }}</td>
+                  <td>{{ plan.budgetCodeName }}</td>
+                  <td>{{ plan.budgetPeriodName }}</td>
+                  <td>{{ plan.amount }}</td>
+                  <td>
+                        <button>Sửa</button>
+                        <button>Xóa</button>
+                  </td>
+            </tr>
+      </tbody>
+</table>

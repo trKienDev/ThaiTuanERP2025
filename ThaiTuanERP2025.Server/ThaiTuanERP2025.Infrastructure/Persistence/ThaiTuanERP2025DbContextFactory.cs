@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ThaiTuanERP2025.Application.Common.Interfaces;
 
 namespace ThaiTuanERP2025.Infrastructure.Persistence
 {
@@ -20,7 +21,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 			var optionsBuilder = new DbContextOptionsBuilder<ThaiTuanERP2025DbContext>();
 			optionsBuilder.UseSqlServer(connectionString);
 
-			return new ThaiTuanERP2025DbContext(optionsBuilder.Options);
+			return new ThaiTuanERP2025DbContext(optionsBuilder.Options, null!);
 		}
 	}
 }
