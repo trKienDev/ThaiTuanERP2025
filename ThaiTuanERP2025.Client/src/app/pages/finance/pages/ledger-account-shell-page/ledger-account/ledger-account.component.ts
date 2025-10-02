@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { debounceTime, distinctUntilChanged, startWith, takeUntil } from 'rxjs';
 import { Subject } from 'rxjs';
-import { CreateLedgerAccountRequest, LedgerAccountBalanceTypeEnum, LedgerAccountDto, LedgerAccountRow, UpdateLedgerAccountRequest } from '../../../models/ledger-account.model';
+import { LedgerAccountRequest, LedgerAccountBalanceTypeEnum, LedgerAccountDto, LedgerAccountRow } from '../../../models/ledger-account.model';
 import { LedgerAccountService } from '../../../services/ledger-account.service';
 import { LedgerAccountTypeService } from '../../../services/ledger-account-type.service';
 
@@ -29,7 +29,7 @@ export class LedgerAccountComponent implements OnInit {
       editingId = signal<string | null>(null);
 
       // Form model
-      form = signal<CreateLedgerAccountRequest>({
+      form = signal<LedgerAccountRequest>({
             number: '',
             name: '',
             ledgerAccountTypeId: '' as any,
@@ -246,7 +246,7 @@ export class LedgerAccountComponent implements OnInit {
             } else {
                   const id = this.editingId();
                   if (!id) return;
-                  const payload: UpdateLedgerAccountRequest = { ...model };
+                  const payload: LedgerAccountRequest = { ...model };
                   this.service.update(id, payload).subscribe({
                         next: _ => { 
                               this.closeDrawer(); 

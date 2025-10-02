@@ -2,18 +2,6 @@
       <nav class="finance-navbar__container">
             <ul class="finance-navbar__list">
                   <li class="finance-navbar__item">
-                        <a class="finance-navbar__link" routerLink="/finance/budget-group" routerLinkActive="selected"  [routerLinkActiveOptions]="{ exact: true }">
-                              <span class="finance-navbar__icon material-icons-round">payments</span>
-                              <span class="finance-navbar__name">Nhóm ngân sách</span>
-                        </a>
-                  </li>
-                  <li class="finance-navbar__item">
-                        <a class="finance-navbar__link" routerLink="/finance/budget-code" routerLinkActive="selected">
-                              <span class="finance-navbar__icon material-icons-round">savings</span>
-                              <span class="finance-navbar__name">Ngân sách</span>
-                        </a>
-                  </li>
-                  <li class="finance-navbar__item">
                         <a class="finance-navbar__link" routerLink="/finance/budget-period" routerLinkActive="selected">
                               <span class="finance-navbar__icon material-icons-round">calendar_month</span>
                               <span class="finance-navbar__name">Kỳ ngân sách</span>
@@ -38,13 +26,19 @@
                         </a>
                   </li> 
                   <li class="finance-navbar__item">
+                        <a class="finance-navbar__link" routerLink="/finance/budgets" routerLinkActive="selected">
+                              <span class="finance-navbar__icon material-icons-round">savings</span>
+                              <span class="finance-navbar__name">Ngân sách</span>
+                        </a>
+                  </li>
+                  <li class="finance-navbar__item">
                         <a class="finance-navbar__link" routerLink="/finance/ledger-account" routerLinkActive="selected">
                               <span class="finance-navbar__icon material-icons-round">calculate</span>
-                              <span class="finance-navbar__name">Tài khoản kế toán</span>
+                              <span class="finance-navbar__name">Tài khoản hoạch toán</span>
                         </a>
                   </li> 
                   <li class="finance-navbar__item">
-                        <a class="finance-navbar__link" routerLink="/finance/cashout" routerLinkActive="selected">
+                        <a class="finance-navbar__link" routerLink="/finance/cashouts" routerLinkActive="selected">
                               <span class="finance-navbar__icon material-icons-round">shopping_cart_checkout</span>
                               <span class="finance-navbar__name">Dòng tiền ra</span>
                         </a>

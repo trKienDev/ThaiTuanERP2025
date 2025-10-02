@@ -79,7 +79,8 @@
                                     <!-- Đơn giá: money directive -->
                                     <td><input matInput type="text" inputmode="decimal" appMoney [appMoneyDecimals]="0" formControlName="unitPrice" /></td>
                                     <!-- Chiết khấu: money directive -->
-                                    <td><input matInput type="text" inputmode="decimal" appMoney [appMoneyDecimals]="0" formControlName="discountAmount" placeholder="VND" [class.invalid]="g.invalid && g.errors?.['discountTooHigh']"/>
+                                    <td>
+                                          <input matInput type="text" inputmode="decimal" appMoney [appMoneyDecimals]="0" formControlName="discountAmount" placeholder="VND" [class.invalid]="g.invalid && g.errors?.['discountTooHigh']"/>
                                           <div class="field-error" *ngIf="g.invalid && g.errors?.['discountTooHigh']">Chiết khấu không được lớn hơn thành tiền.</div>
                                     </td>
                                     <td><input matInput [value]="g.get('gross')?.value | number:'1.0-0'" readonly /></td>

@@ -1,55 +1,49 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { Observable, switchMap } from "rxjs";
-import { ApiResponse } from "../../../core/models/api-response.model";
-import {  CreateUserRequest, UpdateUserRequest, UserDto } from "../models/user.model";
-import { handleApiResponse$ } from "../../../core/utils/handle-api-response.operator";
-import { FileService } from "../../../core/services/api/file.service";
+import { ApiResponse } from "../../../shared/models/api-response.model";
+import { SetUserManagerRequest, UserDto, UserRequest } from "../models/user.model";
+import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
+import { FileService } from "../../../shared/services/file.service";
+import { BaseCrudService } from "../../../shared/services/base-crud.service";
 
 @Injectable({ providedIn: 'root'})
-export class UserService {
-      private readonly API_URL = `${environment.apiUrl}/user`;
-      constructor(private http: HttpClient, private fileService: FileService) {}
-
-      createUser(user: CreateUserRequest): Observable<UserDto> {
-            return this.http.post<ApiResponse<UserDto>>(this.API_URL, user)
-                  .pipe(handleApiResponse$<UserDto>());
-      } 
-
-      getAllUsers(): Observable<UserDto[]> {
-            return this.http.get<ApiResponse<UserDto[]>>(`${this.API_URL}/all`)
-                  .pipe(handleApiResponse$<UserDto[]>());
+export class UserService extends BaseCrudService<UserDto, UserRequest> {
+      constructor(http: HttpClient) {
+            super(http, `${environment.apiUrl}/user`);
       }
+
+      private fileService = inject(FileService);
 
       getCurrentuser(): Observable <UserDto> {
-            return this.http.get<ApiResponse<UserDto>>(`${this.API_URL}/me`)
+            return this.http.get<ApiResponse<UserDto>>(`${this.endpoint}/me`)
                   .pipe(handleApiResponse$<UserDto>());
-      }
-
-      getUserById(id: string): Observable <UserDto> {
-            return this.http.get<ApiResponse<UserDto>>(`${this.API_URL}/${id}`)
-                  .pipe(handleApiResponse$<UserDto>());
-      }
-
-      updateUser(id: string, user: UpdateUserRequest): Observable<UserDto> {
-            return this.http.put<ApiResponse<UserDto>>(`${this.API_URL}/${id}`, user)
-                  .pipe(handleApiResponse$<UserDto>());
-      }
-
-      deleteUser(id: string): Observable<void> {
-            return this.http.delete<ApiResponse<void>>(`${this.API_URL}/${id}`)
-                  .pipe(handleApiResponse$<void>());
       }
 
       updateAvatar(file: File, userId: string): Observable<string> {
             return this.fileService.uploadFile(file, 'account', 'user', userId, false).pipe(
                   switchMap((uploadResult) => {
                         console.log('upload result: ', uploadResult);
-                        const body = { fileId: uploadResult.id };
-                        return this.http.put<ApiResponse<string>>(`${this.API_URL}/${userId}/avatar`, body)
+                        const body = { fileId: uploadResult.data?.id };
+                        return this.http.put<ApiResponse<string>>(`${this.endpoint}/${userId}/avatar`, body)
                               .pipe(handleApiResponse$<string>());
                   })
             );
+      }
+
+      getManagerIds(id: string): Observable<string[]> {
+            return this.http.get<ApiResponse<string[]>>(`${this.endpoint}/${id}/managers/ids`)
+                  .pipe(handleApiResponse$<string[]>());
+      }
+
+      getManagers(id: string): Observable<UserDto[]> {
+            return this.http.get<ApiResponse<UserDto[]>>(`${this.endpoint}/${id}/managers`)
+                  .pipe(handleApiResponse$<UserDto[]>());
+      }
+
+      setManagers(id: string, request: SetUserManagerRequest): Observable<string> {
+            return this.http.put<ApiResponse<string>>(`${this.endpoint}/${id}/managers`, request)
+                  .pipe(handleApiResponse$<string>());
       }
 }

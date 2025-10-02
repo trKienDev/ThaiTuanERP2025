@@ -1,33 +1,29 @@
 import { Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment";
-import { HttpClient } from "@angular/common/http";
-import { Observable, pipe } from "rxjs";
-import { ApiResponse } from "../../../core/models/api-response.model";
-import { BudgetCodeModel, CreateBudgetCodeModel } from "../models/budget-code.model";
-import { handleApiResponse$ } from "../../../core/utils/handle-api-response.operator";
+import { HttpClient, HttpParams } from "@angular/common/http";
+import { Observable } from "rxjs";
+import { ApiResponse } from "../../../shared/models/api-response.model";
+import { BudgetCodeDto, BudgetCodeRequest, BudgetCodeWithAmountDto } from "../models/budget-code.model";
+import { BaseCrudService } from "../../../shared/services/base-crud.service";
+import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
 
 @Injectable({ providedIn: 'root' })
-export class BudgetCodeService {
-      private readonly API_URL = `${environment.apiUrl}/budget-code`;
-      constructor(private http: HttpClient) {}
-
-      getAll(): Observable<BudgetCodeModel[]> {
-            return this.http.get<ApiResponse<BudgetCodeModel[]>>(`${this.API_URL}/all`)
-                  .pipe(handleApiResponse$<BudgetCodeModel[]>());
+export class BudgetCodeService extends BaseCrudService<BudgetCodeDto, BudgetCodeRequest > {
+      constructor(http: HttpClient) {
+            super(http, `${environment.apiUrl}/budget-code`);
       }
 
-      getAllActive(): Observable<BudgetCodeModel[]> {
-            return this.http.get<ApiResponse<BudgetCodeModel[]>>(`${this.API_URL}/active`)
-                  .pipe(handleApiResponse$<BudgetCodeModel[]>());
+      getAllActive(): Observable<BudgetCodeDto[]> {
+            return this.http.get<ApiResponse<BudgetCodeDto[]>>(`${this.endpoint}/active`)
+                  .pipe(handleApiResponse$<BudgetCodeDto[]>());
       }
 
-      create(budgetCode: CreateBudgetCodeModel): Observable<BudgetCodeModel> {
-            return this.http.post<ApiResponse<BudgetCodeModel>>(this.API_URL, budgetCode)
-                  .pipe(handleApiResponse$<BudgetCodeModel>());
-      } 
+      getWithAmount(options?: { year?: number; month?: number; }): Observable<BudgetCodeWithAmountDto[]> {
+            let params = new HttpParams();
+            if (options?.year != null)  params = params.set('year', String(options.year));
+            if (options?.month != null) params = params.set('month', String(options.month));
 
-      updateStatus(id: string, isActive: boolean): Observable<void> {
-            return this.http.put<ApiResponse<void>>(`${this.API_URL}/${id}/status`, isActive)
-                  .pipe(handleApiResponse$<void>());
+            return this.http.get<ApiResponse<BudgetCodeWithAmountDto[]>>(`${this.endpoint}/with-current-amount`, { params })
+                  .pipe(handleApiResponse$<BudgetCodeWithAmountDto[]>());
       }
 }

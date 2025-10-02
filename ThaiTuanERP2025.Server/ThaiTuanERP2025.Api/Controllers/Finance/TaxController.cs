@@ -27,7 +27,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 			_mediator = mediator;
 		}
 
-		[HttpGet]
+		[HttpGet("all")]
 		public async Task<ActionResult<ApiResponse<List<TaxDto>>>> GetAll([FromQuery] bool? isActive, [FromQuery] string? search, CancellationToken cancellationToken)
 		{
 			var listTaxes = await _mediator.Send(new GetAllTaxesQuery{ IsActive = isActive, Search = search }, cancellationToken);

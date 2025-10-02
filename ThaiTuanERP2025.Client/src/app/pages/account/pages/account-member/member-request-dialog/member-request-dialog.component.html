@@ -1,0 +1,72 @@
+<div class="dialog">
+      <div class="dialog-container">
+            <div class="dialog-heading">
+                  <div class="dialog-title">
+                        <h1>{{  dialogTitle }}</h1>
+                  </div>
+                  <div class="dialog-close">
+                        <button type="button" class="close-button" (click)="close()">
+                              <span class="text material-icons-outlined">close</span>
+                        </button>
+                  </div>
+            </div>
+            <div class="dialog-body">
+                  <form [formGroup]="form" (ngSubmit)="submit()">
+                        <div class="dialog-row">
+                              <div class="form-input">
+                                    <input class="" type="text" formControlName="fullName" autocomplete="on" required/>
+                                    <label for="name">Họ và tên <span style="color: red;">  *</span></label>
+                              </div>
+                        </div>
+                        <div class="dialog-row">
+                              <div class="form-input">
+                                    <input class="" type="text" formControlName="username" autocomplete="on" required/>
+                                    <label for="username">username <span style="color: red;">  *</span></label>
+                              </div>
+                        </div>
+                        <div class="dialog-row">
+                              <div class="form-input">
+                                    <input class="" type="text" formControlName="employeeCode" autocomplete="on" required/>
+                                    <label for="employeeCode">Mã nhân viên <span style="color: red;">  *</span></label>
+                              </div>
+                        </div>
+                        <div class="dialog-row">
+                              <div class="form-input">
+                                    <input class="" type="text" formControlName="password" autocomplete="on" required/>
+                                    <label for="password">Mật khẩu <span style="color: red;">  *</span></label>
+                              </div>
+                        </div>
+                        <div class="dialog-row">
+                              <kit-dropdown [options]="(departmentOptions$ | async) ?? []" [placeholder]="'Chọn phòng ban (nếu có)'" (selectionChange)="onDepartmentSelected($event)"></kit-dropdown>
+                        </div>
+                        <div class="dialog-row d-flex gap-10p">
+                              <div class="form-input width-50pt">
+                                    <input class="" type="text" formControlName="email" autocomplete="on">
+                                    <label for="email">Email</label>
+                              </div>
+                              <div class="form-input width-50pt">
+                                    <input class="" type="text" formControlName="phone" autocomplete="on">
+                                    <label for="phone">Số điện thoại</label>
+                              </div>
+                        </div>
+                        <div class="dialog-row d-flex gap-10p">
+                              <div class="width-50pt">
+                                    <kit-dropdown [options]="userRoleOptions" [placeholder]="'Chọn vai trò'" (selectionChange)="onUserRoleSelected($event)"></kit-dropdown>
+                              </div>
+                              <div class="form-input width-50pt">
+                                    <input class="" type="text" formControlName="position" autocomplete="on" required/>
+                                    <label for="name">Chức vụ (HR, Kế toán, ...)</label>
+                              </div>
+                        </div>
+                        <div class="dialog-row">
+                              <div class="dialog-buttons">
+                                    <button type="button" class="button cancel-button" (click)="close()" [disabled]="submitting">Hủy</button>
+                                    <button type="submit" class="button save-button d-flex justify-content-center" [disabled]="submitting">
+                                          {{ submitting ? 'Đang lưu...' : 'Lưu' }}
+                                    </button>
+                              </div>
+                        </div>
+                  </form>
+            </div>
+      </div>
+</div>

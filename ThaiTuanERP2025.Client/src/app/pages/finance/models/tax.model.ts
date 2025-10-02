@@ -9,13 +9,10 @@ export interface TaxDto {
       isActive: boolean;
 }
 
-export interface CreateTaxRequest {
+export interface TaxRequest {
       policyName: string;
       rate: number; // 0..1
       postingLedgerAccountId: string;
       description?: string | null;
       isActive: boolean;
-}
-export interface UpdateTaxRequest extends CreateTaxRequest {
-      id: string;
 }

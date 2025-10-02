@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { ApiResponse } from '../../models/api-response.model';
-import { LoginResponse } from '../../models/login-response.model';
-
+import { ApiResponse } from '../../../shared/models/api-response.model';
+import { LoginResponse } from '../../../shared/models/login-response.model';
+import { NotificationSignalRService } from '../realtime/notification-signalr.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -14,6 +14,7 @@ export class AuthService {
 
       private tokenSubject = new BehaviorSubject<string | null>(null);
       private roleSubject = new BehaviorSubject<string | null>(null);
+      private signalR = inject(NotificationSignalRService);
 
       public token$ = this.tokenSubject.asObservable();
       public role$ = this.tokenSubject.asObservable();
@@ -35,12 +36,14 @@ export class AuthService {
             localStorage.setItem(this.ROLE_KEY, role);
             this.tokenSubject.next(token);
             this.roleSubject.next(role);
+            this.signalR.start(() => this.getToken());
       }
       logout() {
             localStorage.removeItem(this.TOKEN_KEY);
             localStorage.removeItem(this.ROLE_KEY);
             this.tokenSubject.next(null);
             this.roleSubject.next(null);
+            this.signalR.stop();
       }
 
       // Ưu tiên lấy từ BehaviorSubject nếu đã có

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ThaiTuanERP2025.Application.Account.Repositories;
-using ThaiTuanERP2025.Application.Common.Persistence;
+﻿using ThaiTuanERP2025.Application.Account.Repositories;
+using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Expense.Repositories;
 using ThaiTuanERP2025.Application.Files.Repositories;
 using ThaiTuanERP2025.Application.Finance.Repositories;
+using ThaiTuanERP2025.Application.Notifications.Repositories;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Common
@@ -23,6 +19,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 
 			// Account
 			IUserRepository users,
+			IUserManagerAssignmentRepository userManagerAssignments,
 			IDepartmentRepository departments,
 			IGroupRepository groups,
 			IUserGroupRepository userGroups,
@@ -45,14 +42,27 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			IInvoiceFileRepository invoiceFiles,
 			IInvoiceFollowerRepository invoiceFollowers,
 			ISupplierRepository suppliers,
-			IBankAccountRepository bankAccounts
+			IBankAccountRepository bankAccounts,
 
-		) {
+			// Workflow	
+			IApprovalStepTemplateRepository approvalStepTemplates,
+			IApprovalWorkflowTemplateRepository approvalWorkflowTemplates,
+			IApprovalStepInstanceRepository approvalStepInstances,
+			IApprovalWorkflowInstanceRepository approvalWorkflowInstances,
+
+			// Expense Payment
+			IExpensePaymentRepository expensePayments,
+
+			// Notification
+			INotificationRepository notifications
+		)
+		{
 			_dbContext = dbContext;
 
 			StoredFiles = storedFiles;
 
 			Users = users;
+			UserManagerAssignments = userManagerAssignments;
 			Departments = departments;
 			Groups = groups;
 			UserGroups = userGroups;
@@ -75,11 +85,21 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			InvoiceFollowers = invoiceFollowers;
 			Suppliers = suppliers;
 			BankAccounts = bankAccounts;
+
+			ApprovalStepTemplates = approvalStepTemplates;
+			ApprovalWorkflowTemplates = approvalWorkflowTemplates;
+			ApprovalStepInstances = approvalStepInstances;
+			ApprovalWorkflowInstances = approvalWorkflowInstances;
+
+			ExpensePayments = expensePayments;
+
+			Notifications = notifications;
 		}
 
 		public IStoredFilesRepository StoredFiles { get; }
 		// Account
 		public IUserRepository Users { get; }
+		public IUserManagerAssignmentRepository UserManagerAssignments { get; }
 		public IDepartmentRepository Departments { get; }
 		public IGroupRepository Groups { get; }
 		public IUserGroupRepository UserGroups { get; }
@@ -103,6 +123,18 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		public IInvoiceFollowerRepository InvoiceFollowers { get; }
 		public ISupplierRepository Suppliers { get; }
 		public IBankAccountRepository BankAccounts { get; }
+
+		// Workflow
+		public IApprovalWorkflowTemplateRepository ApprovalWorkflowTemplates { get; }
+		public IApprovalStepTemplateRepository ApprovalStepTemplates { get; }
+		public IApprovalWorkflowInstanceRepository ApprovalWorkflowInstances { get; }
+		public IApprovalStepInstanceRepository ApprovalStepInstances { get; }
+
+		// Expense Payment
+		public IExpensePaymentRepository ExpensePayments { get; }
+
+		// Notification
+		public INotificationRepository Notifications { get; }
 
 		public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{

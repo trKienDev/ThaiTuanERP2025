@@ -11,6 +11,18 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 using ThaiTuanERP2025.Infrastructure;
 using Microsoft.Extensions.FileProviders;
+using ThaiTuanERP2025.Infrastructure.StoredFiles.Configurations;
+using Microsoft.Extensions.Options;
+using System.Security.Claims;
+using ThaiTuanERP2025.Application.Expense.Contracts.Resolvers;
+using ThaiTuanERP2025.Infrastructure.Expense.Contracts.Resolvers;
+using ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows;
+using ThaiTuanERP2025.Application.Notifications.Services;
+using ThaiTuanERP2025.Infrastructure.Notifications.Services;
+using ThaiTuanERP2025.Api.Hubs;
+using Microsoft.AspNetCore.SignalR;
+using ThaiTuanERP2025.Api.SignalR;
+using ThaiTuanERP2025.Api.Notifications;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +30,21 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddScoped<IApproverResolver, CreatorManagerResolver>();
+builder.Services.AddScoped<IApproverResolverRegistry, ApproverResolverRegistry>();
+builder.Services.AddScoped<ApprovalWorkflowService>();
+builder.Services.AddScoped<ApprovalWorkflowResolverService>();
+builder.Services.AddScoped<IRealtimeNotifier, SignalRealtimeNotifier>();
+builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 
+builder.Services.AddSignalR()
+	.AddJsonProtocol(o =>
+	{
+		o.PayloadSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+		o.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+	});
+
+builder.Services.AddScoped<INotificationService, NotificationService>();
 // Application services (MediatR, FluentValidation, AutoMapper…)
 builder.Services.AddApplication();
 
@@ -58,22 +84,48 @@ builder.Services.AddSwaggerGen(options =>
 // JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var secretKey = jwtSettings["Key"];
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {
-	options.TokenValidationParameters = new TokenValidationParameters
-	{
-		ValidateIssuer = true,
-		ValidateAudience = true,
-		ValidateLifetime = true,
-		ValidateIssuerSigningKey = true,
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+	.AddJwtBearer(options => {
+		options.TokenValidationParameters = new TokenValidationParameters
+		{
+			ValidateIssuer = true,
+			ValidateAudience = true,
+			ValidateLifetime = true,
+			ValidateIssuerSigningKey = true,
 
-		ValidIssuer = jwtSettings["Issuer"],
-		ValidAudience = jwtSettings["Audience"],
-		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!)),
+			ValidIssuer = jwtSettings["Issuer"],
+			ValidAudience = jwtSettings["Audience"],
+			IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!)),
 
-		ClockSkew = TimeSpan.Zero // không trễ thời gian
-	};
+			NameClaimType = ClaimTypes.NameIdentifier,
+			RoleClaimType = ClaimTypes.Role,
+
+			ClockSkew = TimeSpan.Zero // không trễ thời gian
+		};
+
+		// SignalR
+		options.Events = new JwtBearerEvents
+		{
+			OnMessageReceived = context =>
+			{
+				var accessToken = context.Request.Query["access_token"];
+				var path = context.HttpContext.Request.Path;
+				if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+				{
+					context.Token = accessToken;
+				}
+				return Task.CompletedTask;
+			}
+		};
+	}
+);
+builder.Services.AddAuthorization(options => {
+	// Chính sách chỉ Admin
+	options.AddPolicy("AdminOnly", p => p.RequireRole("Admin"));
+
+	// chính sách nhieefuu role
+	options.AddPolicy("CanManagerUser", p => p.RequireRole("Admin", "HR"));
 });
-builder.Services.AddAuthorization();
 
 // CORS
 builder.Services.AddCors(options =>
@@ -94,9 +146,19 @@ builder.Services.AddControllers().AddJsonOptions(options => {
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.WebHost.CaptureStartupErrors(true);
 
+builder.Services.AddOptions<FileStorageOptions>()
+	.Bind(builder.Configuration.GetSection(FileStorageOptions.SectionName))
+	.ValidateDataAnnotations()
+	.Validate(o => !string.IsNullOrWhiteSpace(o.BasePath), "BasePath is required")
+	.PostConfigure(o =>
+	{
+		// Chuẩn hoá path tuyệt đối (dùng forward/backward đều OK)
+		o.BasePath = Path.GetFullPath(o.BasePath);
+	});
+
 var app = builder.Build();
 
-// Seed
+// Seed roles + admin user
 using (var scope = app.Services.CreateScope())
 {
 	var dbContext = scope.ServiceProvider.GetRequiredService<ThaiTuanERP2025DbContext>();
@@ -116,12 +178,17 @@ app.UseHttpsRedirection();
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapHub<NotificationsHub>("/hubs/notifications");
 
 app.MapControllers();
+
+var storageOpt = app.Services.GetRequiredService<IOptions<FileStorageOptions>>().Value;
+Directory.CreateDirectory(storageOpt.BasePath); // đảm bảo tồn tại
+
 app.UseStaticFiles(new StaticFileOptions
 {
-	FileProvider = new PhysicalFileProvider("E:\\KIEN\\task\\ThaiTuanERP2025.drive"),
-	RequestPath = "/files/public"
+	FileProvider = new PhysicalFileProvider(storageOpt.BasePath),
+	RequestPath = storageOpt.PublicRequestPath
 });
 
 app.Run();

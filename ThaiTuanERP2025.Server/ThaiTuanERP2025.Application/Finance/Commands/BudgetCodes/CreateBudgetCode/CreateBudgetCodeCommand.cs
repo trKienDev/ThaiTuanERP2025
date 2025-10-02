@@ -1,9 +1,4 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 
 namespace ThaiTuanERP2025.Application.Finance.Commands.BudgetCodes.CreateBudgetCode
@@ -13,5 +8,6 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.BudgetCodes.CreateBudgetC
 		public string Code { get; set; } = null!;
 		public string Name { get; set; } = null!;
 		public Guid BudgetGroupId { get; set; }
+		public Guid CashoutCodeId { get; set; }
 	}
 }

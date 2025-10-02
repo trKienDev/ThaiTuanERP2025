@@ -1,18 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Common.Interfaces;
-using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Files.Entities;
 using ThaiTuanERP2025.Domain.Finance.Entities;
+using ThaiTuanERP2025.Domain.Notifications;
 
 namespace ThaiTuanERP2025.Infrastructure.Persistence
 {
@@ -28,6 +22,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 
 		// DbSet
 		public DbSet<User> Users => Set<User>();
+		public DbSet<UserManagerAssignment> UserManagerAssignments => Set<UserManagerAssignment>();
 		public DbSet<Department> Departments => Set<Department>();
 		public DbSet<Group> Groups => Set<Group>();
 		public DbSet<UserGroup> UserGroups => Set<UserGroup>();
@@ -45,7 +40,19 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<InvoiceLine> InvoiceLines => Set<InvoiceLine>();
 		public DbSet<InvoiceFile> InvoiceFiles => Set<InvoiceFile>();
 		public DbSet<InvoiceFollwer> InvoiceFollwers => Set<InvoiceFollwer>();	
-
+		public DbSet<BudgetCode> BudgetCodes => Set<BudgetCode>();
+		public DbSet<BudgetGroup> BudgetGroups => Set<BudgetGroup>();
+		public DbSet<BudgetPeriod> BudgetPeriods => Set<BudgetPeriod>();
+		public DbSet<BudgetPlan> BudgetPlans => Set<BudgetPlan>();
+		public DbSet<ApprovalWorkflowTemplate> ApprovalWorkflowTemplates => Set<ApprovalWorkflowTemplate>();
+		public DbSet<ApprovalStepTemplate> ApproverStepTemplates => Set<ApprovalStepTemplate>();
+		public DbSet<ApprovalWorkflowInstance> ApprovalWorkflowInstances => Set<ApprovalWorkflowInstance>();
+		public DbSet<ApprovalStepInstance> ApprovalStepInstances => Set<ApprovalStepInstance>();
+		public DbSet<ExpensePayment> ExpensePayments => Set<ExpensePayment>();	
+		public DbSet<ExpensePaymentItem> ExpensePaymentItems => Set<ExpensePaymentItem>();
+		public DbSet<ExpensePaymentAttachment> ExpensePaymentAttachments => Set<ExpensePaymentAttachment>();
+		public DbSet<ExpensePaymentFollower> ExpensePaymentFollowers => Set<ExpensePaymentFollower>();	
+		public DbSet<AppNotification> AppNotification => Set<AppNotification>();
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -85,13 +92,6 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 					case EntityState.Modified:
 						entry.Entity.DateModified = DateTime.UtcNow;
 						entry.Entity.ModifiedByUserId = currentUserId;
-						break;
-					case EntityState.Deleted:
-						// Thay vì xóa thực tế, đánh dấu là đã xóa
-						entry.Entity.IsDeleted = true;
-						entry.Entity.DeletedDate = DateTime.UtcNow;
-						entry.Entity.DeletedByUserId = currentUserId;
-						entry.State = EntityState.Modified; // Chuyển sang trạng thái Modified để lưu lại thông tin xóa
 						break;
 				}
 			}

@@ -3,8 +3,8 @@ import { environment } from "../../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { BankAccountDto, CreateSupplierBankAccountRequest, CreateUserBankAccountRequest, UpdateBankAccountRequest } from "../models/bank-account.model";
-import { ApiResponse } from "../../../core/models/api-response.model";
-import { handleApiResponse$ } from "../../../core/utils/handle-api-response.operator";
+import { ApiResponse } from "../../../shared/models/api-response.model";
+import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
 
 @Injectable({ providedIn: 'root' })
 export class BankAccountService {

@@ -16,7 +16,6 @@ import { MatSidenavModule, MatDrawer } from "@angular/material/sidenav";
             BankAccountRequestDrawerComponent , MatSidenavModule
       ],
       templateUrl: './supplier.component.html',
-      styleUrl: './supplier.component.scss'
 })
 export class ExpenseSupplierComponent implements OnInit {
       suppliers: SupplierDto[] = [];
@@ -67,6 +66,4 @@ export class ExpenseSupplierComponent implements OnInit {
                   }
             })
       }
-
-      
 }
