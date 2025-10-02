@@ -6,7 +6,7 @@ using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Account.Commands.ChangePassword;
 using ThaiTuanERP2025.Application.Account.Commands.Login;
 using ThaiTuanERP2025.Application.Account.Dtos;
-using ThaiTuanERP2025.Application.Account.Queries.GetCurrentuser;
+using ThaiTuanERP2025.Application.Account.Queries.Users.GetCurrentUser;
 
 namespace ThaiTuanERP2025.Api.Controllers.Account
 {
@@ -29,7 +29,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 		[Authorize]
 		[HttpGet("me")]
 		public async Task<IActionResult> GetCurrentUser() {
-			var query = new GetCurrentuserQuery(User); // lấy từ JWT Claims
+			var query = new GetCurrentUserQuery(User); // lấy từ JWT Claims
 			var result = await _mediator.Send(query);
 			return Ok(ApiResponse<UserDto>.Success(result));
 		}

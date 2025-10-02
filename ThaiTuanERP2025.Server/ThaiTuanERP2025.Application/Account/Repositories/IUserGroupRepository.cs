@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ThaiTuanERP2025.Domain.Account.Entities;
+
+namespace ThaiTuanERP2025.Application.Account.Repositories
+{
+	public interface IUserGroupRepository
+	{
+		Task<UserGroup?> GetAsync(Guid userId, Guid groupId);	
+		Task<List<UserGroup>> GetByGroupIdAsync(Guid groupId);
+		Task<List<UserGroup>> GetByUserIdAsync(Guid userId);
+		Task AddAsync(UserGroup userGroup);
+		Task RemoveAsync(UserGroup userGroup);
+		Task<bool> ExistAsync(Guid userId, Guid groupId);
+	}
+}

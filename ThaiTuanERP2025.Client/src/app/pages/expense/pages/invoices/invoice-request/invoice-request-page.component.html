@@ -1,0 +1,134 @@
+<h2>Tạo hóa đơn</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()" class="invoice-form">
+      <div class="form-grid">
+            <section class="left-pane">
+                  <div class="row">
+                        <mat-form-field appearance="fill" class="w100">
+                              <mat-label>Tên hóa đơn *</mat-label>
+                              <input matInput formControlName="invoiceName" />
+                        </mat-form-field>
+                  </div>
+
+                  <div class="row">
+                        <mat-form-field appearance="fill" class="w33">
+                              <mat-label>Số hóa đơn *</mat-label>
+                              <input matInput formControlName="invoiceNumber" />
+                        </mat-form-field>
+
+                        <mat-form-field appearance="fill" class="w33">
+                              <mat-label>Ngày thanh toán</mat-label>
+                              <input matInput type="date" formControlName="paymentDate" />
+                        </mat-form-field>
+
+                        <mat-form-field appearance="fill" class="w33">
+                              <mat-label>Ngày lập hóa đơn *</mat-label>
+                              <input matInput type="date" formControlName="issueDate" />
+                        </mat-form-field>
+                  </div>
+
+                  <div class="row">
+                        <mat-form-field appearance="fill" class="w50">
+                              <mat-label>Tên người bán</mat-label>
+                              <input matInput formControlName="sellerName" />
+                        </mat-form-field>
+
+                        <mat-form-field appearance="fill" class="w50">
+                              <mat-label>Mã số thuế người bán *</mat-label>
+                              <input matInput formControlName="sellerTaxCode" />
+                        </mat-form-field>
+                  </div>
+
+                  <div class="row">
+                        <mat-form-field appearance="fill" class="w50">
+                              <mat-label>Địa chỉ người bán</mat-label>
+                              <input matInput formControlName="sellerAddress" />
+                        </mat-form-field>
+
+                        <mat-form-field appearance="fill" class="w50">
+                              <mat-label>Tên người mua</mat-label>
+                              <input matInput formControlName="buyerName" />
+                        </mat-form-field>
+                  </div>
+
+                  <div class="row">
+                        <mat-form-field appearance="fill" class="w50">
+                              <mat-label>Mã số thuế người mua</mat-label>
+                              <input matInput formControlName="buyerTaxCode" />
+                        </mat-form-field>
+
+                        <mat-form-field appearance="fill" class="w50">
+                              <mat-label>Địa chỉ người mua</mat-label>
+                              <input matInput formControlName="buyerAddress" />
+                        </mat-form-field>
+                  </div>
+
+                  <h3>Hạng mục</h3>
+
+                  <table class="lines-table" formArrayName="invoiceLines">
+                        <thead>
+                              <tr>
+                                    <th>#</th><th>Hạng mục *</th><th>SL *</th><th>Đơn giá *</th><th>Chiết khấu</th><th>Thành tiền</th><th>Thuế suất (%)</th><th>Số tiền thuế</th><th>Số tiền có thuế</th><th></th>
+                              </tr>
+                        </thead>
+                        <tbody>
+                              <tr *ngFor="let g of lines.controls; let i = index; trackBy: trackByIndex" [formGroupName]="i">
+                                    <td>{{ (i + 1) | number: '2.0' }}</td>
+                                    <td><input matInput formControlName="itemName" /></td>
+                                    <td><input matInput type="number" formControlName="quantity" /></td>
+                                    <!-- Đơn giá: money directive -->
+                                    <td><input matInput type="text" inputmode="decimal" appMoney [appMoneyDecimals]="0" formControlName="unitPrice" /></td>
+                                    <!-- Chiết khấu: money directive -->
+                                    <td>
+                                          <input matInput type="text" inputmode="decimal" appMoney [appMoneyDecimals]="0" formControlName="discountAmount" placeholder="VND" [class.invalid]="g.invalid && g.errors?.['discountTooHigh']"/>
+                                          <div class="field-error" *ngIf="g.invalid && g.errors?.['discountTooHigh']">Chiết khấu không được lớn hơn thành tiền.</div>
+                                    </td>
+                                    <td><input matInput [value]="g.get('gross')?.value | number:'1.0-0'" readonly /></td>
+                                    <td><input matInput type="number" formControlName="vatRatePercent" min="0" max="100" step="0.01" /></td>
+                                    <td><input matInput [value]="g.get('vatAmount')?.value | number:'1.0-0'" readonly /></td>
+                                    <td><input matInput [value]="g.get('totalWithVat')?.value | number:'1.0-0'" readonly /></td>
+                                    <td><button type="button" mat-stroked-button (click)="removeLine(i)">✕</button></td>
+                              </tr>
+
+                              <!-- Hàng tổng -->
+                              <tr class="totals-row">
+                                    <td colspan="6" style="text-align: right; font-weight: 600;">Tổng: </td>
+                                    <td><input matInput [value]="totalGross | number: '1.0-0'" readonly/></td>
+                                    <td><input matInput [value]="totalVat | number: '1.0-0'" readonly/></td>
+                                    <td><input matInput [value]="totalWithVat | number: '1.0-0'" readonly/></td>
+                                    <td></td>
+                              </tr>
+
+                              <tr>
+                                    <td colspan="10">
+                                          <button type="button" mat-button (click)="addLine()">+ Thêm dòng mới</button>
+                                    </td>
+                              </tr>
+                        </tbody>
+                  </table>
+            </section>
+
+            <section class="right-pane">
+                  <h3>Tệp hóa đơn chính *</h3>
+
+                  <div class="file-actions">
+                        <button mat-stroked-button type="button" (click)="mainFileInput.click()">Chọn tệp (PDF/Ảnh)</button>
+                        <input #mainFileInput type="file" accept="application/pdf,image/*" (change)="onMainFileSelected($event)" hidden />
+                        <div class="file-name" *ngIf="mainFileName">{{ mainFileName }}</div>
+                  </div>
+
+                  <div class="preview" *ngIf="previewUrl">
+                        <ng-container [ngSwitch]="previewKind">
+                              <img *ngSwitchCase="'image'" [src]="previewUrl" alt="invoice preview" style="max-width:100%; max-height:480px;" />
+                              <iframe *ngSwitchCase="'pdf'" [src]="previewUrl" style="width: 100%; height:480px; border:0;"></iframe>
+                              <a *ngSwitchDefault [href]="previewUrl">Xem tệp</a>
+                        </ng-container>
+                  </div>
+            </section>
+      </div>
+
+      <div class="actions">
+            <button mat-raised-button color="primary" type="submit" [disabled]="submitting">Lưu nháp</button>
+            <button mat-button type="button" (click)="cancel()">Hủy</button>
+      </div>
+</form>
