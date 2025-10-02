@@ -1,8 +1,9 @@
 ﻿using ThaiTuanERP2025.Application.Account.Repositories;
-using ThaiTuanERP2025.Application.Common.Persistence;
+using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Expense.Repositories;
 using ThaiTuanERP2025.Application.Files.Repositories;
 using ThaiTuanERP2025.Application.Finance.Repositories;
+using ThaiTuanERP2025.Application.Notifications.Repositories;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Common
@@ -50,7 +51,10 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			IApprovalWorkflowInstanceRepository approvalWorkflowInstances,
 
 			// Expense Payment
-			IExpensePaymentRepository expensePayments
+			IExpensePaymentRepository expensePayments,
+
+			// Notification
+			INotificationRepository notifications
 		)
 		{
 			_dbContext = dbContext;
@@ -88,6 +92,8 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			ApprovalWorkflowInstances = approvalWorkflowInstances;
 
 			ExpensePayments = expensePayments;
+
+			Notifications = notifications;
 		}
 
 		public IStoredFilesRepository StoredFiles { get; }
@@ -126,6 +132,9 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 
 		// Expense Payment
 		public IExpensePaymentRepository ExpensePayments { get; }
+
+		// Notification
+		public INotificationRepository Notifications { get; }
 
 		public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{

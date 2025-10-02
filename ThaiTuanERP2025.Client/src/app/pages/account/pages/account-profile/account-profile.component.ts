@@ -29,7 +29,6 @@ export class AccountProfileComponent implements OnInit {
       
       async ngOnInit(): Promise<void> {
             this.currentUser = await firstValueFrom(this.currentUser$);
-
       }
 
       triggerAvatarUpload(): void {

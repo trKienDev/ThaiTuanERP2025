@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using ThaiTuanERP2025.Application.Common.Persistence;
+using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Domain.Exceptions;
 
 namespace ThaiTuanERP2025.Application.Account.Commands.Departments.SetDepartmentManager

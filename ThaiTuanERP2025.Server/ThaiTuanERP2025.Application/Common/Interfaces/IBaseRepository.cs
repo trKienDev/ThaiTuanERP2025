@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 
 
-namespace ThaiTuanERP2025.Application.Common.Persistence
+namespace ThaiTuanERP2025.Application.Common.Interfaces
 {
 	public interface IBaseRepository<T> where T : class
 	{
@@ -26,7 +26,8 @@ namespace ThaiTuanERP2025.Application.Common.Persistence
 		Task<List<TDto>> ListProjectedAsync<TDto>(Func<IQueryable<T>, IQueryable<TDto>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default);
 
 		Task AddAsync(T entity);
-		
+		Task AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default);
+
 		void Update(T entity);
 
 		void Delete(T entity);

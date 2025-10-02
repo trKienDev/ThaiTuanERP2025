@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using ThaiTuanERP2025.Application.Common.Persistence;
+using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 
 namespace ThaiTuanERP2025.Application.Finance.Queries.BudgetCodes.GetAllBudgetCodes

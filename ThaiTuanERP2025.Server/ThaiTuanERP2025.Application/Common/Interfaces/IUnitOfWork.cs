@@ -2,8 +2,9 @@
 using ThaiTuanERP2025.Application.Expense.Repositories;
 using ThaiTuanERP2025.Application.Files.Repositories;
 using ThaiTuanERP2025.Application.Finance.Repositories;
+using ThaiTuanERP2025.Application.Notifications.Repositories;
 
-namespace ThaiTuanERP2025.Application.Common.Persistence
+namespace ThaiTuanERP2025.Application.Common.Interfaces
 {
 	public interface IUnitOfWork
 	{
@@ -21,7 +22,7 @@ namespace ThaiTuanERP2025.Application.Common.Persistence
 		IBudgetGroupRepository BudgetGroups { get; }
 		IBudgetPeriodRepository BudgetPeriods { get; }
 		IBudgetPlanRepository BudgetPlans { get; }
-		
+
 		ILedgerAccountRepository LedgerAccounts { get; }
 		ILedgerAccountTypeRepository LedgerAccountTypes { get; }
 		ITaxRepository Taxes { get; }
@@ -31,21 +32,24 @@ namespace ThaiTuanERP2025.Application.Common.Persistence
 		IStoredFilesRepository StoredFiles { get; }
 
 		// Expense
-		IInvoiceRepository Invoices { get;  }
+		IInvoiceRepository Invoices { get; }
 		IInvoiceLineRepository InvoiceLines { get; }
 		IInvoiceFileRepository InvoiceFiles { get; }
 		IInvoiceFollowerRepository InvoiceFollowers { get; }
-		ISupplierRepository Suppliers { get; }	
+		ISupplierRepository Suppliers { get; }
 		IBankAccountRepository BankAccounts { get; }
 
 		// Workflow
 		IApprovalStepTemplateRepository ApprovalStepTemplates { get; }
 		IApprovalWorkflowTemplateRepository ApprovalWorkflowTemplates { get; }
-		IApprovalWorkflowInstanceRepository ApprovalWorkflowInstances { get; }	
+		IApprovalWorkflowInstanceRepository ApprovalWorkflowInstances { get; }
 		IApprovalStepInstanceRepository ApprovalStepInstances { get; }
 
 		// Expense Payment
 		IExpensePaymentRepository ExpensePayments { get; }
+
+		// Notification
+		INotificationRepository Notifications { get; }
 
 		Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 	}

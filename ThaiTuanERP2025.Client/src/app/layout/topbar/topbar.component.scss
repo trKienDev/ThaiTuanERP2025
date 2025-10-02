@@ -15,6 +15,18 @@ $topbar-padding: 1.5rem;
       font-size: 1rem;
       // box-shadow: inset 0 calc(0.0625rem*-1) #d9d1e0;
 }
+.topbar-icon-wrapper {
+      border: 1px solid var(--default-border-color);
+      border-radius: 50%;
+      height: 38px;
+      width: 38px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: white;
+      color: var(--default-border-color);
+}
+.topbar-icon { font-size: 20px; user-select: none; }
 .thaituan-topbar-logo {
       height: 50px;
       width: auto;
@@ -28,4 +40,9 @@ $topbar-padding: 1.5rem;
 
 .user-section {
       font-size: 0.95rem;
+}
+.user-avatar {
+      height: 40px;
+      width: 40px;
+      border-radius: 50%;
 }

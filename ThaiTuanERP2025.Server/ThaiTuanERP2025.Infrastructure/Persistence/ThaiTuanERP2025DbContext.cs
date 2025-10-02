@@ -6,6 +6,7 @@ using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Files.Entities;
 using ThaiTuanERP2025.Domain.Finance.Entities;
+using ThaiTuanERP2025.Domain.Notifications;
 
 namespace ThaiTuanERP2025.Infrastructure.Persistence
 {
@@ -51,6 +52,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<ExpensePaymentItem> ExpensePaymentItems => Set<ExpensePaymentItem>();
 		public DbSet<ExpensePaymentAttachment> ExpensePaymentAttachments => Set<ExpensePaymentAttachment>();
 		public DbSet<ExpensePaymentFollower> ExpensePaymentFollowers => Set<ExpensePaymentFollower>();	
+		public DbSet<AppNotification> AppNotification => Set<AppNotification>();
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
