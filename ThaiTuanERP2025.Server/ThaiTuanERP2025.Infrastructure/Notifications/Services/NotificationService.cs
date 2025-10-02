@@ -1,4 +1,5 @@
 ﻿using ThaiTuanERP2025.Application.Common.Interfaces;
+using ThaiTuanERP2025.Application.Notifications.Dtos;
 using ThaiTuanERP2025.Application.Notifications.Services;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Notifications;
@@ -8,16 +9,19 @@ namespace ThaiTuanERP2025.Infrastructure.Notifications.Services
 	public class NotificationService : INotificationService
 	{
 		private readonly IUnitOfWork _unitOfWork;
-		public NotificationService(IUnitOfWork unitOfWork)
+		private readonly IRealtimeNotifier _realtime;
+		public NotificationService(IUnitOfWork unitOfWork, IRealtimeNotifier realtime)
 		{
 			_unitOfWork = unitOfWork;
+			_realtime = realtime;
 		}
 
 		public async Task NotifyStepActivatedAsync(ApprovalWorkflowInstance instance, ApprovalStepInstance step, IReadOnlyCollection<Guid> targetUserIds, CancellationToken cancellationToken)
 		{
 			if (targetUserIds == null || targetUserIds.Count == 0) return;
 
-			var notis = new List<AppNotification>(targetUserIds.Count);
+			// 1 ) Tạo các notification mới (lọc duplicate như hiện tại của bạn)
+			var notifications = new List<AppNotification>(); // sau
 
 			foreach (var uid in targetUserIds.Distinct())
 			{
@@ -31,7 +35,7 @@ namespace ThaiTuanERP2025.Infrastructure.Notifications.Services
 
 				if (existed) continue;
 
-				notis.Add(AppNotification.Create(
+				notifications.Add(AppNotification.Create(
 					userId: uid,
 					title: $"Yêu cầu duyệt: {step.Name}",
 					message: BuildMessage(instance, step),
@@ -43,12 +47,23 @@ namespace ThaiTuanERP2025.Infrastructure.Notifications.Services
 				));
 			}
 
-			if (notis.Count > 0)
-			{
-				await _unitOfWork.Notifications.AddRangeAsync(notis, cancellationToken);
-				await _unitOfWork.SaveChangesAsync(cancellationToken);
-				// (Optional) Đẩy SignalR tại đây nếu bạn đã có Hub
-			}
+			if (notifications.Count == 0) return;
+
+			// 2 ) Lưu vào DB
+			await _unitOfWork.Notifications.AddRangeAsync(notifications, cancellationToken);
+			await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+			// 3 ) Push SignalR (real-time)
+			// Map sang DTO nhẹ để gửi ra client
+			var payloads = notifications.Select(n => new AppNotificationDto(
+				Id: n.Id,
+				Title: n.Title,
+				Message: n.Message,
+				Link: n.Link ?? "/",
+				CreatedAt: n.CreatedDate
+			)).Cast<object>().ToList();
+
+			await _realtime.NotifyStepActivatedAsync(targetUserIds, payloads, cancellationToken);
 		}
 
 		private static string BuildLink(ApprovalWorkflowInstance i)
