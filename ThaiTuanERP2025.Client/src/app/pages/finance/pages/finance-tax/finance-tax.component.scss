@@ -42,7 +42,7 @@ input[type="text"],
 input[type="number"],
 textarea {
   padding: .5rem .6rem;
-  border: 1px solid var(--default-border, #ccc);
+  border: 1px solid var(--default-border-color, #ccc);
   border-radius: .5rem;
   outline: none;
 }
@@ -101,7 +101,7 @@ textarea {
     max-height: 260px;
     overflow: auto;
     background: #fff;
-    border: 1px solid var(--default-border, #ddd);
+    border: 1px solid var(--default-border-color, #ddd);
     border-radius: .5rem;
     z-index: 5;
     padding: .25rem 0;

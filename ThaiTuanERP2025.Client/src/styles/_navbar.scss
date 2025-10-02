@@ -1,11 +1,12 @@
 // _navbar.scss
 .navbar {
-      background-color: var(--sub-bg-color, #f8f9fa);
-      padding: 0 1rem;
+      background-image: linear-gradient(to top, #ffffff, #fefeff, #fcfdff, #f9fcff, #f6fbff);
+      padding: 0 10px;
       display: flex;
       justify-content: flex-start;
       position: relative;
       z-index: 1;
+      border-bottom: 1px solid aliceblue;
 
       &__container {
             width: 100%;
@@ -35,7 +36,6 @@
             background-color: transparent;
             border: 1px solid transparent;
             border-bottom: 1px solid transparent;
-            border-radius: 0.5rem 0.5rem 0 0;
             position: relative;
             z-index: 1;
             transition: all 0.2s ease-in-out;
@@ -45,14 +45,14 @@
                   background-color: white;
                   color: #000;
                   opacity: 1;
-                  border: 1px solid var(--default-border, #ccc);
+                  border: 1px solid var(--default-border-color, #ccc);
                   border-bottom: 1px solid #fff; 
             }
 
             &.selected {
                   background-color: #fff;
                   color: var(--main-foreground-hover);
-                  border: 1px solid var(--default-border, #ccc);
+                  border: 1px solid var(--default-border-color, #ccc);
                   border-bottom: 1px solid #fff; 
                   z-index: 2;
                   position: relative;
@@ -68,7 +68,9 @@
       }
 
       &__content {
-            padding: 1rem;
+            padding: 10px;
             height: 100%;
+            position: relative;
+            overflow-y: auto;
       }
 }

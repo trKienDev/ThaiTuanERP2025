@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ThaiTuanERP2025.Domain.Common;
+﻿using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Finance.Enums;
 
 namespace ThaiTuanERP2025.Domain.Finance.Entities
@@ -26,5 +21,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public LedgerAccount? Parent { get; set; }
 		public LedgerAccountBalanceType LedgerAccountBalanceType { get; set; }
 		public ICollection<LedgerAccount> Children { get; set; } = new List<LedgerAccount>();
+
+		public ICollection<CashoutCode> CashoutCodes { get; set; } = new List<CashoutCode>();
 	}
 }

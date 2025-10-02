@@ -1,12 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using ThaiTuanERP2025.Application.Common.Persistence;
+using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Domain.Exceptions;
 
@@ -37,7 +31,7 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.CashoutCodes.UpdateCashou
 			entity.Code = request.Code;
 			entity.Name = request.Name;
 			entity.CashoutGroupId = request.CashOutGroupId;
-			entity.PostingLedegerAccoutnId = request.PostingLedgerAccountId;
+			entity.PostingLedgerAccountId = request.PostingLedgerAccountId;
 			entity.Description = request.Description;
 
 			await _unitOfWork.SaveChangesAsync(cancellationToken);

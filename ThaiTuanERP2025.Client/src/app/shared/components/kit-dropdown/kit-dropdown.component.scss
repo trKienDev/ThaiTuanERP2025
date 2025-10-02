@@ -1,0 +1,108 @@
+.kit-dropdown {
+      width: 100%;
+      display: inline-block;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 2px rgb(204, 204, 204);
+      transition: all .5s ease;
+      position: relative;
+      color: #474747;
+      text-align: left;
+}
+
+.kit-dropdown-select {
+      cursor: pointer;
+      padding: 10px;
+      display: flex;
+      white-space: nowrap;
+      overflow-x: auto;
+      overflow-y: hidden;
+
+      .multi-selected {
+            display: inline-flex;
+            flex: 0 0 auto;
+            white-space: nowrap;
+            padding: 5px;
+            background-color: white;
+            color: var(--dark-gray);
+            border-radius: var(--default-border-color-radius);
+            border: 1px solid var(--platinum);
+            font-size: 12px;
+            user-select: none;
+            transition: 0.3s all;
+            margin-right: 5px;
+      }
+      .multi-selected:hover {
+            color: red;
+            border: 1px solid red;
+      }
+}
+
+.kit-dropdown .kit-dropdown-select > i {
+      color: #888;
+      cursor: pointer;
+      transition: all .3s ease-in-out;
+      float: right;
+      line-height: 20px;
+}
+
+.kit-dropdown:hover, .kit-dropdown.active {
+      box-shadow: 0 0 4px rgb(204, 204, 204);
+      background-color: #f8f8f8;
+}
+
+.kit-dropdown.active .kit-dropdown-select > i {
+      transform: rotate(-90deg);
+}
+
+.kit-dropdown .kit-dropdown-menu {
+      position: absolute;
+      background-color: #fff;
+      width: 100%;
+      left: 0;
+      margin-top: 1px;
+      box-shadow: 0 1px 2px rgb(204, 204, 204);
+      border-radius: 0 1px 2px 2px;
+      overflow-y: auto;
+      z-index: 9;
+
+      .selected { background: #f5f7fa !important;  }
+      .selected:hover { color: red; }
+      .check { width: 14px; display: inline-block; color: var(--bright-blue-color); }
+}
+
+.kit-dropdown .kit-dropdown-menu li {
+      padding: 10px;
+      transition: background-color .2s ease-in-out;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+}
+.kit-dropdown .kit-dropdown-menu li:hover { background-color: #f2f2f2; }
+.kit-dropdown .kit-dropdown-menu li:active { 
+      outline: none;  
+      background: #f2f2f2; 
+}
+
+
+/* hover vẫn hoạt động như cũ, có thể sáng hơn chút */
+.kit-dropdown .kit-dropdown-menu li[aria-selected="true"]:hover {
+      background-color: #f2f2f2;
+}
+.kit-dropdown .option-img {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      margin-right: 8px;
+}
+.kit-dropdown-filter {
+      padding: unset !important;
+      border-bottom: 1px solid rgb(236, 236, 236);
+}
+.kit-dropdown-filter input[type="text"] {
+      outline: none;
+      border: none;
+      padding: 10px;
+}
+

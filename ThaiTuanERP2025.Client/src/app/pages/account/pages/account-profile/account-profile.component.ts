@@ -1,9 +1,12 @@
 import { CommonModule } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
-import { UserService } from "../../services/user.service";
+import { Component, inject, OnInit } from "@angular/core";
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { environment } from "../../../../../environments/environment";
 import { UserDto } from "../../models/user.model";
+import { UserFacade } from "../../facades/user.facade";
+import { firstValueFrom } from "rxjs";
+import { ToastService } from "../../../../shared/components/toast/toast.service";
+import { UserService } from "../../services/user.service";
 
 @Component({
       selector: 'account-profile',
@@ -13,22 +16,19 @@ import { UserDto } from "../../models/user.model";
       styleUrl: './account-profile.component.scss',
 })
 export class AccountProfileComponent implements OnInit {
-      baseUrl: string = environment.baseUrl;
-      user: UserDto | null = null;
+      private userFacade = inject(UserFacade);
+      private toastService = inject(ToastService);
+      private userService = inject(UserService);
+
+      baseUrl: string = environment.baseUrl;      
+      currentUser$ = this.userFacade.currentUser$;
+      currentUser: UserDto | null = null;
+
       selectedAvatarFile: File | null = null;
       isUploading: boolean = false;
       
-      constructor(private userService: UserService, private snackBar: MatSnackBar) {}
-
-      ngOnInit(): void {
-            this.loadCurrentUser();
-      }
-
-      private loadCurrentUser(): void {
-            this.userService.getCurrentuser().subscribe({
-                  next: (data) => this.user = data,
-                  error: () => this.snackBar.open('Không thể lấy thông tin người dùng', 'Đóng', { duration: 3000 }),
-            });
+      async ngOnInit(): Promise<void> {
+            this.currentUser = await firstValueFrom(this.currentUser$);
       }
 
       triggerAvatarUpload(): void {
@@ -37,8 +37,11 @@ export class AccountProfileComponent implements OnInit {
       }
 
       get avatarSrc(): string {
-            if (this.user?.avatarFileObjectKey) {
-                  return this.baseUrl + '/files/public/' + this.user.avatarFileObjectKey;
+            if (this.currentUser?.avatarFileId && this.currentUser.avatarFileId.startsWith('data:image')) {
+                  return this.currentUser.avatarFileId; // base64 preview
+            }
+            if (this.currentUser?.avatarFileObjectKey) {
+                  return this.baseUrl + '/files/public/' + this.currentUser.avatarFileObjectKey;
             }
             return 'default-user-avatar.jpg';
       }
@@ -49,7 +52,7 @@ export class AccountProfileComponent implements OnInit {
 
                   const allowedTypes = ['image/jpg', 'image/jpeg', 'image/png'];
                   if(!allowedTypes.includes(file.type)) {
-                        this.snackBar.open('Chỉ hỗ trợ ảnh .JPEG, .JPG hoặc .PNG', 'Đóng', { duration: 3000 });
+                        this.toastService.errorRich('Chỉ hỗ trợ ảnh .JPEG, .JPG hoặc .PNG', 'Đóng');
                         return;
                   }
 
@@ -58,40 +61,41 @@ export class AccountProfileComponent implements OnInit {
                   // preview ảnh bằng base64
                   const reader = new FileReader();
                   reader.onload = () => {
-                        if(this.user) {
-                              this.user.avatarFileId = reader.result as string;
+                        if(this.currentUser) {
+                              this.currentUser.avatarFileId = reader.result as string;
                         }
                   };
                   reader.readAsDataURL(file); 
+            
             }
       }
       
       uploadAvatar(): void {
             if(!this.selectedAvatarFile) {
-                  this.snackBar.open('Vui lòng chọn avatar trước', 'Đóng', { duration: 3000 });
+                  this.toastService.errorRich('Vui lòng chọn avatar trước');
                   return;
             }
 
-            if(!this.user) 
+            if(!this.currentUser) 
                   return;
 
             this.isUploading = true;
-            if (!this.user || !this.user.id) {
-                  this.snackBar.open('Không xác định được ID người dùng', 'Đóng', { duration: 3000 });
+            if (!this.currentUser || !this.currentUser.id) {
+                  this.toastService.errorRich('Không xác định được ID người dùng');
                   return;
             }
 
-            this.userService.updateAvatar(this.selectedAvatarFile, this.user.id).subscribe({
+            this.userService.updateAvatar(this.selectedAvatarFile, this.currentUser.id).subscribe({
                   next: (url) => {
-                        this.user!.avatarFileId = url; // gán đường dẫn mới trả về
+                        this.currentUser!.avatarFileId = url; // gán đường dẫn mới trả về
                         this.selectedAvatarFile = null;
-                        this.snackBar.open('Cập nhật avatar thành công', 'Đóng', { duration: 3000 });
+                        this.toastService.successRich('Cập nhật avatar thành công');
                         this.isUploading = false;
                   }, 
                   error: (err) => {
                         this.isUploading = false;
                         console.error('Upload avatar error: ', err);
-                        this.snackBar.open('Không thể cập nhật ảnh đại diện', 'Đóng', { duration: 3000 });
+                        this.toastService.errorRich('Không thể cập nhật ảnh đại diện');
                   }
             })
       }

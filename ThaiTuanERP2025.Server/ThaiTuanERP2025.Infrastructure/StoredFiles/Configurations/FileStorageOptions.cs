@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ThaiTuanERP2025.Infrastructure.StoredFiles.Configurations
+﻿namespace ThaiTuanERP2025.Infrastructure.StoredFiles.Configurations
 {
 	public sealed class FileStorageOptions
 	{
-		public string Bucket { get; set; } = "files";
+		public const string SectionName = "FileStorage";
+		public required string BasePath { get; set; } = default!;
 		public int PresignedExpirySeconds { get; set; } = 300;
-		public string? BasePath { get; set; } = "E:\\KIEN\\task\\ThaiTuanERP2025.drive";
+		public string PublicRequestPath { get; init; } = "/files/public";
 	}
 }

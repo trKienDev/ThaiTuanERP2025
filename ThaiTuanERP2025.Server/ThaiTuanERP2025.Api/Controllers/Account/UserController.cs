@@ -4,12 +4,15 @@ using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Api.Contracts.Users;
 using ThaiTuanERP2025.Application.Account.Commands.Users.CreateUser;
+using ThaiTuanERP2025.Application.Account.Commands.Users.SetUserManagers;
 using ThaiTuanERP2025.Application.Account.Commands.Users.UpdateUser;
 using ThaiTuanERP2025.Application.Account.Commands.Users.UpdateUserAvatarFileId;
 using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Application.Account.Queries.Users.GetAllUsers;
 using ThaiTuanERP2025.Application.Account.Queries.Users.GetCurrentUser;
 using ThaiTuanERP2025.Application.Account.Queries.Users.GetUserById;
+using ThaiTuanERP2025.Application.Account.Queries.Users.GetUserManagerIds;
+using ThaiTuanERP2025.Application.Account.Queries.Users.GetUserManagers;
 
 namespace ThaiTuanERP2025.Api.Controllers.Account
 {
@@ -49,6 +52,18 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			return Ok(ApiResponse<UserDto>.Success(user));
 		}
 
+		[HttpGet("{id:guid}/managers/ids")]
+		public async Task<IActionResult> GetMangerIds(Guid Id, CancellationToken cancellationToken) {
+			var result = await _mediator.Send(new GetUserManagerIdsQuery(Id), cancellationToken);
+			return Ok(ApiResponse<List<Guid>>.Success(result));
+		}
+
+		[HttpGet("{id:guid}/managers")]
+		public async Task<ActionResult<List<UserDto>>> GetManagers(Guid id, CancellationToken cancellationToken) {
+			var result = await _mediator.Send(new GetUserManagersQuery(id), cancellationToken);
+			return Ok(ApiResponse<List<UserDto>>.Success(result));
+		}
+
 		/// <summary>
 		/// Tạo người dùng
 		/// </summary>
@@ -59,7 +74,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			return Ok(ApiResponse<UserDto>.Success(result));
 		}
 
-		[Authorize(Roles = "Admin")]
+		[Authorize(Roles = "admin")]
 		[HttpPut("{id:guid}")]
 		public async Task<IActionResult> Update(Guid id, [FromBody] UpdateUserCommand command) {
 			if(id != command.Id) return BadRequest(ApiResponse<string>.Fail("ID không khớp"));
@@ -71,6 +86,15 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 		public async Task<ActionResult<ApiResponse<string>>> SetAvatar(Guid id, [FromBody] SetUserAvatarRequest request, CancellationToken cancellationToken) {
 			await _mediator.Send(new UpdateUserAvatarFileIdCommand(id, request.FileId), cancellationToken);
 			return Ok(ApiResponse<string>.Success("Cập nhật avatar thành công"));
+		}
+
+		[Authorize(Roles = "admin")]
+		[HttpPut("{id:guid}/managers")]
+		public async Task<IActionResult> SetManagers(Guid id, [FromBody] SetUserManagerRequest request, CancellationToken cancellationToken)
+		{
+			var command = new SetUserManagersCommand(id, request.ManagerIds ?? new List<Guid>(), request.PrimaryManagerId);
+			await _mediator.Send(command, cancellationToken);
+			return Ok(ApiResponse<string>.Success("Cập nhật người quản lý thành công"));
 		}
 	}
 }

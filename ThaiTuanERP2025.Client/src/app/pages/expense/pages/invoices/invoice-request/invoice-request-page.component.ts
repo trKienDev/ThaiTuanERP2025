@@ -4,13 +4,14 @@ import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule
 import { MatButtonModule } from "@angular/material/button";
 import { MatInputModule } from "@angular/material/input";
 import { Router } from "@angular/router";
-import { FileService } from "../../../../../core/services/api/file.service";
+
 import { InvoiceService } from "../../../services/invoice.service";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { firstValueFrom, forkJoin, lastValueFrom } from "rxjs";
-import { AddInvoiceLineRequest, ReplaceMainInvoiceFileRequest } from "../../../models/invoice.model";
+import { AddInvoiceLineRequest } from "../../../models/invoice.model";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MoneyFormatDirective } from "../../../../../shared/directives/money/money-format.directive";
+import { FileService } from "../../../../../shared/services/file.service";
 
 @Component({
       standalone: true,

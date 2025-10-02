@@ -2,8 +2,8 @@ import { CommonModule } from "@angular/common";
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { BudgetPeriodModel } from "../../models/budget-period.model";
 import { BudgetPeriodService } from "../../services/budget-period.service";
-import { handleApiResponse } from "../../../../core/utils/handle-api-response.utils";
-import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
+import { handleApiResponse } from "../../../../shared/utils/handle-api-response.utils";
+import { handleHttpError } from "../../../../shared/utils/handle-http-errors.util";
 import { FormsModule } from "@angular/forms";
 
 @Component({

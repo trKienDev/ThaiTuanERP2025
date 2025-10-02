@@ -3,9 +3,9 @@ import { environment } from "../../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { AddInvoiceLineRequest, AttachInvoiceFileRequest, CreateInvoiceDraftRequest, invoiceDto, ReplaceMainInvoiceFileRequest } from "../models/invoice.model";
 import { Observable } from "rxjs";
-import { ApiResponse } from "../../../core/models/api-response.model";
-import { handleApiResponse$ } from "../../../core/utils/handle-api-response.operator";
-import { PagedResult } from "../../../core/models/paged-result.model";
+import { ApiResponse } from "../../../shared/models/api-response.model";
+import { PagedResult } from "../../../shared/models/paged-result.model";
+import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
 
 @Injectable({ providedIn: 'root' })
 export class InvoiceService {
@@ -26,6 +26,15 @@ export class InvoiceService {
                   .pipe(handleApiResponse$<invoiceDto>());
       }
 
+      getMine(page = 1, pageSize = 20): Observable<PagedResult<invoiceDto>> {
+            const params = new URLSearchParams();
+            params.set('page', String(page));
+            params.set('pageSize', String(pageSize));
+
+            return this.http.get<ApiResponse<PagedResult<invoiceDto>>>(`${this.API_URL}/mine?${params.toString()}`)
+                  .pipe(handleApiResponse$<PagedResult<invoiceDto>>());
+      }
+
       // GET /api/invoices?page=&pageSize=&keyword=
       getPaged(page = 1, pageSize = 20, keyword?: string | null): Observable<PagedResult<invoiceDto>> {
             const params = new URLSearchParams();
@@ -36,6 +45,7 @@ export class InvoiceService {
             return this.http.get<ApiResponse<PagedResult<invoiceDto>>>(`${this.API_URL}?${params.toString()}`)
                   .pipe(handleApiResponse$<PagedResult<invoiceDto>>());
       }
+
 
       // POST /api/invoices/{id}/lines
       addLine(invoiceId: string, body: AddInvoiceLineRequest): Observable<invoiceDto> {

@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ThaiTuanERP2025.Application.Common.Persistence;
+using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 
 namespace ThaiTuanERP2025.Application.Finance.Queries.BudgetCodes.GetAllBudgetCodes
@@ -23,8 +18,18 @@ namespace ThaiTuanERP2025.Application.Finance.Queries.BudgetCodes.GetAllBudgetCo
 
 		public async Task<List<BudgetCodeDto>> Handle(GetAllBudgetCodesQuery request, CancellationToken cancellationToken)
 		{
-			var budgetCodes = await _unitOfWork.BudgetCodes.GetAllAsync();
-			return _mapper.Map<List<BudgetCodeDto>>(budgetCodes);
+			return await _unitOfWork.BudgetCodes.ListProjectedAsync(
+				query => query.Select(x => new BudgetCodeDto {
+					Id = x.Id,
+					Code = x.Code,
+					Name = x.Name,
+					BudgetGroupId = x.BudgetGroupId,
+					BudgetGroupName = x.BudgetGroup.Name,
+					IsActive = x.IsActive
+				}),
+				true,
+				cancellationToken: cancellationToken
+			);
 		}
 	}
 }

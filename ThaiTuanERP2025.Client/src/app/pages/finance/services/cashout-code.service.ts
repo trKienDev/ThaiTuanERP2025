@@ -1,14 +1,14 @@
 import { Injectable } from "@angular/core";
-import { BaseCrudService } from "../../../core/services/api/base-crud.service";
-import { CashoutCodeDto, CreateCashoutCodeRequest, UpdateCashoutCodeRequest } from "../models/cashout-code.model";
+import { BaseCrudService } from "../../../shared/services/base-crud.service";
+import { CashoutCodeDto, CashoutCodeRequest } from "../models/cashout-code.model";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { environment } from "../../../../environments/environment";
 import { Observable } from "rxjs";
-import { ApiResponse } from "../../../core/models/api-response.model";
-import { handleApiResponse$ } from "../../../core/utils/handle-api-response.operator";
+import { ApiResponse } from "../../../shared/models/api-response.model";
+import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
 
 @Injectable({ providedIn: 'root' })
-export class CashOutCodeService extends BaseCrudService<CashoutCodeDto, CreateCashoutCodeRequest, UpdateCashoutCodeRequest> {
+export class CashoutCodeService extends BaseCrudService<CashoutCodeDto, CashoutCodeRequest> {
       constructor(http: HttpClient) {
             super(http, `${environment.apiUrl}/cashout-codes`);
       }

@@ -1,13 +1,8 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using ThaiTuanERP2025.Application.Common.Persistence;
+using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
@@ -71,12 +66,16 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			return query;
 		}
 
+		public virtual Task<bool> ExistAsync(Guid id, CancellationToken cancellationToken = default)
+		{
+			return _dbSet.AsNoTracking().AnyAsync(e => EF.Property<Guid>(e, "Id") == id, cancellationToken);
+		}
 		public virtual async Task<T?> GetByIdAsync(Guid id)
 		{
 			return await _dbSet.FindAsync(id);
 		}
 		public virtual async Task<List<T>> GetAllAsync() {
-			return await _dbSet.ToListAsync();
+			return await _dbSet.AsNoTracking().ToListAsync();
 		}
 		// filter by navigation
 		public virtual async Task<List<T>> GetAllIncludingAsync(params Expression<Func<T, object>>[] includes)
@@ -112,6 +111,11 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		{
 			if (entity == null) throw new ArgumentNullException(nameof(entity));
 			await _dbSet.AddAsync(entity);
+		}
+		public async Task AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default)
+		{
+			if (entities == null) throw new ArgumentNullException(nameof(entities));
+			await _dbSet.AddRangeAsync(entities, cancellationToken);
 		}
 
 		public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
@@ -151,6 +155,12 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 				.Where(e => EF.Property<Guid>(e, "Id") == id)
 				.ProjectTo<TDto>(_configurationProvider)
 				.SingleOrDefaultAsync(cancellationToken);
+		}
+
+		public Task<List<TDto>> ListProjectedAsync<TDto>(Func<IQueryable<T>, IQueryable<TDto>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default)
+		{
+			var query = asNoTracking ? _dbSet.AsNoTracking() : _dbSet.AsQueryable();
+			return builder(query).ToListAsync(cancellationToken); // materialize trong repo
 		}
 	}
 }

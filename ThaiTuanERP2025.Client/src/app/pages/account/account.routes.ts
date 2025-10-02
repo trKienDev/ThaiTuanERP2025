@@ -20,7 +20,7 @@ export const accountRoutes: Routes = [
                         path: 'departments', 
                         canActivate: [adminGuard], 
                         loadComponent: () => import('./pages/account-department/account-department.component').then((m) => m.AccountDepartmentComponent )
-                  }
+                  }, 
             ],
       },
 ];

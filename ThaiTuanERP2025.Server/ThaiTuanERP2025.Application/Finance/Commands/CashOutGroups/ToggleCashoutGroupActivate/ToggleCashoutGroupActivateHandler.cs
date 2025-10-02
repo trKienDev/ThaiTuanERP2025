@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using ThaiTuanERP2025.Application.Common.Persistence;
+using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Finance.Commands.CashOutGroups.ToggleCashOutGroupActivate;
 using ThaiTuanERP2025.Domain.Exceptions;
 

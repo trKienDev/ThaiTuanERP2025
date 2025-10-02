@@ -18,6 +18,11 @@
 		public string? BuyerTaxCode { get; init; }
 		public string? BuyerAddress { get; init; }	
 
+		// Total
+		public decimal TotalAmount { get; set; }
+		public decimal TotalTax { get; set; }
+		public decimal TotalWithTax { get; set; }
+
 		public bool IsDraft { get; init; }
 		
 		public IReadOnlyList<InvoiceLineDto> InvoiceLines { get; init; } = Array.Empty<InvoiceLineDto>();

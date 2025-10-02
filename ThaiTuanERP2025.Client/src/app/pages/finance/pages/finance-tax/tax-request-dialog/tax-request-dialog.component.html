@@ -1,21 +1,19 @@
-<h2 mat-dialog-title>Chính sách thuế mới</h2>
+<h2 class="modal-title">Chính sách thuế mới</h2>
 
-<div mat-dialog-content [formGroup]="form">
-      <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Tên chính sách thuế</mat-label>
-            <input matInput formControlName="policyName" placeholder="VD: VAT 10%">
-            <mat-error *ngIf="taxRequestForm.policyName.hasError('required')">Bắt buộc</mat-error>
-            <mat-error *ngIf="taxRequestForm.policyName.hasError('maxlength')">Tối đa 200 ký tự</mat-error>
-            <mat-error *ngIf="taxRequestForm.policyName.hasError('nameTaken')">Tên chính sách đã tồn tại</mat-error>
-      </mat-form-field>
+<div [formGroup]="form">
+      <div class="input-wrapper">
+            <div class="form-input">
+                  <input class="" type="text" formControlName="policyName" autocomplete="on" required/>
+                  <label for="name">Tên chính sách thuế</label>
+            </div>
+      </div>
 
-      <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Mức thuế</mat-label>
-            <input matInput type="number" formControlName="rate" step="0.01" placeholder="0.1 = 10%">
-            <mat-hint>Nhập 0..1 (ví dụ 0.1 = 10%)</mat-hint>
-            <mat-error *ngIf="taxRequestForm.rate.hasError('required')">Bắt buộc</mat-error>
-            <mat-error *ngIf="taxRequestForm.rate.hasError('min') || taxRequestForm.rate.hasError('max')">Giá trị từ 0 đến 1</mat-error>
-      </mat-form-field>
+      <div class="input-wrapper">
+            <div class="form-input">
+                  <input class="" type="number" formControlName="rate" required/>
+                  <label for="name">Mức thuế</label>
+            </div>
+      </div>
 
       <div class="form-group">
             <label for="postingLedgerAccountId">Tài khoản hạch toán</label>
