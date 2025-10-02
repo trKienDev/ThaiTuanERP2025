@@ -20,6 +20,9 @@ using ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows;
 using ThaiTuanERP2025.Application.Notifications.Services;
 using ThaiTuanERP2025.Infrastructure.Notifications.Services;
 using ThaiTuanERP2025.Api.Hubs;
+using Microsoft.AspNetCore.SignalR;
+using ThaiTuanERP2025.Api.SignalR;
+using ThaiTuanERP2025.Api.Notifications;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +34,8 @@ builder.Services.AddScoped<IApproverResolver, CreatorManagerResolver>();
 builder.Services.AddScoped<IApproverResolverRegistry, ApproverResolverRegistry>();
 builder.Services.AddScoped<ApprovalWorkflowService>();
 builder.Services.AddScoped<ApprovalWorkflowResolverService>();
+builder.Services.AddScoped<IRealtimeNotifier, SignalRealtimeNotifier>();
+builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 
 builder.Services.AddSignalR()
 	.AddJsonProtocol(o =>
