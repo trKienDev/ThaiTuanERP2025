@@ -17,6 +17,9 @@ using System.Security.Claims;
 using ThaiTuanERP2025.Application.Expense.Contracts.Resolvers;
 using ThaiTuanERP2025.Infrastructure.Expense.Contracts.Resolvers;
 using ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows;
+using ThaiTuanERP2025.Application.Notifications.Services;
+using ThaiTuanERP2025.Infrastructure.Notifications.Services;
+using ThaiTuanERP2025.Api.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +31,7 @@ builder.Services.AddScoped<IApproverResolver, CreatorManagerResolver>();
 builder.Services.AddScoped<IApproverResolverRegistry, ApproverResolverRegistry>();
 builder.Services.AddScoped<ApprovalWorkflowService>();
 builder.Services.AddScoped<ApprovalWorkflowResolverService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 // Application services (MediatR, FluentValidation, AutoMapper…)
 builder.Services.AddApplication();
 
@@ -146,6 +150,7 @@ app.UseHttpsRedirection();
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapHub<NotificationsHub>("/hubs/notifications");
 
 app.MapControllers();
 

@@ -1,4 +1,4 @@
-﻿using ThaiTuanERP2025.Application.Common.Persistence;
+﻿using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Domain.Finance.Entities;
 

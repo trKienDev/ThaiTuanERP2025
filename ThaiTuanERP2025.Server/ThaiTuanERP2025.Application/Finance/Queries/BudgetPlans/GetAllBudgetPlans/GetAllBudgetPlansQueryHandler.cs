@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Finance.Dtos;
-using ThaiTuanERP2025.Application.Common.Persistence;
+using ThaiTuanERP2025.Application.Common.Interfaces;
 
 namespace ThaiTuanERP2025.Application.Finance.Queries.BudgetPlans.GetAllBudgetPlans
 {
