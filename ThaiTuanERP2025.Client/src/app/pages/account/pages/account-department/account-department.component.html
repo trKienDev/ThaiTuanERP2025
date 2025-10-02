@@ -1,81 +1,22 @@
-<h2>Quản lý phòng ban</h2>
+<button type="button" class="button default-button" (click)="openDeparmentRequestDialog()">Tạo phòng ban mới</button>
 
-<div class="d-flex gap-20p">
-      <div class="primary-card">
-            <div class="card-header">
-                  <div class="card-title">Thêm phòng ban</div>
-            </div>
-            <div class="card-body">
-                  <form class="d-flex gap-10p" (ngSubmit)="addDepartment()" #departmentForm="ngForm">
-                        <input class="w-25" type="text" name="code" [(ngModel)]="newDepartment.code" placeholder="Mã phòng ban" required/>
-                        <input class="w-60" type="text" name="name" [(ngModel)]="newDepartment.name" placeholder="Tên phòng ban" required/>
-                        <button class="save-button" type="submit" [disabled]="!departmentForm.valid">Thêm</button>
-                  </form>
-            </div>
-      </div>
-
-      <div class="primary-card minw-340px">
-            <div class="import-department-excel">
-                  <div class="card-header d-flex justify-content-between align-items-center">
-                        <span>Thêm nhiều phòng ban</span>
-                        <a href="/assets/templates/department-template.xlsx" download>
-                              <button class="button-download">Excel mẫu</button>
-                        </a>
-                  </div>
-                  <div class="card-body">
-                        <div class="file-uploader">
-                              <input #excelFile id="excelFile" type="file" class="file-input" (change)="onFileSelected($event)" accept=".xlsx,.xls" />
-                              <div class="button button-github">
-                                    <label for="excelFile" class="cursor-pointer">Chọn file</label>
-                              </div>
-                              <span class="file-name" *ngIf="fileName; else noFile">{{ fileName }}</span>
-                              <ng-template #noFile>
-                                    <span class="file-name muted">Chưa chọn file</span>
-                              </ng-template>
-                        </div>
-                        <div class="actions d-flex justify-content-end">
-                              <button class="save-button" type="button" (click)="uploadExcel()" [disabled]="!importedDepartments.length || isImporting">Import danh sách</button>
-                              <button type="button" class="cancel-button" (click)="onCancelImport()" [disabled]="!importedDepartments.length && !fileName">Hủy</button>
-                        </div>
-                        
-                  </div>
-            </div>
-      </div>
-</div>
-
-<div *ngIf="successMessage" class="alert-success">
-      {{ successMessage }}
-</div>
-
-<table class="table-departments">
+<table class="table mar-top-20">
       <thead>
             <tr>
-                  <th>
-                        <input #masterCheckbox type="checkbox" [checked]="isAllSelected()" (change)="toggleAll($event)" />
-                  </th>
+                  <th>#</th>
                   <th>Mã phòng ban</th>
                   <th>Tên phòng ban</th>
-                  <th>Thao tác</th>
+                  <th>Trường bộ phận</th>
             </tr>
       </thead>
       <tbody>
-            <tr *ngFor="let dept of departments">
-                  <td>
-                       <input type="checkbox" [(ngModel)]="dept.selected" (change)="updateMasterCheckboxState()" />
-                  </td>
+            <tr *ngFor="let dept of (departments$ | async) ?? []; trackBy: trackById; let i = index;">
+                  <td>{{ i + 1 }}</td>
                   <td>{{ dept.code }}</td>
                   <td>{{ dept.name }}</td>
-                  <td style="text-align: center; margin-right: 10px">
-                        <button class="btn btn-secondary" (click)="openEditModal(dept)" title="Chỉnh sửa">
-                              <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn btn-danger" (click)="onDelete(dept)" title="Xóa">
-                              <i class="fas fa-trash"></i>
-                        </button>
+                  <td>
+                        <kit-action-menu [actions]="buildDepartmentActions(dept)"></kit-action-menu>
                   </td>
             </tr>
       </tbody>
 </table>
-
-
-<app-edit-department-modal [visible]="isEditing" [selectedDepartment]="selectedDepartment" (submitUpdate)="updateDepartment($event)" (cancel)="cancelEdit()"></app-edit-department-modal>

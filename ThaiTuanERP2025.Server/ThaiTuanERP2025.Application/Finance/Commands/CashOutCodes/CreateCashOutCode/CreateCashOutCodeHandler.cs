@@ -1,12 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ThaiTuanERP2025.Application.Common.Persistence;
-using ThaiTuanERP2025.Application.Finance.Commands.CashoutCodes.CreateCashoutCode;
+using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Domain.Common.Utils;
 using ThaiTuanERP2025.Domain.Exceptions;
@@ -51,7 +45,7 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.CashoutCodes.CreateCashou
 				Code = code,
 				Name = name,
 				CashoutGroupId = request.CashoutGroupId,
-				PostingLedegerAccoutnId = request.PostingLedgerAccountId,
+				PostingLedgerAccountId = request.PostingLedgerAccountId,
 				Description = request.Description,
 				IsActive = true
 			};

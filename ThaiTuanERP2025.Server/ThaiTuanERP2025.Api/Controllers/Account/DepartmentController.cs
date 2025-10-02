@@ -3,12 +3,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Account.Commands.Departments.AddDepartment;
-using ThaiTuanERP2025.Application.Account.Commands.Departments.BulkAddDepartmentCommand;
 using ThaiTuanERP2025.Application.Account.Commands.Departments.DeleteDepartment;
+using ThaiTuanERP2025.Application.Account.Commands.Departments.SetDepartmentManager;
 using ThaiTuanERP2025.Application.Account.Commands.Departments.UpdateDepartment;
 using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Application.Account.Queries.Departments.GetAllDepartments;
-using ThaiTuanERP2025.Application.Account.Queries.Departments.GetDepartmentsByIds;
 
 namespace ThaiTuanERP2025.Api.Controllers.Account
 {
@@ -40,25 +39,6 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			return Ok(ApiResponse<object>.Success( new {departmentId }));
 		}
 
-		[HttpPost("bulk")]
-		public async Task<IActionResult> BulkImport([FromBody] BulkAddDepartmentsCommand command)
-		{
-			if (command == null || command.Departments == null || !command.Departments.Any())
-				return BadRequest(ApiResponse<object>.Fail("Dữ liệu rộng hoặc không hợp lệ !"));
-
-			var addCount = await _mediator.Send(command);
-			return Ok(ApiResponse<object>.Success(new { added = addCount }, "Import thành công"));
-		}
-
-		[HttpPost("by-ids")]
-		public async Task<ActionResult<List<DepartmentDto>>> GetByIds([FromBody] List<Guid> ids, CancellationToken cancellationToken)
-		{
-			if(ids == null || !ids.Any())
-				return BadRequest(ApiResponse<List<DepartmentDto>>.Fail("Dữ liệu rộng hoặc không hợp lệ !"));
-			var departments = await _mediator.Send(new GetDepartmentsByIdsQuery(ids), cancellationToken);
-			return Ok(ApiResponse<List<DepartmentDto>>.Success(departments));
-		}
-
 		[HttpPut("{id}")]
 		public async Task<IActionResult> Update(Guid id, [FromBody] UpdateDepartmentCommand body)
 		{
@@ -67,6 +47,15 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 
 			await _mediator.Send(body);
 			return Ok(ApiResponse<string>.Success("Cập nhật department thành công"));
+		}
+
+		[HttpPut("{id:guid}/manager")]
+		public async Task<IActionResult> SetManager([FromRoute] Guid id, [FromBody] SetDepartmentManagerCommand command)
+		{
+			if (command == null || command.DepartmentId == Guid.Empty || id != command.DepartmentId)
+				return BadRequest(ApiResponse<string>.Fail("Dữ liệu rộng hoặc không hợp lệ !"));
+			await _mediator.Send(command);
+			return Ok(ApiResponse<string>.Success("Cập nhật quản lý phòng ban thành công"));
 		}
 
 		[HttpDelete("{id}")]

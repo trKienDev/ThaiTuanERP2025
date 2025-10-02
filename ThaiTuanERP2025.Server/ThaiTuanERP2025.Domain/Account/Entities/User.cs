@@ -1,8 +1,5 @@
-﻿using System;
-using System.Security.Cryptography.X509Certificates;
-using ThaiTuanERP2025.Domain.Common;
+﻿using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Account.Enums;
-using ThaiTuanERP2025.Domain.Finance.Entities;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 
 namespace ThaiTuanERP2025.Domain.Account.Entities
@@ -32,7 +29,13 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public bool IsSuperAdmin { get; private set; } = false;
 		public bool IsActive { get; private set; } = true;
 
-		public BankAccount? BankAccount { get; private set; }
+		public ICollection<BankAccount> BankAccounts { get; private set; } = new List<BankAccount>();
+
+		// ManagerAssignments: các quan hệ mà User là Manager của người khác (direct reports).
+		public ICollection<UserManagerAssignment> ManagerAssignments { get; private set; } = new List<UserManagerAssignment>();
+		// DirectReportsAssignments: các quan hệ mà User là nhân viên và có các manager khác nhau.
+		public ICollection<UserManagerAssignment> DirectReportsAssignments { get; private set; } = new List<UserManagerAssignment>();
+
 		// EF Core cần constructor mặc định
 		private User() {
 			UserGroups = new List<UserGroup>();

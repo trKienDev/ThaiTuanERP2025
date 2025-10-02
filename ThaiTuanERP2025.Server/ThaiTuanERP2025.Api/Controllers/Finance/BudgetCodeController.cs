@@ -1,14 +1,12 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata;
 using ThaiTuanERP2025.Api.Common;
-using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Application.Finance.Commands.BudgetCodes.CreateBudgetCode;
 using ThaiTuanERP2025.Application.Finance.Commands.BudgetCodes.UpdateBudgetCodeStatus;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Application.Finance.Queries.BudgetCodes.GetAllActiveBudgetCodes;
 using ThaiTuanERP2025.Application.Finance.Queries.BudgetCodes.GetAllBudgetCodes;
+using ThaiTuanERP2025.Application.Finance.Queries.BudgetCodes.GetBudgetCodesWithAmountForPeriod;
 
 namespace ThaiTuanERP2025.Api.Controllers.Finance
 {
@@ -17,13 +15,9 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 	public class BudgetCodeController : ControllerBase
 	{
 		private readonly IMediator _mediator;
-		private readonly IUnitOfWork _unitOfWork;
-		private readonly IMapper _mapper;
-		public BudgetCodeController(IMediator mediator, IUnitOfWork unitOfWork, IMapper mapper)
+		public BudgetCodeController(IMediator mediator)
 		{
 			_mediator = mediator;
-			_unitOfWork = unitOfWork;
-			_mapper = mapper;
 		}
 
 		[HttpGet("all")]
@@ -37,6 +31,14 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 		public async Task<IActionResult> GetAllActive() {
 			var codes = await _mediator.Send(new GetAllActiveBudgetCodesQuery());
 			return Ok(ApiResponse<List<BudgetCodeDto>>.Success(codes));
+		}
+
+		[HttpGet("with-current-amount")]
+		public async Task<IActionResult> GetWithAmount([FromQuery] int? year, [FromQuery] int? month,  CancellationToken cancellationToken)
+		{
+			// var data = await _mediator.Send(new GetBudgetCodesWithAmountForPeriodQuery { Year = year, Month = month, DepartmentId = departmentId }, cancellationToken);
+			var data = await _mediator.Send(new GetBudgetCodesWithAmountForPeriodQuery ( year,  month), cancellationToken);
+			return Ok(ApiResponse<List<BudgetCodeWithAmountDto>>.Success(data));
 		}
 
 		[HttpPost]

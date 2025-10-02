@@ -5,24 +5,62 @@
 @import url('./styles/_cards.scss');
 @import url('./styles/_toggle-switch.scss');
 @import url('./app/shared/components/messages/_message.scss');
-
+@import url('./styles/_input.scss');
+@import url('./styles/_alert.scss');
+@import url('./styles/_checkbox.scss');
+@import url('./styles/_table.scss');
+@import url('./styles/_dialog.scss');
+@import url('./styles/_dropdown-menu.scss');
+@import url('./styles/_badge.scss');
 
 :root {
       --cadmium-red: #D22B2B;
+      --neon-red-color: #FF3131;
       --ultramarin: #0437F2;
+      --neon-blue-color: #1F51FF;
+      --bright-blue-color: #0096FF;
+      --royal-blue-color: #4169E1;
+      --light-blue-color: #F2F9F9;
       --main-bg-color: #f6f8fa;
       --sub-bg-color: #f6f8fa;
       --sub-bg-color_hover: #818b981a;
       --main-theme-bg: #d5a36e;
       --main-foreground-hover: #A50021;
       --main-theme-fg: #f8e1e1;
-      --default-border: #d1d9e0b3;
+      
       --gold-color: #FFD700;
+      // gray
+      --platinum: #E5E4E2;
+      --dark-gray: #A9A9A9;
+      // red
+      --bright-red: #EE4B2B;
+
+      --kelly-green-color: #4CBB17;
+
       --logo-size: 250px;
 
+      // border-radius
+      --default-border-color: #d1d9e0b3;
+      --default-border-color-radius: 5px;
+
+      --topbar-height: 64px;
 }
 
 body, input { font-family: 'Lexend', sans-serif; font-size: 13px; }
+textarea { 
+      font-family: "Lexend", sans-serif;
+      font-size: 13px;
+      width: 100%;
+      min-height: 100px;
+      height: fit-content;
+      border: 1px solid var(--default-border-color);
+      border-radius: var(--default-border-color-radius);
+      box-sizing: border-box;
+      padding: 10px;
+      outline: none;
+      resize: none;
+      line-height: 1.6;
+}
 
 
 ul, ol {
@@ -34,7 +72,7 @@ input {
       padding: 8px;
       box-sizing: border-box;
       border-radius: 5px;
-      border: 1px solid var(--default-border);
+      border: 1px solid var(--default-border-color);
 }
 
 .logo-container {
@@ -53,7 +91,7 @@ input {
             height: 100%;
             object-fit: contain;
             display: block;
-            border-radius: 10px;
+            border-radius: 5px;
       }
 
       // Hiệu ứng ánh sáng
@@ -77,11 +115,78 @@ input {
 }
 html, body { height: 100%; margin: 0; }
 
-.mat-mdc-tooltip-surface {
-      font-family: 'Lexend' !important;
-      user-select: none;
-      background-color: var(--gold-color) !important;
-      color: black !important;
+.page-heading { display: flex; justify-content: space-between; }
+.page-title { display: flex; gap: 10px; font-size: 20px;
+      h3 { margin: 0px; }
+      .title { line-height: 1.6; user-select: none; }
 }
 
+.default-title { font-size: 20px; font-weight: 900; color: var(--main-foreground-hover); }
+.ahref-non-decoration { text-decoration: none; color: black; }
+.ahref-non-decoration:hover { color: var(--bright-blue-color); text-decoration: underline; cursor: pointer;}
 
+/* Chrome, Safari, Edge, Opera */
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+/* Firefox */
+input[type=number] { -moz-appearance: textfield; }
+
+.mat-mdc-tooltip-surface { font-family: 'Lexend' !important; user-select: none; background-color: var(--gold-color) !important; color: black !important; }
+/* target đúng nơi Material render (overlay) */
+.cdk-overlay-pane .mat-mdc-dialog-surface { border-radius: 5px !important; overflow-y: unset; }
+.cdk-overlay-pane .cdk-overlay-black-backdrop { background: rgba(15, 15, 15, 0.5); }
+
+/* mat-calendar */
+.mat-datepicker-content .mat-calendar { width: 300px !important; height: unset !important; border-top-left-radius: var(--default-border-color-radius); border-top-right-radius: var(--default-border-color-radius); }
+.kit-datepicker { background-color: var(--main-bg-color); border-bottom-left-radius: var(--default-border-color-radius); border-bottom-right-radius: var(--default-border-color-radius); }
+.kit-datepicker .mat-calendar-table { margin-top: 10px;}
+.kit-datepicker .mat-calendar-controls { margin: unset !important; }
+.kit-datepicker .mat-calendar-header { background: #1976d2;  color: #fff; border-top-left-radius: var(--default-border-color-radius); border-top-right-radius: var(--default-border-color-radius); padding: unset;}
+.kit-datepicker .mat-calendar-table-header th { padding: unset; font-weight: bold; opacity: 0.5;}
+.kit-datepicker .mat-calendar-body-label { display: table-cell !important; visibility: hidden; padding: 0 !important; width: 0; height: 0; }
+.kit-datepicker .mat-calendar-content { padding: unset; }
+.kit-datepicker .mat-calendar-arrow { fill: white; }
+.kit-datepicker .mat-calendar-previous-button:hover, .kit-datepicker .mat-calendar-next-button:hover { opacity: 0.8; }
+.kit-datepicker .mat-calendar-body-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical), .kit-datepicker .mat-calendar-body-cell-content:hover { background-color: white !important; color: #1976d2; border: 1px solid #1976d2; }
+.kit-datepicker .mat-calendar-body-cell-content { border-radius: var(--default-border-color-radius); }
+.kit-datepicker .mat-calendar-body-selected { background-color: #1976d2; color: white; }
+.kit-datepicker .mat-calendar-body-row { display: table-row !important; }
+.kit-datepicker .mat-calendar-body-cell { display: table-cell !important; }
+
+/* mat-snackbar */
+/* Bọc MDC surface: bo góc + shadow + padding đẹp hơn */
+.mat-mdc-snack-bar-container.kit-snack { margin: 16px; }
+.mat-mdc-snack-bar-container.kit-snack .mdc-snackbar__surface { border-radius: 5px; box-shadow: 0 10px 24px rgba(2, 6, 23, 0.18), 0 2px 6px rgba(2, 6, 23, 0.08); animation: kit-snack-in 160ms ease-out; position: relative; overflow: visible; padding-bottom: 4px;  } 
+@keyframes kit-snack-in { from { transform: translateY(-6px); opacity: 0; }  to   { transform: translateY(0);    opacity: 1; }  }
+.mdc-snackbar__label { padding: 5px !important; }
+
+/* Màu theo loại: dùng CSS vars MDC để an toàn */
+.mat-mdc-snack-bar-container.kit-snack.kit-snack--success { --mdc-snackbar-container-color: #4CBB17; --mdc-snackbar-supporting-text-color: #ffffff; }
+.mat-mdc-snack-bar-container.kit-snack.kit-snack--error { --mdc-snackbar-container-color: #FF3131; --mdc-snackbar-supporting-text-color: #ffffff; }
+.mat-mdc-snack-bar-container.kit-snack.kit-snack--warning { --mdc-snackbar-container-color: var(--gold-color); --mdc-snackbar-supporting-text-color: black;  }
+.mat-mdc-snack-bar-container.kit-snack.kit-snack--info { --mdc-snackbar-container-color: rgba(250, 248, 253); --mdc-snackbar-supporting-text-color: black; }
+/* Layout cho ToastComponent */
+.kit-snack-row { display: flex; align-items: center; gap: 10px; color: var(--mdc-snackbar-supporting-text-color); position: sticky; }
+.kit-snack-icon { display: flex !important; align-items: center; justify-content: center; line-height: 20px; color: var(--mdc-snackbar-supporting-text-color); }
+.kit-snack-text { display: grid; gap: 2px; }
+.kit-snack-title { font-weight: 700; line-height: 1.1; }
+.kit-snack-msg { line-height: 1.2; white-space: pre-line; user-select: none; }
+.mdc-snackbar__surface { width: fit-content !important; min-width: unset !important; max-width: unset !important; }
+.kit-snack-progress { position: absolute; left: 0px; right: 0px; bottom: 0px; height: 3px; background: rgba(255,255,255,0.22); overflow: hidden; border-radius: 0 0 5px 5px; z-index: 1; }
+.kit-snack-progress .bar { display: block; height: 100%; width: 0%; background: rgba(255,255,255,0.9); animation-name: kit-snack-progress-line; animation-timing-function: linear; animation-fill-mode: forwards; }
+.mat-mdc-snack-bar-container.kit-snack.kit-snack--warning .kit-snack-progress .bar { background: #111827; }
+@keyframes kit-snack-progress-line { from { width: 0%; } to   { width: 100%; } }
+
+/* file uploader */
+.file-uploader { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.file-input { display: none; } /* ẩn input gốc */
+.file-name { max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file-name.muted { color: #888; }
+
+/* form error messages */
+.error small { color: #d32f2f; }
+[aria-invalid="true"] { outline: 1px solid #d32f2f; }
+.form-summary-error { margin-top: 8px; color: #d32f2f; }
+
+/* mat-dialog  */
+.mat-mdc-dialog-surface { min-width: fit-content !important; }
+.cdk-overlay-pane, .mat-mdc-dialog-container, .mat-mdc-dialog-inner-container { min-width: fit-content !important; }

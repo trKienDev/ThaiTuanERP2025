@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Account.Commands.Group.CreateGroup;
 using ThaiTuanERP2025.Application.Account.Dtos;
-using ThaiTuanERP2025.Application.Common.Persistence;
+using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Domain.Account.Entities;
 
 namespace ThaiTuanERP2025.Application.Account.Commands.Groups.CreateGroup
@@ -24,7 +24,7 @@ namespace ThaiTuanERP2025.Application.Account.Commands.Groups.CreateGroup
 
 		public async Task<GroupDto> Handle(CreateGroupCommand request, CancellationToken cancellationToken)
 		{
-			var group = new Domain.Account.Entities.Group(request.Name, request.Description);
+			var group = new Domain.Account.Entities.Group(request.Name, request.Slug, request.Description);
 			group.SetAdmin(request.AdminUserId);
 
 			var userGroup = new UserGroup(request.AdminUserId, group.Id);

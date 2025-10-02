@@ -1,115 +1,122 @@
-import { Directive, ElementRef, HostListener, input, Input, OnDestroy } from "@angular/core";
-import { NgControl } from "@angular/forms";
-import { Subscription } from "rxjs";
+import { Directive, ElementRef, HostListener, Input, forwardRef } from "@angular/core";
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 @Directive({
       selector: '[appMoney]',
-      standalone: true
+      standalone: true,
+      providers: [
+            { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => MoneyFormatDirective), multi: true }
+      ]
 })
-export class MoneyFormatDirective implements OnDestroy {
-      // Số chữ số thập phân muốn hiển thị (VND thường = 0)
+export class MoneyFormatDirective implements ControlValueAccessor {
       @Input('appMoneyDecimals') decimals = 0;
 
-      private subscription?: Subscription;
       private composing = false;
+      private updatingView = false;
+      private onChange: (value: number | null) => void = () => {};
+      private onTouched: () => void = () => {};
+      private disabled = false;
 
-      constructor(private element: ElementRef<HTMLInputElement>, private ngControl: NgControl) {
-            // Nếu value thay đổi từ code, format lại display
-            this.subscription = this.ngControl.control?.valueChanges.subscribe(v => {
-                  // Tránh vòng lặp khi do chính directive set
-                  if(this.element.nativeElement !== document.activeElement) {
-                        this.element.nativeElement.value = this.formatFromNumber(v);
-                  }
-            });
+      constructor(private element: ElementRef<HTMLInputElement>) {}
+
+      // ===== ControlValueAccessor =====
+      writeValue(value: any): void {
+            if (this.element.nativeElement === document.activeElement) {
+                  this.updatingView = true;
+                  this.element.nativeElement.value = value ?? '';
+                  this.updatingView = false;
+            } else {
+                  this.updatingView = true;
+                  this.element.nativeElement.value = this.formatFromNumber(value);
+                  this.updatingView = false;
+            }
+      }
+      registerOnChange(fn: any): void { this.onChange = fn; }
+      registerOnTouched(fn: any): void { this.onTouched = fn; }
+      setDisabledState(isDisabled: boolean): void {
+            this.disabled = isDisabled;
+            this.element.nativeElement.disabled = isDisabled;
       }
 
-      ngOnDestroy(): void {
-            this.subscription?.unsubscribe();
-      }
-
-      
+      // ===== UI events =====
       @HostListener('input', ['$event'])
-      onInput(event: Event) {
-            if(this.composing) return;
+      onInput(_: Event) {
+            if (this.composing || this.updatingView || this.disabled) return;
 
             const input = this.element.nativeElement;
             const prev = input.value;
-            const selectionStart = input.selectionStart ?? prev.length;
+            const selStart = input.selectionStart ?? prev.length;
+            const unitsBefore = this.countUnits(prev.slice(0, selStart));
 
-            // Đếm "đơn vị đếm caret" (digit + dấu thập phân nếu cho phép) trước caret cũ
-            const unitsBeforeCaret = this.countUnits(prev.slice(0, selectionStart));
-
-            // Chuẩn hóa chuỗi (chỉ còn số và (.) nếu decimals>0) + giới hạn số lẻ
             const normalized = this.normalize(prev);
-
-            // Cập nhật FormControl với number
             const numeric = this.toNumber(normalized);
-            this.ngControl.control?.setValue(numeric, { emitEvent: true });
 
-            // Format hiển thị với dấu phẩy
+            this.onChange(numeric);
+
             const formatted = this.formatFromString(normalized);
+            this.updatingView = true;
             input.value = formatted;
-
-            // Đặt lại caret dựa trên số "đơn vị" trước caret
-            const newCaret = this.indexFromUnits(formatted, unitsBeforeCaret);
-            input.setSelectionRange(newCaret, newCaret);
+            const caretIndex = this.indexFromUnits(formatted, unitsBefore);
+            input.setSelectionRange(caretIndex, caretIndex);
+            this.updatingView = false;
       }
 
       @HostListener('focus')
       onFocus() {
-            const value = this.ngControl.control?.value;
-            this.element.nativeElement.value = value ?? '';
+            const current = this.element.nativeElement.value;
+            const numeric = this.toNumber(this.normalize(current));
+            this.updatingView = true;
+            this.element.nativeElement.value = Number.isFinite(numeric) ? String(numeric) : '';
             this.element.nativeElement.select();
+            this.updatingView = false;
       }
 
       @HostListener('blur')
       onBlur() {
-            const input = this.element.nativeElement;
-            const normalized = this.normalize(input.value);
-            const numeric = this.toNumber(normalized);
-            this.ngControl.control?.setValue(numeric, { emitEvent: true });
-            input.value = this.formatFromNumber(numeric);
+            const raw = this.toNumber(this.normalize(this.element.nativeElement.value));
+            const rounded = (this.decimals === 0) ? Math.round(raw) : Number(raw.toFixed(this.decimals));
+
+            this.onChange(rounded);
+            this.onTouched();
+
+            this.updatingView = true;
+            this.element.nativeElement.value = this.formatFromNumber(rounded);
+            this.updatingView = false;
       }
 
       @HostListener('compositionstart') onCompStart() { this.composing = true; }
       @HostListener('compositionend') onCompEnd() { this.composing = false; }
 
-      // ---------- Helpers ----------
-      /** Loại bỏ mọi ký tự ngoài digit (và '.' nếu cho phép), cắt số lẻ theo this.decimals */
+      // ===== Helpers =====
       private normalize(text: string): string {
-            if (!text) return '';
-            const allowDot = this.decimals > 0;
+      if (!text) return '';
+      const allowDot = this.decimals > 0;
 
-            // Giữ số và (tối đa một) dấu '.'
-            let cleaned = text.replace(/[^\d.]/g, '');
-            if (!allowDot) {
-                  cleaned = cleaned.replace(/\./g, '');
-                  return cleaned.replace(/^0+(\d)/, '$1'); // bỏ 0 đầu nếu dài
-            }
+      let cleaned = text.replace(/[^\d.]/g, '');
+      if (!allowDot) {
+            cleaned = cleaned.replace(/\./g, '');
+            return cleaned.replace(/^0+(\d)/, '$1');
+      }
 
-            // Cho phép 1 dấu '.' và giới hạn số lẻ
-            const firstDot = cleaned.indexOf('.');
+      const firstDot = cleaned.indexOf('.');
             if (firstDot >= 0) {
                   const intPart = cleaned.slice(0, firstDot).replace(/\./g, '');
                   let fracPart = cleaned.slice(firstDot + 1).replace(/\./g, '');
-                  if (this.decimals >= 0) 
+                  if (this.decimals >= 0)
                         fracPart = fracPart.slice(0, this.decimals);
                   cleaned = intPart + '.' + fracPart;
             } else {
-                  cleaned = cleaned.replace(/\./g, '');
+            cleaned = cleaned.replace(/\./g, '');
             }
             return cleaned.replace(/^0+(\d)/, '$1');
       }
 
-      /** Chuyển chuỗi normalized -> number */
       private toNumber(normalized: string): number {
-            if (!normalized) 
-                  return 0;
-            const n = Number(normalized);
+            if (!normalized) return 0;
+                  const n = Number(normalized);
             return isNaN(n) ? 0 : n;
       }
 
-      /** Format từ number (sử dụng Intl). Với decimals=0 không có phần lẻ. */
       private formatFromNumber(val: unknown): string {
             const n = Number(val);
             if (isNaN(n)) return '';
@@ -119,7 +126,6 @@ export class MoneyFormatDirective implements OnDestroy {
             }).format(n);
       }
 
-      /** Format từ chuỗi normalized (tự format phần nguyên, giữ nguyên phần lẻ) */
       private formatFromString(normalized: string): string {
             if (!normalized) return '';
             if (this.decimals === 0) {
@@ -131,14 +137,11 @@ export class MoneyFormatDirective implements OnDestroy {
             return f.length ? `${intGrouped}.${f}` : intGrouped;
       }
 
-      /** Thêm dấu phẩy phần nguyên */
       private groupThousands(intStr: string): string {
-            if (!intStr) 
-                  return '0';
+            if (!intStr) return '0';
             return intStr.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
       }
 
-      /** Đếm "đơn vị caret": digit + ('.' nếu decimals>0) trong chuỗi */
       private countUnits(s: string): number {
             const allowDot = this.decimals > 0;
             let cnt = 0;
@@ -148,10 +151,8 @@ export class MoneyFormatDirective implements OnDestroy {
             return cnt;
       }
 
-      /** Tìm index trong formatted sao cho số "đơn vị" trước index khớp units */
       private indexFromUnits(formatted: string, units: number): number {
-            if (units <= 0) 
-                  return 0;
+            if (units <= 0) return 0;
 
             const allowDot = this.decimals > 0;
             let cnt = 0;
@@ -164,21 +165,4 @@ export class MoneyFormatDirective implements OnDestroy {
             }
             return formatted.length;
       }
-
-      // private parse(text: any): number {
-      //       if(text == null) return 0;
-      //       const normalized = String(text).replace(/,/g, '').trim();
-      //       if(normalized === '') return 0;
-      //       const number = Number(normalized);
-      //       return isNaN(number) ? 0 : number; 
-      // } 
-
-      // private format(value: any): string {
-      //       const number = Number(value);
-      //       if(isNaN(number)) return '';
-      //       return new Intl.NumberFormat('en-US', {
-      //             minimumFractionDigits: this.decimals,
-      //             maximumFractionDigits: this.decimals,
-      //       }).format(number);
-      // }
 }

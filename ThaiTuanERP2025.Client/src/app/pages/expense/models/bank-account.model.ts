@@ -2,7 +2,7 @@ export interface BankAccountDto {
       id: string;
       bankName: string;
       accountNumber: string;
-      BeneficiaryName: string;
+      beneficiaryName: string;
       isActive: boolean;
       userId?: string | null;
       supplierId?: string | null;

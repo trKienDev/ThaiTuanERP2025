@@ -29,18 +29,23 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 
 			// Owner: hoặc User hoặc Supplier
 			builder.HasOne(x => x.User)
-				.WithOne(u => u.BankAccount)
-				.HasForeignKey<BankAccount>(x => x.UserId)
+				.WithMany(u => u.BankAccounts)
+				.HasForeignKey(x => x.UserId)
 				.OnDelete(DeleteBehavior.Restrict);
 			builder.HasOne(x => x.Supplier)
 				.WithMany(s => s.BankAccounts)
 				.HasForeignKey(x => x.SupplierId)
 				.OnDelete(DeleteBehavior.Restrict);
 
-			// unique filtered index: đảm bảo 1 user chỉ có 1 BankAccount
-			builder.HasIndex(x => x.UserId)
+			// Mỗi User không được lặp AccountNumber
+			builder.HasIndex(x => new { x.UserId, x.AccountNumber })
 				.IsUnique()
 				.HasFilter("[UserId] IS NOT NULL");
+
+			// Mỗi Supplier không được lặp AccountNumber
+			builder.HasIndex(x => new { x.SupplierId, x.AccountNumber })
+				.IsUnique()
+				.HasFilter("[SupplierId] IS NOT NULL");
 		}
 	}
 }

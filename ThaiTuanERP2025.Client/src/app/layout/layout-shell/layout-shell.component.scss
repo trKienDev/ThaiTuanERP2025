@@ -3,13 +3,12 @@
 }
 .main-content {
       flex: 1;
-      padding: 0px 1.5rem;
+      padding-right: 1.5rem;
       background-color: var(--main-bg-color);
-      
 }
 .main-content-container {
       background-color: white;
-      height: 100vh;
-      border: 1px solid var(--default-border);
+      min-height: calc(100dvh - var(--topbar-height) - 20px);
+      border: 1px solid var(--default-border-color);
       border-radius: 5px;
 }

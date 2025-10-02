@@ -1,37 +1,39 @@
 import { CommonModule } from "@angular/common";
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { BudgetPlanService } from "../../services/budget-plan.service";
-import { BudgetPlanModel, CreateBudgetPlanModel } from "../../models/budget-plan.model";
-import { BudgetCodeModel } from "../../models/budget-code.model";
 import { DepartmentService } from "../../../account/services/department.service";
 import { BudgetCodeService } from "../../services/budget-code.service";
 import { BudgetPeriodService } from "../../services/budget-period.service";
-import { handleHttpError } from "../../../../core/utils/handle-http-errors.util";
+import { handleHttpError } from "../../../../shared/utils/handle-http-errors.util";
 import { FormsModule } from "@angular/forms";
 import { BudgetPeriodModel } from "../../models/budget-period.model";
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { DepartmentDto } from "../../../account/models/department.model";
+import { MoneyFormatDirective } from "../../../../shared/directives/money/money-format.directive";
+import { BudgetPlanDto, BudgetPlanRequest } from "../../models/budget-plan.model";
+import { BudgetCodeDto } from "../../models/budget-code.model";
 
 @Component({
       selector: 'finance-budget-plan',
       standalone: true,
-      imports: [ CommonModule, FormsModule, MatInputModule, MatFormFieldModule, MatAutocompleteModule ],
+      imports: [ CommonModule, FormsModule, MatInputModule, MatFormFieldModule, MatAutocompleteModule,
+            MoneyFormatDirective
+      ],
       templateUrl: './budget-plan.component.html',
-      styleUrl: './budget-plan.component.scss',
 })
 export class BudgetPlanComponent implements OnInit {
-      budgetPlans: (BudgetPlanModel & { selected: boolean })[] = [];
+      budgetPlans: (BudgetPlanDto & { selected: boolean })[] = [];
 
       departments: DepartmentDto[] = [];
       filteredDepartments: DepartmentDto[] = [];
 
-      budgetCodes: BudgetCodeModel[] = [];
+      budgetCodes: BudgetCodeDto[] = [];
       budgetPeriods: BudgetPeriodModel[] = [];
       successMessage: string | null = null;
 
-      formData: CreateBudgetPlanModel = {
+      formData: BudgetPlanRequest = {
             departmentId: '',
             budgetCodeId: '',
             budgetPeriodId: '',

@@ -6,8 +6,8 @@ using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
+using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Common.Models;
-using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Application.Expense.Dtos;
 
 namespace ThaiTuanERP2025.Application.Expense.Queries.Invoices.GetInvoicesPaged

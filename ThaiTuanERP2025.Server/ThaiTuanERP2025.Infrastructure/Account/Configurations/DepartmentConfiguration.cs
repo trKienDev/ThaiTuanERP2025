@@ -13,9 +13,21 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 
 			builder.Property(x => x.Code).IsRequired().HasMaxLength(64);
 			builder.Property(x => x.Name).IsRequired().HasMaxLength(200);
+			builder.Property(x => x.Region).HasConversion<int>().IsRequired();
+			builder.Property(x => x.Level).IsRequired();
+
+			builder.HasOne(x => x.Parent)
+				.WithMany(x => x.Children)
+				.HasForeignKey(x => x.ParentId)
+				.OnDelete(DeleteBehavior.Restrict);
 
 			builder.HasIndex(x => x.Code).IsUnique();
 			builder.HasIndex(x => x.Name);
+
+			builder.HasOne(d => d.ManagerUser)
+				.WithMany()                
+				.HasForeignKey(d => d.ManagerUserId)
+				.OnDelete(DeleteBehavior.Restrict);
 
 			builder.HasOne(e => e.CreatedByUser)
 				.WithMany()

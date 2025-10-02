@@ -33,7 +33,7 @@ namespace ThaiTuanERP2025.Infrastructure.Seeding
 				context.SaveChanges();
 
 				// 2) Tạo phòng ban, gán CreatedByUserId = admin.Id
-				var dept = new Department("Phòng IT", "ITC");
+				var dept = new Department("Phòng IT", "ITC", Region.South);
 				// nếu AuditableEntity có CreatedByUserId:
 				// dept.CreatedByUserId = admin.Id;
 				// hoặc: dept.CreatedByUser = admin;

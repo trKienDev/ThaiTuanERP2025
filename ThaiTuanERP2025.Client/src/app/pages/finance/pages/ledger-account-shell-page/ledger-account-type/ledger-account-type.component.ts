@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { CreateLedgerAccountTypeRequest, LedgerAccountTypeDto, UpdateLedgerAccountTypeRequest } from '../../../models/ledger-account-type.dto';
+import { LedgerAccountTypeDto, LedgerAccountTypeRequest } from '../../../models/ledger-account-type.dto';
 import { LedgerAccountTypeService } from '../../../services/ledger-account-type.service';
 
 @Component({
@@ -20,7 +20,7 @@ export class LedgerAccountTypeComponent implements OnInit {
 
       // create
       createOpen = false;
-      createForm: CreateLedgerAccountTypeRequest = { 
+      createForm: LedgerAccountTypeRequest = { 
             name: '', 
             code: '',
             ledgerAccountTypeKind: 1,
@@ -30,7 +30,7 @@ export class LedgerAccountTypeComponent implements OnInit {
       // edit
       editOpen = false;
       editingId: string | null = null;
-      editForm: UpdateLedgerAccountTypeRequest = { 
+      editForm: LedgerAccountTypeRequest = { 
             name: '', 
             code: '', 
             ledgerAccountTypeKind: 1,
@@ -54,6 +54,7 @@ export class LedgerAccountTypeComponent implements OnInit {
 
       ngOnInit(): void {
             this.reload();
+            console.log('ledger-account-types: ', this.types$);
       }
 
       /** load danh sách */

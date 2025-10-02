@@ -1,15 +1,12 @@
 .ledger-shell {
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  height: 100%;
-  background: #f2f3f4;
-  border: 1px solid var(--default-border, #dadde1);
+      display: grid;
+      grid-template-columns: 200px 1fr;
 }
 
 /* Sidebar */
 .ledger-shell__sidebar {
   background: #fff;
-  border-right: 1px solid var(--default-border, #e5e7eb);
+  border-right: 1px solid var(--default-border-color, #e5e7eb);
   padding: 12px;
   display: flex;
   flex-direction: column;
@@ -17,7 +14,6 @@
 }
 
 .sidebar__item {
-  width: 100%;
   text-align: left;
   border: 1px solid #e5e7eb;
   padding: 10px 12px;
@@ -36,6 +32,7 @@
 /* Content */
 .ledger-shell__content {
   padding: 12px;
+  width: 80%;
 }
 .panel {
   height: 100%;

@@ -1,0 +1,41 @@
+<div class="container">
+      <div class="heading d-flex justify-content-between">
+            <div class="">
+                  <span class="default-title">Tạo luồng duyệt mới</span>
+            </div>
+            <div class="">
+                  <button class="button save-button" (click)="openSaveApprovalWorkflowTemplate()">Lưu luồng duyệt</button>
+            </div>
+      </div>
+
+      <div class="approval-workflow-wrapper">
+            <div class="approval-workflow-process">
+                  <div class="step begin-step">Bắt đầu</div>
+
+                  <ng-container *ngFor="let s of steps; let i = index">
+                        <!-- khe nối trước mỗi step -->
+                        <div class="connector-slot">
+                              <div class="connector-line"></div>
+                              <div class="inline-add">
+                                    <!-- <button type="button" class="plus-button plus-button--small"  aria-label="thêm bước duyệt" (click)="openApprovalStepRequestDialog()"></button> -->
+                                    <kit-action-menu [icon]="'add'" [actions]="buildStepActtions(i)"></kit-action-menu>
+                              </div>
+                        </div>
+
+                        <div class="step d-flex align-items-center gap-10p" cdkDrag>
+                              <div class="step-inner" style="line-height: 1.4;">
+                                    <a class="ahref-non-decoration" (click)="editStep(i); $event.preventDefault()">{{ s.name }}</a>
+                              </div>
+                              <div> 
+                                    <kit-action-menu [actions]="buildStepActtions(i)"></kit-action-menu>
+                              </div>
+                        </div>
+                  </ng-container>
+
+                  <!-- nút + sau step cuối -->
+                  <div class="tail-add">
+                        <kit-action-menu [icon]="'add'" [actions]="buildAddStepAction()"></kit-action-menu>
+                  </div>
+            </div>
+      </div>
+</div>

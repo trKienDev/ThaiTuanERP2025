@@ -4,14 +4,8 @@ export interface SupplierDto {
       taxCode?: string | null;
       isActive: boolean;
 }
-export interface CreateSupplierRequest {
+export interface SupplierRequest {
       name: string,
-      taxCode?: string | null;
-      isActive: boolean;
-}
-export interface UpdateSupplierRequest {
-      id: string;
-      name: string;
       taxCode?: string | null;
       isActive: boolean;
 }

@@ -1,7 +1,7 @@
 .primary-card {
       border-radius: 5px;
       background-color: white;
-      border: 1px solid var(--default-border);
+      border: 1px solid var(--default-border-color);
       width: fit-content;
       height: fit-content;
 }
@@ -9,14 +9,14 @@
       font-size: 15px;
       font-weight: bold;
       padding: 15px;
-      border-bottom: 1px solid var(--default-border);
+      border-bottom: 1px solid var(--default-border-color);
 }
 .primary-card .card-body {
       padding: 15px;
 }
 .primary-card .card-box {
       width: 80%;
-      border: 1px solid var(--default-border);
+      border: 1px solid var(--default-border-color);
       border-radius: 5px;
       padding: 10px;
       user-select: none;
