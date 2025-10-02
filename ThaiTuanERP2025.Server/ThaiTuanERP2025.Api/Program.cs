@@ -31,6 +31,14 @@ builder.Services.AddScoped<IApproverResolver, CreatorManagerResolver>();
 builder.Services.AddScoped<IApproverResolverRegistry, ApproverResolverRegistry>();
 builder.Services.AddScoped<ApprovalWorkflowService>();
 builder.Services.AddScoped<ApprovalWorkflowResolverService>();
+
+builder.Services.AddSignalR()
+	.AddJsonProtocol(o =>
+	{
+		o.PayloadSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+		o.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+	});
+
 builder.Services.AddScoped<INotificationService, NotificationService>();
 // Application services (MediatR, FluentValidation, AutoMapper…)
 builder.Services.AddApplication();
@@ -84,10 +92,25 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 			ValidAudience = jwtSettings["Audience"],
 			IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!)),
 
-			RoleClaimType = ClaimTypes.Role,
 			NameClaimType = ClaimTypes.NameIdentifier,
+			RoleClaimType = ClaimTypes.Role,
 
 			ClockSkew = TimeSpan.Zero // không trễ thời gian
+		};
+
+		// SignalR
+		options.Events = new JwtBearerEvents
+		{
+			OnMessageReceived = context =>
+			{
+				var accessToken = context.Request.Query["access_token"];
+				var path = context.HttpContext.Request.Path;
+				if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+				{
+					context.Token = accessToken;
+				}
+				return Task.CompletedTask;
+			}
 		};
 	}
 );
