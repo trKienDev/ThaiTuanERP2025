@@ -2,7 +2,7 @@
 using MediatR;
 using System.Runtime.Intrinsics.X86;
 using ThaiTuanERP2025.Application.Account.Dtos;
-using ThaiTuanERP2025.Application.Common.Persistence;
+using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Common.Security;
 using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Account.Enums;

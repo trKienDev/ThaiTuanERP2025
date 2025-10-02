@@ -7,14 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Account.Commands.Departments.UpdateDepartment;
 using ThaiTuanERP2025.Application.Account.Repositories;
-using ThaiTuanERP2025.Application.Common.Persistence;
+using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Exceptions;
 
 namespace ThaiTuanERP2025.Application.Account.Commands.Departments.DeleteDepartment
 {
-        public class DeleteDepartmentHandler : IRequestHandler<DeleteDepartmentCommand>
+	public class DeleteDepartmentHandler : IRequestHandler<DeleteDepartmentCommand>
         {
                 private readonly IMapper _mapper;
                 private readonly IUnitOfWork _unitOfWork;

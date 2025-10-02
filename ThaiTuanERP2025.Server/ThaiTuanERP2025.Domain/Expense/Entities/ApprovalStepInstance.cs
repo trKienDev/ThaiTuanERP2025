@@ -40,10 +40,11 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		private ApprovalStepInstance() { }
 
 		public ApprovalStepInstance(
-		    Guid workflowInstanceId, Guid? templateStepId, string name, int order,
-		    FlowType flowType, int slaHours, ApproverMode approverMode,
-		    string? candidatesJson, Guid? defaultApproverId, Guid? selectedApproverId,
-		    StepStatus status = StepStatus.Pending)
+			Guid workflowInstanceId, Guid? templateStepId, string name, int order,
+			FlowType flowType, int slaHours, ApproverMode approverMode,
+			string? candidatesJson, Guid? defaultApproverId, Guid? selectedApproverId,
+			StepStatus status = StepStatus.Pending
+		)
 		{
 			Id = Guid.NewGuid();
 			WorkflowInstanceId = workflowInstanceId;
@@ -90,5 +91,34 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		}
 
 		public void SetHistory(string? historyJson) => HistoryJson = historyJson;
+
+		public void MarkApproved(string? reason = null)
+		{
+			if (Status is StepStatus.Approved or StepStatus.Skipped)
+				return;
+			Status = StepStatus.Approved;
+			 ApprovedAt = DateTime.UtcNow;
+			AppendHistory("completed", reason);
+		}
+
+		public void MarkSkipped(string reason)
+		{
+			if (Status is StepStatus.Approved or StepStatus.Skipped)
+				return;
+			Status = StepStatus.Skipped;
+			ApprovedAt = DateTime.UtcNow;
+			AppendHistory("skipped", reason);
+		}
+
+		public void SetResolvedApproverCandidates(IEnumerable<Guid> ids)
+		{
+			ResolvedApproverCandidatesJson = System.Text.Json.JsonSerializer.Serialize(ids?.Distinct() ?? Enumerable.Empty<Guid>());
+		}
+
+		private void AppendHistory(string action, string? note)
+		{
+			// tuỳ bạn đang lưu HistoryJson thế nào, ở đây chỉ gợi ý
+			// HistoryJsonAdd(new { at = DateTime.UtcNow, action, note });
+		}
 	}
 }

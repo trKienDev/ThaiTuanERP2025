@@ -1,5 +1,4 @@
 ﻿using ThaiTuanERP2025.Application.Common.Interfaces;
-using ThaiTuanERP2025.Application.Common.Persistence;
 using ThaiTuanERP2025.Application.Expense.Contracts.Resolvers;
 
 namespace ThaiTuanERP2025.Infrastructure.Expense.Contracts.Resolvers

@@ -1,5 +1,6 @@
-﻿using ThaiTuanERP2025.Application.Common.Persistence;
+﻿using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Common.Utils;
+using ThaiTuanERP2025.Application.Notifications.Services;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Expense.Enums;
@@ -18,10 +19,12 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly ApprovalWorkflowResolverService _resolverService;
-		public ApprovalWorkflowService(IUnitOfWork unitOfWork, ApprovalWorkflowResolverService resolverService)
+		private readonly INotificationService _notificationService;
+		public ApprovalWorkflowService(IUnitOfWork unitOfWork, ApprovalWorkflowResolverService resolverService, INotificationService notificationService)
 		{
 			_unitOfWork = unitOfWork;
 			_resolverService = resolverService;
+			_notificationService = notificationService;
 		}
 
 		public async Task<Guid> CreateInstanceForExpensePaymentAsync(Guid paymentId, Guid workflowTemplateId, IReadOnlyCollection<StepOverrideRequest>? overrides, bool autoStart, bool linkToPayment, CancellationToken cancellationToken) {
@@ -61,7 +64,6 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 				?? new Dictionary<int, Guid?>();
 
 			var firstOrder = tpl.Steps.Min(x => x.Order);
-			ApprovalStepInstance? firstStepRef = null;
 			// 3) Sinh step instances (Pending)
 			foreach (var s in tpl.Steps.OrderBy(x => x.Order))
 			{
@@ -108,15 +110,214 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 				linkMethod.Invoke(payment, new object?[] { awi.Id });
 			}
 
-			// 5) AutoStart (không khuyến nghị ngay khi tạo)
-			if (autoStart)
-			{
-				awi.Start(firstOrder);
-				firstStepRef?.Activate(DateTime.UtcNow);
-			}
-
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+			await StartInstanceAsync(awi.Id, CancellationToken.None);
+
 			return awi.Id;
 		}
+
+		public async Task StartInstanceAsync(Guid instanceId, CancellationToken ct)
+		{
+			var ins = await LoadInstanceWithStepsAsync(instanceId, ct);
+			if (ins.Status != WorkflowStatus.Draft) return;
+
+			ins.MarkInProgress();
+
+			var first = ins.Steps.OrderBy(s => s.Order).First();
+			await ActivateStepAsync(ins, first, ct);
+
+			// >>> GỬI THÔNG BÁO BƯỚC ĐẦU
+			var targetUserIds = await ResolveTargetsForNotificationAsync(first, ct);
+			await _notificationService.NotifyStepActivatedAsync(ins, first, targetUserIds, ct);
+
+			await _unitOfWork.SaveChangesAsync(ct);
+		}
+
+		private async Task MoveToNextStepAsync(ApprovalWorkflowInstance ins, ApprovalStepInstance current, CancellationToken ct)
+		{
+			current.MarkApproved(); // hoặc Approved/Rejected tuỳ rule
+			var next = GetNextStep(ins, current);
+
+			if (next is null)
+			{
+				ins.MarkInProgress();
+				return;
+			}
+
+			await ActivateStepAsync(ins, next, ct);
+
+			// >>> GỬI THÔNG BÁO BƯỚC KẾ
+			var targetUserIds = await ResolveTargetsForNotificationAsync(next, ct);
+			await _notificationService.NotifyStepActivatedAsync(ins, next, targetUserIds, ct);
+		}
+
+		private Task<IReadOnlyCollection<Guid>> ResolveTargetsForNotificationAsync(ApprovalStepInstance step, CancellationToken ct)
+		{
+			// Nếu đã có SelectedApproverId (flow single + override/chọn sẵn) => chỉ 1 người
+			if (step.SelectedApproverId.HasValue && step.SelectedApproverId.Value != Guid.Empty)
+				return Task.FromResult<IReadOnlyCollection<Guid>>(new[] { step.SelectedApproverId.Value });
+
+			Guid[] ids = Array.Empty<Guid>();
+			if (!string.IsNullOrWhiteSpace(step.ResolvedApproverCandidatesJson))
+			{
+				try
+				{
+					ids = System.Text.Json.JsonSerializer
+					    .Deserialize<List<Guid>>(step.ResolvedApproverCandidatesJson!)?
+					    .ToArray() ?? Array.Empty<Guid>();
+				}
+				catch { /* ignore */ }
+			}
+
+			if (ids.Length == 0 && step.DefaultApproverId.HasValue && step.DefaultApproverId.Value != Guid.Empty)
+				return Task.FromResult<IReadOnlyCollection<Guid>>(new[] { step.DefaultApproverId.Value });
+
+			return Task.FromResult<IReadOnlyCollection<Guid>>(ids);
+		}
+
+		private async Task<ApprovalWorkflowInstance> LoadInstanceWithStepsAsync(Guid instanceId, CancellationToken cancellationToken)
+		{
+			var ins = await _unitOfWork.ApprovalWorkflowInstances.SingleOrDefaultIncludingAsync(
+				i => i.Id == instanceId,
+				asNoTracking: false,
+				cancellationToken: cancellationToken,
+				i => i.Steps
+			) ?? throw new NotFoundException($"Workflow instance {instanceId} not found");
+
+			// Sắp xếp và dùng biến cục bộ thay vì gán ngược vào navigation
+			var stepsOrdered = ins.Steps.OrderBy(s => s.Order).ToList();
+
+			// Nếu các hàm sau cần steps theo thứ tự, hãy truyền stepsOrdered vào chúng,
+			// hoặc dùng ngay stepsOrdered thay vì ins.Steps.
+			// Ví dụ:
+			// var first = stepsOrdered.First();
+
+			return ins;
+		}
+
+		private async Task ActivateStepAsync(ApprovalWorkflowInstance ins, ApprovalStepInstance step, CancellationToken ct)
+		{
+			if (step.Status != StepStatus.Pending) return;
+
+			// Resolve candidates nếu chưa có
+			if (string.IsNullOrWhiteSpace(step.ResolvedApproverCandidatesJson))
+			{
+				var candidates = await ResolveApproversAsync(ins, step, ct);
+				if (candidates.Count > 0)
+					step.SetResolvedApproverCandidates(candidates);
+			}
+
+			// Activate (Waiting + DueAt)
+			step.Activate(DateTime.UtcNow);
+
+			// Nếu không có ai để notify/duyệt → Skip và nhảy bước
+			var targets = await ResolveTargetsForNotificationAsync(step, ct);
+			if (targets.Count == 0 && !step.SelectedApproverId.HasValue && !step.DefaultApproverId.HasValue)
+			{
+				step.Skip("No approver candidates");
+				await MoveToNextStepAsync(ins, step, ct);
+			}
+		}
+
+		private async Task<IReadOnlyCollection<Guid>> ResolveApproversAsync(ApprovalWorkflowInstance ins, ApprovalStepInstance step, CancellationToken cancellationToken)
+		{
+			// 0) Nếu đã resolve sẵn thì dùng luôn
+			if (!string.IsNullOrWhiteSpace(step.ResolvedApproverCandidatesJson))
+			{
+				try
+				{
+					var ids = System.Text.Json.JsonSerializer.Deserialize<List<Guid>>(step.ResolvedApproverCandidatesJson) ?? new();
+					return ids;
+				}
+				catch { /* ignore */ }
+			}
+
+			// 1) Load template step
+			ApprovalStepTemplate? tpl = null;
+			if (step.TemplateStepId.HasValue)
+			{
+				tpl = await _unitOfWork.ApprovalStepTemplates
+				    .SingleOrDefaultIncludingAsync(t => t.Id == step.TemplateStepId.Value, cancellationToken: cancellationToken);
+			}
+
+			// Fallback: khớp bằng (WorkflowTemplateId + Order) nếu TemplateStepId không có
+			if (tpl is null)
+			{
+				tpl = await _unitOfWork.ApprovalStepTemplates
+					.SingleOrDefaultIncludingAsync(t =>
+						t.WorkflowTemplateId == ins.TemplateId && t.Order == step.Order,
+						cancellationToken: cancellationToken
+					);
+			}
+
+			if (tpl is null) return Array.Empty<Guid>();
+
+			// 2) Theo mode
+			if (tpl.ApproverMode == ApproverMode.Standard)
+			{
+				// Nếu template khai báo cố định
+				if (!string.IsNullOrWhiteSpace(tpl.FixedApproverIdsJson))
+				{
+					try
+					{
+						var ids = System.Text.Json.JsonSerializer.Deserialize<List<Guid>>(tpl.FixedApproverIdsJson!) ?? new();
+						return ids;
+					}
+					catch { return Array.Empty<Guid>(); }
+				}
+
+				// Không có danh sách cố định -> thử DefaultApproverId của step
+				if (step.DefaultApproverId.HasValue && step.DefaultApproverId.Value != Guid.Empty)
+					return new[] { step.DefaultApproverId.Value };
+
+				return Array.Empty<Guid>();
+			}
+			else // ApproverMode.Condition
+			{
+				// Lấy context document nếu cần (ExpensePayment)
+				ExpensePayment? payment = null;
+				if (ins.DocumentType == "ExpensePayment")
+				{
+					payment = await _unitOfWork.ExpensePayments
+					    .SingleOrDefaultIncludingAsync(p => p.Id == ins.DocumentId, cancellationToken: cancellationToken);
+				}
+
+				if (payment is null)
+					throw new InvalidOperationException("Resolver requires ExpensePayment context");
+
+				var cands = await _resolverService.ResolveAsync(
+					tpl.ResolverKey!,
+					tpl.ResolverParamsJson, 
+					payment, 
+					cancellationToken
+				);
+
+				return cands?.ToArray() ?? Array.Empty<Guid>();
+			}
+		}
+
+		// Trong ApprovalWorkflowService.cs (cùng lớp với MoveToNextStepAsync)
+		private ApprovalStepInstance? GetNextStep(ApprovalWorkflowInstance ins, ApprovalStepInstance current)
+		{
+			// Sắp xếp bước theo Order
+			var ordered = ins.Steps.OrderBy(s => s.Order).ToList();
+
+			// Tìm vị trí bước hiện tại
+			var idx = ordered.FindIndex(s => s.Id == current.Id);
+			if (idx < 0 || idx >= ordered.Count - 1)
+				return null;
+
+			// Trả về bước kế tiếp còn Pending (tuỳ enum của bạn, đổi lại nếu khác)
+			for (int i = idx + 1; i < ordered.Count; i++)
+			{
+				var s = ordered[i];
+				if (s.Status == StepStatus.Pending)   // hoặc Created/New nếu bạn đặt tên khác
+					return s;
+			}
+			return null;
+		}
+
+
 	}
 }

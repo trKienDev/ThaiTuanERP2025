@@ -24,6 +24,9 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public string? BudgetCode { get; private set; }
 		public string? CostCenter { get; private set; }
 
+		public DateTime? ApprovedAt { get; private set; }
+		public Guid? ApprovedBy { get; private set; }
+
 		// Navigation
 		public ICollection<ApprovalStepInstance> Steps { get; private set; } = new List<ApprovalStepInstance>();
 
@@ -57,5 +60,23 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		public void SetStatus(WorkflowStatus status) => Status = status;
 		public void SetCurrentStep(int? order) => CurrentStepOrder = order;
+
+		public void MarkApproved(string? reason = null) {
+			if (Status is WorkflowStatus.Approved or WorkflowStatus.Expired)
+				return;
+			Status = WorkflowStatus.Approved;
+			ApprovedAt = DateTime.UtcNow;
+			AppendHistory("completed", reason);
+		}
+
+		public void MarkInProgress() {
+			Status = WorkflowStatus.InProgress;
+		}
+
+		private void AppendHistory(string action, string? note)
+		{
+			// tuỳ bạn đang lưu HistoryJson thế nào, ở đây chỉ gợi ý
+			// HistoryJsonAdd(new { at = DateTime.UtcNow, action, note });
+		}
 	}
 }

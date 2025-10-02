@@ -2,7 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using ThaiTuanERP2025.Application.Common.Persistence;
+using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
@@ -111,6 +111,11 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		{
 			if (entity == null) throw new ArgumentNullException(nameof(entity));
 			await _dbSet.AddAsync(entity);
+		}
+		public async Task AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default)
+		{
+			if (entities == null) throw new ArgumentNullException(nameof(entities));
+			await _dbSet.AddRangeAsync(entities, cancellationToken);
 		}
 
 		public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
