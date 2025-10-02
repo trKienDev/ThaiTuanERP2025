@@ -117,21 +117,21 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 			return awi.Id;
 		}
 
-		public async Task StartInstanceAsync(Guid instanceId, CancellationToken ct)
+		public async Task StartInstanceAsync(Guid instanceId, CancellationToken cancellationToken)
 		{
-			var ins = await LoadInstanceWithStepsAsync(instanceId, ct);
-			if (ins.Status != WorkflowStatus.Draft) return;
+			var workflowInstance = await LoadInstanceWithStepsAsync(instanceId, cancellationToken);
+			if (workflowInstance.Status != WorkflowStatus.Draft) return;
 
-			ins.MarkInProgress();
+			workflowInstance.MarkInProgress();
 
-			var first = ins.Steps.OrderBy(s => s.Order).First();
-			await ActivateStepAsync(ins, first, ct);
+			var firstStep = workflowInstance.Steps.OrderBy(s => s.Order).First();
+			await ActivateStepAsync(workflowInstance, firstStep, cancellationToken);
 
 			// >>> GỬI THÔNG BÁO BƯỚC ĐẦU
-			var targetUserIds = await ResolveTargetsForNotificationAsync(first, ct);
-			await _notificationService.NotifyStepActivatedAsync(ins, first, targetUserIds, ct);
+			var targetUserIds = await ResolveTargetsForNotificationAsync(firstStep, cancellationToken);
+			await _notificationService.NotifyStepActivatedAsync(workflowInstance, firstStep, targetUserIds, cancellationToken);
 
-			await _unitOfWork.SaveChangesAsync(ct);
+			await _unitOfWork.SaveChangesAsync(cancellationToken);
 		}
 
 		private async Task MoveToNextStepAsync(ApprovalWorkflowInstance ins, ApprovalStepInstance current, CancellationToken ct)
