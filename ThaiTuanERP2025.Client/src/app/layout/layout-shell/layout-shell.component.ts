@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { TopbarComponent } from '../../shared/topbar/topbar.component';
+import { TopbarComponent } from '../topbar/topbar.component';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { SidebarComponent } from '../../shared/sidebar/sidebar.component';
+import { SidebarComponent } from '../sidebar/sidebar.component';
 
 @Component({
       selector: 'app-layout-shell',

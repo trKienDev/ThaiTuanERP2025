@@ -1,0 +1,55 @@
+<h2 class="modal-title">Chính sách thuế mới</h2>
+
+<div [formGroup]="form">
+      <div class="input-wrapper">
+            <div class="form-input">
+                  <input class="" type="text" formControlName="policyName" autocomplete="on" required/>
+                  <label for="name">Tên chính sách thuế</label>
+            </div>
+      </div>
+
+      <div class="input-wrapper">
+            <div class="form-input">
+                  <input class="" type="number" formControlName="rate" required/>
+                  <label for="name">Mức thuế</label>
+            </div>
+      </div>
+
+      <div class="form-group">
+            <label for="postingLedgerAccountId">Tài khoản hạch toán</label>
+
+            <input id="ledgerAccountSearch" type="text" [formControl]="ledgerAccountSearchCtrl" 
+                  [matAutocomplete]="ledgerAccountAuto" placeholder="Tìm tài khoản hạch toán"/>
+            <mat-autocomplete #ledgerAccountAuto="matAutocomplete" (optionSelected)="onLedgerAccountSelected($event)">
+                  <mat-option *ngIf="ledgerAccountSearching" disabled>Đang tìm...</mat-option>
+                  <ng-container *ngIf="!ledgerAccountSearching">
+                        <mat-option *ngFor="let acc of ledgerAccountOptions" [value]="acc">
+                              {{ acc.number }} - {{ acc.name }}
+                        </mat-option>
+                        <mat-option *ngIf="!ledgerAccountOptions.length" disabled>Không có kết quả</mat-option>
+                  </ng-container>                       
+            </mat-autocomplete>
+
+            <!-- input ẩn (hoặc readonly) để giữ GUID gửi lên server -->
+            <input type="text" formControlName="postingLedgerAccountId" hidden />
+            <div class="error" *ngIf="taxRequestForm.postingLedgerAccountId.hasError('required')">Bắt buộc</div>
+      </div>
+
+      <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Mô tả</mat-label>
+            <textarea matInput formControlName="description" rows="3"></textarea>
+      </mat-form-field>
+
+      <mat-checkbox formControlName="isActive">Kích hoạt</mat-checkbox>
+
+      <div *ngIf="errorMessages.length" class="mt-2">
+            <div *ngFor="let msg of errorMessages" class="text-red-600 text-sm">• {{ msg }}</div>
+      </div>
+</div>
+
+<div mat-dialog-actions align="end">
+      <button mat-button (click)="cancel()" [disabled]="saving">Hủy</button>
+      <button mat-raised-button color="primary" (click)="submit()" [disabled]="saving">
+            {{ saving ? 'Đang lưu...' : 'Lưu' }}
+      </button>
+</div>

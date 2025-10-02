@@ -1,0 +1,12 @@
+.kit-actions-menu-button {
+      display: flex;
+      padding: 5px 10px; 
+      border: 1px solid var(--default-border-color);
+      border-radius: 5px; 
+      background-color: white; 
+      transition: duration ease 80ms;
+	&:hover {
+		color: var(--bright-blue-color);
+		cursor: pointer;
+	}
+}

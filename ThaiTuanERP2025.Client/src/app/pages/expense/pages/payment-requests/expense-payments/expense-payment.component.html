@@ -1,0 +1,263 @@
+<form class="expense-payment-form" [formGroup]="form" (ngSubmit)="Submit()">
+      <div class="input-wrapper d-flex justify-content-between">
+            <div class="page-title">
+                  <h3 class="icon">💸</h3>
+                  <h3 class="title">Tạo chi phí thanh toán mới</h3>
+            </div>
+            <div class="process-button-container d-flex gap-10p">
+                  <button type="button" class="button cancel-button">Hủy</button>
+                  <button type="submit    " class="button save-button">Gửi phê duyệt</button>
+            </div>
+      </div>
+      <div class="input-wrapper">
+            <div class="form-input">
+                  <input class="" type="text" formControlName="name" autocomplete="on" required/>
+                  <label for="name">Tên chi phí</label>
+            </div>
+      </div>
+
+      <div class="input-wrapper d-flex gap-10p">
+            <div class="width-50pt">
+                  <div class="alert dark-alert"> 🔒 ĐỀ NGHỊ THANH TOÁN</div>
+            </div>
+            <div class="width-50pt">
+                  <kit-dropdown [options]="goodsReceiptOptions" [placeholder]="'Nhập kho hay không ❓'" [enableFilter]="false" (selectionChange)="onGoodsReceiptSelected($event)" [width]="'174px'"></kit-dropdown>
+            </div>
+      </div>
+
+      <div class="payee-container d-flex gap-10p pad-10p">
+            <div class="payee-type-wrapper d-flex gap-10p align-items-center">
+                  <div>
+                        <span>Công ty trả cho</span><span style="color: red;">  *</span>
+                  </div>
+                  <kit-dropdown [options]="payeeOptions" placeholder="chọn đối tượng" [enableFilter]="false" (selectionChange)="onPayeeSelected($event)" [width]="120"></kit-dropdown>
+            </div>
+            <div class="payee-selection">
+                  <div class="supplier-selection  display-inline-flex" *ngIf="selectedPayee === 1">
+                        <kit-dropdown formControlName="supplierId" [options]="(supplierOptions$ | async) ?? []" (selectionChange)="onSupplierSelected($event)" [width]="320" [placeholder]="'chọn nhà cung cấp thụ hưởng'"></kit-dropdown>
+                        <button class="button link-button" (click)="openCreateSupplierDialog()">Thêm nhà cung cấp mới</button>
+                  </div>
+                  <div class="employee-selection" *ngIf="selectedPayee === 2">
+                        <kit-dropdown [options]="(userOptions$ | async) ?? []" (selectionChange)="onUserSelected($event)" [width]="200" [placeholder]="'chọn nhân viên thụ hưởng'"></kit-dropdown>
+                  </div>
+            </div>
+      </div>
+
+      <div class="bank-account-input-container d-flex gap-10p mar-top-20">
+
+            <div class="input-wrapper">
+                  <div class="form-input">
+                        <input class="" type="text" formControlName="bankName" autocomplete="on" required/>
+                        <label for="name">Tên ngân hàng</label>
+                  </div>
+            </div>
+
+            <div class="input-wrapper">
+                  <div class="form-input">
+                        <input class="" type="text" formControlName="accountNumber" autocomplete="on" required/>
+                        <label for="name">Số tài khoản</label>
+                  </div>
+            </div>
+
+            <div class="input-wrapper">
+                  <div class="form-input">
+                        <input class="" type="text" formControlName="beneficiaryName" autocomplete="on" required/>
+                        <label for="name">Người thụ hưởng</label>
+                  </div>
+            </div>
+      </div>
+
+      <div class="payment-categories mar-top-20 pad-10p">
+            <div class="payment-categories-heading d-flex gap-10p">
+                  <div class="payment-categories-title align-content-center">
+                        <span>Bảng hạng mục</span><span style="color: red;">  *</span>
+                  </div>
+                  <div class="payment-categories-currency">
+                        <!-- <kit-dropdown formControlName="currencyId" [options]="currencyOptions" [width]="100" placeholder="VND"></kit-dropdown> -->
+                  </div>
+            </div>
+            <div class="payment-categories-body">
+                  <table class="table table-center-text mar-top-10">
+                        <thead>
+                              <tr>
+                                    <th style="width: 1%;">#</th>
+                                    <th>Hạng mục <span style="color: red;">  *</span></th>
+                                    <th class="head-quanity" style="width: 7%;">Số lượng <span style="color: red;">  *</span></th>
+                                    <th>Đơn giá <span style="color: red;">  *</span></th>
+                                    <th>Thành tiền</th>
+                                    <th class="head-tax" style="width: 6%;">Thuế</th>
+                                    <th>Số tiền thuế</th>
+                                    <th>Số tiền có thuế</th>
+                                    <th class="head-extension">Ngân sách <span style="color: red;">  *</span></th>
+                                    <th class="head-invoice">Hóa đơn</th>
+                                    <th>Xóa</th>
+                              </tr>
+                        </thead>
+                        <tbody formArrayName="items">
+                              <tr *ngFor="let row of items.controls; let i = index; trackBy: trackByIndex" [formGroupName]="i">
+                                    <td>{{ i + 1 }}</td>
+                                    <td>
+                                          <input type="text" formControlName="itemName" placeholder="Tên hạng mục"/>
+                                    </td>
+                                    <td>
+                                          <input type="text" formControlName="quantity" inputmode="decimal" appMoney [appMoneyDecimals]="0" />
+                                    </td>
+                                    <td>
+                                          <input type="text" formControlName="unitPrice" inputmode="decimal" appMoney [appMoneyDecimals]="0"  />
+                                    </td>
+                                    <td> {{ row.get('amount')?.value | number:'1.0-2' }} </td>
+                                    <td>
+                                          <div class="percent-field">
+                                                <input type="text" inputmode="decimal" class="tax-rate-input"
+                                                formControlName="taxRatePercent" placeholder="%"
+                                                title="Nhập % thuế, ví dụ 10 hoặc 10.5"/>
+                                                <span class="unit" aria-hidden="true">%</span>
+                                          </div>
+                                    </td>
+                                    <td>
+                                          <input type="text" formControlName="taxAmount" inputmode="decimal" appMoney [appMoneyDecimals]="0">
+                                    </td>
+                                    <td>{{ row.get('totalWithTax')?.value | number:'1.0-2' }}</td>
+                                    <td class="text-align-center">
+                                          <button type="button" (click)="openExpenseBudgetCodeDialog(i)"
+                                                [ngClass]="{
+                                                      'button': true,
+                                                      'non-linked-button': !row.get('budgetCodeId')?.value,
+                                                      'linked-button': !!row.get('budgetCodeId')?.value
+                                                }"
+                                                aria-label="Chọn ngân sách"
+                                          >
+                                                <span class="text material-icons-outlined">attach_money</span>
+                                          </button>
+                                    </td>
+                                    <td class="text-align-center">
+                                          <div class="invoice-menu dropdown-menu">
+                                                <button type="button"
+                                                [ngClass]="{
+                                                      'button': true,
+                                                      'non-linked-button': !row.get('invoiceId')?.value,
+                                                      'linked-button': !!row.get('invoiceId')?.value
+                                                }"
+                                                aria-label="Hóa đơn" cdkOverlayOrigin #invoiceOrigin="cdkOverlayOrigin" (click)="toggleInvoiceMenu(i, $event)">
+                                                      <span class="text material-icons-round">receipt_long</span>
+                                                </button>
+
+                                                <!-- Menu dạng overlay (chỉ mở khi click) -->
+                                                <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="invoiceOrigin" [cdkConnectedOverlayOpen]="invoiceMenuOpenIndex === i" 
+                                                [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayBackdropClass]="'cdk-overlay-transparent-backdrop'" 
+                                                (backdropClick)="onMenuClosed()" (overlayOutsideClick)="onMenuClosed()" [cdkConnectedOverlayPositions]="invoiceMenuOverlayPosition">
+                                                      <div class="invoice-menu-panel dropdown-menu-panel" role="menu" aria-label="invoice actions" (keydown.escape)="onMenuClosed()" tabindex="0">
+                                                            <button type="button" class="dropdown-menu-item" (click)="openMyInvoicesDialog(i); onMenuClosed()">Chọn hóa đơn đã tải</button>
+                                                            <button type="button" class="dropdown-menu-item" (click)="openMiniInvoiceRequestDialog(i); onMenuClosed()">Tải hóa đơn mới</button>
+                                                            <button type="button" class="dropdown-menu-item" 
+                                                                  [disabled]="!row.get('invoiceId')?.value" 
+                                                                  [ngStyle]="{ color: row.get('invoiceId')?.value ? 'red' : 'unset' }"
+                                                                  (click)="unlinkInvoice(i)">Gỡ hóa đơn đã liên kết</button>
+                                                      </div>
+                                                </ng-template>
+                                          </div>
+                                    </td>
+                                    <td class="d-flex justify-content-center">
+                                          <button type="button" class="button danger-button" (click)="removeItem(i)" aria-label="Xóa dòng">
+                                                <span class="material-icons-outlined">close</span>
+                                          </button>
+                                    </td>
+                              </tr>
+                              <tr class="tr-non-hover">
+                                    <td colspan="12"><button type="button" class="text-button" (click)="addItem()">Thêm hạng mục</button></td>
+                              </tr>
+                        </tbody>
+                        <!-- Tổng -->
+                        <tfoot *ngIf="items.length">
+                              <tr class="total-row">
+                                    <td colspan="4" class=""><strong>Tổng</strong></td>
+                                    <td>{{ totalAmount | number: '1.0-2'}}</td>
+                                    <td></td>
+                                    <td>{{ totalTax | number: '1.0-2'}}</td>
+                                    <td>{{ totalWithTax | number: '1.0-2'}}</td>
+                                    <td colspan="4"></td>
+                              </tr>
+                        </tfoot>
+                  </table>
+            </div>
+      </div>
+
+      <div class="input-wrapper d-flex gap-20p mar-top-20">
+            <div class="width-50pt">
+                  <div class="d-flex gap-10p">
+                        <label class="width-fit-content text-no-wrap align-content-center" for="name">Tổng thanh toán 🔒</label>
+                        <input class="dark dark-alert user-select-none" [value]="form.get('totalWithTax')?.value | number:'1.0-2'" disabled />
+                  </div>
+            </div>
+            <div class="width-50pt">
+                  <div class="d-flex gap-10p">
+                              <label class="width-fit-content text-no-wrap align-content-center" for="name">Hạn thanh toán <span style="color: red;">  *</span></label>
+                              <input class="invoice-date" formControlName="paymentDate" matInput [matDatepicker]="picker" placeholder="chọn ngày/tháng/năm"
+                                    (focus)="picker.open()" (click)="picker.open()" (keydown.enter)="picker.open()" (keydown.arrowDown)="picker.open()" 
+                              required/>
+                        </div>
+                  <mat-datepicker #picker panelClass="kit-datepicker"></mat-datepicker>
+            </div>
+      </div>
+
+      <div class="input-wrapper">
+            <span class="display-block">Nội dung thanh toán <span style="color: red;">*</span></span>
+            <textarea class="mar-top-10" name="" id="" placeholder="Trình bày nội dung ở đây"></textarea>
+      </div>
+
+      <div class="input-wrapper d-flex gap-10p">
+            <div style="width: 70%;">
+                  <kit-dropdown [multiple]="true" [options]="(userOptions$ | async) ?? []"  (selectionChange)="onFollowerSelected($event)" [width]="'100%'" [placeholder]="'Thêm người theo dõi'"></kit-dropdown>
+            </div>
+            <div style="width: 30%;">
+                  <kit-dropdown [options]="(managerOptions$ | async) ?? []"  [width]="'100%'" (selectionChange)="onManagerApproverSelected($event)" [placeholder]="'Chọn quản lý duyệt'"></kit-dropdown>
+            </div>
+      </div>
+
+      <div class="mar-top-20">
+            <span class="input-wrapper">Tệp đính kèm chi phí    </span>
+            <div class="file-uploader pad-10p">
+                  <!-- input ẩn: cho phép chọn nhiều file -->
+                  <input #invoiceFile id="invoiceFile" type="file" class="file-input d-none" accept="application/pdf,image/*" (change)="onFileSelected($event)" multiple/>
+
+                  <!-- nút chọn file -->
+                  <div class="button default-button">
+                        <label for="invoiceFile" class="cursor-pointer">Chọn file (PDF/Ảnh)</label>
+                  </div>
+
+                  <span *ngIf="!(uploads?.length)" class="file-name muted" style="color:#888; margin-left:10px;">
+                        Chưa chọn file
+                  </span>
+            </div>
+
+            <div class="" style="padding: 0 10px;">
+                  <!-- Danh sách file đã chọn/đang upload -->
+                  <ul class="uploader-list"  *ngIf="uploads?.length">
+                        <li class="uploader-item" *ngFor="let u of uploads; let i = index" [ngClass]="u.status">
+                              <div class="file-row">
+                                    <div class="file-meta">
+                                          <span class="file-name">{{ u.name }}</span>
+                                    </div>
+                                    <div class="status-line" [ngClass]="u.status">
+                                          <ng-container [ngSwitch]="u.status">
+                                                <span *ngSwitchCase="'queued'">Đang chờ...</span>
+                                                <span *ngSwitchCase="'uploading'">Đang tải lên: {{ u.progress | number:'1.0-0' }}%</span>
+                                                <span *ngSwitchCase="'done'">✔ Đã tải</span>
+                                                <span *ngSwitchCase="'error'">✖ Lỗi</span>
+                                          </ng-container>
+                                    </div>
+                                    <button type="button" class="d-flex close-button" (click)="removeUpload(i)" [disabled]="u.status === 'uploading'">
+                                          <span class="text material-icons-outlined" style="font-size: 15px;">close</span>
+                                    </button>
+                              </div>
+
+                              <!-- Progress bar -->
+                              <div class="progress" *ngIf="u.status === 'uploading'">
+                                    <div class="progress-bar" [style.width.%]="u.progress"></div>
+                              </div>
+                        </li>
+                  </ul>
+            </div>
+      </div>
+
+</form>

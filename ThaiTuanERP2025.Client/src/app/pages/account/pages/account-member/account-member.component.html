@@ -1,0 +1,36 @@
+<div class="page-heading">
+      <div class="page-title">
+            <h3 class="icon">👨🏻‍💻</h3>
+            <h3 class="title" >Quản lý thành viên</h3>
+      </div>
+      <div>
+            <button type="button" class="button default-button" (click)="openUserRequestDialog()">Thêm người dùng mới</button>
+      </div>
+</div>
+
+<div class="page-body">
+      <table class="table mar-top-20">
+            <thead>
+                  <tr>
+                        <th>#</th>
+                        <th>Họ và tên</th>
+                        <th>Mã nhân viên</th>
+                        <th>Phòng ban</th>
+                        <th>Quản lý</th>
+                        <th></th>
+                  </tr>
+            </thead>
+            <tbody>
+                  <tr *ngFor="let user of (users$ | async) ?? []; trackBy: trackById; let i = index;">
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ user.fullName }}</td>
+                        <td>{{ user.employeeCode }}</td>
+                        <td>{{ user.department?.name }}</td>
+                        <td>{{ user.manager?.fullName }}</td>
+                        <td>
+                              <kit-action-menu [actions]="buildUserActions(user)"></kit-action-menu>
+                        </td>
+                  </tr>
+            </tbody>
+      </table>
+</div>

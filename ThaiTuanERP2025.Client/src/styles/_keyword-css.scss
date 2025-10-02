@@ -1,0 +1,66 @@
+// align-items
+.align-items-center { align-items: center; }
+
+// align-content
+.align-content-center { align-content: center; }
+
+// cursort
+.cursor-pointer { cursor: pointer; }
+
+// display
+.d-flex { display: flex; }
+.display-inline-flex { display: inline-flex;}
+.d-none { display: none !important; }
+.display-block { display: block;}
+
+// flex-wrap
+.fl-wrap { flex-wrap: wrap;}
+
+// font-weight 
+.font-weight-bold { font-weight: bold; }
+
+// margin
+.mar-top-10 { margin-top: 10px; }
+.mar-top-20 { margin-top: 20px; }
+
+// justify-content
+.justify-content-center { justify-content: center; }
+.justify-content-between { justify-content: space-between; }
+.justify-content-end { justify-content: flex-end;}
+
+// gap
+.gap-5p { gap: 5px; }
+.gap-10p { gap: 10px; }
+.gap-20p { gap: 20px; }
+
+// overflow-y
+.overflow-y-scroll { overflow-y: scroll; }
+
+// text
+.text-align-center { text-align: center !important; }
+
+// padding
+.pad-10p { padding: 10px; }
+
+// user-select
+.user-select-none { user-select: none; }
+
+// text
+.text-no-wrap { text-wrap: nowrap; }
+
+// width
+.w-15 { width: 15%; }
+.w-25 { width: 25%; }
+.w-30 { width: 30%; }
+.w-40 { width: 40%; }
+.width-50pt { width: 50%; }
+.w-60 { width: 60%; }
+.w-70 { width: 70%; }
+.w-75 { width: 75%; }
+.w-90 { width: 90%; }
+.width-100pt { width: 100%; }
+.width-fit-content { width: fit-content; }
+//max-width 
+.mw-100 { max-width: 100%;}
+// min-width
+.minw-340px { min-width: 340px;}

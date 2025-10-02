@@ -1,0 +1,30 @@
+<!-- action-menu.component.html -->
+<div class="kit-actions-menu-wrapper">
+      <button type="button" class="kit-actions-menu-button"
+            cdkOverlayOrigin #origin="cdkOverlayOrigin"
+            [attr.aria-expanded]="menuOpenIndex === 0"
+            (click)="toggleMenu(0, $event)">
+            <span class="material-icons-outlined" style="font-size: initial;">{{ icon }}</span>
+      </button>
+
+      <ng-template cdkConnectedOverlay
+            [cdkConnectedOverlayOrigin]="origin"
+            [cdkConnectedOverlayOpen]="menuOpenIndex === 0"
+            [cdkConnectedOverlayHasBackdrop]="true"
+            [cdkConnectedOverlayBackdropClass]="'cdk-overlay-transparent-backdrop'"
+            (backdropClick)="closeMenu()"
+            (overlayOutsideClick)="closeMenu()"
+            [cdkConnectedOverlayPositions]="menuOverlayPosition">
+
+            <div class="dropdown-menu-panel" role="menu" tabindex="0" (keydown.escape)="closeMenu()">
+                  <button type="button"
+                              class="dropdown-menu-item"
+                              *ngFor="let a of actions"
+                              [disabled]="a.disabled"
+                              [ngStyle]="{ color: a.color }"
+                              (click)="onActionClick(a)">
+                        {{ a.icon ?? '' }} {{ a.label }}
+                  </button>
+            </div>
+      </ng-template>
+</div>

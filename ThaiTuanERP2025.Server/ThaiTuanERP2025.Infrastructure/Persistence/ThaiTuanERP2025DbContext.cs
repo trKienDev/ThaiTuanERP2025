@@ -1,88 +1,121 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
+using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Expense.Entities;
+using ThaiTuanERP2025.Domain.Files.Entities;
+using ThaiTuanERP2025.Domain.Finance.Entities;
+using ThaiTuanERP2025.Domain.Notifications;
 
 namespace ThaiTuanERP2025.Infrastructure.Persistence
 {
 	public class ThaiTuanERP2025DbContext : DbContext
 	{
-		public ThaiTuanERP2025DbContext(DbContextOptions<ThaiTuanERP2025DbContext> options) : base(options) { }
+		private readonly ICurrentUserService _currentUserService;
+		public ThaiTuanERP2025DbContext(
+			DbContextOptions<ThaiTuanERP2025DbContext> options,
+			ICurrentUserService currentUserService	
+		) : base(options) {
+			_currentUserService = currentUserService;
+		}
 
 		// DbSet
 		public DbSet<User> Users => Set<User>();
+		public DbSet<UserManagerAssignment> UserManagerAssignments => Set<UserManagerAssignment>();
 		public DbSet<Department> Departments => Set<Department>();
 		public DbSet<Group> Groups => Set<Group>();
 		public DbSet<UserGroup> UserGroups => Set<UserGroup>();
+		public DbSet<NumberSeries> NumberSeries => Set<NumberSeries>();
+		public DbSet<LedgerAccountType> LedgerAccountTypes => Set<LedgerAccountType>();
+		public DbSet<LedgerAccount> LedgerAccounts => Set<LedgerAccount>();
+		public DbSet<Tax> Taxes => Set<Tax>();
+		public DbSet<WithholdingTaxType> WithholdingTaxTypes => Set<WithholdingTaxType>();
+		public DbSet<CashoutGroup> CashOutGroups => Set<CashoutGroup>();
+		public DbSet<CashoutCode> CashOutCodes => Set<CashoutCode>();
+		public DbSet<StoredFile> StoredFiles => Set<StoredFile>();
+		public DbSet<BankAccount> BankAccounts => Set<BankAccount>();
+		public DbSet<Supplier> Suppliers => Set<Supplier>();
+		public DbSet<Invoice> Invoices => Set<Invoice>();
+		public DbSet<InvoiceLine> InvoiceLines => Set<InvoiceLine>();
+		public DbSet<InvoiceFile> InvoiceFiles => Set<InvoiceFile>();
+		public DbSet<InvoiceFollwer> InvoiceFollwers => Set<InvoiceFollwer>();	
+		public DbSet<BudgetCode> BudgetCodes => Set<BudgetCode>();
+		public DbSet<BudgetGroup> BudgetGroups => Set<BudgetGroup>();
+		public DbSet<BudgetPeriod> BudgetPeriods => Set<BudgetPeriod>();
+		public DbSet<BudgetPlan> BudgetPlans => Set<BudgetPlan>();
+		public DbSet<ApprovalWorkflowTemplate> ApprovalWorkflowTemplates => Set<ApprovalWorkflowTemplate>();
+		public DbSet<ApprovalStepTemplate> ApproverStepTemplates => Set<ApprovalStepTemplate>();
+		public DbSet<ApprovalWorkflowInstance> ApprovalWorkflowInstances => Set<ApprovalWorkflowInstance>();
+		public DbSet<ApprovalStepInstance> ApprovalStepInstances => Set<ApprovalStepInstance>();
+		public DbSet<ExpensePayment> ExpensePayments => Set<ExpensePayment>();	
+		public DbSet<ExpensePaymentItem> ExpensePaymentItems => Set<ExpensePaymentItem>();
+		public DbSet<ExpensePaymentAttachment> ExpensePaymentAttachments => Set<ExpensePaymentAttachment>();
+		public DbSet<ExpensePaymentFollower> ExpensePaymentFollowers => Set<ExpensePaymentFollower>();	
+		public DbSet<AppNotification> AppNotification => Set<AppNotification>();
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			ConfigureUser(modelBuilder);
-			ConfigureDepartment(modelBuilder);
-			ConfigureGroup(modelBuilder);
-			ConfigureUserGroup(modelBuilder);
+			modelBuilder.ApplyConfigurationsFromAssembly(typeof(ThaiTuanERP2025DbContext).Assembly);
+			ApplySoftDeleteFilters(modelBuilder);
+			ConfigureNumberSeries(modelBuilder);
 		}
-
-		private void ConfigureUser(ModelBuilder modelBuilder)
-		{
-			modelBuilder.Entity<User>(builder =>
+		
+		private void ConfigureNumberSeries(ModelBuilder modelBuilder) {
+			modelBuilder.Entity<NumberSeries>(b =>
 			{
-				builder.HasKey(u => u.Id);
+				b.ToTable("NumberSeries");
+				b.HasKey(x => x.Id);
 
-				builder.Property(u => u.FullName).IsRequired().HasMaxLength(255);
-				builder.Property(u => u.Username).IsRequired().HasMaxLength(100);
-				builder.Property(u => u.EmployeeCode).IsRequired().HasMaxLength(50);
-				builder.Property(u => u.PasswordHash).IsRequired();
-				builder.Property(u => u.AvatarUrl).HasMaxLength(500);
-				builder.Property(u => u.Role).HasMaxLength(100); // nhân viên, quản lý, giám đốc, PGĐ, TGĐ
-				builder.Property(u => u.Position).HasMaxLength(100); // nhân viên IT
+				b.HasIndex(x => x.Key).IsUnique();
+				b.Property(x => x.Key).IsRequired().HasMaxLength(100);
 
-				// Owned types
-				builder.OwnsOne(u => u.Email, email =>
-				{
-					email.Property(e => e.Value).HasColumnName("Email").HasMaxLength(255);
-				});
-				builder.OwnsOne(u => u.Phone, phone =>
-				{
-					phone.Property(p => p.Value).HasColumnName("Phone").HasMaxLength(20);
-				});
+				b.Property(x => x.Prefix).IsRequired().HasMaxLength(20);
+				b.Property(x => x.PadLength).IsRequired().HasDefaultValue(6); // độ dài padding, mặc định 6 ký tự
+				b.Property(x => x.NextNumber).IsRequired();
 
-				// Relationships
-				builder.HasOne(u => u.Department)
-					.WithMany(d => d.Users)
-					.HasForeignKey(u => u.DepartmentId)
-					.OnDelete(DeleteBehavior.Restrict);
-				builder.HasOne(u => u.Manager).WithMany().HasForeignKey(u => u.ManagerId).OnDelete(DeleteBehavior.Restrict);
+				b.Property(x => x.RowVersion).IsRowVersion(); // concurrency token
 			});
 		}
+		
+		public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+		{
+			var entries = ChangeTracker.Entries<AuditableEntity>();
+			var currentUserId = _currentUserService?.UserId ?? Guid.Empty;
+			foreach (var entry in entries) {
+				switch (entry.State)
+				{
+					case EntityState.Added:
+						entry.Entity.CreatedByUserId = currentUserId;
+						entry.Entity.CreatedDate = DateTime.UtcNow;
+						break;
+					case EntityState.Modified:
+						entry.Entity.DateModified = DateTime.UtcNow;
+						entry.Entity.ModifiedByUserId = currentUserId;
+						break;
+				}
+			}
+			return base.SaveChangesAsync(cancellationToken);
+		}
 
-		private void ConfigureDepartment(ModelBuilder modelBuilder) {
-			modelBuilder.Entity<Department>(builder =>
+		private static void ApplySoftDeleteFilters(ModelBuilder modelBuilder)
+		{
+			foreach (var entityType in modelBuilder.Model.GetEntityTypes())
 			{
-				builder.HasKey(g => g.Id);
-				builder.Property(g => g.Name).IsRequired().HasMaxLength(100);
-				builder.Property(g => g.Code).HasMaxLength(255);
-			});
+				var clrType = entityType.ClrType;
+
+				// Bỏ qua các type không phải entity thực (owned/skip navigations etc.)
+				if (clrType == null || !typeof(AuditableEntity).IsAssignableFrom(clrType))
+					continue;
+
+				var parameter = Expression.Parameter(clrType, "e");
+				var prop = Expression.Property(parameter, nameof(AuditableEntity.IsDeleted));
+				var body = Expression.Not(prop); // !e.IsDeleted
+				var lambda = Expression.Lambda(body, parameter);
+
+				modelBuilder.Entity(clrType).HasQueryFilter(lambda);
+			}
 		}
-		private void ConfigureGroup(ModelBuilder modelBuilder)
-		{
-			modelBuilder.Entity<Group>(builder => {
-				builder.HasKey(g => g.Id);
-				builder.Property(g => g.Name).IsRequired().HasMaxLength(100);
-				builder.Property(g => g.Description).HasMaxLength(255);
-			});
-		}
-		private void ConfigureUserGroup(ModelBuilder modelBuilder)
-		{
-			modelBuilder.Entity<UserGroup>(builder => { 
-				builder.HasKey(ug => new { ug.UserId, ug.GroupId });
-				builder.HasOne(ug => ug.User).WithMany(u => u.UserGroups).HasForeignKey(ug => ug.UserId);
-				builder.HasOne(ug => ug.Group).WithMany(g => g.UserGroups).HasForeignKey(ug => ug.GroupId);
-			});
-		}
+
 	}
 }

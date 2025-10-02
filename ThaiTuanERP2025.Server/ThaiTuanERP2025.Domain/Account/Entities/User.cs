@@ -1,7 +1,6 @@
-﻿using System;
-using System.Security.Cryptography.X509Certificates;
-using ThaiTuanERP2025.Domain.Common;
+﻿using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Account.Enums;
+using ThaiTuanERP2025.Domain.Expense.Entities;
 
 namespace ThaiTuanERP2025.Domain.Account.Entities
 {
@@ -12,14 +11,14 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public string Username { get; private set; } = string.Empty;
 		public string EmployeeCode { get; private set; } = string.Empty;
 		public string PasswordHash { get; private set; } = string.Empty;
-		public string AvatarUrl { get; private set; } = string.Empty;
+		public Guid? AvatarFileId { get; private set; }
 		public UserRole Role { get; private set; }
 		public string Position { get; private set; } = string.Empty;
-
+		
 		public Email? Email { get; private set; }
 		public Phone? Phone { get; private set; }
 
-		public Guid DepartmentId { get; private set; }
+		public Guid? DepartmentId { get; private set; }
 		public Department? Department { get; private set; }
 
 		public Guid? ManagerId { get; private set; }
@@ -29,6 +28,13 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 
 		public bool IsSuperAdmin { get; private set; } = false;
 		public bool IsActive { get; private set; } = true;
+
+		public ICollection<BankAccount> BankAccounts { get; private set; } = new List<BankAccount>();
+
+		// ManagerAssignments: các quan hệ mà User là Manager của người khác (direct reports).
+		public ICollection<UserManagerAssignment> ManagerAssignments { get; private set; } = new List<UserManagerAssignment>();
+		// DirectReportsAssignments: các quan hệ mà User là nhân viên và có các manager khác nhau.
+		public ICollection<UserManagerAssignment> DirectReportsAssignments { get; private set; } = new List<UserManagerAssignment>();
 
 		// EF Core cần constructor mặc định
 		private User() {
@@ -40,12 +46,12 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			string userName, 
 			string employeeCode,
 			string passwordHash,
-			string avatarUrl,
 			UserRole role,
 			string position,
-			Guid departmentId,
+			Guid? departmentId,
 			Email? email = null,
-			Phone? phone = null
+			Phone? phone = null,
+			Guid? avatarFileId = null
 		) {
 			if (string.IsNullOrWhiteSpace(fullName)) throw new ArgumentException("Tên không được để trống");
 			if (string.IsNullOrWhiteSpace(userName)) throw new ArgumentException("Username không hợp lệ");
@@ -58,7 +64,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			PasswordHash = passwordHash;
 			Email = email;
 			Phone = phone;
-			AvatarUrl = avatarUrl;	
+			AvatarFileId = avatarFileId;
 			Role = role;
 			Position = position;
 			DepartmentId = departmentId;
@@ -73,20 +79,15 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			ManagerId = managerId;
 		}
 		public bool HasRole(UserRole role) => Role == role;
-		public void SetSuperAdmin(bool isSuper) {
-			IsSuperAdmin = isSuper;
-		}
-		public void Activate() {
-			IsActive = true;
-		}
-		public void Deactivate()
-		{
-			IsActive = false;
-		}
+		public void SetSuperAdmin(bool isSuper) => IsSuperAdmin = isSuper;
+		public void Activate() => IsActive = true;
+		public void Deactivate() => IsActive = false;
+		
 		public void ChangePassword(string newPasswordHash) {
 			if (string.IsNullOrWhiteSpace(newPasswordHash)) throw new ArgumentException("Mật khẩu mới không hợp lệ");
 			PasswordHash = newPasswordHash;
 		}
+
 		public void UpdateProfile(
 			string fullName,
 			string avatarUrl,
@@ -97,17 +98,14 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		{
 			if (string.IsNullOrWhiteSpace(fullName)) throw new ArgumentException("Tên không được để trống");
 			FullName = fullName;
-			AvatarUrl = avatarUrl;
 			Position = position;
 			Email = email;	
 			Phone = phone;	
 		}
-		public void SetRole(UserRole role) {
-			Role = role;
-		}
-		public void SetDepartment(Guid departmentId)
-		{
-			DepartmentId = departmentId;
-		}
+
+		public void SetRole(UserRole role) => Role = role;
+		public void SetDepartment(Guid departmentId) =>DepartmentId = departmentId;
+		public void UpdateAvatar(Guid? fileId) => AvatarFileId = fileId;
+
 	}
 }
