@@ -2,10 +2,6 @@ $topbar-padding: 1.5rem;
 
 .topbar {
       height: var(--topbar-height);
-      // background-color: var(--main-bg-color);
-      // background-image: url('/assets/heading-background.jpg');
-      // background-size: cover;
-      // background-position: center;
       background-image: linear-gradient(to right top, #ffffff, #fafaff, #f4f6ff, #edf2ff, #e5eeff);
       color: black;
       display: flex;
@@ -13,18 +9,19 @@ $topbar-padding: 1.5rem;
       justify-content: space-between;
       padding: 0 $topbar-padding;
       font-size: 1rem;
-      // box-shadow: inset 0 calc(0.0625rem*-1) #d9d1e0;
+      position: relative;
 }
 .topbar-icon-wrapper {
       border: 1px solid var(--default-border-color);
       border-radius: 50%;
       height: 38px;
       width: 38px;
-      display: flex;
+      display: inline-flex;
       justify-content: center;
       align-items: center;
       background-color: white;
       color: var(--default-border-color);
+      position: relative;
 }
 .topbar-icon { font-size: 20px; user-select: none; }
 .thaituan-topbar-logo {
@@ -45,4 +42,25 @@ $topbar-padding: 1.5rem;
       height: 40px;
       width: 40px;
       border-radius: 50%;
+}
+
+.notification-badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      min-width: 14px;
+      height: 14px;
+      line-height: 14px;
+      // padding: 0 4px;
+      font-size: 10px;
+      // font-weight: 700;
+      // text-align: center;
+      border-radius: 9px;
+      background: #e11d48; // đỏ hồng
+      color: #fff;
+      box-shadow: 0 0 0 2px #fff; // viền tách khỏi nền
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
 }
