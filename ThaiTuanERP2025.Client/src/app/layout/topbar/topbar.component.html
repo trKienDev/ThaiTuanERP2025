@@ -4,8 +4,9 @@
             <div class="topbar-icon-wrapper">
                   <span class="topbar-icon material-icons-round">alarm</span>
             </div>
-            <div class="topbar-icon-wrapper">
+            <div #bellBtn class="topbar-icon-wrapper" (click)="togglePanel(bellBtn)">
                   <span class="topbar-icon material-icons-round">notifications</span>
+                  <span class="notification-badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
             </div>
             <div class="user-avatar-wrapper">
                   <img class="user-avatar" [src]="avatarSrc" alt="user avatar">
