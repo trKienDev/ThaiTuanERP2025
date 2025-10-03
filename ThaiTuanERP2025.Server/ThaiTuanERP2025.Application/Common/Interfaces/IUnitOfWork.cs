@@ -50,6 +50,7 @@ namespace ThaiTuanERP2025.Application.Common.Interfaces
 
 		// Notification
 		INotificationRepository Notifications { get; }
+		ITaskReminderRepository TaskReminders { get; }
 
 		Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 	}

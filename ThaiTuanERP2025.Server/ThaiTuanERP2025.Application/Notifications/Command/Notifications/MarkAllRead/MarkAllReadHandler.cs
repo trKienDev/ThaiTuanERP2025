@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 
-namespace ThaiTuanERP2025.Application.Notifications.Command.MarkAllRead
+namespace ThaiTuanERP2025.Application.Notifications.Command.Notifications.MarkAllRead
 {
 	public sealed class MarkAllReadHandler : IRequestHandler<MarkAllReadCommand, Unit>
 	{

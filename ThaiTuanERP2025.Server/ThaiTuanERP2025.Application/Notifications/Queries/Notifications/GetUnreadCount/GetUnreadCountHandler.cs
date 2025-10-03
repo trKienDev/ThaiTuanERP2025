@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 
-namespace ThaiTuanERP2025.Application.Notifications.Queries.GetUnreadCount
+namespace ThaiTuanERP2025.Application.Notifications.Queries.Notifications.GetUnreadCount
 {
 	public sealed class GetUnreadCountHandler : IRequestHandler<GetUnreadCountQuery, int>
 	{
