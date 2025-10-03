@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { NotificationPayload } from "./notification.model";
 
@@ -9,6 +9,7 @@ import { NotificationPayload } from "./notification.model";
       templateUrl: './notification-panel.component.html',
       imports: [ CommonModule, RouterModule ],
       styleUrls: ['./notification-panel.component.scss'],
+      changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NotificationPanelComponent {
       @Input() notifications: NotificationPayload[] = [];

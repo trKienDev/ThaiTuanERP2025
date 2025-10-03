@@ -1,7 +1,7 @@
 /* shared/notifications/notification-panel.component.scss */
 :host { display: block; }
 
-.panel {
+.notification-panel {
       width: 360px;
       max-height: min(70vh, 560px);
       background: #fff;
@@ -9,6 +9,7 @@
       box-shadow: 0 12px 28px rgba(0,0,0,.12), 0 2px 4px rgba(0,0,0,.08);
       overflow: hidden;
       display: flex; flex-direction: column;
+      user-select: none;
 }
 
 .panel-header {
