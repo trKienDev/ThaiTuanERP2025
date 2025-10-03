@@ -4,10 +4,12 @@ import { UserFacade } from '../../pages/account/facades/user.facade';
 import { UserDto } from '../../pages/account/models/user.model';
 import { firstValueFrom, takeUntil } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { NotificationSignalRService } from '../../core/services/realtime/notification-signalr.service';
 import { Subject } from 'rxjs';
-import { NotificationPayload } from './notification-panel/notification.model';
-import { NotificationPanelService } from './notification-panel/notification-panel.service';
+import { NotificationPayload, NotificationSignalRService } from './notification-panel/services/notification-signalr.service';
+import { NotificationPanelService } from './notification-panel/services/notification-panel.service';
+import { NotificationStateService } from './notification-panel/services/notification-state.service';
+import { NotificationFacade } from './notification-panel/facade/notification.facade';
+import { NotificationDto } from './notification-panel/models/notification.model';
 
 @Component({
       selector: 'app-topbar',
@@ -19,7 +21,9 @@ import { NotificationPanelService } from './notification-panel/notification-pane
 export class TopbarComponent implements OnInit {
       private userFacade = inject(UserFacade);
       private notifierService = inject(NotificationSignalRService);
+      private notificationFacade = inject(NotificationFacade);
       private notificationPanel = inject(NotificationPanelService);
+      private notificationState = inject(NotificationStateService);
 
       private destroy$ = new Subject<void>();
 
@@ -27,12 +31,14 @@ export class TopbarComponent implements OnInit {
       currentUser$ = this.userFacade.currentUser$;
       currentUser: UserDto | null = null;
 
-      notifications: NotificationPayload[] = [];
+      notifications: NotificationDto[] = [];
       unreadCount = 0;
+      notifications$ = this.notificationFacade.notifications$;
+      unreadCount$ = this.notificationFacade.unreadCount$;
 
       async ngOnInit(): Promise<void> {
             this.currentUser = await firstValueFrom(this.currentUser$);
-
+            await this.notificationFacade.init();
             const getToken = () => localStorage.getItem('access_token');
 
             this.notifierService.start(getToken);
@@ -53,10 +59,16 @@ export class TopbarComponent implements OnInit {
 
       togglePanel(btn: HTMLElement) {
             if(this.notificationPanel.isOpen()) {
-                  this.notificationPanel.close();
+                  this.notificationPanel.reposition(btn);
+                  this.notificationPanel.updateStreams(this.notifications$, this.unreadCount$, {
+                        markAllRead: () => this.notificationState.markAllRead(),
+                        markOneRead:  (id) => this.notificationState.markRead(id),
+                  });
             } else {
-                  this.notificationPanel.open(btn, this.notifications);
-                  this.notifierService.markAllAsRead();
+                  this.notificationPanel.open(btn, this.notifications$, this.unreadCount$, {
+                        markAllRead: () => this.notificationState.markAllRead(),
+                        markOneRead:  (id) => this.notificationState.markRead(id),
+                  });
             }
       }
 
@@ -77,5 +89,13 @@ export class TopbarComponent implements OnInit {
 
       onNotificationsClick() {
             this.notifierService.markAllAsRead();
+      }
+
+      onMarkAllRead() {
+            this.notificationFacade.markAllRead();
+      }
+
+      onMarkRead(id: string) {
+            this.notificationFacade.markRead(id);
       }
 }

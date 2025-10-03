@@ -1,14 +1,21 @@
-// shared/notifications/notification-panel.service.ts
-import { ComponentRef, Injectable, Injector } from '@angular/core';
+// src/app/shared/notifications/notification-panel.service.ts
+import { Injectable, Injector, ComponentRef } from '@angular/core';
 import { Overlay, OverlayRef, ConnectedPosition, FlexibleConnectedPositionStrategy, OverlayConfig } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { NotificationPanelComponent } from './notification-panel.component';
-import { NotificationPayload } from './notification.model';
+import { Observable, Subscription } from 'rxjs';
+import { NotificationPanelComponent } from '../notification-panel.component';
+import { NotificationDto } from '../models/notification.model';
+
+export interface NotificationPanelHandlers {
+  markAllRead?: () => void;
+  markOneRead?: (id: string) => void;
+}
 
 @Injectable({ providedIn: 'root' })
 export class NotificationPanelService {
       private overlayRef?: OverlayRef;
       private compRef?: ComponentRef<NotificationPanelComponent>;
+      private subs = new Subscription();
 
       constructor(private overlay: Overlay, private injector: Injector) {}
 
@@ -16,23 +23,16 @@ export class NotificationPanelService {
             return !!this.overlayRef && this.overlayRef.hasAttached();
       }
 
-      open(origin: HTMLElement, notifications: NotificationPayload[]) {
+      open(origin: HTMLElement, notifications$: Observable<NotificationDto[]>, unreadCount$: Observable<number>, handlers?: NotificationPanelHandlers) {
             if (this.isOpen()) {
-                  this.update(notifications);
-                  this.overlayRef!.updatePositionStrategy(
-                        this.overlay.position().flexibleConnectedTo(origin).withPositions(this.positions())
-                  );
+                  this.reposition(origin);
+                  this.updateStreams(notifications$, unreadCount$, handlers);
                   return;
             }
 
-            const positions: ConnectedPosition[] = [
-                  { originX: 'end', originY: 'bottom', overlayX: 'end', overlayY: 'top', offsetY: 8 },
-                  { originX: 'end', originY: 'top',    overlayX: 'end', overlayY: 'bottom', offsetY: -8 },
-            ];
-
             const positionStrategy: FlexibleConnectedPositionStrategy = this.overlay.position()
                   .flexibleConnectedTo(origin)
-                  .withPositions(positions)
+                  .withPositions(this.positions())
                   .withPush(true);
 
             const config: OverlayConfig = {
@@ -46,21 +46,26 @@ export class NotificationPanelService {
             const portal = new ComponentPortal(NotificationPanelComponent, null, this.injector);
             this.compRef = this.overlayRef.attach(portal);
 
-            // bơm dữ liệu initial
-            this.compRef.instance.notifications = notifications;
-            this.compRef.changeDetectorRef.markForCheck();
+            // Gắn streams
+            this.compRef.instance.notifications$ = notifications$;
+            this.compRef.instance.unreadCount$ = unreadCount$;
 
+            // Gắn handlers
+            this.wireHandlers(handlers);
+
+            // Close khi click backdrop
             this.overlayRef.backdropClick().subscribe(() => this.close());
             this.overlayRef.detachments().subscribe(() => this.dispose());
       }
 
-      update(notifications: NotificationPayload[]) {
+      updateStreams( notifications$: Observable<NotificationDto[]>, unreadCount$: Observable<number>, handlers?: NotificationPanelHandlers) {
             if (!this.compRef || !this.overlayRef?.hasAttached()) return;
-            this.compRef.instance.notifications = notifications;
+            this.compRef.instance.notifications$ = notifications$;
+            this.compRef.instance.unreadCount$ = unreadCount$;
+            this.wireHandlers(handlers, true);
             this.compRef.changeDetectorRef.markForCheck();
       }
 
-      /** Reposition thủ công (nếu cần) */
       reposition(origin: HTMLElement) {
             if (!this.overlayRef) return;
                   this.overlayRef.updatePositionStrategy(
@@ -75,9 +80,26 @@ export class NotificationPanelService {
       }
 
       private dispose() {
+            this.subs.unsubscribe();
+            this.subs = new Subscription();
+            this.compRef?.destroy();
+            this.compRef = undefined;
             this.overlayRef?.dispose();
             this.overlayRef = undefined;
-            this.compRef = undefined;
+      }
+
+      private wireHandlers(handlers?: NotificationPanelHandlers, reset = false) {
+            if (!this.compRef) return;
+            if (reset) {
+                  this.subs.unsubscribe();
+                  this.subs = new Subscription();
+            }
+            if (handlers?.markAllRead) {
+                  this.subs.add(this.compRef.instance.markAllRead.subscribe(() => handlers.markAllRead!()));
+            }
+            if (handlers?.markOneRead) {
+                  this.subs.add(this.compRef.instance.markOneRead.subscribe(id => handlers.markOneRead!(id)));
+            }
       }
 
       private positions(): ConnectedPosition[] {

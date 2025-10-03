@@ -124,6 +124,12 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			return await _dbSet.AnyAsync(predicate);
 		}
 
+		public virtual Task<int> CountAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
+		{
+			if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+			return _dbSet.AsNoTracking().CountAsync(predicate, cancellationToken);
+		}
+
 		public void Update(T entity)
 		{
 			if (entity == null) throw new ArgumentNullException(nameof(entity));

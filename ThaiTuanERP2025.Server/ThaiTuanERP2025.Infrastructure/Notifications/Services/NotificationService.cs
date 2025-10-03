@@ -60,7 +60,8 @@ namespace ThaiTuanERP2025.Infrastructure.Notifications.Services
 				Title: n.Title,
 				Message: n.Message,
 				Link: n.Link ?? "/",
-				CreatedAt: n.CreatedDate
+				CreatedAt: n.CreatedDate,
+				IsRead: n.IsRead
 			)).Cast<object>().ToList();
 
 			await _realtime.NotifyStepActivatedAsync(targetUserIds, payloads, cancellationToken);

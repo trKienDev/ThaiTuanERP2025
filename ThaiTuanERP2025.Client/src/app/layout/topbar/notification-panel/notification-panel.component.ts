@@ -1,7 +1,8 @@
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { NotificationPayload } from "./notification.model";
+import { NotificationDto, NotificationPayload } from "./models/notification.model";
+import { Observable } from "rxjs";
 
 @Component({
       selector: 'app-notification-panel',
@@ -12,26 +13,39 @@ import { NotificationPayload } from "./notification.model";
       changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NotificationPanelComponent {
-      @Input() notifications: NotificationPayload[] = [];
+      /** Streams từ state service */
+      @Input() notifications$!: Observable<NotificationDto[]>;
+      @Input() unreadCount$!: Observable<number>;
+
+      /** Sự kiện để overlay/service bên ngoài bắt */
+      @Output() markAllRead = new EventEmitter<void>();
+      @Output() markOneRead = new EventEmitter<string>();
 
       onSettings() {
-            console.log('Open notification settings');      
+      // optional: điều hướng trang cài đặt
+            console.log('open notification settings');
       }
 
-      onClickItem(notification: NotificationPayload) {
-            if(notification.link) {
-                  window.open(notification.link, '_blank');
-            }
+      onClickItem(n: NotificationDto) {
+            // Điều hướng nếu có link
+            if (n.link) window.open(n.link, '_blank');
       }
 
-      formateTime(dateStr?: string | Date): string {
-            if (!dateStr) return '';
-            const date = typeof dateStr === 'string' ? new Date(dateStr) : dateStr;
+      onMarkOne(ev: MouseEvent, id: string) {
+            ev.stopPropagation();
+            this.markOneRead.emit(id);
+      }
+
+      trackById = (_: number, n: NotificationDto) => n.id;
+
+      formatTime(dt?: string | Date): string {
+            if (!dt) return '';
+            const d = typeof dt === 'string' ? new Date(dt) : dt;
             const now = new Date();
-            const diff = (now.getTime() - date.getTime()) / 1000;
+            const diff = (now.getTime() - d.getTime()) / 1000;
             if (diff < 60) return 'vừa xong';
             if (diff < 3600) return `${Math.floor(diff / 60)} phút trước`;
             if (diff < 86400) return `${Math.floor(diff / 3600)} giờ trước`;
-            return date.toLocaleString();
+            return d.toLocaleString();
       }
 }

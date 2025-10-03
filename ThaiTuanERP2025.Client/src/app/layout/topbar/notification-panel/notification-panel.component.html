@@ -1,21 +1,23 @@
 <section class="notification-panel">
       <header class="panel-header">
-            <h3>Thông báo</h3>
+            <h3 style="color: var(--bright-blue-color);">Thông báo</h3>
       </header>
 
-      <ng-container *ngIf="(notifications?.length ?? 0) > 0; else emptyState">
-            <ul class="notification-list">
-                  <li class="notification-item" *ngFor="let notification of notifications" (click)="onClickItem(notification)">
-                        <div class="content">
-                              <div class="title d-flex gap-10p align-items-center">
-                                    <span>{{ notification.title || 'Thông báo' }}</span>
-                                    <div class="unread-dot" *ngIf="notification.unread"></div>
+      <ng-container *ngIf="(notifications$ | async) as items; else loadingTpl">
+            <ng-container *ngIf="items.length > 0; else emptyState">
+                  <ul class="notification-list">
+                        <li class="notification-item" *ngFor="let n of items; trackBy: trackById" [class.unread]="!n.isRead" (click)="onClickItem(n)">
+                              <div class="content">
+                                    <div class="title d-flex gap-10p align-items-center">
+                                          <span>{{ n.title || 'Thông báo' }}</span>
+                                          <div class="unread-dot" *ngIf="!n.isRead"></div>
+                                    </div>
+                                    <div class="message" *ngIf="n.message">{{ n.message }}</div>
+                                    <div class="meta">{{ formatTime(n.createdAt) }}</div>
                               </div>
-                              <div class="message" *ngIf="notification.message">{{ notification.message }}</div>
-                              <div class="meta">{{ formateTime(notification.createdAt) }}</div>
-                        </div>
-                  </li>
-            </ul>
+                        </li>
+                  </ul>
+            </ng-container>
       </ng-container>
 
       <ng-template #emptyState>
@@ -27,4 +29,8 @@
                   <div class="empty-sub">Khi có thông báo mới, chúng sẽ xuất hiện tại đây.</div>
             </div>
       </ng-template>
-  </section>
+
+      <ng-template #loadingTpl>
+            <div class="loading">Đang tải thông báo…</div>
+      </ng-template>
+</section>
