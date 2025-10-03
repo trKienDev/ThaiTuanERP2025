@@ -3,7 +3,7 @@ export interface NotificationPayload {
       title: string;
       message: string;
       link?: string;   
-      createdAt?: string | Date;     
+      createdAt: string | Date;     
       isRead: boolean;
 }
 

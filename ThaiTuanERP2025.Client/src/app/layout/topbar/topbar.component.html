@@ -3,8 +3,9 @@
       <div class="user-section d-flex gap-10p">
             <div class="topbar-icon-wrapper">
                   <span class="topbar-icon material-icons-round">alarm</span>
+                   <span class="badge" *ngIf="(reminders$ | async) as list" [style.display]="list.length > 0 ? null : 'none'">{{ list.length }}</span>
             </div>
-            <div #bellBtn class="topbar-icon-wrapper" (click)="togglePanel(bellBtn)" title="Thông báo">
+            <div #bellBtn class="topbar-icon-wrapper" (click)="toggleNotificationPanel(bellBtn)" title="Thông báo">
                   <span class="topbar-icon material-icons-round">notifications</span>
                   <span class="notification-badge" *ngIf="(unreadCount$ | async) as c" [style.display]="c>0 ? null : 'none'">{{ c }}</span>
             </div>

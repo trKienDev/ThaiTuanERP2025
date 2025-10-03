@@ -21,5 +21,24 @@ namespace ThaiTuanERP2025.Api.Notifications
 			// "ReceiveNotification" là event client-side sẽ lắng nghe
 			await _hub.Clients.Users(userIds).SendAsync("ReceiveNotification", payloads, cancellationToken);
 		}
+
+		public async Task PushAlarmsAsync(IEnumerable<Guid> userIds, IEnumerable<object> payloads, CancellationToken cancellationToken = default)
+		{
+			var ids = userIds.Select(x => x.ToString()).ToList();
+			if (!ids.Any() || !payloads.Any()) return;
+
+			// client Angular lắng nghe event "ReceiveAlarm"
+			await _hub.Clients.Users(ids).SendAsync("ReceiveAlarm", payloads, cancellationToken);
+		}
+
+		// mới: thông báo alarm đã được resolve (approved/expired/dismissed)
+		public async Task PushAlarmResolvedAsync(IEnumerable<Guid> userIds, IEnumerable<Guid> alarmIds, CancellationToken cancellationToken = default)
+		{
+			var ids = userIds.Select(x => x.ToString()).ToList();
+			if (!ids.Any() || !alarmIds.Any()) return;
+
+			// client Angular lắng nghe event "ResolveAlarm"
+			await _hub.Clients.Users(ids).SendAsync("ResolveAlarm", alarmIds, cancellationToken);
+		}
 	}
 }
