@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
-import { environment } from '../../../../environments/environment';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { environment } from '../../../../../environments/environment';
+import { NotificationDto } from '../models/notification.model';
 
 export interface NotificationPayload {
       userId: string;
@@ -20,11 +21,11 @@ export class NotificationSignalRService {
       private hubConnection?: signalR.HubConnection;
 
       // internal stream 
-      private _incoming$ = new Subject<NotificationPayload[]>();
+      private _incoming$ = new Subject<NotificationDto[]>();
       private _unreadCount$ = new BehaviorSubject<number>(0);
 
       // public stream
-      readonly incoming$: Observable<NotificationPayload[]> = this._incoming$.asObservable();
+      readonly incoming$: Observable<NotificationDto[]> = this._incoming$.asObservable();
       readonly unreadCount$: Observable<number> = this._unreadCount$.asObservable();
 
       /** Bắt đầu kết nối */
@@ -43,7 +44,7 @@ export class NotificationSignalRService {
                   .build();
 
             // Lắng nghe sự kiện từ server
-            this.hubConnection.on('ReceiveNotification', (payloads: NotificationPayload[]) => {
+            this.hubConnection.on('ReceiveNotification', (payloads: NotificationDto[]) => {
                   console.log('ReceiveNotification:', payloads);
 
                   this._incoming$.next(payloads);
@@ -64,7 +65,6 @@ export class NotificationSignalRService {
       stop() {
             return this.hubConnection?.stop();
       }
-
 
       markAllAsRead() {
             this._unreadCount$.next(0);

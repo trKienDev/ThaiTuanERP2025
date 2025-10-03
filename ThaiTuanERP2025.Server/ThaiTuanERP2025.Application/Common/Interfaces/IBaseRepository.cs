@@ -5,6 +5,7 @@ namespace ThaiTuanERP2025.Application.Common.Interfaces
 {
 	public interface IBaseRepository<T> where T : class
 	{
+		Task<int> CountAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
 		Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
 		Task<List<T>> ListAsync(Func<IQueryable<T>, IQueryable<T>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default);
 		Task<T?> SingleOrDefaultAsync(Func<IQueryable<T>, IQueryable<T>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default);
