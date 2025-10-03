@@ -53,6 +53,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<ExpensePaymentAttachment> ExpensePaymentAttachments => Set<ExpensePaymentAttachment>();
 		public DbSet<ExpensePaymentFollower> ExpensePaymentFollowers => Set<ExpensePaymentFollower>();	
 		public DbSet<AppNotification> AppNotification => Set<AppNotification>();
+		public DbSet<TaskReminder> TaskReminders => Set<TaskReminder>();
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

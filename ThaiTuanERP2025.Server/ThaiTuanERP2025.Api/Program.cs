@@ -36,6 +36,7 @@ builder.Services.AddScoped<ApprovalWorkflowService>();
 builder.Services.AddScoped<ApprovalWorkflowResolverService>();
 builder.Services.AddScoped<IRealtimeNotifier, SignalRealtimeNotifier>();
 builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
+builder.Services.AddScoped<ITaskReminderService, TaskReminderService>();
 
 builder.Services.AddSignalR()
 	.AddJsonProtocol(o =>

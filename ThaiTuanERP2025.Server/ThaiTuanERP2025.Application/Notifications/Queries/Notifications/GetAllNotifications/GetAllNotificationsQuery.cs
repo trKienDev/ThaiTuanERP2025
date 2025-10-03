@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using ThaiTuanERP2025.Application.Notifications.Dtos;
 
-namespace ThaiTuanERP2025.Application.Notifications.Queries.GetAllNotifications
+namespace ThaiTuanERP2025.Application.Notifications.Queries.Notifications.GetAllNotifications
 {
 	public sealed record GetAllNotificationsQuery
 	(

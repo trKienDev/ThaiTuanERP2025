@@ -25,7 +25,7 @@ export class NotificationSignalRService {
       private _unreadCount$ = new BehaviorSubject<number>(0);
 
       // public stream
-      readonly incoming$: Observable<NotificationDto[]> = this._incoming$.asObservable();
+      readonly incoming$ = this._incoming$.asObservable();
       readonly unreadCount$: Observable<number> = this._unreadCount$.asObservable();
 
       /** Bắt đầu kết nối */
@@ -48,8 +48,7 @@ export class NotificationSignalRService {
                   console.log('ReceiveNotification:', payloads);
 
                   this._incoming$.next(payloads);
-                  const inc = Array.isArray(payloads) ? payloads.length : 1;
-                  this._unreadCount$.next(this._unreadCount$.value + inc);
+                  this._unreadCount$.next(this._unreadCount$.value + (payloads?.length ?? 0));
             });
 
             return this.hubConnection.start()

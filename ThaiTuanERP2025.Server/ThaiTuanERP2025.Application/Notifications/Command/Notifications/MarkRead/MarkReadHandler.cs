@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 
-namespace ThaiTuanERP2025.Application.Notifications.Command.MarkRead
+namespace ThaiTuanERP2025.Application.Notifications.Command.Notifications.MarkRead
 {
 	public sealed class MarkReadHandler : IRequestHandler<MarkReadCommand, Unit>
 	{
@@ -16,8 +16,8 @@ namespace ThaiTuanERP2025.Application.Notifications.Command.MarkRead
 		public async Task<Unit> Handle(MarkReadCommand request, CancellationToken cancellationToken)
 		{
 			var uid = _currentUserService.UserId;
-			var notification = await _unitOfWork.Notifications.SingleOrDefaultIncludingAsync(x => 
-				x.Id == request.Id && x.UserId == uid, 
+			var notification = await _unitOfWork.Notifications.SingleOrDefaultIncludingAsync(x =>
+				x.Id == request.Id && x.UserId == uid,
 				cancellationToken: cancellationToken
 			);
 

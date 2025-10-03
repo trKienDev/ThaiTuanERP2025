@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
-using ThaiTuanERP2025.Application.Notifications.Command.MarkAllRead;
-using ThaiTuanERP2025.Application.Notifications.Command.MarkRead;
+using ThaiTuanERP2025.Application.Notifications.Command.Notifications.MarkAllRead;
+using ThaiTuanERP2025.Application.Notifications.Command.Notifications.MarkRead;
 using ThaiTuanERP2025.Application.Notifications.Dtos;
-using ThaiTuanERP2025.Application.Notifications.Queries.GetAllNotifications;
-using ThaiTuanERP2025.Application.Notifications.Queries.GetUnreadCount;
+using ThaiTuanERP2025.Application.Notifications.Queries.Notifications.GetAllNotifications;
+using ThaiTuanERP2025.Application.Notifications.Queries.Notifications.GetUnreadCount;
 
 namespace ThaiTuanERP2025.Api.Controllers.Notification
 {

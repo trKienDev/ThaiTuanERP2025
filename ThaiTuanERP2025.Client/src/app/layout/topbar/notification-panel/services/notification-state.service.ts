@@ -35,9 +35,10 @@ export class NotificationStateService {
             // 3. lắng nghe realtime
             this.realtime.incoming$.subscribe(newItems => {
                   const current = this._notifications$.value;
-                  const merged = [...newItems.map(x => ({ ...x, isRead: false })), ...current];
+                  const mapped: NotificationDto[] = newItems.map(x => ({ ...x, isRead: false }));
+                  const merged: NotificationDto[] = [...mapped, ...current];
                   this._notifications$.next(merged);
-                  this._unreadCount$.next(this._unreadCount$.value + newItems.length);
+                  this._unreadCount$.next(this._unreadCount$.value + (newItems?.length ?? 0));
             });
       }
 

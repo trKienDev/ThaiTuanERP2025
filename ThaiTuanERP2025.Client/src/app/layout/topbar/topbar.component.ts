@@ -10,6 +10,8 @@ import { NotificationPanelService } from './notification-panel/services/notifica
 import { NotificationStateService } from './notification-panel/services/notification-state.service';
 import { NotificationFacade } from './notification-panel/facade/notification.facade';
 import { NotificationDto } from './notification-panel/models/notification.model';
+import { TaskReminderFacade } from './task-reminder-panel/facades/task-reminder.facade';
+import { TaskReminderPanelService } from './task-reminder-panel/services/task-reminder-panel.service';
 
 @Component({
       selector: 'app-topbar',
@@ -25,6 +27,9 @@ export class TopbarComponent implements OnInit {
       private notificationPanel = inject(NotificationPanelService);
       private notificationState = inject(NotificationStateService);
 
+      private reminderFacade = inject(TaskReminderFacade);
+      private reminderPanel = inject(TaskReminderPanelService);
+
       private destroy$ = new Subject<void>();
 
       baseUrl: string = environment.baseUrl;      
@@ -35,10 +40,13 @@ export class TopbarComponent implements OnInit {
       unreadCount = 0;
       notifications$ = this.notificationFacade.notifications$;
       unreadCount$ = this.notificationFacade.unreadCount$;
+      reminders$ = this.reminderFacade.reminders$;
 
       async ngOnInit(): Promise<void> {
             this.currentUser = await firstValueFrom(this.currentUser$);
             await this.notificationFacade.init();
+            await this.reminderFacade.init();
+
             const getToken = () => localStorage.getItem('access_token');
 
             this.notifierService.start(getToken);
@@ -57,7 +65,7 @@ export class TopbarComponent implements OnInit {
                   });
       }
 
-      togglePanel(btn: HTMLElement) {
+      toggleNotificationPanel(btn: HTMLElement) {
             if(this.notificationPanel.isOpen()) {
                   this.notificationPanel.reposition(btn);
                   this.notificationPanel.updateStreams(this.notifications$, this.unreadCount$, {
@@ -68,6 +76,19 @@ export class TopbarComponent implements OnInit {
                   this.notificationPanel.open(btn, this.notifications$, this.unreadCount$, {
                         markAllRead: () => this.notificationState.markAllRead(),
                         markOneRead:  (id) => this.notificationState.markRead(id),
+                  });
+            }
+      }
+
+      toggleTaskReminderPanel(btn: HTMLElement) {
+            if(this.reminderPanel.isOpen()) {
+                  this.reminderPanel.reposition(btn);
+                  this.reminderPanel.updateStreams(this.reminders$, {
+                        dismiss: (id) => this.reminderFacade.dismiss(id),
+                  });
+            } else {
+                  this.reminderPanel.open(btn, this.reminders$, {
+                        dismiss: (id) => this.reminderFacade.dismiss(id),
                   });
             }
       }

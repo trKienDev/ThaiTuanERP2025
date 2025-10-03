@@ -20,11 +20,18 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly ApprovalWorkflowResolverService _resolverService;
 		private readonly INotificationService _notificationService;
-		public ApprovalWorkflowService(IUnitOfWork unitOfWork, ApprovalWorkflowResolverService resolverService, INotificationService notificationService)
+		private readonly ITaskReminderService _taskReminderService;
+		public ApprovalWorkflowService(
+			IUnitOfWork unitOfWork, 
+			ApprovalWorkflowResolverService resolverService, 
+			INotificationService notificationService,
+			ITaskReminderService taskReminderService
+		)
 		{
 			_unitOfWork = unitOfWork;
 			_resolverService = resolverService;
 			_notificationService = notificationService;
+			_taskReminderService = taskReminderService;
 		}
 
 		public async Task<Guid> CreateInstanceForExpensePaymentAsync(Guid paymentId, Guid workflowTemplateId, IReadOnlyCollection<StepOverrideRequest>? overrides, bool autoStart, bool linkToPayment, CancellationToken cancellationToken) {
@@ -112,12 +119,12 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-			await StartInstanceAsync(awi.Id, CancellationToken.None);
+			await StartInstanceAsync(awi.Id, payment.Name, CancellationToken.None);
 
 			return awi.Id;
 		}
 
-		public async Task StartInstanceAsync(Guid instanceId, CancellationToken cancellationToken)
+		public async Task StartInstanceAsync(Guid instanceId, string paymentName, CancellationToken cancellationToken)
 		{
 			var workflowInstance = await LoadInstanceWithStepsAsync(instanceId, cancellationToken);
 			if (workflowInstance.Status != WorkflowStatus.Draft) return;
@@ -130,6 +137,15 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 			// >>> GỬI THÔNG BÁO BƯỚC ĐẦU
 			var targetUserIds = await ResolveTargetsForNotificationAsync(firstStep, cancellationToken);
 			await _notificationService.NotifyStepActivatedAsync(workflowInstance, firstStep, targetUserIds, cancellationToken);
+
+			var approverIds = JsonUtils.ParseGuidArray(firstStep.ResolvedApproverCandidatesJson);
+			await _taskReminderService.CreateForStepActivationAsync(
+				firstStep.Id, workflowInstance.Id, approverIds,
+				title: $"Cần duyệt bước \"{firstStep.Name}\"",
+				message: $"Chứng từ {paymentName}",
+				dueAt: firstStep.DueAt!.Value.AddHours(firstStep.SlaHours),
+				cancellationToken
+			);
 
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 		}
@@ -150,6 +166,7 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 			// >>> GỬI THÔNG BÁO BƯỚC KẾ
 			var targetUserIds = await ResolveTargetsForNotificationAsync(next, ct);
 			await _notificationService.NotifyStepActivatedAsync(ins, next, targetUserIds, ct);
+			await _taskReminderService.ResolveByStepAsync(ins.Id, "Approved", ct);
 		}
 
 		private Task<IReadOnlyCollection<Guid>> ResolveTargetsForNotificationAsync(ApprovalStepInstance step, CancellationToken ct)

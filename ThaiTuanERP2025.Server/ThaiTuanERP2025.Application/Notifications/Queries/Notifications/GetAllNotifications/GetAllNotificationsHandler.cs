@@ -4,7 +4,7 @@ using MediatR;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Notifications.Dtos;
 
-namespace ThaiTuanERP2025.Application.Notifications.Queries.GetAllNotifications
+namespace ThaiTuanERP2025.Application.Notifications.Queries.Notifications.GetAllNotifications
 {
 	public sealed class GetAllNotificationsHandler : IRequestHandler<GetAllNotificationsQuery, IReadOnlyCollection<AppNotificationDto>>
 	{
@@ -30,7 +30,7 @@ namespace ThaiTuanERP2025.Application.Notifications.Queries.GetAllNotifications
 			var page = request.Page <= 0 ? 1 : request.Page;
 			var pageSize = request.PageSize <= 0 || request.PageSize > 200 ? 30 : request.PageSize;
 
-			var items = await _unitOfWork.Notifications.ListProjectedAsync<AppNotificationDto>(q =>
+			var items = await _unitOfWork.Notifications.ListProjectedAsync(q =>
 				q.Where(n => n.UserId == uid)
 				.Where(n => !request.UnreadOnly || !n.IsRead)
 				.OrderByDescending(n => n.CreatedDate)

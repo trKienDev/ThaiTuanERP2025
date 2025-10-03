@@ -54,7 +54,8 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			IExpensePaymentRepository expensePayments,
 
 			// Notification
-			INotificationRepository notifications
+			INotificationRepository notifications,
+			ITaskReminderRepository taskReminders
 		)
 		{
 			_dbContext = dbContext;
@@ -94,6 +95,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			ExpensePayments = expensePayments;
 
 			Notifications = notifications;
+			TaskReminders = taskReminders;
 		}
 
 		public IStoredFilesRepository StoredFiles { get; }
@@ -135,6 +137,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 
 		// Notification
 		public INotificationRepository Notifications { get; }
+		public ITaskReminderRepository TaskReminders { get; }
 
 		public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{
