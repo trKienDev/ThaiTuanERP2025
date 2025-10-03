@@ -22,6 +22,11 @@ $topbar-padding: 1.5rem;
       background-color: white;
       color: var(--default-border-color);
       position: relative;
+      cursor: pointer;
+      transition: all 0.2s;
+      &:hover { 
+            color: black; 
+      }
 }
 .topbar-icon { font-size: 20px; user-select: none; }
 .thaituan-topbar-logo {
