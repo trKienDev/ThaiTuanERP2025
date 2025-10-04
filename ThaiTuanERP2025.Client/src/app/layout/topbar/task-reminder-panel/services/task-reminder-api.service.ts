@@ -8,15 +8,15 @@ import { ApiResponse } from '../../../../shared/models/api-response.model';
 
 @Injectable({ providedIn: 'root' })
 export class TaskReminderApiService {
-  private http = inject(HttpClient);
-  private baseUrl = `${environment.baseUrl}/api/alarms`;
+      private http = inject(HttpClient);
+      private baseUrl = `${environment.baseUrl}/api/task-reminder`;
 
-  getMyActive(): Observable<TaskReminderDto[]> {
-    return this.http.get<ApiResponse<TaskReminderDto[]>>(this.baseUrl).pipe(handleApiResponse$<TaskReminderDto[]>());
-  }
+      getMyActive(): Observable<TaskReminderDto[]> {
+            return this.http.get<ApiResponse<TaskReminderDto[]>>(this.baseUrl).pipe(handleApiResponse$<TaskReminderDto[]>());
+      }
 
-  dismiss(id: string): Observable<void> {
-    return this.http.post<ApiResponse<void>>(`${this.baseUrl}/${id}/dismiss`, {})
-      .pipe(handleApiResponse$<void>());
-  }
+      dismiss(id: string): Observable<void> {
+            return this.http.post<ApiResponse<void>>(`${this.baseUrl}/${id}/dismiss`, {})
+                  .pipe(handleApiResponse$<void>());
+      }
 }

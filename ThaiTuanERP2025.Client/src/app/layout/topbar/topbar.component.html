@@ -1,11 +1,11 @@
 <header class="topbar">
       <img class="thaituan-topbar-logo" src="thaituan-logo-homepage.png" alt="thaituan-logo">
       <div class="user-section d-flex gap-10p">
-            <div class="topbar-icon-wrapper">
-                  <span class="topbar-icon material-icons-round">alarm</span>
-                   <span class="badge" *ngIf="(reminders$ | async) as list" [style.display]="list.length > 0 ? null : 'none'">{{ list.length }}</span>
+            <div class="reminder-wrapper topbar-icon-wrapper">
+                  <span class="reminder-icon topbar-icon material-icons-round">alarm</span>
+                  <span class="reminder-badge" *ngIf="(reminders$ | async) as list" [style.display]="list.length > 0 ? null : 'none'">{{ list.length }}</span>
             </div>
-            <div #bellBtn class="topbar-icon-wrapper" (click)="toggleNotificationPanel(bellBtn)" title="Thông báo">
+            <div #bellBtn class="notification-wrapper topbar-icon-wrapper" (click)="toggleNotificationPanel(bellBtn)" title="Thông báo">
                   <span class="topbar-icon material-icons-round">notifications</span>
                   <span class="notification-badge" *ngIf="(unreadCount$ | async) as c" [style.display]="c>0 ? null : 'none'">{{ c }}</span>
             </div>
