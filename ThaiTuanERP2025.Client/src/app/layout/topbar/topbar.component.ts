@@ -11,7 +11,7 @@ import { NotificationStateService } from './notification-panel/services/notifica
 import { NotificationFacade } from './notification-panel/facade/notification.facade';
 import { NotificationDto } from './notification-panel/models/notification.model';
 import { TaskReminderFacade } from './task-reminder-panel/facades/task-reminder.facade';
-import { TaskReminderPanelService } from './task-reminder-panel/services/task-reminder-panel.service';
+import { TaskReminderDrawerService } from './task-reminder-panel/services/task-reminder-drawer.service';
 
 @Component({
       selector: 'app-topbar',
@@ -28,7 +28,7 @@ export class TopbarComponent implements OnInit {
       private notificationState = inject(NotificationStateService);
 
       private reminderFacade = inject(TaskReminderFacade);
-      private reminderPanel = inject(TaskReminderPanelService);
+      private reminderDrawer = inject(TaskReminderDrawerService);
 
       private destroy$ = new Subject<void>();
 
@@ -82,14 +82,11 @@ export class TopbarComponent implements OnInit {
             }
       }
 
-      toggleTaskReminderPanel(btn: HTMLElement) {
-            if(this.reminderPanel.isOpen()) {
-                  this.reminderPanel.reposition(btn);
-                  this.reminderPanel.updateStreams(this.reminders$, {
-                        dismiss: (id) => this.reminderFacade.dismiss(id),
-                  });
+      toggleTaskReminderDrawer() {
+            if(this.reminderDrawer.isOpen()) {
+                  this.reminderDrawer.close();
             } else {
-                  this.reminderPanel.open(btn, this.reminders$, {
+                  this.reminderDrawer.open(this.reminders$, {
                         dismiss: (id) => this.reminderFacade.dismiss(id),
                   });
             }

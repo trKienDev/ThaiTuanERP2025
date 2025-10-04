@@ -1,9 +1,20 @@
 <header class="topbar">
       <img class="thaituan-topbar-logo" src="thaituan-logo-homepage.png" alt="thaituan-logo">
       <div class="user-section d-flex gap-10p">
-            <div class="reminder-wrapper topbar-icon-wrapper">
-                  <span class="reminder-icon topbar-icon material-icons-round">alarm</span>
-                  <span class="reminder-badge" *ngIf="(reminders$ | async) as list" [style.display]="list.length > 0 ? null : 'none'">{{ list.length }}</span>
+            <div class="reminder-wrapper topbar-icon-wrapper" 
+            *ngIf="(reminders$ | async) as list" [class.remind]="list.length > 0"
+            (click)="toggleTaskReminderDrawer()" title="Nhắc việc">
+                  <span class="reminder-icon topbar-icon material-icons-round"
+                  *ngIf="(reminders$ | async) as list"
+                  [class.ringing]="list.length > 0">
+                        alarm
+                  </span>
+                  <span class="reminder-badge"
+                  *ngIf="(reminders$ | async) as list"
+                  [class.has-reminders]="list.length > 0"
+                  [class.no-reminders]="list.length === 0">
+                        {{ list.length }}
+                  </span>
             </div>
             <div #bellBtn class="notification-wrapper topbar-icon-wrapper" (click)="toggleNotificationPanel(bellBtn)" title="Thông báo">
                   <span class="topbar-icon material-icons-round">notifications</span>

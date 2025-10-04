@@ -1,21 +1,21 @@
-// src/app/layout/topbar/alarm-panel/alarm-panel.component.ts
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { Observable, interval, map, startWith } from 'rxjs';
-import { TaskReminderDto } from './models/task-reminder.model';
+import { CommonModule } from "@angular/common";
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
+import { interval, map, Observable, startWith } from "rxjs";
+import { TaskReminderDto } from "../models/task-reminder.model";
 
 @Component({
-      selector: 'app-task-reminder-panel',
-      standalone: true,
-      imports: [CommonModule],
-      templateUrl: './task-reminder-panel.component.html',
+      selector: 'app-task-reminder-drawer',
+      imports: [ CommonModule ],
+      templateUrl: './task-reminder-drawer.component.html',
+      styleUrls: ['./task-reminder-drawer.component.scss'],
       changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TaskReminderPanelComponent {
+export class TaskReminderDrawerComponent {
       @Input() reminders$!: Observable<TaskReminderDto[]>;
       @Output() dismiss = new EventEmitter<string>();
+      @Output() closed = new EventEmitter<void>();
 
-      trackById(index: number, item: TaskReminderDto): string {
+      trackById(index: number, item: TaskReminderDto) {
             return item.id;
       }
 
@@ -31,5 +31,11 @@ export class TaskReminderPanelComponent {
                         return `${h}h ${m}m ${s}s`;
                   })
             );
+      }
+
+      onAnimationEnd(event: AnimationEvent) {
+            if ((event.target as HTMLElement).classList.contains('closing')) {
+                  this.closed.emit();
+            }
       }
 }
