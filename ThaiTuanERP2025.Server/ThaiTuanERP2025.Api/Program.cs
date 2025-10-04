@@ -23,6 +23,7 @@ using ThaiTuanERP2025.Api.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using ThaiTuanERP2025.Api.SignalR;
 using ThaiTuanERP2025.Api.Notifications;
+using ThaiTuanERP2025.Infrastructure.Notifications.Background;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +38,11 @@ builder.Services.AddScoped<ApprovalWorkflowResolverService>();
 builder.Services.AddScoped<IRealtimeNotifier, SignalRealtimeNotifier>();
 builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 builder.Services.AddScoped<ITaskReminderService, TaskReminderService>();
+
+builder.Services.AddHostedService<TaskReminderExpiryHostedService>();
+builder.Services.Configure<TaskReminderExpiryOptions>(
+	builder.Configuration.GetSection("TaskReminderExpiry")
+);
 
 builder.Services.AddSignalR()
 	.AddJsonProtocol(o =>

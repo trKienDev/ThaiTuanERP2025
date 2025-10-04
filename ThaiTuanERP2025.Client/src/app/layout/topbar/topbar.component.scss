@@ -10,6 +10,7 @@ $topbar-padding: 1.5rem;
       padding: 0 $topbar-padding;
       font-size: 1rem;
       position: relative;
+      user-select: none;
 }
 .topbar-icon-wrapper {
       border: 1px solid var(--default-border-color);
@@ -27,7 +28,7 @@ $topbar-padding: 1.5rem;
             color: black; 
       }
 }
-.topbar-icon { font-size: 20px; user-select: none; }
+.topbar-icon { font-size: 20px;  }
 .thaituan-topbar-logo {
       height: 50px;
       width: auto;
@@ -81,6 +82,7 @@ $topbar-padding: 1.5rem;
 .reminder-badge {
       background-color: red;
       color: white;
-      padding: 0 5px;
-      border-radius: 5px;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 13px;
 }

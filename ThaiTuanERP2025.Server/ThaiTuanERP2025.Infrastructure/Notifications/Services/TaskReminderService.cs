@@ -27,7 +27,7 @@ namespace ThaiTuanERP2025.Infrastructure.Notifications.Services
 
 			// push realtime
 			var dtos = _mapper.Map<List<TaskReminderDto>>(reminders);
-			await _realtime.PushAlarmsAsync(userIds, dtos, cancellationToken); // event 'ReceiveAlarm'
+			await _realtime.PushRemindersAsync(userIds, dtos, cancellationToken); // event 'ReceiveAlarm'
 		}
 
 		public async Task ResolveByStepAsync(Guid stepInstanceId, string reason, CancellationToken cancellationToken)
@@ -43,7 +43,7 @@ namespace ThaiTuanERP2025.Infrastructure.Notifications.Services
 			var groupedByUser = items.GroupBy(x => x.UserId);
 			foreach (var g in groupedByUser)
 			{
-				await _realtime.PushAlarmResolvedAsync(new[] { g.Key }, g.Select(x => x.Id).ToList(), cancellationToken); // 'ResolveAlarm'
+				await _realtime.PushRemindersResolvedAsync(new[] { g.Key }, g.Select(x => x.Id).ToList(), cancellationToken); // 'ResolveAlarm'
 			}
 		}
 
@@ -53,7 +53,7 @@ namespace ThaiTuanERP2025.Infrastructure.Notifications.Services
 			if (it == null || it.IsResolved) return;
 			it.Resolve(reason);
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
-			await _realtime.PushAlarmResolvedAsync(new[] { it.UserId }, new List<Guid> { it.Id }, cancellationToken);
+			await _realtime.PushRemindersResolvedAsync(new[] { it.UserId }, new List<Guid> { it.Id }, cancellationToken);
 		}
 	}
 }
