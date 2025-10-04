@@ -77,12 +77,43 @@ $topbar-padding: 1.5rem;
 .reminder-wrapper { 
       gap: 5px;
       border-radius: 5px;
-      padding: 0 6px;
+      padding: 0 12px;
+      &.remind {
+            border-color: 1px solid red;
+      }
 }
 .reminder-badge {
-      background-color: red;
-      color: white;
       padding: 1px 5px;
       border-radius: 3px;
       font-size: 13px;
+
+      &.has-reminders {
+            background-color: red;
+            color: white;
+      }
+      &.no-reminders {
+            background-color: transparent;
+            color: black;
+      }
 }
+.reminder-icon {
+      transform-origin: 60% 20%;
+      will-change: transform;
+}
+.reminder-icon.ringing {
+      animation: ring 3.2s ease-in-out infinite;
+}
+
+/* keyframes lắc kiểu chuông báo thức */
+@keyframes ring {
+      /* start: màu đen, nghỉ */
+      0%    { transform: rotate(0); color: black;    }
+      10%   { transform: rotate(15deg); color: black; }
+      20%   { transform: rotate(-14deg); color: black; }
+      30%   { transform: rotate(12deg); color: black; }
+      37.5% { transform: rotate(0); color: black; } /* kết thúc ring (1.2s) */
+
+      /* nghỉ 2.0s: đứng yên + về đen */
+      100%  { transform: rotate(0); color: black; }
+}
+
