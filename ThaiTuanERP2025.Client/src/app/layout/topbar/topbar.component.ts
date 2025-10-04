@@ -5,7 +5,7 @@ import { UserDto } from '../../pages/account/models/user.model';
 import { firstValueFrom, takeUntil } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Subject } from 'rxjs';
-import { NotificationPayload, NotificationSignalRService } from './notification-panel/services/notification-signalr.service';
+import { NotificationSignalRService } from './notification-panel/services/notification-signalr.service';
 import { NotificationPanelService } from './notification-panel/services/notification-panel.service';
 import { NotificationStateService } from './notification-panel/services/notification-state.service';
 import { NotificationFacade } from './notification-panel/facade/notification.facade';
@@ -43,6 +43,8 @@ export class TopbarComponent implements OnInit {
       reminders$ = this.reminderFacade.reminders$;
 
       async ngOnInit(): Promise<void> {
+            console.log('reminders: ', this.reminders$);
+
             this.currentUser = await firstValueFrom(this.currentUser$);
             await this.notificationFacade.init();
             await this.reminderFacade.init();
