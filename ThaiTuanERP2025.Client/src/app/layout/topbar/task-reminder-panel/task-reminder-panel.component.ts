@@ -5,7 +5,7 @@ import { Observable, interval, map, startWith } from 'rxjs';
 import { TaskReminderDto } from './models/task-reminder.model';
 
 @Component({
-      selector: 'app-alarm-panel',
+      selector: 'app-task-reminder-panel',
       standalone: true,
       imports: [CommonModule],
       templateUrl: './task-reminder-panel.component.html',
