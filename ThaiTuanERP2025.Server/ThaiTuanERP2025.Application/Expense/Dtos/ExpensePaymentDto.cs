@@ -56,4 +56,45 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 
 		public string ManagerApproverId { get; init; } = default!;
 	}
+
+	public sealed record ExpensePaymentDetailDto {
+		// Payment core
+		public Guid Id { get; init; }
+		public string Name { get; init; } = string.Empty;
+		public DateTime PaymentDate { get; init; }
+		public bool HasGoodsReceipt { get; init; }
+		public decimal TotalAmount { get; init; }
+		public decimal TotalTax { get; init; }
+		public decimal TotalWithTax { get; init; }
+		public int Status { get; init; }
+
+		// Creator
+		public Guid CreatedByUserId { get; init; }
+		public string CreatedByUsername { get; init; } = string.Empty;
+		public string? CreatedByFullName { get; init; }
+		public Guid? CreatedByDepartmentId { get; init; }
+		public string? CreatedByDepartmentName { get; init; }
+
+		// Supplier
+		public Guid? SupplierId { get; init; }
+		public SupplierDto? Supplier { get; init; }
+
+		// Bank info (nhập trực tiếp trên chứng từ)
+		public string BankName { get; init; } = string.Empty;
+		public string AccountNumber { get; init; } = string.Empty;
+		public string BeneficiaryName { get; init; } = string.Empty;
+
+		// Items
+		public IReadOnlyList<ExpensePaymentItemDto> Items { get; init; } = Array.Empty<ExpensePaymentItemDto>();
+		public IReadOnlyList<ExpensePaymentAttachmentDto> Attachments { get; init; } = Array.Empty<ExpensePaymentAttachmentDto>();
+
+		// Followers
+		public IReadOnlyList<ExpensePaymentFollowersDto> Followers { get; init; } = Array.Empty<ExpensePaymentFollowersDto>();
+
+		// Invoices (nếu có liên kết)
+		public IReadOnlyList<InvoiceDto> Invoices { get; init; } = Array.Empty<InvoiceDto>();
+
+		// Workflow
+		public ApprovalWorkflowInstanceDto? WorkflowInstance { get; init; }
+	}
 }
