@@ -1,7 +1,9 @@
 import { UserDto } from "../../account/models/user.model";
+import { ApprovalWorkflowInstanceDto } from "./approval-workflow-instance.model";
 import { ExpensePaymentAttachmentDto, ExpensePaymentAttachmentRequest } from "./expense-payment-attachment.model";
 import { ExpensePaymentFollowerDto } from "./expense-payment-followers.model";
 import { ExpensePaymentItemDto, ExpensePaymentItemRequest } from "./expense-paymnet-item.model";
+import { invoiceDto } from "./invoice.model";
 import { SupplierDto } from "./supplier.model";
 
 export enum PayeeType {
@@ -64,4 +66,19 @@ export interface ExpensePaymentRequest {
       followerIds: string[];
 
       managerApproverId: string;
+}
+
+export interface ExpensePaymentDetailDto extends ExpensePaymentDto {
+      createdByUserId: string;
+      createdByUserName: string;
+      createdByFullName?: string;
+      createdByDepartmentId: string;
+      createdByDepartmentName?: string;
+
+      createdAt: Date;
+      updatedBy?: UserDto;
+      updatedAt?: Date;
+
+      invoices: invoiceDto[];
+      workflowInstance?: ApprovalWorkflowInstanceDto;
 }

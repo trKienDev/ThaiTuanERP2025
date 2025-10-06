@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { UserFacade } from '../../pages/account/facades/user.facade';
 import { UserDto } from '../../pages/account/models/user.model';
-import { firstValueFrom, takeUntil } from 'rxjs';
+import { firstValueFrom, take, takeUntil } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Subject } from 'rxjs';
 import { NotificationSignalRService } from './notification-panel/services/notification-signalr.service';
@@ -43,8 +43,6 @@ export class TopbarComponent implements OnInit {
       reminders$ = this.reminderFacade.reminders$;
 
       async ngOnInit(): Promise<void> {
-            console.log('reminders: ', this.reminders$);
-
             this.currentUser = await firstValueFrom(this.currentUser$);
             await this.notificationFacade.init();
             await this.reminderFacade.init();

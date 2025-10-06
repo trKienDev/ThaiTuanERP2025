@@ -2,7 +2,7 @@
 import { Injectable, Injector, ComponentRef } from '@angular/core';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, tap } from 'rxjs';
 import { TaskReminderDrawerComponent } from '../drawer/task-reminder-drawer.component';
 import { TaskReminderDto } from '../models/task-reminder.model';
 
@@ -20,6 +20,9 @@ export class TaskReminderDrawerService {
 
       open(reminders$: Observable<TaskReminderDto[]>, handlers?: { dismiss?: (id: string) => void }) {
             if (this.isOpen()) {
+                  const debug$ = reminders$.pipe(
+      tap(list => console.log('[DrawerService] updateStreams len =', Array.isArray(list) ? list.length : '(not array)', list))
+    );
                   this.updateStreams(reminders$, handlers);
                   return;
             }
@@ -32,7 +35,16 @@ export class TaskReminderDrawerService {
             };
 
             this.overlayRef = this.overlay.create(config);
+
+            const debug$ = reminders$.pipe(
+                  tap(list => console.log('[DrawerService] open len =', Array.isArray(list) ? list.length : '(not array)', list))
+            );
+
+
             this.compRef = this.overlayRef.attach(new ComponentPortal(TaskReminderDrawerComponent, null, this.injector));
+               this.compRef.instance.reminders$ = debug$;          // <-- dùng debug$
+  this.compRef.changeDetectorRef.detectChanges();
+
 
             this.compRef.instance.reminders$ = reminders$;
 
@@ -50,6 +62,8 @@ export class TaskReminderDrawerService {
       updateStreams(reminders$: Observable<TaskReminderDto[]>, handlers?: { dismiss?: (id: string) => void }) {
             if (!this.compRef || !this.overlayRef?.hasAttached()) return;
             this.compRef.instance.reminders$ = reminders$;
+            this.compRef.changeDetectorRef.detectChanges();
+
       }
 
       close() {

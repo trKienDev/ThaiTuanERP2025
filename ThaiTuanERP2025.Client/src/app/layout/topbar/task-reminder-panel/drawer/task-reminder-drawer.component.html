@@ -6,8 +6,9 @@
                   <span class="text material-icons-outlined">close</span>
             </button>
       </header>
-
       <div class="drawer-body" *ngIf="(reminders$ | async) as items">
+            <small>Tổng: {{ items.length }}</small>
+  <pre>{{ items | json }}</pre>
             <ng-container *ngIf="items.length > 0; else emptyState">
                   <ul class="reminder-list">
                         <li *ngFor="let a of items; trackBy: trackById">

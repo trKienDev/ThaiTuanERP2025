@@ -25,21 +25,14 @@ export class TaskReminderStateService {
             // incoming new reminders
             this.realtime.incoming$.subscribe(items => {
                   const current = this._reminders$.value;
-                  this._reminders$.next([...items, ...current]);
+                  const merged = [...items, ...current];
+                  this._reminders$.next(merged);
             });
 
             // resolved reminders (approve / expired / dismissed)
             this.realtime.resolved$.subscribe(ids => {
                   const left = this._reminders$.value.filter(a => !ids.includes(a.id));
                   this._reminders$.next(left);
-            });
-
-            // optional: client-side auto-drop when due passes (fallback)
-            interval(1000 * 30).subscribe(() => {
-                  const now = Date.now();
-                  const left = this._reminders$.value.filter(a => new Date(a.dueAt).getTime() > now);
-                  if (left.length !== this._reminders$.value.length) 
-                        this._reminders$.next(left);
             });
       }
 
