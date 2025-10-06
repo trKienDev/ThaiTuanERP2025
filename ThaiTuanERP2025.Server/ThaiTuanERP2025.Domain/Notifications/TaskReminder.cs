@@ -15,6 +15,9 @@ namespace ThaiTuanERP2025.Domain.Notifications
 		public string? ResolvedReason { get; private set; }          // "Approved" | "Expired" | "Dismissed"
 		public DateTime? ResolvedAt { get; private set; }
 
+		public Guid DocumentId { get; private set; }      // Ví dụ: Id của ExpensePayment
+		public string DocumentType { get; private set; }
+
 		private TaskReminder() { }
 
 		public static TaskReminder Create(
@@ -23,6 +26,8 @@ namespace ThaiTuanERP2025.Domain.Notifications
 			Guid stepInstanceId,
 			string title,
 			string message,
+			Guid documentId,
+			string documentType,
 			DateTime dueAt
 		)
 		{
@@ -34,6 +39,8 @@ namespace ThaiTuanERP2025.Domain.Notifications
 				StepInstanceId = stepInstanceId,
 				Title = title?.Trim() ?? string.Empty,
 				Message = message?.Trim() ?? string.Empty,
+				DocumentId = documentId,
+				DocumentType = documentType,
 				DueAt = dueAt,
 				IsResolved = false
 			};

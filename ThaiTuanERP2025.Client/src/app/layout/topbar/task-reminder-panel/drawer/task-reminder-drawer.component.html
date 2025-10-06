@@ -9,7 +9,9 @@
       <div class="drawer-body" *ngIf="(sortedReminders$ | async) as items">
             <ng-container *ngIf="items.length > 0; else emptyState">
                   <ul class="reminder-list">
-                        <li *ngFor="let item of items; trackBy: trackById">
+                        <li class="reminder-item clickable" *ngFor="let item of items; trackBy: trackById"
+                        (click)="goTo(item)" (keydown.enter)="goTo(item)" (keydown.space)="goTo(item); $event.preventDefault()"
+                        tabindex="0" role="button">
                               <div class="title">{{ item.title }}</div>
                               <div class="message">{{ item.message }}</div>
                               <div class="due" [ngClass]="{ 'expired': isExpired(item), 'active': !isExpired(item) }">

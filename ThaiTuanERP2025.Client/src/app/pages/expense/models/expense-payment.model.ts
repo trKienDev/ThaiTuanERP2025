@@ -14,10 +14,10 @@ export enum PayeeType {
 export enum ExpensePaymentStatus {
       draft = 0,
       submitted = 1,
-      approved = 2,
-      rejected = 3,
-      cancelled = 4,
-      paid = 5,
+      pending = 2,
+      approved = 3,
+      rejected = 4,
+      cancelled = 5,
 }
 
 export interface ExpensePaymentDto {
@@ -36,8 +36,6 @@ export interface ExpensePaymentDto {
       totalAmount: number;
       totalTax: number;
       totalWithTax: number;
-
-      status: ExpensePaymentStatus;
 
       items: ExpensePaymentItemDto[];
       attachments: ExpensePaymentAttachmentDto[];
@@ -74,6 +72,8 @@ export interface ExpensePaymentDetailDto extends ExpensePaymentDto {
       createdByFullName?: string;
       createdByDepartmentId: string;
       createdByDepartmentName?: string;
+
+      status: number;
 
       createdAt: Date;
       updatedBy?: UserDto;

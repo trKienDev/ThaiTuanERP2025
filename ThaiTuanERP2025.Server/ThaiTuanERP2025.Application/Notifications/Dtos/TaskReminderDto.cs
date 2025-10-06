@@ -6,6 +6,8 @@
 		string Message,
 		DateTime DueAt,
 		Guid WorkflowInstanceId,
-		Guid StepInstanceId
+		Guid StepInstanceId,
+		Guid DocumentId,
+		string DocumentType
 	);
 }

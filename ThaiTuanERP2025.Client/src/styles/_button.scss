@@ -10,6 +10,8 @@ button, .button {
       font-size: 13px; 
       padding: 7px 10px;
       border-radius: 5px;
+      height: fit-content;
+      border: 1px solid !important;
 }
 
 // *** default button ***
@@ -20,12 +22,6 @@ button, .button {
 .button-1 { border: none; display: flex; background-color: #488aec; color: #ffffff; font-weight: 700; text-align: center; cursor: pointer; vertical-align: middle; align-items: center; border-radius: 0.5rem; user-select: none; gap: 0.75rem; box-shadow: 0 4px 6px -1px #488aec31, 0 2px 4px -1px #488aec17; transition: all 0.6s ease; }
 .button-1:hover { box-shadow: 0 10px 15px -3px #488aec4f, 0 4px 6px -2px #488aec17; }
 .button-1:focus, .button-1:active { opacity: 0.85; box-shadow: none; }
-
-// *** button-login ***
-// .button-login { font-family: 'Lexend', 'Courier New', Courier, monospace; border: none; outline: none; color: rgb(255, 255, 255); background: rgb(77, 76, 76); cursor: pointer; position: relative; z-index: 0; border-radius: 10px; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
-// .button-login:before { content: ""; background: linear-gradient( 45deg,#ff0000,#ff7300,#fffb00,#48ff00,#00ffd5,#002bff,#7a00ff,#ff00c8,#ff0000 ); position: absolute; top: -2px; left: -2px; background-size: 400%; z-index: -1; filter: blur(5px); -webkit-filter: blur(5px); width: calc(100% + 4px); height: calc(100% + 4px); animation: glowing-button-login 20s linear infinite; transition: opacity 0.3s ease-in-out; border-radius: 10px; }
-// @keyframes glowing-button-login { 0% { background-position: 0 0; } 50% { background-position: 400% 0; } 100% { background-position: 0 0; } }
-// .button-login:after { z-index: -1; content: ""; position: absolute; width: 100%; height: 100%; background: rgb(44, 27, 27); left: 0; top: 0; border-radius: 10px; }
 
 // *** button-62 ***
 .button-login { background: linear-gradient( to bottom right, #7E133D, #FF1973); border: 0; color: #FFFFFF; cursor: pointer; display: inline-block; font-weight: 500; outline: transparent; text-align: center; text-decoration: none; transition: box-shadow .2s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: manipulation; white-space: nowrap; }
@@ -51,11 +47,11 @@ button, .button {
 .button-noor:active { background-color: #006AE8; }
 .button-noor:hover { background-color: #1C84FF; }
 
-/*** cancel-button ***/
-.danger-button { align-items: center; background-color: #FFE7E7; background-position: 0 0; border: 1px solid #FEE0E0; border-radius: 5px; box-sizing: border-box; color: #D33A2C; cursor: pointer; display: flex ; font-weight: 700; text-align: left; text-decoration: none; text-shadow: none; text-underline-offset: 1px; transition: border .2s ease-in-out,box-shadow .2s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: manipulation; white-space: nowrap; word-break: break-word; border: 2px solid transparent; transition: all ease 0.5s; }
+/*** danger-button ***/
+.danger-button { align-items: center; background-color: #FFE7E7; background-position: 0 0; border: 1px solid #FEE0E0; border-radius: 5px; box-sizing: border-box; color: #D33A2C; cursor: pointer; display: flex ; font-weight: 700; text-align: left; text-decoration: none; text-shadow: none; text-underline-offset: 1px; transition: border .2s ease-in-out,box-shadow .2s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: manipulation; white-space: nowrap; word-break: break-word; border-color: transparent !important; transition: all ease 0.5s; }
 .danger-button:active, .danger-button:hover, .danger-button:focus { outline: 0; }
 .danger-button:active { background-color: #D33A2C; box-shadow: rgba(0, 0, 0, 0.12) 0 1px 3px 0 inset; color: #FFFFFF; }
-.danger-button:hover { background-color: #FFE3E3; border: 2px solid #FAA4A4; }
+.danger-button:hover { background-color: #FFE3E3; border-color: #FAA4A4 !important; }
 .danger-button:active:hover, .danger-button:focus:hover, .danger-button:focus { background-color: #D33A2C; box-shadow: rgba(0, 0, 0, 0.12) 0 1px 3px 0 inset; color: #FFFFFF; }
 
 /*** icon-button ***/
@@ -85,6 +81,14 @@ button, .button {
 .save-button { align-items: center; appearance: button; background-color: #0276FF; border-style: none; box-shadow: rgba(255, 255, 255, 0.26) 0 1px 2px inset; box-sizing: border-box; color: #fff; cursor: pointer; display: flex; flex-direction: row; flex-shrink: 0; font-family: "Lexend",sans-serif; font-size: 100%; line-height: 1.15; margin: 0; padding: 10px 21px; text-align: center; text-transform: none; transition: color .13s ease-in-out,background .13s ease-in-out,opacity .13s ease-in-out,box-shadow .13s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
 .save-button:active { background-color: #006AE8; }
 .save-button:hover { background-color: #1C84FF; }
+
+/* submit */
+.submit-button { appearance: none; background-color: #2ea44f; border-color: rgba(27, 31, 35, .15) !important; border-radius: 6px; box-shadow: rgba(27, 31, 35, .1) 0 1px 0; box-sizing: border-box; color: #fff; cursor: pointer; display: inline-block; font-weight: 600; position: relative; text-align: center; text-decoration: none; user-select: none; -webkit-user-select: none; touch-action: manipulation; vertical-align: middle; white-space: nowrap; }
+.submit-button:focus:not(:focus-visible):not(.focus-visible) { box-shadow: none; outline: none; }
+.submit-button:hover { background-color: #2c974b; }
+.submit-button:focus { box-shadow: rgba(46, 164, 79, .4) 0 0 0 3px; outline: none; }
+.submit-button:disabled { background-color: #94d3a2; border-color: rgba(27, 31, 35, .1) !important; color: rgba(255, 255, 255, .8); cursor: default; }
+.submit-button:active { background-color: #298e46; box-shadow: rgba(20, 70, 32, .2) 0 1px 0 inset; }
 
 /* close-button */
 .close-button { padding: unset !important; border: none !important; background-color: unset !important; transition: 0.1s all ease-in-out; }

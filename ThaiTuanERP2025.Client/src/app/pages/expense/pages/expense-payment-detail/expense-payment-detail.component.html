@@ -1,0 +1,22 @@
+<div class="payment-detail-container">
+      <div class="payment-heading">
+            <div class="d-flex gap-10p">
+                  <h3 class="payment-name">{{ paymentDetail?.name }}</h3>
+                 <div class="payment-status">
+                        <span class="payment-status-badge"
+                        [ngClass]="(paymentDetail?.status | expensePaymentStatus).class">
+                        {{ (paymentDetail?.status | expensePaymentStatus).text }}
+                        </span>
+                 </div>
+            </div>
+            <div class="payment-actions d-flex gap-10p align-items-center">
+                  <button type="button" class="button submit-button">Duyệt</button>
+                  <button type="button" class="button danger-button">Từ chối</button>
+            </div>
+      </div>
+      <div class="payment-body">
+            <div class="payment-body-wrapper">
+                  
+            </div>
+      </div>
+</div>

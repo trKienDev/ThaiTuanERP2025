@@ -45,8 +45,6 @@ export class NotificationSignalRService {
 
             // Lắng nghe sự kiện từ server
             this.hubConnection.on('ReceiveNotification', (payloads: NotificationDto[]) => {
-                  console.log('ReceiveNotification:', payloads);
-
                   this._incoming$.next(payloads);
                   this._unreadCount$.next(this._unreadCount$.value + (payloads?.length ?? 0));
             });

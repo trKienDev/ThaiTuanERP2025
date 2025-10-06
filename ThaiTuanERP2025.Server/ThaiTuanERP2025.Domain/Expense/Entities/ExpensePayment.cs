@@ -17,7 +17,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			Name = name.Trim();
 			PayeeType = payeeType;
 			PaymentDate = paymentDate;
-			Status = ExpensePaymentStatus.Draft;
+			Status = ExpensePaymentStatus.Pending;
 		}
 
 		// Thông tin chung
@@ -121,7 +121,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public void Approve() => Status = ExpensePaymentStatus.Approved;
 		public void Reject() => Status = ExpensePaymentStatus.Rejected;
 		public void Cancel() => Status = ExpensePaymentStatus.Cancelled;
-		public void MarkPaid() => Status = ExpensePaymentStatus.Paid;
 
 		public void AddAttachment(string objectKey, string fileName, long size, string? url, Guid? fileId)
 		{

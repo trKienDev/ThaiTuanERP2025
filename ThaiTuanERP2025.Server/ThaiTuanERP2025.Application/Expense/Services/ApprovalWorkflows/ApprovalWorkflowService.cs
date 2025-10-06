@@ -119,12 +119,12 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-			await StartInstanceAsync(awi.Id, payment.Name, CancellationToken.None);
+			await StartInstanceAsync(awi.Id, payment, CancellationToken.None);
 
 			return awi.Id;
 		}
 
-		public async Task StartInstanceAsync(Guid instanceId, string paymentName, CancellationToken cancellationToken)
+		public async Task StartInstanceAsync(Guid instanceId, ExpensePayment payment,CancellationToken cancellationToken)
 		{
 			var workflowInstance = await LoadInstanceWithStepsAsync(instanceId, cancellationToken);
 			if (workflowInstance.Status != WorkflowStatus.Draft) return;
@@ -142,8 +142,11 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 			await _taskReminderService.CreateForStepActivationAsync(
 				firstStep.Id, workflowInstance.Id, approverIds,
 				title: $"Cần duyệt bước \"{firstStep.Name}\"",
-				message: $"Chứng từ {paymentName}",
+				message: $"Chứng từ {payment.Name}",
+				documentId: payment.Id,
+				documentType: "ExpensePayment",
 				dueAt: firstStep.DueAt!.Value.AddHours(firstStep.SlaHours),
+
 				cancellationToken
 			);
 
