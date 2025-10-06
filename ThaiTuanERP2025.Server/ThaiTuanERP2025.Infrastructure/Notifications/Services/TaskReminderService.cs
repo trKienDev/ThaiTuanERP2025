@@ -18,9 +18,9 @@ namespace ThaiTuanERP2025.Infrastructure.Notifications.Services
 			_mapper = mapper;
 		}
 
-		public async Task CreateForStepActivationAsync(Guid stepInstanceId, Guid workflowInstanceId, IEnumerable<Guid> userIds, string title, string message, DateTime dueAt, CancellationToken cancellationToken)
+		public async Task CreateForStepActivationAsync(Guid stepInstanceId, Guid workflowInstanceId, IEnumerable<Guid> userIds, string title, string message, Guid documentId, string documentType, DateTime dueAt, CancellationToken cancellationToken)
 		{
-			var reminders = userIds.Select(uid => TaskReminder.Create(uid, workflowInstanceId, stepInstanceId, title, message, dueAt)).ToList();
+			var reminders = userIds.Select(uid => TaskReminder.Create(uid, workflowInstanceId, stepInstanceId, title, message, documentId, documentType, dueAt)).ToList();
 
 			await _unitOfWork.TaskReminders.AddRangeAsync(reminders, cancellationToken);
 			await _unitOfWork.SaveChangesAsync(cancellationToken);

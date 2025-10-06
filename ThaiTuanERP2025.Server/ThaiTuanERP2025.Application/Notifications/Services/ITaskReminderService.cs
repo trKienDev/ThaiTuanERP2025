@@ -2,7 +2,7 @@
 {
 	public interface ITaskReminderService
 	{
-		Task CreateForStepActivationAsync(Guid stepInstanceId, Guid workflowInstanceId, IEnumerable<Guid> userIds, string title, string message, DateTime dueAt, CancellationToken cancellationToken);
+		Task CreateForStepActivationAsync(Guid stepInstanceId, Guid workflowInstanceId, IEnumerable<Guid> userIds, string title, string message, Guid documentId, string documentType, DateTime dueAt, CancellationToken cancellationToken);
 		Task ResolveByStepAsync(Guid stepInstanceId, string reason, CancellationToken cancellationToken);
 		Task ResolveOneAsync(Guid reminderId, string reason, CancellationToken cancellationToken);
 	}

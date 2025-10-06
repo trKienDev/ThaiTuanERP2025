@@ -14,7 +14,8 @@ export class ExpensePaymentService extends BaseCrudService<ExpensePaymentDto, Ex
       }
 
       getDetailById(id: string): Observable<ExpensePaymentDetailDto> {
-            return this.http.get<ApiResponse<ExpensePaymentDetailDto>>(`${this.endpoint}/${id}/detail`)
+            return this.http.
+                  get<ApiResponse<ExpensePaymentDetailDto>>(`${this.endpoint}/${id}/detail`)
                   .pipe(
                         handleApiResponse$<ExpensePaymentDetailDto>(),
                         catchError(err => throwError(() => err))
