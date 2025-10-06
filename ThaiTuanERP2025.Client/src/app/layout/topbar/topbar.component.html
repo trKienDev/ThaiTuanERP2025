@@ -2,15 +2,15 @@
       <img class="thaituan-topbar-logo" src="thaituan-logo-homepage.png" alt="thaituan-logo">
       <div class="user-section d-flex gap-10p">
             <div class="reminder-wrapper topbar-icon-wrapper" 
-            *ngIf="(reminders$ | async) as list" [class.remind]="list.length > 0"
+            *ngIf="(activeReminders$ | async) as list" [class.remind]="list.length > 0"
             (click)="toggleTaskReminderDrawer()" title="Nhắc việc">
                   <span class="reminder-icon topbar-icon material-icons-round"
-                  *ngIf="(reminders$ | async) as list"
+                  *ngIf="(activeReminders$ | async) as list"
                   [class.ringing]="list.length > 0">
                         alarm
                   </span>
                   <span class="reminder-badge"
-                  *ngIf="(reminders$ | async) as list"
+                  *ngIf="(activeReminders$ | async) as list"
                   [class.has-reminders]="list.length > 0"
                   [class.no-reminders]="list.length === 0">
                         {{ list.length }}

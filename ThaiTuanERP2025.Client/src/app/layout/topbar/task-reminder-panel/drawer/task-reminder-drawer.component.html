@@ -6,16 +6,15 @@
                   <span class="text material-icons-outlined">close</span>
             </button>
       </header>
-      <div class="drawer-body" *ngIf="(reminders$ | async) as items">
-            <small>Tổng: {{ items.length }}</small>
-  <pre>{{ items | json }}</pre>
+      <div class="drawer-body" *ngIf="(sortedReminders$ | async) as items">
             <ng-container *ngIf="items.length > 0; else emptyState">
                   <ul class="reminder-list">
-                        <li *ngFor="let a of items; trackBy: trackById">
-                              <div class="title">{{ a.title }}</div>
-                              <div class="message">{{ a.message }}</div>
-                              <div class="due">
-                                     Hết hạn sau: <span class="countdown">{{ (leftTime(a) | async) }}</span>
+                        <li *ngFor="let item of items; trackBy: trackById">
+                              <div class="title">{{ item.title }}</div>
+                              <div class="message">{{ item.message }}</div>
+                              <div class="due" [ngClass]="{ 'expired': isExpired(item), 'active': !isExpired(item) }">
+                                    Hết hạn sau:
+                                    <span class="countdown">{{ (leftTime(item) | async) }}</span>
                               </div>
                         </li>
                   </ul>

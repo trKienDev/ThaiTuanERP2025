@@ -1,23 +1,40 @@
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
-import { interval, map, Observable, startWith } from "rxjs";
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { combineLatest, interval, map, Observable, startWith } from "rxjs";
 import { TaskReminderDto } from "../models/task-reminder.model";
 
 @Component({
-      selector: 'app-task-reminder-drawer',
-      imports: [ CommonModule ],
-      templateUrl: './task-reminder-drawer.component.html',
-      styleUrls: ['./task-reminder-drawer.component.scss'],
-      changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-task-reminder-drawer',
+  imports: [ CommonModule ],
+  templateUrl: './task-reminder-drawer.component.html',
+  styleUrls: ['./task-reminder-drawer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TaskReminderDrawerComponent {
+export class TaskReminderDrawerComponent implements OnInit {
       @Input() reminders$!: Observable<TaskReminderDto[]>;
       @Output() dismiss = new EventEmitter<string>();
       @Output() closed = new EventEmitter<void>();
 
-      trackById(index: number, item: TaskReminderDto) {
-            return item.id;
+      sortedReminders$!: Observable<TaskReminderDto[]>;   // <-- khai báo, chưa khởi tạo
+
+      ngOnInit(): void {
+            const timer$ = interval(1000).pipe(startWith(0));
+            this.sortedReminders$ = combineLatest([this.reminders$, timer$]).pipe(
+                  map(([list]) => {
+                        const now = Date.now();
+                        return [...list].sort((a, b) => {
+                              const aDue = new Date(a.dueAt).getTime();
+                              const bDue = new Date(b.dueAt).getTime();
+                              const aExpired = aDue <= now;
+                              const bExpired = bDue <= now;
+                              if (aExpired !== bExpired) return aExpired ? 1 : -1; // còn hạn trước
+                              return aDue - bDue; // cùng nhóm: dueAt sớm trước
+                        });
+                  })
+            );
       }
+
+      trackById(index: number, item: TaskReminderDto) { return item.id; }
 
       leftTime(tr: TaskReminderDto): Observable<string> {
             return interval(1000).pipe(
@@ -32,10 +49,15 @@ export class TaskReminderDrawerComponent {
                   })
             );
       }
+      isExpired(item: TaskReminderDto): boolean {
+            return new Date(item.dueAt).getTime() <= Date.now();
+      }
 
       onAnimationEnd(event: AnimationEvent) {
             if ((event.target as HTMLElement).classList.contains('closing')) {
                   this.closed.emit();
             }
       }
+
+
 }
