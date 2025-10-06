@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { UserFacade } from '../../pages/account/facades/user.facade';
 import { UserDto } from '../../pages/account/models/user.model';
-import { firstValueFrom, take, takeUntil } from 'rxjs';
+import { firstValueFrom, map, take, takeUntil } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Subject } from 'rxjs';
 import { NotificationSignalRService } from './notification-panel/services/notification-signalr.service';
@@ -40,7 +40,11 @@ export class TopbarComponent implements OnInit {
       unreadCount = 0;
       notifications$ = this.notificationFacade.notifications$;
       unreadCount$ = this.notificationFacade.unreadCount$;
+
       reminders$ = this.reminderFacade.reminders$;
+      activeReminders$ = this.reminders$.pipe(
+            map(list => list.filter(a => new Date(a.dueAt).getTime() > Date.now()))
+      );
 
       async ngOnInit(): Promise<void> {
             this.currentUser = await firstValueFrom(this.currentUser$);
