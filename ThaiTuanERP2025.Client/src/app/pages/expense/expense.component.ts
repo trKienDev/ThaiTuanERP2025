@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { AuthService } from "../../core/services/auth/auth.service";
-import { RouterModule } from "@angular/router";
+import { Router, RouterModule } from "@angular/router";
 
 @Component({
       selector: 'app-expense',
@@ -12,9 +12,14 @@ import { RouterModule } from "@angular/router";
 })
 export class ExpenseComponent implements OnInit {
       isAdmin = false;
-      constructor(private auth: AuthService) {}
+      
+      constructor(private auth: AuthService, private router: Router) {}
 
       ngOnInit(): void {
             this.isAdmin = this.auth.getUserRole() === 'admin';
+      }
+
+      get isPaymentDetailPage(): boolean {
+            return this.router.url.startsWith("/expense/payment-detail");
       }
 }

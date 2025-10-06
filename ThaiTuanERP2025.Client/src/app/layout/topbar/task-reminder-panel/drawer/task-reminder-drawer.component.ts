@@ -2,6 +2,7 @@ import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { combineLatest, interval, map, Observable, startWith } from "rxjs";
 import { TaskReminderDto } from "../models/task-reminder.model";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-task-reminder-drawer',
@@ -16,6 +17,8 @@ export class TaskReminderDrawerComponent implements OnInit {
       @Output() closed = new EventEmitter<void>();
 
       sortedReminders$!: Observable<TaskReminderDto[]>;   // <-- khai báo, chưa khởi tạo
+
+      constructor(private router: Router) {}
 
       ngOnInit(): void {
             const timer$ = interval(1000).pipe(startWith(0));
@@ -32,6 +35,26 @@ export class TaskReminderDrawerComponent implements OnInit {
                         });
                   })
             );
+      }
+
+      async goTo(item: TaskReminderDto) {
+            const cmdOrUrl = this.resolveRoute(item);
+            sessionStorage.setItem('allowPaymentDetailOnce', '1');
+            if (Array.isArray(cmdOrUrl)) {
+                  await this.router.navigate(cmdOrUrl);           // ví dụ: ['/expense', 'approval-workflow-engine']
+            } else {
+                  await this.router.navigateByUrl(cmdOrUrl);      // ví dụ: '/expense/approval-workflow-engine'
+            }
+
+            // (tuỳ chọn) đóng drawer sau khi điều hướng
+            this.dismiss.emit('CLOSE_DRAWER');
+      }
+      private resolveRoute(tr: TaskReminderDto): (string | number)[] | string {
+            console.log(tr);
+            if (tr.documentType === 'ExpensePayment' && tr.documentId) {
+                  return ['/expense', 'payment-detail', tr.documentId];
+            }
+            return ['/expense', 'payment-detail'];
       }
 
       trackById(index: number, item: TaskReminderDto) { return item.id; }

@@ -1,0 +1,24 @@
+.payment-heading {
+      display: flex;
+      gap: 500px
+}
+
+.payment-status {
+      display: flex;
+      align-items: center;
+}
+.payment-status-badge {
+      align-content: center;
+      padding: 5px 10px;
+      border-radius: 5px;
+      user-select: none;
+      font-size: 12px;
+
+      &.draft      { color:#888;   background:#f0f0f0; }
+      &.submitted  { color:#1565c0;background:#e3f2fd; }
+      &.pending    { color: #f57c00; background: #fff3e0; border: 1px solid #ecdfd2; }
+      &.approved   { color:#2e7d32;background:#e8f5e9; }
+      &.rejected   { color:#c62828;background:#ffebee; }
+      &.cancelled  { color:#6d4c41;background:#efebe9; }
+      &.unknown    { color:#555;   background:#eee; }
+}
