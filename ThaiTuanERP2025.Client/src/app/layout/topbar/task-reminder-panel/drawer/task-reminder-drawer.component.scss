@@ -53,8 +53,15 @@
 
             .title { font-weight: bold; }
             .message { color: #555; margin-top: 5px; }
-            .due { color: #999; margin-top: 5px; }
-            .countdown { color: red; }
+            .due { 
+                  color: #999; margin-top: 5px; 
+                  &.active .countdown {
+                        color: #1e88e5; /* xanh dương */
+                  }
+                  &.expired .countdown {
+                        color: #e53935; /* đỏ */
+                  }      
+            }
       }
 }
 
