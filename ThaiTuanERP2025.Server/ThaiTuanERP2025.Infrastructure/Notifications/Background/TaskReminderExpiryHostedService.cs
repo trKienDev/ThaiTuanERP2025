@@ -61,18 +61,6 @@ namespace ThaiTuanERP2025.Infrastructure.Notifications.Background
 
 					// Group theo User để đẩy ResolveAlarm theo nhóm
 					var grouped = batch.GroupBy(x => x.UserId);
-					foreach (var g in grouped)
-					{
-						var ids = g.Select(x => x.Id).ToList();
-						foreach (var it in g)
-							it.Resolve("Expired"); // Đánh dấu hết hạn
-
-						// lưu theo nhóm để giảm roundtrip
-						await unitOfWork.SaveChangesAsync(cancellationToken);
-
-						// Push realtime: gỡ các reminder theo Id
-						await notifier.PushRemindersResolvedAsync(new[] { g.Key }, ids, cancellationToken);
-					}
 				}
 			}
 			catch (OperationCanceledException)
