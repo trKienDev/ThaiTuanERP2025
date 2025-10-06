@@ -57,6 +57,21 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 				.HasForeignKey(p => p.ManagerApproverId)
 				.OnDelete(DeleteBehavior.Restrict);
 
+			builder.HasOne(e => e.CreatedByUser)
+				.WithMany()
+				.HasForeignKey(e => e.CreatedByUserId)
+				.OnDelete(DeleteBehavior.Restrict);
+
+			builder.HasOne(e => e.ModifiedByUser)
+				.WithMany()
+				.HasForeignKey(e => e.ModifiedByUserId)
+				.OnDelete(DeleteBehavior.Restrict);
+
+			builder.HasOne(e => e.DeletedByUser)
+				.WithMany()
+				.HasForeignKey(e => e.DeletedByUserId)
+				.OnDelete(DeleteBehavior.Restrict);
+
 			// Indexes
 			builder.HasIndex(x => x.SupplierId);
 			builder.HasIndex(x => x.PaymentDate);

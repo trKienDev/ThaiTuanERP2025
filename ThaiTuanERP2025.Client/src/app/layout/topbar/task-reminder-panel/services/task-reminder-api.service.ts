@@ -12,11 +12,14 @@ export class TaskReminderApiService {
       private baseUrl = `${environment.baseUrl}/api/task-reminder`;
 
       getMyActive(): Observable<TaskReminderDto[]> {
-            return this.http.get<ApiResponse<TaskReminderDto[]>>(this.baseUrl).pipe(handleApiResponse$<TaskReminderDto[]>());
+            return this.http
+                  .get<ApiResponse<TaskReminderDto[]>>(this.baseUrl)
+                  .pipe(handleApiResponse$<TaskReminderDto[]>());
       }
 
       dismiss(id: string): Observable<void> {
-            return this.http.post<ApiResponse<void>>(`${this.baseUrl}/${id}/dismiss`, {})
+            return this.http
+                  .post<ApiResponse<void>>(`${this.baseUrl}/${id}/dismiss`, {})
                   .pipe(handleApiResponse$<void>());
       }
 }

@@ -9,7 +9,7 @@ namespace ThaiTuanERP2025.Application.Common.Interfaces
 		Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
 		Task<List<T>> ListAsync(Func<IQueryable<T>, IQueryable<T>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default);
 		Task<T?> SingleOrDefaultAsync(Func<IQueryable<T>, IQueryable<T>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default);
-		Task<T?> SingleOrDefaultIncludingAsync(Expression<Func<T, bool>> predicate, bool asNoTracking = true, CancellationToken cancellationToken = default, params Expression<Func<T, object>>[] includes);
+		Task<T?> SingleOrDefaultIncludingAsync(Expression<Func<T, bool>> predicate, bool asNoTracking = true, CancellationToken cancellationToken = default, params Expression<Func<T, object>>[] includes	);
 
 		// IQueryable<T> (ko materialize sớm) để còn compose filter/sort/paging/ProjectTo ở phía DB
 		IQueryable<T> Query(bool asNoTracking = true);

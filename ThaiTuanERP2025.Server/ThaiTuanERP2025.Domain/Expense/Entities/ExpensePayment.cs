@@ -1,4 +1,5 @@
-﻿using ThaiTuanERP2025.Domain.Common;
+﻿using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Expense.Enums;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
@@ -58,6 +59,10 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		// Workflow instance id (nếu có)
 		public Guid? CurrentWorkflowInstanceId { get; private set; }
 		public ApprovalWorkflowInstance? CurrentWorkflowInstance { get; private set; }
+
+		public User CreatedByUser { get; set; } = null!;
+		public User? ModifiedByUser { get; set; }
+		public User? DeletedByUser { get; set; }
 
 		public Guid ManagerApproverId { get; private set; }
 
