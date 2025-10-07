@@ -1,6 +1,6 @@
 <header class="topbar">
       <img class="thaituan-topbar-logo" src="thaituan-logo-homepage.png" alt="thaituan-logo">
-      <div class="user-section d-flex gap-10p">
+      <div class="user-section d-flex gap-10px">
             <div class="reminder-wrapper topbar-icon-wrapper" 
             *ngIf="(activeReminders$ | async) as list" [class.remind]="list.length > 0"
             (click)="toggleTaskReminderDrawer()" title="Nhắc việc">

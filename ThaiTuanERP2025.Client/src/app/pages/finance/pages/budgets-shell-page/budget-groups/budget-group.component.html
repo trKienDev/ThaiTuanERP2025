@@ -3,7 +3,7 @@
             <div class="card-title">Thêm nhóm ngân sách</div>
       </div>
       <div class="card-body">
-            <form class="d-flex gap-10p" (ngSubmit)="createBudgetGroup()" #budgetGroupForm="ngForm">
+            <form class="d-flex gap-10px" (ngSubmit)="createBudgetGroup()" #budgetGroupForm="ngForm">
                   <input class="w-30" type="text" name="code" [(ngModel)]="newBudgetGroup.code" placeholder="Mã nhóm ngân sách" required/>
                   <input class="w-70" type="text" name="name" [(ngModel)]="newBudgetGroup.name" placeholder="Tên nhóm ngân sách" required/>
                   <button class="save-button" type="submit" [disabled]="!budgetGroupForm.valid">Thêm</button>
@@ -21,7 +21,7 @@
 </div>
 
 
-<table class="table mar-top-20">
+<table class="table margin-top-20px">
       <thead>
             <tr>
                   <th>

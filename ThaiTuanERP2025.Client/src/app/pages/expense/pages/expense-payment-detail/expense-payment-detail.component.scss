@@ -34,7 +34,7 @@
       object-fit: cover;
 }
 
-.payment-workflow {
+.payment-workflow, .payment-followers {
       display: flex;
       gap: 20px;
       list-style: none;
@@ -44,9 +44,24 @@
 .payment-step {
       display: inline-block;
 }
-.approver-avatar {
+.approver-avatar, .follower-avatar {
       width: 30px;
       height: 30px;
       border-radius: 50%;
       object-fit: cover;
+}
+
+.amount-infor-block {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+       background-image: linear-gradient(to bottom, #f2fff9, #f3fffa, #f4fffb, #f5fefb, #f6fefc, #f7fefd, #f8fdfe, #fafdfe, #fcfdff, #fdfeff, #fefeff, #ffffff);
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+.amount-infor-label {
+      font-weight: bold;
+      color: #018601;
 }
