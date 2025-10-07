@@ -1,6 +1,6 @@
 <div class="payment-detail-container">
       <div class="payment-heading">
-            <div class="d-flex gap-10p">
+            <div class="d-flex gap-10px">
                   <h3 class="payment-name">{{ paymentDetail?.name }}</h3>
                  <div class="payment-status">
                         <span class="payment-status-badge"
@@ -9,49 +9,103 @@
                         </span>
                  </div>
             </div>
-            <div class="payment-actions d-flex gap-10p align-items-center">
+            <div class="payment-actions d-flex gap-10px align-items-center">
                   <button type="button" class="button submit-button">Duyệt</button>
                   <button type="button" class="button danger-button">Từ chối</button>
             </div>
       </div>
       <div class="payment-body">
-            <div class="payment-body-wrapper">
-                  <div class="payment-infor">
-                        <label class="payment-infor-label">ID</label>
-                        <span> {{ paymentDetail?.subId }}</span>
+            <div class="general-infor">
+                  <div class="primary-card">
+                        <div class="card-header">Thông tin chung</div>
+                        <div class="card-body">
+                              <div class="payment-infor">
+                                    <label class="payment-infor-label">ID</label>
+                                    <span> {{ paymentDetail?.subId }}</span>
+                              </div>
+                              <div class="payment-infor d-flex align-items-center gap-20px">
+                                    <label class="payment-infor-label">Tạo bởi</label>
+                                    <img class="created-user-avatar" [src]="paymentDetail?.createdByUser | avatarUrlPipe" alt="user avatar">
+                                    <span> {{ paymentDetail?.createdByUser?.fullName }}</span>
+                              </div>
+                              <div class="payment-infor">
+                                    <label class="payment-infor-label">Tạo lúc</label>
+                                    <span> {{ paymentDetail?.createdDate | date: 'HH:mm dd/MM/yyyy' }}</span>
+                              </div>
+                              <div class="payment-infor">
+                                    <label class="payment-infor-label">Công ty trả cho</label>
+                                    <span> {{ paymentDetail?.supplier?.name }}</span>
+                              </div>
+                              <div class="payment-infor">
+                                    <label class="payment-infor-label">Nội dung thanh toán</label>
+                                    <span> {{ paymentDetail?.description }}</span>
+                              </div>
+                              <div class="payment-infor d-flex gap-10px align-items-center">
+                                    <label class="payment-infor-label">Luồng duyệt</label>
+                                    <ul class="payment-workflow">
+                                          <li *ngFor="let step of paymentDetail?.workflowInstance?.steps; let i = index">
+                                                <img class="approver-avatar" [src]="step.approverCandidates[0] | avatarUrlPipe" alt="user avatar">                              </li>
+                                    </ul>
+                              </div>
+                              <div class="payment-infor d-flex gap-10px align-items-center">
+                                    <label class="payment-infor-label">Người theo dõi</label>
+                                    <ul class="payment-followers">
+                                          <li *ngFor="let follower of paymentDetail?.followers; let i = index">
+                                                <img class="follower-avatar" [src]="follower.user | avatarUrlPipe" alt="user avatar">
+                                          </li>
+                                    </ul>
+                              </div>
+                        </div>
                   </div>
-                  <div class="payment-infor d-flex align-items-center gap-5p">
-                        <label class="payment-infor-label">Tạo bởi</label>
-                        <img class="created-user-avatar" [src]="paymentDetail?.createdByUser | avatarUrlPipe" alt="user avatar">
-                        <span> {{ paymentDetail?.createdByUser?.fullName }}</span>
-                  </div>
-                  <div class="payment-infor">
-                        <label class="payment-infor-label">Tạo lúc</label>
-                        <span> {{ paymentDetail?.createdDate | date: 'HH:mm dd/MM/yyyy' }}</span>
-                  </div>
-                  <div class="payment-infor">
-                        <label class="payment-infor-label">Công ty trả cho</label>
-                        <span> {{ paymentDetail?.supplier?.name }}</span>
-                  </div>
-                  <div class="payment-infor">
-                        <label class="payment-infor-label">Nội dung thanh toán</label>
-                        <span> {{ paymentDetail?.description }}</span>
-                  </div>
-                  <div class="payment-infor d-flex gap-10p align-items-center">
-                        <label class="payment-infor-label">Luồng duyệt</label>
-                        <ul class="payment-workflow">
-                              <li *ngFor="let step of paymentDetail?.workflowInstance?.steps; let i = index">
-                                    <img class="approver-avatar" [src]="step.approverCandidates[0] | avatarUrlPipe" alt="user avatar">                              </li>
-                        </ul>
-                  </div>
-                  <div class="payment-infor">
-                        <label class="payment-infor-label">Người theo dõi</label>
-                        <ul class="payment-followers">
-                              <li *ngFor="let follower of paymentDetail?.followers">
-                                    <!-- <img class="follower-avatar" [src]="follower | avatarUrlPipe" alt="user avatar"> -->
-                              </li>
-                        </ul>
-                  </div>
+            </div>
+            <div class="payment-amount-infor margin-top-20px">
+                  <div class="primary-card">
+                        <div class="card-body">
+                              <div class="amount-block  d-flex gap-20px">
+                                    <div class="amount-infor-block">
+                                          <label class="amount-infor-label" for="total-amount">Số tiền thanh toán</label>
+                                          <span>{{ paymentDetail?.totalWithTax | number:'1.0-0' }} VNĐ</span>
+                                    </div>
+                                    <div class="amount-infor-block">
+                                          <label class="amount-infor-label" for="payment-date">Ngày thanh toán</label>
+                                          <span>{{ paymentDetail?.paymentDate | date: 'dd/MM/yyyy' }}</span>
+                                    </div>
+                                    <div class="amount-infor-block">
+                                          <label class="amount-infor-label" for="payment-date">Số tiền đã tạo lệnh</label>
+                                          <span></span>
+                                    </div>
+                              </div>
+                              <div class="payment-item-table margin-top-20px">
+                                    <table class="table table-center-text">
+                                          <thead>
+                                                <tr>
+                                                      <th style="width: 1%;">#</th>
+                                                      <th>Hạng mục <span style="color: red;">  *</span></th>
+                                                      <th class="head-quanity" style="width: 7%;">Số lượng <span style="color: red;">  *</span></th>
+                                                      <th>Đơn giá <span style="color: red;">  *</span></th>
+                                                      <th>Thành tiền</th>
+                                                      <th class="head-tax" style="width: 6%;">Thuế</th>
+                                                      <th>Số tiền thuế</th>
+                                                      <th>Số tiền có thuế</th>
+                                                      <th class="head-extension">Ngân sách <span style="color: red;">  *</span></th>
+                                                      <th class="head-invoice">Hóa đơn</th>
+                                                </tr>
+                                          </thead>
+                                          <tbody>
+                                                <tr *ngFor="let item of paymentDetail?.items; let i = index">
+                                                      <td>{{ i + 1 }}</td>
+                                                      <td class="item-name">{{ item.itemName }}</td>
+                                                      <td class="item-quanity">{{ item.quantity | number:'1.0-0' }}</td>
+                                                      <td class="item-unit-price">{{ item.unitPrice | number:'1.0-0' }} VNĐ</td>
+                                                      <td class="item-amount">{{ item.amount | number:'1.0-0' }} VNĐ</td>
+                                                      <td class="item-tax">{{ (item.taxRate * 100) | number:'1.0-0' }}%</td>
+                                                      <td class="item-tax-amount">{{ item.taxAmount | number:'1.0-0' }} VNĐ</td>
+                                                      <td class="item-total-with-tax">{{ item.totalWithTax | number:'1.0-0' }} VNĐ</td>
+                                          </tbody>
+                                    </table>
+                              </div>
+                        </div>
+                  </div> 
             </div>
       </div>
 </div>

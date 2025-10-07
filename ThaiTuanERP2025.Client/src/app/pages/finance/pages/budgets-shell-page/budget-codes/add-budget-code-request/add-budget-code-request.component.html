@@ -25,7 +25,7 @@
                         <kit-dropdown [options]="cashoutCodeOptions" (selectionChange)="onCashoutCodeSelected($event)" [placeholder]="'Chọn dòng tiền ra'" [width]="'100%'"></kit-dropdown>
                   </div>
 
-                  <div class="actions d-flex gap-10p mar-top-20">
+                  <div class="actions d-flex gap-10px margin-top-20px">
                         <button type="button" class="width-50pt button cancel-button" (click)="close()">Hủy</button>
                         <button type="submit" class="width-50pt button save-button d-flex justify-content-center" [disabled]="submitting">
                               {{ submitting ? 'Đang lưu...' : 'Lưu' }}
