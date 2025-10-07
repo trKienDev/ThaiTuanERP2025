@@ -74,6 +74,8 @@ export interface ExpensePaymentDetailDto extends ExpensePaymentDto {
       createdByUserId: string;
       createdByUser: UserDto;
 
+      
+
       createdByDepartmentId: string;
       createdByDepartmentName?: string;
 
