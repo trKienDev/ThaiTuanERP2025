@@ -8,7 +8,7 @@
                   <ul class="notification-list">
                         <li class="notification-item" *ngFor="let n of items; trackBy: trackById" [class.unread]="!n.isRead" (click)="onClickItem(n)">
                               <div class="content">
-                                    <div class="title d-flex gap-10px align-items-center">
+                                    <div class="title display-flex gap-10px align-items-center">
                                           <span>{{ n.title || 'Thông báo' }}</span>
                                           <div class="unread-dot" *ngIf="!n.isRead"></div>
                                     </div>

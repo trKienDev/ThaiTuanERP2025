@@ -39,7 +39,7 @@
                         <div class="dialog-row">
                               <kit-dropdown [options]="(departmentOptions$ | async) ?? []" [placeholder]="'Chọn phòng ban (nếu có)'" (selectionChange)="onDepartmentSelected($event)"></kit-dropdown>
                         </div>
-                        <div class="dialog-row d-flex gap-10px">
+                        <div class="dialog-row display-flex gap-10px">
                               <div class="form-input width-50pt">
                                     <input class="" type="text" formControlName="email" autocomplete="on">
                                     <label for="email">Email</label>
@@ -49,7 +49,7 @@
                                     <label for="phone">Số điện thoại</label>
                               </div>
                         </div>
-                        <div class="dialog-row d-flex gap-10px">
+                        <div class="dialog-row display-flex gap-10px">
                               <div class="width-50pt">
                                     <kit-dropdown [options]="userRoleOptions" [placeholder]="'Chọn vai trò'" (selectionChange)="onUserRoleSelected($event)"></kit-dropdown>
                               </div>
@@ -61,7 +61,7 @@
                         <div class="dialog-row">
                               <div class="dialog-buttons">
                                     <button type="button" class="button cancel-button" (click)="close()" [disabled]="submitting">Hủy</button>
-                                    <button type="submit" class="button save-button d-flex justify-content-center" [disabled]="submitting">
+                                    <button type="submit" class="button save-button display-flex justify-content-center" [disabled]="submitting">
                                           {{ submitting ? 'Đang lưu...' : 'Lưu' }}
                                     </button>
                               </div>

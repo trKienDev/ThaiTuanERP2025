@@ -21,9 +21,9 @@
                         <kit-dropdown [options]="parentOptions" (selectionChange)="(onParentsSelected($event))" [placeholder]="'Chọn nhóm tài khoản cha (nếu có)'" [width]="'100%'"></kit-dropdown>
                   </div>
 
-                  <div class="actions d-flex gap-10px margin-top-20px">
+                  <div class="actions display-flex gap-10px margin-top-20px">
                         <button type="button" class="width-50pt button cancel-button" (click)="close()">Hủy</button>
-                        <button type="submit" class="width-50pt button save-button d-flex justify-content-center" [disabled]="saving">
+                        <button type="submit" class="width-50pt button save-button display-flex justify-content-center" [disabled]="saving">
                               {{ saving ? 'Đang lưu...' : 'Lưu' }}
                         </button>
                   </div>

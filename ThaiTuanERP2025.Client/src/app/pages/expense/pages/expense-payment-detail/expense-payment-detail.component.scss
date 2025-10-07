@@ -68,3 +68,54 @@
 .cancel-button:hover {
       cursor: unset;
 }
+
+
+
+.comment-composer {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 8px;
+      cursor: text;
+      &.active { cursor: default; }
+}
+.comment-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+}
+.comment-placeholder {
+      flex: 1;
+      height: 36px;
+      line-height: 36px;
+      border-bottom: 1px solid #e0e0e0;
+      color: #6b7280; /* gray-500 */
+}
+.comment-input-area {
+      flex: 1;
+}
+
+.comment-textarea {
+      box-sizing: border-box;
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid #e0e0e0;
+      padding: 6px 0 2px;     /* giảm padding dưới */
+      line-height: 1.5 !important;       /* line-height nhỏ gọn */
+      resize: none;           /* tránh kéo làm tăng khoảng trống */
+      outline: none;
+      font: inherit;
+      min-height: unset;
+      height: 30px;
+}
+.comment-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 8px;
+
+      .button.ghost { background: transparent; }
+      .button.submit[disabled] { opacity: .5; cursor: not-allowed; }
+}
