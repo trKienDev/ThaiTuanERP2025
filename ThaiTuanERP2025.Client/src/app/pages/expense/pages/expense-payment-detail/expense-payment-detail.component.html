@@ -1,6 +1,6 @@
 <div class="payment-detail-container">
       <div class="payment-heading">
-            <div class="d-flex gap-10px">
+            <div class="display-flex gap-10px">
                   <h3 class="payment-name">{{ paymentDetail?.name }}</h3>
                  <div class="payment-status">
                         <span class="payment-status-badge"
@@ -9,21 +9,21 @@
                         </span>
                  </div>
             </div>
-            <div class="payment-actions d-flex gap-10px align-items-center">
+            <div class="payment-actions display-flex gap-10px align-items-center">
                   <button type="button" class="button submit-button">Duyệt</button>
                   <button type="button" class="button danger-button">Từ chối</button>
             </div>
       </div>
       <div class="payment-body">
-            <div class="general-infor">
-                  <div class="primary-card">
+            <div class="primary-row display-flex gap-20px margin-top-20px">
+                  <div class="general-infor left-column primary-card width-50pt">
                         <div class="card-header">Thông tin chung</div>
                         <div class="card-body">
                               <div class="payment-infor">
                                     <label class="payment-infor-label">ID</label>
                                     <span> {{ paymentDetail?.subId }}</span>
                               </div>
-                              <div class="payment-infor d-flex align-items-center gap-20px">
+                              <div class="payment-infor display-flex align-items-center gap-20px">
                                     <label class="payment-infor-label">Tạo bởi</label>
                                     <img class="created-user-avatar" [src]="paymentDetail?.createdByUser | avatarUrlPipe" alt="user avatar">
                                     <span> {{ paymentDetail?.createdByUser?.fullName }}</span>
@@ -40,14 +40,14 @@
                                     <label class="payment-infor-label">Nội dung thanh toán</label>
                                     <span> {{ paymentDetail?.description }}</span>
                               </div>
-                              <div class="payment-infor d-flex gap-10px align-items-center">
+                              <div class="payment-infor display-flex gap-10px align-items-center">
                                     <label class="payment-infor-label">Luồng duyệt</label>
                                     <ul class="payment-workflow">
                                           <li *ngFor="let step of paymentDetail?.workflowInstance?.steps; let i = index">
                                                 <img class="approver-avatar" [src]="step.approverCandidates[0] | avatarUrlPipe" alt="user avatar">                              </li>
                                     </ul>
                               </div>
-                              <div class="payment-infor d-flex gap-10px align-items-center">
+                              <div class="payment-infor display-flex gap-10px align-items-center">
                                     <label class="payment-infor-label">Người theo dõi</label>
                                     <ul class="payment-followers">
                                           <li *ngFor="let follower of paymentDetail?.followers; let i = index">
@@ -57,11 +57,27 @@
                               </div>
                         </div>
                   </div>
+                  <div class="payment-comment right-column primary-card width-50pt">
+                        <div class="card-header">Bình luận</div>
+                        <div class="card-body comment-composer" [class.active]="isCommenting" (click)="startCommenting()">
+                              <img class="comment-avatar" [src]="(currentUser$ | async) | avatarUrlPipe" alt="avatar">
+                              <!-- Placeholder khi chưa focus -->
+                              <div class="comment-placeholder" *ngIf="!isCommenting">Viết bình luận...</div>
+                              <!-- Ô nhập khi focus/click -->
+                              <div class="comment-input-area" *ngIf="isCommenting" (click)="$event.stopPropagation()">
+                                    <textarea #ta class="comment-textarea" autoResize noSpellcheck [(ngModel)]="commentText" placeholder="Viết bình luận..."></textarea>
+                                    <div class="comment-actions">
+                                          <button type="button" class="button cancel-button" (click)="$event.stopPropagation(); cancelComment()">Hủy</button>
+                                          <button type="button" class="button save-button" [disabled]="!commentText.trim()" (click)="submitComment()">Gửi</button>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
             </div>
-            <div class="payment-amount-infor margin-top-20px">
+            <div class="payment-amount-infor secondary-row margin-top-20px">
                   <div class="primary-card">
                         <div class="card-body">
-                              <div class="amount-block  d-flex gap-20px">
+                              <div class="amount-block  display-flex gap-20px">
                                     <div class="amount-infor-block">
                                           <label class="amount-infor-label" for="total-amount">Số tiền thanh toán</label>
                                           <span>{{ paymentDetail?.totalWithTax | number:'1.0-0' }} VNĐ</span>

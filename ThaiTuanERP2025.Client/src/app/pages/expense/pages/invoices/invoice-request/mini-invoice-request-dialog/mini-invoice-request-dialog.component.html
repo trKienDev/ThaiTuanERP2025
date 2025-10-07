@@ -37,7 +37,7 @@
 
                   <!-- Ngày lập hóa đơn -->
                   <div class="dialog-row">
-                        <div class="d-flex gap-10px">
+                        <div class="display-flex gap-10px">
                               <label class="w-40 align-content-center" for="name">Ngày lập hóa đơn <span style="color: red;">  *</span></label>
                               <input class="invoice-date" formControlName="issueDate" matInput [matDatepicker]="picker" placeholder="chọn ngày/tháng/năm"
                                     (focus)="picker.open()" (click)="picker.open()" (keydown.enter)="picker.open()" (keydown.arrowDown)="picker.open()" 
@@ -63,7 +63,7 @@
                   <div class="dialog-row">
                         <div class="dialog-buttons">
                               <button type="button" class="width-50pt button cancel-button" (click)="close()">Hủy</button>
-                              <button type="submit" class="width-50pt button save-button d-flex justify-content-center" [disabled]="submitting">
+                              <button type="submit" class="width-50pt button save-button display-flex justify-content-center" [disabled]="submitting">
                                     {{ submitting ? 'Đang lưu...' : 'Lưu' }}
                               </button>
                         </div>
