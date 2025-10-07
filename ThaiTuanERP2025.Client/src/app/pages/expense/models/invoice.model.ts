@@ -1,6 +1,6 @@
 import { invoiceLineDto, invoiceLineRequest } from "./invoice-line.model";
 
-export interface invoiceDto {
+export interface InvoiceDto {
       id: string;
       invoiceNumber: string;
       invoiceName: string;

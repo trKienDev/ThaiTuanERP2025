@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using System.ComponentModel.DataAnnotations;
 using System.Net.WebSockets;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Common.Services;
@@ -35,16 +36,42 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ExpensePayments.CreateExp
 			payment.SetBankInfo(request.BankName, request.AccountNumber, request.BeneficiaryName);
 			payment.SetGoodsReceipt(request.HasGoodsReceipt);
 
+			// 1 ) gom các budgetCodeId trong request
+			var budgetIds = request.Items.Where(i => i.BudgetCodeId.HasValue)
+				.Select(i => i.BudgetCodeId!.Value)
+				.Distinct()
+				.ToList();
+			var budgetCodes = await _unitOfWork.BudgetCodes.FindIncludingAsync(bc => budgetIds.Contains(bc.Id));
+			var bcToCashout = budgetCodes.ToDictionary(x => x.Id, x => x.CashoutCodeId);
+
 			// items
-			foreach(var item in request.Items)
+			foreach (var item in request.Items)
 			{
+				Guid? effectiveCashoutId = item.CashoutCodeId;
+				if (!effectiveCashoutId.HasValue && item.BudgetCodeId.HasValue)
+				{
+					if (bcToCashout.TryGetValue(item.BudgetCodeId.Value, out var mappedCashout))
+						effectiveCashoutId = mappedCashout;
+					else
+						throw new ValidationException($"BudgetCodeId {item.BudgetCodeId} không tồn tại hoặc không hợp lệ cho item '{item.ItemName}'.");
+				}
+
+				// (Tuỳ chọn) Nếu client có truyền nhưng lại khác mapping -> chặn để đảm bảo nhất quán
+				if (item.CashoutCodeId.HasValue && 
+					item.BudgetCodeId.HasValue &&
+					bcToCashout.TryGetValue(item.BudgetCodeId.Value, out var expectedCashout) &&
+					expectedCashout != item.CashoutCodeId.Value)
+				{
+					throw new ValidationException($"CashoutCodeId gửi lên không khớp với BudgetCodeId cho item '{item.ItemName}'.");
+				}
+
 				payment.AddItem(
 					itemName: item.ItemName,
 					quantity: item.Quantity,
 					unitPrice: item.UnitPrice,
 					taxRate: item.TaxRate,
 					budgetCodeId: item.BudgetCodeId,
-					cashoutCodeId: item.CashoutCodeId,
+					cashoutCodeId: effectiveCashoutId,
 					invoiceId: item.InvoiceId,
 					overrideTaxAmount: item.TaxAmount
 				);

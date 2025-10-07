@@ -2,8 +2,8 @@ import { UserDto } from "../../account/models/user.model";
 import { ApprovalWorkflowInstanceDetailDto, ApprovalWorkflowInstanceDto } from "./approval-workflow-instance.model";
 import { ExpensePaymentAttachmentDto, ExpensePaymentAttachmentRequest } from "./expense-payment-attachment.model";
 import { ExpensePaymentFollowerDto } from "./expense-payment-followers.model";
-import { ExpensePaymentItemDto, ExpensePaymentItemRequest } from "./expense-paymnet-item.model";
-import { invoiceDto } from "./invoice.model";
+import { ExpensePaymentItemDetailDto, ExpensePaymentItemDto, ExpensePaymentItemRequest } from "./expense-paymnet-item.model";
+import { InvoiceDto } from "./invoice.model";
 import { SupplierDto } from "./supplier.model";
 
 export enum PayeeType {
@@ -38,7 +38,7 @@ export interface ExpensePaymentDto {
       totalTax: number;
       totalWithTax: number;
 
-      items: ExpensePaymentItemDto[];
+      items: ExpensePaymentItemDetailDto[];
       attachments: ExpensePaymentAttachmentDto[];
       followers: ExpensePaymentFollowerDto[];
 }
@@ -85,6 +85,5 @@ export interface ExpensePaymentDetailDto extends ExpensePaymentDto {
       updatedBy?: UserDto;
       updatedAt?: Date;
 
-      invoices: invoiceDto[];
       workflowInstance?: ApprovalWorkflowInstanceDetailDto;
 }

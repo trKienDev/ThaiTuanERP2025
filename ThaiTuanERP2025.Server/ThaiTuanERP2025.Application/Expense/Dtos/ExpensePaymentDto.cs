@@ -90,14 +90,11 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 		public DateTime CreatedDate { get; init; }
 
 		// Items
-		public IReadOnlyList<ExpensePaymentItemDto> Items { get; init; } = Array.Empty<ExpensePaymentItemDto>();
+		public IReadOnlyList<ExpensePaymentItemDetailDto> Items { get; init; } = Array.Empty<ExpensePaymentItemDetailDto>();
 		public IReadOnlyList<ExpensePaymentAttachmentDto> Attachments { get; init; } = Array.Empty<ExpensePaymentAttachmentDto>();
 
 		// Followers
 		public IReadOnlyList<ExpensePaymentFollowersDto> Followers { get; init; } = Array.Empty<ExpensePaymentFollowersDto>();
-
-		// Invoices (nếu có liên kết)
-		public IReadOnlyList<InvoiceDto> Invoices { get; init; } = Array.Empty<InvoiceDto>();
 
 		// Workflow
 		public ApprovalWorkflowInstanceDetailDto? WorkflowInstance { get; init; } = default!;
