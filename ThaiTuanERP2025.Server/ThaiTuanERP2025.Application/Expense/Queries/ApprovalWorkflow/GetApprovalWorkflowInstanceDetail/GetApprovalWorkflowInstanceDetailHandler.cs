@@ -27,12 +27,12 @@ namespace ThaiTuanERP2025.Application.Expense.Queries.ApprovalWorkflow.GetApprov
 				throw new DirectoryNotFoundException("Không tìm thấy workflow instance");
 
 			var dto = _mapper.Map<ApprovalWorkflowInstanceDto>(entity);
-			var steps = dto.Steps.OrderBy(s => s.Order).ToList();
+			var stepDetails = _mapper.Map<List<ApprovalStepInstanceDetailDto>>(dto.Steps.OrderBy(s => s.Order));
 
 			return new ApprovalWorkflowInstanceDetailDto
 			{
 				WorkflowInstance = dto,
-				Steps = steps
+				Steps = stepDetails
 			};
 		}
 	}

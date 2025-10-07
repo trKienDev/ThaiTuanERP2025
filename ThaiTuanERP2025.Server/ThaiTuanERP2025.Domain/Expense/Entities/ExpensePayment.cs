@@ -10,7 +10,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		private ExpensePayment() { } // EF
 
-		public ExpensePayment(string name, PayeeType payeeType, DateTime paymentDate, string managerApproverId)
+		public ExpensePayment(string name, PayeeType payeeType, DateTime paymentDate, string managerApproverId, string? description)
 		{
 			Id = Guid.NewGuid();
 			ManagerApproverId = Guid.Parse(managerApproverId);
@@ -18,10 +18,12 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			PayeeType = payeeType;
 			PaymentDate = paymentDate;
 			Status = ExpensePaymentStatus.Pending;
+			Description = description?.Trim() ?? string.Empty;
 		}
 
 		// Thông tin chung
 		public string Name { get; private set; } = string.Empty;
+		public string SubId { get; private set; } = default!;
 
 		// Đối tượng thụ hưởng
 		public PayeeType PayeeType { get; private set; }
@@ -36,6 +38,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		// Lịch thanh toán
 		public DateTime PaymentDate { get; private set; }
 		public bool HasGoodsReceipt { get; private set; }
+		public string? Description { get; set; } = string.Empty;
 
 		// Tổng cộng (được item cộng dồn)
 		public decimal TotalAmount { get; private set; }     // 18,2
@@ -67,6 +70,12 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public Guid ManagerApproverId { get; private set; }
 
 		// ==== HÀM NGHIỆP VỤ ====
+		public void SetSubId(string value)
+		{
+			if (string.IsNullOrWhiteSpace(value)) throw new ArgumentException("SubId is required");
+			SubId = value;
+		}
+
 		public void SetSupplier(Guid? supplierId)
 		{
 			SupplierId = supplierId;

@@ -5,19 +5,23 @@ import { firstValueFrom } from "rxjs";
 import { ExpensePaymentService } from "../../services/expense-payment.service";
 import { ExpensePaymentStatusPipe } from "../../pipes/expense-payment-status.pipe";
 import { CommonModule } from "@angular/common";
+import { environment } from "../../../../../environments/environment";
+import { AvatarUrlPipe } from "../../../../shared/pipes/avatar-url.pipe";
 
 @Component({
       selector: 'expense-payment-detail',      
       standalone: true,
       templateUrl: './expense-payment-detail.component.html',
       styleUrls: ['./expense-payment-detail.component.scss'],
-      imports: [ CommonModule, ExpensePaymentStatusPipe],
+      imports: [ CommonModule, ExpensePaymentStatusPipe, AvatarUrlPipe],
 })
 export class ExpensePaymentDetailComponent implements OnInit {
       private route = inject(ActivatedRoute);
       private expensePaymentService = inject(ExpensePaymentService);
+
       paymentId: string = '';
       paymentDetail: ExpensePaymentDetailDto | null = null;
+      baseUrl: string = environment.baseUrl;
       
       ngOnInit(): void {
             this.paymentId = this.route.snapshot.paramMap.get('id')!;

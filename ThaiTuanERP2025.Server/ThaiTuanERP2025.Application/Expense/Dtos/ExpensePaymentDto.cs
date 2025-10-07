@@ -1,4 +1,5 @@
-﻿using ThaiTuanERP2025.Domain.Expense.Entities;
+﻿using ThaiTuanERP2025.Application.Account.Dtos;
+using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Expense.Enums;
 
 namespace ThaiTuanERP2025.Application.Expense.Dtos
@@ -18,6 +19,7 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 
 		public DateTime PaymentDate { get; init; }
 		public bool HasGoodsReceipt { get; init; }
+		public string? Description { get; init; } = string.Empty;
 
 		public decimal TotalAmount { get; init; }
 		public decimal TotalTax { get; init; }
@@ -43,6 +45,7 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 
 		public DateTime PaymentDate { get; init; }
 		public bool HasGoodsReceipt { get; init; }
+		public string? Description { get; init; } = string.Empty;
 
 		public decimal TotalAmount { get; init; }
 		public decimal TotalTax { get; init; }
@@ -60,7 +63,8 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 	public sealed record ExpensePaymentDetailDto {
 		// Payment core
 		public Guid Id { get; init; }
-		public string Name { get; init; } = string.Empty;
+		public string Name { get; init; } = default!;
+		public string SubId { get; init; } = default!;
 		public DateTime PaymentDate { get; init; }
 		public bool HasGoodsReceipt { get; init; }
 		public decimal TotalAmount { get; init; }
@@ -71,9 +75,7 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 		// Creator
 		public Guid CreatedByUserId { get; init; }
 		public string CreatedByUsername { get; init; } = string.Empty;
-		public string? CreatedByFullName { get; init; }
-		public Guid? CreatedByDepartmentId { get; init; }
-		public string? CreatedByDepartmentName { get; init; }
+		public UserDto CreatedByUser { get; init; } = default!;		
 
 		// Supplier
 		public Guid? SupplierId { get; init; }
@@ -83,6 +85,9 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 		public string BankName { get; init; } = string.Empty;
 		public string AccountNumber { get; init; } = string.Empty;
 		public string BeneficiaryName { get; init; } = string.Empty;
+		public string Description { get; init; } = string.Empty;
+
+		public DateTime CreatedDate { get; init; }
 
 		// Items
 		public IReadOnlyList<ExpensePaymentItemDto> Items { get; init; } = Array.Empty<ExpensePaymentItemDto>();
@@ -95,6 +100,6 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 		public IReadOnlyList<InvoiceDto> Invoices { get; init; } = Array.Empty<InvoiceDto>();
 
 		// Workflow
-		public ApprovalWorkflowInstanceDto? WorkflowInstance { get; init; }
+		public ApprovalWorkflowInstanceDetailDto? WorkflowInstance { get; init; } = default!;
 	}
 }

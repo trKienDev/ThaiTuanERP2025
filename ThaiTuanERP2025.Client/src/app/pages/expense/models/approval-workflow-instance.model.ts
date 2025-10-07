@@ -1,4 +1,4 @@
-import { ApprovalStepInstanceDto } from "./approval-step-instance.model";
+import { ApprovalStepInstanceDetailDto, ApprovalStepInstanceDto } from "./approval-step-instance.model";
 
 export interface ApprovalWorkflowInstanceDto {
       id: string;
@@ -31,5 +31,5 @@ export interface ApprovalWorkflowInstanceRequest {
 
 export interface ApprovalWorkflowInstanceDetailDto {
       workflowInstance: ApprovalWorkflowInstanceDto;
-      Steps: ApprovalStepInstanceDto[];
+      steps: ApprovalStepInstanceDetailDto[];
 }

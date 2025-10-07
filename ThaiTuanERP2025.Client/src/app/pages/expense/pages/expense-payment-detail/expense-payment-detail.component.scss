@@ -22,3 +22,31 @@
       &.cancelled  { color:#6d4c41;background:#efebe9; }
       &.unknown    { color:#555;   background:#eee; }
 }
+
+.payment-infor {
+      margin-top: 10px;
+}
+
+.created-user-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+}
+
+.payment-workflow {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+      padding-left: 0;  
+      margin: 0;
+}
+.payment-step {
+      display: inline-block;
+}
+.approver-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+}

@@ -4,7 +4,7 @@
       max-height: 36px;
 }
 
-.non-linked-button { background-color: var(--platinum); outline: 2px var(--platinum) solid; outline-offset: -2px; border-radius: 5px; border: none; cursor: pointer; transition: 400ms; }
+.non-linked-button { background-color: var(--platinum); outline: 2px var(--platinum) solid; outline-offset: -2px; border-radius: 5px; padding: 8px 10px !important; border: none !important; cursor: pointer; transition: 400ms; }
 .non-linked-button .text { color: black; font-size: 22px; transition: 400ms; }
 .non-linked-button:hover { background-color: transparent; }
 

@@ -24,6 +24,9 @@ using Microsoft.AspNetCore.SignalR;
 using ThaiTuanERP2025.Api.SignalR;
 using ThaiTuanERP2025.Api.Notifications;
 using ThaiTuanERP2025.Infrastructure.Notifications.Background;
+using ThaiTuanERP2025.Application.Common.Services;
+using ThaiTuanERP2025.Infrastructure.Common.Services;
+using ThaiTuanERP2025.Application.Common.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,11 +41,17 @@ builder.Services.AddScoped<ApprovalWorkflowResolverService>();
 builder.Services.AddScoped<IRealtimeNotifier, SignalRealtimeNotifier>();
 builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 builder.Services.AddScoped<ITaskReminderService, TaskReminderService>();
+builder.Services.AddScoped<IDocumentSubIdGeneratorService, DocumentSubIdGeneratorService>();
 
 builder.Services.AddHostedService<TaskReminderExpiryHostedService>();
 builder.Services.Configure<TaskReminderExpiryOptions>(
 	builder.Configuration.GetSection("TaskReminderExpiry")
 );
+
+builder.Services.Configure<DocumentSubIdOptions>(opt => {
+	opt.TypeDigits["ExpensePayment"] = "01";
+	opt.TypeDigits["Request"] = "02";
+});
 
 builder.Services.AddSignalR()
 	.AddJsonProtocol(o =>
