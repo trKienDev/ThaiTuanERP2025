@@ -50,7 +50,6 @@ export class TaskReminderDrawerComponent implements OnInit {
             this.dismiss.emit('CLOSE_DRAWER');
       }
       private resolveRoute(tr: TaskReminderDto): (string | number)[] | string {
-            console.log(tr);
             if (tr.documentType === 'ExpensePayment' && tr.documentId) {
                   return ['/expense', 'payment-detail', tr.documentId];
             }

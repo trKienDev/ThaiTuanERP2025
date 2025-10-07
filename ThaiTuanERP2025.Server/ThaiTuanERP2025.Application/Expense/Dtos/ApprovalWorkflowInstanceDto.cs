@@ -37,8 +37,8 @@
 		public bool StartImmediately { get; init; } = true;
 	};
 
-	public sealed class ApprovalWorkflowInstanceDetailDto {
+	public sealed record ApprovalWorkflowInstanceDetailDto {
 		public ApprovalWorkflowInstanceDto WorkflowInstance { get; init; } = default!;
-		public IReadOnlyList<ApprovalStepInstanceDto> Steps { get; init; } = Array.Empty<ApprovalStepInstanceDto>();
+		public IReadOnlyList<ApprovalStepInstanceDetailDto> Steps { get; init; } = Array.Empty<ApprovalStepInstanceDetailDto>();
 	}
 }

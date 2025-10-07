@@ -1,5 +1,5 @@
 import { UserDto } from "../../account/models/user.model";
-import { ApprovalWorkflowInstanceDto } from "./approval-workflow-instance.model";
+import { ApprovalWorkflowInstanceDetailDto, ApprovalWorkflowInstanceDto } from "./approval-workflow-instance.model";
 import { ExpensePaymentAttachmentDto, ExpensePaymentAttachmentRequest } from "./expense-payment-attachment.model";
 import { ExpensePaymentFollowerDto } from "./expense-payment-followers.model";
 import { ExpensePaymentItemDto, ExpensePaymentItemRequest } from "./expense-paymnet-item.model";
@@ -26,6 +26,7 @@ export interface ExpensePaymentDto {
       payeeType: PayeeType;
       supplierId?: string;
       supplier: SupplierDto;
+      description?: string;
       
       bankName: string;
       accountNumber: string;
@@ -50,6 +51,7 @@ export interface ExpensePaymentRequest {
       bankName: string;
       accountNumber: string;
       beneficiaryName: string;
+      description?: string;
       
       paymentDate: Date;
       hasGoodsReceipt: boolean;
@@ -67,18 +69,20 @@ export interface ExpensePaymentRequest {
 }
 
 export interface ExpensePaymentDetailDto extends ExpensePaymentDto {
+      subId: string;
+
       createdByUserId: string;
-      createdByUserName: string;
-      createdByFullName?: string;
+      createdByUser: UserDto;
+
       createdByDepartmentId: string;
       createdByDepartmentName?: string;
 
       status: number;
 
-      createdAt: Date;
+      createdDate: Date;
       updatedBy?: UserDto;
       updatedAt?: Date;
 
       invoices: invoiceDto[];
-      workflowInstance?: ApprovalWorkflowInstanceDto;
+      workflowInstance?: ApprovalWorkflowInstanceDetailDto;
 }

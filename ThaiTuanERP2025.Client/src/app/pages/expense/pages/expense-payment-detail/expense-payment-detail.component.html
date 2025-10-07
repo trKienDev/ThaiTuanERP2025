@@ -16,7 +16,42 @@
       </div>
       <div class="payment-body">
             <div class="payment-body-wrapper">
-                  
+                  <div class="payment-infor">
+                        <label class="payment-infor-label">ID</label>
+                        <span> {{ paymentDetail?.subId }}</span>
+                  </div>
+                  <div class="payment-infor d-flex align-items-center gap-5p">
+                        <label class="payment-infor-label">Tạo bởi</label>
+                        <img class="created-user-avatar" [src]="paymentDetail?.createdByUser | avatarUrlPipe" alt="user avatar">
+                        <span> {{ paymentDetail?.createdByUser?.fullName }}</span>
+                  </div>
+                  <div class="payment-infor">
+                        <label class="payment-infor-label">Tạo lúc</label>
+                        <span> {{ paymentDetail?.createdDate | date: 'HH:mm dd/MM/yyyy' }}</span>
+                  </div>
+                  <div class="payment-infor">
+                        <label class="payment-infor-label">Công ty trả cho</label>
+                        <span> {{ paymentDetail?.supplier?.name }}</span>
+                  </div>
+                  <div class="payment-infor">
+                        <label class="payment-infor-label">Nội dung thanh toán</label>
+                        <span> {{ paymentDetail?.description }}</span>
+                  </div>
+                  <div class="payment-infor d-flex gap-10p align-items-center">
+                        <label class="payment-infor-label">Luồng duyệt</label>
+                        <ul class="payment-workflow">
+                              <li *ngFor="let step of paymentDetail?.workflowInstance?.steps; let i = index">
+                                    <img class="approver-avatar" [src]="step.approverCandidates[0] | avatarUrlPipe" alt="user avatar">                              </li>
+                        </ul>
+                  </div>
+                  <div class="payment-infor">
+                        <label class="payment-infor-label">Người theo dõi</label>
+                        <ul class="payment-followers">
+                              <li *ngFor="let follower of paymentDetail?.followers">
+                                    <!-- <img class="follower-avatar" [src]="follower | avatarUrlPipe" alt="user avatar"> -->
+                              </li>
+                        </ul>
+                  </div>
             </div>
       </div>
 </div>
