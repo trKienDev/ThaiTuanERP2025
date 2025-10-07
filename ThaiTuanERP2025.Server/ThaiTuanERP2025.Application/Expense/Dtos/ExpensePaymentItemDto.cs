@@ -1,6 +1,9 @@
-﻿namespace ThaiTuanERP2025.Application.Expense.Dtos
+﻿using ThaiTuanERP2025.Domain.Expense.Entities;
+using ThaiTuanERP2025.Domain.Finance.Entities;
+
+namespace ThaiTuanERP2025.Application.Expense.Dtos
 {
-	public sealed record ExpensePaymentItemDto
+	public record ExpensePaymentItemDto
 	{
 		public Guid Id { get; init; }
 		public Guid ExpensePaymentId { get; init; }
@@ -15,6 +18,11 @@
 		public decimal Amount { get; init; }
 		public decimal TaxAmount { get; init; }
 		public decimal TotalWithTax { get; init; }
+	}
+	public sealed record ExpensePaymentItemDetailDto : ExpensePaymentItemDto {
+		public BudgetCode? BudgetCode { get; init; } = default!;
+		public CashoutCode? CashoutCode { get; init; } = default!;
+		public Invoice? Invoice { get; init; } = default!;
 	}
 
 	public sealed record ExpensePaymentItemRequest {
@@ -31,5 +39,6 @@
 		public decimal TaxAmount { get; init; }
 		public decimal TotalWithTax { get; init; }
 	}
+
 
 }
