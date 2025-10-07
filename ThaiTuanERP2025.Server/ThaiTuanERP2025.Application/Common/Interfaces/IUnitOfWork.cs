@@ -47,6 +47,9 @@ namespace ThaiTuanERP2025.Application.Common.Interfaces
 
 		// Expense Payment
 		IExpensePaymentRepository ExpensePayments { get; }
+		IExpensePaymentCommentRepository ExpensePaymentComments { get; }
+		IExpensePaymentCommentAttachmentRepository ExpensePaymentCommentAttachments { get; }
+		IExpensePaymentCommentTagRepository ExpensePaymentCommentTags { get; }
 
 		// Notification
 		INotificationRepository Notifications { get; }

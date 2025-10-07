@@ -52,6 +52,9 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 
 			// Expense Payment
 			IExpensePaymentRepository expensePayments,
+			IExpensePaymentCommentRepository expensePaymentComments,
+			IExpensePaymentCommentTagRepository expensePaymentCommentTags,
+			IExpensePaymentCommentAttachmentRepository expensePaymentCommentAttachments,
 
 			// Notification
 			INotificationRepository notifications,
@@ -93,6 +96,9 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			ApprovalWorkflowInstances = approvalWorkflowInstances;
 
 			ExpensePayments = expensePayments;
+			ExpensePaymentComments = expensePaymentComments;
+			ExpensePaymentCommentAttachments = expensePaymentCommentAttachments;
+			ExpensePaymentCommentTags = expensePaymentCommentTags;
 
 			Notifications = notifications;
 			TaskReminders = taskReminders;
@@ -134,6 +140,9 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 
 		// Expense Payment
 		public IExpensePaymentRepository ExpensePayments { get; }
+		public IExpensePaymentCommentRepository ExpensePaymentComments { get; }
+		public IExpensePaymentCommentAttachmentRepository ExpensePaymentCommentAttachments { get; }
+		public IExpensePaymentCommentTagRepository ExpensePaymentCommentTags { get; }
 
 		// Notification
 		public INotificationRepository Notifications { get; }
