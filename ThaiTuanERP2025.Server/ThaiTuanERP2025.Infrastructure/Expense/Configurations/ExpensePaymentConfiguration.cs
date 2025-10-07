@@ -13,9 +13,11 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 
 			// Text fields
 			builder.Property(x => x.Name).HasMaxLength(256).IsRequired();
+			builder.Property(x => x.SubId).HasMaxLength(32).IsRequired();
 			builder.Property(x => x.BankName).HasMaxLength(128);
 			builder.Property(x => x.AccountNumber).HasMaxLength(64);
 			builder.Property(x => x.BeneficiaryName).HasMaxLength(128);
+			builder.Property(x => x.Description).HasMaxLength(2048);
 
 			// Totals precision
 			builder.Property(x => x.TotalAmount).HasPrecision(18, 2);
@@ -73,6 +75,7 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 				.OnDelete(DeleteBehavior.Restrict);
 
 			// Indexes
+			builder.HasIndex(p => p.SubId).IsUnique();
 			builder.HasIndex(x => x.SupplierId);
 			builder.HasIndex(x => x.PaymentDate);
 			builder.HasIndex(x => x.Status);

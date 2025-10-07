@@ -7,6 +7,7 @@ import { UserFacade } from "../../facades/user.facade";
 import { firstValueFrom } from "rxjs";
 import { ToastService } from "../../../../shared/components/toast/toast.service";
 import { UserService } from "../../services/user.service";
+import { resolveAvatarUrl } from "../../../../shared/utils/avatar.utils";
 
 @Component({
       selector: 'account-profile',
@@ -37,14 +38,9 @@ export class AccountProfileComponent implements OnInit {
       }
 
       get avatarSrc(): string {
-            if (this.currentUser?.avatarFileId && this.currentUser.avatarFileId.startsWith('data:image')) {
-                  return this.currentUser.avatarFileId; // base64 preview
-            }
-            if (this.currentUser?.avatarFileObjectKey) {
-                  return this.baseUrl + '/files/public/' + this.currentUser.avatarFileObjectKey;
-            }
-            return 'default-user-avatar.jpg';
+            return resolveAvatarUrl(this.baseUrl, this.currentUser);
       }
+
       onAvatarSelected(event: Event): void {
             const input = event.target as HTMLInputElement;
             if(input.files && input.files.length > 0) {

@@ -2,20 +2,19 @@
       --button-default-bgColor-rest: #f6f8fa;
       --button-default-shadow-resting: 0px 1px 0px 0px #1f23280a;
       --button-default-color-rest: #25292e;
-
 }
 
 button, .button { 
       font-family: 'Lexend', sans-serif; 
       font-size: 13px; 
-      padding: 7px 10px;
+      padding: 10px 10px;
       border-radius: 5px;
       height: fit-content;
       border: 1px solid !important;
 }
 
 // *** default button ***
-.default-button { background-color: #f6f8fa; box-shadow: 0px 1px 0px 0px #1f23280a; color: #696e75; cursor: pointer; user-select: none; border: 1px solid #d1d9e0; }
+.default-button { background-color: #f6f8fa; box-shadow: 0px 1px 0px 0px #1f23280a; color: #696e75; cursor: pointer; user-select: none; border: 1px solid #d1d9e0 !important; }
 .default-button:hover { transition-duration: 80ms; background-color: #eff2f5; color: #25292e;}
 
 // *** button-1 ***
@@ -24,7 +23,7 @@ button, .button {
 .button-1:focus, .button-1:active { opacity: 0.85; box-shadow: none; }
 
 // *** button-62 ***
-.button-login { background: linear-gradient( to bottom right, #7E133D, #FF1973); border: 0; color: #FFFFFF; cursor: pointer; display: inline-block; font-weight: 500; outline: transparent; text-align: center; text-decoration: none; transition: box-shadow .2s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: manipulation; white-space: nowrap; }
+.button-login { background: linear-gradient( to bottom right, #7E133D, #FF1973); border: 0 !important; color: #FFFFFF; cursor: pointer; display: inline-block; font-weight: 500; outline: transparent; text-align: center; text-decoration: none; transition: box-shadow .2s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: manipulation; white-space: nowrap; }
 .button-login:focus { box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5); }
 .button-login:hover { box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5); }
 
@@ -48,7 +47,7 @@ button, .button {
 .button-noor:hover { background-color: #1C84FF; }
 
 /*** danger-button ***/
-.danger-button { align-items: center; background-color: #FFE7E7; background-position: 0 0; border: 1px solid #FEE0E0; border-radius: 5px; box-sizing: border-box; color: #D33A2C; cursor: pointer; display: flex ; font-weight: 700; text-align: left; text-decoration: none; text-shadow: none; text-underline-offset: 1px; transition: border .2s ease-in-out,box-shadow .2s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: manipulation; white-space: nowrap; word-break: break-word; border-color: transparent !important; transition: all ease 0.5s; }
+.danger-button { align-items: center; background-color: #FFE7E7; background-position: 0 0; border: 2px solid #FEE0E0 !important; border-radius: 5px; box-sizing: border-box; color: #D33A2C; cursor: pointer; display: flex ; font-weight: 700; text-align: left; text-decoration: none; text-shadow: none; text-underline-offset: 1px; transition: border .2s ease-in-out,box-shadow .2s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: manipulation; white-space: nowrap; word-break: break-word; border-color: transparent !important; transition: all ease 0.5s; }
 .danger-button:active, .danger-button:hover, .danger-button:focus { outline: 0; }
 .danger-button:active { background-color: #D33A2C; box-shadow: rgba(0, 0, 0, 0.12) 0 1px 3px 0 inset; color: #FFFFFF; }
 .danger-button:hover { background-color: #FFE3E3; border-color: #FAA4A4 !important; }
@@ -61,16 +60,16 @@ button, .button {
 .icon-button:hover .text { color: #007ACC; }
 
 /*** link-button ***/
-.link-button { color: var(--ultramarin); background-color: var(--light-blue-color); border-color: none; border: none; border-bottom: 2px solid var(--ultramarin); border-radius: unset; border-top-left-radius: 5px; border-top-right-radius: 5px; }
+.link-button { color: var(--ultramarin); background-color: var(--light-blue-color); border-color: none !important; border: none !important; border-bottom: 2px solid var(--ultramarin) !important; border-radius: unset; border-top-left-radius: 5px; border-top-right-radius: 5px; }
 .link-button:hover { cursor: pointer; background-color: azure; }
 
 /*** text-button ***/
-.text-button { color: var(--ultramarin); background-color: transparent; border: none;}
+.text-button { color: var(--ultramarin); background-color: transparent; border: none !important;}
 .text-button:hover { text-decoration: underline; cursor: pointer;}
 
 /* cancel */
 .cancel-button { 
-      border: none; background: #6E6D70;
+      border: none  !important; background: #6E6D70;
       box-shadow: 0px 0.5px 1px rgba(0, 0, 0, 0.1), inset 0px 0.5px 0.5px rgba(255, 255, 255, 0.5), 0px 0px 0px 0.5px rgba(0, 0, 0, 0.12); 
       color: white; user-select: none; -webkit-user-select: none; touch-action: manipulation; 
 }
@@ -78,7 +77,7 @@ button, .button {
 .cancel-button:hover { cursor: pointer; opacity: 0.8; }
 
 /* save */   
-.save-button { align-items: center; appearance: button; background-color: #0276FF; border-style: none; box-shadow: rgba(255, 255, 255, 0.26) 0 1px 2px inset; box-sizing: border-box; color: #fff; cursor: pointer; display: flex; flex-direction: row; flex-shrink: 0; font-family: "Lexend",sans-serif; font-size: 100%; line-height: 1.15; margin: 0; padding: 10px 21px; text-align: center; text-transform: none; transition: color .13s ease-in-out,background .13s ease-in-out,opacity .13s ease-in-out,box-shadow .13s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+.save-button { align-items: center; appearance: button; background-color: #0276FF; border-color: transparent !important; box-shadow: rgba(255, 255, 255, 0.26) 0 1px 2px inset; box-sizing: border-box; color: #fff; cursor: pointer; display: flex; flex-direction: row; flex-shrink: 0; font-family: "Lexend",sans-serif; font-size: 100%; line-height: 1.15; margin: 0; text-align: center; text-transform: none; transition: color .13s ease-in-out,background .13s ease-in-out,opacity .13s ease-in-out,box-shadow .13s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
 .save-button:active { background-color: #006AE8; }
 .save-button:hover { background-color: #1C84FF; }
 

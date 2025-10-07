@@ -1,5 +1,7 @@
 ﻿using MediatR;
+using System.Net.WebSockets;
 using ThaiTuanERP2025.Application.Common.Interfaces;
+using ThaiTuanERP2025.Application.Common.Services;
 using ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Expense.Enums;
@@ -10,18 +12,25 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ExpensePayments.CreateExp
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly ApprovalWorkflowService _approvalWorkflowService;
-		public CreateExpensePaymentsHandler(IUnitOfWork unitOfWork, ApprovalWorkflowService approvalWorkflowService)
+		private readonly IDocumentSubIdGeneratorService _documentSubIdGeneratorService;
+		public CreateExpensePaymentsHandler(
+			IUnitOfWork unitOfWork, 
+			ApprovalWorkflowService approvalWorkflowService,
+			IDocumentSubIdGeneratorService documentSubIdGeneratorService
+		)
 		{
 			_unitOfWork = unitOfWork;
 			_approvalWorkflowService = approvalWorkflowService;
+			_documentSubIdGeneratorService = documentSubIdGeneratorService;
 		}
 
 		public async Task<Guid> Handle(CreateExpensePaymentCommand command, CancellationToken cancellationToken)
 		{
 			var request = command.Request;
-
+			var subId = await _documentSubIdGeneratorService.NextSubIdAsync("ExpensePayment" ,DateTime.UtcNow, cancellationToken);
 			// payment
-			var payment = new ExpensePayment(request.Name, request.PayeeType, request.PaymentDate, request.ManagerApproverId);
+			var payment = new ExpensePayment(request.Name, request.PayeeType, request.PaymentDate, request.ManagerApproverId, request.Description);
+			payment.SetSubId(subId);
 			payment.SetSupplier(request.PayeeType == PayeeType.Supplier ? request.SupplierId : null);
 			payment.SetBankInfo(request.BankName, request.AccountNumber, request.BeneficiaryName);
 			payment.SetGoodsReceipt(request.HasGoodsReceipt);

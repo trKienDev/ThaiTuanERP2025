@@ -1,3 +1,4 @@
+import { UserDto } from "../../account/models/user.model";
 import { ApproverMode, FlowType } from "./approval-step-template.model";
 
 export interface ApprovalStepInstanceDto {
@@ -10,7 +11,7 @@ export interface ApprovalStepInstanceDto {
       slaHours: number;
       approverMode: ApproverMode;
 
-      resolvedApproverCandidates?: string;
+      resolvedApproverCandidateIds?: string;
       defaultApproverId?: string;
       selectedApproverId?: string;
 
@@ -25,4 +26,8 @@ export interface ApprovalStepInstanceDto {
       comment?: string;
       slaBreached?: boolean;
       history?: object;
+}
+
+export interface ApprovalStepInstanceDetailDto extends ApprovalStepInstanceDto {
+      approverCandidates: UserDto[];
 }

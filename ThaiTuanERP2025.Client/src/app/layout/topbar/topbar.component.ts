@@ -12,6 +12,7 @@ import { NotificationFacade } from './notification-panel/facade/notification.fac
 import { NotificationDto } from './notification-panel/models/notification.model';
 import { TaskReminderFacade } from './task-reminder-panel/facades/task-reminder.facade';
 import { TaskReminderDrawerService } from './task-reminder-panel/services/task-reminder-drawer.service';
+import { resolveAvatarUrl } from '../../shared/utils/avatar.utils';
 
 @Component({
       selector: 'app-topbar',
@@ -100,13 +101,7 @@ export class TopbarComponent implements OnInit {
       }
 
       get avatarSrc(): string {
-            if (this.currentUser?.avatarFileId && this.currentUser.avatarFileId.startsWith('data:image')) {
-                  return this.currentUser.avatarFileId; // base64 preview
-            }
-            if (this.currentUser?.avatarFileObjectKey) {
-                  return this.baseUrl + '/files/public/' + this.currentUser.avatarFileObjectKey;
-            }
-            return 'default-user-avatar.jpg';
+            return resolveAvatarUrl(this.baseUrl, this.currentUser);
       }
 
       onNotificationsClick() {
