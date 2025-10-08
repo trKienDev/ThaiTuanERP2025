@@ -31,7 +31,6 @@ export class NotificationSignalRService {
       /** Bắt đầu kết nối */
       start(getToken?: () => string | null) {
             if (this.hubConnection?.state === signalR.HubConnectionState.Connected) {
-                  console.log('SignalR already connected');
                   return Promise.resolve();
             }
            
@@ -51,8 +50,7 @@ export class NotificationSignalRService {
 
             return this.hubConnection.start()
                   .then(() => {
-                        console.log('SignalR connected:', this.hubConnection?.state);
-                        console.log(`hubs: ${environment.baseUrl}${environment.hubs.notification}`);
+
                   })
                   .catch(err => {
                         console.error('SignalR start error', err);
