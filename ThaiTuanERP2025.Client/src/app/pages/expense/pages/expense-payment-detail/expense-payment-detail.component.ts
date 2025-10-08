@@ -14,6 +14,9 @@ import { TextareaNoSpellcheckDirective } from "../../../../shared/directives/mon
 import { ExpensePaymentCommentService } from "../../services/expense-payment-comment.service";
 import { ExpensePaymentCommentDto, ExpensePaymentCommentRequest } from "../../models/expense-payment-comment.model";
 import { animate, state, style, transition, trigger } from "@angular/animations";
+import { MatDialog } from "@angular/material/dialog";
+import { InvoiceDetailDialogComponent } from "../invoices/invoice-detail-dialog/invoice-detail-dialog.component";
+import { InvoiceDto } from "../../models/invoice.model";
 
 @Component({
       selector: 'expense-payment-detail',      
@@ -45,6 +48,7 @@ export class ExpensePaymentDetailComponent implements OnInit {
       private epCommentService = inject(ExpensePaymentCommentService);
       private userFacade = inject(UserFacade);
       currentUser$ = this.userFacade.currentUser$;
+      private readonly matDialog = inject(MatDialog);
 
       paymentId: string = '';
       paymentDetail: ExpensePaymentDetailDto | null = null;
@@ -62,7 +66,6 @@ export class ExpensePaymentDetailComponent implements OnInit {
 
       async getPaymentDetails() {
             this.paymentDetail = await firstValueFrom(this.expensePaymentService.getDetailById(this.paymentId));
-            console.log('payment detail', this.paymentDetail);
       }
 
       trackByComment = (_: number, c: ExpensePaymentCommentDto) => c.id;
@@ -124,5 +127,15 @@ export class ExpensePaymentDetailComponent implements OnInit {
 
             this.commentText = '';
             this.isCommenting = false;
+      }
+
+      async openInvoiceDetail(invoice?: InvoiceDto | null) {
+            if (!invoice) return;
+            const dialogRef = this.matDialog.open(InvoiceDetailDialogComponent, {
+                  data: { invoice }
+            });
+            dialogRef.afterClosed().subscribe(result => {
+                  alert(result);
+            });
       }
 }

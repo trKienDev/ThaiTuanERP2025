@@ -20,9 +20,6 @@ export class TaskReminderDrawerService {
 
       open(reminders$: Observable<TaskReminderDto[]>, handlers?: { dismiss?: (id: string) => void }) {
             if (this.isOpen()) {
-                  const debug$ = reminders$.pipe(
-      tap(list => console.log('[DrawerService] updateStreams len =', Array.isArray(list) ? list.length : '(not array)', list))
-    );
                   this.updateStreams(reminders$, handlers);
                   return;
             }
@@ -42,8 +39,8 @@ export class TaskReminderDrawerService {
 
 
             this.compRef = this.overlayRef.attach(new ComponentPortal(TaskReminderDrawerComponent, null, this.injector));
-               this.compRef.instance.reminders$ = debug$;          // <-- dùng debug$
-  this.compRef.changeDetectorRef.detectChanges();
+            this.compRef.instance.reminders$ = debug$;          // <-- dùng debug$
+            this.compRef.changeDetectorRef.detectChanges();
 
 
             this.compRef.instance.reminders$ = reminders$;

@@ -1,0 +1,25 @@
+<div class="dialog" style="min-width: 520px;">
+      <div class="dialog-container">
+            <div class="dialog-heading">
+                  <div class="dialog-title">
+                        <h1>Chi tiết hóa đơn</h1>
+                  </div>
+                  <div class="dialog-close">
+                        <button type="button" class="close-button" >
+                              <span class="text material-icons-outlined" (click)="close()">close</span>
+                        </button>
+                  </div>
+            </div>
+            <div class="dialog-body">
+                  <div class="invoice-infor">
+                        <div class="infor-heading">
+                              <div class="invoice-name">
+                                    <span>{{ invoiceDetail.invoiceName }}</span>
+                              </div>
+                              <div class="invoice-number">( Invoice #{{ invoiceDetail.invoiceNumber }})</div>
+                              <div class="invoice-status">{{ invoiceDetail.isDraft | invoiceStatus }}</div>
+                        </div>
+                  </div>
+            </div>
+      </div>
+</div>

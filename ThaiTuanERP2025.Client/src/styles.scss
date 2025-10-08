@@ -138,6 +138,7 @@ input[type=number] { -moz-appearance: textfield; }
 /* mat-calendar */
 .mat-datepicker-content .mat-calendar { width: 300px !important; height: unset !important; border-top-left-radius: var(--default-border-color-radius); border-top-right-radius: var(--default-border-color-radius); }
 .kit-datepicker { background-color: var(--main-bg-color); border-bottom-left-radius: var(--default-border-color-radius); border-bottom-right-radius: var(--default-border-color-radius); }
+.kit-datepicker button { border: none !important; }
 .kit-datepicker .mat-calendar-table { margin-top: 10px;}
 .kit-datepicker .mat-calendar-controls { margin: unset !important; }
 .kit-datepicker .mat-calendar-header { background: #1976d2;  color: #fff; border-top-left-radius: var(--default-border-color-radius); border-top-right-radius: var(--default-border-color-radius); padding: unset;}
