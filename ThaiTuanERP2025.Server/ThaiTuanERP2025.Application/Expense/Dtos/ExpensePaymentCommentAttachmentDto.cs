@@ -5,7 +5,8 @@
 		string FileName,
 		string FileUrl,
 		long FileSize,
-		string? MimeType
+		string? MimeType,
+		Guid FileId
 	);
 	public sealed record CommentAttachmentRequest(
 		string FileName,
