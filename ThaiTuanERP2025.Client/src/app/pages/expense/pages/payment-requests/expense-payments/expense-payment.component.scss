@@ -13,6 +13,8 @@
 .linked-button:hover { background-color: transparent; }
 .linked-button:hover .text { color: var(--kelly-green-color); }
 
+.text-button { padding: unset; }
+
 .danger-button { padding: 8px 10px !important; }
 .danger-button span { font-size: 22px !important; }
 

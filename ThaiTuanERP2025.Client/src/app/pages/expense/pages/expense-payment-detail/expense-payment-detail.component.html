@@ -116,8 +116,7 @@
                                                       <td class="item-total-with-tax">{{ item.totalWithTax | number:'1.0-0' }} VNĐ</td>
                                                       <td class="item-budget-code">{{ item.budgetCode?.code}} - {{ item.budgetCode?.name }}</td>
                                                       <td class="item-invoice">
-                                                            <button type="button" class="button"
-                                                            [ngClass]="item.invoice ? 'default-button' : 'cancel-button'">
+                                                            <button type="button" class="button" [ngClass]="item.invoice ? 'default-button' : 'cancel-button'" (click)="openInvoiceDetail(item.invoice)">
                                                                   {{ item.invoice ? 'Xem hóa đơn' : 'Không hóa đơn' }}
                                                             </button>
                                                       </td>
