@@ -11,6 +11,8 @@ import { UserFacade } from "../../../account/facades/user.facade";
 import { FormsModule } from "@angular/forms";
 import { AutoResizeDirective } from "../../../../shared/directives/money/textarea/textarea-auto-resize.directive";
 import { TextareaNoSpellcheckDirective } from "../../../../shared/directives/money/textarea/textarea-no-spellcheck.directive";
+import { ExpensePaymentCommentService } from "../../services/expense-payment-comment.service";
+import { ExpensePaymentCommentRequest } from "../../models/expense-payment-comment.model";
 
 @Component({
       selector: 'expense-payment-detail',      
@@ -22,6 +24,7 @@ import { TextareaNoSpellcheckDirective } from "../../../../shared/directives/mon
 export class ExpensePaymentDetailComponent implements OnInit {
       private route = inject(ActivatedRoute);
       private expensePaymentService = inject(ExpensePaymentService);
+      private epCommentService = inject(ExpensePaymentCommentService);
       private userFacade = inject(UserFacade);
       currentUser$ = this.userFacade.currentUser$;
 
@@ -49,11 +52,16 @@ export class ExpensePaymentDetailComponent implements OnInit {
             this.commentText = '';
             this.isCommenting = false;
       }
-      submitComment() {
+      async submitComment() {
             const content = this.commentText.trim();
             if(!content) return;
-            // call api submit comment here
-            console.log('submit comment', content);
+            
+            const payload: ExpensePaymentCommentRequest = {
+                  expensePaymentId: this.paymentId,
+                  content: content,
+            };
+            const result = await firstValueFrom(this.epCommentService.submitComment(this.paymentId, payload));
+            console.log('submit result', result);
             this.commentText = '';
             this.isCommenting = false;
       }

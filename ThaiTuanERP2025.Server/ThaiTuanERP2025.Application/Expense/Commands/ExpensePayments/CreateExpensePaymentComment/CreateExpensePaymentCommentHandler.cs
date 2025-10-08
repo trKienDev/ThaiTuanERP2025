@@ -63,10 +63,18 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ExpensePayments.CreateExp
 			await _unitOfWork.ExpensePaymentComments.AddAsync(comment);
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-			// Map Detail DTO
-			var dto = await _unitOfWork.ExpensePaymentComments.GetByIdProjectedAsync<ExpensePaymentCommentDto>(comment.Id, cancellationToken);
+			var entity = await _unitOfWork.ExpensePaymentComments.SingleOrDefaultIncludingAsync(
+				c => c.Id == comment.Id,
+				true,
+				cancellationToken,
+				c => c.CreatedByUser,
+				c => c.Attachments,
+				c => c.Tags,
+				c => c.Replies
+			);
 
-			return dto!;
+			var dto = _mapper.Map<ExpensePaymentCommentDto>(entity);
+			return dto;
 		}
 	}
 }
