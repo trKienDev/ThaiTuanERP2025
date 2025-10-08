@@ -12,7 +12,8 @@ import { FormsModule } from "@angular/forms";
 import { AutoResizeDirective } from "../../../../shared/directives/money/textarea/textarea-auto-resize.directive";
 import { TextareaNoSpellcheckDirective } from "../../../../shared/directives/money/textarea/textarea-no-spellcheck.directive";
 import { ExpensePaymentCommentService } from "../../services/expense-payment-comment.service";
-import { ExpensePaymentCommentRequest } from "../../models/expense-payment-comment.model";
+import { ExpensePaymentCommentDto, ExpensePaymentCommentRequest } from "../../models/expense-payment-comment.model";
+import { animate, state, style, transition, trigger } from "@angular/animations";
 
 @Component({
       selector: 'expense-payment-detail',      
@@ -20,6 +21,23 @@ import { ExpensePaymentCommentRequest } from "../../models/expense-payment-comme
       templateUrl: './expense-payment-detail.component.html',
       styleUrls: ['./expense-payment-detail.component.scss'],
       imports: [CommonModule, FormsModule, ExpensePaymentStatusPipe, AvatarUrlPipe, AutoResizeDirective, TextareaNoSpellcheckDirective],
+      animations: [
+            trigger('commentBox', [
+                  transition(':enter', [
+                        style({ opacity: 0, transform: 'translateY(-8px)', height: 0, overflow: 'hidden' }),
+                        animate(
+                              '180ms ease-out',
+                              style({ opacity: 1, transform: 'translateY(0)', height: '*', overflow: 'visible' })
+                        )
+                  ]),
+                  transition(':leave', [
+                        animate(
+                              '120ms ease-in',
+                              style({ opacity: 0, transform: 'translateY(-8px)', height: 0, overflow: 'hidden' })
+                        )
+                  ]),
+            ]),
+      ],
 })
 export class ExpensePaymentDetailComponent implements OnInit {
       private route = inject(ActivatedRoute);
@@ -30,11 +48,16 @@ export class ExpensePaymentDetailComponent implements OnInit {
 
       paymentId: string = '';
       paymentDetail: ExpensePaymentDetailDto | null = null;
-      baseUrl: string = environment.baseUrl;     
+      baseUrl: string = environment.baseUrl;    
+      comments: ExpensePaymentCommentDto[] = []; 
+
+      trackByIndex = (index: number) => index;
+      @ViewChild('ta') textareaRef?: ElementRef<HTMLTextAreaElement>;
       
       ngOnInit(): void {
             this.paymentId = this.route.snapshot.paramMap.get('id')!;
             this.getPaymentDetails();
+            this.loadComments();
       }
 
       async getPaymentDetails() {
@@ -42,11 +65,20 @@ export class ExpensePaymentDetailComponent implements OnInit {
             console.log('payment detail', this.paymentDetail);
       }
 
+      trackByComment = (_: number, c: ExpensePaymentCommentDto) => c.id;
+
       // comment
       isCommenting: boolean = false;
       commentText: string = '';
+
+      async loadComments() {
+            this.comments = await firstValueFrom(this.epCommentService.getByPayment(this.paymentId));
+      }
+
+
       startCommenting() {
             this.isCommenting = true;
+            setTimeout(() => this.textareaRef?.nativeElement.focus(), 0);
       }
       cancelComment() {
             this.commentText = '';
@@ -61,7 +93,35 @@ export class ExpensePaymentDetailComponent implements OnInit {
                   content: content,
             };
             const result = await firstValueFrom(this.epCommentService.submitComment(this.paymentId, payload));
-            console.log('submit result', result);
+            
+            if (result) {
+                  // Nếu là comment cha
+                  if (!result.parentCommentId) {
+                        // thêm lên đầu danh sách cho “cảm giác realtime”
+                        this.comments = [{ ...result, replies: result.replies ?? [] }, ...this.comments];
+                  } else {
+                        // Nếu là reply 1 cấp: tìm cha và chèn vào replies
+                        const parentIdx = this.comments.findIndex(c => c.id === result.parentCommentId);
+                        if (parentIdx >= 0) {
+                        const parent = this.comments[parentIdx];
+                        const newReplies = [...(parent.replies ?? []), result];
+                        // immutable update để Angular detect change
+                        const newParent = { ...parent, replies: newReplies };
+                        this.comments = [
+                              ...this.comments.slice(0, parentIdx),
+                              newParent,
+                              ...this.comments.slice(parentIdx + 1)
+                        ];
+                        } else {
+                        // không tìm thấy cha (trường hợp hiếm) ⇒ fallback: reload
+                        await this.loadComments();
+                        }
+                  }
+            } else {
+                  // ---- CÁCH (2): nếu API trả về Unit (hoặc null) ⇒ reload
+                  await this.loadComments();
+            }
+
             this.commentText = '';
             this.isCommenting = false;
       }

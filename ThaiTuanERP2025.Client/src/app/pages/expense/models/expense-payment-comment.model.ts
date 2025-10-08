@@ -1,3 +1,4 @@
+import { UserDto } from "../../account/models/user.model";
 import { ExpensePaymentAttachmentDto } from "./expense-payment-attachment.model";
 import { ExpensePaymentCommentAttachmentRequest } from "./expense-payment-comment-attachment.dto";
 import { ExpensePaymentCommentTagDto } from "./expense-payment-comment-tag.model";
@@ -16,8 +17,7 @@ export interface ExpensePaymentCommentDto extends ExpensePaymentComment {
       isEdited: boolean;
       commentType: number;
       createdByUserId: string;
-      createdByFullName: string;
-      createdByAvatar?: string;
+      createdByUser: UserDto;
       createdDate: Date;
       attachments?: ExpensePaymentAttachmentDto[];
       tags: ExpensePaymentCommentTagDto[];
