@@ -22,7 +22,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
 		/// <summary>
 		/// Tạo bình luận cho một ExpensePayment (hỗ trợ đính kèm file, tag user, và reply 1 cấp).
 		/// </summary>
-		[HttpPost]
+		[HttpPost("{expensePaymentId:guid}")]
 		[ProducesResponseType(typeof(ExpensePaymentCommentDto), StatusCodes.Status201Created)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<IActionResult> CreateAsync([FromRoute] Guid expensePaymentId, [FromBody] ExpensePaymentCommentRequest body, CancellationToken cancellationToken)
@@ -51,7 +51,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
 		/// (tuỳ chọn) Lấy toàn bộ comments theo paymentId (cha + replies 1 cấp).
 		/// Nếu bạn đã có GetCommentsByExpensePaymentIdQuery thì map action này đến query đó.
 		/// </summary>
-		[HttpGet("{payment-id:guid}")]
+		[HttpGet("by-payment/{expensePaymentId:guid}")]
 		[ProducesResponseType(typeof(IReadOnlyList<ExpensePaymentCommentDto>), StatusCodes.Status200OK)]
 		public async Task<IActionResult> GetByPaymentAsync([FromRoute] Guid expensePaymentId, CancellationToken cancellationToken)
 		{
