@@ -9,20 +9,11 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 		public ExpensePaymentCommentMappingProfile() {
 			// Comment → CommentDto
 			CreateMap<ExpensePaymentComment, ExpensePaymentCommentDto>()
-			    // map theo các tham số ctor của record ExpensePaymentCommentDto
-			    .ForCtorParam("Id", o => o.MapFrom(s => s.Id))
-			    .ForCtorParam("ExpensePaymentId", o => o.MapFrom(s => s.ExpensePaymentId))
-			    .ForCtorParam("ParentCommentId", o => o.MapFrom(s => s.ParentCommentId))
-			    .ForCtorParam("Content", o => o.MapFrom(s => s.Content))
-			    .ForCtorParam("IsEdited", o => o.MapFrom(s => s.IsEdited))
-			    .ForCtorParam("CommentType", o => o.MapFrom(s => (int)s.CommentType))
-			    .ForCtorParam("CreatedByUserId", o => o.MapFrom(s => s.CreatedByUserId))
-			    .ForCtorParam("CreatedByFullName", o => o.MapFrom(s => s.CreatedByUser != null ? s.CreatedByUser.FullName : "")) // NULL-SAFE
-			    .ForCtorParam("CreatedByAvatar", o => o.MapFrom(s => s.CreatedByUser != null ? s.CreatedByUser.AvatarFileObjectKey : null)) // NULL-SAFE
-			    .ForCtorParam("CreatedDate", o => o.MapFrom(s => s.CreatedDate))
-			    .ForCtorParam("Attachments", o => o.MapFrom(s => s.Attachments))
-			    .ForCtorParam("Tags", o => o.MapFrom(s => s.Tags))
-			    .ForCtorParam("Replies", o => o.MapFrom(s => s.Replies));
+				.ForMember(d => d.CommentType, o => o.MapFrom(s => (int)s.CommentType))
+				.ForMember(d => d.CreatedByUser, o => o.MapFrom(s => s.CreatedByUser))
+				.ForMember(d => d.Attachments, o => o.MapFrom(s => s.Attachments))
+				.ForMember(d => d.Tags, o => o.MapFrom(s => s.Tags))
+				.ForMember(d => d.Replies, o => o.MapFrom(s => s.Replies));
 
 			// Tag → TagDto
 			CreateMap<ExpensePaymentCommentTag, ExpensePaymentCommentTagDto>()
