@@ -1,18 +1,18 @@
-﻿using ThaiTuanERP2025.Domain.Files.Entities;
+﻿using ThaiTuanERP2025.Domain.Expense.Entities;
 
-namespace ThaiTuanERP2025.Domain.Expense.Entities
+namespace ThaiTuanERP2025.Application.Expense.Dtos
 {
-	public class InvoiceFile
+	public record InvoiceFileDto
 	{
 		public Guid Id { get; set; } = Guid.NewGuid();
 		public Guid InvoiceId { get; set; }
 		public Guid FileId { get; set; }
-
+		public string ObjectKey { get; set; } = null!;
 		public bool IsMain { get; set; } = false;
 		public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-		// Navigation
+	}
+	
+	public sealed record InvoiceFileDetailDto : InvoiceFileDto {
 		public Invoice Invoice { get; set; } = default!;
-		public StoredFile File { get; set; } = default!;
 	}
 }

@@ -4,7 +4,7 @@ using MediatR;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Expense.Dtos;
 
-namespace ThaiTuanERP2025.Application.Expense.Queries.Expense.GetCommentsByExpensePaymentId
+namespace ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetCommentsByExpensePaymentId
 {
 	public sealed class GetCommentsByExpensePaymentIdHandler : IRequestHandler<GetCommentsByExpensePaymentIdQuery, IReadOnlyList<ExpensePaymentCommentDto>>
 	{

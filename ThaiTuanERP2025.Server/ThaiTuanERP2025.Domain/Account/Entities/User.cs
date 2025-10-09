@@ -6,7 +6,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 {
 	public class User
 	{
-		public object AvatarFileObjectKey;
+		public object? AvatarFileObjectKey;
 
 		public Guid Id { get; set; }
 		public string FullName { get; private set; } = string.Empty;

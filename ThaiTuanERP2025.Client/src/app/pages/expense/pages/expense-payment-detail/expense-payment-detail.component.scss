@@ -6,12 +6,12 @@
       display: flex;
       gap: 100px;
       .payment-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding-right: 20px; // chừa khoảng cho đường kẻ
-    border-right: 1px solid #ddd; // ← đường kẻ dọc ngăn cách
-  }
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-right: 20px; // chừa khoảng cho đường kẻ
+            border-right: 1px solid #ddd; // ← đường kẻ dọc ngăn cách
+      }
 }
 .payment-body {
       display: flex;
@@ -244,6 +244,9 @@
       }
       & .date { color: var(--dark-gray); font-size: 11px; }
 }
-
+.no-comment {
+      padding: 10px;
+      user-select: none;
+}
 
 

@@ -22,7 +22,7 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories
 				.Include(p => p.Supplier)
 				.Include(p => p.Items).ThenInclude(i => i.BudgetCode)
 				.Include(p => p.Items).ThenInclude(i => i.CashoutCode)
-				.Include(p => p.Items).ThenInclude(i => i.Invoice)
+				.Include(p => p.Items).ThenInclude(i => i.Invoice!).ThenInclude(inv => inv.Files).ThenInclude(f => f.File)
 				.Include(p => p.Attachments)
 				.Include(p => p.Followers).ThenInclude(f => f.User)
 				.SingleOrDefaultAsync(p => p.Id == id && !p.IsDeleted, cancellationToken);

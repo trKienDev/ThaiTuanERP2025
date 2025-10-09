@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace ThaiTuanERP2025.Application.Expense.Commands.Invoices.CreateInvoiceDraft
 {
-	public sealed class CreateInvoiceDraftValidator : AbstractValidator<CreateInvoiceDraftRequest>
+	public sealed class CreateInvoiceValidator : AbstractValidator<CreateInvoiceRequest>
 	{
-		public CreateInvoiceDraftValidator() {
+		public CreateInvoiceValidator() {
 			RuleFor(x => x.InvoiceName).NotEmpty().MaximumLength(250);
 			RuleFor(x => x.InvoiceNumber).NotEmpty().MaximumLength(50);
 			RuleFor(x => x.IssueDate).NotEmpty();

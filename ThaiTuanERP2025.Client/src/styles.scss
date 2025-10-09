@@ -138,18 +138,22 @@ input[type=number] { -moz-appearance: textfield; }
 .cdk-overlay-pane .cdk-overlay-black-backdrop { background: rgba(15, 15, 15, 0.5); }
 
 /* mat-calendar */
+
 .mat-datepicker-content .mat-calendar { width: 300px !important; height: unset !important; border-top-left-radius: var(--default-border-color-radius); border-top-right-radius: var(--default-border-color-radius); }
-.kit-datepicker { background-color: var(--main-bg-color); border-bottom-left-radius: var(--default-border-color-radius); border-bottom-right-radius: var(--default-border-color-radius); }
+.kit-datepicker { 
+       background-image: linear-gradient(to bottom, #ffffff, #fdfdff, #fafcff, #f6fbfe, #f2fafd, #eff9fd, #ecf8fc, #e9f7fc, #e8f5fe, #e9f3ff, #ecf1ff, #f0eeff);
+      box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px; 
+      border-bottom-left-radius: var(--default-border-color-radius); border-bottom-right-radius: var(--default-border-color-radius); user-select: none; }
 .kit-datepicker button { border: none !important; }
-.kit-datepicker .mat-calendar-table { margin-top: 10px;}
 .kit-datepicker .mat-calendar-controls { margin: unset !important; }
 .kit-datepicker .mat-calendar-header { background: #1976d2;  color: #fff; border-top-left-radius: var(--default-border-color-radius); border-top-right-radius: var(--default-border-color-radius); padding: unset;}
-.kit-datepicker .mat-calendar-table-header th { padding: unset; font-weight: bold; opacity: 0.5;}
+.mat-calendar-table-header-divider { display: none; }
+.kit-datepicker .mat-calendar-table-header th { padding: 7px 0px; font-weight: bold; opacity: 0.5;}
 .kit-datepicker .mat-calendar-body-label { display: table-cell !important; visibility: hidden; padding: 0 !important; width: 0; height: 0; }
 .kit-datepicker .mat-calendar-content { padding: unset; }
 .kit-datepicker .mat-calendar-arrow { fill: white; }
 .kit-datepicker .mat-calendar-previous-button:hover, .kit-datepicker .mat-calendar-next-button:hover { opacity: 0.8; }
-.kit-datepicker .mat-calendar-body-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical), .kit-datepicker .mat-calendar-body-cell-content:hover { background-color: white !important; color: #1976d2; border: 1px solid #1976d2; }
+.kit-datepicker .mat-calendar-body-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical), .kit-datepicker .mat-calendar-body-cell-content:hover { background-color: white !important; color: #1976d2; font-weight: bold; border: none;}
 .kit-datepicker .mat-calendar-body-cell-content { border-radius: var(--default-border-color-radius); }
 .kit-datepicker .mat-calendar-body-selected { background-color: #1976d2; color: white; }
 .kit-datepicker .mat-calendar-body-row { display: table-row !important; }

@@ -63,10 +63,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public Guid? CurrentWorkflowInstanceId { get; private set; }
 		public ApprovalWorkflowInstance? CurrentWorkflowInstance { get; private set; }
 
-		public User CreatedByUser { get; set; } = null!;
-		public User? ModifiedByUser { get; set; }
-		public User? DeletedByUser { get; set; }
-
 		public Guid ManagerApproverId { get; private set; }
 
 		// ==== HÀM NGHIỆP VỤ ====
