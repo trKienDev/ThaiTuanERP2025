@@ -56,6 +56,7 @@ export class MiniInvoiceRequestDialogComponent {
       // ============ Handlers ============
       onFileSelected(event: Event): void {
             const file = (event.target as HTMLInputElement).files?.[0] ?? null;
+            console.log('Selected file:', file);
             this.pendingFile = file;
             this.fileName = file?.name ?? '';
       }

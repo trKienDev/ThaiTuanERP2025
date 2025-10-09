@@ -1,7 +1,23 @@
+.dialog {
+      width: 1000px;
+      .dialog-body {
+            display: flex;
+            gap: 20px;
+            flex-direction: column;
+      }
+      .primary-row {
+            display: flex;
+            gap: 20px;
+            align-items: stretch;
+      }
+}
+
 .primary-card {
       width: 100%;
 }
+
 .invoice-information {
+
       .infor-heading {
             display: flex;
             font-size: 16px;
@@ -47,3 +63,22 @@
       }
 }
 
+.invoice-preview {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+
+      .invoice-pdf-frame {
+            flex: 1;        
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      }
+      .no-file-placeholder {
+            text-align: center;
+            color: #888;
+            padding: 20px;
+            font-style: italic;
+      }
+}

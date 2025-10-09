@@ -16,7 +16,7 @@ namespace ThaiTuanERP2025.Domain.Notifications
 		public DateTime? ResolvedAt { get; private set; }
 
 		public Guid DocumentId { get; private set; }      // Ví dụ: Id của ExpensePayment
-		public string DocumentType { get; private set; }
+		public string DocumentType { get; private set; } = string.Empty;
 
 		private TaskReminder() { }
 

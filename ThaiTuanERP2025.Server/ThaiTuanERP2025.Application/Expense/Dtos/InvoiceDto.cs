@@ -26,10 +26,9 @@
 		public bool IsDraft { get; init; }
 		
 		public IReadOnlyList<InvoiceLineDto> InvoiceLines { get; init; } = Array.Empty<InvoiceLineDto>();
-
-		// File preivews
-		public IReadOnlyList<Guid> FileIds { get; init; } = Array.Empty<Guid>();
+		public IReadOnlyList<InvoiceFileDto> InvoiceFiles { get; init; } = Array.Empty<InvoiceFileDto>();
 		public IReadOnlyList<Guid> FollowerUserIds { get; init; } = Array.Empty<Guid>();
+
 
 		// Totals (computed from lines)
 		public decimal SubTotal { get; init; }

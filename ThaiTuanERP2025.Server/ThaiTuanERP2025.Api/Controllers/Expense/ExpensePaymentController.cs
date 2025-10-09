@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Expense.Commands.ExpensePayments.CreateExpensePayments;
 using ThaiTuanERP2025.Application.Expense.Dtos;
-using ThaiTuanERP2025.Application.Expense.Queries.Expense.GetExpensePaymentDetail;
+using ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetExpensePaymentDetail;
 
 namespace ThaiTuanERP2025.Api.Controllers.Expense
 {
