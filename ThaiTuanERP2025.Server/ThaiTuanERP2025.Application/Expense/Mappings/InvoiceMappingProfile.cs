@@ -16,7 +16,8 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 				.ForMember(d => d.TotalVAT, o => o.MapFrom(s => s.Lines.Sum(l => l.VATAmount ?? 0)))
 				.ForMember(d => d.TotalWHT, o => o.MapFrom(s => s.Lines.Sum(l => l.WHTAmount ?? 0)))
 				.ForMember(d => d.GrandTotal, o => o.MapFrom(s => s.Lines.Sum(l => l.LineTotal)))
-				.ForMember(d => d.InvoiceFiles, o => o.MapFrom(s => s.Files));
+				.ForMember(d => d.InvoiceFiles, o => o.MapFrom(s => s.Files))
+				.ForMember(d => d.CreatedByUser, o => o.MapFrom(s => s.CreatedByUser));
 
 			CreateMap<InvoiceFile, InvoiceFileDto>()
 				.ForMember(d => d.ObjectKey, o => o.MapFrom(s => s.File.ObjectKey));

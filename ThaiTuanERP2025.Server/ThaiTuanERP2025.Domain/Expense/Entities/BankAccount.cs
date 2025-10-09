@@ -17,5 +17,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public Supplier? Supplier { get; set; }
 
 		public bool IsActive { get; set; } = true;
+
 	}
 }

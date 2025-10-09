@@ -40,6 +40,10 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public IReadOnlyCollection<ExpensePaymentCommentAttachment> Attachments => _attachments;
 		public IReadOnlyCollection<ExpensePaymentCommentTag> Tags => _tags;
 
+		public User CreatedByUser { get; set; } = null!;
+		public User? ModifiedByUser { get; set; }
+		public User? DeletedByUser { get; set; }
+
 		// Hành vi
 		public void Edit(string newContent, Guid modifiedByUserId)
 		{

@@ -14,10 +14,15 @@
 
 .primary-card {
       width: 100%;
+      .card-body {
+            display: flex;
+            gap: 16px;
+            flex-direction: column;
+      }
 }
 
 .invoice-information {
-
+      flex: 1;
       .infor-heading {
             display: flex;
             font-size: 16px;
@@ -28,16 +33,17 @@
                   color: var(--bright-blue-color);
                   margin-right: 10px;
             }
-            .invoice-number {
+            .invoice-number span {
                   color: var(--dark-gray);
                   font-size: 12px;
                   display: flex;
                   align-items: center;
                   margin-right: 10px;
+                  font-weight: lighter;
             }
       }
 
-      .primary-infor {
+      .primary-infor, .sub-infor {
             display: flex;
             flex-wrap: wrap;
             gap: 16px;
@@ -52,11 +58,14 @@
                   .infor-row {
                         display: grid;
                         grid-template-columns: 160px 1fr;
+                        align-items: center;
+
                         .infor-label {
                               margin-right: 10px;
                               font-style: italic;
                               color: #797171;
                         }
+                        
                   }
 
             }
@@ -81,4 +90,12 @@
             padding: 20px;
             font-style: italic;
       }
+}
+
+.avatar-image {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #eee;
 }

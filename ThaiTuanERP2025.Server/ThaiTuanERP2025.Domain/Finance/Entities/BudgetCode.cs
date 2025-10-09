@@ -16,5 +16,9 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public CashoutCode CashoutCode { get; set; } = null!;
 
 		public ICollection<BudgetPlan> BudgetPlans { get; set; } = new List<BudgetPlan>();
+
+		public User CreatedByUser { get; set; } = null!;
+		public User? ModifiedByUser { get; set; }
+		public User? DeletedByUser { get; set; }
 	}
 }
