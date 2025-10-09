@@ -18,7 +18,9 @@
                                           <div class="invoice-name">
                                                 <span>{{ invoiceDetail.invoiceName }}</span>
                                           </div>
-                                          <div class="invoice-number">( Invoice #{{ invoiceDetail.invoiceNumber }} )</div>
+                                          <div class="invoice-number">
+                                                <span>( Invoice #{{ invoiceDetail.invoiceNumber }} )</span>
+                                          </div>
                                           <div class="invoice-status badge success-light-badgde">{{ invoiceDetail.isDraft | invoiceStatus }}</div>
                                     </div>
                                     <div class="card-body">
@@ -103,19 +105,28 @@
                                           </div>
                                           <div class="sub-infor">
                                                 <div class="block-infor">
-                                                      <span style="font-weight: bold;">Thông tin chunng</span>
+                                                      <span style="font-weight: bold;">Thông tin chung</span>
                                                       <div class="infor-row">
                                                             <label class="infor-label" for="invoice-updater">Tạo bởi</label>
-                                                            <ng-container *ngIf="invoiceDetail.buyerAddress | emptyPlaceholder as result">
-                                                                  <span class="infor-value" [class.empty-placeholder]="result.isPlaceholder">
-                                                                        {{ result.text }}
-                                                                  </span>
-                                                            </ng-container>
+                                                            <div class="infor-value display-flex align-items-center gap-10px">
+                                                                  <img class="avatar-image" [src]="invoiceDetail.createdByUser | avatarUrlPipe" alt="Avatar">
+                                                                  <ng-container *ngIf="invoiceDetail.createdByUser.fullName | emptyPlaceholder as result">
+                                                                        <span class="infor-value" [class.empty-placeholder]="result.isPlaceholder">
+                                                                              {{ result.text }}
+                                                                        </span>
+                                                                  </ng-container>
+                                                            </div>
                                                       </div>
-                                                </div>
+                                                      <div class="infor-row">
+                                                            <label class="infor-label" for="invoice-date">Tạo lúc</label>
+                                                            <span class="infor-value">
+                                                                  {{ invoiceDetail.createdDate | date:'HH:mm dd/MM/yyyy ' }}
+                                                            </span>
+                                                      </div>
                                           </div>
                                     </div>
                               </div>
+                        </div>
                         </div>
                         <div class="invoice-preview">
                               <ng-container *ngIf="invoiceDetail.invoiceFiles.length > 0">

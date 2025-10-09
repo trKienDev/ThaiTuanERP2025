@@ -21,6 +21,10 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public Guid? ManagerUserId { get; set; }	
 		public User? ManagerUser { get; set; }
 
+		public User CreatedByUser { get; set; } = null!;
+		public User? ModifiedByUser { get; set; }
+		public User? DeletedByUser { get; set; }
+
 		private Department() {
 			Users = new List<User>();
 		} // EF

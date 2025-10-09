@@ -1,4 +1,5 @@
-﻿using ThaiTuanERP2025.Domain.Files.Entities;
+﻿using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Domain.Files.Entities;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
