@@ -6,11 +6,12 @@ import { InvoiceStatusPipe } from "../../../pipes/invoice-status.pipe";
 import { EmptyPlaceholderPipe } from "../../../../../shared/pipes/empty-placeholder.pipe";
 import { environment } from "../../../../../../environments/environment";
 import { SafeUrlPipe } from "../../../../../shared/pipes/safe-url.pipe";
+import { AvatarUrlPipe } from "../../../../../shared/pipes/avatar-url.pipe";
 
 @Component({
       selector: 'my-invoices-dialog',
       standalone: true,
-      imports: [CommonModule, InvoiceStatusPipe, EmptyPlaceholderPipe, SafeUrlPipe],
+      imports: [CommonModule, InvoiceStatusPipe, EmptyPlaceholderPipe, SafeUrlPipe, AvatarUrlPipe],
       templateUrl: './invoice-detail-dialog.component.html',
       styleUrls: ['./invoice-detail-dialog.component.scss']
 })

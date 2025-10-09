@@ -1,3 +1,4 @@
+import { UserDto } from "../../account/models/user.model";
 import { InvoiceFileDto } from "./invoice-file.model";
 import { invoiceLineDto, invoiceLineRequest } from "./invoice-line.model";
 
@@ -19,8 +20,6 @@ export interface InvoiceDto {
       isDraft: boolean;
 
       invoiceLines: invoiceLineDto[];
-
-      
       invoiceFiles: InvoiceFileDto[];
       followerUserIds: string[];
 
@@ -28,6 +27,9 @@ export interface InvoiceDto {
       totalVAT: number;
       totalWHT: number;
       grandTotal: number;
+
+      createdByUser: UserDto;
+      createdDate: Date;
 }
 
 export interface CreateInvoiceDraftRequest {

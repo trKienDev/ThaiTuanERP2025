@@ -10,6 +10,11 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public Group Group { get; private set; }
 		public DateTime JoinedAt { get; private set; } = DateTime.UtcNow;
 
+		public User CreatedByUser { get; set; } = null!;
+		public User? ModifiedByUser { get; set; }
+		public User? DeletedByUser { get; set; }
+
+
 		private UserGroup() {
 			User = null!;
 			Group = null!;
