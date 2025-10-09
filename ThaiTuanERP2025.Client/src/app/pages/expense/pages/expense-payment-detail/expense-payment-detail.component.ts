@@ -134,8 +134,6 @@ export class ExpensePaymentDetailComponent implements OnInit {
             const dialogRef = this.matDialog.open(InvoiceDetailDialogComponent, {
                   data: { invoice }
             });
-            dialogRef.afterClosed().subscribe(result => {
-                  alert(result);
-            });
+
       }
-}
+}     
