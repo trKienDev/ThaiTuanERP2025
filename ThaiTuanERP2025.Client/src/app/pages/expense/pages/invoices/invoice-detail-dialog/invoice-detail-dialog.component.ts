@@ -3,11 +3,12 @@ import { Component, Inject, inject } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { InvoiceDto } from "../../../models/invoice.model";
 import { InvoiceStatusPipe } from "../../../pipes/invoice-status.pipe";
+import { EmptyPlaceholderPipe } from "../../../../../shared/pipes/empty-placeholder.pipe";
 
 @Component({
       selector: 'my-invoices-dialog',
       standalone: true,
-      imports: [CommonModule, InvoiceStatusPipe],
+      imports: [CommonModule, InvoiceStatusPipe, EmptyPlaceholderPipe],
       templateUrl: './invoice-detail-dialog.component.html',
       styleUrls: ['./invoice-detail-dialog.component.scss']
 })
@@ -22,7 +23,7 @@ export class InvoiceDetailDialogComponent{
 
 
 
-      close(result?: any): void {
-            this.dialogRef.close(result);
+      close(): void {
+            this.dialogRef.close();
       }
 }

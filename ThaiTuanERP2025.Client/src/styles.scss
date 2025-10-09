@@ -125,6 +125,8 @@ html, body { height: 100%; margin: 0; }
 .ahref-non-decoration { text-decoration: none; color: black; }
 .ahref-non-decoration:hover { color: var(--bright-blue-color); text-decoration: underline; cursor: pointer;}
 
+.empty-placeholder { color: var(--dark-gray); user-select: none;}
+
 /* Chrome, Safari, Edge, Opera */
 input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 /* Firefox */
