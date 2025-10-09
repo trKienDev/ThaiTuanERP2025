@@ -1,5 +1,49 @@
-.invoice-infor {
+.primary-card {
+      width: 100%;
+}
+.invoice-information {
       .infor-heading {
             display: flex;
+            font-size: 16px;
+            align-items: center;
+
+            .invoice-name {
+                  font-weight: 600;
+                  color: var(--bright-blue-color);
+                  margin-right: 10px;
+            }
+            .invoice-number {
+                  color: var(--dark-gray);
+                  font-size: 12px;
+                  display: flex;
+                  align-items: center;
+                  margin-right: 10px;
+            }
+      }
+
+      .primary-infor {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            flex-direction: column;
+
+            .block-infor {
+                  display: flex;
+                  flex-wrap: wrap;
+                  gap: 10px;
+                  flex-direction: column;
+
+                  .infor-row {
+                        display: grid;
+                        grid-template-columns: 160px 1fr;
+                        .infor-label {
+                              margin-right: 10px;
+                              font-style: italic;
+                              color: #797171;
+                        }
+                  }
+
+            }
       }
 }
+
