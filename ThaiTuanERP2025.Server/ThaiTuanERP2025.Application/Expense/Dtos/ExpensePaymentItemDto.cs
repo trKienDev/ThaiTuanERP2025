@@ -22,7 +22,7 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 	public sealed record ExpensePaymentItemDetailDto : ExpensePaymentItemDto {
 		public BudgetCode? BudgetCode { get; init; } = default!;
 		public CashoutCode? CashoutCode { get; init; } = default!;
-		public Invoice? Invoice { get; init; } = default!;
+		public InvoiceDto? Invoice { get; init; } = default!;
 	}
 
 	public sealed record ExpensePaymentItemRequest {

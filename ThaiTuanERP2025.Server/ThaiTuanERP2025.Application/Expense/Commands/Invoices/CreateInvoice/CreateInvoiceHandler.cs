@@ -6,15 +6,15 @@ using ThaiTuanERP2025.Domain.Expense.Entities;
 
 namespace ThaiTuanERP2025.Application.Expense.Commands.Invoices.CreateInvoiceDraft
 {
-	public sealed class CreateInvoiceDraftHandler : IRequestHandler<CreateInvoiceDraftCommand, InvoiceDto>
+	public sealed class CreateInvoiceHandler : IRequestHandler<CreateInvoiceCommand, InvoiceDto>
 	{
 		private readonly IUnitOfWork _unitOfWork;
-		public CreateInvoiceDraftHandler(IUnitOfWork unitOfWork)
+		public CreateInvoiceHandler(IUnitOfWork unitOfWork)
 		{
 			_unitOfWork = unitOfWork;
 		}
 
-		public async Task<InvoiceDto> Handle(CreateInvoiceDraftCommand request, CancellationToken cancellationToken)
+		public async Task<InvoiceDto> Handle(CreateInvoiceCommand request, CancellationToken cancellationToken)
 		{
 			var invoice = new Invoice
 			{

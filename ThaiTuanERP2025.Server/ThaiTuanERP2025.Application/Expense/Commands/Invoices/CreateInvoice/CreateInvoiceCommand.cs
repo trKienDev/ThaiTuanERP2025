@@ -1,14 +1,9 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Expense.Dtos;
 
 namespace ThaiTuanERP2025.Application.Expense.Commands.Invoices.CreateInvoiceDraft
 {
-	public sealed record CreateInvoiceDraftRequest(
+	public sealed record CreateInvoiceRequest(
 		string InvoiceNumber,
 		string InvoiceName,
 		DateTime IssueDate,
@@ -22,5 +17,5 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.Invoices.CreateInvoiceDra
 		Guid? MainFileId
 	);
 
-	public sealed record CreateInvoiceDraftCommand(CreateInvoiceDraftRequest Request) : IRequest<InvoiceDto>;
+	public sealed record CreateInvoiceCommand(CreateInvoiceRequest Request) : IRequest<InvoiceDto>;
 }

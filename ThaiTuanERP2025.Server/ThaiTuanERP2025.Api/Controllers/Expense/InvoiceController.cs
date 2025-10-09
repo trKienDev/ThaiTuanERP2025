@@ -30,9 +30,9 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
 		}
 
 		[HttpPost("draft")]
-		public async Task<ActionResult<ApiResponse<InvoiceDto>>> CreateDraft([FromBody] CreateInvoiceDraftRequest request)
+		public async Task<ActionResult<ApiResponse<InvoiceDto>>> CreateDraft([FromBody] CreateInvoiceRequest request)
 		{
-			var result = await _mediator.Send(new CreateInvoiceDraftCommand(request));
+			var result = await _mediator.Send(new CreateInvoiceCommand(request));
 			return Ok(ApiResponse<InvoiceDto>.Success(result));
 		}
 

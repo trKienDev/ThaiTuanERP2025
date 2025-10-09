@@ -49,9 +49,9 @@
                   <!-- File hóa đơn (file/ảnh) -->
                   <div class="dialog-row">
                         <div class="file-uploader">
-                              <input #invoiceFile id="invoiceFile" type="file" class="file-input d-none" accept="application/pdf,image/*" (change)="onFileSelected($event)" />
+                              <input #miniFile type="file" class="file-input d-none" accept="application/pdf,image/*" (change)="onFileSelected($event)" />
                               <div class="button default-button">
-                                    <label for="invoiceFile" class="cursor-pointer">Chọn file (PDF/Ảnh)</label>
+                                    <label for="invoiceFile" class="cursor-pointer" (click)="miniFile.click()">Chọn file (PDF/Ảnh)</label>
                               </div>
                               <span class="file-name" *ngIf="fileName; else noFile" style="margin-left: 10px;">{{ fileName }}</span>
                               <ng-template #noFile>

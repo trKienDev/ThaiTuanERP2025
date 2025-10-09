@@ -1,3 +1,4 @@
+import { InvoiceFileDto } from "./invoice-file.model";
 import { invoiceLineDto, invoiceLineRequest } from "./invoice-line.model";
 
 export interface InvoiceDto {
@@ -18,8 +19,9 @@ export interface InvoiceDto {
       isDraft: boolean;
 
       invoiceLines: invoiceLineDto[];
+
       
-      fileIds: string[];
+      invoiceFiles: InvoiceFileDto[];
       followerUserIds: string[];
 
       subTotal: number;
