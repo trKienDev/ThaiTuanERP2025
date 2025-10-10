@@ -6,6 +6,7 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ApprovalSteps.RejectCurre
 		Guid WorkflowInstanceId,
 		Guid StepInstanceId,
 		Guid UserId,
-		string? Reason // có thể bắt buộc nếu policy yêu cầu
+		Guid PaymentId,
+		string? Comment 
 	) : IRequest<Unit>;
 }
