@@ -1,7 +1,7 @@
 <div class="payment-detail-container">
       <div class="payment-heading">
             <div class="payment-actions display-flex gap-10px align-items-center">
-                  <button type="button" class="button submit-button">Duyệt</button>
+                  <button type="button" class="button submit-button" (click)="onApprove()">Duyệt</button>
                   <button type="button" class="button danger-button">Từ chối</button>
             </div>
             <div class="display-flex gap-10px">
@@ -50,11 +50,11 @@
                                           <label>Luồng duyệt</label>
                                           <div class="value">
                                                 <ul class="avatar-stack">
-                                                      <li *ngFor="let u of (paymentDetail?.workflowInstance?.steps || []); let i = index; trackBy: trackByIndex">
+                                                      <li *ngFor="let u of (paymentDetail?.workflowInstanceDetail?.steps || []); let i = index; trackBy: trackByIndex">
                                                             <img class="avatar" [src]="u?.approverCandidates?.[0] | avatarUrlPipe" alt="approver">
                                                       </li>
-                                                      <li class="more" *ngIf="(paymentDetail?.workflowInstance?.steps?.length || 0) > 6">
-                                                            +{{ (paymentDetail?.workflowInstance?.steps?.length || 0) - 6 }}
+                                                      <li class="more" *ngIf="(paymentDetail?.workflowInstanceDetail?.steps?.length || 0) > 6">
+                                                            +{{ (paymentDetail?.workflowInstanceDetail?.steps?.length || 0) - 6 }}
                                                       </li>
                                                 </ul>
                                           </div>

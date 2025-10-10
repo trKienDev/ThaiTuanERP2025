@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Microsoft.Identity.Client;
 using ThaiTuanERP2025.Application.Common.Options;
 using ThaiTuanERP2025.Application.Common.Services;
 using ThaiTuanERP2025.Domain.Common;

@@ -2,11 +2,11 @@
 
 namespace ThaiTuanERP2025.Application.Expense.Dtos
 {
-	public record ApprovalStepInstanceDto (
+	public record ApprovalStepInstanceDto(
 		Guid Id,
 		Guid WorkflowInstanceId,
 		Guid? TemplateStepId,
-		string Name,	
+		string Name,
 		int Order,
 		string FlowType,
 		int SlaHours,
@@ -78,5 +78,18 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 		SlaBreached,
 		History
 	);
+
+	public sealed record ApproveStepRequest
+	{
+		public Guid UserId { get; set; }
+		public Guid PaymentId { get; set; }
+		public string? Comment { get; set; }
+	};
+
+	public sealed record RejectStepRequest
+	{
+		public Guid UserId { get; set; }
+		public string Reason { get; set; } = default!;
+	};
 
 }
