@@ -79,17 +79,11 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 		History
 	);
 
-	public sealed record ApproveStepRequest
+	public record ApproveStepRequest
 	{
 		public Guid UserId { get; set; }
 		public Guid PaymentId { get; set; }
 		public string? Comment { get; set; }
 	};
-
-	public sealed record RejectStepRequest
-	{
-		public Guid UserId { get; set; }
-		public string Reason { get; set; } = default!;
-	};
-
+	public sealed record RejectStepRequest : ApproveStepRequest;
 }
