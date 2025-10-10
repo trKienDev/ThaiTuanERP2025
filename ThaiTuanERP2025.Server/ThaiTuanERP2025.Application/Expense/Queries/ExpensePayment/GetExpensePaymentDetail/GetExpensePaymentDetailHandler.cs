@@ -67,7 +67,7 @@ namespace ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetExpenseP
 			// 6) Nhét vào ExpensePaymentDetailDto
 			var dto = _mapper.Map<ExpensePaymentDetailDto>(payment) with
 			{
-				WorkflowInstance = detail
+				WorkflowInstanceDetail = detail
 			};
 
 			return dto;

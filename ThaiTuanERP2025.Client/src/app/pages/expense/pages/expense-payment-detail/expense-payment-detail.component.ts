@@ -13,10 +13,14 @@ import { AutoResizeDirective } from "../../../../shared/directives/money/textare
 import { TextareaNoSpellcheckDirective } from "../../../../shared/directives/money/textarea/textarea-no-spellcheck.directive";
 import { ExpensePaymentCommentService } from "../../services/expense-payment-comment.service";
 import { ExpensePaymentCommentDto, ExpensePaymentCommentRequest } from "../../models/expense-payment-comment.model";
-import { animate, state, style, transition, trigger } from "@angular/animations";
+import { animate, style, transition, trigger } from "@angular/animations";
 import { MatDialog } from "@angular/material/dialog";
 import { InvoiceDetailDialogComponent } from "../invoices/invoice-detail-dialog/invoice-detail-dialog.component";
 import { InvoiceDto } from "../../models/invoice.model";
+import { UserDto } from "../../../account/models/user.model";
+import { ApprovalWorkflowInstanceService } from "../../services/approval-workflow-instance.service";
+import { ApproveStepRequest } from "../../models/approval-step-instance.model";
+import { ToastService } from "../../../../shared/components/toast/toast.service";
 
 @Component({
       selector: 'expense-payment-detail',      
@@ -49,6 +53,9 @@ export class ExpensePaymentDetailComponent implements OnInit {
       private userFacade = inject(UserFacade);
       currentUser$ = this.userFacade.currentUser$;
       private readonly matDialog = inject(MatDialog);
+      currentUser: UserDto | null = null;
+      private readonly workflowInstanceService = inject(ApprovalWorkflowInstanceService);
+      private toastService = inject(ToastService);
 
       paymentId: string = '';
       paymentDetail: ExpensePaymentDetailDto | null = null;
@@ -58,8 +65,9 @@ export class ExpensePaymentDetailComponent implements OnInit {
       trackByIndex = (index: number) => index;
       @ViewChild('ta') textareaRef?: ElementRef<HTMLTextAreaElement>;
       
-      ngOnInit(): void {
+      async ngOnInit(): Promise<void> {
             this.paymentId = this.route.snapshot.paramMap.get('id')!;
+            this.currentUser = await firstValueFrom(this.currentUser$);
             this.getPaymentDetails();
             this.loadComments();
       }
@@ -135,5 +143,27 @@ export class ExpensePaymentDetailComponent implements OnInit {
                   data: { invoice }
             });
 
+      }
+
+      async onApprove() {
+            const workflowInstanceDetail = this.paymentDetail?.workflowInstanceDetail;
+            if(!workflowInstanceDetail) return;
+            const currentStep = workflowInstanceDetail.steps.find(s => s.order === workflowInstanceDetail.workflowInstance.currentStepOrder);
+            if(!currentStep) return;
+            if (!this.currentUser?.id) { alert('Không xác định được người dùng hiện tại'); return; }
+            if (!this.paymentId) { alert('Thiếu PaymentId'); return; }
+
+            const payload: ApproveStepRequest = {
+                  userId: this.currentUser.id,
+                  paymentId: this.paymentId,
+                  comment: this.commentText || ''
+            };
+            
+            const result = await firstValueFrom(this.workflowInstanceService.approveStep(
+                  workflowInstanceDetail.workflowInstance.id, 
+                  currentStep.id,
+                  payload
+            ));
+            if(result) { this.toastService.successRich(result); }
       }
 }     

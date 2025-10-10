@@ -27,6 +27,7 @@ using ThaiTuanERP2025.Infrastructure.Notifications.Background;
 using ThaiTuanERP2025.Application.Common.Services;
 using ThaiTuanERP2025.Infrastructure.Common.Services;
 using ThaiTuanERP2025.Application.Common.Options;
+using ThaiTuanERP2025.Infrastructure.Expense.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +43,7 @@ builder.Services.AddScoped<IRealtimeNotifier, SignalRealtimeNotifier>();
 builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 builder.Services.AddScoped<ITaskReminderService, TaskReminderService>();
 builder.Services.AddScoped<IDocumentSubIdGeneratorService, DocumentSubIdGeneratorService>();
+builder.Services.AddScoped<IApprovalStepService, ApprovalStepService>();
 
 builder.Services.AddHostedService<TaskReminderExpiryHostedService>();
 builder.Services.Configure<TaskReminderExpiryOptions>(

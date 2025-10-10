@@ -85,5 +85,5 @@ export interface ExpensePaymentDetailDto extends ExpensePaymentDto {
       updatedBy?: UserDto;
       updatedAt?: Date;
 
-      workflowInstance?: ApprovalWorkflowInstanceDetailDto;
+      workflowInstanceDetail?: ApprovalWorkflowInstanceDetailDto;
 }

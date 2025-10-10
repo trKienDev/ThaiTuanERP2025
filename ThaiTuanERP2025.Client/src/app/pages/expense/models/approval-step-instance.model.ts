@@ -31,3 +31,9 @@ export interface ApprovalStepInstanceDto {
 export interface ApprovalStepInstanceDetailDto extends ApprovalStepInstanceDto {
       approverCandidates: UserDto[];
 }
+
+export interface ApproveStepRequest {
+      userId: string;
+      paymentId: string;
+      comment?: string;
+}
