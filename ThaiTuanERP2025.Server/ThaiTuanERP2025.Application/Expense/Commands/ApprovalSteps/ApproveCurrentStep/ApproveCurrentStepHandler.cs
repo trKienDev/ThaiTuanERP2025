@@ -34,6 +34,10 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ApprovalSteps.ApproveCurr
 				asNoTracking: false,
 				cancellationToken: cancellationToken
 			) ?? throw new NotFoundException("Không tìm thấy workflow instance");
+
+			if (workflowInstance.Status is not Domain.Expense.Enums.WorkflowStatus.InProgress)
+				throw new ConflictException($"Workflow ở trạng thái {workflowInstance.Status}, không thể duyệt bước duyệt");
+
 			var paymentDetail = await _unitOfWork.ExpensePayments.GetByIdAsync(command.PaymentId)
 				?? throw new NotFoundException("Không tìm thấy chi phí thanh toán");
 

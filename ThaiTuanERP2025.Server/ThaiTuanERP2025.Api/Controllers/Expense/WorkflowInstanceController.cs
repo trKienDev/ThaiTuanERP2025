@@ -61,7 +61,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
 		[HttpPost("{instanceId}/steps/{stepId}/reject")]
 		public async Task<IActionResult> RejectStep(Guid instanceId, Guid stepId, [FromBody] RejectStepRequest body, CancellationToken cancellationToken)
 		{
-			var result = await _mediator.Send(new RejectCurrentStepCommand(instanceId, stepId, body.UserId, body.Reason), cancellationToken);
+			var result = await _mediator.Send(new RejectCurrentStepCommand(instanceId, stepId, body.UserId, body.PaymentId, body.Comment), cancellationToken);
 			return Ok(ApiResponse<object>.Success("Step rejected successfully"));
 		}
 	}
