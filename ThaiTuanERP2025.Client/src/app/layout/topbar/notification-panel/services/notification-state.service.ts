@@ -4,6 +4,7 @@ import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { NotificationSignalRService } from './notification-signalr.service';
 import { NotificationDto } from '../models/notification.model';
 import { NotificationsApiService } from './notification-api.service';
+import { ToastNotificationService } from '../../../../shared/components/toast-notification/toast-notification.service';
 
 @Injectable({ providedIn: 'root' })
 export class NotificationStateService {
@@ -16,6 +17,8 @@ export class NotificationStateService {
       /** Stream public cho component subscribe */
       readonly notifications$ = this._notifications$.asObservable();
       readonly unreadCount$ = this._unreadCount$.asObservable();
+
+      private notificationToast = inject(ToastNotificationService);
 
       /** Khởi tạo: load từ REST + start SignalR */
       async init(): Promise<void> {
@@ -39,6 +42,16 @@ export class NotificationStateService {
                   const merged: NotificationDto[] = [...mapped, ...current];
                   this._notifications$.next(merged);
                   this._unreadCount$.next(this._unreadCount$.value + (newItems?.length ?? 0));
+
+                  for (const n of mapped) {
+        this.notificationToast.show({
+          id: n.id,                // de-dupe
+          title: n.title || 'Thông báo',
+          message: n.message,
+          link: n.link,
+          duration: 5000
+        });
+      }
             });
       }
 

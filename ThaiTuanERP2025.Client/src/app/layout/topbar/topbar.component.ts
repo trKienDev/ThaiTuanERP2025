@@ -1,15 +1,13 @@
+// topbar.component.ts (đã chỉnh)
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { UserFacade } from '../../pages/account/facades/user.facade';
 import { UserDto } from '../../pages/account/models/user.model';
-import { firstValueFrom, map, take, takeUntil } from 'rxjs';
+import { firstValueFrom, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Subject } from 'rxjs';
-import { NotificationSignalRService } from './notification-panel/services/notification-signalr.service';
 import { NotificationPanelService } from './notification-panel/services/notification-panel.service';
 import { NotificationStateService } from './notification-panel/services/notification-state.service';
 import { NotificationFacade } from './notification-panel/facade/notification.facade';
-import { NotificationDto } from './notification-panel/models/notification.model';
 import { TaskReminderFacade } from './task-reminder-panel/facades/task-reminder.facade';
 import { TaskReminderDrawerService } from './task-reminder-panel/services/task-reminder-drawer.service';
 import { resolveAvatarUrl } from '../../shared/utils/avatar.utils';
@@ -23,22 +21,21 @@ import { resolveAvatarUrl } from '../../shared/utils/avatar.utils';
 })
 export class TopbarComponent implements OnInit {
       private userFacade = inject(UserFacade);
-      private notifierService = inject(NotificationSignalRService);
+
+      // Notification
       private notificationFacade = inject(NotificationFacade);
       private notificationPanel = inject(NotificationPanelService);
       private notificationState = inject(NotificationStateService);
 
+      // Task Reminder
       private reminderFacade = inject(TaskReminderFacade);
       private reminderDrawer = inject(TaskReminderDrawerService);
 
-      private destroy$ = new Subject<void>();
-
-      baseUrl: string = environment.baseUrl;      
+      baseUrl: string = environment.baseUrl;
       currentUser$ = this.userFacade.currentUser$;
       currentUser: UserDto | null = null;
 
-      notifications: NotificationDto[] = [];
-      unreadCount = 0;
+      // ❗️Chỉ dùng stream từ Facade — không còn biến cục bộ
       notifications$ = this.notificationFacade.notifications$;
       unreadCount$ = this.notificationFacade.unreadCount$;
 
@@ -49,29 +46,16 @@ export class TopbarComponent implements OnInit {
 
       async ngOnInit(): Promise<void> {
             this.currentUser = await firstValueFrom(this.currentUser$);
+
+            // Khởi tạo state: REST + SignalR đã được thực hiện bên trong NotificationStateService
             await this.notificationFacade.init();
+
+            // Khởi tạo nhắc việc
             await this.reminderFacade.init();
-
-            const getToken = () => localStorage.getItem('access_token');
-
-            this.notifierService.start(getToken);
-
-            this.notifierService.incoming$
-                  .pipe(takeUntil(this.destroy$))
-                  .subscribe(payloads => {
-                        // thêm vào đầu danh sách (mới nhất trên cùng)
-                        this.notifications = [...payloads.map(p => ({ ...p, unread: true })), ...this.notifications];
-                  });
-
-            this.notifierService.unreadCount$
-                  .pipe(takeUntil(this.destroy$))
-                  .subscribe(count => {
-                        this.unreadCount = count;
-                  });
       }
 
       toggleNotificationPanel(btn: HTMLElement) {
-            if(this.notificationPanel.isOpen()) {
+            if (this.notificationPanel.isOpen()) {
                   this.notificationPanel.reposition(btn);
                   this.notificationPanel.updateStreams(this.notifications$, this.unreadCount$, {
                         markAllRead: () => this.notificationState.markAllRead(),
@@ -86,7 +70,7 @@ export class TopbarComponent implements OnInit {
       }
 
       toggleTaskReminderDrawer() {
-            if(this.reminderDrawer.isOpen()) {
+            if (this.reminderDrawer.isOpen()) {
                   this.reminderDrawer.close();
             } else {
                   this.reminderDrawer.open(this.reminders$, {
@@ -95,19 +79,11 @@ export class TopbarComponent implements OnInit {
             }
       }
 
-      ngOnDestroy(): void {
-            this.destroy$.next();
-            this.destroy$.complete();
-      }
-
       get avatarSrc(): string {
             return resolveAvatarUrl(this.baseUrl, this.currentUser);
       }
 
-      onNotificationsClick() {
-            this.notifierService.markAllAsRead();
-      }
-
+      // Optional: giữ các hàm này nếu bạn gọi từ nơi khác
       onMarkAllRead() {
             this.notificationFacade.markAllRead();
       }
