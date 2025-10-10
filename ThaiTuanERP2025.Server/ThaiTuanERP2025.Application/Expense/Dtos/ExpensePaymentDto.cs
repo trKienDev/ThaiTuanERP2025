@@ -97,6 +97,6 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 		public IReadOnlyList<ExpensePaymentFollowersDto> Followers { get; init; } = Array.Empty<ExpensePaymentFollowersDto>();
 
 		// Workflow
-		public ApprovalWorkflowInstanceDetailDto? WorkflowInstance { get; init; } = default!;
+		public ApprovalWorkflowInstanceDetailDto? WorkflowInstanceDetail { get; init; } = default!;
 	}
 }
