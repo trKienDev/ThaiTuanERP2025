@@ -15,7 +15,6 @@ export interface NotificationPayload {
       workflowStepInstanceId: string;
 }
 
-
 @Injectable({ providedIn: 'root' })
 export class NotificationSignalRService {
       private hubConnection?: signalR.HubConnection;

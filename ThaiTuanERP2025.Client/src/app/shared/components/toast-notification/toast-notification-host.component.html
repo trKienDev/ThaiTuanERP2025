@@ -1,0 +1,18 @@
+<!-- A11y -->
+<div class="toast-live-region" aria-live="polite" aria-atomic="true"></div>
+
+<ul class="toast-stack" *ngIf="queue$ | async as list">
+      <li class="toast-item"
+      *ngFor="let t of list; trackBy: trackById"
+      (mouseenter)="pauseTimer(t.id)"
+      (mouseleave)="resumeTimer(t.id)"
+      (animationstart)="onMount(t.id, t.duration || 5000)">
+            <div class="toast-card">
+                  <div class="toast-header">
+                        <span class="toast-title">{{ t.title || 'Thông báo' }}</span>
+                  </div>
+                  <div class="toast-message" *ngIf="t.message">{{ t.message }}</div>
+            </div>
+      </li>
+</ul>
+
