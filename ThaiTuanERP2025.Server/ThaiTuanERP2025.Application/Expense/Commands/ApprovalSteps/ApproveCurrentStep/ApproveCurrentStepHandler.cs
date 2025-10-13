@@ -43,6 +43,9 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ApprovalSteps.ApproveCurr
 			var paymentDetail = await _unitOfWork.ExpensePayments.GetByIdAsync(command.PaymentId)
 				?? throw new NotFoundException("Không tìm thấy chi phí thanh toán");
 
+			var approverUser = await _unitOfWork.Users.GetByIdAsync(command.UserId)
+				?? throw new NotFoundException("Không tìm thấy thông tin người duyệt");
+
 			// current step
 			var currentStep = workflowInstance.Steps.OrderBy(s => s.Order)
 				.FirstOrDefault(s => s.Order == workflowInstance.CurrentStepOrder)
@@ -109,6 +112,16 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ApprovalSteps.ApproveCurr
 					{
 						payment.Approve();
 					}
+
+					await _notificationService.NotifyWorkflowApprovedAsync(
+						workflowInstance, currentStep,
+						targetUserIds: new[] { workflowInstance.CreatedByUserId },
+						approver: approverUser.FullName,
+						docName: paymentDetail.Name,
+						documentId: paymentDetail.Id,
+						documentType: "ExpensePayment",
+						cancellationToken
+					);
 				}
 			}
 

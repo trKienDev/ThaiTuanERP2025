@@ -99,7 +99,41 @@ namespace ThaiTuanERP2025.Infrastructure.Notifications.Services
 				createdAt = n.CreatedDate,
 				isRead = n.IsRead
 			}).ToList();
+			await _realtime.NotifyStepActivatedAsync(targetUserIds, payloads, cancellationToken);
+		}
 
+		public async Task NotifyWorkflowApprovedAsync(ApprovalWorkflowInstance workflow, ApprovalStepInstance step, IReadOnlyCollection<Guid> targetUserIds, string approver, string docName, Guid documentId, string documentType, CancellationToken cancellationToken = default) {
+			if (targetUserIds == null || targetUserIds.Count == 0) return;
+
+			var title = $"{docName} đã được chấp thuận";
+			var message = $"Chứng từ {docName} đã được {approver} duyệt";
+			var link = BuildLink(workflow);
+
+			var notifications = targetUserIds.Distinct().Select(uid =>
+				AppNotification.Create(
+					userId: uid,
+					title: title,
+					message: message,
+					link: link,
+					documentType: documentType,
+					documentId: documentId,
+					workflowInstanceId: workflow.Id,
+					workflowStepInstanceId: null // kết thúc workflow: không gắn step cụ thể
+				)
+			).ToList();
+
+			await _unitOfWork.Notifications.AddRangeAsync(notifications, cancellationToken);
+			await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+			// push realtime (dùng cùng kênh "ReceiveNotification")
+			var payloads = notifications.Select(n => new {
+				id = n.Id,
+				title = n.Title,
+				message = n.Message,
+				link = n.Link,
+				createdAt = n.CreatedDate,
+				isRead = n.IsRead
+			}).ToList();
 			await _realtime.NotifyStepActivatedAsync(targetUserIds, payloads, cancellationToken);
 		}
 
