@@ -56,6 +56,11 @@
 
             .title { font-weight: bold; }
             .message { color: #555; margin-top: 5px; }
+            .sla-warning {
+                  width: 10px; height: 10px; border-radius: 50%; background: #ef4444; 
+                  flex: 0 0 auto;  
+                  animation: blink 2s infinite;
+            }
             .due { 
                   color: #999; margin-top: 5px; 
                   &.active .countdown {
@@ -68,6 +73,7 @@
       }
 }
 
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
 @keyframes slideIn {
       from { transform: translateX(100%); }
