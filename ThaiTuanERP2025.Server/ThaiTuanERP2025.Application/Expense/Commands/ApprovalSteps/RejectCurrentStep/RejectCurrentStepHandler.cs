@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Common.Utils;
-using ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows;
+using ThaiTuanERP2025.Application.Notifications.Services;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Enums;
 
@@ -10,11 +10,13 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ApprovalSteps.RejectCurre
 	public sealed class RejectCurrentStepHandler : IRequestHandler<RejectCurrentStepCommand>
 	{
 		private readonly IUnitOfWork _unitOfWork;
-		private readonly IApprovalStepService _approvalStepService;
-		public RejectCurrentStepHandler(IUnitOfWork unitOfWork, IApprovalStepService approvalStepService)
+		private readonly INotificationService _notificationService;
+		private readonly ITaskReminderService _taskReminderService;
+		public RejectCurrentStepHandler(IUnitOfWork unitOfWork, INotificationService notificationService, ITaskReminderService taskReminderService)
 		{
 			_unitOfWork = unitOfWork;
-			_approvalStepService = approvalStepService;
+			_notificationService = notificationService;
+			_taskReminderService = taskReminderService;
 		}
 
 		public async Task<Unit> Handle(RejectCurrentStepCommand command, CancellationToken cancellationToken) {
@@ -65,9 +67,20 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ApprovalSteps.RejectCurre
 					payment.Reject();
 			}
 
-			await _approvalStepService.PublishAsync(workflowInstance, currentStep, docName: paymentDetail.Name, docId: paymentDetail.Id, docType: "ExpensePayment", cancellationToken);
-
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+			// Notifications
+			await _notificationService.NotifyWorkflowRejectedAsync(
+				workflowInstance, currentStep,
+				docName: paymentDetail.Name,
+				docId: paymentDetail.Id,
+				docType: "ExpensePayment",
+				targetUserIds: new[] { workflowInstance.CreatedByUserId },
+				cancellationToken
+			);
+			await _taskReminderService.ResolveByWorkflowAsync(workflowInstance.Id, "Workflow rejected", cancellationToken);
+
+
 			return Unit.Value;
 		}
 	}
