@@ -11,11 +11,11 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ExpensePayments.CreateExp
 	public sealed class CreateExpensePaymentsHandler : IRequestHandler<CreateExpensePaymentCommand, Guid>
 	{
 		private readonly IUnitOfWork _unitOfWork;
-		private readonly ApprovalWorkflowService _approvalWorkflowService;
+		private readonly IApprovalWorkflowService _approvalWorkflowService;
 		private readonly IDocumentSubIdGeneratorService _documentSubIdGeneratorService;
 		public CreateExpensePaymentsHandler(
 			IUnitOfWork unitOfWork, 
-			ApprovalWorkflowService approvalWorkflowService,
+			IApprovalWorkflowService approvalWorkflowService,
 			IDocumentSubIdGeneratorService documentSubIdGeneratorService
 		)
 		{
@@ -90,10 +90,9 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ExpensePayments.CreateExp
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 
 			await _approvalWorkflowService.CreateInstanceForExpensePaymentAsync(
-				paymentId: payment.Id,
+				expensePayment: payment,
 				workflowTemplateId: Guid.Parse("77B4F0E4-91DE-4377-9AC3-C2A8A69EDF6E"),
 				overrides: null,
-				autoStart: false,
 				linkToPayment: true,
 				cancellationToken: cancellationToken
 			);

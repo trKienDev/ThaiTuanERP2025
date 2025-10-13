@@ -37,7 +37,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IApproverResolver, CreatorManagerResolver>();
 builder.Services.AddScoped<IApproverResolverRegistry, ApproverResolverRegistry>();
-builder.Services.AddScoped<ApprovalWorkflowService>();
+builder.Services.AddScoped<IApprovalWorkflowService, ApprovalWorkflowService>();
 builder.Services.AddScoped<ApprovalWorkflowResolverService>();
 builder.Services.AddScoped<IRealtimeNotifier, SignalRealtimeNotifier>();
 builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();

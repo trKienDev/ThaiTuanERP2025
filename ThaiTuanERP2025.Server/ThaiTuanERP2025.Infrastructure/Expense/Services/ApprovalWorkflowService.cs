@@ -7,7 +7,7 @@ using ThaiTuanERP2025.Domain.Expense.Enums;
 
 namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 {
-	public sealed record StepOverrideRequest(int StepOrder, Guid? SelectedApproverId);
+	
 
 	/// <summary>
 	/// Sinh ApprovalWorkflowInstance + ApprovalStepInstance cho 1 ExpensePayment ngay sau khi tạo.
@@ -15,7 +15,7 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 	/// Trả về WorkflowInstanceId đã tạo. Nếu đã tồn tại AWI Draft/InProgress thì trả Guid.Empty (idempotent).
 	/// </summary>
 	/// 
-	public sealed class ApprovalWorkflowService
+	public sealed class ApprovalWorkflowService : IApprovalWorkflowService
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly ApprovalWorkflowResolverService _resolverService;
@@ -24,8 +24,8 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 		private readonly IApprovalStepService _approvalStepService;
 
 		public ApprovalWorkflowService(
-			IUnitOfWork unitOfWork, 
-			ApprovalWorkflowResolverService resolverService, 
+			IUnitOfWork unitOfWork,
+			ApprovalWorkflowResolverService resolverService,
 			INotificationService notificationService,
 			ITaskReminderService taskReminderService,
 			IApprovalStepService approvalStepService
@@ -38,18 +38,15 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 			_approvalStepService = approvalStepService;
 		}
 
-		public async Task<Guid> CreateInstanceForExpensePaymentAsync(Guid paymentId, Guid workflowTemplateId, IReadOnlyCollection<StepOverrideRequest>? overrides, bool autoStart, bool linkToPayment, CancellationToken cancellationToken) {
+		public async Task<Guid> CreateInstanceForExpensePaymentAsync(ExpensePayment expensePayment, Guid workflowTemplateId, IReadOnlyCollection<StepOverrideRequest>? overrides, bool linkToPayment, CancellationToken cancellationToken) 
+		{
 			// 0) Chống trùng: đã có AWI Draft/InProgress cho document này?
 			var existed = await _unitOfWork.ApprovalWorkflowInstances.AnyAsync(
 				x => x.DocumentType == "ExpensePayment"
-				&& x.DocumentId == paymentId
+				&& x.DocumentId == expensePayment.Id
 				&& (x.Status == WorkflowStatus.Draft || x.Status == WorkflowStatus.InProgress)
 			);
 			if (existed) return Guid.Empty;
-
-			// 1) Load payment + template (+ steps)
-			var payment = await _unitOfWork.ExpensePayments.SingleOrDefaultIncludingAsync(p => p.Id == paymentId)
-				?? throw new NotFoundException("ExpensePayment not found");
 
 			var tpl = await _unitOfWork.ApprovalWorkflowTemplates.SingleOrDefaultIncludingAsync(t => t.Id == workflowTemplateId && t.IsActive, includes: t => t.Steps)
 				?? throw new ConflictException("Workflow template not found or inactive");
@@ -61,9 +58,9 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 				templateId: tpl.Id,
 				templateVersion: tpl.Version,
 				documentType: "ExpensePayment",
-				documentId: payment.Id,
-				createdByUserId: payment.CreatedByUserId,
-				amount: payment.TotalWithTax,
+				documentId: expensePayment.Id,
+				createdByUserId: expensePayment.CreatedByUserId,
+				amount: expensePayment.TotalWithTax,
 				currency: null,
 				budgetCode: null,
 				costCenter: null,
@@ -71,7 +68,7 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 			);
 			await _unitOfWork.ApprovalWorkflowInstances.AddAsync(awi);
 
-			var ovMap = overrides?.ToDictionary(x => x.StepOrder, x => x.SelectedApproverId) 
+			var ovMap = overrides?.ToDictionary(x => x.StepOrder, x => x.SelectedApproverId)
 				?? new Dictionary<int, Guid?>();
 
 			var firstOrder = tpl.Steps.Min(x => x.Order);
@@ -89,7 +86,7 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 				}
 				else
 				{
-					var cands = await _resolverService.ResolveAsync(s.ResolverKey!, s.ResolverParamsJson, payment, cancellationToken);
+					var cands = await _resolverService.ResolveAsync(s.ResolverKey!, s.ResolverParamsJson, expensePayment, cancellationToken);
 					candidatesJson = JsonUtils.ToJsonArray(cands);
 					defaultApprover = cands.FirstOrDefault();
 				}
@@ -114,21 +111,35 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 			}
 
 			// 4) Link nhanh về payment (nếu domain có property này)
-			var linkMethod = payment.GetType()
-				.GetMethod("LinkWorkflow",System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+			var linkMethod = expensePayment.GetType()
+				.GetMethod("LinkWorkflow", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
 			if (linkToPayment && linkMethod != null)
 			{
-				linkMethod.Invoke(payment, new object?[] { awi.Id });
+				linkMethod.Invoke(expensePayment, new object?[] { awi.Id });
 			}
+
+			// 5 ) Add Folllowers
+			var followers = new List<ExpensePaymentFollower>();
+			followers.Add(new ExpensePaymentFollower(expensePayment.Id, expensePayment.CreatedByUserId));
+			var approvers = awi.Steps.SelectMany(s => JsonUtils.ParseGuidArray(s.ResolvedApproverCandidatesJson))
+				.Distinct()
+				.ToList();
+			foreach (var approverId in approvers)
+			{
+				// tránh trùng với người tạo (vì có thể người tạo cũng là approver)
+				if (approverId != expensePayment.CreatedByUserId)
+					followers.Add(new ExpensePaymentFollower(expensePayment.Id, approverId));
+			}
+			await _unitOfWork.ExpensePaymentFollowers.AddRangeAsync(followers);
 
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-			await StartInstanceAsync(awi.Id, payment, CancellationToken.None);
+			await StartInstanceAsync(awi.Id, expensePayment, CancellationToken.None);
 
 			return awi.Id;
 		}
 
-		public async Task StartInstanceAsync(Guid instanceId, ExpensePayment payment,CancellationToken cancellationToken)
+		public async Task StartInstanceAsync(Guid instanceId, ExpensePayment payment, CancellationToken cancellationToken)
 		{
 			var workflowInstance = await LoadInstanceWithStepsAsync(instanceId, cancellationToken);
 			if (workflowInstance.Status != WorkflowStatus.Draft) return;
@@ -253,8 +264,8 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 
 				var cands = await _resolverService.ResolveAsync(
 					tpl.ResolverKey!,
-					tpl.ResolverParamsJson, 
-					payment, 
+					tpl.ResolverParamsJson,
+					payment,
 					cancellationToken
 				);
 
