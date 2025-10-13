@@ -16,6 +16,8 @@ export const expenseRoutes: Routes = [
                         canActivate: [paymentDetailEntryGuard],
                         loadComponent: () => import('./pages/expense-payment-detail/expense-payment-detail.component').then((m) => m.ExpensePaymentDetailComponent )
                   },
+                  { path: 'outgoing-payment', loadComponent: () => import('./pages/outgoing-payment/outgoing-payment.component').then((m) => m.ExpenseOutgoingPaymentComponent )},
+                  { path: 'outgoing-payment/outgoing-payment-request', loadComponent: () => import('./pages/outgoing-payment/outgoing-payment-request/outgoing-payment-request.component').then((m) => m.OutgoingPaymentRequestComponent )},
                   { path: 'approval-workflow-engine', loadComponent: () => import('./pages/expense-approval-workflow-engine/expense-approval-workflow-engine.component').then((m) => m.ExpenseApprovalWorkflowEngineComponent )},
                   { path: 'approval-workflow-engine/approval-workflow-engine-request', loadComponent: () => import('./pages/expense-approval-workflow-engine/expense-approval-workflow-engine-request/expense-approval-workflow-engine-request.component').then((m) => m.ExpenseApprovalWorkflowEngineRequest )},
                   { path: 'payment-request', loadComponent: () => import('./pages/payment-requests/payment-request.component').then((m) => m.ExpensePaymentRequestComponent )},

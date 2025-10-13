@@ -11,10 +11,12 @@ namespace ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetExpenseP
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly IMapper _mapper;
-		public GetExpensePaymentDetailHandler(IUnitOfWork unitOfWork, IMapper mapper)
+		private readonly ICurrentUserService _currentUserService;
+		public GetExpensePaymentDetailHandler(IUnitOfWork unitOfWork, IMapper mapper, ICurrentUserService currentUserService)
 		{
 			_unitOfWork = unitOfWork;
 			_mapper = mapper;
+			_currentUserService = currentUserService;
 		}
 
 		public async Task<ExpensePaymentDetailDto> Handle(GetExpensePaymentDetailQuery query, CancellationToken cancellationToken) {

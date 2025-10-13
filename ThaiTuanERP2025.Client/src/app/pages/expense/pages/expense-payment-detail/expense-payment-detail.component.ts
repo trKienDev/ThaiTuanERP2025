@@ -1,6 +1,6 @@
 import { Component, ElementRef, inject, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { ExpensePaymentDetailDto } from "../../models/expense-payment.model";
+import { ExpensePaymentDetailDto, ExpensePaymentStatus } from "../../models/expense-payment.model";
 import { firstValueFrom } from "rxjs";
 import { ExpensePaymentService } from "../../services/expense-payment.service";
 import { ExpensePaymentStatusPipe } from "../../pipes/expense-payment-status.pipe";
@@ -19,7 +19,7 @@ import { InvoiceDetailDialogComponent } from "../invoices/invoice-detail-dialog/
 import { InvoiceDto } from "../../models/invoice.model";
 import { UserDto } from "../../../account/models/user.model";
 import { ApprovalWorkflowInstanceService } from "../../services/approval-workflow-instance.service";
-import { ApproveStepRequest } from "../../models/approval-step-instance.model";
+import { ApprovalStepInstanceDetailDto, ApproveStepRequest, StepStatus } from "../../models/approval-step-instance.model";
 import { ToastService } from "../../../../shared/components/toast/toast.service";
 
 @Component({
@@ -44,6 +44,15 @@ import { ToastService } from "../../../../shared/components/toast/toast.service"
                         )
                   ]),
             ]),
+            trigger('actionsFade', [
+                  transition(':enter', [
+                        style({ opacity: 0 }),
+                        animate('220ms ease-out', style({ opacity: 1 }))
+                  ]),
+                  transition(':leave', [
+                        animate('220ms ease-in', style({ opacity: 0 }))
+                  ])
+            ])
       ],
 })
 export class ExpensePaymentDetailComponent implements OnInit {
@@ -164,7 +173,10 @@ export class ExpensePaymentDetailComponent implements OnInit {
                   currentStep.id,
                   payload
             ));
-            if(result) { this.toastService.successRich(result); }
+            if(result) { 
+                  this.toastService.successRich(result); 
+                  await this.getPaymentDetails();
+            }
       }
 
       async onReject() {
@@ -186,6 +198,28 @@ export class ExpensePaymentDetailComponent implements OnInit {
                   currentStep.id,
                   payload
             ));
-            if(result) { this.toastService.successRich(result); }
+            if(result) { 
+                  this.toastService.successRich(result); 
+                  await this.getPaymentDetails();
+            }
+      }
+
+      get currentStep(): ApprovalStepInstanceDetailDto | undefined {
+            const wf = this.paymentDetail?.workflowInstanceDetail;
+            if (!wf) return undefined;
+            return wf.steps.find(s => s.order === wf.workflowInstance.currentStepOrder);
+      }
+      get canApproveOrReject(): boolean {
+            const wf = this.paymentDetail?.workflowInstanceDetail;
+            const step = this.currentStep;
+            const userId = this.currentUser?.id;
+            
+            const isPaymentPending = this.paymentDetail?.status === ExpensePaymentStatus.pending; // 2
+            const isStepWaiting = step?.status === StepStatus.Waiting;
+
+            const isCurrentUserApprover =
+            !!userId && (step?.resolvedApproverCandidateIds ?? []).includes(userId);
+
+            return !!(isPaymentPending && isStepWaiting && isCurrentUserApprover);
       }
 }     

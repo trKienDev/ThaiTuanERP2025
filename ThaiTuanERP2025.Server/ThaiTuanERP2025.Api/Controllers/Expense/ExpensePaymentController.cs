@@ -29,9 +29,9 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
 		[HttpGet("{id:guid}/detail")]
 		[ProducesResponseType(typeof(ApiResponse<ExpensePaymentDetailDto>), StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<IActionResult> GetDetail(Guid id, CancellationToken ct)
+		public async Task<IActionResult> GetDetail(Guid id, CancellationToken cancellationToken)
 		{
-			var dto = await _mediator.Send(new GetExpensePaymentDetailQuery(id), ct);
+			var dto = await _mediator.Send(new GetExpensePaymentDetailQuery(id), cancellationToken);
 			return Ok(ApiResponse<ExpensePaymentDetailDto>.Success(dto));
 		}
 	}
