@@ -37,3 +37,4 @@ export interface ApproveStepRequest {
       paymentId: string;
       comment?: string;
 }
+export interface RejectStepRequest extends ApproveStepRequest {}

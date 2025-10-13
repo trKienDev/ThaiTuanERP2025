@@ -166,4 +166,26 @@ export class ExpensePaymentDetailComponent implements OnInit {
             ));
             if(result) { this.toastService.successRich(result); }
       }
+
+      async onReject() {
+            const workflowInstanceDetail = this.paymentDetail?.workflowInstanceDetail;
+            if(!workflowInstanceDetail) return;
+            const currentStep = workflowInstanceDetail.steps.find(s => s.order === workflowInstanceDetail.workflowInstance.currentStepOrder);
+            if(!currentStep) return;
+            if (!this.currentUser?.id) { alert('Không xác định được người dùng hiện tại'); return; }
+            if (!this.paymentId) { alert('Thiếu PaymentId'); return; }
+
+            const payload: ApproveStepRequest = {
+                  userId: this.currentUser.id,
+                  paymentId: this.paymentId,
+                  comment: this.commentText || ''
+            };
+            
+            const result = await firstValueFrom(this.workflowInstanceService.rejectStep(
+                  workflowInstanceDetail.workflowInstance.id, 
+                  currentStep.id,
+                  payload
+            ));
+            if(result) { this.toastService.successRich(result); }
+      }
 }     

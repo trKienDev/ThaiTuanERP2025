@@ -22,8 +22,8 @@ export class TaskReminderSignalRService {
                   .withAutomaticReconnect()
                   .build();
 
-            this.hub.on('ReceiveAlarm', (payloads: TaskReminderDto[]) => this._incoming$.next(payloads));
-            this.hub.on('ResolveAlarm', (alarmIds: string[]) => this._resolved$.next(alarmIds));
+            this.hub.on('ReceiveReminder', (payloads: TaskReminderDto[]) => this._incoming$.next(payloads));
+            this.hub.on('ResolveReminder', (alarmIds: string[]) => this._resolved$.next(alarmIds));
 
             await this.hub.start();
       }

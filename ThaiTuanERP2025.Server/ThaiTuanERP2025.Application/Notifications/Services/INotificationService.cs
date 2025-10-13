@@ -5,5 +5,6 @@ namespace ThaiTuanERP2025.Application.Notifications.Services
 	public interface INotificationService
 	{
 		Task NotifyStepActivatedAsync(ApprovalWorkflowInstance instance, ApprovalStepInstance step, IReadOnlyCollection<Guid> targetUserIds, CancellationToken cancellationToken);
+		Task NotifyWorkflowRejectedAsync(ApprovalWorkflowInstance workflow, ApprovalStepInstance step, string docName, Guid docId, string docType, IReadOnlyCollection<Guid> targetUserIds, CancellationToken cancellationToken);
 	}
 }

@@ -6,7 +6,7 @@ import { environment } from "../../../../environments/environment";
 import { ApiResponse } from "../../../shared/models/api-response.model";
 import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
 import { catchError, throwError } from "rxjs";
-import { ApproveStepRequest } from "../models/approval-step-instance.model";
+import { ApproveStepRequest, RejectStepRequest } from "../models/approval-step-instance.model";
 
 @Injectable({ providedIn: 'root'})
 export class ApprovalWorkflowInstanceService extends BaseCrudService<ApprovalWorkflowInstanceDto, ApprovalWorkflowInstanceRequest> {
@@ -22,13 +22,11 @@ export class ApprovalWorkflowInstanceService extends BaseCrudService<ApprovalWor
                   );
       };
 
-      rejectStep(instanceId: string, stepId: string, userId: string, reason: string) {
-            return this.http.post<ApiResponse<string>>(
-                  `${this.endpoint}/${instanceId}/steps/${stepId}/reject`, 
-                  { userId, reason }
-            ).pipe(
-                  handleApiResponse$<string>(),
-                  catchError(err => throwError(() => err))
-            );
+      rejectStep(instanceId: string, stepId: string, request: RejectStepRequest) {
+            return this.http.post<ApiResponse<string>>(`${this.endpoint}/${instanceId}/steps/${stepId}/reject`, request)
+                  .pipe(
+                        handleApiResponse$<string>(),
+                        catchError(err => throwError(() => err))
+                  );
       }
 }
