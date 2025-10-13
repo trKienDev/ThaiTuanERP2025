@@ -28,7 +28,7 @@ namespace ThaiTuanERP2025.Api.Notifications
 			if (!ids.Any() || !payloads.Any()) return;
 
 			// client Angular lắng nghe event "ReceiveAlarm"
-			await _hub.Clients.Users(ids).SendAsync("ReceiveAlarm", payloads, cancellationToken);
+			await _hub.Clients.Users(ids).SendAsync("ReceiveReminder", payloads, cancellationToken);
 		}
 
 		// mới: thông báo alarm đã được resolve (approved/expired/dismissed)
@@ -38,7 +38,7 @@ namespace ThaiTuanERP2025.Api.Notifications
 			if (!ids.Any() || !alarmIds.Any()) return;
 
 			// client Angular lắng nghe event "ResolveAlarm"
-			await _hub.Clients.Users(ids).SendAsync("ResolveAlarm", alarmIds, cancellationToken);
+			await _hub.Clients.Users(ids).SendAsync("ResolveReminder", alarmIds, cancellationToken);
 		}
 	}
 }

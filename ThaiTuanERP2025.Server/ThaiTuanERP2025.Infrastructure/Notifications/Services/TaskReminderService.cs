@@ -55,5 +55,24 @@ namespace ThaiTuanERP2025.Infrastructure.Notifications.Services
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 			await _realtime.PushRemindersResolvedAsync(new[] { it.UserId }, new List<Guid> { it.Id }, cancellationToken);
 		}
+
+		// TaskReminderService.cs (ý tưởng)
+		public async Task ResolveByWorkflowAsync(Guid workflowInstanceId, string reason, CancellationToken cancellationToken)
+		{
+			var reminders = await _unitOfWork.TaskReminders.ListAsync(
+				q => q.Where(a => a.WorkflowInstanceId == workflowInstanceId && !a.IsResolved),
+				cancellationToken: cancellationToken,
+				asNoTracking: false
+			);
+
+			if (!reminders.Any()) return;
+
+			reminders.ForEach(a => a.Resolve(reason));
+			await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+			var userIds = reminders.Select(a => a.UserId).Distinct().ToList();
+			var reminderIds = reminders.Select(a => a.Id).ToList();
+			await _realtime.PushRemindersResolvedAsync(userIds, reminderIds, cancellationToken);
+		}
 	}
 }

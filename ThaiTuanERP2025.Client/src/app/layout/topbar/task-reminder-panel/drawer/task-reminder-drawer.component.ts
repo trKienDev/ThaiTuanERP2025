@@ -5,11 +5,11 @@ import { TaskReminderDto } from "../models/task-reminder.model";
 import { Router } from "@angular/router";
 
 @Component({
-  selector: 'app-task-reminder-drawer',
-  imports: [ CommonModule ],
-  templateUrl: './task-reminder-drawer.component.html',
-  styleUrls: ['./task-reminder-drawer.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+      selector: 'app-task-reminder-drawer',
+      imports: [ CommonModule ],
+      templateUrl: './task-reminder-drawer.component.html',
+      styleUrls: ['./task-reminder-drawer.component.scss'],
+      changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskReminderDrawerComponent implements OnInit {
       @Input() reminders$!: Observable<TaskReminderDto[]>;
@@ -80,6 +80,4 @@ export class TaskReminderDrawerComponent implements OnInit {
                   this.closed.emit();
             }
       }
-
-
 }
