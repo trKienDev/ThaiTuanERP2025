@@ -1,6 +1,15 @@
 import { UserDto } from "../../account/models/user.model";
 import { ApproverMode, FlowType } from "./approval-step-template.model";
 
+export enum StepStatus {
+      Pending = 'Pending',
+      Waiting = 'Waiting',
+      Approved = 'Approved',
+      Rejected = 'Rejected',
+      Skipped = 'Skipped',
+      Expired = 'Expired',
+}
+
 export interface ApprovalStepInstanceDto {
       id: string;
       workflowInstanceId: string;
@@ -11,7 +20,7 @@ export interface ApprovalStepInstanceDto {
       slaHours: number;
       approverMode: ApproverMode;
 
-      resolvedApproverCandidateIds?: string;
+      resolvedApproverCandidateIds?: string[];
       defaultApproverId?: string;
       selectedApproverId?: string;
 

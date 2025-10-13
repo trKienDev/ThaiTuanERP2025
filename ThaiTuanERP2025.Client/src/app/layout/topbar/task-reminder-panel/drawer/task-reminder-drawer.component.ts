@@ -25,7 +25,6 @@ export class TaskReminderDrawerComponent implements OnInit {
             this.sortedReminders$ = combineLatest([this.reminders$, timer$]).pipe(
                   map(([list]) => {
                         const now = Date.now();
-                        console.log('reminder list: ', list);
                         return [...list].sort((a, b) => {
                               const aDue = new Date(a.dueAt).getTime();
                               const bDue = new Date(b.dueAt).getTime();
@@ -60,15 +59,10 @@ export class TaskReminderDrawerComponent implements OnInit {
       trackById(index: number, item: TaskReminderDto) { return item.id; }
 
       leftTime(tr: TaskReminderDto): Observable<string> {
-            console.log('setting up leftTime for reminder: ', tr);
             return interval(1000).pipe(
                   startWith(0),
                   map(() => {
                         const sec = Math.max(0, Math.floor((new Date(tr.dueAt).getTime() - Date.now()) / 1000));
-                        console.log('dueAt: ', tr.dueAt);
-                        console.log('time dueAt: ',(new Date(tr.dueAt).getTime()));
-                        console.log('Date.now(): ', new Date(Date.now()).toISOString());
-                        console.log('dueAt: ',(new Date(tr.dueAt).getTime()), '| now', Date.now(), '| sec left: ', sec);
                         if (sec <= 0) return 'Hết hạn';
                         const h = Math.floor(sec / 3600);
                         const m = Math.floor((sec % 3600) / 60);

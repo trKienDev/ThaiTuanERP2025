@@ -14,7 +14,6 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 				// Creator
 				.ForMember(d => d.CreatedByUserId, opt => opt.MapFrom(s => s.CreatedByUserId))
 				.ForMember(d => d.CreatedByUsername, opt => opt.MapFrom(s => s.CreatedByUser.Username))
-
 				// Collections
 				.ForMember(d => d.Items, opt => opt.MapFrom(s => s.Items))
 				.ForMember(d => d.Attachments, opt => opt.MapFrom(s => s.Attachments))
