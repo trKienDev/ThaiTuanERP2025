@@ -118,3 +118,56 @@
       color: #666;              // tuỳ theme
       font-size: 0.95em;
 }
+
+
+/* expense-payment.component.scss */
+
+/* Spinner nhỏ trong nút */
+.btn-spinner {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin-right: 6px;
+      border: 2px solid rgba(255, 255, 255, 0.6);
+      border-top-color: rgba(255, 255, 255, 0.6);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: _ngcontent-ng-c934698783_epc_spin 0.8s linear infinite;
+      vertical-align: -2px;
+}
+
+@keyframes epc_spin { to { transform: rotate(360deg); } }
+
+/* Overlay toàn form khi isBusy */
+.form-loading-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(1px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10; /* lớn hơn nội dung form */
+      pointer-events: all; /* chặn tương tác */
+}
+
+/* Đảm bảo container form là relative để overlay bám */
+.expense-payment-form { position: relative; max-height: 100vh; }
+.overlay-box {
+      background: #fff;
+      border-radius: 12px;
+      padding: 14px 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+}
+.overlay-spinner {
+      width: 20px; height: 20px;
+      border: 3px solid #d1d5db;
+      border-top-color: #3b82f6; /* dùng màu primary của bạn nếu có */
+      border-radius: 50%;
+      animation: epc_spin 0.9s linear infinite;
+}
+
+.overlay-text { font-weight: 500; }

@@ -84,8 +84,11 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       private managerOptionStore = inject(ManagerOptionStore);
       private userFacade = inject(UserFacade);
       private supplierFacade = inject(SupplierFacade);
-      private submitting = false;
+      public submitting = false;
       private readonly expensePaymentService = inject(ExpensePaymentService);
+
+      // private wait(ms: number) { return new Promise(res => setTimeout(res, ms)); } // demo
+      // private readonly DEMO_MIN_LOADING_MS = 300000000; // demo
 
       private readonly uploadMeta = {
             module: 'expense',
@@ -117,7 +120,9 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             private budegetCodeService: BudgetCodeService,
             private cashoutCodeService: CashoutCodeService,
             private confirmService: ConfirmService,
-      ) {}
+      ) {
+
+      }
 
       // reactive form
       form = this.formBuilder.group({
@@ -536,6 +541,9 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
       }
 
       async Submit(): Promise<void> {
+            // chặn double-click & chặn khi vẫn còn upload file
+            if (this.isBusy) return;
+
             if(this.form.invalid) {
                   this.toast.errorRich('Vui lòng nhập đầy đủ thông tin');
                   return;
@@ -588,16 +596,30 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
             try {
                   console.log('payload: ', payload);
                   const result = await firstValueFrom(this.expensePaymentService.create(payload));
+
+                  // demo
+                  // await Promise.all([
+                  //       firstValueFrom(this.expensePaymentService.create(payload)),
+                  //       this.wait(this.DEMO_MIN_LOADING_MS)   // đảm bảo chờ ít nhất 3s
+                  // ]);
+
                   this.toast.successRich('Gửi phê duyệt thành công');
             } catch(error) {
                   console.error('Gửi phê duyệt thất bại', error);
                   this.toast.errorRich('Gửi phê duyệt thất bại');
             } finally {
+                  // demo 
+                  // await this.wait(800);
                   this.submitting = false;
             }
-            
+      }
+      get isUploading() {
+            return this.uploads?.some(u => u.status === 'uploading');
+      }
+      // 3. trạng thái bận chung
+      get isBusy() {
+
+            return this.submitting || this.isUploading;
       }
 
 }
-
-
