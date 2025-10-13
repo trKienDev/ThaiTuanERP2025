@@ -4,7 +4,7 @@
 		Guid Id,
 		string Title,
 		string Message,
-		DateTime DueAt,
+		DateTimeOffset DueAt,
 		Guid WorkflowInstanceId,
 		Guid StepInstanceId,
 		Guid DocumentId,
