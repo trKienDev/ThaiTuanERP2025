@@ -10,7 +10,7 @@ export interface ApprovalWorkflowInstanceDto {
       createdByUserId: string;
       createdAt: Date;
       status: string;
-      currentStepOrder?: number;
+      currentStepOrder: number;
       amount?: number;
       currency?: string;
       budgetCode?: string;

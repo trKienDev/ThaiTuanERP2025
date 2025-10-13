@@ -16,8 +16,9 @@ export enum ExpensePaymentStatus {
       submitted = 1,
       pending = 2,
       approved = 3,
-      rejected = 4,
-      cancelled = 5,
+      readyForPayment = 4,
+      rejected = 5,
+      cancelled = 6,
 }
 
 export interface ExpensePaymentDto {
@@ -73,8 +74,6 @@ export interface ExpensePaymentDetailDto extends ExpensePaymentDto {
 
       createdByUserId: string;
       createdByUser: UserDto;
-
-      
 
       createdByDepartmentId: string;
       createdByDepartmentName?: string;
