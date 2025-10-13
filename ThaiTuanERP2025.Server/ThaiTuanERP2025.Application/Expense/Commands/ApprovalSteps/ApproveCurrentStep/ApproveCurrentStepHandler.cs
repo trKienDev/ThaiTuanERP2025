@@ -14,15 +14,17 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ApprovalSteps.ApproveCurr
 		private readonly ITaskReminderService _taskReminderService;
 		private readonly INotificationService _notificationService;
 		private readonly IApprovalStepService _approvalStepService;
+		private readonly IRealtimeNotifier _realtimeNotifier;
 		public ApproveCurrentStepHandler(
 			IUnitOfWork unitOfWork, ITaskReminderService taskReminderService, INotificationService notificationService,
-			IApprovalStepService approvalStepService
+			IApprovalStepService approvalStepService, IRealtimeNotifier realtimeNotifier
 		)
 		{
 			_unitOfWork = unitOfWork;
 			_taskReminderService = taskReminderService;
 			_notificationService = notificationService;
 			_approvalStepService = approvalStepService;
+			_realtimeNotifier = realtimeNotifier;
 		}
 
 		public async Task<Unit> Handle(ApproveCurrentStepCommand command, CancellationToken cancellationToken)
@@ -110,7 +112,19 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ApprovalSteps.ApproveCurr
 				}
 			}
 
+			var reminder = await _unitOfWork.TaskReminders.SingleOrDefaultAsync(
+				q => q.Where(t => t.WorkflowInstanceId == workflowInstance.Id &&
+					!t.IsResolved && t.StepInstanceId == currentStep.Id && t.UserId == userId
+				),
+				cancellationToken: cancellationToken,
+				asNoTracking: false
+			); 
+			if(reminder is not null) {
+				reminder.Resolve("");
+				await _realtimeNotifier.PushRemindersResolvedAsync(candidates, new[] { reminder.Id }, cancellationToken);
+			}
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
+			
 			return Unit.Value;
 		}
 	}
