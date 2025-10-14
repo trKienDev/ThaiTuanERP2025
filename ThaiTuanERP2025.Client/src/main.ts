@@ -14,6 +14,6 @@ bootstrapApplication(AppComponent, {
             provideHttpClient(withInterceptors([jwtInterceptor])),
             provideAnimations(),
             importProvidersFrom(MatIconModule),
-            importProvidersFrom(BrowserAnimationsModule)
+            importProvidersFrom(BrowserAnimationsModule),
       ]
 });
