@@ -29,6 +29,7 @@ export class KitShellTabsComponent implements OnInit, OnDestroy {
       @Input() queryParamKey = 'view';
       @Input() sidebarWidth?: number | null | undefined; // px
       @Output() tabChange = new EventEmitter<string>();
+      private forceShowHiddenTabId?: string;
 
       selectedId!: string;
 
@@ -39,7 +40,7 @@ export class KitShellTabsComponent implements OnInit, OnDestroy {
       ngOnInit() {
             this.route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe((map) => {
                   const qpId = map.get(this.queryParamKey);
-                  const fallback = this.tabs.find(t => !t.hidden)?.id;   // 👈 fallback tab hiển thị
+                  const fallback = this.tabs.find(t => !t.hidden)?.id;
                   const next = (qpId && this.tabs.some(t => t.id === qpId)) ? qpId : fallback;
 
                   if (!next) return;
@@ -51,21 +52,34 @@ export class KitShellTabsComponent implements OnInit, OnDestroy {
                   if (next !== this.selectedId) {
                         this.selectedId = next;
                         this.tabChange.emit(next);
+
+                        // 👇 Nếu tab được chọn là tab ẩn, và có flag "cho phép 1 lần" → mở khóa nút trên sidebar
+                        const selectedTab = this.tabs.find(t => t.id === next);
+                        if (selectedTab?.hidden) {
+                              const allowOnce = sessionStorage.getItem('allowPaymentDetailOnce') === '1';
+                              if (allowOnce) {
+                                    this.forceShowHiddenTabId = next;             // mở khóa hiển thị nút tab
+                                    sessionStorage.removeItem('allowPaymentDetailOnce'); // dùng xong thì xoá flag
+                              }
+                        }
                   }
             });
-
-            if (!this.selectedId) {
-                  this.selectedId = this.tabs.find(t => !t.hidden)?.id ?? this.tabs[0]?.id;
-            }
       }
 
       selectTab(id: string) {
             if (id === this.selectedId) return;
+
+            // 👇 nếu rời tab đã được mở khoá tạm thời → khoá lại
+            if (this.forceShowHiddenTabId && id !== this.forceShowHiddenTabId) {
+                  this.forceShowHiddenTabId = undefined;
+            }
+
             this.selectedId = id;
             this.tabChange.emit(id);
             const merged = { ...this.route.snapshot.queryParams, [this.queryParamKey]: id };
             this.router.navigate([], { relativeTo: this.route, queryParams: merged, queryParamsHandling: 'merge' });
       }
+
 
       ngOnDestroy() {
             this.destroy$.next();
@@ -73,6 +87,12 @@ export class KitShellTabsComponent implements OnInit, OnDestroy {
       }
 
       public get displayTabs(): KitShellTabDef[] {
-            return this.tabs.filter(t => !t.hidden);
+            return this.tabs.filter(t =>
+                  !t.hidden ||
+                  t.id === this.selectedId ||
+                  (this.forceShowHiddenTabId && t.id === this.forceShowHiddenTabId)
+            );
       }
+
+      
 }
