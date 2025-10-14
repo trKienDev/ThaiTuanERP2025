@@ -20,12 +20,12 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			_configurationProvider = configurationProvider ?? throw new ArgumentNullException(nameof(configurationProvider));
 		}
 
-		public virtual Task<List<T>> ListAsync(Func<IQueryable<T>, IQueryable<T>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default)
+		public virtual Task<List<TResult>> ListAsync<TResult>(Func<IQueryable<T>, IQueryable<TResult>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default)
 		{
-			if (builder == null) throw new ArgumentNullException(nameof(builder));
 			var query = asNoTracking ? _dbSet.AsNoTracking() : _dbSet.AsQueryable();
 			return builder(query).ToListAsync(cancellationToken);
 		}
+
 		public virtual Task<T?> SingleOrDefaultAsync(Func<IQueryable<T>, IQueryable<T>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default)
 		{
 			if (builder == null) throw new ArgumentNullException(nameof(builder));

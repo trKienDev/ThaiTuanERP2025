@@ -13,9 +13,15 @@
       </aside>
 
       <main class="content" role="tabpanel">
-            <ng-container *ngFor="let t of tabs">
-                  <ng-container *ngIf="t.id === selectedId">
-                        <ng-container *ngComponentOutlet="t.component"></ng-container>
+            <!-- Ưu tiên render child-route (form tạo mới) -->
+            <router-outlet></router-outlet>
+
+            <!-- Khi không có child-route đang active thì mới render nội dung tab -->
+            <ng-container *ngIf="!route.firstChild || route.firstChild.snapshot.url.length === 0">
+                  <ng-container *ngFor="let t of tabs">
+                        <ng-container *ngIf="t.id === selectedId">
+                              <ng-container *ngComponentOutlet="t.component"></ng-container>
+                        </ng-container>
                   </ng-container>
             </ng-container>
       </main>

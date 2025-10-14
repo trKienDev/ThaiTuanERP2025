@@ -7,7 +7,7 @@ namespace ThaiTuanERP2025.Application.Common.Interfaces
 	{
 		Task<int> CountAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
 		Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
-		Task<List<T>> ListAsync(Func<IQueryable<T>, IQueryable<T>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default);
+		Task<List<TResult>> ListAsync<TResult>(Func<IQueryable<T>, IQueryable<TResult>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default);
 		Task<T?> SingleOrDefaultAsync(Func<IQueryable<T>, IQueryable<T>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default);
 		Task<T?> SingleOrDefaultIncludingAsync(Expression<Func<T, bool>> predicate, bool asNoTracking = true, CancellationToken cancellationToken = default, params Expression<Func<T, object>>[] includes	);
 
