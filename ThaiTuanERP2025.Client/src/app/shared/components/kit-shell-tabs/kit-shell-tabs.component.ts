@@ -13,6 +13,7 @@ export interface KitShellTabDef {
       label: string;           // nhãn hiển thị
       icon?: string;           // tên icon Material Symbols (tùy chọn)
       component: Type<unknown>;// component panel để render
+      hidden?: boolean;     // ẩn tab này (mặc định false)
 }
 
 @Component({
@@ -36,15 +37,13 @@ export class KitShellTabsComponent implements OnInit, OnDestroy {
       private destroy$ = new Subject<void>();
 
       ngOnInit() {
-            // Lấy từ query param -> nếu không hợp lệ thì rơi về tab đầu
             this.route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe((map) => {
                   const qpId = map.get(this.queryParamKey);
-                  const fallback = this.tabs[0]?.id;
+                  const fallback = this.tabs.find(t => !t.hidden)?.id;   // 👈 fallback tab hiển thị
                   const next = (qpId && this.tabs.some(t => t.id === qpId)) ? qpId : fallback;
 
                   if (!next) return;
                   if (next !== qpId) {
-                        // sửa URL nếu query param không hợp lệ
                         const merged = { ...this.route.snapshot.queryParams, [this.queryParamKey]: next };
                         this.router.navigate([], { relativeTo: this.route, queryParams: merged, queryParamsHandling: 'merge' });
                   }
@@ -55,9 +54,8 @@ export class KitShellTabsComponent implements OnInit, OnDestroy {
                   }
             });
 
-            // Fallback sync ngay lần đầu (trường hợp không có subscribe kịp)
-            if (!this.selectedId && this.tabs.length) {
-                  this.selectedId = this.tabs[0].id;
+            if (!this.selectedId) {
+                  this.selectedId = this.tabs.find(t => !t.hidden)?.id ?? this.tabs[0]?.id;
             }
       }
 
@@ -72,5 +70,9 @@ export class KitShellTabsComponent implements OnInit, OnDestroy {
       ngOnDestroy() {
             this.destroy$.next();
             this.destroy$.complete();
+      }
+
+      public get displayTabs(): KitShellTabDef[] {
+            return this.tabs.filter(t => !t.hidden);
       }
 }

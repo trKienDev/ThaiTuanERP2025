@@ -5,6 +5,7 @@ export const loadDomAnimations = trigger('loadDomAnimations', [
             query(':enter, :leave', [
                   style({
                         position: 'absolute',
+                        width: '100%',
                         opacity: 0,
                   })
             ], { optional: true }),
