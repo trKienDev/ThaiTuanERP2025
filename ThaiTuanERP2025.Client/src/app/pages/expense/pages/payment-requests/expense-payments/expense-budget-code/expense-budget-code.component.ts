@@ -52,6 +52,7 @@ export class ExpenseBudgetCodeDialogComponent implements OnInit {
             this.ref.close({
                   success: true,
                   budgetCodeId: bc.id,
+                  budgetAmount: bc.amount,
             });
       }
 

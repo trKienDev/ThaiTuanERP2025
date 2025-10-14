@@ -34,5 +34,9 @@ export class ConfirmService {
             return this.warn$('Dòng này đã gắn một hóa đơn. Bạn có muốn thay thế không?', 'Thay thế hóa đơn', 'Thay thế', 'Giữ nguyên');
       }
 
+      validateBudgetLimit$(isOverBudget: boolean): Observable<boolean> {
+            if (!isOverBudget) return of(true);
+            return this.danger$('Vượt ngân sách','Số tiền vượt quá ngân sách còn lại', '', 'Hủy');
+      }
 
 }

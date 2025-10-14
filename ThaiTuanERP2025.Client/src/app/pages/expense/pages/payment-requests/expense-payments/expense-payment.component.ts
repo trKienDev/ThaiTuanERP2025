@@ -116,7 +116,6 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
 
       constructor(
             private bankAccountService: BankAccountService,
-            private taxService: TaxService,
             private budegetCodeService: BudgetCodeService,
             private cashoutCodeService: CashoutCodeService,
             private confirmService: ConfirmService,
@@ -333,8 +332,18 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
                   data: { selectedBudgetCodeId: selectedId },
             });
 
-            dialogRef.afterClosed().subscribe((result: { success?: boolean, budgetCodeId?: string } | undefined) => {
-                  if(!result?.success || !result.budgetCodeId) return;
+            dialogRef.afterClosed().subscribe((result: { success?: boolean, budgetCodeId?: string, budgetAmount?: number } | undefined) => {
+                  if(!result?.success || !result.budgetCodeId || !result.budgetAmount) return;
+                  
+                  const budgetAmount = Number(result.budgetAmount);
+                  const totalWithTax = Number(row.get('totalWithTax')?.value ?? 0);
+                  if (budgetAmount < totalWithTax) {
+                        this.confirmService.validateBudgetLimit$(true).subscribe(ok => {
+                              if (!ok) return;
+                        });
+                        return; 
+                  }
+
                   row.patchValue({ budgetCodeId: result.budgetCodeId }, { emitEvent: true });
                   this.toast.successRich('Đã chọn mã ngân sách');
             });
