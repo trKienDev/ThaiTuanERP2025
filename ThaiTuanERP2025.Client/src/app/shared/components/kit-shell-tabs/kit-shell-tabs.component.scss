@@ -3,7 +3,6 @@
 }
 
 .sidebar {
-      border-right: 1px solid var(--default-border-color);
       padding-right: 10px;
       width: fit-content;
 }
@@ -29,6 +28,7 @@
       color: #4c607a;
       cursor: pointer;
       font-size: 13px;
+      text-wrap: nowrap;
 
       &:hover {
             background-color: var(--main-bg-color);
@@ -36,7 +36,8 @@
 
       &.active {
             background: linear-gradient(182deg,rgba(255, 255, 255, 1) 0%, rgba(245, 249, 255, 1) 54%, rgba(233, 241, 247, 1) 100%);
-            border: 1px solid var(--default-border-color) !important;
+            border: 1px solid#ccf4f1 !important;
+            box-shadow: rgba(185, 218, 243, 0.952) 0px 1px 2px 0px, rgba(220, 235, 247, 0.959) 0px 1px 3px 1px;
             cursor: default;
       }
 }

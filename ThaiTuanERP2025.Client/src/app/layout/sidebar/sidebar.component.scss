@@ -4,7 +4,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      background-color: var(--main-bg-color);
+      background-image: linear-gradient(to left bottom, #ffffff, #fdfdfe, #fbfbfd, #f9fafb, #f6f8fa);
       padding: 5px;
       user-select: none;
 }
@@ -34,7 +34,9 @@
 .sidebar nav ul li a .sidebar-icon {
       font-size: 25px;
       color: #7b7b7b;
-      margin-bottom: 4px;
+      margin-bottom: 10px;
+      margin-top: 5px;
+      line-height: 1;
 }
 .sidebar .sidebar-title {
       color: #7b7b7b;
@@ -47,9 +49,6 @@
 }
 .sidebar nav ul li a:hover .sidebar-title, .sidebar nav ul li a.active .sidebar-title {
       color: var(--main-foreground-hover);
-}
-.sidebar nav ul li a.active .sidebar-title {
-      font-weight: bold;
 }
 
 
