@@ -10,7 +10,7 @@
             </nav>
       </aside>
 
-      <main class="content" role="tabpanel">
+      <main class="content" role="tabpanel" [@loadDomAnimations]="selectedId">
             <!-- Ưu tiên render child-route (form tạo mới) -->
             <router-outlet></router-outlet>
 

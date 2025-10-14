@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { loadDomAnimations } from '../../animations/load-dom/load-dom.animation';
 
 export interface KitShellTabDef {
       id: string;              // ví dụ: 'code' | 'group' | 'plan' | 'period'
@@ -20,6 +21,7 @@ export interface KitShellTabDef {
       imports: [CommonModule, RouterOutlet],
       templateUrl: './kit-shell-tabs.component.html',
       styleUrl: './kit-shell-tabs.component.scss',
+      animations: [ loadDomAnimations], 
 })
 export class KitShellTabsComponent implements OnInit, OnDestroy {
       @Input({ required: true }) tabs: KitShellTabDef[] = [];

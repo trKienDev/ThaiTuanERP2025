@@ -1,4 +1,4 @@
-<div class="expense-navbar">
+<div class="expense-navbar dom-animation-content" >
       <nav class="expense-navbar__container">
             <ul class="expense-navbar__list">
                   <li class="expense-navbar__item">
@@ -46,6 +46,6 @@
             </ul>
       </nav>
 </div>
-<div class="expense-navbar__content">
-      <router-outlet></router-outlet>
+<div class="expense-navbar__content" [@loadDomAnimations]="o && o.activatedRouteData && o.activatedRouteData['animation']">
+      <router-outlet #o="outlet"></router-outlet>
 </div>
