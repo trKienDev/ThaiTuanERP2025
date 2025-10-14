@@ -44,8 +44,12 @@
       --default-border-color-radius: 5px;
 
       --topbar-height: 64px;
+      --sidebar-width: 80px;
+      --sidebar-padding: 5px;
+      --navbar-height: 40px;
 }
 
+html, body { height: 100%; overflow: hidden; }
 body, input { font-family: 'Lexend', sans-serif; font-size: 13px; }
 textarea { 
       font-family: "Lexend", sans-serif;
@@ -197,3 +201,8 @@ input[type=number] { -moz-appearance: textfield; }
 /* mat-dialog  */
 .mat-mdc-dialog-surface { min-width: fit-content !important; }
 .cdk-overlay-pane, .mat-mdc-dialog-container, .mat-mdc-dialog-inner-container { min-width: fit-content !important; }
+
+.white-space {
+      display: block;
+      height: 300px;
+}
