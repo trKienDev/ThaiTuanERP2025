@@ -1,9 +1,11 @@
 <div class="shell">
       <aside class="sidebar" [style.width.px]="sidebarWidth ?? null">
             <nav class="tab-list" role="tablist" aria-orientation="vertical">
-                  <button type="button" class="tab-item" role="tab" 
-                  *ngFor="let t of tabs" [class.active]="t.id === selectedId" 
-                  (click)="selectTab(t.id)" [attr.aria-selected]="t.id === selectedId">
+                  <button type="button" class="tab-item" role="tab"
+                  *ngFor="let t of displayTabs"
+                  [class.active]="t.id === selectedId"
+                  (click)="selectTab(t.id)"
+                  [attr.aria-selected]="t.id === selectedId">
                         <span class="material-symbols-outlined" *ngIf="t.icon">{{ t.icon }}</span>
                         <span>{{ t.label }}</span>
                   </button>
