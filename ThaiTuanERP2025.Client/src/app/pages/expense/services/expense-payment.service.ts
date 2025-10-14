@@ -21,4 +21,13 @@ export class ExpensePaymentService extends BaseCrudService<ExpensePaymentDto, Ex
                         catchError(err => throwError(() => err))
                   );
       }
+
+      getFollowingPayments(): Observable<ExpensePaymentDto[]> {
+            return this.http.
+                  get<ApiResponse<ExpensePaymentDto[]>>(`${this.endpoint}/following`)
+                  .pipe(
+                        handleApiResponse$<ExpensePaymentDto[]>(),
+                        catchError(err => throwError(() => err))
+                  );
+      }
 } 

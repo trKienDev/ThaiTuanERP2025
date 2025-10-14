@@ -5,6 +5,7 @@ using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Expense.Commands.ExpensePayments.CreateExpensePayments;
 using ThaiTuanERP2025.Application.Expense.Dtos;
 using ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetExpensePaymentDetail;
+using ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetFollowingExpensePayment;
 
 namespace ThaiTuanERP2025.Api.Controllers.Expense
 {
@@ -33,6 +34,13 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
 		{
 			var dto = await _mediator.Send(new GetExpensePaymentDetailQuery(id), cancellationToken);
 			return Ok(ApiResponse<ExpensePaymentDetailDto>.Success(dto));
+		}
+
+		[HttpGet("following")]
+		public async Task<IActionResult> GetFollowingExpensePayments(CancellationToken cancellationToken)
+		{
+			var dtos = await _mediator.Send(new GetFollowingExpensePaymentQuery(), cancellationToken);
+			return Ok(ApiResponse<IReadOnlyCollection<ExpensePaymentDto>>.Success(dtos));
 		}
 	}
 }

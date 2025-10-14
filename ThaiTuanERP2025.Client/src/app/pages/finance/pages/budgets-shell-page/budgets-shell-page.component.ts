@@ -2,7 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
 import { BudgetCodePanelComponent } from "./budget-codes/budget-code.component";
 import { BudgetGroupPanelComponent } from "./budget-groups/budget-group.component";
-import { KitShellTabDef, KitShellTabsComponent } from "../../../../shared/components/shell-tabs/kit-shell-tabs.component";
+import { KitShellTabDef, KitShellTabsComponent } from "../../../../shared/components/kit-shell-tabs/kit-shell-tabs.component";
 
 @Component({
       selector: 'budgets-shell-page',
