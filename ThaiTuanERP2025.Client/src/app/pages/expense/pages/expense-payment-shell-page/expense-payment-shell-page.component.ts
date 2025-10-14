@@ -3,6 +3,7 @@ import { KitShellTabDef, KitShellTabsComponent } from "../../../../shared/compon
 import { CommonModule } from "@angular/common";
 import { ExpensePaymentRequestPanelComponent } from "./expense-payment-request/expense-payment-request.component";
 import { ExpensePaymentsPanelComponent } from "./expense-payments/expense-payments.component";
+import { ExpensePaymentDetailPanelComponent } from "./expense-payment-detail/expense-payment-detail.component";
 
 @Component({
       selector: 'expense-payment-shell-page',
@@ -12,7 +13,8 @@ import { ExpensePaymentsPanelComponent } from "./expense-payments/expense-paymen
 })
 export class ExpensePaymentShellPageComponent {
       readonly tabs: KitShellTabDef[] = [
-            { id: 'payments', label: 'Thanh toán đã tạo', component: ExpensePaymentsPanelComponent },
-            { id: 'payment-request', label: 'Yêu cầu thanh toán', component: ExpensePaymentRequestPanelComponent },
+            { id: 'payments', label: 'Thanh toán của bạn', component: ExpensePaymentsPanelComponent },
+            { id: 'payment-request', label: 'Thanh toán mới', component: ExpensePaymentRequestPanelComponent },
+            { id: 'payment-detail', label: 'Chi tiết thanh toán', component: ExpensePaymentDetailPanelComponent }
       ];
 }
