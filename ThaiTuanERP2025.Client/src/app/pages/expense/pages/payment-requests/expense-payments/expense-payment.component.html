@@ -15,7 +15,7 @@
       <div class="input-wrapper">
             <div class="form-input">
                   <input class="" type="text" formControlName="name" autocomplete="on" required/>
-                  <label for="name">Tên chi phí</label>
+                  <label for="name">Tên chi phí <span style="color: red;">  *</span></label>
             </div>
       </div>
 
@@ -51,21 +51,21 @@
             <div class="input-wrapper">
                   <div class="form-input">
                         <input class="" type="text" formControlName="bankName" autocomplete="on" required/>
-                        <label for="name">Tên ngân hàng</label>
+                        <label for="name">Tên ngân hàng <span style="color: red;">  *</span></label>
                   </div>
             </div>
 
             <div class="input-wrapper">
                   <div class="form-input">
                         <input class="" type="text" formControlName="accountNumber" autocomplete="on" required/>
-                        <label for="name">Số tài khoản</label>
+                        <label for="name">Số tài khoản <span style="color: red;">  *</span></label>
                   </div>
             </div>
 
             <div class="input-wrapper">
                   <div class="form-input">
                         <input class="" type="text" formControlName="beneficiaryName" autocomplete="on" required/>
-                        <label for="name">Người thụ hưởng</label>
+                        <label for="name">Người thụ hưởng <span style="color: red;">  *</span>  </label>
                   </div>
             </div>
       </div>
@@ -123,13 +123,12 @@
                                     <td>{{ row.get('totalWithTax')?.value | number:'1.0-2' }}</td>
                                     <td class="text-align-center">
                                           <button type="button" (click)="openExpenseBudgetCodeDialog(i)"
-                                                [ngClass]="{
-                                                      'button': true,
-                                                      'non-linked-button': !row.get('budgetCodeId')?.value,
-                                                      'linked-button': !!row.get('budgetCodeId')?.value
-                                                }"
-                                                aria-label="Chọn ngân sách"
-                                          >
+                                          [ngClass]="{
+                                                'button': true,
+                                                'non-linked-button': !row.get('budgetCodeId')?.value,
+                                                'linked-button': !!row.get('budgetCodeId')?.value
+                                          }"
+                                          aria-label="Chọn ngân sách">
                                                 <span class="text material-icons-outlined">attach_money</span>
                                           </button>
                                     </td>
