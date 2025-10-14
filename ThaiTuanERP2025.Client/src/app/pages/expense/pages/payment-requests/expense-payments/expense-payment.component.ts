@@ -19,7 +19,7 @@ import { MiniInvoiceRequestDialogComponent } from "../../invoices/invoice-reques
 import { ConnectedPosition, OverlayModule } from "@angular/cdk/overlay";
 import { MyInvoicesDialogComponent } from "../../invoices/my-invoices-dialog/my-invoices-dialog.component";
 import { ToastService } from "../../../../../shared/components/toast/toast.service";
-import { ConfirmService } from "../../../../../shared/services/confirm.service";
+import { ConfirmService } from "../../../../../shared/components/confirm-dialog/confirm.service";
 import { ExpenseBudgetCodeDialogComponent } from "./expense-budget-code/expense-budget-code.component";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
@@ -337,8 +337,15 @@ export class ExpensePaymentComponent implements OnInit, OnDestroy {
                   
                   const budgetAmount = Number(result.budgetAmount);
                   const totalWithTax = Number(row.get('totalWithTax')?.value ?? 0);
-                  if (budgetAmount < totalWithTax) {
-                        this.confirmService.validateBudgetLimit$(true).subscribe(ok => {
+
+                  // Cho phép vượt 5%
+                  const tolerance = 0.05; // 5%
+                  const allowed = Math.round(budgetAmount * (1 + tolerance));
+
+                  if (totalWithTax > allowed) {
+                        this.confirmService.validateBudgetLimit$({
+                              message: `Khoản thanh toán vượt quá ngân sách cho phép`
+                        }).subscribe(ok => {
                               if (!ok) return;
                         });
                         return; 

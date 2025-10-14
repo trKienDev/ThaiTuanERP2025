@@ -26,10 +26,9 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 	}
 
 	public sealed record ExpensePaymentItemRequest {
-		public Guid? ExpensePaymentId { get; init; }
+		public Guid ExpensePaymentId { get; init; }
 		public Guid? InvoiceId { get; init; }
-		public Guid? BudgetCodeId { get; init; }
-		public Guid? CashoutCodeId { get; init; }
+		public Guid BudgetCodeId { get; init; }
 
 		public string ItemName { get; init; } = string.Empty;
 		public int Quantity { get; init; }
