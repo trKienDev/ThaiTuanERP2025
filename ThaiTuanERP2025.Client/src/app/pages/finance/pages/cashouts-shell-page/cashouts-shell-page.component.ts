@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { KitShellTabDef, KitShellTabsComponent } from "../../../../shared/components/shell-tabs/kit-shell-tabs.component";
+import { KitShellTabDef, KitShellTabsComponent } from "../../../../shared/components/kit-shell-tabs/kit-shell-tabs.component";
 import { CashoutCodePanelComponent } from "./cashout-codes/cashout-code.component";
 import { CashoutGroupPanelComponent } from "./cashout-groups/cashout-group.component";
 

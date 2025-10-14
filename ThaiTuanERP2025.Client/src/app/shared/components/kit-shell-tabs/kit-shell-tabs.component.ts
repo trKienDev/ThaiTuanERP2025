@@ -3,7 +3,7 @@ import {
   ChangeDetectionStrategy, OnInit, OnDestroy, inject
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -17,7 +17,7 @@ export interface KitShellTabDef {
 @Component({
       selector: 'kit-shell-tabs',
       standalone: true,
-      imports: [CommonModule],
+      imports: [CommonModule, RouterOutlet],
       templateUrl: './kit-shell-tabs.component.html',
       styleUrl: './kit-shell-tabs.component.scss',
 })
@@ -30,7 +30,7 @@ export class KitShellTabsComponent implements OnInit, OnDestroy {
       selectedId!: string;
 
       private router = inject(Router);
-      private route = inject(ActivatedRoute);
+      public route = inject(ActivatedRoute);
       private destroy$ = new Subject<void>();
 
       ngOnInit() {

@@ -95,7 +95,6 @@ export class ExpensePaymentDetailComponent implements OnInit {
             this.comments = await firstValueFrom(this.epCommentService.getByPayment(this.paymentId));
       }
 
-
       startCommenting() {
             this.isCommenting = true;
             setTimeout(() => this.textareaRef?.nativeElement.focus(), 0);
@@ -174,7 +173,7 @@ export class ExpensePaymentDetailComponent implements OnInit {
                   payload
             ));
             if(result) { 
-                  this.toastService.successRich(result); 
+                  this.toastService.successRich('Duyệt thành công'); 
                   await this.getPaymentDetails();
             }
       }
