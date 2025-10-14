@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { ConfirmDialogData, KitConfirmDialogComponent } from "../components/confirm-dialog/confirm-dialog.component";
+import { ConfirmDialogData, KitConfirmDialogComponent } from "./confirm-dialog.component";
 import { map, Observable, of } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
@@ -34,9 +34,8 @@ export class ConfirmService {
             return this.warn$('Dòng này đã gắn một hóa đơn. Bạn có muốn thay thế không?', 'Thay thế hóa đơn', 'Thay thế', 'Giữ nguyên');
       }
 
-      validateBudgetLimit$(isOverBudget: boolean): Observable<boolean> {
-            if (!isOverBudget) return of(true);
-            return this.danger$('Vượt ngân sách','Số tiền vượt quá ngân sách còn lại', '', 'Hủy');
+      validateBudgetLimit$({ title = 'Cảnh báo', message }: { title?: string; message: string }): Observable<boolean> {
+            return this.danger$(message, title, '', 'Hủy');
       }
 
 }
