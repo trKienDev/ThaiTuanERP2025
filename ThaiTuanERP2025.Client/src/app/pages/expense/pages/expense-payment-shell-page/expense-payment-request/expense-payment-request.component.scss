@@ -151,8 +151,8 @@
       pointer-events: all; /* chặn tương tác */
 }
 
-/* Đảm bảo container form là relative để overlay bám */
-.expense-payment-form { position: relative; max-height: 100vh; }
+// /* Đảm bảo container form là relative để overlay bám */
+// .expense-payment-form { position: relative; max-height: 100vh; }
 .overlay-box {
       background: #fff;
       border-radius: 12px;
