@@ -1,11 +1,16 @@
 .sidebar {
-      width: 80px;
-      min-height: 100vh;
+      width: var(--sidebar-width);
+      position: fixed;
+      top: var(--topbar-height);
+      left: 0;
+      height: calc(100dvh - var(--topbar-height));
+      overflow: auto;
+      z-index: 900;
       display: flex;
       flex-direction: column;
       align-items: center;
-      background-image: linear-gradient(to left bottom, #ffffff, #fdfdfe, #fbfbfd, #f9fafb, #f6f8fa);
-      padding: 5px;
+      background-color: var(--main-bg-color);
+      padding: var(--sidebar-padding);
       user-select: none;
 }
 .sidebar nav {
