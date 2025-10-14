@@ -1,8 +1,8 @@
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, inject, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { BudgetCodeService } from "../../../../../finance/services/budget-code.service";
-import { BudgetCodeWithAmountDto } from "../../../../../finance/models/budget-code.model";
+import { BudgetCodeService } from "../../../../services/budget-code.service";
+import { BudgetCodeWithAmountDto } from "../../../../models/budget-code.model";
 import { handleHttpError } from "../../../../../../shared/utils/handle-http-errors.util";
 
 @Component({

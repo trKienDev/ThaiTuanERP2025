@@ -15,6 +15,6 @@ export class ExpensePaymentShellPageComponent {
       readonly tabs: KitShellTabDef[] = [
             { id: 'payments', label: 'Thanh toán của bạn', component: ExpensePaymentsPanelComponent },
             { id: 'payment-request', label: 'Thanh toán mới', component: ExpensePaymentRequestPanelComponent },
-            { id: 'payment-detail', label: 'Chi tiết thanh toán', component: ExpensePaymentDetailPanelComponent }
+            { id: 'payment-detail', label: 'Chi tiết thanh toán', component: ExpensePaymentDetailPanelComponent, hidden: true }
       ];
 }
