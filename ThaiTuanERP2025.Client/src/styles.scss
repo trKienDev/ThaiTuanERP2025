@@ -14,6 +14,7 @@
 @import url('./styles/_badge.scss');
 @import url('./app/shared/animations/load-dom/load-dom.animation.scss');
 @import url('./app/core/services/ngprogress/ngprogress.scss');
+@import url('./styles/_expense-payment-status.scss');
 
 :root {
       --cadmium-red: #D22B2B;
@@ -122,9 +123,9 @@ input {
 html, body { height: 100%; margin: 0; }
 
 .page-heading { display: flex; justify-content: space-between; }
-.page-title { display: flex; gap: 10px; font-size: 20px;
+.page-title { display: flex; gap: 10px; font-size: 20px; user-select: none;
       h3 { margin: 0px; }
-      .title { line-height: 1.6; user-select: none; }
+      .title { line-height: 1.6; }
 }
 
 .default-title { font-size: 20px; font-weight: 900; color: var(--main-foreground-hover); }

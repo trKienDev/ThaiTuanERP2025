@@ -13,7 +13,7 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 			CreateMap<ExpensePayment, ExpensePaymentDetailDto>()
 				// Creator
 				.ForMember(d => d.CreatedByUserId, opt => opt.MapFrom(s => s.CreatedByUserId))
-				.ForMember(d => d.CreatedByUsername, opt => opt.MapFrom(s => s.CreatedByUser.Username))
+				.ForMember(d => d.CreatedByUser, opt => opt.MapFrom(s => s.CreatedByUser))
 				// Collections
 				.ForMember(d => d.Items, opt => opt.MapFrom(s => s.Items))
 				.ForMember(d => d.Attachments, opt => opt.MapFrom(s => s.Attachments))
@@ -22,7 +22,9 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 				.ForMember(d => d.Supplier, opt => opt.MapFrom(s => s.Supplier))
 				// Enum -> int (AutoMapper tự chuyển, dòng này có thể bỏ)
 				.ForMember(d => d.Status, opt => opt.MapFrom(s => (int)s.Status));
-				// Invoices nếu bạn có navigation từ Items -> Invoice
+			// Invoices nếu bạn có navigation từ Items -> Invoice
+			CreateMap<ExpensePayment, ExpensePaymentSummaryDto>()
+				.ForMember(d => d.Status, opt => opt.MapFrom(s => (int)s.Status));
 
 			// ===== Sub-entities =====
 			CreateMap<ExpensePaymentItem, ExpensePaymentItemDto>();

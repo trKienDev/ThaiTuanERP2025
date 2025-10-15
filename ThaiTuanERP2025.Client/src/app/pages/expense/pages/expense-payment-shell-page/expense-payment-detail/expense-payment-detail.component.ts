@@ -83,11 +83,13 @@ export class ExpensePaymentDetailPanelComponent {
             });
             this.currentUser = await firstValueFrom(this.currentUser$);
             this.getPaymentDetails();
+
             this.loadComments();
       }
 
       async getPaymentDetails() {
             this.paymentDetail = await firstValueFrom(this.expensePaymentService.getDetailById(this.paymentId));
+            console.log('payment detail: ', this.paymentDetail);
       }
 
       trackByComment = (_: number, c: ExpensePaymentCommentDto) => c.id;

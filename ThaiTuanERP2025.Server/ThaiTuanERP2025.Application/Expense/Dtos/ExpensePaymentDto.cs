@@ -4,6 +4,7 @@ using ThaiTuanERP2025.Domain.Expense.Enums;
 
 namespace ThaiTuanERP2025.Application.Expense.Dtos
 {
+	
 	public sealed record ExpensePaymentDto
 	{
 		public Guid Id { get; init; }
@@ -98,5 +99,31 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 
 		// Workflow
 		public ApprovalWorkflowInstanceDetailDto? WorkflowInstanceDetail { get; init; } = default!;
+	}
+
+	public sealed record ExpensePaymentSummaryDto {
+		public Guid Id { get; init; }
+		public string Name { get; init; } = string.Empty;
+
+		public PayeeType PayeeType { get; init; }
+		public Guid? SupplierId { get; init; }
+		public Supplier? Supplier { get; init; }
+
+		public string BankName { get; init; } = string.Empty;
+		public string AccountNumber { get; init; } = string.Empty;
+		public string BeneficiaryName { get; init; } = string.Empty;
+
+		public DateTime PaymentDate { get; init; }
+		public bool HasGoodsReceipt { get; init; }
+		public string? Description { get; init; } = string.Empty;
+
+		public decimal TotalAmount { get; init; }
+		public decimal TotalTax { get; init; }
+		public decimal TotalWithTax { get; init; }
+
+		public int Status { get; init; }
+
+		public UserDto CreatedByUser { get; init; } = default!;
+		public DateTime CreatedDate { get; init; }
 	}
 }

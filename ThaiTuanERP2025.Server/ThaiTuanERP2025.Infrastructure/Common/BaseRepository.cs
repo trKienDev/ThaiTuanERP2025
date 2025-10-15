@@ -95,7 +95,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			return await _dbSet.AsNoTracking().Where(predicate).ToListAsync();
 		}
 		// filter by condition and navigation
-		public virtual async Task<List<T>> FindIncludingAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
+		public virtual async Task<List<T>> FindIncludingAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken, params Expression<Func<T, object>>[] includes)
 		{
 			if (predicate == null) throw new ArgumentNullException(nameof(predicate));
 
@@ -104,7 +104,9 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 				foreach (var include in includes.Distinct())
 					query = query.Include(include);
 
-			return await query.ToListAsync();
+			return await query
+				.Where(predicate)
+				.ToListAsync(cancellationToken);
 		}
 
 		public async Task AddAsync(T entity)
