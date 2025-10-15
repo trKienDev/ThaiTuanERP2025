@@ -50,10 +50,14 @@ export interface RejectStepRequest extends ApproveStepRequest {}
 
 export interface ApprovalStepInstanceStatusDto {
       status: number;
-      StartedAt?: Date;
+      startedAt?: Date;
       dueAt?: Date;
-      ApprovedAt?: Date;
-      ApprovedBy?: string;
+      
+      approvedAt?: Date;
+      approvedBy?: string;
+      approvedByUser?: UserDto;
+
       rejectedAt?: Date;
       rejectedBy?: string;
+      rejectedByUser?: UserDto;
 }

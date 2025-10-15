@@ -26,6 +26,7 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 
 			CreateMap<ExpensePayment, ExpensePaymentSummaryDto>()
 				.ForMember(d => d.Status, opt => opt.MapFrom(s => (int)s.Status))
+				.ForMember(d => d.CreatedByUser, opt => opt.MapFrom(s => s.CreatedByUser))
 				.ForMember(d => d.WorkflowInstanceStatus, o => o.MapFrom(s => s.CurrentWorkflowInstance));
 
 			// ===== Sub-entities =====
