@@ -22,7 +22,9 @@
                   </thead>
                   <tbody>
                         <tr *ngFor="let payment of expensePayments">
-                              <td>{{ payment.name }}</td>
+                              <td>
+                                    <span class="payment-name" (click)="openExpensePaymentDetailDialog(payment.id)">{{ payment.name }}</span>
+                              </td>
                               <td>
                                     <span  class="payment-status-badge" [ngClass]="(payment.status | expensePaymentStatus).class">
                                           {{ (payment.status | expensePaymentStatus).text}}

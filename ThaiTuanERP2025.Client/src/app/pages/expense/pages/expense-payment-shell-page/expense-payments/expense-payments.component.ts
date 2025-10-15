@@ -5,6 +5,8 @@ import { firstValueFrom } from "rxjs";
 import { ExpensePaymentService } from "../../../services/expense-payment.service";
 import { ExpensePaymentStatusPipe } from "../../../pipes/expense-payment-status.pipe";
 import { AvatarUrlPipe } from "../../../../../shared/pipes/avatar-url.pipe";
+import { MatDialog } from "@angular/material/dialog";
+import { ExpensePaymentDetailDialogComponent } from "../expense-payment-detail/expense-payment-detail-dialog/expense-payment-detail-dialog.component";
 
 @Component({
       selector: 'expense-payments-panel',
@@ -14,6 +16,7 @@ import { AvatarUrlPipe } from "../../../../../shared/pipes/avatar-url.pipe";
       imports: [CommonModule, ExpensePaymentStatusPipe, AvatarUrlPipe ]
 })
 export class ExpensePaymentsPanelComponent implements OnInit {
+      private dialog = inject(MatDialog);
       public expensePayments: ExpensePaymentSummaryDto[] = [];
       private expensePaymentService = inject(ExpensePaymentService);
 
@@ -24,5 +27,17 @@ export class ExpensePaymentsPanelComponent implements OnInit {
       private async loadExpensePayments() {
             this.expensePayments = await firstValueFrom(this.expensePaymentService.getFollowingPayments());
             console.log(this.expensePayments);
+      }
+
+      openExpensePaymentDetailDialog(paymentId: string) {
+            const dialogRef = this.dialog.open(ExpensePaymentDetailDialogComponent, {
+                  data: paymentId,
+            });
+
+            dialogRef.afterClosed().subscribe((result: any) => {
+                  if (result?.success) {
+                        // Handle success result if needed
+                  }     
+            });
       }
 }
