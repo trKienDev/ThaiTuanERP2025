@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { ExpensePaymentDetailDto, ExpensePaymentDto, ExpensePaymentRequest } from "../models/expense-payment.model";
+import { ExpensePaymentDetailDto, ExpensePaymentDto, ExpensePaymentRequest, ExpensePaymentSummaryDto } from "../models/expense-payment.model";
 import { BaseCrudService } from "../../../shared/services/base-crud.service";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "../../../../environments/environment";
@@ -22,11 +22,11 @@ export class ExpensePaymentService extends BaseCrudService<ExpensePaymentDto, Ex
                   );
       }
 
-      getFollowingPayments(): Observable<ExpensePaymentDto[]> {
+      getFollowingPayments(): Observable<ExpensePaymentSummaryDto[]> {
             return this.http.
-                  get<ApiResponse<ExpensePaymentDto[]>>(`${this.endpoint}/following`)
+                  get<ApiResponse<ExpensePaymentSummaryDto[]>>(`${this.endpoint}/following`)
                   .pipe(
-                        handleApiResponse$<ExpensePaymentDto[]>(),
+                        handleApiResponse$<ExpensePaymentSummaryDto[]>(),
                         catchError(err => throwError(() => err))
                   );
       }

@@ -17,6 +17,7 @@ namespace ThaiTuanERP2025.Application.Finance.Queries.LedgerAccounts.GetAllLedge
 		public async Task<List<LedgerAccountDto>> Handle(GetAllLedgerAccountsQuery request, CancellationToken cancellationToken) {
 			var list = await _unitOfWork.LedgerAccounts.FindIncludingAsync(
 				_ => true,
+				cancellationToken: cancellationToken,
 				a => a.LedgerAccountType
 			);
 			var ordered = list.OrderBy(x => x.Path).ToList();	

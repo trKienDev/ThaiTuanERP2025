@@ -17,7 +17,7 @@ namespace ThaiTuanERP2025.Application.Common.Interfaces
 		IQueryable<T> QueryIncluding(bool asNoTracking = true, params Expression<Func<T, object>>[] includes);
 
 		Task<List<T>> FindAsync(Expression<Func<T, bool>> predicate);
-		Task<List<T>> FindIncludingAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes);
+		Task<List<T>> FindIncludingAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken, params Expression<Func<T, object>>[] includes);
 
 		Task<T?> GetByIdAsync(Guid id);
 		Task<List<T>> GetAllAsync();

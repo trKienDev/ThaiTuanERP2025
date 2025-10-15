@@ -29,6 +29,8 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories
 				.SingleOrDefaultAsync(p => p.Id == id && !p.IsDeleted, cancellationToken);
 		}
 
+
+
 		public async Task<ApprovalWorkflowInstance?> GetWorkflowInstanceAsync(Guid documentId, CancellationToken cancellationToken = default)
 		{
 			return await _context.Set<ApprovalWorkflowInstance>()
