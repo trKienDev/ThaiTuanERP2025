@@ -23,8 +23,10 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 				// Enum -> int (AutoMapper tự chuyển, dòng này có thể bỏ)
 				.ForMember(d => d.Status, opt => opt.MapFrom(s => (int)s.Status));
 			// Invoices nếu bạn có navigation từ Items -> Invoice
+
 			CreateMap<ExpensePayment, ExpensePaymentSummaryDto>()
-				.ForMember(d => d.Status, opt => opt.MapFrom(s => (int)s.Status));
+				.ForMember(d => d.Status, opt => opt.MapFrom(s => (int)s.Status))
+				.ForMember(d => d.WorkflowInstanceStatus, o => o.MapFrom(s => s.CurrentWorkflowInstance));
 
 			// ===== Sub-entities =====
 			CreateMap<ExpensePaymentItem, ExpensePaymentItemDto>();

@@ -52,8 +52,6 @@ export class TopbarComponent implements OnInit {
 
             // Khởi tạo nhắc việc
             await this.reminderFacade.init();
-
-            console.log('active reminder: ', await firstValueFrom(this.activeReminders$));
       }
 
       toggleNotificationPanel(btn: HTMLElement) {

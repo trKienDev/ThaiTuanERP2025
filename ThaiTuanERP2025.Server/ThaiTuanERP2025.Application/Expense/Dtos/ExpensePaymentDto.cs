@@ -98,7 +98,7 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 		public IReadOnlyList<ExpensePaymentFollowersDto> Followers { get; init; } = Array.Empty<ExpensePaymentFollowersDto>();
 
 		// Workflow
-		public ApprovalWorkflowInstanceDetailDto? WorkflowInstanceDetail { get; init; } = default!;
+		public ApprovalWorkflowInstanceDetailDto WorkflowInstanceDetail { get; init; } = default!;
 	}
 
 	public sealed record ExpensePaymentSummaryDto {
@@ -125,5 +125,7 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 
 		public UserDto CreatedByUser { get; init; } = default!;
 		public DateTime CreatedDate { get; init; }
+
+		public ApprovalWorkflowInstanceStatusDto WorkflowInstanceStatus { get; init; } = default!;
 	}
 }
