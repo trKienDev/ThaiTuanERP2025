@@ -28,13 +28,17 @@
                                           {{ (payment.status | expensePaymentStatus).text}}
                                     </span>
                               </td>
-                              <td></td>
+                              <td>
+                                    <ng-container *ngFor="let step of payment.workflowInstanceStatus.steps">
+                                          <img class="approver-avatar" [src]="step.approvedByUser | avatarUrlPipe" alt="approved by">
+                                    </ng-container>
+                              </td>
                               <td>{{ payment.totalAmount | number:'1.0-0' }}</td>
                               <td>{{ payment.totalTax | number:'1.0-0' }}</td>
                               <td>{{ payment.totalWithTax | number:'1.0-0' }}</td>
                               <td></td>
                               <td>
-                                    <img class="created-by-user" [src]="payment.createdByUser | avatarUrlPipe" alt="created by">
+                                    <img class="approver-avatar" [src]="payment.createdByUser | avatarUrlPipe" alt="created by">
                               </td>
                               <td>{{ payment.createdDate | date:'dd/MM/yyyy' }}</td>
                         </tr>

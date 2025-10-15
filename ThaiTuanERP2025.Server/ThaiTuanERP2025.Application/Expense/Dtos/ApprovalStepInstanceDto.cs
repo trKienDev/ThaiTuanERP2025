@@ -87,13 +87,18 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 	};
 	public sealed record RejectStepRequest : ApproveStepRequest;
 
-	public sealed record ApprovalStepInstanceStatusDto(
-		string Status,
-		DateTime? StartedAt,
-		DateTime? DueAt,
-		DateTime? ApprovedAt,
-		Guid? ApprovedBy,
-		DateTime? RejectedAt,
-		Guid? RejectedBy
-	);
+	public sealed record ApprovalStepInstanceStatusDto
+	{
+		public string Status { get; init; } = default!;   // enum → string
+		public DateTime? StartedAt { get; init; }
+		public DateTime? DueAt { get; init; }
+
+		public DateTime? ApprovedAt { get; init; }
+		public Guid? ApprovedBy { get; init; }
+		public UserDto? ApprovedByUser { get; init; }
+
+		public DateTime? RejectedAt { get; init; }
+		public Guid? RejectedBy { get; init; }
+		public UserDto? RejectedByUser { get; init; }
+	}
 }

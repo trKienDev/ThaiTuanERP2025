@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Expense.Dtos;
 
@@ -28,12 +29,30 @@ namespace ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetFollowin
 			var expensePayments = await _unitOfWork.ExpensePayments.FindIncludingAsync(
 				p => expensePaymentIds.Contains(p.Id),
 				cancellationToken,
+				p => p.CreatedByUser,
 				p => p.CurrentWorkflowInstance!,
 				p => p.CurrentWorkflowInstance!.Steps
 			);
 
-			var dtos = expensePayments.Select(p => _mapper.Map<ExpensePaymentSummaryDto>(p))
-				.ToArray();
+			var userIds = expensePayments.Where(p => p.CurrentWorkflowInstance != null)
+				.SelectMany(p => p.CurrentWorkflowInstance!.Steps)
+				.SelectMany(s => new[] { s.ApprovedBy, s.RejectedBy })
+				.Where(id => id.HasValue)
+				.Select(id => id!.Value)
+				.Distinct().ToArray();
+
+			var users = userIds.Length == 0 ? new List<Domain.Account.Entities.User>()
+			    : await _unitOfWork.Users.ListAsync(q => q.Where(u => userIds.Contains(u.Id)),cancellationToken: cancellationToken);
+
+			var userDtoDict = users.Select(u => _mapper.Map<UserDto>(u))
+								.ToDictionary(u => u.Id, u => u);
+
+			// Map ExpensePayment -> SummaryDto và truyền preload dict qua Items
+			var dtos = expensePayments.Select(
+				p => _mapper.Map<ExpensePaymentSummaryDto>(
+					p, opt => { opt.Items["UserDict"] = userDtoDict; }
+				)
+			).ToArray();
 
 			return dtos;
 		}
