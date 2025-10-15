@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using System.Text.Json;
+using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Application.Expense.Dtos;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Expense.Enums;
@@ -16,8 +17,10 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 			CreateMap<ApprovalStepInstance, ApprovalStepInstanceDetailDto>()
 				.ConvertUsing<StepInstanceDetailConverter>();
 
-			CreateMap<ApprovalStepInstance, ApprovalStepInstanceStatusDto>();
-				//.ConvertUsing<StepInstanceDetailConverter>();
+			CreateMap<ApprovalStepInstance, ApprovalStepInstanceStatusDto>()
+				.ForMember(d => d.Status, o => o.MapFrom(s => s.Status.ToString()))
+				.ForMember(d => d.ApprovedByUser, o => o.MapFrom<ApprovedUserResolver>())
+				.ForMember(d => d.RejectedByUser, o => o.MapFrom<RejectedUserResolver>());
 		}
 
 		private sealed class StepInstanceConverter : ITypeConverter<ApprovalStepInstance, ApprovalStepInstanceDto>
@@ -114,6 +117,37 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 					history
 				);
 			}
+		}
+
+		private sealed class ApprovedUserResolver : IValueResolver<ApprovalStepInstance, ApprovalStepInstanceStatusDto, UserDto?>
+		{
+			public UserDto? Resolve(ApprovalStepInstance s, ApprovalStepInstanceStatusDto d, UserDto? destMember, ResolutionContext ctx)
+			{
+				if (!s.ApprovedBy.HasValue) return null;
+				return TryGetUserDto(ctx, s.ApprovedBy.Value);
+			}
+		}
+
+		private sealed class RejectedUserResolver : IValueResolver<ApprovalStepInstance, ApprovalStepInstanceStatusDto, UserDto?>
+		{
+			public UserDto? Resolve(ApprovalStepInstance s, ApprovalStepInstanceStatusDto d, UserDto? destMember, ResolutionContext ctx)
+			{
+				if (!s.RejectedBy.HasValue) return null;
+				return TryGetUserDto(ctx, s.RejectedBy.Value);
+			}
+		}
+
+		private static UserDto? TryGetUserDto(ResolutionContext ctx, Guid userId)
+		{
+			// ctx.Items["UserDict"] kỳ vọng là Dictionary<Guid, UserDto>
+			if (ctx.TryGetItems(out var items) &&
+			    items.TryGetValue("UserDict", out var obj) &&
+			    obj is Dictionary<Guid, UserDto> dict &&
+			    dict.TryGetValue(userId, out var dto))
+			{
+				return dto;
+			}
+			return null;
 		}
 	}
 }
