@@ -22,7 +22,7 @@ export interface KitShellTabDef {
       imports: [CommonModule, RouterOutlet],
       templateUrl: './kit-shell-tabs.component.html',
       styleUrl: './kit-shell-tabs.component.scss',
-      animations: [ loadDomAnimations], 
+      // animations: [ loadDomAnimations], 
 })
 export class KitShellTabsComponent implements OnInit, OnDestroy {
       @Input({ required: true }) tabs: KitShellTabDef[] = [];
