@@ -14,7 +14,6 @@ export class TaskReminderStateService {
       readonly reminders$ = this._reminders$.asObservable();
 
       async init() {
-            console.log('Init TaskReminderStateService');
             // load active reminders
             const list = await firstValueFrom(this.api.getMyActive());
             this._reminders$.next(list);
@@ -25,7 +24,6 @@ export class TaskReminderStateService {
 
             // incoming new reminders
             this.realtime.incoming$.subscribe(items => {
-                  console.log('Received reminders:', items);
                   const current = this._reminders$.value;
                   const merged = [...items, ...current];
                   this._reminders$.next(merged);
@@ -33,9 +31,7 @@ export class TaskReminderStateService {
 
             // resolved reminders (approve / expired / dismissed)
             this.realtime.resolved$.subscribe(ids => {
-                  console.log('Resolve reminders:', ids);
                   const left = this._reminders$.value.filter(a => !ids.includes(a.id));
-                  console.log('Left reminders:', left);
                   this._reminders$.next(left);
             });
       }

@@ -126,7 +126,6 @@ export class LedgerAccountComponent implements OnInit {
       private loadAll() {
             this.service.getAll().subscribe(list => {
                   const rows = this.toRows(list || []);
-                  console.log('rows: ', rows);
                   this.rows$.set(rows);
                   this._filteredRows.set(rows);
             });

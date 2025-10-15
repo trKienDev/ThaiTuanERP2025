@@ -22,7 +22,6 @@ export class InvoiceDetailDialogComponent{
 
       constructor(@Inject(MAT_DIALOG_DATA) public data:  { invoice: InvoiceDto }) {
             this.invoiceDetail = this.data.invoice;
-            console.log('invoice detail: ', this.invoiceDetail);
             if (this.invoiceDetail.invoiceFiles?.length > 0) {
                   this.fileUrl = `${environment.baseUrl}/files/public/${this.invoiceDetail.invoiceFiles[0].objectKey}`;
             }

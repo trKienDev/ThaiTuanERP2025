@@ -15,6 +15,9 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 
 			CreateMap<ApprovalStepInstance, ApprovalStepInstanceDetailDto>()
 				.ConvertUsing<StepInstanceDetailConverter>();
+
+			CreateMap<ApprovalStepInstance, ApprovalStepInstanceStatusDto>();
+				//.ConvertUsing<StepInstanceDetailConverter>();
 		}
 
 		private sealed class StepInstanceConverter : ITypeConverter<ApprovalStepInstance, ApprovalStepInstanceDto>
@@ -64,13 +67,9 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 			}
 		}
 
-		private sealed class StepInstanceDetailConverter
-	: ITypeConverter<ApprovalStepInstance, ApprovalStepInstanceDetailDto>
+		private sealed class StepInstanceDetailConverter : ITypeConverter<ApprovalStepInstance, ApprovalStepInstanceDetailDto>
 		{
-			public ApprovalStepInstanceDetailDto Convert(
-			    ApprovalStepInstance s,
-			    ApprovalStepInstanceDetailDto d,
-			    ResolutionContext ctx)
+			public ApprovalStepInstanceDetailDto Convert(ApprovalStepInstance s, ApprovalStepInstanceDetailDto d, ResolutionContext ctx)
 			{
 				// copy logic parse candidates/history giống StepInstanceConverter
 				Guid[]? candidates = null;
@@ -91,28 +90,28 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 				}
 
 				return new ApprovalStepInstanceDetailDto(
-				    s.Id,
-				    s.WorkflowInstanceId,
-				    s.TemplateStepId,
-				    s.Name,
-				    s.Order,
-				    s.FlowType == FlowType.OneOfN ? "OneOfN" : "Single",
-				    s.SlaHours,
-				    s.ApproverMode == ApproverMode.Condition ? "Condition" : "Standard",
-				    candidates,
-				    /* ApproverCandidates */ null, // sẽ fill sau nếu bạn muốn load UserDto
-				    s.DefaultApproverId,
-				    s.SelectedApproverId,
-				    s.Status.ToString(),
-				    s.StartedAt,
-				    s.DueAt,
-				    s.ApprovedAt,
-				    s.ApprovedBy,
-				    s.RejectedAt,
-				    s.RejectedBy,
-				    s.Comments,
-				    s.SlaBreached,
-				    history
+					s.Id,
+					s.WorkflowInstanceId,
+					s.TemplateStepId,
+					s.Name,
+					s.Order,
+					s.FlowType == FlowType.OneOfN ? "OneOfN" : "Single",
+					s.SlaHours,
+					s.ApproverMode == ApproverMode.Condition ? "Condition" : "Standard",
+					candidates,
+					/* ApproverCandidates */ null, // sẽ fill sau nếu bạn muốn load UserDto
+					s.DefaultApproverId,
+					s.SelectedApproverId,
+					s.Status.ToString(),
+					s.StartedAt,
+					s.DueAt,
+					s.ApprovedAt,
+					s.ApprovedBy,
+					s.RejectedAt,
+					s.RejectedBy,
+					s.Comments,
+					s.SlaBreached,
+					history
 				);
 			}
 		}

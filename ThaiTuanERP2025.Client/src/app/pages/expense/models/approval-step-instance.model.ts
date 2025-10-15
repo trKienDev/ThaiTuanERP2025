@@ -47,3 +47,13 @@ export interface ApproveStepRequest {
       comment?: string;
 }
 export interface RejectStepRequest extends ApproveStepRequest {}
+
+export interface ApprovalStepInstanceStatusDto {
+      status: number;
+      StartedAt?: Date;
+      dueAt?: Date;
+      ApprovedAt?: Date;
+      ApprovedBy?: string;
+      rejectedAt?: Date;
+      rejectedBy?: string;
+}

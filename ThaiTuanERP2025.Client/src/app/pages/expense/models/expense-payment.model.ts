@@ -1,5 +1,5 @@
 import { UserDto } from "../../account/models/user.model";
-import { ApprovalWorkflowInstanceDetailDto, ApprovalWorkflowInstanceDto } from "./approval-workflow-instance.model";
+import { ApprovalWorkflowInstanceDetailDto, ApprovalWorkflowInstanceDto, ApprovalWorkflowIntanceStatusDto } from "./approval-workflow-instance.model";
 import { ExpensePaymentAttachmentDto, ExpensePaymentAttachmentRequest } from "./expense-payment-attachment.model";
 import { ExpensePaymentFollowerDto } from "./expense-payment-followers.model";
 import { ExpensePaymentItemDetailDto, ExpensePaymentItemDto, ExpensePaymentItemRequest } from "./expense-paymnet-item.model";
@@ -111,4 +111,6 @@ export interface ExpensePaymentSummaryDto {
 
 	createdByUser: UserDto;
       createdDate: Date;
+
+      workflowInstanceStatus: ApprovalWorkflowIntanceStatusDto;
 }

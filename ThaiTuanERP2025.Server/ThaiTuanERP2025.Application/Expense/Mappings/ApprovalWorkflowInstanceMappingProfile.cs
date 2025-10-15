@@ -14,6 +14,10 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 			CreateMap<ApprovalWorkflowInstance, ApprovalWorkflowInstanceDetailDto>()
 			    .ForMember(d => d.WorkflowInstance, opt => opt.MapFrom(s => s))
 			    .ForMember(d => d.Steps, opt => opt.MapFrom(s => s.Steps));
+
+			CreateMap<ApprovalWorkflowInstance, ApprovalWorkflowInstanceStatusDto>()
+				.ForMember(d => d.Status, opt => opt.MapFrom(s => s.Status.ToString()))
+				.ForMember(d => d.Steps, opt => opt.MapFrom(s => s.Steps));
 		}
 	}
 }
