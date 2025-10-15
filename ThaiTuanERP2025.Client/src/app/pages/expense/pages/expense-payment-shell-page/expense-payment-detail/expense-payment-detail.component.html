@@ -8,8 +8,7 @@
             <div class="display-flex gap-10px">
                   <h3 class="payment-name">{{ paymentDetail?.name }}</h3>
                  <div class="payment-status">
-                        <span class="payment-status-badge"
-                        [ngClass]="(paymentDetail?.status | expensePaymentStatus).class">
+                        <span class="payment-status-badge" [ngClass]="(paymentDetail?.status | expensePaymentStatus).class">
                               {{ (paymentDetail?.status | expensePaymentStatus).text }}
                         </span>
                  </div>

@@ -5,7 +5,7 @@ using ThaiTuanERP2025.Application.Expense.Dtos;
 
 namespace ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetFollowingExpensePayment
 {
-	public sealed class GetFollowingExpensePaymentHandler : IRequestHandler<GetFollowingExpensePaymentQuery, IReadOnlyCollection<ExpensePaymentDto>>
+	public sealed class GetFollowingExpensePaymentHandler : IRequestHandler<GetFollowingExpensePaymentQuery, IReadOnlyCollection<ExpensePaymentSummaryDto>>
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly IMapper _mapper;
@@ -17,7 +17,7 @@ namespace ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetFollowin
 			_currentUserService = currentUserService;
 		}
 
-		public async Task<IReadOnlyCollection<ExpensePaymentDto>> Handle(GetFollowingExpensePaymentQuery query, CancellationToken cancellationToken)
+		public async Task<IReadOnlyCollection<ExpensePaymentSummaryDto>> Handle(GetFollowingExpensePaymentQuery query, CancellationToken cancellationToken)
 		{
 			var currentUserId = _currentUserService.UserId;
 			var expensePaymentIds = await _unitOfWork.ExpensePaymentFollowers.ListAsync(
@@ -25,12 +25,13 @@ namespace ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetFollowin
 				cancellationToken: cancellationToken
 			);
 
-			var expensePayments = await _unitOfWork.ExpensePayments.ListAsync(
-				q => q.Where(p => expensePaymentIds.Contains(p.Id)),
-				cancellationToken: cancellationToken
+			var expensePayments = await _unitOfWork.ExpensePayments.FindIncludingAsync(
+				    p => expensePaymentIds.Contains(p.Id),
+				    cancellationToken,
+				    p => p.CreatedByUser
 			);
 
-			var dtos = expensePayments.Select(p => _mapper.Map<ExpensePaymentDto>(p))
+			var dtos = expensePayments.Select(p => _mapper.Map<ExpensePaymentSummaryDto>(p))
 				.ToArray();
 
 			return dtos;

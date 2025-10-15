@@ -31,10 +31,11 @@ namespace ThaiTuanERP2025.Application.Account.Commands.Departments.SetDepartment
 
 			department.SetManager(command.ManagerId);
 
-			var users = await _unitOfWork.Users.FindIncludingAsync(u =>
-				u.DepartmentId == department.Id &&
-				u.Role == Domain.Account.Enums.UserRole.user &&
-				u.Id != command.ManagerId
+			var users = await _unitOfWork.Users.FindIncludingAsync(
+				u => u.DepartmentId == department.Id &&
+					u.Role == Domain.Account.Enums.UserRole.user &&
+					u.Id != command.ManagerId,
+				cancellationToken: cancellationToken
 			);
 
 			foreach(var u in users) {

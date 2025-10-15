@@ -86,3 +86,29 @@ export interface ExpensePaymentDetailDto extends ExpensePaymentDto {
 
       workflowInstanceDetail?: ApprovalWorkflowInstanceDetailDto;
 }
+
+export interface ExpensePaymentSummaryDto {
+	id: string;
+	name: string;
+
+	payeeType: PayeeType;
+	supplierId?: string;
+	supplier?: SupplierDto;
+
+	bankName: string;
+	accountNumber: string;
+	beneficiaryName: string;
+
+	paymentDate: Date;
+	hasGoodsReceipt: boolean;
+	description?: string;
+
+	totalAmount: number;
+	totalTax: number;
+	totalWithTax: number;
+
+	status: number;
+
+	createdByUser: UserDto;
+      createdDate: Date;
+}
