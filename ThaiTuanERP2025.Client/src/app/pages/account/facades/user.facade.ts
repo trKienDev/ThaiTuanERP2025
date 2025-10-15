@@ -32,7 +32,9 @@ export class UserFacade extends BaseCrudFacade<UserDto, UserRequest>{
 
             if (!req$) {
                   req$ = this.userService.getManagerIds(userId).pipe(
-                        tap(() => console.log('[HTTP] GET /users/' + userId + '/managers/ids')),
+                        tap(() => {
+                              // console.log(`Fetched manager IDs for user ${userId}`);
+                        }),
                         // share kết quả + phát ngay giá trị mới nhất cho subscriber đến sau
                         shareReplay({ bufferSize: 1, refCount: true })
                   );

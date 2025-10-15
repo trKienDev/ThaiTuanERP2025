@@ -41,7 +41,6 @@ export class SaveApprovalWorkflowTemplateComponent implements OnInit {
       }
 
       ngOnInit(): void {
-            console.log('steps: ', this.input?.steps);
       }
 
       close(): void {

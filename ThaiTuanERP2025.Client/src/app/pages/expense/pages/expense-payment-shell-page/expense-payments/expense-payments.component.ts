@@ -19,10 +19,10 @@ export class ExpensePaymentsPanelComponent implements OnInit {
 
       async ngOnInit(): Promise<void> {
             await this.loadExpensePayments();
-            console.log('expense payments: ', this.expensePayments);
       }
 
       private async loadExpensePayments() {
             this.expensePayments = await firstValueFrom(this.expensePaymentService.getFollowingPayments());
+            console.log(this.expensePayments);
       }
 }

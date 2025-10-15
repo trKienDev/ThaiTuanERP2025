@@ -26,9 +26,10 @@ namespace ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetFollowin
 			);
 
 			var expensePayments = await _unitOfWork.ExpensePayments.FindIncludingAsync(
-				    p => expensePaymentIds.Contains(p.Id),
-				    cancellationToken,
-				    p => p.CreatedByUser
+				p => expensePaymentIds.Contains(p.Id),
+				cancellationToken,
+				p => p.CurrentWorkflowInstance!,
+				p => p.CurrentWorkflowInstance!.Steps
 			);
 
 			var dtos = expensePayments.Select(p => _mapper.Map<ExpensePaymentSummaryDto>(p))

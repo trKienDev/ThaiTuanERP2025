@@ -17,16 +17,16 @@ import { ProgressService } from '../../core/services/ngprogress/ngprogress.servi
 })
 export class LayoutShellComponent {
       constructor(private router: Router, private progress: ProgressService) {
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationStart) {
-        this.progress.start();
-      } else if (
-        event instanceof NavigationEnd ||
-        event instanceof NavigationCancel ||
-        event instanceof NavigationError
-      ) {
-        this.progress.done();
+            this.router.events.subscribe(event => {
+                  if (event instanceof NavigationStart) {
+                        this.progress.start();
+                  } else if (
+                        event instanceof NavigationEnd ||
+                        event instanceof NavigationCancel ||
+                        event instanceof NavigationError
+                  ) {
+                        this.progress.done();
+                  }
+            });
       }
-    });
-  }
 }

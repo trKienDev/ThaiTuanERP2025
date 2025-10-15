@@ -452,12 +452,10 @@ export class ExpensePaymentRequestPanelComponent {
       }
 
       unlinkInvoice(i: number) {
-            console.log('unlink Invoice');
             const row = this.items.at(i);
             const current = row.get('invoiceId')!.value;
 
             if (!current) {
-                  console.log('dòng này chưa liên kết hóa đơn');
                   this.toast.info?.('Dòng này chưa liên kết hóa đơn');    // ToastService đã inject sẵn :contentReference[oaicite:1]{index=1}
                   return;
             }
@@ -510,7 +508,6 @@ export class ExpensePaymentRequestPanelComponent {
             this.fileService.uploadFileWithProgress$(item.file, this.uploadMeta).subscribe({
                   next: (evt) => {
                         if(evt.type === 'progress') {
-                              console.log('progressing');
                               item.progress = Math.min(100, Math.max(0, Math.round(evt.percent)));
                         } else if(evt.type === 'done') {
                               item.progress = 100;
@@ -537,7 +534,6 @@ export class ExpensePaymentRequestPanelComponent {
       removeUpload(index: number): void {
             const item = this.uploads[index];
             if(item.status === 'uploading') return;
-            console.log('item: ', item);
             const fileId = item.fileId;
             if(fileId) {
                   this.fileService.hardDelete$(fileId).subscribe({
@@ -545,7 +541,6 @@ export class ExpensePaymentRequestPanelComponent {
                         error:(err) => {
                               const msg = handleHttpError(err);
                               const message = Array.isArray(msg) ? msg.join('\n') : String(msg);
-                              console.log('message: ', message);
                               this.toast.errorRich('Không xóa được tệp')
                         } 
                   });
@@ -608,7 +603,6 @@ export class ExpensePaymentRequestPanelComponent {
 
             this.submitting = true;
             try {
-                  console.log('payload: ', payload);
                   const result = await firstValueFrom(this.expensePaymentService.create(payload));
 
                   // demo
