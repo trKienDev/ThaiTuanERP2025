@@ -1,8 +1,42 @@
-<form class="request-form">
-      <div class="outgoing-payment-request">
-            <div class="page-title">
-                  <h3 class="icon">💷</h3>
-                  <h3 class="title">Ghi nhận khoản tiền ra</h3>
+<!-- 1) Loading indicator -->
+<ng-container *ngIf="loading(); else contentTpl">
+      <div class="loading-spinner">Đang tải…</div>
+</ng-container>
+
+<!-- 2) Content -->
+<ng-template #contentTpl>
+      <ng-container *ngIf="paymentDetail() as detail; else errorTpl">
+            <div class="outgoing-payment-request">
+                  <div class="request-heading display-flex justify-content-between align-items-center">
+                        <div class="page-title">
+                              <h3 class="icon">💷</h3>
+                              <h3 class="title">Ghi nhận khoản tiền ra</h3>
+                              <h3 class="title payment-name">{{ detail.name }}</h3>
+                        </div>
+                        <div class="process-button-container display-flex gap-10px">
+                              <button type="button" class="button cancel-button" [disabled]="loading()">Hủy</button>
+                              <button type="submit" class="button save-button" [disabled]="loading() || submitting">
+                                    <span class="btn-spinner" *ngIf="submitting" aria-hidden="true"></span>
+                                    <span>{{ submitting ? 'Đang gửi…' : 'Gửi phê duyệt' }}</span>
+                              </button>
+                        </div>
+                  </div>
+
+                  <div class="request-body margin-top-20px">
+                        <form class="outgoing-payment-form" [formGroup]="form" autocomplete="off">
+                              <div class="form-input">
+                                    <input type="text" formControlName="name" required placeholder="Nhập tên khoản tiền ra" />
+                                    <label for="name">
+                                          Tên khoản tiền ra <span style="color: red">*</span>
+                                    </label>
+                              </div>
+                        </form>
+                  </div>
             </div>
-      </div>
-</form>
+      </ng-container>
+</ng-template>
+
+<!-- 3) Error -->
+<ng-template #errorTpl>
+      <div class="error-text">{{ err() }}</div>
+</ng-template>

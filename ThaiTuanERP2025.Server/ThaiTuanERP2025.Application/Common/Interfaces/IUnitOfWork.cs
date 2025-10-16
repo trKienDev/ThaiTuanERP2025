@@ -38,6 +38,7 @@ namespace ThaiTuanERP2025.Application.Common.Interfaces
 		IInvoiceFollowerRepository InvoiceFollowers { get; }
 		ISupplierRepository Suppliers { get; }
 		IBankAccountRepository BankAccounts { get; }
+		IOutgoingBankAccountRepository OutgoingBankAccounts { get; }
 
 		// Workflow
 		IApprovalStepTemplateRepository ApprovalStepTemplates { get; }
