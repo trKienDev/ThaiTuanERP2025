@@ -3,17 +3,18 @@ import {
   ChangeDetectionStrategy, OnInit, OnDestroy, inject
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import { loadDomAnimations } from '../../animations/load-dom/load-dom.animation';
 
-export interface KitShellTabDef {
+export interface KitShellTab {
       id: string;              // ví dụ: 'code' | 'group' | 'plan' | 'period'
       label: string;           // nhãn hiển thị
       icon?: string;           // tên icon Material Symbols (tùy chọn)
       component: Type<unknown>;// component panel để render
       hidden?: boolean;     // ẩn tab này (mặc định false)
+      disabled?: boolean; 
 }
 
 @Component({
@@ -25,74 +26,118 @@ export interface KitShellTabDef {
       // animations: [ loadDomAnimations], 
 })
 export class KitShellTabsComponent implements OnInit, OnDestroy {
-      @Input({ required: true }) tabs: KitShellTabDef[] = [];
-      @Input() queryParamKey = 'view';
-      @Input() sidebarWidth?: number | null | undefined; // px
-      @Output() tabChange = new EventEmitter<string>();
-      private forceShowHiddenTabId?: string;
+      @Input() tabs: KitShellTab[] = [];
+  /** Bật/tắt cơ chế "mở 1 lần" cho tab ẩn qua sessionStorage */
+  @Input() allowOnce = true;
+  /** Prefix để tránh đụng key giữa nhiều shell khác nhau */
+  @Input() allowOnceStoragePrefix = 'kit-shell-tabs.allowOnce';
 
-      selectedId!: string;
+  selectedId: string | null = null;
 
-      private router = inject(Router);
-      public route = inject(ActivatedRoute);
-      private destroy$ = new Subject<void>();
+  private destroy$ = new Subject<void>();
 
-      ngOnInit() {
-            this.route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe((map) => {
-                  const qpId = map.get(this.queryParamKey);
-                  const fallback = this.tabs.find(t => !t.hidden)?.id;
-                  const next = (qpId && this.tabs.some(t => t.id === qpId)) ? qpId : fallback;
+  constructor(public route: ActivatedRoute, private router: Router) {}
 
-                  if (!next) return;
-                  if (next !== qpId) {
-                        const merged = { ...this.route.snapshot.queryParams, [this.queryParamKey]: next };
-                        this.router.navigate([], { relativeTo: this.route, queryParams: merged, queryParamsHandling: 'merge' });
-                  }
+  // ------- Lifecycle ---------------------------------------------------------
 
-                  if (next !== this.selectedId) {
-                        this.selectedId = next;
-                        this.tabChange.emit(next);
+  ngOnInit(): void {
+    // 1) Lần đầu: đọc child route hiện tại; nếu không có -> redirect sang tab đầu tiên không hidden
+    const initial = this.readChildPath();
+    const fallback = this.firstVisibleTabId();
+    const next = initial ?? fallback;
 
-                        // 👇 Nếu tab được chọn là tab ẩn, và có flag "cho phép 1 lần" → mở khóa nút trên sidebar
-                        const selectedTab = this.tabs.find(t => t.id === next);
-                        if (selectedTab?.hidden) {
-                              const allowOnce = sessionStorage.getItem('allowPaymentDetailOnce') === '1';
-                              if (allowOnce) {
-                                    this.forceShowHiddenTabId = next;             // mở khóa hiển thị nút tab
-                                    sessionStorage.removeItem('allowPaymentDetailOnce'); // dùng xong thì xoá flag
-                              }
-                        }
-                  }
-            });
-      }
+    if (!initial && fallback) {
+      // chuyển lần đầu cho sạch URL
+      this.navigateTo(fallback, /*replaceUrl*/ true);
+    }
+    this.selectedId = next;
 
-      selectTab(id: string) {
-            if (id === this.selectedId) return;
+    // 2) Theo dõi điều hướng để sync selectedId khi user đổi child-route
+    this.router.events
+      .pipe(
+        filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        const current = this.readChildPath();
+        if (current && this.selectedId !== current) {
+          this.selectedId = current;
+        }
+      });
+  }
 
-            // 👇 nếu rời tab đã được mở khoá tạm thời → khoá lại
-            if (this.forceShowHiddenTabId && id !== this.forceShowHiddenTabId) {
-                  this.forceShowHiddenTabId = undefined;
-            }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
-            this.selectedId = id;
-            this.tabChange.emit(id);
-            const merged = { ...this.route.snapshot.queryParams, [this.queryParamKey]: id };
-            this.router.navigate([], { relativeTo: this.route, queryParams: merged, queryParamsHandling: 'merge' });
-      }
+  // ------- Template helpers --------------------------------------------------
 
+  trackById = (_: number, t: KitShellTab) => t.id;
 
-      ngOnDestroy() {
-            this.destroy$.next();
-            this.destroy$.complete();
-      }
+  get displayTabs(): KitShellTab[] {
+    return this.tabs.filter((t) => {
+      if (!t.hidden) return true;
+      if (t.id === this.selectedId) return true; // đang chọn thì luôn hiển thị
 
-      public get displayTabs(): KitShellTabDef[] {
-            return this.tabs.filter(t =>
-                  !t.hidden ||
-                  t.id === this.selectedId ||
-                  (this.forceShowHiddenTabId && t.id === this.forceShowHiddenTabId)
-            );
-      }
+      if (!this.allowOnce) return false;
+      // Cho phép hiện 1 lần (nếu bên ngoài đã "mở khóa" trước khi điều hướng)
+      return sessionStorage.getItem(this.allowOnceKey(t.id)) === '1';
+    });
+  }
 
-      
+  // ------- Actions -----------------------------------------------------------
+
+  selectTab(id: string) {
+    if (id === this.selectedId) return;
+    const tab = this.tabs.find((t) => t.id === id);
+    if (!tab || tab.disabled) return;
+
+    this.navigateTo(id);
+  }
+
+  // ------- Internals ---------------------------------------------------------
+
+  private readChildPath(): string | null {
+    // Lấy segment đầu của child route hiện tại: /parent/<this>
+    const child = this.route.firstChild;
+    if (!child) return null;
+
+    // Ưu tiên URL thực tế (ổn với case path tham số), fallback path tĩnh
+    const seg = child.snapshot.url?.[0]?.path;
+    if (seg) return seg;
+
+    const cfgPath = child.snapshot.routeConfig?.path ?? null;
+    // Nếu cfgPath là '' (redirect), coi như null
+    return cfgPath && cfgPath !== '' ? cfgPath : null;
+  }
+
+  private firstVisibleTabId(): string | null {
+    const t = this.tabs.find((x) => !x.hidden && !x.disabled);
+    return t ? t.id : null;
+  }
+
+  private navigateTo(id: string, replaceUrl = false) {
+    // Điều hướng sang child route: /parent/<id>
+    this.router.navigate([id], {
+      relativeTo: this.route,
+      replaceUrl,
+    });
+
+    // "Tiêu thụ" allowOnce nếu có
+    sessionStorage.removeItem(this.allowOnceKey(id));
+
+    this.selectedId = id;
+  }
+
+  private allowOnceKey(tabId: string) {
+    return `${this.allowOnceStoragePrefix}.${tabId}`;
+  }
+
+  // ------- Static helper: mở khoá 1 lần từ nơi khác -------------------------
+
+  /** Gọi hàm này TRƯỚC khi navigate tới route cần mở tab ẩn */
+  static allowOnce(tabId: string, storagePrefix = 'kit-shell-tabs.allowOnce') {
+    sessionStorage.setItem(`${storagePrefix}.${tabId}`, '1');
+  }
 }

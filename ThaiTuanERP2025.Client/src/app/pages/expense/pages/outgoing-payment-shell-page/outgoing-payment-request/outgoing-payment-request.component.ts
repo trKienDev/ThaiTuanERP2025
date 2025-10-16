@@ -3,10 +3,10 @@ import { Component } from "@angular/core";
 
 @Component({
       selector: 'outgoing-payment-request',
-      standalone: true,
       templateUrl: './outgoing-payment-request.component.html',
-      imports: [ CommonModule ],
+      standalone: true,
+      imports: [ CommonModule],
 })
 export class OutgoingPaymentRequestComponent {
-
+      
 }

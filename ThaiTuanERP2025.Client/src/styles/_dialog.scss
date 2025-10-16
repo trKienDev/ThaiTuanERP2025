@@ -1,21 +1,30 @@
+:root {
+      --dialog-container-padding: 20px;
+}
+
 .dialog {
       width: fit-content;
       min-width: 520px;
       box-shadow: rgba(255, 255, 255, 0.77) 0px 10px 36px 0px, rgba(255, 255, 255, 0.09) 0px 0px 0px 1px
 }
 
-.dialog-container {
-      padding: 20px;
-}
-
 .dialog-heading {
       display: flex;
       justify-content: space-between;
+      padding: 0px var(--dialog-container-padding);
+       background-image: linear-gradient(to bottom, #ebfaff, #edfbff, #f0fcff, #f2fdff, #f5feff, #f7feff, #f8ffff, #faffff, #fbffff, #fdffff, #feffff, #ffffff);
+      border-radius: 8px;
+}
+.dialog-body {
+      padding: var(--dialog-container-padding);
+      padding-top: 0px;
 }
 
 .dialog-title { 
       display: flex;
       justify-content: center;
+      color: #4c607a;
+      user-select: none;
 }
 
 .dialog-row {

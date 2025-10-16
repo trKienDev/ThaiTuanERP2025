@@ -14,7 +14,7 @@
                         </a>
                   </li>
                   <li class="expense-navbar__item">
-                        <a class="expense-navbar__link" routerLink="/expense/outgoing-payment" routerLinkActive="selected"  [routerLinkActiveOptions]="{ exact: true }">
+                        <a class="expense-navbar__link" routerLink="/expense/outgoing-payment-shell" routerLinkActive="selected">
                               <span class="expense-navbar__icon material-icons-round">credit_score</span>
                               <span class="expense-navbar__name">Khoản tiền ra</span>
                         </a>
@@ -40,6 +40,6 @@
             </ul>
       </nav>
 </div>
-<div class="expense-navbar__content" [@loadDomAnimations]="o && o.activatedRouteData && o.activatedRouteData['animation']">
-      <router-outlet #o="outlet"></router-outlet>
+<div class="expense-navbar__content">
+      <router-outlet></router-outlet>
 </div>
