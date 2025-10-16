@@ -44,20 +44,17 @@ export class TaskReminderDrawerComponent implements OnInit {
             this.dismiss.emit('CLOSE_DRAWER');
       }
       private resolveRoute(tr: TaskReminderDto): { commands: (string | number)[], extras: NavigationExtras } {
-            // Luôn điều hướng về trang shell
-            const commands: (string | number)[] = ['/expense', 'expense-payment-shell'];
+            const commands: (string | number)[] = ['/expense', 'expense-payment-shell', 'payment-detail'];
 
-            // Giữ view = 'payment-detail', truyền id riêng
             const extras: NavigationExtras = {
                   queryParamsHandling: 'merge',
-                  queryParams: {
-                        view: 'payment-detail',
-                        ...(tr.documentType === 'ExpensePayment' && tr.documentId ? { paymentId: tr.documentId } : {})
-                  }
+                  queryParams: (tr.documentType === 'ExpensePayment' && tr.documentId)
+                        ? { paymentId: tr.documentId } : {}
             };
 
             return { commands, extras };
       }
+
 
       trackById(index: number, item: TaskReminderDto) { return item.id; }
 

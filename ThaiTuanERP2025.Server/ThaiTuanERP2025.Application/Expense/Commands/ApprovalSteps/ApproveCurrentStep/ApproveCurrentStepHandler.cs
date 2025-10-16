@@ -110,7 +110,7 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ApprovalSteps.ApproveCurr
 					var payment = await _unitOfWork.ExpensePayments.GetByIdAsync(workflowInstance.DocumentId);
 					if (payment != null)
 					{
-						payment.Approve();
+						payment.ReadyForOutgoingPayment();
 					}
 
 					await _notificationService.NotifyWorkflowApprovedAsync(
