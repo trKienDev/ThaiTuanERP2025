@@ -2,11 +2,10 @@ import { CommonModule } from "@angular/common";
 import { Component, Inject, inject } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { ExpensePaymentDetailDto } from "../../../../models/expense-payment.model";
-import { firstValueFrom } from "rxjs";
-import { ExpensePaymentService } from "../../../../services/expense-payment.service";
 import { ExpensePaymentStatusPipe } from "../../../../pipes/expense-payment-status.pipe";
 import { AvatarUrlPipe } from "../../../../../../shared/pipes/avatar-url.pipe";
 import { Router } from "@angular/router";
+import { usePaymentDetail } from "../../../../composables/use-payment-detail";
 
 @Component({
       selector: 'expense-payment-detail-dialog',
@@ -17,23 +16,23 @@ import { Router } from "@angular/router";
 })
 export class ExpensePaymentDetailDialogComponent {
       private dialogRef = inject(MatDialogRef<ExpensePaymentDetailDialogComponent>);
-       private router = inject(Router);
-      private paymentId: string = '';
-      public paymentDetail: ExpensePaymentDetailDto | null = null;
-      private expensePaymentService = inject(ExpensePaymentService);
+      private router = inject(Router);
+
+      private paymentLogic = usePaymentDetail();
+      loading = this.paymentLogic.isLoading;
+      err = this.paymentLogic.error;
       
-      constructor(
-            @Inject(MAT_DIALOG_DATA) public data: string
-      ) {
-            this.paymentId = data;
-            this.getPaymentDetails();
+      constructor(@Inject(MAT_DIALOG_DATA) public data: string) {
+            if(data) this.paymentLogic.load(data);
+      }
+
+      get paymentDetail(): ExpensePaymentDetailDto | null {
+            return this.paymentLogic.paymentDetail();
       }
 
       trackByIndex = (index: number) => index;
 
-      async getPaymentDetails() {
-            this.paymentDetail = await firstValueFrom(this.expensePaymentService.getDetailById(this.paymentId));
-      }
+
 
       navigateToOutgoingPaymentRequest() {
             if (!this.paymentDetail) return;

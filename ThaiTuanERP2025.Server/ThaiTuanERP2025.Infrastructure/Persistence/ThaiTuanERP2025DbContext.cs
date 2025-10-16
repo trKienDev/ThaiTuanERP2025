@@ -35,6 +35,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<CashoutCode> CashOutCodes => Set<CashoutCode>();
 		public DbSet<StoredFile> StoredFiles => Set<StoredFile>();
 		public DbSet<BankAccount> BankAccounts => Set<BankAccount>();
+		public DbSet<OutgoingBankAccount> OutgoingBankAccounts => Set<OutgoingBankAccount>();
 		public DbSet<Supplier> Suppliers => Set<Supplier>();
 		public DbSet<Invoice> Invoices => Set<Invoice>();
 		public DbSet<InvoiceLine> InvoiceLines => Set<InvoiceLine>();

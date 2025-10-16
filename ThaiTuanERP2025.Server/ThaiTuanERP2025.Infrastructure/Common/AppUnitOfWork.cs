@@ -43,6 +43,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			IInvoiceFollowerRepository invoiceFollowers,
 			ISupplierRepository suppliers,
 			IBankAccountRepository bankAccounts,
+			IOutgoingBankAccountRepository outgoingBankAccounts,
 
 			// Workflow	
 			IApprovalStepTemplateRepository approvalStepTemplates,
@@ -90,6 +91,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			InvoiceFollowers = invoiceFollowers;
 			Suppliers = suppliers;
 			BankAccounts = bankAccounts;
+			OutgoingBankAccounts = outgoingBankAccounts;
 
 			ApprovalStepTemplates = approvalStepTemplates;
 			ApprovalWorkflowTemplates = approvalWorkflowTemplates;
@@ -133,6 +135,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		public IInvoiceFollowerRepository InvoiceFollowers { get; }
 		public ISupplierRepository Suppliers { get; }
 		public IBankAccountRepository BankAccounts { get; }
+		public IOutgoingBankAccountRepository OutgoingBankAccounts { get; }
 
 		// Workflow
 		public IApprovalWorkflowTemplateRepository ApprovalWorkflowTemplates { get; }

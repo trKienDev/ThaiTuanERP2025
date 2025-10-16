@@ -5,6 +5,7 @@ import { ExpensePaymentRequestPanelComponent } from "./pages/expense-payment-she
 import { ExpensePaymentDetailPanelComponent } from "./pages/expense-payment-shell-page/expense-payment-detail/expense-payment-detail.component";
 import { FollowingOutgoingPaymentComponent } from "./pages/outgoing-payment-shell-page/following-outgoing-payment/following-outgoing-payment.component";
 import { OutgoingPaymentRequestComponent } from "./pages/outgoing-payment-shell-page/outgoing-payment-request/outgoing-payment-request.component";
+import { OutgoingBankAccountComponent } from "./pages/bank-account-shell-page/outgoing-bank-account/outgoing-bank-account.component";
 
 export const expenseRoutes: Routes = [
       {
@@ -32,6 +33,14 @@ export const expenseRoutes: Routes = [
                               { path: '', redirectTo: 'following-outgoing-payments', pathMatch: 'full' },
                               { path: 'following-outgoing-payments', component: FollowingOutgoingPaymentComponent },
                               { path: 'outgoing-payment-request/:id', component: OutgoingPaymentRequestComponent },
+                        ]
+                  },
+                  { 
+                        path: 'bank-account-shell-page',
+                        loadComponent: () => import('./pages/bank-account-shell-page/bank-account-shell-page.component').then((m) => m.BankAccountShellPageComponent),
+                        children: [
+                              { path: '', redirectTo: 'outgoing-bank-account', pathMatch: 'full' },
+                              { path: 'outgoing-bank-account', component: OutgoingBankAccountComponent },
                         ]
                   },
                   { path: 'approval-workflow-engine', data: { animation: 'ApprovalWorkflowEnginePage' }, loadComponent: () => import('./pages/expense-approval-workflow-engine/expense-approval-workflow-engine.component').then((m) => m.ExpenseApprovalWorkflowEngineComponent )},
