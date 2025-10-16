@@ -3,7 +3,7 @@
       <header class="drawer-header">
             <h3 style="color: var(--main-foreground-hover);">Phê duyệt đang chờ ⏳</h3>
             <button type="button" class="close-button"  (click)="dismiss.emit('CLOSE_DRAWER')">
-                  <span class="text material-icons-outlined">close</span>
+                  <span class="text material-icons-outlined">arrow_forward_ios</span>
             </button>
       </header>
       <div class="drawer-body" *ngIf="(sortedReminders$ | async) as items">

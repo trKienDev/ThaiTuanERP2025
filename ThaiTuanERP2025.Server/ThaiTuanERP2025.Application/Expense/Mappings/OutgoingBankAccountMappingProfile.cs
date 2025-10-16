@@ -4,10 +4,10 @@ using ThaiTuanERP2025.Domain.Expense.Entities;
 
 namespace ThaiTuanERP2025.Application.Expense.Mappings
 {
-	public sealed partial class BankAccountMappingProfile : Profile
+	public sealed class OutgoingBankAccountMappingProfile : Profile
 	{
-		public BankAccountMappingProfile() {
-			CreateMap<BankAccount, BankAccountDto>();
+		public OutgoingBankAccountMappingProfile() {
+			CreateMap<OutgoingBankAccount, OutgoingBankAccountDto>();
 		}
 	}
 }

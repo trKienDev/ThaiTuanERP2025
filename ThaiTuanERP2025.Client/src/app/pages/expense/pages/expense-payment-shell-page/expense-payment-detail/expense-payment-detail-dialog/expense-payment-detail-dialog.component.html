@@ -11,6 +11,8 @@
                   </div>
             </div>
             <div class="dialog-body">
+                        <ng-container *ngIf="loading()">Đang tải...</ng-container>
+                        <ng-container *ngIf="err()">{{ err() }}</ng-container>
                   <div class="expense-payment-detail-container">
                         <div class="payment-heading display-flex gap-10px align-items-center">
                               <div class="payment-status">

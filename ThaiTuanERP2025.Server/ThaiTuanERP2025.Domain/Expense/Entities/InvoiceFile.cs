@@ -3,7 +3,7 @@ using ThaiTuanERP2025.Domain.Files.Entities;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
-	public class InvoiceFile
+	public class InvoiceFile 
 	{
 		public Guid Id { get; set; } = Guid.NewGuid();
 		public Guid InvoiceId { get; set; }

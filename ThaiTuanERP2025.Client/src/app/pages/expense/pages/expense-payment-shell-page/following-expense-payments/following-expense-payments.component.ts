@@ -26,7 +26,6 @@ export class FollowingExpensePaymentsPanelComponent implements OnInit {
 
       private async loadExpensePayments() {
             this.expensePayments = await firstValueFrom(this.expensePaymentService.getFollowingPayments());
-            console.log(this.expensePayments);
       }
 
       openExpensePaymentDetailDialog(paymentId: string) {
