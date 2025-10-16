@@ -20,7 +20,7 @@ export const loadDomAnimations = trigger('loadDomAnimations', [
                   // fade-in nhẹ khi vào
                   query(':enter', [
                         style({ opacity: 0 }),
-                        animate('600ms cubic-bezier(0.22, 1, 0.36, 1)', style({ opacity: 1 }))
+                        animate('300ms cubic-bezier(0.22, 1, 0.36, 1)', style({ opacity: 1 }))
                   ], { optional: true }),
             ])
       ]),
