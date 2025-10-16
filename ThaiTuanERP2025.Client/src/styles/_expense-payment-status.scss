@@ -13,6 +13,7 @@
       &.submitted  { color:#1565c0;background:#e3f2fd; }
       &.pending    { color: #f57c00; background: #fff3e0; border: 1px solid #ecdfd2; }
       &.approved   { color:#2e7d32;background:#e8f5e9; }
+      &.outgoing-payment { color:#1565c0;background:#e3f2fd; }
       &.rejected   { color:#c62828;background:#ffebee; }
       &.cancelled  { color:#6d4c41;background:#efebe9; }
       &.unknown    { color:#555;   background:#eee; }

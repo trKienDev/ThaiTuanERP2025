@@ -11,8 +11,9 @@ export class ExpensePaymentStatusPipe implements PipeTransform {
                   case 1: return { text: 'Đã gửi xử lý', class: 'submitted' };
                   case 2: return { text: 'Chờ duyệt', class: 'pending' };
                   case 3: return { text: 'Đã duyệt', class: 'approved' };
-                  case 4: return { text: 'Bị từ chối', class: 'rejected' };
-                  case 5: return { text: 'Đã hủy', class: 'cancelled' };
+                  case 4: return { text: 'Chờ khoản tiền ra', class: 'outgoing-payment' };
+                  case 5: return { text: 'Bị từ chối', class: 'rejected' };
+                  case 6: return { text: 'Đã hủy', class: 'cancelled' };
                   default: return { text: 'Không xác định', class: 'unknown' }
             }
       }

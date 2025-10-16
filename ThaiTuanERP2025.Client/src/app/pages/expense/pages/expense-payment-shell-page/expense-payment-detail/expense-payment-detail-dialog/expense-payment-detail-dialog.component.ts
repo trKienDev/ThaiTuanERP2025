@@ -6,6 +6,7 @@ import { firstValueFrom } from "rxjs";
 import { ExpensePaymentService } from "../../../../services/expense-payment.service";
 import { ExpensePaymentStatusPipe } from "../../../../pipes/expense-payment-status.pipe";
 import { AvatarUrlPipe } from "../../../../../../shared/pipes/avatar-url.pipe";
+import { Router } from "@angular/router";
 
 @Component({
       selector: 'expense-payment-detail-dialog',
@@ -16,6 +17,7 @@ import { AvatarUrlPipe } from "../../../../../../shared/pipes/avatar-url.pipe";
 })
 export class ExpensePaymentDetailDialogComponent {
       private dialogRef = inject(MatDialogRef<ExpensePaymentDetailDialogComponent>);
+       private router = inject(Router);
       private paymentId: string = '';
       public paymentDetail: ExpensePaymentDetailDto | null = null;
       private expensePaymentService = inject(ExpensePaymentService);
@@ -33,7 +35,14 @@ export class ExpensePaymentDetailDialogComponent {
             this.paymentDetail = await firstValueFrom(this.expensePaymentService.getDetailById(this.paymentId));
       }
 
-
+      navigateToOutgoingPaymentRequest() {
+            if (!this.paymentDetail) return;
+            this.close(); // đóng dialog
+            this.router.navigate([
+                  '/expense/outgoing-payment-shell/outgoing-payment-request',
+                  this.paymentDetail.id
+            ]);
+      }
 
       close(): void {
             this.dialogRef.close();

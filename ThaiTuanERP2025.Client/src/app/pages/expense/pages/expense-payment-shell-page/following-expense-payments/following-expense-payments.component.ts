@@ -11,11 +11,11 @@ import { ExpensePaymentDetailDialogComponent } from "../expense-payment-detail/e
 @Component({
       selector: 'expense-payments-panel',
       standalone: true,
-      templateUrl: './expense-payments.component.html',
-      styleUrls: ['./expense-payments.component.scss'],
+      templateUrl: './following-expense-payments.component.html',
+      styleUrls: ['./following-expense-payments.component.scss'],
       imports: [CommonModule, ExpensePaymentStatusPipe, AvatarUrlPipe ]
 })
-export class ExpensePaymentsPanelComponent implements OnInit {
+export class FollowingExpensePaymentsPanelComponent implements OnInit {
       private dialog = inject(MatDialog);
       public expensePayments: ExpensePaymentSummaryDto[] = [];
       private expensePaymentService = inject(ExpensePaymentService);
