@@ -58,7 +58,7 @@
                               <div class="form-row display-flex gap-10px">
                                     <div class="form-column flex-1">
                                           <label class="form-label" for="name">Số tiền công ty cần trả 🔒</label>
-                                          <input class="dark dark-alert user-select-none margin-top-10px" [value]="form.get('totalWithTax')?.value | number:'1.0-2'" disabled />
+                                          <input class="dark dark-alert user-select-none margin-top-10px" [value]="paymentDetail()?.totalWithTax | number:'1.0-2'" disabled />
                                     </div>
                                     <div class="form-column flex-1">
                                           <label class="form-label" for="name">Số tiền chờ tạo lệnh 🔒</label>
@@ -127,7 +127,7 @@
                                     </div>
                                     <div class="form-column flex-1">
                                           <label class="form-label" for="name">Hạn thanh toán 🔒</label>
-                                          <input class="dark dark-alert user-select-none margin-top-10px" [value]="paymentDetail()?.paymentDate | date:'dd/MM/yyyy'" disabled />
+                                          <input class="dark dark-alert user-select-none margin-top-10px" [value]="paymentDetail()?.dueDate | date:'dd/MM/yyyy'" disabled />
                                     </div>
                               </div>
                               <div class="form-row">
@@ -135,7 +135,7 @@
                               </div>
                               <div class="form-row">
                                     <label class="form-label" for="name">Mô tả</label>
-                                    <textarea class="margin-top-10px" formControlName="description" placeholder="Trình bày nội dung ở đây"></textarea>
+                                    <textarea class="margin-top-10px" formControlName="description" placeholder="Trình bày nội dung ở đây" noSpellcheck></textarea>
                               </div>
                               <div class="form-row">
                                     <span>Tệp đính khoản tiền ra</span>
@@ -149,5 +149,9 @@
 
 <!-- 3) Error -->
 <ng-template #errorTpl>
-      <div class="error-text">{{ err() }}</div>
+      <div class="error-container">
+            <div class="error-icon">⚠️</div>
+            <div class="error-title">Không thể tải dữ liệu thanh toán</div>
+            <div class="error-message">Vui lòng kiểm tra lại kết nối mạng hoặc thử tải lại trang.</div>
+      </div>
 </ng-template>

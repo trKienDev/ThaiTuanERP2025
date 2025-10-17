@@ -1,5 +1,5 @@
 <form class="expense-payment-form" [formGroup]="form" (ngSubmit)="Submit()">
-      <div class="input-wrapper display-flex justify-content-between">
+      <div class="form-row display-flex justify-content-between">
             <div class="page-title">
                   <h3 class="icon">💸</h3>
                   <h3 class="title">Tạo chi phí thanh toán mới</h3>
@@ -12,14 +12,14 @@
                   </button>
             </div>
       </div>
-      <div class="input-wrapper">
+      <div class="form-row">
             <div class="form-input">
                   <input class="" type="text" formControlName="name" autocomplete="on" required/>
                   <label for="name">Tên chi phí <span style="color: red;">  *</span></label>
             </div>
       </div>
 
-      <div class="input-wrapper display-flex gap-10px">
+      <div class="form-row display-flex gap-10px">
             <div class="width-50pt">
                   <div class="alert dark-alert"> 🔒 ĐỀ NGHỊ THANH TOÁN</div>
             </div>
@@ -36,9 +36,9 @@
                   <kit-dropdown [options]="payeeOptions" placeholder="chọn đối tượng" [enableFilter]="false" (selectionChange)="onPayeeSelected($event)" [width]="120"></kit-dropdown>
             </div>
             <div class="payee-selection">
-                  <div class="supplier-selection  display-inline-flex" *ngIf="selectedPayee === 1">
+                  <div class="supplier-selection  display-inline-flex gap-10px" *ngIf="selectedPayee === 1">
                         <kit-dropdown formControlName="supplierId" [options]="(supplierOptions$ | async) ?? []" (selectionChange)="onSupplierSelected($event)" [width]="320" [placeholder]="'chọn nhà cung cấp thụ hưởng'"></kit-dropdown>
-                        <button class="button link-button" (click)="openCreateSupplierDialog()">Thêm nhà cung cấp mới</button>
+                        <button class="button default-button" (click)="openCreateSupplierDialog()" style="font-size: 11px;">Thêm nhà cung cấp mới</button>
                   </div>
                   <div class="employee-selection" *ngIf="selectedPayee === 2">
                         <kit-dropdown [options]="(userOptions$ | async) ?? []" (selectionChange)="onUserSelected($event)" [width]="200" [placeholder]="'chọn nhân viên thụ hưởng'"></kit-dropdown>
@@ -47,19 +47,19 @@
       </div>
 
       <div class="bank-account-input-container display-flex gap-10px margin-top-20px">
-            <div class="input-wrapper">
+            <div class="form-row">
                   <div class="form-input">
                         <input class="" type="text" formControlName="bankName" autocomplete="on" required/>
                         <label for="name">Tên ngân hàng <span style="color: red;">  *</span></label>
                   </div>
             </div>
-            <div class="input-wrapper">
+            <div class="form-row">
                   <div class="form-input">
                         <input class="" type="text" formControlName="accountNumber" autocomplete="on" required/>
                         <label for="name">Số tài khoản <span style="color: red;">  *</span></label>
                   </div>
             </div>
-            <div class="input-wrapper">
+            <div class="form-row">
                   <div class="form-input">
                         <input class="" type="text" formControlName="beneficiaryName" autocomplete="on" required/>
                         <label for="name">Người thụ hưởng <span style="color: red;">  *</span>  </label>
@@ -181,7 +181,7 @@
             </div>
       </div>
 
-      <div class="input-wrapper display-flex gap-20px margin-top-20px">
+      <div class="form-row display-flex gap-20px margin-top-20px">
             <div class="width-50pt">
                   <div class="display-flex gap-10px">
                         <label class="width-fit-content text-no-wrap align-content-center" for="name">Tổng thanh toán 🔒</label>
@@ -199,12 +199,12 @@
             </div>
       </div>
 
-      <div class="input-wrapper">
+      <div class="form-row">
             <span class="display-block">Nội dung thanh toán <span style="color: red;">*</span></span>
-            <textarea class="margin-top-10px" formControlName="description" placeholder="Trình bày nội dung ở đây"></textarea>
+            <textarea class="margin-top-10px" formControlName="description" placeholder="Trình bày nội dung ở đây" noSpellcheck></textarea>
       </div>
 
-      <div class="input-wrapper display-flex gap-10px">
+      <div class="form-row display-flex gap-10px">
             <div style="width: 70%;">
                   <kit-dropdown [multiple]="true" [options]="(userOptions$ | async) ?? []"  (selectionChange)="onFollowerSelected($event)" [width]="'100%'" [placeholder]="'Thêm người theo dõi'"></kit-dropdown>
             </div>
@@ -214,7 +214,7 @@
       </div>
 
       <div class="margin-top-20px">
-            <span class="input-wrapper">Tệp đính kèm chi phí    </span>
+            <span class="form-row">Tệp đính kèm chi phí    </span>
             <kit-file-uploader [meta]="uploadMeta" [(uploads)]="uploads"></kit-file-uploader>
       </div>
 
