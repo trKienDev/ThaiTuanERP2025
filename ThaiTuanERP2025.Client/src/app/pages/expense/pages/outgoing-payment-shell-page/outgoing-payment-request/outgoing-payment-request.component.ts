@@ -9,13 +9,14 @@ import { ToastService } from "../../../../../shared/components/toast/toast.servi
 import { KitFileUploaderComponent } from "../../../../../shared/components/kit-file-uploader/kit-file-uploader.component";
 import { UploadItem } from "../../../../../shared/components/kit-file-uploader/upload-item.model";
 import { MoneyFormatDirective } from "../../../../../shared/directives/money/money-format.directive";
+import { Kit404PageComponent } from "../../../../../shared/components/kit-404-page/kit-404-page.component";
 
 
 @Component({
       selector: 'outgoing-payment-request',
       templateUrl: './outgoing-payment-request.component.html',
       standalone: true,
-      imports: [CommonModule, ReactiveFormsModule, KitDropdownComponent, KitFileUploaderComponent, MoneyFormatDirective],
+      imports: [CommonModule, ReactiveFormsModule, KitDropdownComponent, KitFileUploaderComponent, MoneyFormatDirective, Kit404PageComponent],
       styleUrls: ['./outgoing-payment-request.component.scss']
 })
 export class OutgoingPaymentRequestComponent {
