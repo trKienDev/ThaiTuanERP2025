@@ -215,48 +215,7 @@
 
       <div class="margin-top-20px">
             <span class="input-wrapper">Tệp đính kèm chi phí    </span>
-            <div class="file-uploader pad-10p">
-                  <!-- input ẩn: cho phép chọn nhiều file -->
-                  <input #documentFile id="invoiceFile" type="file" class="file-input d-none" accept="application/pdf,image/*" (change)="onFileSelected($event)" multiple/>
-
-                  <!-- nút chọn file -->
-                  <div class="button default-button">
-                        <label for="invoiceFile" class="cursor-pointer">Chọn file (PDF/Ảnh)</label>
-                  </div>
-
-                  <span *ngIf="!(uploads?.length)" class="file-name muted" style="color:#888; margin-left:10px;">
-                        Chưa chọn file
-                  </span>
-            </div>
-
-            <div class="" style="padding: 0 10px;">
-                  <!-- Danh sách file đã chọn/đang upload -->
-                  <ul class="uploader-list"  *ngIf="uploads?.length">
-                        <li class="uploader-item" *ngFor="let u of uploads; let i = index" [ngClass]="u.status">
-                              <div class="file-row">
-                                    <div class="file-meta">
-                                          <span class="file-name">{{ u.name }}</span>
-                                    </div>
-                                    <div class="status-line" [ngClass]="u.status">
-                                          <ng-container [ngSwitch]="u.status">
-                                                <span *ngSwitchCase="'queued'">Đang chờ...</span>
-                                                <span *ngSwitchCase="'uploading'">Đang tải lên: {{ u.progress | number:'1.0-0' }}%</span>
-                                                <span *ngSwitchCase="'done'">✔ Đã tải</span>
-                                                <span *ngSwitchCase="'error'">✖ Lỗi</span>
-                                          </ng-container>
-                                    </div>
-                                    <button type="button" class="display-flex close-button" (click)="removeUpload(i)" [disabled]="u.status === 'uploading'">
-                                          <span class="text material-icons-outlined" style="font-size: 15px;">close</span>
-                                    </button>
-                              </div>
-
-                              <!-- Progress bar -->
-                              <div class="progress" *ngIf="u.status === 'uploading'">
-                                    <div class="progress-bar" [style.width.%]="u.progress"></div>
-                              </div>
-                        </li>
-                  </ul>
-            </div>
+            <kit-file-uploader [meta]="uploadMeta" [(uploads)]="uploads"></kit-file-uploader>
       </div>
 
       <div class="form-loading-overlay" *ngIf="isBusy" aria-live="polite">
