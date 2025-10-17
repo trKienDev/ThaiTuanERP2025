@@ -5,8 +5,6 @@ $topbar-padding: 1.5rem;
       height: var(--topbar-height);
       top: 0; left: 0; right: 0;
       z-index: 1000;
-
-      background-image: linear-gradient(to right top, #ffffff, #fafaff, #f4f6ff, #edf2ff, #e5eeff);
       color: black;
       display: flex;
       align-items: center;

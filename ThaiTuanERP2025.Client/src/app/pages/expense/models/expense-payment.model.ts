@@ -16,9 +16,11 @@ export enum ExpensePaymentStatus {
       submitted = 1,
       pending = 2,
       approved = 3,
-      readyForPayment = 4,
-      rejected = 5,
-      cancelled = 6,
+      rejected = 4,
+      cancelled = 5,
+      readyForPayment = 6,
+      partiallyPaid = 7,
+      fullyPaid = 8,
 }
 
 export interface ExpensePaymentDto {
@@ -33,7 +35,7 @@ export interface ExpensePaymentDto {
       accountNumber: string;
       beneficiaryName: string;
       
-      paymentDate: Date;
+      dueDate: Date;
       hasGoodReceipt: boolean;
       totalAmount: number;
       totalTax: number;
@@ -54,7 +56,7 @@ export interface ExpensePaymentRequest {
       beneficiaryName: string;
       description?: string;
       
-      paymentDate: Date;
+      dueDate: Date;
       hasGoodsReceipt: boolean;
       totalAmount: number;
       totalTax: number;
@@ -99,7 +101,7 @@ export interface ExpensePaymentSummaryDto {
 	accountNumber: string;
 	beneficiaryName: string;
 
-	paymentDate: Date;
+	dueDate: Date;
 	hasGoodsReceipt: boolean;
 	description?: string;
 

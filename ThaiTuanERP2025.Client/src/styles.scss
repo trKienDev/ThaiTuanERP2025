@@ -52,6 +52,10 @@
       --navbar-height: 40px;
 }
 
+
+body {
+      background-image: linear-gradient(to right top, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff, #fefeff, #fdfdff, #fcfcff, #fafaff, #f7f8ff, #f5f7ff, #f2f5ff);
+}
 html, body { height: 100%; overflow: hidden; }
 body, input { font-family: 'Lexend', sans-serif; font-size: 13px; }
 textarea { 
@@ -148,21 +152,21 @@ input[type=number] { -moz-appearance: textfield; }
 
 .mat-datepicker-content .mat-calendar { width: 300px !important; height: unset !important; border-top-left-radius: var(--default-border-color-radius); border-top-right-radius: var(--default-border-color-radius); }
 .kit-datepicker { 
-       background-image: linear-gradient(to bottom, #ffffff, #fdfdff, #fafcff, #f6fbfe, #f2fafd, #eff9fd, #ecf8fc, #e9f7fc, #e8f5fe, #e9f3ff, #ecf1ff, #f0eeff);
+      background-image: linear-gradient(to bottom, #ffffff, #fcfcff, #f8f9ff, #f3f6ff, #edf4ff);
       box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px; 
       border-bottom-left-radius: var(--default-border-color-radius); border-bottom-right-radius: var(--default-border-color-radius); user-select: none; }
 .kit-datepicker button { border: none !important; }
 .kit-datepicker .mat-calendar-controls { margin: unset !important; }
 .kit-datepicker .mat-calendar-header { background: #1976d2;  color: #fff; border-top-left-radius: var(--default-border-color-radius); border-top-right-radius: var(--default-border-color-radius); padding: unset;}
 .mat-calendar-table-header-divider { display: none; }
-.kit-datepicker .mat-calendar-table-header th { padding: 7px 0px; font-weight: bold; opacity: 0.5;}
+.kit-datepicker .mat-calendar-table-header th { padding: 7px 0px; font-weight: bold; color: var(--bright-blue-color);}
 .kit-datepicker .mat-calendar-body-label { display: table-cell !important; visibility: hidden; padding: 0 !important; width: 0; height: 0; }
 .kit-datepicker .mat-calendar-content { padding: unset; }
 .kit-datepicker .mat-calendar-arrow { fill: white; }
 .kit-datepicker .mat-calendar-previous-button:hover, .kit-datepicker .mat-calendar-next-button:hover { opacity: 0.8; }
 .kit-datepicker .mat-calendar-body-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical), .kit-datepicker .mat-calendar-body-cell-content:hover { background-color: white !important; color: #1976d2; font-weight: bold; border: none;}
 .kit-datepicker .mat-calendar-body-cell-content { border-radius: var(--default-border-color-radius); }
-.kit-datepicker .mat-calendar-body-selected { background-color: #1976d2; color: white; }
+.kit-datepicker .mat-calendar-body-selected { background-color: var(--bright-blue-color); color: white; }
 .kit-datepicker .mat-calendar-body-row { display: table-row !important; }
 .kit-datepicker .mat-calendar-body-cell { display: table-cell !important; }
 

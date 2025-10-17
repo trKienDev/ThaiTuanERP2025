@@ -14,3 +14,26 @@
 }
 
 /* Uploader */
+.error-container {
+      text-align: center;
+      margin-top: 80px;
+      color: #c0392b;
+      user-select: none;
+
+      .error-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+      }
+
+      .error-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+      }
+
+      .error-message {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 16px;
+      }
+}

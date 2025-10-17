@@ -6,7 +6,6 @@ import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { OutgoingBankAccountOptionStore } from "../../../options/outgoing-bank-account-option.store";
 import { KitDropdownComponent } from "../../../../../shared/components/kit-dropdown/kit-dropdown.component";
 import { ToastService } from "../../../../../shared/components/toast/toast.service";
-import { FileService } from "../../../../../shared/services/file.service";
 import { KitFileUploaderComponent } from "../../../../../shared/components/kit-file-uploader/kit-file-uploader.component";
 import { UploadItem } from "../../../../../shared/components/kit-file-uploader/upload-item.model";
 import { MoneyFormatDirective } from "../../../../../shared/directives/money/money-format.directive";
@@ -25,7 +24,6 @@ export class OutgoingPaymentRequestComponent {
       public submitting = false;
       private OBAccountOptionsStore = inject(OutgoingBankAccountOptionStore);
       OBAccountOptions = this.OBAccountOptionsStore.options$;
-      private fileService = inject(FileService);
 
       private paymentLogic = usePaymentDetail();
       loading = this.paymentLogic.isLoading;
@@ -48,10 +46,12 @@ export class OutgoingPaymentRequestComponent {
             bankName: this.formBuilder.control<string>('', { nonNullable: true, validators: [Validators.required] }),
             accountNumber: this.formBuilder.control<string>('', { nonNullable: true, validators: [Validators.required] }),
             beneficiaryName: this.formBuilder.control<string>('', { nonNullable: true, validators: [Validators.required] }),
-            totalAmount: this.formBuilder.nonNullable.control<number>(0),
-            totalTax: this.formBuilder.nonNullable.control<number>(0),
-            totalWithTax: this.formBuilder.nonNullable.control<number>(0),
-            totalOutgoing: this.formBuilder.nonNullable.control<number>(0),
+            totalOutgoingAmount: this.formBuilder.nonNullable.control<number>(0),
+            outgoingAmount: this.formBuilder.nonNullable.control<number>(0, { validators: [Validators.required, Validators.min(1)] }),
+            followerIds: this.formBuilder.nonNullable.control<string[]>([]),
+            expensePaymentId: this.formBuilder.nonNullable.control<string>('', { validators: [Validators.required] }),
+            outgoingBankAccountId: this.formBuilder.nonNullable.control<string>('', { validators: [Validators.required] }),
+            postingDate: this.formBuilder.nonNullable.control<Date>(new Date(), { validators: [Validators.required] }),
       });
       
       private autoPatchEffect = effect(() => {
@@ -74,9 +74,6 @@ export class OutgoingPaymentRequestComponent {
                         bankName: detail.bankName,
                         accountNumber: detail.accountNumber,
                         beneficiaryName: detail.beneficiaryName,
-                        totalAmount: detail.totalAmount,
-                        totalTax: detail.totalTax,
-                        totalWithTax: detail.totalWithTax,
                   });
             }
       });

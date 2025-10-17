@@ -6,8 +6,10 @@
 		Submitted = 1,
 		Pending = 2,
 		Approved = 3,
-		ReadyForPayment = 4,
-		Rejected = 5,
-		Cancelled = 6,
+		Rejected = 4,
+		Cancelled = 5,
+		ReadyForPayment = 6,
+		PartiallyPaid = 7,
+		FullyPaid = 8,
 	}
 }
