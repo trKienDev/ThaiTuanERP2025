@@ -10,13 +10,14 @@ import { KitFileUploaderComponent } from "../../../../../shared/components/kit-f
 import { UploadItem } from "../../../../../shared/components/kit-file-uploader/upload-item.model";
 import { MoneyFormatDirective } from "../../../../../shared/directives/money/money-format.directive";
 import { Kit404PageComponent } from "../../../../../shared/components/kit-404-page/kit-404-page.component";
+import { KitLoadingSpinnerComponent } from "../../../../../shared/components/kit-loading-spinner/kit-loading-spinner.component";
 
 
 @Component({
       selector: 'outgoing-payment-request',
       templateUrl: './outgoing-payment-request.component.html',
       standalone: true,
-      imports: [CommonModule, ReactiveFormsModule, KitDropdownComponent, KitFileUploaderComponent, MoneyFormatDirective, Kit404PageComponent],
+      imports: [CommonModule, ReactiveFormsModule, KitDropdownComponent, KitFileUploaderComponent, MoneyFormatDirective, Kit404PageComponent, KitLoadingSpinnerComponent],
       styleUrls: ['./outgoing-payment-request.component.scss']
 })
 export class OutgoingPaymentRequestComponent {
