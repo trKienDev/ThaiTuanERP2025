@@ -32,6 +32,7 @@ import { MiniInvoiceRequestDialogComponent } from "../../invoices/invoice-reques
 import { MyInvoicesDialogComponent } from "../../invoices/my-invoices-dialog/my-invoices-dialog.component";
 import { ExpenseBudgetCodeDialogComponent } from "../../../../finance/pages/budgets-shell-page/budget-codes/expense-budget-code/expense-budget-code.component";
 import { SupplierRequestDialogComponent } from "../../suppliers/supplier-request-dialog/supplier-request-dialog.component";
+import { KitFileUploaderComponent } from "../../../../../shared/components/kit-file-uploader/kit-file-uploader.component";
 
 type UploadStatus = 'queued' | 'uploading' | 'done' | 'error';
 type UploadItem = {
@@ -63,9 +64,8 @@ type PaymentItem = {
       selector: 'new-expense-payment-request',
       templateUrl: './expense-payment-request.component.html',
       imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule,
-            KitDropdownComponent, MatDialogModule, MoneyFormatDirective, OverlayModule, MatSnackBarModule,
-            MatDatepickerModule, HttpClientModule
-      ],
+      KitDropdownComponent, MatDialogModule, MoneyFormatDirective, OverlayModule, MatSnackBarModule,
+      MatDatepickerModule, HttpClientModule, KitFileUploaderComponent],
       styleUrls: ['./expense-payment-request.component.scss'],
       standalone: true,
       providers: [...provideMondayFirstDateAdapter() ]
@@ -88,12 +88,13 @@ export class ExpensePaymentRequestPanelComponent {
       // private wait(ms: number) { return new Promise(res => setTimeout(res, ms)); } // demo
       // private readonly DEMO_MIN_LOADING_MS = 300000000; // demo
 
-      private readonly uploadMeta = {
+      public readonly uploadMeta = {
             module: 'expense',
             entity: 'payment-attachment',
             entityId: undefined as string | undefined,
             isPublic: false
       }
+      public uploads: UploadItem[] = [];
 
       userOptions$ = this.userOptionsStore.option$; 
       supplierOptions$ = this.supplierOptionStore.option$;
@@ -107,10 +108,7 @@ export class ExpensePaymentRequestPanelComponent {
       cashoutCodeOptions: KitDropdownOption[] = [];
 
       supplierBankAccounts: BankAccountDto[] = [];
-      selectedBankAccount: BankAccountDto | null = null;
-
-      uploads: UploadItem[] = [];
-      
+      selectedBankAccount: BankAccountDto | null = null;     
 
       constructor(
             private bankAccountService: BankAccountService,
@@ -463,90 +461,6 @@ export class ExpensePaymentRequestPanelComponent {
 
             this.onMenuClosed?.(); 
             this.toast.successRich?.('Đã gỡ liên kết hóa đơn');  
-      }
-
-      onFileSelected(event: Event): void {
-            const input = event.target as HTMLInputElement;
-            const files = Array.from((event.target as HTMLInputElement).files ?? []);
-            if(!files.length) return;
-
-            let invalidCount = 0;
-
-            // tạo item và upload từng file
-            for (const f of files) {
-                  if(!f.size || f.size <= 0) {
-                        invalidCount++;
-                        this.toast.errorRich('File không hợp lệ');
-                        continue;
-                  }
-
-                  const item: UploadItem = {
-                        file: f,
-                        name: f.name,
-                        size: f.size,
-                        progress: 0,
-                        status: 'queued'
-                  };
-                  this.uploads.push(item);
-                  this.uploadOne(item);
-            }
-
-            // reset input để có thể chọn lại cùng tên file lần sau
-            (event.target as HTMLInputElement).value = '';
-            input.value = '';
-      }
-
-      private uploadOne(item: UploadItem): void {
-            // có nơi khác push UploadItem thẳng vào this.uploads, thêm guard đầu hàm:
-            if (!item.size || item.size <= 0) {
-                  item.status = 'error';
-                  this.toast.errorRich('file không hợp lệ', { sticky: true });
-                  return;
-            }
-            
-            item.status = 'uploading';
-            this.fileService.uploadFileWithProgress$(item.file, this.uploadMeta).subscribe({
-                  next: (evt) => {
-                        if(evt.type === 'progress') {
-                              item.progress = Math.min(100, Math.max(0, Math.round(evt.percent)));
-                        } else if(evt.type === 'done') {
-                              item.progress = 100;
-                              setTimeout(() => item.status = 'done', 400);
-                              const data = evt.data; // UploadFileResult | undefined
-                              // map kết quả tuỳ cấu trúc UploadFileResult của bạn
-                              item.objectKey = data?.objectKey ?? data?.objectKey ?? data?.id ?? item.objectKey;
-                              (item as any).fileId = (data as any)?.id ?? (item as any).fileId;
-                              (item as any).url = (data as any)?.url ?? (item as any).url;
-
-                              item.progress = 100;
-                              item.status = 'done';
-                              this.toast.successRich('Tải tệp thành công');
-                        }
-                  },
-                  error: (err) => {
-                        console.error('Upload error: ', err);
-                        item.status = 'error';
-                        this.toast.errorRich('Up file thất bại');
-                  }
-            });
-      }
-
-      removeUpload(index: number): void {
-            const item = this.uploads[index];
-            if(item.status === 'uploading') return;
-            const fileId = item.fileId;
-            if(fileId) {
-                  this.fileService.hardDelete$(fileId).subscribe({
-                        next: () => this.toast.successRich('Đã xóa tệp'),
-                        error:(err) => {
-                              const msg = handleHttpError(err);
-                              const message = Array.isArray(msg) ? msg.join('\n') : String(msg);
-                              this.toast.errorRich('Không xóa được tệp')
-                        } 
-                  });
-
-            }
-            this.uploads.splice(index, 1);
       }
 
       async Submit(): Promise<void> {

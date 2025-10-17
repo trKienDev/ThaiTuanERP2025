@@ -31,15 +31,15 @@
                                     </div>
                               </div>
                               <div class="form-row display-flex align-items-center gap-20px">
-                                    <label for="name" style="width: 8%;">Tài khoản tiền ra <span style="color: red;">*</span></label>
+                                    <label class="form-label" for="name" style="width: 8%;">Tài khoản tiền ra <span style="color: red;">*</span></label>
                                     <kit-dropdown [options]="(OBAccountOptions | async) ?? []" [placeholder]="'Chọn tài khoản tiền ra'" style="width: 100%;"></kit-dropdown>
                               </div>
-                              <div class="form-row display-flex gap-20px">
-                                    <label for="receiver-payment">Công ty trả cho: </label>
+                              <div class="form-row display-flex gap-20px align-items-center">
+                                    <label class="form-label" for="receiver-payment">Công ty trả cho: </label>
                                     <span class="receiver-name">{{ paymentDetail()?.supplier?.name }}</span>
                               </div>
                               <div class="form-row">
-                                    <label for="payment-bank">Tài khoản thụ hưởng: </label>
+                                    <label class="form-label" for="payment-bank">Tài khoản thụ hưởng: </label>
                                     <div class="receiver-payment display-flex gap-10px margin-top-20px">
                                           <div class="form-input flex-1">
                                                 <input class="" type="text" formControlName="bankName" autocomplete="on" required/>
@@ -57,16 +57,20 @@
                               </div>
                               <div class="form-row display-flex gap-10px">
                                     <div class="form-column flex-1">
-                                          <label class="width-fit-content text-no-wrap align-content-center" for="name">Số tiền công ty cần trả 🔒</label>
+                                          <label class="form-label" for="name">Số tiền công ty cần trả 🔒</label>
                                           <input class="dark dark-alert user-select-none margin-top-10px" [value]="form.get('totalWithTax')?.value | number:'1.0-2'" disabled />
                                     </div>
                                     <div class="form-column flex-1">
-                                          <label class="width-fit-content text-no-wrap align-content-center" for="name">Số tiền chờ tạo lệnh 🔒</label>
+                                          <label class="form-label" for="name">Số tiền chờ tạo lệnh 🔒</label>
                                           <input class="dark dark-alert user-select-none margin-top-10px" [value]="form.get('totalOutgoing')?.value | number:'1.0-2'" disabled />
+                                    </div>
+                                    <div class="form-column flex-1">
+                                          <label class="form-label" for="name">Số tiền khoản tiền ra</label>
+                                          <input class="margin-top-10px" placeholder="Nhập số tiền khoản tiền ra" type="text" formControlName="quantity" inputmode="decimal" appMoney [appMoneyDecimals]="0" />
                                     </div>
                               </div>
                               <div class="form-row">
-                                    <label for="category-table">Hạng mục <span style="color: red;">  *</span></label>
+                                    <label class="form-label" for="category-table">Hạng mục <span style="color: red;">  *</span></label>
                                     <table class="table table-center-text margin-top-10px">
                                           <thead>
                                                 <tr>
@@ -114,71 +118,28 @@
                               </div>
                               <div class="form-row display-flex gap-10px">
                                     <div class="form-column flex-1">
-                                          <label class="width-fit-content text-no-wrap align-content-center" for="name">Số tiền thanh toán 🔒</label>
+                                          <label class="form-label" for="name">Số tiền thanh toán 🔒</label>
                                           <input class="dark dark-alert user-select-none margin-top-10px" [value]="paymentDetail()?.totalWithTax| number:'1.0-2'" disabled />
                                     </div>
                                     <div class="form-column flex-1">
-                                          <label class="width-fit-content text-no-wrap align-content-center" for="name">Ngày tạo thanh toán 🔒</label>
+                                          <label class="form-label" for="name">Ngày tạo thanh toán 🔒</label>
                                           <input class="dark dark-alert user-select-none margin-top-10px" [value]="paymentDetail()?.createdDate| date:'dd/MM/yyyy'" disabled />
                                     </div>
                                     <div class="form-column flex-1">
-                                          <label class="width-fit-content text-no-wrap align-content-center" for="name">Hạn thanh toán 🔒</label>
+                                          <label class="form-label" for="name">Hạn thanh toán 🔒</label>
                                           <input class="dark dark-alert user-select-none margin-top-10px" [value]="paymentDetail()?.paymentDate | date:'dd/MM/yyyy'" disabled />
                                     </div>
                               </div>
                               <div class="form-row">
-                                    <label class="width-fit-content text-no-wrap align-content-center" for="name">Người theo dõi</label>
+                                    <label class="form-label" for="name">Người theo dõi</label>
                               </div>
                               <div class="form-row">
-                                    <label class="width-fit-content text-no-wrap align-content-center" for="name">Mô tả</label>
+                                    <label class="form-label" for="name">Mô tả</label>
                                     <textarea class="margin-top-10px" formControlName="description" placeholder="Trình bày nội dung ở đây"></textarea>
                               </div>
                               <div class="form-row">
-                                    <div class="margin-top-20px">
-                                          <span class="input-wrapper">Tệp đính kèm chi phí    </span>
-                                          <div class="file-uploader pad-10p">
-                                                <!-- input ẩn: cho phép chọn nhiều file -->
-                                                <input #documentFile id="invoiceFile" type="file" class="file-input d-none" accept="application/pdf,image/*" (change)="onFileSelected($event)" multiple/>
-
-                                                <!-- nút chọn file -->
-                                                <div class="button default-button">
-                                                      <label for="invoiceFile" class="cursor-pointer">Chọn file (PDF/Ảnh)</label>
-                                                </div>
-
-                                                <span *ngIf="!(uploads?.length)" class="file-name muted" style="color:#888; margin-left:10px;">
-                                                      Chưa chọn file
-                                                </span>
-                                          </div>
-
-                                          <div class="" style="padding: 0 10px;">
-                                                <!-- Danh sách file đã chọn/đang upload -->
-                                                <ul class="uploader-list"  *ngIf="uploads?.length">
-                                                      <li class="uploader-item" *ngFor="let u of uploads; let i = index" [ngClass]="u.status">
-                                                            <div class="file-row">
-                                                                  <div class="file-meta">
-                                                                        <span class="file-name">{{ u.name }}</span>
-                                                                  </div>
-                                                                  <div class="status-line" [ngClass]="u.status">
-                                                                        <ng-container [ngSwitch]="u.status">
-                                                                              <span *ngSwitchCase="'queued'">Đang chờ...</span>
-                                                                              <span *ngSwitchCase="'uploading'">Đang tải lên: {{ u.progress | number:'1.0-0' }}%</span>
-                                                                              <span *ngSwitchCase="'done'">✔ Đã tải</span>
-                                                                              <span *ngSwitchCase="'error'">✖ Lỗi</span>
-                                                                        </ng-container>
-                                                                  </div>
-                                                                  <button type="button" class="display-flex close-button" (click)="removeUpload(i)" [disabled]="u.status === 'uploading'">
-                                                                        <span class="text material-icons-outlined" style="font-size: 15px;">close</span>
-                                                                  </button>
-                                                            </div>
-
-                                                            <!-- Progress bar -->
-                                                            <div class="progress" *ngIf="u.status === 'uploading'">
-                                                                  <div class="progress-bar" [style.width.%]="u.progress"></div>
-                                                            </div>
-                                                      </li>
-                                                </ul>
-                                          </div>
-                                    </div>
+                                    <span>Tệp đính khoản tiền ra</span>
+                                    <kit-file-uploader [meta]="uploadMeta" [(uploads)]="uploads"></kit-file-uploader>
                               </div>
                         </form>
                   </div>
