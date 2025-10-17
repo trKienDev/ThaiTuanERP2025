@@ -33,6 +33,7 @@ import { MyInvoicesDialogComponent } from "../../invoices/my-invoices-dialog/my-
 import { ExpenseBudgetCodeDialogComponent } from "../../../../finance/pages/budgets-shell-page/budget-codes/expense-budget-code/expense-budget-code.component";
 import { SupplierRequestDialogComponent } from "../../suppliers/supplier-request-dialog/supplier-request-dialog.component";
 import { KitFileUploaderComponent } from "../../../../../shared/components/kit-file-uploader/kit-file-uploader.component";
+import { TextareaNoSpellcheckDirective } from "../../../../../shared/directives/money/textarea/textarea-no-spellcheck.directive";
 
 type UploadStatus = 'queued' | 'uploading' | 'done' | 'error';
 type UploadItem = {
@@ -65,7 +66,7 @@ type PaymentItem = {
       templateUrl: './expense-payment-request.component.html',
       imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule,
       KitDropdownComponent, MatDialogModule, MoneyFormatDirective, OverlayModule, MatSnackBarModule,
-      MatDatepickerModule, HttpClientModule, KitFileUploaderComponent],
+      MatDatepickerModule, HttpClientModule, KitFileUploaderComponent, TextareaNoSpellcheckDirective],
       styleUrls: ['./expense-payment-request.component.scss'],
       standalone: true,
       providers: [...provideMondayFirstDateAdapter() ]
@@ -131,7 +132,7 @@ export class ExpensePaymentRequestPanelComponent {
             totalAmount: this.formBuilder.nonNullable.control<number>(0),
             totalTax: this.formBuilder.nonNullable.control<number>(0),
             totalWithTax: this.formBuilder.nonNullable.control<number>(0),
-            paymentDate: this.formBuilder.nonNullable.control<Date>(new Date(), { validators: [Validators.required] }),
+            dueDate: this.formBuilder.nonNullable.control<Date>(new Date(), { validators: [Validators.required] }),
             hasGoodsReceipt: this.formBuilder.nonNullable.control<boolean>(false),
             followerIds: this.formBuilder.nonNullable.control<string[]>([]),
             managerApproverId: this.formBuilder.nonNullable.control<string>('', { validators: Validators.required })
@@ -503,7 +504,7 @@ export class ExpensePaymentRequestPanelComponent {
                   accountNumber: raw.accountNumber,
                   description: raw.description ?? '',
                   beneficiaryName: raw.beneficiaryName,
-                  paymentDate: raw.paymentDate,
+                  dueDate: raw.dueDate,
                   hasGoodsReceipt: raw.hasGoodsReceipt ?? false,
                   totalAmount: Number(raw.totalAmount ?? 0),
                   totalTax: Number(raw.totalTax ?? 0),

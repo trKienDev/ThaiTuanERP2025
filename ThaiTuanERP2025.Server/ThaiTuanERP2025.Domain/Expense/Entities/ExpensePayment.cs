@@ -10,13 +10,13 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		private ExpensePayment() { } // EF
 
-		public ExpensePayment(string name, PayeeType payeeType, DateTime paymentDate, string managerApproverId, string? description)
+		public ExpensePayment(string name, PayeeType payeeType, DateTime dueDate, string managerApproverId, string? description)
 		{
 			Id = Guid.NewGuid();
 			ManagerApproverId = Guid.Parse(managerApproverId);
 			Name = name.Trim();
 			PayeeType = payeeType;
-			PaymentDate = paymentDate;
+			DueDate = dueDate;
 			Status = ExpensePaymentStatus.Pending;
 			Description = description?.Trim() ?? string.Empty;
 		}
@@ -36,7 +36,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public string BeneficiaryName { get; private set; } = string.Empty;
 
 		// Lịch thanh toán
-		public DateTime PaymentDate { get; private set; }
+		public DateTime DueDate { get; private set; }
 		public bool HasGoodsReceipt { get; private set; }
 		public string? Description { get; set; } = string.Empty;
 
@@ -65,6 +65,9 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		public Guid ManagerApproverId { get; private set; }
 
+		private readonly List<OutgoingPayment> _outgoingPayments = new();
+		public IReadOnlyCollection<OutgoingPayment> OutgoingPayments => _outgoingPayments.AsReadOnly();
+
 		public User CreatedByUser { get; set; } = null!;
 		public User? ModifiedByUser { get; set; }
 		public User? DeletedByUser { get; set; }
@@ -88,7 +91,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			BeneficiaryName = beneficiaryName?.Trim() ?? string.Empty;
 		}
 
-		public void SetPaymentDate(DateTime date) => PaymentDate = date;
+		public void SetDueDate(DateTime date) => DueDate = date;
 
 		public void SetGoodsReceipt(bool hasGoodsReceipt) => HasGoodsReceipt = hasGoodsReceipt;
 
@@ -160,5 +163,36 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		public void LinkWorkflow(Guid instanceId) => CurrentWorkflowInstanceId = instanceId;
 		public void UnlinkWorkflow() => CurrentWorkflowInstanceId = null;
+
+		public decimal TotalOutgoing => _outgoingPayments.Sum(o => o.OutgoingAmount);
+
+		// === Tổng còn lại chưa chi ===
+		public decimal RemainingAmount => TotalWithTax - TotalOutgoing;
+		public OutgoingPayment AddOutgoingPayment(
+			string name, string bankName, string accountNumber, string beneficiaryName,
+			decimal amount, DateTime postingDate, DateTime paymentDate, Guid outgoingBankAccountId,
+			string? description = null 
+		) {
+			if (amount <= 0)
+				throw new InvalidOperationException("Số tiền chi phải lớn hơn 0.");
+			if (amount > RemainingAmount)
+				throw new InvalidOperationException("Số tiền chi vượt quá tổng cần thanh toán.");
+
+			var outgoing = new OutgoingPayment(
+				name, amount,
+				bankName, accountNumber, beneficiaryName,
+				postingDate, paymentDate,
+				outgoingBankAccountId, this.Id,
+				description
+			);
+
+			_outgoingPayments.Add(outgoing);
+
+			// Nếu tổng chi đã đủ
+			if (RemainingAmount == 0)
+				Status = ExpensePaymentStatus.FullyPaid;
+
+			return outgoing;
+		}
 	}
 }

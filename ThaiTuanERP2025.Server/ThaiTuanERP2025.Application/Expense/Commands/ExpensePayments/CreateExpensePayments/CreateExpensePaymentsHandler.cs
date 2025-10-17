@@ -32,7 +32,7 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ExpensePayments.CreateExp
 			var request = command.Request;
 			var subId = await _documentSubIdGeneratorService.NextSubIdAsync("ExpensePayment", DateTime.UtcNow, cancellationToken);
 			// payment
-			var payment = new ExpensePayment(request.Name, request.PayeeType, request.PaymentDate, request.ManagerApproverId, request.Description);
+			var payment = new ExpensePayment(request.Name, request.PayeeType, request.DueDate, request.ManagerApproverId, request.Description);
 			payment.SetSubId(subId);
 			payment.SetSupplier(request.PayeeType == PayeeType.Supplier ? request.SupplierId : null);
 			payment.SetBankInfo(request.BankName, request.AccountNumber, request.BeneficiaryName);

@@ -18,7 +18,7 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 		public string AccountNumber { get; init; } = string.Empty;	
 		public string BeneficiaryName { get; init; } = string.Empty;
 
-		public DateTime PaymentDate { get; init; }
+		public DateTime DueDate { get; init; }
 		public bool HasGoodsReceipt { get; init; }
 		public string? Description { get; init; } = string.Empty;
 
@@ -44,7 +44,7 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 		public string AccountNumber { get; init; } = string.Empty;
 		public string BeneficiaryName { get; init; } = string.Empty;
 
-		public DateTime PaymentDate { get; init; }
+		public DateTime DueDate { get; init; }
 		public bool HasGoodsReceipt { get; init; }
 		public string? Description { get; init; } = string.Empty;
 
@@ -66,7 +66,7 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 		public Guid Id { get; init; }
 		public string Name { get; init; } = default!;
 		public string SubId { get; init; } = default!;
-		public DateTime PaymentDate { get; init; }
+		public DateTime DueDate { get; init; }
 		public bool HasGoodsReceipt { get; init; }
 		public decimal TotalAmount { get; init; }
 		public decimal TotalTax { get; init; }
@@ -113,7 +113,7 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 		public string AccountNumber { get; init; } = string.Empty;
 		public string BeneficiaryName { get; init; } = string.Empty;
 
-		public DateTime PaymentDate { get; init; }
+		public DateTime DueDate { get; init; }
 		public bool HasGoodsReceipt { get; init; }
 		public string? Description { get; init; } = string.Empty;
 
