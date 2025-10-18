@@ -6,6 +6,7 @@ using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Files.Entities;
 using ThaiTuanERP2025.Domain.Finance.Entities;
+using ThaiTuanERP2025.Domain.Followers.Entities;
 using ThaiTuanERP2025.Domain.Notifications;
 
 namespace ThaiTuanERP2025.Infrastructure.Persistence
@@ -52,13 +53,14 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<ExpensePayment> ExpensePayments => Set<ExpensePayment>();	
 		public DbSet<ExpensePaymentItem> ExpensePaymentItems => Set<ExpensePaymentItem>();
 		public DbSet<ExpensePaymentAttachment> ExpensePaymentAttachments => Set<ExpensePaymentAttachment>();
-		public DbSet<ExpensePaymentFollower> ExpensePaymentFollowers => Set<ExpensePaymentFollower>();	
 		public DbSet<ExpensePaymentComment> ExpensePaymentComments => Set<ExpensePaymentComment>();
 		public DbSet<ExpensePaymentCommentAttachment> ExpensePaymentCommentAttachments => Set<ExpensePaymentCommentAttachment>();
 		public DbSet<ExpensePaymentCommentTag> expensePaymentCommentTags => Set<ExpensePaymentCommentTag>();
+		public DbSet<OutgoingPayment> outgoingPayments => Set<OutgoingPayment>();
 
 		public DbSet<AppNotification> AppNotification => Set<AppNotification>();
 		public DbSet<TaskReminder> TaskReminders => Set<TaskReminder>();
+		public DbSet<Follower> followers => Set<Follower>();
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

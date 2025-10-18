@@ -65,7 +65,7 @@
                                           <div class="value">
                                                 <ul class="avatar-stack">
                                                       <li *ngFor="let f of (paymentDetail?.followers || []); trackBy: trackByIndex">
-                                                            <img class="avatar" [src]="f?.user | avatarUrlPipe" alt="follower">
+                                                            <img class="avatar" [src]="f | avatarUrlPipe" alt="follower">
                                                       </li>
                                                 </ul>
                                           </div>

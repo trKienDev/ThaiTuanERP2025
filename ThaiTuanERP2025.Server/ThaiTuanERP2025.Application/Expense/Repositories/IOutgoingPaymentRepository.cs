@@ -3,7 +3,7 @@ using ThaiTuanERP2025.Domain.Expense.Entities;
 
 namespace ThaiTuanERP2025.Application.Expense.Repositories
 {
-	public interface IExpensePaymentFollowerRepository : IBaseRepository<ExpensePaymentFollower>
+	public interface IOutgoingPaymentRepository : IBaseRepository<OutgoingPayment>
 	{
 	}
 }

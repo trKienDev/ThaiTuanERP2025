@@ -2,6 +2,7 @@
 using ThaiTuanERP2025.Application.Expense.Repositories;
 using ThaiTuanERP2025.Application.Files.Repositories;
 using ThaiTuanERP2025.Application.Finance.Repositories;
+using ThaiTuanERP2025.Application.Followers.Repositories;
 using ThaiTuanERP2025.Application.Notifications.Repositories;
 
 namespace ThaiTuanERP2025.Application.Common.Interfaces
@@ -39,6 +40,7 @@ namespace ThaiTuanERP2025.Application.Common.Interfaces
 		ISupplierRepository Suppliers { get; }
 		IBankAccountRepository BankAccounts { get; }
 		IOutgoingBankAccountRepository OutgoingBankAccounts { get; }
+		IOutgoingPaymentRepository OutgoingPayments { get; }
 
 		// Workflow
 		IApprovalStepTemplateRepository ApprovalStepTemplates { get; }
@@ -51,11 +53,13 @@ namespace ThaiTuanERP2025.Application.Common.Interfaces
 		IExpensePaymentCommentRepository ExpensePaymentComments { get; }
 		IExpensePaymentCommentAttachmentRepository ExpensePaymentCommentAttachments { get; }
 		IExpensePaymentCommentTagRepository ExpensePaymentCommentTags { get; }
-		IExpensePaymentFollowerRepository ExpensePaymentFollowers { get; }
 
 		// Notification
 		INotificationRepository Notifications { get; }
 		ITaskReminderRepository TaskReminders { get; }
+
+		// Follow
+		IFollowerRepository Followers { get; }
 
 		Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 	}

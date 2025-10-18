@@ -2,9 +2,11 @@
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Common.Services;
 using ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows;
+using ThaiTuanERP2025.Application.Followers.Services;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Expense.Enums;
+using ThaiTuanERP2025.Domain.Followers.Enums;
 
 namespace ThaiTuanERP2025.Application.Expense.Commands.ExpensePayments.CreateExpensePayments
 {
@@ -14,17 +16,20 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ExpensePayments.CreateExp
 		private readonly IApprovalWorkflowService _approvalWorkflowService;
 		private readonly IDocumentSubIdGeneratorService _documentSubIdGeneratorService;
 		private readonly ICurrentUserService _currentUserService;
+		private readonly IFollowerService _followerService;
 		public CreateExpensePaymentsHandler(
 			IUnitOfWork unitOfWork,
 			IApprovalWorkflowService approvalWorkflowService,
 			IDocumentSubIdGeneratorService documentSubIdGeneratorService,
-			ICurrentUserService currentUserService
+			ICurrentUserService currentUserService,
+			IFollowerService followerService
 		)
 		{
 			_unitOfWork = unitOfWork;
 			_approvalWorkflowService = approvalWorkflowService;
 			_documentSubIdGeneratorService = documentSubIdGeneratorService;
 			_currentUserService = currentUserService;
+			_followerService = followerService;
 		}
 
 		public async Task<Guid> Handle(CreateExpensePaymentCommand command, CancellationToken cancellationToken)
@@ -59,7 +64,12 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ExpensePayments.CreateExp
 
 			// followers
 			if (request.FollowerIds?.Count > 0)
-				payment.ReplaceFollowers(request.FollowerIds);
+			{
+				foreach (var uid in request.FollowerIds)
+				{
+					await _followerService.FollowAsync(SubjectType.ExpensePayment, payment.Id, uid, cancellationToken);
+				}
+			}
 
 			// attachments
 			foreach (var attachment in request.Attachments)

@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Api.Common;
+using ThaiTuanERP2025.Presentation.Common;
 using ThaiTuanERP2025.Application.Finance.Commands.BudgetGroups.CreateBudgetGroup;
 using ThaiTuanERP2025.Application.Finance.Commands.BudgetGroup.DeleteBudgetGroup;
 using ThaiTuanERP2025.Application.Finance.Commands.BudgetGroup.UpdateBudgetGroup;
@@ -9,7 +9,7 @@ using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Application.Finance.Queries.BudgetGroups.GetAllBudgetGroups;
 using ThaiTuanERP2025.Application.Finance.Queries.BudgetGroups.GetBudgetGroupById;
 
-namespace ThaiTuanERP2025.Api.Controllers.Finance
+namespace ThaiTuanERP2025.Presentation.Controllers.Finance
 {
 	[Authorize]
 	[ApiController]

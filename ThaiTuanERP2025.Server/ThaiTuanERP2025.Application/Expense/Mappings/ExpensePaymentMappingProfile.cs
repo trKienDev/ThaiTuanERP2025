@@ -17,7 +17,6 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 				// Collections
 				.ForMember(d => d.Items, opt => opt.MapFrom(s => s.Items))
 				.ForMember(d => d.Attachments, opt => opt.MapFrom(s => s.Attachments))
-				.ForMember(d => d.Followers, opt => opt.MapFrom(s => s.Followers))
 				// Supplier
 				.ForMember(d => d.Supplier, opt => opt.MapFrom(s => s.Supplier))
 				// Enum -> int (AutoMapper tự chuyển, dòng này có thể bỏ)
@@ -38,8 +37,6 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 				.ForMember(d => d.Invoice, o => o.MapFrom(s => s.Invoice));
 
 			CreateMap<ExpensePaymentAttachment, ExpensePaymentAttachmentDto>();
-
-			CreateMap<ExpensePaymentFollower, ExpensePaymentFollowersDto>();
 		}
 	}
 }

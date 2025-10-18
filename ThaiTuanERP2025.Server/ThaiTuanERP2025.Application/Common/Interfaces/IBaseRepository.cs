@@ -6,7 +6,7 @@ namespace ThaiTuanERP2025.Application.Common.Interfaces
 	public interface IBaseRepository<T> where T : class
 	{
 		Task<int> CountAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
-		Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
+		Task<bool> AnyAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
 		Task<List<TResult>> ListAsync<TResult>(Func<IQueryable<T>, IQueryable<TResult>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default);
 		Task<T?> SingleOrDefaultAsync(Func<IQueryable<T>, IQueryable<T>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default);
 		Task<T?> SingleOrDefaultIncludingAsync(Expression<Func<T, bool>> predicate, bool asNoTracking = true, CancellationToken cancellationToken = default, params Expression<Func<T, object>>[] includes	);
@@ -26,7 +26,7 @@ namespace ThaiTuanERP2025.Application.Common.Interfaces
 		Task<TDto?> GetByIdProjectedAsync<TDto>(Guid id, CancellationToken cancellationToken = default);
 		Task<List<TDto>> ListProjectedAsync<TDto>(Func<IQueryable<T>, IQueryable<TDto>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default);
 
-		Task AddAsync(T entity);
+		Task AddAsync(T entity, CancellationToken cancellationToken = default);
 		Task AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default);
 
 		void Update(T entity);

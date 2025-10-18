@@ -1,12 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Api.Common;
+using ThaiTuanERP2025.Presentation.Common;
 using ThaiTuanERP2025.Application.Expense.Commands.ExpensePayments.CreateExpensePaymentComment;
 using ThaiTuanERP2025.Application.Expense.Dtos;
 using ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetCommentsByExpensePaymentId;
 
-namespace ThaiTuanERP2025.Api.Controllers.Expense
+namespace ThaiTuanERP2025.Presentation.Controllers.Expense
 {
 	[ApiController]
 	[Route("api/expense-payment-comments")]

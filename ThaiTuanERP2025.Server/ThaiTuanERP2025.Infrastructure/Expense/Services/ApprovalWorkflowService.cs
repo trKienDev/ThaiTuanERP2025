@@ -1,9 +1,11 @@
 ﻿using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Common.Utils;
+using ThaiTuanERP2025.Application.Followers.Services;
 using ThaiTuanERP2025.Application.Notifications.Services;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Expense.Enums;
+using ThaiTuanERP2025.Domain.Followers.Enums;
 
 namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 {
@@ -22,13 +24,15 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 		private readonly INotificationService _notificationService;
 		private readonly ITaskReminderService _taskReminderService;
 		private readonly IApprovalStepService _approvalStepService;
+		private readonly IFollowerService _followerService;
 
 		public ApprovalWorkflowService(
 			IUnitOfWork unitOfWork,
 			ApprovalWorkflowResolverService resolverService,
 			INotificationService notificationService,
 			ITaskReminderService taskReminderService,
-			IApprovalStepService approvalStepService
+			IApprovalStepService approvalStepService, 
+			IFollowerService followerService
 		)
 		{
 			_unitOfWork = unitOfWork;
@@ -36,6 +40,7 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 			_notificationService = notificationService;
 			_taskReminderService = taskReminderService;
 			_approvalStepService = approvalStepService;
+			_followerService = followerService;
 		}
 
 		public async Task<Guid> CreateInstanceForExpensePaymentAsync(ExpensePayment expensePayment, Guid workflowTemplateId, IReadOnlyCollection<StepOverrideRequest>? overrides, bool linkToPayment, CancellationToken cancellationToken) 
@@ -119,18 +124,12 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 			}
 
 			// 5 ) Add Folllowers
-			var followers = new List<ExpensePaymentFollower>();
-			followers.Add(new ExpensePaymentFollower(expensePayment.Id, expensePayment.CreatedByUserId));
-			var approvers = awi.Steps.SelectMany(s => JsonUtils.ParseGuidArray(s.ResolvedApproverCandidatesJson))
-				.Distinct()
-				.ToList();
-			foreach (var approverId in approvers)
-			{
-				// tránh trùng với người tạo (vì có thể người tạo cũng là approver)
-				if (approverId != expensePayment.CreatedByUserId)
-					followers.Add(new ExpensePaymentFollower(expensePayment.Id, approverId));
-			}
-			await _unitOfWork.ExpensePaymentFollowers.AddRangeAsync(followers);
+			var followerIds = new HashSet<Guid>() { expensePayment.CreatedByUserId };
+			followerIds.UnionWith(
+				awi.Steps.SelectMany(s => JsonUtils.ParseGuidArray(s.ResolvedApproverCandidatesJson)).Where(id => id != Guid.Empty)
+			);
+
+			await _followerService.FollowManyAsync(SubjectType.ExpensePayment, expensePayment.Id, followerIds, cancellationToken);
 
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 
