@@ -1,12 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Api.Common;
+using ThaiTuanERP2025.Presentation.Common;
 using ThaiTuanERP2025.Application.Notifications.Command.TaskReminders.DismissReminder;
 using ThaiTuanERP2025.Application.Notifications.Dtos;
 using ThaiTuanERP2025.Application.Notifications.Queries.TaskReminders.GetMyReminders;
 
-namespace ThaiTuanERP2025.Api.Controllers.Notification
+namespace ThaiTuanERP2025.Presentation.Controllers.Notification
 {
 	[ApiController]
 	[Route("api/task-reminder")]

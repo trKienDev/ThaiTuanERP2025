@@ -109,10 +109,10 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 				.ToListAsync(cancellationToken);
 		}
 
-		public async Task AddAsync(T entity)
+		public async Task AddAsync(T entity, CancellationToken cancellationToken = default)
 		{
 			if (entity == null) throw new ArgumentNullException(nameof(entity));
-			await _dbSet.AddAsync(entity);
+			await _dbSet.AddAsync(entity, cancellationToken);
 		}
 		public async Task AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default)
 		{
@@ -120,10 +120,10 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			await _dbSet.AddRangeAsync(entities, cancellationToken);
 		}
 
-		public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
+		public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
 		{
 			if (predicate == null) throw new ArgumentNullException(nameof(predicate));
-			return await _dbSet.AnyAsync(predicate);
+			return await _dbSet.AnyAsync(predicate, cancellationToken);
 		}
 
 		public virtual Task<int> CountAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)

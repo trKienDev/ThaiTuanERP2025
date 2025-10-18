@@ -4,6 +4,7 @@ using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Expense.Dtos;
 using ThaiTuanERP2025.Domain.Exceptions;
+using ThaiTuanERP2025.Domain.Followers.Enums;
 
 namespace ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetExpensePaymentDetail
 {
@@ -66,9 +67,26 @@ namespace ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetExpenseP
 
 			detail = detail with { Steps = enrichedSteps };
 
-			// 6) Nhét vào ExpensePaymentDetailDto
+			// 6 ) Followers
+			var followerUserIds = await _unitOfWork.Followers.ListAsync(
+				q => q.Where(f => f.SubjectType == SubjectType.ExpensePayment && f.SubjectId == payment.Id).Select(f => f.UserId),
+				cancellationToken: cancellationToken
+			);
+			var followerDtos = Array.Empty<UserDto>();
+			if (followerUserIds.Count > 0)
+			{
+				var uidArr = followerUserIds.ToArray();
+				var followerUsers = await _unitOfWork.Users.ListAsync(
+					q => q.Where(u => uidArr.Contains(u.Id)),
+					cancellationToken: cancellationToken
+				);
+				followerDtos = followerUsers.Select(u => _mapper.Map<UserDto>(u)).ToArray();
+			}
+
+			// 7 ) Nhét vào ExpensePaymentDetailDto
 			var dto = _mapper.Map<ExpensePaymentDetailDto>(payment) with
 			{
+				Followers = followerDtos,
 				WorkflowInstanceDetail = detail
 			};
 

@@ -21,7 +21,7 @@
                                     </span>
                               </div>
                               <h3 class="payment-name">{{ paymentDetail?.name }}</h3>
-                              <ng-container *ngIf="paymentDetail?.status === 4">
+                              <ng-container *ngIf="paymentDetail?.status === 6">
                                     <div class="payment-outgoing-btn margin-left-auto">
                                           <button type="button" class="button pintura-button" (click)="navigateToOutgoingPaymentRequest()">
                                                 Ghi nhận khoản tiền ra
@@ -78,7 +78,7 @@
                                                 <div class="value">
                                                       <ul class="avatar-stack">
                                                             <li *ngFor="let f of (paymentDetail?.followers || []); trackBy: trackByIndex">
-                                                                  <img class="avatar" [src]="f?.user | avatarUrlPipe" alt="follower">
+                                                                  <img class="avatar" [src]="f | avatarUrlPipe" alt="follower">
                                                             </li>
                                                       </ul>
                                                 </div>

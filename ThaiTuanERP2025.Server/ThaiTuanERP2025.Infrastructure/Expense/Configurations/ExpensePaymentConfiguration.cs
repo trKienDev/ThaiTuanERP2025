@@ -43,11 +43,6 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 				.HasForeignKey(x => x.SupplierId)
 				.OnDelete(DeleteBehavior.Restrict);
 
-			builder.HasMany(x => x.Followers)
-				.WithOne(f => f.ExpensePayment)
-				.HasForeignKey(f => f.ExpensePaymentId)
-				.OnDelete(DeleteBehavior.Cascade);
-
 			builder.HasOne(p => p.CurrentWorkflowInstance)
 				.WithMany()
 				.HasForeignKey(p => p.CurrentWorkflowInstanceId)

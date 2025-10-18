@@ -9,8 +9,12 @@ export interface OutgoingPayment {
       followerIds: string[];
 }
 
+export interface OutgoingPaymentDto extends OutgoingPayment {
+      id: string;
+}
+
 export interface OutgoingPaymentRequest extends OutgoingPayment {
       expensePaymentId: string;
       outgoingBankAccountId: string;
-      postingDate: Date;
+      dueDate: Date;
 }

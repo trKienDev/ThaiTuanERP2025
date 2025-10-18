@@ -1,5 +1,6 @@
 ﻿using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Expense.Enums;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
@@ -16,7 +17,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public OutgoingPayment(
 			string name, decimal outgoingAmount,
 			string bankName, string accountNumber, string beneficiaryName, 
-			DateTime postingDate, DateTime paymentDate,
+			DateTime postingDate,
 			Guid outgoingBankAccountId, Guid expensePaymentId,
 			string? description = null
 		) {
@@ -24,8 +25,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 				throw new ArgumentException("Tên chứng từ không được để trống.", nameof(name));
 			if (outgoingAmount <= 0)
 				throw new ArgumentException("Số tiền chi phải lớn hơn 0.", nameof(outgoingAmount));
-			if (postingDate > paymentDate)
-				throw new ArgumentException("Ngày chi không thể nhỏ hơn ngày ghi nhận.", nameof(paymentDate));
 
 			Id = Guid.NewGuid();
 			Name = name.Trim();
@@ -35,15 +34,16 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			BeneficiaryName = beneficiaryName?.Trim() ?? string.Empty;
 			OutgoingAmount = outgoingAmount;
 			PostingDate = postingDate;
-			PaymentDate = paymentDate;
 			OutgoingBankAccountId = outgoingBankAccountId;
 			ExpensePaymentId = expensePaymentId;
+			Status = OutgoingPaymentStatus.Pending;
 		}
 
 
 		public string Name { get; private set; } = string.Empty;
 		public string Description { get; private set; } = string.Empty;
 		public decimal OutgoingAmount { get; private set; }
+		public OutgoingPaymentStatus Status { get; private set; }
 
 		public string BankName { get; private set; } = string.Empty;
 		public string AccountNumber { get; private set; } = string.Empty;
@@ -51,6 +51,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		public DateTime PostingDate { get; private set; }
 		public DateTime PaymentDate { get; private set; }
+		public DateTime DueDate { get; private set; }
 
 		public Guid OutgoingBankAccountId { get; private set; }
 		public OutgoingBankAccount OutgoingBankAccount { get; private set; } = null!;
@@ -74,6 +75,11 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			if (amount <= 0)
 				throw new ArgumentException("Số tiền chi phải lớn hơn 0.");
 			OutgoingAmount = amount;
+		}
+
+		public void SetPaymentDate(DateTime paymentDate)
+		{
+			PaymentDate = paymentDate;
 		}
 
 		public void LinkExpensePayment(Guid expensePaymentId)
@@ -109,5 +115,13 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			_followerIds.AddRange(set);
 		}
 
+		public void ChangeStatus(OutgoingPaymentStatus newStatus)
+		{
+			// 🔸 Domain rule: không thể quay lại trạng thái trước
+			if ((int)newStatus < (int)Status)
+				throw new InvalidOperationException($"Không thể chuyển trạng thái từ {Status} về {newStatus}");
+
+			Status = newStatus;
+		}
 	}
 }

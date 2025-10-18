@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Api.Common;
+using ThaiTuanERP2025.Presentation.Common;
 using ThaiTuanERP2025.Application.Expense.Commands.ApprovalSteps.ApproveCurrentStep;
 using ThaiTuanERP2025.Application.Expense.Commands.ApprovalSteps.RejectCurrentStep;
 using ThaiTuanERP2025.Application.Expense.Commands.ApprovalWorkflows.CreateApprovalWorkflowInstance;
@@ -9,7 +9,7 @@ using ThaiTuanERP2025.Application.Expense.Queries.ApprovalWorkflow.GetApprovalWo
 using ThaiTuanERP2025.Application.Expense.Queries.ApprovalWorkflow.GetApprovalWorkflowInstancesByFilter;
 using ThaiTuanERP2025.Domain.Expense.Enums;
 
-namespace ThaiTuanERP2025.Api.Controllers.Expense
+namespace ThaiTuanERP2025.Presentation.Controllers.Expense
 {
 	[ApiController]
 	[Route("api/approval-workflow-instances")]

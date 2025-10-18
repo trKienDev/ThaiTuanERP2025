@@ -3,6 +3,7 @@ using MediatR;
 using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Expense.Dtos;
+using ThaiTuanERP2025.Domain.Followers.Enums;
 
 namespace ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetFollowingExpensePayment
 {
@@ -21,13 +22,16 @@ namespace ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetFollowin
 		public async Task<IReadOnlyCollection<ExpensePaymentSummaryDto>> Handle(GetFollowingExpensePaymentQuery query, CancellationToken cancellationToken)
 		{
 			var currentUserId = _currentUserService.UserId;
-			var expensePaymentIds = await _unitOfWork.ExpensePaymentFollowers.ListAsync(
-				q => q.Where(f => f.UserId == currentUserId).Select(f => f.ExpensePaymentId),
+			var expensePaymentIds = await _unitOfWork.Followers.ListAsync(
+				q => q.Where(f => f.UserId == currentUserId && f.SubjectType == SubjectType.ExpensePayment).Select(f => f.SubjectId),
 				cancellationToken: cancellationToken
 			);
+			if (expensePaymentIds.Count == 0)
+				return Array.Empty<ExpensePaymentSummaryDto>();
 
+			var idArr = expensePaymentIds.ToArray();
 			var expensePayments = await _unitOfWork.ExpensePayments.FindIncludingAsync(
-				p => expensePaymentIds.Contains(p.Id),
+				p => idArr.Contains(p.Id),
 				cancellationToken,
 				p => p.CreatedByUser,
 				p => p.CurrentWorkflowInstance!,

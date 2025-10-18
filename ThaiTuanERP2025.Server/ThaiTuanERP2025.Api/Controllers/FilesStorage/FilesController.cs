@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Api.Common;
+using ThaiTuanERP2025.Presentation.Common;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Infrastructure.Authentication;
 
-namespace ThaiTuanERP2025.Api.Controllers.FileStorage
+namespace ThaiTuanERP2025.Presentation.Controllers.FileStorage
 {
 	[ApiController]
 	[Route("api/files")]
