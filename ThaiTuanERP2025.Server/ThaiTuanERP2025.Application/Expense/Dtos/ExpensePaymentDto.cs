@@ -30,7 +30,6 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 		
 		public IReadOnlyCollection<ExpensePaymentItem> Items { get; init; } = [];
 		public IReadOnlyCollection<ExpensePaymentAttachment> Attachments { get; init; } = [];
-		public IReadOnlyCollection<ExpensePaymentFollower> Followers { get; init; } = [];
 	}
 
 	public sealed record ExpensePaymentRequest
@@ -56,7 +55,9 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 
 		public IReadOnlyCollection<ExpensePaymentItemRequest> Items { get; init; } = [];
 		public IReadOnlyCollection<ExpensePaymentAttachmentRequest> Attachments { get; init; } = [];
+		
 		public IReadOnlyCollection<Guid> FollowerIds { get; init; } = [];
+
 
 		public string ManagerApproverId { get; init; } = default!;
 	}
@@ -95,7 +96,7 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 		public IReadOnlyList<ExpensePaymentAttachmentDto> Attachments { get; init; } = Array.Empty<ExpensePaymentAttachmentDto>();
 
 		// Followers
-		public IReadOnlyList<ExpensePaymentFollowersDto> Followers { get; init; } = Array.Empty<ExpensePaymentFollowersDto>();
+		public IReadOnlyList<UserDto> Followers { get; init; } = Array.Empty<UserDto>();
 
 		// Workflow
 		public ApprovalWorkflowInstanceDetailDto WorkflowInstanceDetail { get; init; } = default!;

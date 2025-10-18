@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Api.Common;
+using ThaiTuanERP2025.Presentation.Common;
 using ThaiTuanERP2025.Application.Common.Models;
 using ThaiTuanERP2025.Application.Expense.Commands.Invoices.AddInvoiceFollowers;
 using ThaiTuanERP2025.Application.Expense.Commands.Invoices.AddInvoiceLine;
@@ -16,7 +16,7 @@ using ThaiTuanERP2025.Application.Expense.Queries.Invoices.GetInvoiceById;
 using ThaiTuanERP2025.Application.Expense.Queries.Invoices.GetInvoicesPaged;
 using ThaiTuanERP2025.Application.Expense.Queries.Invoices.GetMyInvoices;
 
-namespace ThaiTuanERP2025.Api.Controllers.Expense
+namespace ThaiTuanERP2025.Presentation.Controllers.Expense
 {
 	[Authorize]
 	[ApiController]

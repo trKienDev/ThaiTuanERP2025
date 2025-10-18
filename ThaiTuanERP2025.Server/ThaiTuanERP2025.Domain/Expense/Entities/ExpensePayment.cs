@@ -56,8 +56,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public IReadOnlyCollection<ExpensePaymentAttachment> Attachments => _attachments;
 
 		// Payment followers
-		private readonly List<ExpensePaymentFollower> _followers = new();
-		public IReadOnlyCollection<ExpensePaymentFollower> Followers => _followers;
+
 
 		// Workflow instance id (nếu có)
 		public Guid? CurrentWorkflowInstanceId { get; private set; }
@@ -134,31 +133,12 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public void Reject() => Status = ExpensePaymentStatus.Rejected;
 		public void Cancel() => Status = ExpensePaymentStatus.Cancelled;
 		public void ReadyForOutgoingPayment() => Status = ExpensePaymentStatus.ReadyForPayment;
+		public void PartiallyPaid() => Status = ExpensePaymentStatus.PartiallyPaid;
+		public void FullyPaid() => Status = ExpensePaymentStatus.FullyPaid;
 
 		public void AddAttachment(string objectKey, string fileName, long size, string? url, Guid? fileId)
 		{
 			_attachments.Add(new ExpensePaymentAttachment(Id, objectKey, fileName, size, url, fileId));
-		}
-
-		public void AddFollower(Guid userId)
-		{
-			if (_followers.Any(f => f.UserId == userId)) return;
-			_followers.Add(new ExpensePaymentFollower(Id, userId));
-		}
-
-		public void RemoveFollower(Guid userId)
-		{
-			var idx = _followers.FindIndex(f => f.UserId == userId);
-			if (idx >= 0) _followers.RemoveAt(idx);
-		}
-
-		public void ReplaceFollowers(IEnumerable<Guid> userIds)
-		{
-			var set = new HashSet<Guid>(userIds.Where(id => id != Guid.Empty));
-			_followers.RemoveAll(f => !set.Contains(f.UserId));
-			foreach (var uid in set)
-				if (!_followers.Any(f => f.UserId == uid))
-					_followers.Add(new ExpensePaymentFollower(Id, uid));
 		}
 
 		public void LinkWorkflow(Guid instanceId) => CurrentWorkflowInstanceId = instanceId;
@@ -181,8 +161,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			var outgoing = new OutgoingPayment(
 				name, amount,
 				bankName, accountNumber, beneficiaryName,
-				postingDate, paymentDate,
-				outgoingBankAccountId, this.Id,
+				postingDate, outgoingBankAccountId, this.Id,
 				description
 			);
 

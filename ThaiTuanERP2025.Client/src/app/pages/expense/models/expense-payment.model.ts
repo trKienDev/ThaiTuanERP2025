@@ -1,7 +1,6 @@
 import { UserDto } from "../../account/models/user.model";
 import { ApprovalWorkflowInstanceDetailDto, ApprovalWorkflowInstanceDto, ApprovalWorkflowIntanceStatusDto } from "./approval-workflow-instance.model";
 import { ExpensePaymentAttachmentDto, ExpensePaymentAttachmentRequest } from "./expense-payment-attachment.model";
-import { ExpensePaymentFollowerDto } from "./expense-payment-followers.model";
 import { ExpensePaymentItemDetailDto, ExpensePaymentItemDto, ExpensePaymentItemRequest } from "./expense-paymnet-item.model";
 import { InvoiceDto } from "./invoice.model";
 import { SupplierDto } from "./supplier.model";
@@ -43,7 +42,6 @@ export interface ExpensePaymentDto {
 
       items: ExpensePaymentItemDetailDto[];
       attachments: ExpensePaymentAttachmentDto[];
-      followers: ExpensePaymentFollowerDto[];
 }
 
 export interface ExpensePaymentRequest {
@@ -68,6 +66,7 @@ export interface ExpensePaymentRequest {
       attachments: ExpensePaymentAttachmentRequest[];
       followerIds: string[];
 
+
       managerApproverId: string;
 }
 
@@ -85,6 +84,8 @@ export interface ExpensePaymentDetailDto extends ExpensePaymentDto {
       createdDate: Date;
       updatedBy?: UserDto;
       updatedAt?: Date;
+
+      followers: UserDto[];
 
       workflowInstanceDetail?: ApprovalWorkflowInstanceDetailDto;
 }
