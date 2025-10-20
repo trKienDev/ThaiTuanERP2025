@@ -25,7 +25,7 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 				.ToListAsync(cancellationToken);
 		}
 
-		public override async Task<List<User>> GetAllAsync()
+		public override async Task<List<User>> GetAllAsync(CancellationToken cancellationToken)
 		{
 			return await DbContext.Users
 				.Include(u => u.Department)

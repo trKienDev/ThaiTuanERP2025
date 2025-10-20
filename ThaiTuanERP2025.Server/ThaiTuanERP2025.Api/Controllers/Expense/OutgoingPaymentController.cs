@@ -6,6 +6,8 @@ using ThaiTuanERP2025.Application.Expense.Commands.OutgoingPayments.CreateOutgoi
 using ThaiTuanERP2025.Application.Expense.Dtos;
 using ThaiTuanERP2025.Application.Expense.Queries.OutgoingPayments.GetFollowingOutgoingPayments;
 using ThaiTuanERP2025.Application.Expense.Queries.OutgoingPayments.GetOutgoingPaymentDetail;
+using ThaiTuanERP2025.Application.Expense.Commands.OutgoingPayments.ApproveOutgoingPayment;
+using ThaiTuanERP2025.Application.Expense.Commands.OutgoingPayments.MarkOutgoingPaymentCreated;
 
 namespace ThaiTuanERP2025.Presentation.Controllers.Expense
 {
@@ -39,6 +41,18 @@ namespace ThaiTuanERP2025.Presentation.Controllers.Expense
 		{
 			var detailDto = await _mediator.Send(new GetOutgoingPaymentDetailQuery(id), cancellationToken);
 			return Ok(ApiResponse<OutgoingPaymentDetailDto>.Success(detailDto));
+		}
+
+		[HttpPost("{id:guid}/approve")]
+		public async Task<IActionResult> Approve(Guid id, CancellationToken cancellationToken) {
+			var result = await _mediator.Send(new ApproveOutgoingPaymentCommand(id), cancellationToken);
+			return Ok(ApiResponse<Unit>.Success(result));
+		}
+
+		[HttpPost("{id:guid}/created")]
+		public async Task<IActionResult> MarkCreated(Guid id, CancellationToken cancellationToken) {
+			var result = await _mediator.Send(new MarkOutgoingPaymentCreatedCommand(id), cancellationToken);
+			return Ok(ApiResponse<Unit>.Success(result));
 		}
 	}
 }

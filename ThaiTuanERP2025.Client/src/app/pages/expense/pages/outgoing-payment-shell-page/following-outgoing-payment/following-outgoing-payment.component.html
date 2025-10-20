@@ -21,7 +21,7 @@
                         </tr>
                   </thead>
                   <tbody>
-                        <tr *ngFor="let payment of followingPayments">
+                        <tr *ngFor="let payment of (outgoingPayments$ | async) ?? []; trackBy: trackById;">
                               <td>
                                     <div class="link display-flex align-items-center justify-content-center">
                                           <span>🔗</span>

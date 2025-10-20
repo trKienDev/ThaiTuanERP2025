@@ -8,7 +8,7 @@ import { handleApiResponse$ } from "../../../shared/operators/handle-api-respons
 import { ApiResponse } from "../../../shared/models/api-response.model";
 
 @Injectable({ providedIn: 'root' })
-export class OutgoingPaymentService extends BaseCrudService<OutgoingPaymentDto, OutgoingPaymentRequest> {
+export class OutgoingPaymentService extends BaseCrudService<OutgoingPaymentSummaryDto, OutgoingPaymentRequest> {
       constructor(http: HttpClient) {
             super(http, `${environment.apiUrl}/outgoing-payments`);
       }
@@ -25,6 +25,22 @@ export class OutgoingPaymentService extends BaseCrudService<OutgoingPaymentDto, 
             return this.http.get<ApiResponse<OutgoingPaymentSummaryDto[]>>(`${this.endpoint}/following`)
                   .pipe(
                         handleApiResponse$<OutgoingPaymentSummaryDto[]>(),
+                        catchError(err => throwError(() => err))
+                  );
+      }
+
+      onApprove(id: string): Observable<void> {
+            return this.http.post<ApiResponse<void>>(`${this.endpoint}/${id}/approve`, {})
+                  .pipe(
+                        handleApiResponse$<void>(),
+                        catchError(err => throwError(() => err))
+                  );
+      }
+
+      markCreated(id: string): Observable<void> {
+            return this.http.post<ApiResponse<void>>(`${this.endpoint}/${id}/created`, {})
+                  .pipe(
+                        handleApiResponse$<void>(),
                         catchError(err => throwError(() => err))
                   );
       }
