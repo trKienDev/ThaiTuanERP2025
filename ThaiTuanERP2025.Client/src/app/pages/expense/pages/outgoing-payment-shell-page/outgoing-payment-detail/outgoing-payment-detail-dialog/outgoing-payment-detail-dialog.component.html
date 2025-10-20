@@ -2,7 +2,7 @@
       <div class="dialog-container">
             <div class="dialog-heading">
                   <div class="dialog-title">
-                        <h1>Chi tiết thanh toán</h1>
+                        <h1>Chi tiết khoản chi</h1>
                   </div>
                   <div class="dialog-close">
                         <button type="button" class="close-button" (click)="close()" aria-label="Đóng">
@@ -12,93 +12,69 @@
             </div>
             <div class="dialog-body">
                   <ng-container *ngIf="loading()">Đang tải...</ng-container>
-                  <ng-container *ngIf="err()">{{ err() }}</ng-container>
-                  <div class="expense-payment-detail-container">
-                        <div class="payment-heading display-flex gap-10px align-items-center">
-                              <div class="payment-status">
-                                    <span class="payment-status-badge" [ngClass]="(paymentDetail?.status | expensePaymentStatus).class">
-                                          {{ (paymentDetail?.status | expensePaymentStatus).text }}
+                  <ng-container *ngIf="error()">{{ error() }}</ng-container>
+                  <div block-label="outgoing-payment-detail" class="container">
+                        <div class="detail-heading display-flex align-items-center gap-10px">
+                              <div class="detail-status">
+                                    <span  class="outgoing-status-badge" [ngClass]="outgoingPaymentDetail?.status | outgoingPaymentStatus : 'class'">
+                                          {{ outgoingPaymentDetail?.status | outgoingPaymentStatus : 'label' }}
                                     </span>
                               </div>
-                              <h3 class="payment-name">{{ paymentDetail?.name }}</h3>
-                              <ng-container *ngIf="paymentDetail?.status === 6">
-                                    <div class="payment-outgoing-btn margin-left-auto">
-                                          <button type="button" class="button pintura-button" (click)="navigateToOutgoingPaymentRequest()">
-                                                Ghi nhận khoản tiền ra
-                                          </button>
-                                    </div>
-                              </ng-container>
+                              <h3 class="payment-name">{{ outgoingPaymentDetail?.name }}</h3>
                         </div>
-                        <div class="payment-body margin-top-15px">
+                        <div class="detail-body">
                               <div class="general-information-block primary-card">
                                     <div class="card-header">Thông tin chung</div>
                                     <div class="card-body general-grid">
                                           <div class="row">
-                                                <label>ID</label>
-                                                <div class="value mono">{{ paymentDetail?.subId }}</div>
+                                                <label for="detail-subid">ID</label>
+                                                <span class="value">{{ outgoingPaymentDetail?.subId }}</span>
                                           </div>
                                           <div class="row">
-                                                <label>Tạo bởi</label>
+                                                <label for="detail-createdby">Tạo bởi</label>
                                                 <div class="value flex">
-                                                      <img class="avatar" [src]="paymentDetail?.createdByUser | avatarUrlPipe" alt="avatar">
-                                                      <span>{{ paymentDetail?.createdByUser?.fullName }}</span>
+                                                      <img class="avatar" [src]="outgoingPaymentDetail?.createdBy | avatarUrlPipe" alt="avatar">
+                                                      <span>{{ outgoingPaymentDetail?.createdBy?.fullName }}</span>
                                                 </div>
                                           </div>
                                           <div class="row">
-                                                <label>Tạo lúc</label>
-                                                <div class="value">{{ paymentDetail?.createdDate | date:'HH:mm dd/MM/yyyy' }}</div>
+                                                <label for="">Tạo lúc</label>
+                                                <div class="value">{{ outgoingPaymentDetail?.createdDate | date: 'HH:mm dd/MM/yyyy' }}</div>
                                           </div>
                                           <div class="row">
-                                                <label>Công ty trả cho</label>
-                                                <div class="value ellipsis" [title]="paymentDetail?.supplier?.name">
-                                                      {{ paymentDetail?.supplier?.name }}
-                                                </div>
+                                                <label for="">Tài khoản tiền</label>
+                                                <div class="value">{{ outgoingPaymentDetail?.outgoingBankAccount?.name }}</div>
                                           </div>
                                           <div class="row">
-                                                <label>Nội dung thanh toán</label>
-                                                <div class="value ellipsis">
-                                                      {{ paymentDetail?.description }}
-                                                </div>
+                                                <label for="">Tên ngân hàng thụ hưởng</label>
+                                                <div class="value">{{ outgoingPaymentDetail?.bankName }}</div>
                                           </div>
                                           <div class="row">
-                                                <label>Luồng duyệt</label>
-                                                <div class="value">
-                                                      <ul class="avatar-stack">
-                                                            <li *ngFor="let u of (paymentDetail?.workflowInstanceDetail?.steps || []); let i = index; trackBy: trackByIndex">
-                                                                  <img class="avatar" [src]="u?.approverCandidates?.[0] | avatarUrlPipe" alt="approver">
-                                                            </li>
-                                                            <li class="more" *ngIf="(paymentDetail?.workflowInstanceDetail?.steps?.length || 0) > 6">
-                                                                  +{{ (paymentDetail?.workflowInstanceDetail?.steps?.length || 0) - 6 }}
-                                                            </li>
-                                                      </ul>
-                                                </div>
+                                                <label for="">Tài khoản thụ hưởng</label>
+                                                <div class="value">{{ outgoingPaymentDetail?.accountNumber }}</div>
                                           </div>
                                           <div class="row">
-                                                <label>Người theo dõi</label>
-                                                <div class="value">
-                                                      <ul class="avatar-stack">
-                                                            <li *ngFor="let f of (paymentDetail?.followers || []); trackBy: trackByIndex">
-                                                                  <img class="avatar" [src]="f | avatarUrlPipe" alt="follower">
-                                                            </li>
-                                                      </ul>
-                                                </div>
+                                                <label for="">Người thụ hưởng</label>
+                                                <div class="value">{{ outgoingPaymentDetail?.beneficiaryName }}</div>
+                                          </div>
+                                          <div class="row">
+                                                <label for="">Chi phí gốc</label>
+                                                <div class="value">{{ outgoingPaymentDetail?.expensePayment?.name }}</div>
                                           </div>
                                     </div>
                               </div>
-                              <div class="payment-amount-block primary-card margin-top-15px">
+                              <div class="amount-information-block primary-card margin-top-20px">
                                     <div class="card-body">
-                                          <div class="total-amount-block">
-                                                <div class="amount-infor-block">
-                                                      <label class="amount-infor-label" for="total-amount">Số tiền thanh toán</label>
-                                                      <span>{{ paymentDetail?.totalWithTax | number:'1.0-0' }} VNĐ</span>
+                                          <div class="display-flex gap-10px justify-content-center">
+                                                <div class="amount-block">
+                                                      <label class="amount-label">Số tiền thanh toán</label>
+                                                      <span>{{ outgoingPaymentDetail?.expensePayment?.totalWithTax | number:'1.0-0' }} VNĐ</span>
+                                                      <span class="amount-date">Ngày phát sinh: {{ outgoingPaymentDetail?.expensePayment?.createdDate | date: 'dd/MM/yyyy' }}</span>
                                                 </div>
-                                                <div class="amount-infor-block">
-                                                      <label class="amount-infor-label" for="payment-date">Ngày thanh toán</label>
-                                                      <span>{{ paymentDetail?.dueDate | date: 'dd/MM/yyyy' }}</span>
-                                                </div>
-                                                <div class="amount-infor-block">
-                                                      <label class="amount-infor-label" for="payment-date">Số tiền đã tạo lệnh</label>
-                                                      <span></span>
+                                                <div class="amount-block">
+                                                      <label class="amount-label">Số tiền khoản chi</label>
+                                                      <span>{{ outgoingPaymentDetail?.outgoingAmount| number:'1.0-0' }} VNĐ</span>
+                                                      <span class="amount-date">Hạn thanh toán: {{ outgoingPaymentDetail?.dueDate | date: 'dd/MM/yyyy' }}</span>
                                                 </div>
                                           </div>
                                           <div class="amount-item-block">
@@ -119,7 +95,7 @@
                                                                   </tr>
                                                             </thead>
                                                             <tbody>
-                                                                  <tr *ngFor="let item of paymentDetail?.items; let i = index">
+                                                                  <tr *ngFor="let item of outgoingPaymentDetail?.expensePayment?.items; let i = index">
                                                                         <td>{{ i + 1 }}</td>
                                                                         <td class="item-name">{{ item.itemName }}</td>
                                                                         <td class="item-quanity">{{ item.quantity | number:'1.0-0' }}</td>
@@ -136,13 +112,13 @@
                                                                         </td>
                                                                   </tr>
                                                             </tbody>
-                                                            <tfoot *ngIf="paymentDetail?.items?.length">
+                                                            <tfoot *ngIf="outgoingPaymentDetail?.expensePayment?.items?.length">
                                                                   <tr class="total-row">
                                                                         <td colspan="4" class=""><strong>Tổng</strong></td>
-                                                                        <td>{{ paymentDetail?.totalAmount | number:'1.0-0' }} VNĐ</td>
+                                                                        <td>{{ outgoingPaymentDetail?.expensePayment?.totalAmount | number:'1.0-0' }} VNĐ</td>
                                                                         <td></td>
-                                                                        <td>{{ paymentDetail?.totalTax | number:'1.0-0' }} VNĐ</td>
-                                                                        <td>{{ paymentDetail?.totalWithTax | number:'1.0-0' }} VNĐ</td>
+                                                                        <td>{{ outgoingPaymentDetail?.expensePayment?.totalTax | number:'1.0-0' }} VNĐ</td>
+                                                                        <td>{{ outgoingPaymentDetail?.expensePayment?.totalWithTax | number:'1.0-0' }} VNĐ</td>
                                                                         <td colspan="4"></td>
                                                                   </tr>
                                                             </tfoot>

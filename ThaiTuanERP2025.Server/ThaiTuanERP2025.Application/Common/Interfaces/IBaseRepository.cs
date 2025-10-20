@@ -20,7 +20,7 @@ namespace ThaiTuanERP2025.Application.Common.Interfaces
 		Task<List<T>> FindAsync(Expression<Func<T, bool>> predicate);
 		Task<List<T>> FindIncludingAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken, params Expression<Func<T, object>>[] includes);
 
-		Task<T?> GetByIdAsync(Guid id);
+		Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 		Task<List<T>> GetAllAsync();
 		Task<List<T>> GetAllIncludingAsync(params Expression<Func<T, object>>[] includes);
 

@@ -1,4 +1,8 @@
+import { UserDto } from "../../account/models/user.model";
 import { OutgoingBankAccountComponent } from "../pages/bank-account-shell-page/outgoing-bank-account/outgoing-bank-account.component";
+import { ExpensePaymentDetailDto } from "./expense-payment.model";
+import { OutgoingBankAccountDto } from "./outgoing-bank-account.model";
+import { SupplierDto } from "./supplier.model";
 
 export enum OutgoingPaymentStatus {
       pending = 0, // chờ tạo lệnh
@@ -23,6 +27,8 @@ export interface OutgoingPayment {
       status: OutgoingPaymentStatus | string;
       expensePaymentId: string;
       outgoingBankAccountId: string;
+      employeeId?: string | null;
+      supplierId?: string | null;
 }
 
 export interface OutgoingPaymentDto extends OutgoingPayment {
@@ -36,9 +42,14 @@ export interface OutgoingPaymentRequest extends OutgoingPayment {
 }
 
 export interface OutgoingPaymentDetailDto extends OutgoingPaymentDto {
-      postingDate: Date;
-      paymentDate: Date;      
-      dueDate: Date;
+      subId: string;
+      createdBy: UserDto;
+      createdDate: Date;   
+      
+      supplier?: SupplierDto | null;
+      employee?: UserDto | null;
+      outgoingBankAccount: OutgoingBankAccountDto;
+      expensePayment: ExpensePaymentDetailDto;
 }
 
 export interface OutgoingPaymentSummaryDto extends OutgoingPaymentDto {

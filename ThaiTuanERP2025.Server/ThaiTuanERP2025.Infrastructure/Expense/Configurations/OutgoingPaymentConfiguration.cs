@@ -37,6 +37,15 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 				.HasForeignKey(o => o.OutgoingBankAccountId)
 				.OnDelete(DeleteBehavior.Restrict);
 
+			builder.HasOne(o => o.Supplier)
+				.WithMany()
+				.HasForeignKey("SupplierId")
+				.OnDelete(DeleteBehavior.Restrict);
+
+			builder.HasOne(o => o.Employee)
+				.WithMany()
+				.HasForeignKey("EmployeeId")
+				.OnDelete(DeleteBehavior.Restrict);
 
 			builder.HasOne(o => o.CreatedByUser)
 				.WithMany()

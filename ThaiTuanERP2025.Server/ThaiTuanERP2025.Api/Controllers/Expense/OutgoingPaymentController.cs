@@ -5,6 +5,7 @@ using ThaiTuanERP2025.Presentation.Common;
 using ThaiTuanERP2025.Application.Expense.Commands.OutgoingPayments.CreateOutgoingPayment;
 using ThaiTuanERP2025.Application.Expense.Dtos;
 using ThaiTuanERP2025.Application.Expense.Queries.OutgoingPayments.GetFollowingOutgoingPayments;
+using ThaiTuanERP2025.Application.Expense.Queries.OutgoingPayments.GetOutgoingPaymentDetail;
 
 namespace ThaiTuanERP2025.Presentation.Controllers.Expense
 {
@@ -31,6 +32,13 @@ namespace ThaiTuanERP2025.Presentation.Controllers.Expense
 		{
 			var dtos = await _mediator.Send(new GetFollowingOutgoingPaymentsQuery(), cancellationToken);
 			return Ok(ApiResponse<IReadOnlyCollection<OutgoingPaymentSummaryDto>>.Success(dtos));
+		}
+
+		[HttpGet("{id:guid}/detail")]
+		public async Task<IActionResult> GetDetail(Guid id, CancellationToken cancellationToken)
+		{
+			var detailDto = await _mediator.Send(new GetOutgoingPaymentDetailQuery(id), cancellationToken);
+			return Ok(ApiResponse<OutgoingPaymentDetailDto>.Success(detailDto));
 		}
 	}
 }

@@ -30,6 +30,7 @@ using ThaiTuanERP2025.Application.Common.Options;
 using ThaiTuanERP2025.Infrastructure.Expense.Services;
 using ThaiTuanERP2025.Application.Followers.Services;
 using ThaiTuanERP2025.Infrastructure.Followers.Services;
+using ThaiTuanERP2025.Domain.Common.Enums;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,8 +55,9 @@ builder.Services.Configure<TaskReminderExpiryOptions>(
 );
 
 builder.Services.Configure<DocumentSubIdOptions>(opt => {
-	opt.TypeDigits["ExpensePayment"] = "01";
-	opt.TypeDigits["Request"] = "02";
+	opt.TypeDigits[DocumentType.ExpensePayment] = "01";
+	opt.TypeDigits[DocumentType.OutgoingPayment] = "02";
+	opt.TypeDigits[DocumentType.Invoice] = "03";
 });
 
 builder.Services.AddSignalR()

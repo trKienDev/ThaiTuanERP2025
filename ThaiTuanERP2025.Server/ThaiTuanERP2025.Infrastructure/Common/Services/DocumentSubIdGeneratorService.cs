@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using ThaiTuanERP2025.Application.Common.Options;
 using ThaiTuanERP2025.Application.Common.Services;
 using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Common.Enums;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Common.Services
@@ -17,11 +18,8 @@ namespace ThaiTuanERP2025.Infrastructure.Common.Services
 			_opt = opt;
 		}
 
-		public async Task<string> NextSubIdAsync(string documentType, DateTime nowUtc, CancellationToken ct)
+		public async Task<string> NextSubIdAsync(DocumentType documentType, DateTime nowUtc, CancellationToken ct)
 		{
-			if (string.IsNullOrWhiteSpace(documentType))
-				throw new ArgumentException("documentType is required", nameof(documentType));
-
 			var (ddMMyyyy, yyyyMMdd) = GetVietnamDateStrings(nowUtc);
 			var digit = ResolveDigit(documentType);
 
@@ -67,7 +65,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common.Services
 		}
 
 
-		private string ResolveDigit(string documentType)
+		private string ResolveDigit(DocumentType documentType)
 		{
 			if (_opt.Value.TypeDigits.TryGetValue(documentType, out var d) && !string.IsNullOrWhiteSpace(d))
 				return d;
