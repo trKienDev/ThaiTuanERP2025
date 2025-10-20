@@ -30,7 +30,7 @@ namespace ThaiTuanERP2025.Presentation.Controllers.Expense
 		public async Task<IActionResult> GetFollowingOutgoingPayments(CancellationToken cancellationToken)
 		{
 			var dtos = await _mediator.Send(new GetFollowingOutgoingPaymentsQuery(), cancellationToken);
-			return Ok(ApiResponse<IReadOnlyCollection<OutgoingPaymentDto>>.Success(dtos));
+			return Ok(ApiResponse<IReadOnlyCollection<OutgoingPaymentSummaryDto>>.Success(dtos));
 		}
 	}
 }
