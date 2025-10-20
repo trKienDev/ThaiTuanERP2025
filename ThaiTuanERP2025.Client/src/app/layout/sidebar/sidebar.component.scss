@@ -1,11 +1,17 @@
 .sidebar {
-      width: 80px;
-      min-height: 100vh;
+      width: var(--sidebar-width);
+      position: fixed;
+      top: var(--topbar-height);
+      left: 0;
+      height: calc(100dvh - var(--topbar-height));
+      overflow: auto;
+      z-index: 900;
       display: flex;
       flex-direction: column;
       align-items: center;
-      background-color: var(--main-bg-color);
-      padding: 5px;
+      // background-color: var(--main-bg-color);
+      padding: var(--sidebar-padding);
+      user-select: none;
 }
 .sidebar nav {
       width: 100%;
@@ -30,23 +36,27 @@
       border-radius: 8px;
       margin-bottom: 10px;
 }
-.sidebar nav ul li a .material-icons-round {
+.sidebar nav ul li a .sidebar-icon {
       font-size: 25px;
       color: #7b7b7b;
-      margin-bottom: 4px;
+      margin-bottom: 10px;
+      margin-top: 5px;
+      line-height: 1;
 }
 .sidebar .sidebar-title {
       color: #7b7b7b;
-      font-size: 10px;
+      font-size: 11px;
+      transition: all 80ms;
 }
-.sidebar nav ul li a:hover, .sidebar nav ul li a.active {
+.sidebar nav ul li a:hover {
       background-color: white;
-      box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+      box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
-.sidebar nav ul li a:hover .sidebar-title, 
-.sidebar nav ul li a:hover .material-icons-round,
-.sidebar nav ul li a.active .sidebar-title,
-.sidebar nav ul li a.active .material-icons-round {
+.sidebar nav ul li a.active {
+      background-color: white;
+      box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+}
+.sidebar nav ul li a:hover .sidebar-title, .sidebar nav ul li a.active .sidebar-title {
       color: var(--main-foreground-hover);
 }
 

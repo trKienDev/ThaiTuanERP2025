@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Common;
 
 namespace ThaiTuanERP2025.Domain.Finance.Entities
@@ -24,5 +20,9 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		// path
 		public int Level { get; set; }	// 0 cho root, +1 mỗi tầng
 		public string? Path { get; set; }
+
+		public User CreatedByUser { get; set; } = null!;
+		public User? ModifiedByUser { get; set; }
+		public User? DeletedByUser { get; set; }
 	}
 }

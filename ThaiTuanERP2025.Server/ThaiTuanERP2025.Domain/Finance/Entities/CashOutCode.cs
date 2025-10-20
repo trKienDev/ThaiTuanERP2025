@@ -1,4 +1,5 @@
-﻿using ThaiTuanERP2025.Domain.Common;
+﻿using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Domain.Common;
 
 namespace ThaiTuanERP2025.Domain.Finance.Entities
 {
@@ -17,5 +18,9 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public LedgerAccount PostingLedgerAccount { get; set; } = null!;
 
 		public ICollection<BudgetCode> BudgetCodes { get; set; } = new List<BudgetCode>();
+
+		public User CreatedByUser { get; set; } = null!;
+		public User? ModifiedByUser { get; set; }
+		public User? DeletedByUser { get; set; }
 	}
 }

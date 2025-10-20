@@ -1,4 +1,5 @@
-﻿using ThaiTuanERP2025.Domain.Common;
+﻿using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Expense.Enums;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
@@ -9,18 +10,20 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		private ExpensePayment() { } // EF
 
-		public ExpensePayment(string name, PayeeType payeeType, DateTime paymentDate, string managerApproverId)
+		public ExpensePayment(string name, PayeeType payeeType, DateTime dueDate, string managerApproverId, string? description)
 		{
 			Id = Guid.NewGuid();
 			ManagerApproverId = Guid.Parse(managerApproverId);
 			Name = name.Trim();
 			PayeeType = payeeType;
-			PaymentDate = paymentDate;
-			Status = ExpensePaymentStatus.Draft;
+			DueDate = dueDate;
+			Status = ExpensePaymentStatus.Pending;
+			Description = description?.Trim() ?? string.Empty;
 		}
 
 		// Thông tin chung
 		public string Name { get; private set; } = string.Empty;
+		public string SubId { get; private set; } = default!;
 
 		// Đối tượng thụ hưởng
 		public PayeeType PayeeType { get; private set; }
@@ -33,8 +36,9 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public string BeneficiaryName { get; private set; } = string.Empty;
 
 		// Lịch thanh toán
-		public DateTime PaymentDate { get; private set; }
+		public DateTime DueDate { get; private set; }
 		public bool HasGoodsReceipt { get; private set; }
+		public string? Description { get; set; } = string.Empty;
 
 		// Tổng cộng (được item cộng dồn)
 		public decimal TotalAmount { get; private set; }     // 18,2
@@ -52,8 +56,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public IReadOnlyCollection<ExpensePaymentAttachment> Attachments => _attachments;
 
 		// Payment followers
-		private readonly List<ExpensePaymentFollower> _followers = new();
-		public IReadOnlyCollection<ExpensePaymentFollower> Followers => _followers;
+
 
 		// Workflow instance id (nếu có)
 		public Guid? CurrentWorkflowInstanceId { get; private set; }
@@ -61,7 +64,20 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		public Guid ManagerApproverId { get; private set; }
 
+		private readonly List<OutgoingPayment> _outgoingPayments = new();
+		public IReadOnlyCollection<OutgoingPayment> OutgoingPayments => _outgoingPayments.AsReadOnly();
+
+		public User CreatedByUser { get; set; } = null!;
+		public User? ModifiedByUser { get; set; }
+		public User? DeletedByUser { get; set; }
+
 		// ==== HÀM NGHIỆP VỤ ====
+		public void SetSubId(string value)
+		{
+			if (string.IsNullOrWhiteSpace(value)) throw new ArgumentException("SubId is required");
+			SubId = value;
+		}
+
 		public void SetSupplier(Guid? supplierId)
 		{
 			SupplierId = supplierId;
@@ -74,7 +90,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			BeneficiaryName = beneficiaryName?.Trim() ?? string.Empty;
 		}
 
-		public void SetPaymentDate(DateTime date) => PaymentDate = date;
+		public void SetDueDate(DateTime date) => DueDate = date;
 
 		public void SetGoodsReceipt(bool hasGoodsReceipt) => HasGoodsReceipt = hasGoodsReceipt;
 
@@ -116,35 +132,46 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public void Approve() => Status = ExpensePaymentStatus.Approved;
 		public void Reject() => Status = ExpensePaymentStatus.Rejected;
 		public void Cancel() => Status = ExpensePaymentStatus.Cancelled;
-		public void MarkPaid() => Status = ExpensePaymentStatus.Paid;
+		public void ReadyForOutgoingPayment() => Status = ExpensePaymentStatus.ReadyForPayment;
+		public void PartiallyPaid() => Status = ExpensePaymentStatus.PartiallyPaid;
+		public void FullyPaid() => Status = ExpensePaymentStatus.FullyPaid;
 
 		public void AddAttachment(string objectKey, string fileName, long size, string? url, Guid? fileId)
 		{
 			_attachments.Add(new ExpensePaymentAttachment(Id, objectKey, fileName, size, url, fileId));
 		}
 
-		public void AddFollower(Guid userId)
-		{
-			if (_followers.Any(f => f.UserId == userId)) return;
-			_followers.Add(new ExpensePaymentFollower(Id, userId));
-		}
-
-		public void RemoveFollower(Guid userId)
-		{
-			var idx = _followers.FindIndex(f => f.UserId == userId);
-			if (idx >= 0) _followers.RemoveAt(idx);
-		}
-
-		public void ReplaceFollowers(IEnumerable<Guid> userIds)
-		{
-			var set = new HashSet<Guid>(userIds.Where(id => id != Guid.Empty));
-			_followers.RemoveAll(f => !set.Contains(f.UserId));
-			foreach (var uid in set)
-				if (!_followers.Any(f => f.UserId == uid))
-					_followers.Add(new ExpensePaymentFollower(Id, uid));
-		}
-
 		public void LinkWorkflow(Guid instanceId) => CurrentWorkflowInstanceId = instanceId;
 		public void UnlinkWorkflow() => CurrentWorkflowInstanceId = null;
+
+		public decimal TotalOutgoing => _outgoingPayments.Sum(o => o.OutgoingAmount);
+
+		// === Tổng còn lại chưa chi ===
+		public decimal RemainingAmount => TotalWithTax - TotalOutgoing;
+		public OutgoingPayment AddOutgoingPayment(
+			string name, string bankName, string accountNumber, string beneficiaryName,
+			decimal amount, DateTime postingDate, DateTime paymentDate, Guid outgoingBankAccountId,
+			string? description = null 
+		) {
+			if (amount <= 0)
+				throw new InvalidOperationException("Số tiền chi phải lớn hơn 0.");
+			if (amount > RemainingAmount)
+				throw new InvalidOperationException("Số tiền chi vượt quá tổng cần thanh toán.");
+
+			var outgoing = new OutgoingPayment(
+				name, amount,
+				bankName, accountNumber, beneficiaryName,
+				postingDate, outgoingBankAccountId, this.Id,
+				description
+			);
+
+			_outgoingPayments.Add(outgoing);
+
+			// Nếu tổng chi đã đủ
+			if (RemainingAmount == 0)
+				Status = ExpensePaymentStatus.FullyPaid;
+
+			return outgoing;
+		}
 	}
 }

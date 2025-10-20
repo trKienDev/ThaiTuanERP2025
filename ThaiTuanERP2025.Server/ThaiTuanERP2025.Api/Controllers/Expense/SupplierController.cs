@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Api.Common;
+using ThaiTuanERP2025.Presentation.Common;
 using ThaiTuanERP2025.Application.Expense.Commands.Suppliers.CreateSupplier;
 using ThaiTuanERP2025.Application.Expense.Commands.Suppliers.UpdateSupplier;
 using ThaiTuanERP2025.Application.Expense.Dtos;
@@ -9,7 +9,7 @@ using ThaiTuanERP2025.Application.Expense.Queries.Suppliers.CheckSupplierNameAva
 using ThaiTuanERP2025.Application.Expense.Queries.Suppliers.GetSupplierById;
 using ThaiTuanERP2025.Application.Expense.Queries.Suppliers.GetSuppliers;
 
-namespace ThaiTuanERP2025.Api.Controllers.Expense
+namespace ThaiTuanERP2025.Presentation.Controllers.Expense
 {
 	[Authorize]
 	[ApiController]

@@ -1,7 +1,8 @@
 import { UserDto } from "../../account/models/user.model";
+import { ApprovalWorkflowInstanceDetailDto, ApprovalWorkflowInstanceDto, ApprovalWorkflowIntanceStatusDto } from "./approval-workflow-instance.model";
 import { ExpensePaymentAttachmentDto, ExpensePaymentAttachmentRequest } from "./expense-payment-attachment.model";
-import { ExpensePaymentFollowerDto } from "./expense-payment-followers.model";
-import { ExpensePaymentItemDto, ExpensePaymentItemRequest } from "./expense-paymnet-item.model";
+import { ExpensePaymentItemDetailDto, ExpensePaymentItemDto, ExpensePaymentItemRequest } from "./expense-paymnet-item.model";
+import { InvoiceDto } from "./invoice.model";
 import { SupplierDto } from "./supplier.model";
 
 export enum PayeeType {
@@ -12,10 +13,13 @@ export enum PayeeType {
 export enum ExpensePaymentStatus {
       draft = 0,
       submitted = 1,
-      approved = 2,
-      rejected = 3,
-      cancelled = 4,
-      paid = 5,
+      pending = 2,
+      approved = 3,
+      rejected = 4,
+      cancelled = 5,
+      readyForPayment = 6,
+      partiallyPaid = 7,
+      fullyPaid = 8,
 }
 
 export interface ExpensePaymentDto {
@@ -24,22 +28,20 @@ export interface ExpensePaymentDto {
       payeeType: PayeeType;
       supplierId?: string;
       supplier: SupplierDto;
+      description?: string;
       
       bankName: string;
       accountNumber: string;
       beneficiaryName: string;
       
-      paymentDate: Date;
+      dueDate: Date;
       hasGoodReceipt: boolean;
       totalAmount: number;
       totalTax: number;
       totalWithTax: number;
 
-      status: ExpensePaymentStatus;
-
-      items: ExpensePaymentItemDto[];
+      items: ExpensePaymentItemDetailDto[];
       attachments: ExpensePaymentAttachmentDto[];
-      followers: ExpensePaymentFollowerDto[];
 }
 
 export interface ExpensePaymentRequest {
@@ -50,8 +52,9 @@ export interface ExpensePaymentRequest {
       bankName: string;
       accountNumber: string;
       beneficiaryName: string;
+      description?: string;
       
-      paymentDate: Date;
+      dueDate: Date;
       hasGoodsReceipt: boolean;
       totalAmount: number;
       totalTax: number;
@@ -63,5 +66,54 @@ export interface ExpensePaymentRequest {
       attachments: ExpensePaymentAttachmentRequest[];
       followerIds: string[];
 
+
       managerApproverId: string;
+}
+
+export interface ExpensePaymentDetailDto extends ExpensePaymentDto {
+      subId: string;
+
+      createdByUserId: string;
+      createdByUser: UserDto;
+
+      createdByDepartmentId: string;
+      createdByDepartmentName?: string;
+
+      status: number;
+
+      createdDate: Date;
+      updatedBy?: UserDto;
+      updatedAt?: Date;
+
+      followers: UserDto[];
+
+      workflowInstanceDetail?: ApprovalWorkflowInstanceDetailDto;
+}
+
+export interface ExpensePaymentSummaryDto {
+	id: string;
+	name: string;
+
+	payeeType: PayeeType;
+	supplierId?: string;
+	supplier?: SupplierDto;
+
+	bankName: string;
+	accountNumber: string;
+	beneficiaryName: string;
+
+	dueDate: Date;
+	hasGoodsReceipt: boolean;
+	description?: string;
+
+	totalAmount: number;
+	totalTax: number;
+	totalWithTax: number;
+
+	status: number;
+
+	createdByUser: UserDto;
+      createdDate: Date;
+
+      workflowInstanceStatus: ApprovalWorkflowIntanceStatusDto;
 }

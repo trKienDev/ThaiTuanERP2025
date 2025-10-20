@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Domain.Files.Entities;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
-	public class InvoiceFile
+	public class InvoiceFile 
 	{
 		public Guid Id { get; set; } = Guid.NewGuid();
 		public Guid InvoiceId { get; set; }
@@ -17,5 +14,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		// Navigation
 		public Invoice Invoice { get; set; } = default!;
+		public StoredFile File { get; set; } = default!;
 	}
 }

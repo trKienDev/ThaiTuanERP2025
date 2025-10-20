@@ -21,7 +21,7 @@ namespace ThaiTuanERP2025.Application.Finance.Queries.CashoutGroups.GetAllCashou
 		}
 
 		public async Task<List<CashoutGroupDto>> Handle(GetAllCashoutGroupsQuery request, CancellationToken cancellationToken) {
-			var list = await _unitOfWork.CashoutGroups.FindIncludingAsync(_ => true);
+			var list = await _unitOfWork.CashoutGroups.FindIncludingAsync(_ => true, cancellationToken: cancellationToken);
 			var ordered = list.OrderBy(x => x.Name).ToList();
 			return _mapper.Map<List<CashoutGroupDto>>(ordered);
 		}
