@@ -11,15 +11,11 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 			CreateMap<ExpensePayment, ExpensePaymentDto>();
 
 			CreateMap<ExpensePayment, ExpensePaymentDetailDto>()
-				// Creator
 				.ForMember(d => d.CreatedByUserId, opt => opt.MapFrom(s => s.CreatedByUserId))
 				.ForMember(d => d.CreatedByUser, opt => opt.MapFrom(s => s.CreatedByUser))
-				// Collections
 				.ForMember(d => d.Items, opt => opt.MapFrom(s => s.Items))
 				.ForMember(d => d.Attachments, opt => opt.MapFrom(s => s.Attachments))
-				// Supplier
 				.ForMember(d => d.Supplier, opt => opt.MapFrom(s => s.Supplier))
-				// Enum -> int (AutoMapper tự chuyển, dòng này có thể bỏ)
 				.ForMember(d => d.Status, opt => opt.MapFrom(s => (int)s.Status));
 			// Invoices nếu bạn có navigation từ Items -> Invoice
 

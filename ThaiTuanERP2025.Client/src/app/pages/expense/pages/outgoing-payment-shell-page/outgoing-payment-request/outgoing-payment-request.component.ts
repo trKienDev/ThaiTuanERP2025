@@ -62,6 +62,8 @@ export class OutgoingPaymentRequestComponent {
             expensePaymentId: this.formBuilder.nonNullable.control<string>('', { validators: [Validators.required] }),
             outgoingBankAccountId: this.formBuilder.nonNullable.control<string>('', { validators: [Validators.required] }),
             dueDate: this.formBuilder.nonNullable.control<Date>(new Date(), { validators: [Validators.required] }),
+            supplierId: this.formBuilder.control<string | null>(null),
+            employeeId: this.formBuilder.control<string | null>(null),
       });
       
       private autoPatchEffect = effect(() => {
@@ -84,6 +86,8 @@ export class OutgoingPaymentRequestComponent {
                         accountNumber: detail.accountNumber,
                         beneficiaryName: detail.beneficiaryName,
                         expensePaymentId: detail.id,
+                        supplierId: detail.supplierId || null,
+                        // employeeId: detail.employeeId || null,
                   });
             }
       });
@@ -121,7 +125,7 @@ export class OutgoingPaymentRequestComponent {
                         firstInvalidControl.scrollIntoView({ behavior: 'smooth', block: 'center' });
                         firstInvalidControl.focus();
                   }
-2
+
                   this.toast.warningRich('Vui lòng kiểm tra và điền đầy đủ các thông tin bắt buộc.');
                   return;
             }

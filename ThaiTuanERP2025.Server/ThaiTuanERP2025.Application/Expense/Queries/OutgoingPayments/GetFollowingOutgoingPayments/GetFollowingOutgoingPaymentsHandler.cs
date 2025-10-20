@@ -3,7 +3,6 @@ using AutoMapper.QueryableExtensions;
 using MediatR;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Expense.Dtos;
-using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Followers.Enums;
 
 namespace ThaiTuanERP2025.Application.Expense.Queries.OutgoingPayments.GetFollowingOutgoingPayments
@@ -39,6 +38,7 @@ namespace ThaiTuanERP2025.Application.Expense.Queries.OutgoingPayments.GetFollow
 					.ProjectTo<OutgoingPaymentSummaryDto>(_mapper.ConfigurationProvider),
 				cancellationToken: cancellationToken
 			);
+			
 			return summaries;
 		}
 	}

@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using ThaiTuanERP2025.Application.Common.Interfaces;
+using ThaiTuanERP2025.Application.Common.Services;
 using ThaiTuanERP2025.Application.Followers.Services;
+using ThaiTuanERP2025.Domain.Common.Enums;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Followers.Enums;
@@ -12,11 +14,16 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.OutgoingPayments.CreateOu
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly IFollowerService _followerService;
 		private readonly ICurrentUserService _currentUserService;
-		public CreateOutgoingPaymentHandler(IUnitOfWork unitOfWork, IFollowerService followerService, ICurrentUserService currentUserService)
+		private readonly IDocumentSubIdGeneratorService _documentSubIdGeneratorService;
+		public CreateOutgoingPaymentHandler(
+			IUnitOfWork unitOfWork, IFollowerService followerService, ICurrentUserService currentUserService,
+			IDocumentSubIdGeneratorService documentSubIdGeneratorService
+		)
 		{
 			_unitOfWork = unitOfWork;
 			_followerService = followerService;
 			_currentUserService = currentUserService;
+			_documentSubIdGeneratorService = documentSubIdGeneratorService;
 		}
 
 		public async Task<Unit> Handle(CreateOutgoingPaymentCommand command, CancellationToken cancellationToken) {
@@ -36,7 +43,8 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.OutgoingPayments.CreateOu
 			var name = request.Name.IsNormalized() ? request.Name : request.Name.Trim();
 			var bankName = request.BankName.IsNormalized() ? request.BankName : request.BankName.Trim();
 			var accountNumber = request.AccountNumber.IsNormalized() ? request.AccountNumber : request.AccountNumber.Trim();
-			var beneficiaryName = request.BeneficiaryName.IsNormalized() ? request.BeneficiaryName : request.BeneficiaryName.Trim();	
+			var beneficiaryName = request.BeneficiaryName.IsNormalized() ? request.BeneficiaryName : request.BeneficiaryName.Trim();
+			var subId = await _documentSubIdGeneratorService.NextSubIdAsync(DocumentType.OutgoingPayment, DateTime.UtcNow, cancellationToken);				
 
 			if (existing is not null)
 			{
@@ -51,6 +59,16 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.OutgoingPayments.CreateOu
 				request.ExpensePaymentId,
 				request.Description
 			);
+			entity.SetSubId(subId);
+
+			if (request.SupplierId.HasValue && !request.EmployeeId.HasValue)
+				entity.SetSupplierId(request.SupplierId.Value);
+			else if(request.EmployeeId.HasValue && !request.SupplierId.HasValue)
+				entity.SetEmployeeId(request.EmployeeId.Value);
+			else if(request.SupplierId.HasValue && request.EmployeeId.HasValue)
+				throw new InvalidOperationException("Chỉ được chọn một trong Nhà cung cấp hoặc Nhân viên.");
+			else if(!request.SupplierId.HasValue && !request.EmployeeId.HasValue)
+				throw new InvalidOperationException("Phải chọn một trong Nhà cung cấp hoặc Nhân viên.");
 
 			var paymentFollowerIds = await _unitOfWork.Followers.ListAsync(
 				q => q.Where(f => f.SubjectType == SubjectType.ExpensePayment && f.SubjectId == expensePayment.Id).Select(f => f.UserId),

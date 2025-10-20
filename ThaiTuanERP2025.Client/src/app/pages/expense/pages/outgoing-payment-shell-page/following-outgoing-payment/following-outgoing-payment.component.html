@@ -25,7 +25,7 @@
                               <td>
                                     <div class="link display-flex align-items-center justify-content-center">
                                           <span>🔗</span>
-                                          <span class="outgoing-payment-name"> {{ payment.name }}</span>
+                                          <span class="outgoing-payment-name" (click)="openOutgoingPaymentDetailDialog(payment.id)"> {{ payment.name }}</span>
                                     </div>
                               <td>
                                     <span  class="outgoing-status-badge" [ngClass]="payment.status | outgoingPaymentStatus : 'class'">

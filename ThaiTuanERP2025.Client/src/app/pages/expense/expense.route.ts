@@ -6,6 +6,7 @@ import { ExpensePaymentDetailPanelComponent } from "./pages/expense-payment-shel
 import { FollowingOutgoingPaymentComponent } from "./pages/outgoing-payment-shell-page/following-outgoing-payment/following-outgoing-payment.component";
 import { OutgoingPaymentRequestComponent } from "./pages/outgoing-payment-shell-page/outgoing-payment-request/outgoing-payment-request.component";
 import { OutgoingBankAccountComponent } from "./pages/bank-account-shell-page/outgoing-bank-account/outgoing-bank-account.component";
+import { OutgoingPaymentDetailComponent } from "./pages/outgoing-payment-shell-page/outgoing-payment-detail/outgoing-payment-detail.component";
 
 export const expenseRoutes: Routes = [
       {
@@ -33,6 +34,7 @@ export const expenseRoutes: Routes = [
                               { path: '', redirectTo: 'following-outgoing-payments', pathMatch: 'full' },
                               { path: 'following-outgoing-payments', component: FollowingOutgoingPaymentComponent },
                               { path: 'outgoing-payment-request/:id', component: OutgoingPaymentRequestComponent },
+                              { path: 'outgoing-payment-detail', component: OutgoingPaymentDetailComponent }
                         ]
                   },
                   { 

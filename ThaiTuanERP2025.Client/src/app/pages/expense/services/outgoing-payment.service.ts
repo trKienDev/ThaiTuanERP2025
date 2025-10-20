@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { OutgoingPaymentDto, OutgoingPaymentRequest, OutgoingPaymentSummaryDto } from "../models/outgoing-payment.model";
+import { OutgoingPaymentDetailDto, OutgoingPaymentDto, OutgoingPaymentRequest, OutgoingPaymentSummaryDto } from "../models/outgoing-payment.model";
 import { BaseCrudService } from "../../../shared/services/base-crud.service";
 import { environment } from "../../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
@@ -11,6 +11,14 @@ import { ApiResponse } from "../../../shared/models/api-response.model";
 export class OutgoingPaymentService extends BaseCrudService<OutgoingPaymentDto, OutgoingPaymentRequest> {
       constructor(http: HttpClient) {
             super(http, `${environment.apiUrl}/outgoing-payments`);
+      }
+
+      getDetailById(id: string): Observable<OutgoingPaymentDetailDto> {
+            return this.http.get<ApiResponse<OutgoingPaymentDetailDto>>(`${this.endpoint}/${id}/detail`)
+                  .pipe(
+                        handleApiResponse$<OutgoingPaymentDetailDto>(),
+                        catchError(err => throwError(() => err))
+                  );
       }
 
       getFollowing(): Observable<OutgoingPaymentSummaryDto[]> {

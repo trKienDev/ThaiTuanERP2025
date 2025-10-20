@@ -22,6 +22,9 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 	public sealed record OutgoingPaymentRequest (
 		string Name,
 		string Description,
+		PayeeType PayeeType,
+		Guid? SupplierId,
+		Guid? EmployeeId,
 		decimal OutgoingAmount,
 		string BankName,
 		string AccountNumber,
@@ -55,29 +58,37 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 		public OutgoingPaymentStatus Status { get; init; }
 	};
 
-	public record OutgoingPaymentDetailDto (
-		Guid Id,
-		string Name,
-		string Description,
-		decimal OutgoingAmount,
+	public record OutgoingPaymentDetailDto
+	{
+		public Guid Id { get; init; }
+		public string Name { get; init; } = string.Empty;
+		public string SubId { get; init; } = default!;
+		public string Description { get; init; } = string.Empty;
+		public decimal OutgoingAmount { get; init; }
 
-		string BankName,
-		string AccountNumber,
-		string BeneficiaryName,
+		public string BankName { get; init; } = string.Empty;
+		public string AccountNumber { get; init; } = string.Empty;
+		public string BeneficiaryName { get; init; } = string.Empty;
 
-		DateTime PostingDate,
-		DateTime PaymentDate,
-		DateTime DueDate,
+		public DateTime PostingDate { get; init; }
+		public DateTime PaymentDate { get; init; }
+		public DateTime DueDate { get; init; }
 
-		Guid OutgoingBankAccountId,
-		OutgoingBankAccountDto OutgoingBankAccount,
+		public Guid OutgoingBankAccountId { get; init; }
+		public OutgoingBankAccountDto OutgoingBankAccount { get; init; } = default!;
 
-		Guid ExpensePaymentId,
-		ExpensePaymentDto ExpensePayment,
+		public Guid ExpensePaymentId { get; init; }
+		public ExpensePaymentDetailDto ExpensePayment { get; init; } = default!;
 
-		OutgoingPaymentStatus Status,
-		
-		Guid CreatedByUserId,
-		UserDto CreatedByUser
-	);
+		public OutgoingPaymentStatus Status { get; init; }
+
+		public Guid? SupplierId { get; init; }
+		public SupplierDto? Supplier { get; init; } = default!;
+
+		public Guid? EmployeeId { get; init; }
+		public UserDto? Employee { get; init; } = default!;
+
+		public UserDto CreatedByUser { get; init; } = default!;
+		public DateTime CreatedDate { get; init; }
+	};
 }

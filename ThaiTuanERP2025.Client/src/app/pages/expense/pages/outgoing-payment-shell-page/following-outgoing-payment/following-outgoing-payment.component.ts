@@ -6,6 +6,7 @@ import { firstValueFrom } from "rxjs";
 import { OutgoingPaymentStatusPipe } from "../../../pipes/outgoing-payment-status.pipe";
 import { ExpensePaymentDetailDialogComponent } from "../../expense-payment-shell-page/expense-payment-detail/expense-payment-detail-dialog/expense-payment-detail-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
+import { OutgoingPaymentDetailDialogComponent } from "../outgoing-payment-detail/outgoing-payment-detail-dialog/outgoing-payment-detail-dialog.component";
 
 @Component({
       selector: 'following-outgoing-payment',
@@ -20,7 +21,6 @@ export class FollowingOutgoingPaymentComponent implements OnInit {
 
       async ngOnInit(): Promise<void> {
             await this.loadFollowingOutgoingPayments();
-            console.log('following outgoing payments', this.followingPayments);
       }
 
       private async loadFollowingOutgoingPayments() {
@@ -36,6 +36,18 @@ export class FollowingOutgoingPaymentComponent implements OnInit {
                   if (result?.success) {
                         // Handle success result if needed
                   }     
+            });
+      }
+
+      openOutgoingPaymentDetailDialog(outgoingPaymentId: string) {
+            const dialogRef = this.dialog.open(OutgoingPaymentDetailDialogComponent, {
+                  data: outgoingPaymentId,
+            });
+            
+            dialogRef.afterClosed().subscribe((result: any) => {
+                  if (result?.success) {
+                        // Handle success result if needed
+                  }
             });
       }
 }
