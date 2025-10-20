@@ -4,8 +4,10 @@
 
       <main class="main-content">
             <div class="main-content-container" [@loadDomAnimations]="o && o.activatedRouteData && o.activatedRouteData['animation']">
-                  <router-outlet #o="outlet"></router-outlet>
-                  <app-toast-host></app-toast-host>
+                  <div class="main-content-border">
+                        <router-outlet #o="outlet"></router-outlet>
+                        <app-toast-host></app-toast-host>
+                  </div>
             </div>
       </main>
 

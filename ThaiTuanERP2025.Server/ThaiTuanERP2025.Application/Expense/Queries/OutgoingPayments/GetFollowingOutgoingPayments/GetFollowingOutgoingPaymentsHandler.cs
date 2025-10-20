@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using MediatR;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Expense.Dtos;
+using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Followers.Enums;
 
 namespace ThaiTuanERP2025.Application.Expense.Queries.OutgoingPayments.GetFollowingOutgoingPayments
 {
-	public sealed class GetFollowingOutgoingPaymentsHandler : IRequestHandler<GetFollowingOutgoingPaymentsQuery, IReadOnlyCollection<OutgoingPaymentDto>>
+	public sealed class GetFollowingOutgoingPaymentsHandler : IRequestHandler<GetFollowingOutgoingPaymentsQuery, IReadOnlyCollection<OutgoingPaymentSummaryDto>>
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly ICurrentUserService _currentUserService;
@@ -18,25 +20,26 @@ namespace ThaiTuanERP2025.Application.Expense.Queries.OutgoingPayments.GetFollow
 			_mapper = mapper;
 		}
 
-		public async Task<IReadOnlyCollection<OutgoingPaymentDto>> Handle(GetFollowingOutgoingPaymentsQuery query, CancellationToken cancellationToken)
+		public async Task<IReadOnlyCollection<OutgoingPaymentSummaryDto>> Handle(GetFollowingOutgoingPaymentsQuery query, CancellationToken cancellationToken)
 		{
 			var currentUserId = _currentUserService.UserId;
-			var outgoingPaymentIds = await _unitOfWork.Followers.ListAsync(
-				q => q.Where(f => f.UserId == currentUserId && f.SubjectType == SubjectType.OutgoingPayment)
-					  .Select(f => f.SubjectId),
+
+			// 1) Lấy danh sách ID mà user đang follow (chủ đề OutgoingPayment)
+			var idList = await _unitOfWork.Followers.ListAsync<Guid>(
+			    q => q.Where(f => f.UserId == currentUserId && f.SubjectType == SubjectType.OutgoingPayment)
+				  .Select(f => f.SubjectId),
+			    cancellationToken: cancellationToken
+			);
+
+			if (idList.Count == 0) return Array.Empty<OutgoingPaymentSummaryDto>();
+
+			// ListProjectedAsync<TDto> : EF Core chỉ select các cột cần thiết
+			var summaries = await _unitOfWork.OutgoingPayments.ListProjectedAsync<OutgoingPaymentSummaryDto>(
+				q => q.Where(p => idList.Contains(p.Id))
+					.ProjectTo<OutgoingPaymentSummaryDto>(_mapper.ConfigurationProvider),
 				cancellationToken: cancellationToken
 			);
-			if(outgoingPaymentIds.Count == 0)
-				return Array.Empty<OutgoingPaymentDto>();
-
-			var idArr = outgoingPaymentIds.ToArray();
-			var outgoingPayments = await _unitOfWork.OutgoingPayments.FindIncludingAsync(
-				p => idArr.Contains(p.Id),
-				cancellationToken
-			);
-
-			var dtos = outgoingPayments.Select(p => _mapper.Map<OutgoingPaymentDto>(p)).ToArray();
-			return dtos;
+			return summaries;
 		}
 	}
 }
