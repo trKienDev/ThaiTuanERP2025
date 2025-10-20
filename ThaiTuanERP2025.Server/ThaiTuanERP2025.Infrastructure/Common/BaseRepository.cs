@@ -20,12 +20,12 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			_configurationProvider = configurationProvider ?? throw new ArgumentNullException(nameof(configurationProvider));
 		}
 
-		public virtual Task<List<T>> ListAsync(Func<IQueryable<T>, IQueryable<T>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default)
+		public virtual Task<List<TResult>> ListAsync<TResult>(Func<IQueryable<T>, IQueryable<TResult>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default)
 		{
-			if (builder == null) throw new ArgumentNullException(nameof(builder));
 			var query = asNoTracking ? _dbSet.AsNoTracking() : _dbSet.AsQueryable();
 			return builder(query).ToListAsync(cancellationToken);
 		}
+
 		public virtual Task<T?> SingleOrDefaultAsync(Func<IQueryable<T>, IQueryable<T>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default)
 		{
 			if (builder == null) throw new ArgumentNullException(nameof(builder));
@@ -95,7 +95,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			return await _dbSet.AsNoTracking().Where(predicate).ToListAsync();
 		}
 		// filter by condition and navigation
-		public virtual async Task<List<T>> FindIncludingAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
+		public virtual async Task<List<T>> FindIncludingAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken, params Expression<Func<T, object>>[] includes)
 		{
 			if (predicate == null) throw new ArgumentNullException(nameof(predicate));
 
@@ -104,13 +104,21 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 				foreach (var include in includes.Distinct())
 					query = query.Include(include);
 
-			return await query.ToListAsync();
+			return await query
+				.Where(predicate)
+				.ToListAsync(cancellationToken);
+		}
+		public IQueryable<T> FindQueryable(Expression<Func<T, bool>> predicate, bool asNoTracking = true)
+		{
+			if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+			var query = asNoTracking ? _dbSet.AsNoTracking() : _dbSet.AsQueryable();
+			return query.Where(predicate);
 		}
 
-		public async Task AddAsync(T entity)
+		public async Task AddAsync(T entity, CancellationToken cancellationToken = default)
 		{
 			if (entity == null) throw new ArgumentNullException(nameof(entity));
-			await _dbSet.AddAsync(entity);
+			await _dbSet.AddAsync(entity, cancellationToken);
 		}
 		public async Task AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default)
 		{
@@ -118,10 +126,16 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			await _dbSet.AddRangeAsync(entities, cancellationToken);
 		}
 
-		public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
+		public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
 		{
 			if (predicate == null) throw new ArgumentNullException(nameof(predicate));
-			return await _dbSet.AnyAsync(predicate);
+			return await _dbSet.AnyAsync(predicate, cancellationToken);
+		}
+
+		public virtual Task<int> CountAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
+		{
+			if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+			return _dbSet.AsNoTracking().CountAsync(predicate, cancellationToken);
 		}
 
 		public void Update(T entity)

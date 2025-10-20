@@ -90,7 +90,6 @@ export class MemberRequestDialog implements OnInit {
 
             try {
                   const payload: UserRequest = this.form.getRawValue();
-                  console.log('payload: ', payload);
                   const created = await firstValueFrom(this.userFacade.create(payload));
                   this.toastService.successRich('Thêm người dùng thành công');
                   this.dialogRef.close({ isSuccess: true, response: created });

@@ -57,7 +57,6 @@ export class BudgetPlanComponent implements OnInit {
       loadBudgetPlans(): void {
             this.budgetPlanService.getAll().subscribe({
                   next: (data) => {
-                        console.log('data: ', data);
                         this.budgetPlans = data.map(plan => ({ ...plan, selected: false}));
                         this.updateMasterCheckboxState();
                   },

@@ -1,4 +1,5 @@
-﻿using ThaiTuanERP2025.Domain.Common;
+﻿using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Finance.Enums;
 
 namespace ThaiTuanERP2025.Domain.Finance.Entities
@@ -23,5 +24,9 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public ICollection<LedgerAccount> Children { get; set; } = new List<LedgerAccount>();
 
 		public ICollection<CashoutCode> CashoutCodes { get; set; } = new List<CashoutCode>();
+
+		public User CreatedByUser { get; set; } = null!;
+		public User? ModifiedByUser { get; set; }
+		public User? DeletedByUser { get; set; }
 	}
 }

@@ -2,13 +2,6 @@
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ThaiTuanERP2025.Application.Common.Interfaces;
-
 namespace ThaiTuanERP2025.Infrastructure.Persistence
 {
 	public class ThaiTuanERP2025DbContextFactory : IDesignTimeDbContextFactory<ThaiTuanERP2025DbContext> {

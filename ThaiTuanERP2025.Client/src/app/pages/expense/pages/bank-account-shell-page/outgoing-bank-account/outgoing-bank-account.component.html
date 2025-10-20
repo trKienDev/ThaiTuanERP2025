@@ -1,0 +1,33 @@
+<div class="page-container">
+      <div class="page-heading">
+            <div class="page-title">
+                  <h3 class="icon">🪪</h3>
+                  <h3 class="title">Tài khoản tiền ra</h3>
+            </div>
+            <div class="actions">
+                  <button class="button default-button" (click)="openNewOutgoingBankAccountDialog()">Thêm Tài khoản tiền ra</button>
+            </div>
+      </div>
+      <div class="page-body">
+            <table class="table margin-top-20px">
+                  <thead>
+                        <tr>
+                              <th>#</th>
+                              <th>Tên tài khoản ra</th>
+                              <th>Ngân hàng</th>
+                              <th>Số tài khoản</th>
+                              <th>Chủ tài khoản</th>
+                        </tr>
+                  </thead>
+                  <tbody>
+                        <tr *ngFor="let account of (OBAccounts$ | async) ?? []; trackBy: trackById; let i = index;">
+                              <td>{{ i + 1 }}</td>
+                              <td>{{ account.name }}</td>
+                              <td>{{ account.bankName }}</td>
+                              <td>{{ account.accountNumber }}</td>
+                              <td>{{ account.ownerName }}</td>
+                        </tr>
+                  </tbody>
+            </table>
+      </div>
+</div>

@@ -1,0 +1,48 @@
+.shell {
+      display: flex;
+}
+
+.sidebar {
+      padding-right: 10px;
+      width: fit-content;
+}
+
+.tab-list {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+}
+
+.tab-item {
+      display: block;
+      width: 100%;
+      background-color: initial;
+      border: 1px solid transparent !important;
+      border-radius: var(--default-border-color-radius);
+      text-align: left;
+      transition: duration 80ms;
+      user-select: none;
+      box-sizing: border-box;
+      text-decoration: none;
+      padding: 5px 8px;
+      color: #4c607a;
+      cursor: pointer;
+      font-size: 13px;
+      text-wrap: nowrap;
+
+      &:hover {
+            background-color: var(--main-bg-color);
+      }
+
+      &.active {
+            background: linear-gradient(182deg,rgba(255, 255, 255, 1) 0%, rgba(245, 249, 255, 1) 54%, rgba(233, 241, 247, 1) 100%);
+            border: 1px solid#ccf4f1 !important;
+            cursor: default;
+            box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
+      }
+}
+
+.content {
+      padding: 0 12px;
+      width: 100%;
+}

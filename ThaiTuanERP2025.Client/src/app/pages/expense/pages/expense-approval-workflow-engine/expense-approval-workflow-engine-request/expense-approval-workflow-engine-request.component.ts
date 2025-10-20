@@ -100,7 +100,6 @@ export class ExpenseApprovalWorkflowEngineRequest {
       }
 
       openSaveApprovalWorkflowTemplate(): void {
-            console.log('steps: ', this.steps);
             const dialogRef = this.dialog.open(SaveApprovalWorkflowTemplateComponent, {
                   data: { steps: this.steps }
             });

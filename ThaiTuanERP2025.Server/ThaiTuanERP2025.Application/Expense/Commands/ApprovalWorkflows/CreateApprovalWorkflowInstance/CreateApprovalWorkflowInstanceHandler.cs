@@ -91,17 +91,17 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ApprovalWorkflows.CreateA
 				}
 
 				var stepInstance = new ApprovalStepInstance(
-				    workflowInstanceId: instance.Id,
-				    templateStepId: s.Id,
-				    name: s.Name,
-				    order: s.Order,
-				    flowType: s.FlowType,
-				    slaHours: s.SlaHours,
-				    approverMode: s.ApproverMode,
-				    candidatesJson: candidatesJson,
-				    defaultApproverId: defaultApprover,
-				    selectedApproverId: selectedApprover,
-				    status: StepStatus.Pending
+					workflowInstanceId: instance.Id,
+					templateStepId: s.Id,
+					name: s.Name,
+					order: s.Order,
+					flowType: s.FlowType,
+					slaHours: s.SlaHours,
+					approverMode: s.ApproverMode,
+					candidatesJson: candidatesJson,
+					defaultApproverId: defaultApprover,
+					selectedApproverId: selectedApprover,
+					status: StepStatus.Pending
 				);
 
 				instance.Steps.Add(stepInstance);

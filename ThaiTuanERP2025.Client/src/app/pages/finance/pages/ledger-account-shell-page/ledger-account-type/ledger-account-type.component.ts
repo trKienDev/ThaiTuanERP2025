@@ -54,7 +54,6 @@ export class LedgerAccountTypeComponent implements OnInit {
 
       ngOnInit(): void {
             this.reload();
-            console.log('ledger-account-types: ', this.types$);
       }
 
       /** load danh sách */

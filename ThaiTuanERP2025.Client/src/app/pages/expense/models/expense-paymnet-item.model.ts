@@ -1,3 +1,7 @@
+import { BudgetCodeDto } from "../../finance/models/budget-code.model";
+import { CashoutCodeDto } from "../../finance/models/cashout-code.model";
+import { InvoiceDto } from "./invoice.model";
+
 export interface ExpensePaymentItemDto {
       id: string;
       expensePaymentId: string;
@@ -26,4 +30,10 @@ export interface ExpensePaymentItemRequest {
       amount: number;
       taxAmount: number;
       totalWithTax: number;
+}
+
+export interface ExpensePaymentItemDetailDto extends ExpensePaymentItemDto {
+      budgetCode?: BudgetCodeDto;
+      cashoutCode?: CashoutCodeDto;
+      invoice?: InvoiceDto;
 }
