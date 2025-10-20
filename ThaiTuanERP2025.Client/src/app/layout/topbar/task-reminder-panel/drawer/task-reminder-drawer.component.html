@@ -1,0 +1,30 @@
+<!-- task-reminder-drawer.component.html -->
+<div class="drawer" (animationend)="onAnimationEnd($event)">
+      <header class="drawer-header">
+            <h3 style="color: var(--main-foreground-hover);">Phê duyệt đang chờ ⏳</h3>
+      </header>
+      <div class="drawer-body" *ngIf="(sortedReminders$ | async) as items">
+            <ng-container *ngIf="items.length > 0; else emptyState">
+                  <ul class="reminder-list">
+                        <li class="reminder-item clickable" *ngFor="let item of items; trackBy: trackById"
+                        (click)="goTo(item)" (keydown.enter)="goTo(item)" (keydown.space)="goTo(item); $event.preventDefault()"
+                        tabindex="0" role="button">
+                              <div class="title-wrapper display-flex gap-10px align-items-center">
+                                    <div class="sla-warning" *ngIf="!isExpired(item)" class="sla-warning"></div>
+                                    <div class="title">{{ item.title }}</div>
+                              </div>
+                              <div class="message">{{ item.message }}</div>
+                              <div class="due" [ngClass]="{ 'expired': isExpired(item), 'active': !isExpired(item) }">
+                                    Hết hạn sau: <span class="countdown">{{ (leftTime(item) | async) }}</span>
+                              </div>
+                        </li>
+                  </ul>
+            </ng-container>
+      </div>
+
+      <ng-template #emptyState>
+            <div class="empty">
+                  <p>Không có duyệt nào đang chờ</p>
+            </div>
+      </ng-template>
+</div>

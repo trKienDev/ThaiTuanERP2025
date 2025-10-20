@@ -38,7 +38,6 @@ export class DepartmentManagerDialogComponent implements OnInit {
       })
 
       ngOnInit(): void {
-            console.log('data: ', this.data);
             if(this.data) {
                   this.depatment = this.data;
                   if(this.depatment.managerUserId) {

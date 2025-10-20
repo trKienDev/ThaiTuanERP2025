@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ThaiTuanERP2025.Domain.Account.Entities;
+﻿using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Common;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
@@ -22,5 +17,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public Supplier? Supplier { get; set; }
 
 		public bool IsActive { get; set; } = true;
+
 	}
 }

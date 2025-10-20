@@ -1,4 +1,6 @@
-﻿namespace ThaiTuanERP2025.Application.Expense.Dtos
+﻿using System.Security.Cryptography.X509Certificates;
+
+namespace ThaiTuanERP2025.Application.Expense.Dtos
 {
 	public sealed record ApprovalWorkflowInstanceDto
 	{
@@ -37,8 +39,14 @@
 		public bool StartImmediately { get; init; } = true;
 	};
 
-	public sealed class ApprovalWorkflowInstanceDetailDto {
+	public sealed record ApprovalWorkflowInstanceDetailDto {
 		public ApprovalWorkflowInstanceDto WorkflowInstance { get; init; } = default!;
-		public IReadOnlyList<ApprovalStepInstanceDto> Steps { get; init; } = Array.Empty<ApprovalStepInstanceDto>();
+		public IReadOnlyList<ApprovalStepInstanceDetailDto> Steps { get; init; } = Array.Empty<ApprovalStepInstanceDetailDto>();
 	}
+
+	public sealed record ApprovalWorkflowInstanceStatusDto {
+		public string Status { get; init; } = default!;
+		public int CurrentStepOrder { get; init; } = default!;
+		public IReadOnlyList<ApprovalStepInstanceStatusDto> Steps { get; init; } = Array.Empty<ApprovalStepInstanceStatusDto>();
+	};
 }

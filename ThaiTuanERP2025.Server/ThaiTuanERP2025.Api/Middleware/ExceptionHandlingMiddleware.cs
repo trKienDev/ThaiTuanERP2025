@@ -2,12 +2,12 @@
 using Microsoft.Extensions.Options;
 using System.Net;
 using System.Text.Json;
-using ThaiTuanERP2025.Api.Common;
+using ThaiTuanERP2025.Presentation.Common;
 using ThaiTuanERP2025.Domain.Exceptions;
 using FVValidationException = FluentValidation.ValidationException;
 using DomainValidationException = ThaiTuanERP2025.Domain.Exceptions.ValidationException;
 
-namespace ThaiTuanERP2025.Api.Middleware
+namespace ThaiTuanERP2025.Presentation.Middleware
 {
 	public class ExceptionHandlingMiddleware
 	{

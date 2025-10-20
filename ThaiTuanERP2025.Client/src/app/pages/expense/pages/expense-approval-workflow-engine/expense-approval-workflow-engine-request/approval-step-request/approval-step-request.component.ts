@@ -103,7 +103,6 @@ export class ApprovalStepRequestDialog implements OnInit {
             this.form.markAllAsTouched();
             if(this.form.invalid) {
                   logFormErrors(this.form);
-                  console.log('form: ', this.form.getRawValue());
                   return;
             }
 

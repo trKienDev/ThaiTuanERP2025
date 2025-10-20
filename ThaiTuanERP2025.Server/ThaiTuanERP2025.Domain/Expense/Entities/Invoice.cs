@@ -1,4 +1,5 @@
-﻿using ThaiTuanERP2025.Domain.Common;
+﻿using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Domain.Common;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
@@ -24,6 +25,10 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public decimal TotalAmount { get; private set; } // tổng trước thuế
 		public decimal TotalTax { get; private set; } // tổng thuế
 		public decimal TotalWithTax { get; private set; } // tổng sau thuế
+
+		public User CreatedByUser { get; set; } = null!;
+		public User? ModifiedByUser { get; set; }
+		public User? DeletedByUser { get; set; }
 
 		// Navigation
 		public ICollection<InvoiceLine> Lines { get; set; } = new List<InvoiceLine>();

@@ -1,0 +1,20 @@
+<section class="page_404">
+      <div class="container">
+            <div class="row">
+                  <div class="col text-center">
+                        <div class="four_zero_four_bg"></div>
+                        <div class="contant_box_404">
+                              <h3 class="h2">{{ title || '⛔ Có lỗi xảy ra' }}</h3>
+                              <p>{{ message || 'Vui lòng kiểm tra kết nối internet, thử lại hoặc liên hệ với phòng IT.' }}</p>
+
+                              <button type="button" class="link_404" (click)="onPrimary()" *ngIf="primaryLabel">
+                                    {{ primaryLabel }}
+                              </button>
+                              <button type="button"class="link_back" (click)="onSecondary()" *ngIf="secondaryLabel">
+                                    {{ secondaryLabel }}
+                              </button>
+                        </div>
+                  </div>
+            </div>
+      </div>
+</section>

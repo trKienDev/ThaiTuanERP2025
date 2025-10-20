@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
-using ThaiTuanERP2025.Api.Common;
+using ThaiTuanERP2025.Presentation.Common;
 using ThaiTuanERP2025.Application.Common.Models;
 using ThaiTuanERP2025.Application.Finance.Commands.Taxes.CreateTax;
 using ThaiTuanERP2025.Application.Finance.Commands.Taxes.DeleteTax;
@@ -15,7 +15,7 @@ using ThaiTuanERP2025.Application.Finance.Queries.Taxes.GetTaxById;
 using ThaiTuanERP2025.Application.Finance.Queries.Taxes.GetTaxByName;
 using ThaiTuanERP2025.Application.Finance.Queries.Taxes.GetTaxPaged;
 
-namespace ThaiTuanERP2025.Api.Controllers.Finance
+namespace ThaiTuanERP2025.Presentation.Controllers.Finance
 {
 	[ApiController]
 	[Authorize]

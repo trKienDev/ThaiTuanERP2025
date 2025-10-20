@@ -76,7 +76,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		private void AppendHistory(string action, string? note)
 		{
 			// tuỳ bạn đang lưu HistoryJson thế nào, ở đây chỉ gợi ý
-			// HistoryJsonAdd(new { at = DateTime.UtcNow, action, note });
+			// HistoryJsonAdd(new { at = DateTime.Now, action, note });
 		}
 	}
 }

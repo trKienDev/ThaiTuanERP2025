@@ -105,8 +105,6 @@ export class CashoutCodeRequestDialogComponent implements OnInit {
             } catch(error) {
                   const msg = handleHttpError(error);
                   const message = Array.isArray(msg) ? msg.join('\n') : String(msg);
-                  console.log(error);
-                  console.log(message);
                   this.toast.errorRich('Lỗi thêm nhóm dòng tiền ra');
             } finally {
                   this.submitting = false;

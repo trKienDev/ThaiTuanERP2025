@@ -43,9 +43,9 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 				.ToListAsync();
 		}
 
-		public new async Task AddAsync(UserGroup userGroup)
+		public new async Task AddAsync(UserGroup userGroup, CancellationToken cancellationToken = default)
 		{
-			await base.AddAsync(userGroup);
+			await base.AddAsync(userGroup, cancellationToken);
 		}
 
 		public Task RemoveAsync(UserGroup userGroup)

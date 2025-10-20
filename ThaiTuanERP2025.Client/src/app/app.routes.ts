@@ -11,10 +11,10 @@ export const routes: Routes = [
             canActivate: [authGuard],
             children:  [
                   { path: '', redirectTo: 'home', pathMatch: 'full' },
-                  { path: 'account', loadChildren: () => import('./pages/account/account.routes').then((m) => m.accountRoutes) },
-                  { path: 'finance', loadChildren: () => import('./pages/finance/finance.route').then((m) => m.financeRoutes )},
-                  { path: 'expense', loadChildren: () => import('./pages/expense/expense.route').then((m) => m.expenseRoutes )},
-                  { path: 'admin', loadComponent: () => import('./pages/admin/admin.component').then(m => m.AdminComponent)},
+                  { path: 'account',  data: { animation: 'AccountPage' }, loadChildren: () => import('./pages/account/account.routes').then((m) => m.accountRoutes) },
+                  { path: 'finance',  data: { animation: 'FinancePage' }, loadChildren: () => import('./pages/finance/finance.route').then((m) => m.financeRoutes )},
+                  { path: 'expense',  data: { animation: 'ExpensePage' }, loadChildren: () => import('./pages/expense/expense.route').then((m) => m.expenseRoutes )},
+                  { path: 'admin',  data: { animation: 'AdminPage' }, loadComponent: () => import('./pages/admin/admin.component').then(m => m.AdminComponent)},
                   
                   { path: 'home', component: HomeComponent }
             ]

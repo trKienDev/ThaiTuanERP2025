@@ -4,7 +4,8 @@
 		Guid Id, 
 		string Title,
 		string Message,
-		string Link,
-		DateTime CreatedAt
+		string? Link,
+		DateTime CreatedAt,
+		bool IsRead
 	);
 }

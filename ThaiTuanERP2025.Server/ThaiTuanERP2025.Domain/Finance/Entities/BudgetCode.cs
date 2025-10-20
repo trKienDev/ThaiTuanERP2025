@@ -15,10 +15,10 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public Guid CashoutCodeId { get; set; }
 		public CashoutCode CashoutCode { get; set; } = null!;
 
-		public User CreatedByUser { get; set; } = default!;
-		public User? ModifiedByUser { get; set; }
-		public User? DeletedByUser { get; set; } 
-
 		public ICollection<BudgetPlan> BudgetPlans { get; set; } = new List<BudgetPlan>();
+
+		public User CreatedByUser { get; set; } = null!;
+		public User? ModifiedByUser { get; set; }
+		public User? DeletedByUser { get; set; }
 	}
 }

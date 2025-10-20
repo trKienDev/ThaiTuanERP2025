@@ -22,9 +22,9 @@
             </div>
       </div>
 
-      <div class="d-flex gap-10p" style="padding: 10px;">
+      <div class="display-flex gap-10px" style="padding: 10px;">
             <button type="button" class="width-50pt button cancel-button" (click)="cancel()" [disabled]="saving">Hủy</button>
-            <button type="button" class="width-50pt button save-button d-flex justify-content-center" (click)="submit()" [disabled]="saving || supplierForm.invalid">
+            <button type="button" class="width-50pt button save-button display-flex justify-content-center" (click)="submit()" [disabled]="saving || supplierForm.invalid">
                   {{ saving ? 'Đang lưu...' : 'Lưu' }}
             </button>
       </div>

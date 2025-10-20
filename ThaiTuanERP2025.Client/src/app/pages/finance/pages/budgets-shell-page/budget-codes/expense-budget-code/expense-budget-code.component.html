@@ -1,0 +1,55 @@
+<div class="dialog">
+      <div class="dialog-container">
+            <div class="dialog-heading">
+                  <div class="dialog-title">
+                        <h1>Ngân sách có thể chọn</h1>
+                  </div>
+                  <div class="dialog-close">
+                        <button type="button" class="close-button" (click)="close()" aria-label="Đóng">
+                              <span class="text material-icons-outlined">close</span>
+                        </button>
+                  </div>
+            </div>
+
+            <div class="dialog-body">
+                  <table class="table table-center-text margin-top-20px">
+                        <thead>
+                              <tr>
+                                    <th>Nhóm ngân sách</th>
+                                    <th>Mã ngân sách</th>
+                                    <th>Tên ngân sách</th>
+                                    <th>Kỳ</th>
+                                    <th>Số tiền khả dụng</th>
+                                    <th></th>
+                              </tr>
+                        </thead>
+                        <tbody>
+                              <tr *ngFor="let bc of budgetCodes; trackBy: trackById" [class.selected]="bc.id === selectedBudgetCodeId">
+                                    <td>{{ bc.budgetGroupName }}</td>
+                                    <td>{{ bc.code }}</td>
+                                    <td>{{ bc.name }}</td>
+                                    <td>{{ bc.month }}/{{ bc.year }}</td>
+                                    <td>{{ bc.amount == null ? '—' : (bc.amount | number:'1.0-2') }}</td>
+                                    <td>
+                                          <button type="button" class="button default-button" 
+                                          (click)="selectBudgetCode(bc)"
+                                          (keydown.enter)="selectBudgetCode(bc)"
+                                          (keydown.space)="selectBudgetCode(bc); $event.preventDefault()"
+                                          tabindex="0" role="button" 
+                                          [attr.aria-label]="'Chọn mã ' + bc.code"
+                                          [class.selected]="bc.id === selectedBudgetCodeId">
+                                                {{ bc.id === selectedBudgetCodeId ? 'đã chọn' : 'chọn' }}
+                                          </button>
+                                    </td>
+                              </tr>
+                              <tr *ngIf="!loading && budgetCodes.length === 0">
+                                    <td colspan="6" class="text-center">Không có mã ngân sách nào</td>
+                              </tr>
+                              <tr *ngIf="loading">
+                                    <td colspan="6" class="text-center">Đang tải...</td>
+                              </tr>
+                        </tbody>
+                  </table>
+            </div>
+      </div>
+</div>

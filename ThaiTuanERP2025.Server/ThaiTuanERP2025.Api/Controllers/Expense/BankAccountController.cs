@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
-using ThaiTuanERP2025.Api.Common;
+using ThaiTuanERP2025.Presentation.Common;
 using ThaiTuanERP2025.Application.Expense.Commands.BankAccounts.CreateSupplierBankAccount;
 using ThaiTuanERP2025.Application.Expense.Commands.BankAccounts.CreateUserBankAccount;
 using ThaiTuanERP2025.Application.Expense.Commands.BankAccounts.DeleteBankAccount;
@@ -12,7 +12,7 @@ using ThaiTuanERP2025.Application.Expense.Queries.BankAccounts.GetBankAccountByI
 using ThaiTuanERP2025.Application.Expense.Queries.BankAccounts.GetUserBankAccount;
 using ThaiTuanERP2025.Application.Expense.Queries.BankAccounts.ListSupplierBankAccount;
 
-namespace ThaiTuanERP2025.Api.Controllers.Expense
+namespace ThaiTuanERP2025.Presentation.Controllers.Expense
 {
 	[Authorize]
 	[ApiController]

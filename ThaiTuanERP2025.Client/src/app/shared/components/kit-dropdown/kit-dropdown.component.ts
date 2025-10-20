@@ -30,7 +30,7 @@ export class KitDropdownComponent implements ControlValueAccessor, OnChanges {
       @Input() width: string | number | null = null;
       @Input() multiple = false; // Bật chế độ chọn nhiều
       @Input() enableFilter = true;       /** Bật/tắt ô filter và placeholder của nó */
-      @Input() filterPlaceholder = 'Tìm...';
+      @Input() filterPlaceholder = '🔎 Tìm...';
       @Input() caseSensitive = false;       /** Có phân biệt hoa/thường không */
       @Input() autoFocusFilter = true;       /** Khi mở menu, tự động focus vào ô filter */     
 

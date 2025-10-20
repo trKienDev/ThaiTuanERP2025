@@ -1,4 +1,14 @@
+import { UserDto } from "../../account/models/user.model";
 import { ApproverMode, FlowType } from "./approval-step-template.model";
+
+export enum StepStatus {
+      Pending = 'Pending',
+      Waiting = 'Waiting',
+      Approved = 'Approved',
+      Rejected = 'Rejected',
+      Skipped = 'Skipped',
+      Expired = 'Expired',
+}
 
 export interface ApprovalStepInstanceDto {
       id: string;
@@ -10,7 +20,7 @@ export interface ApprovalStepInstanceDto {
       slaHours: number;
       approverMode: ApproverMode;
 
-      resolvedApproverCandidates?: string;
+      resolvedApproverCandidateIds?: string[];
       defaultApproverId?: string;
       selectedApproverId?: string;
 
@@ -25,4 +35,29 @@ export interface ApprovalStepInstanceDto {
       comment?: string;
       slaBreached?: boolean;
       history?: object;
+}
+
+export interface ApprovalStepInstanceDetailDto extends ApprovalStepInstanceDto {
+      approverCandidates: UserDto[];
+}
+
+export interface ApproveStepRequest {
+      userId: string;
+      paymentId: string;
+      comment?: string;
+}
+export interface RejectStepRequest extends ApproveStepRequest {}
+
+export interface ApprovalStepInstanceStatusDto {
+      status: number;
+      startedAt?: Date;
+      dueAt?: Date;
+      
+      approvedAt?: Date;
+      approvedBy?: string;
+      approvedByUser?: UserDto;
+
+      rejectedAt?: Date;
+      rejectedBy?: string;
+      rejectedByUser?: UserDto;
 }

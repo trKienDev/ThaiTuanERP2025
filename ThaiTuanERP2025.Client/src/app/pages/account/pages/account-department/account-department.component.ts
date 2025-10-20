@@ -23,7 +23,6 @@ export class AccountDepartmentComponent implements OnInit {
       ngOnInit(): void {
             this.departments$.subscribe({
                   next: (departments) =>{
-                        console.log('departments: ', departments);
                   }
             })
       }

@@ -14,6 +14,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public User? ModifiedByUser { get; set; }
 		public User? DeletedByUser { get; set; }
 
+
 		private UserGroup() {
 			User = null!;
 			Group = null!;

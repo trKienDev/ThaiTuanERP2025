@@ -12,7 +12,7 @@
 
       th, td {
             border-bottom: 1px solid #e2e8ee;
-            padding: 15px 25px;
+            padding: 10px 15px;
             text-align: center;
             text-wrap: nowrap;
       }
@@ -43,9 +43,18 @@
 
       .total-row {
             background-color: var(--main-bg-color);
-            color: #00c100;
+            color: #018601;
             font-weight: 800;
       }
+
+      .link {
+            cursor: pointer;
+            :hover {
+                  text-decoration: underline;
+                  color: var(--bright-blue-color) !important;
+            }     
+      }
+
 }
 
 thead, tr, td {

@@ -1,4 +1,4 @@
-import { ApprovalStepInstanceDto } from "./approval-step-instance.model";
+import { ApprovalStepInstanceDetailDto, ApprovalStepInstanceDto, ApprovalStepInstanceStatusDto } from "./approval-step-instance.model";
 
 export interface ApprovalWorkflowInstanceDto {
       id: string;
@@ -10,7 +10,7 @@ export interface ApprovalWorkflowInstanceDto {
       createdByUserId: string;
       createdAt: Date;
       status: string;
-      currentStepOrder?: number;
+      currentStepOrder: number;
       amount?: number;
       currency?: string;
       budgetCode?: string;
@@ -31,5 +31,11 @@ export interface ApprovalWorkflowInstanceRequest {
 
 export interface ApprovalWorkflowInstanceDetailDto {
       workflowInstance: ApprovalWorkflowInstanceDto;
-      Steps: ApprovalStepInstanceDto[];
+      steps: ApprovalStepInstanceDetailDto[];
+}
+
+export interface ApprovalWorkflowIntanceStatusDto {
+      status: number;
+      currentStepOrder: number;     
+      steps: ApprovalStepInstanceStatusDto[];
 }

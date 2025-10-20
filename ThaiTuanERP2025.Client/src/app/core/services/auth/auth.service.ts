@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { ApiResponse } from '../../../shared/models/api-response.model';
 import { LoginResponse } from '../../../shared/models/login-response.model';
-import { NotificationSignalRService } from '../realtime/notification-signalr.service';
+import { NotificationSignalRService } from '../../../layout/topbar/notification-panel/services/notification-signalr.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {

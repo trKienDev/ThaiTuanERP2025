@@ -1,14 +1,25 @@
 .layout-container {
       display: flex;
+      height: 100vh;
+      margin-top: var(--topbar-height);
 }
 .main-content {
       flex: 1;
       padding-right: 1.5rem;
-      background-color: var(--main-bg-color);
+      height: calc(100dvh - var(--topbar-height));
+      margin-left: calc(var(--sidebar-width) + var(--sidebar-padding)*2);
+      overflow: hidden;                      
+      -webkit-overflow-scrolling: touch; 
 }
 .main-content-container {
       background-color: white;
-      min-height: calc(100dvh - var(--topbar-height) - 20px);
-      border: 1px solid var(--default-border-color);
+      // border: 1px solid var(--default-border-color);
       border-radius: 5px;
+      -webkit-overflow-scrolling: touch; 
+      position: relative;
+      padding: 5px;
 }
+.main-content-border {
+      box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
+}
+

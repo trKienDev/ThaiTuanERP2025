@@ -1,6 +1,6 @@
 ﻿using ThaiTuanERP2025.Application;
 using ThaiTuanERP2025.Infrastructure.Persistence; // call AssemblyReference
-using ThaiTuanERP2025.Api.Middleware;
+using ThaiTuanERP2025.Presentation.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -19,10 +19,17 @@ using ThaiTuanERP2025.Infrastructure.Expense.Contracts.Resolvers;
 using ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows;
 using ThaiTuanERP2025.Application.Notifications.Services;
 using ThaiTuanERP2025.Infrastructure.Notifications.Services;
-using ThaiTuanERP2025.Api.Hubs;
+using ThaiTuanERP2025.Presentation.Hubs;
 using Microsoft.AspNetCore.SignalR;
-using ThaiTuanERP2025.Api.SignalR;
-using ThaiTuanERP2025.Api.Notifications;
+using ThaiTuanERP2025.Presentation.SignalR;
+using ThaiTuanERP2025.Presentation.Notifications;
+using ThaiTuanERP2025.Infrastructure.Notifications.Background;
+using ThaiTuanERP2025.Application.Common.Services;
+using ThaiTuanERP2025.Infrastructure.Common.Services;
+using ThaiTuanERP2025.Application.Common.Options;
+using ThaiTuanERP2025.Infrastructure.Expense.Services;
+using ThaiTuanERP2025.Application.Followers.Services;
+using ThaiTuanERP2025.Infrastructure.Followers.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,10 +39,24 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IApproverResolver, CreatorManagerResolver>();
 builder.Services.AddScoped<IApproverResolverRegistry, ApproverResolverRegistry>();
-builder.Services.AddScoped<ApprovalWorkflowService>();
+builder.Services.AddScoped<IApprovalWorkflowService, ApprovalWorkflowService>();
 builder.Services.AddScoped<ApprovalWorkflowResolverService>();
 builder.Services.AddScoped<IRealtimeNotifier, SignalRealtimeNotifier>();
 builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
+builder.Services.AddScoped<ITaskReminderService, TaskReminderService>();
+builder.Services.AddScoped<IDocumentSubIdGeneratorService, DocumentSubIdGeneratorService>();
+builder.Services.AddScoped<IApprovalStepService, ApprovalStepService>();
+builder.Services.AddScoped<IFollowerService, FollowerService>();
+
+builder.Services.AddHostedService<TaskReminderExpiryHostedService>();
+builder.Services.Configure<TaskReminderExpiryOptions>(
+	builder.Configuration.GetSection("TaskReminderExpiry")
+);
+
+builder.Services.Configure<DocumentSubIdOptions>(opt => {
+	opt.TypeDigits["ExpensePayment"] = "01";
+	opt.TypeDigits["Request"] = "02";
+});
 
 builder.Services.AddSignalR()
 	.AddJsonProtocol(o =>

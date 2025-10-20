@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Api.Common;
-using ThaiTuanERP2025.Api.Contracts.Users;
+using ThaiTuanERP2025.Presentation.Common;
+using ThaiTuanERP2025.Presentation.Contracts.Users;
 using ThaiTuanERP2025.Application.Account.Commands.Users.CreateUser;
 using ThaiTuanERP2025.Application.Account.Commands.Users.SetUserManagers;
 using ThaiTuanERP2025.Application.Account.Commands.Users.UpdateUser;
@@ -14,7 +14,7 @@ using ThaiTuanERP2025.Application.Account.Queries.Users.GetUserById;
 using ThaiTuanERP2025.Application.Account.Queries.Users.GetUserManagerIds;
 using ThaiTuanERP2025.Application.Account.Queries.Users.GetUserManagers;
 
-namespace ThaiTuanERP2025.Api.Controllers.Account
+namespace ThaiTuanERP2025.Presentation.Controllers.Account
 {
 	[Authorize]
 	[ApiController]

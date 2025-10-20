@@ -13,9 +13,11 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 
 			// Text fields
 			builder.Property(x => x.Name).HasMaxLength(256).IsRequired();
+			builder.Property(x => x.SubId).HasMaxLength(32).IsRequired();
 			builder.Property(x => x.BankName).HasMaxLength(128);
 			builder.Property(x => x.AccountNumber).HasMaxLength(64);
 			builder.Property(x => x.BeneficiaryName).HasMaxLength(128);
+			builder.Property(x => x.Description).HasMaxLength(2048);
 
 			// Totals precision
 			builder.Property(x => x.TotalAmount).HasPrecision(18, 2);
@@ -41,11 +43,6 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 				.HasForeignKey(x => x.SupplierId)
 				.OnDelete(DeleteBehavior.Restrict);
 
-			builder.HasMany(x => x.Followers)
-				.WithOne(f => f.ExpensePayment)
-				.HasForeignKey(f => f.ExpensePaymentId)
-				.OnDelete(DeleteBehavior.Cascade);
-
 			builder.HasOne(p => p.CurrentWorkflowInstance)
 				.WithMany()
 				.HasForeignKey(p => p.CurrentWorkflowInstanceId)
@@ -57,9 +54,30 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 				.HasForeignKey(p => p.ManagerApproverId)
 				.OnDelete(DeleteBehavior.Restrict);
 
+			builder.HasMany(x => x.OutgoingPayments)
+				.WithOne(o => o.ExpensePayment)
+				.HasForeignKey(o => o.ExpensePaymentId)
+				.OnDelete(DeleteBehavior.Cascade);
+
+			builder.HasOne(e => e.CreatedByUser)
+				.WithMany()
+				.HasForeignKey(e => e.CreatedByUserId)
+				.OnDelete(DeleteBehavior.Restrict);
+
+			builder.HasOne(e => e.ModifiedByUser)
+				.WithMany()
+				.HasForeignKey(e => e.ModifiedByUserId)
+				.OnDelete(DeleteBehavior.Restrict);
+
+			builder.HasOne(e => e.DeletedByUser)
+				.WithMany()
+				.HasForeignKey(e => e.DeletedByUserId)
+				.OnDelete(DeleteBehavior.Restrict);
+
 			// Indexes
+			builder.HasIndex(p => p.SubId).IsUnique();
 			builder.HasIndex(x => x.SupplierId);
-			builder.HasIndex(x => x.PaymentDate);
+			builder.HasIndex(x => x.DueDate);
 			builder.HasIndex(x => x.Status);
 			builder.HasIndex(p => p.ManagerApproverId);
 		}

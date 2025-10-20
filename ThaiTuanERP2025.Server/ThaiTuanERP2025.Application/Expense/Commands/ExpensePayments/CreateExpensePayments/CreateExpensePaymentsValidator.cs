@@ -6,7 +6,7 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ExpensePayments.CreateExp
 	{
 		public CreateExpensePaymentsValidator() {
 			RuleFor(x => x.Request.Name).NotEmpty().MaximumLength(256);
-			RuleFor(x => x.Request.PaymentDate).NotEmpty();
+			RuleFor(x => x.Request.DueDate).NotEmpty();
 			RuleForEach(x => x.Request.Items).ChildRules(item =>
 			{
 				item.RuleFor(i => i.ItemName).NotEmpty().MaximumLength(256);

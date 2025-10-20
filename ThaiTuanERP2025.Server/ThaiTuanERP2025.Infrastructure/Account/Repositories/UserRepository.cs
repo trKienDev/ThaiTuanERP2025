@@ -15,11 +15,14 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 
 		}
 
-		public override async Task<User?> GetByIdAsync(Guid id) {
-			return await DbContext.Users
-				.Include(u => u.Department)
-				.Include(u => u.UserGroups).ThenInclude(ug => ug.Group)
-				.FirstOrDefaultAsync(u => u.Id == id);
+		public async Task<List<User>> ListByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken)
+		{
+			var idArray = ids?.Distinct().ToArray() ?? Array.Empty<Guid>();
+			if (idArray.Length == 0) return new List<User>();
+
+			return await DbContext.Users.Where(u => idArray.Contains(u.Id))
+				.AsNoTracking()
+				.ToListAsync(cancellationToken);
 		}
 
 		public override async Task<List<User>> GetAllAsync()

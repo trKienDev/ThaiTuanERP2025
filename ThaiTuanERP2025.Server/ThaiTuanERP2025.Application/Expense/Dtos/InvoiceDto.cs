@@ -1,4 +1,6 @@
-﻿namespace ThaiTuanERP2025.Application.Expense.Dtos
+﻿using ThaiTuanERP2025.Application.Account.Dtos;
+
+namespace ThaiTuanERP2025.Application.Expense.Dtos
 {
 	public sealed record InvoiceDto
 	{
@@ -26,9 +28,7 @@
 		public bool IsDraft { get; init; }
 		
 		public IReadOnlyList<InvoiceLineDto> InvoiceLines { get; init; } = Array.Empty<InvoiceLineDto>();
-
-		// File preivews
-		public IReadOnlyList<Guid> FileIds { get; init; } = Array.Empty<Guid>();
+		public IReadOnlyList<InvoiceFileDto> InvoiceFiles { get; init; } = Array.Empty<InvoiceFileDto>();
 		public IReadOnlyList<Guid> FollowerUserIds { get; init; } = Array.Empty<Guid>();
 
 		// Totals (computed from lines)
@@ -36,5 +36,8 @@
 		public decimal TotalVAT { get; init; }
 		public decimal TotalWHT { get; init; }
 		public decimal GrandTotal { get; init; }
+
+		public UserDto CreatedByUser { get; init; } = default!;
+		public DateTime CreatedDate { get; init; } = default!;
 	}
 }

@@ -25,15 +25,35 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 			builder.Property(x => x.TotalWithTax).HasPrecision(18, 2);
 
 			// Relationship
+			builder.HasOne(e => e.CreatedByUser)
+				.WithMany()
+				.HasForeignKey(e => e.CreatedByUserId)
+				.OnDelete(DeleteBehavior.Restrict);
+
+			builder.HasOne(e => e.ModifiedByUser)
+				.WithMany()
+				.HasForeignKey(e => e.ModifiedByUserId)
+				.OnDelete(DeleteBehavior.Restrict);
+
+			builder.HasOne(e => e.DeletedByUser)
+				.WithMany()
+				.HasForeignKey(e => e.DeletedByUserId)
+				.OnDelete(DeleteBehavior.Restrict);
+
 			builder.HasMany(x => x.Lines)
 				.WithOne(l => l.Invoice)
 				.HasForeignKey(l => l.InvoiceId);
-			builder.HasMany(x => x.Files)
-				.WithOne(l => l.Invoice)
-				.HasForeignKey(l => l.InvoiceId);
+
+			builder.HasMany(i => i.Files)
+				.WithOne(f => f.Invoice)
+				.HasForeignKey(f => f.InvoiceId)
+				.OnDelete(DeleteBehavior.Cascade);
+
 			builder.HasMany(x => x.Follwers)
 				.WithOne(f => f.Invoice)
 				.HasForeignKey(f => f.InvoiceId);
+
+
 		}
 	}
 }

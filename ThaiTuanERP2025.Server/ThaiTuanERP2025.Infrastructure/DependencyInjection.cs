@@ -7,6 +7,7 @@ using ThaiTuanERP2025.Application.Common.Services;
 using ThaiTuanERP2025.Application.Expense.Repositories;
 using ThaiTuanERP2025.Application.Files.Repositories;
 using ThaiTuanERP2025.Application.Finance.Repositories;
+using ThaiTuanERP2025.Application.Followers.Repositories;
 using ThaiTuanERP2025.Application.Notifications.Repositories;
 using ThaiTuanERP2025.Infrastructure.Account.Repositories;
 using ThaiTuanERP2025.Infrastructure.Authentication;
@@ -14,6 +15,7 @@ using ThaiTuanERP2025.Infrastructure.Common;
 using ThaiTuanERP2025.Infrastructure.Common.Services;
 using ThaiTuanERP2025.Infrastructure.Expense.Repositories;
 using ThaiTuanERP2025.Infrastructure.Finance.Repositories;
+using ThaiTuanERP2025.Infrastructure.Followers.Repositories;
 using ThaiTuanERP2025.Infrastructure.Notifications.Repositories;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 using ThaiTuanERP2025.Infrastructure.StoredFiles.Configurations;
@@ -63,12 +65,19 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IInvoiceFileRepository, InvoiceFileRepository>();
 			services.AddScoped<ISupplierRepository, SupplierRepository>();
 			services.AddScoped<IBankAccountRepository, BankAccountRepository>();
+			services.AddScoped<IOutgoingBankAccountRepository, OutgoingBankAccountRepository>();
+			services.AddScoped<IOutgoingPaymentRepository, OutgoingPaymentRepository>();
 			services.AddScoped<IApprovalWorkflowTemplateRepository, ApprovalWorkflowTemplateRepository>();
 			services.AddScoped<IApprovalStepTemplateRepository, ApprovalStepTemplateRepository>();
 			services.AddScoped<IApprovalStepInstanceRepository, ApprovalStepInstanceRepository>();
 			services.AddScoped<IApprovalWorkflowInstanceRepository, ApprovalWorkflowInstanceRepository>();
 			services.AddScoped<IExpensePaymentRepository, ExpensePaymentRepository>();
+			services.AddScoped<IExpensePaymentCommentRepository, ExpensePaymentCommentRepository>();
+			services.AddScoped<IExpensePaymentCommentTagRepository, ExpensePaymentCommentTagRepository>();
+			services.AddScoped<IExpensePaymentCommentAttachmentRepository, ExpensePaymentCommentAttachmentRepository>();
 			services.AddScoped<INotificationRepository, NotificationRepository>();
+			services.AddScoped<ITaskReminderRepository, TaskReminderRepository>();
+			services.AddScoped<IFollowerRepository, FollowerRepository>();
 
 			// ========= File Storage (MinIO) =========
 			services.Configure<FileStorageOptions>(cfg.GetSection("Minio"));

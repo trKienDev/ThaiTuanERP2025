@@ -36,7 +36,6 @@ export class BudgetCodePanelComponent {
                   next: (data) => {
                         this.budgetCodes = data.map(bc => ({ ...bc, selected: false }));
                         this.updateMasterCheckboxState();
-                        console.log('budget codes: ', this.budgetCodes);
                   },
                   error: err => alert(handleHttpError(err).join('\n'))
             });

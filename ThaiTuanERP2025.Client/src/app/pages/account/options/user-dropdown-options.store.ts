@@ -18,6 +18,4 @@ export class UserOptionStore {
             }),
             shareReplay({ bufferSize: 1, refCount: false })
       );
-
-      
 }

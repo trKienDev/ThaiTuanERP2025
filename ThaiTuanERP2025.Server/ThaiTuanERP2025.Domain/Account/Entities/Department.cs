@@ -16,14 +16,14 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public Department? Parent { get; set; }
 		public ICollection<Department> Children { get; private set; } = new List<Department>();	
 
-		public User CreatedByUser { get; set; } = null!;
-		public User? ModifiedByUser { get; set; }
-		public User? DeletedByUser { get; set; }
-
 		public Region Region { get; set; } = Region.None;
 
 		public Guid? ManagerUserId { get; set; }	
 		public User? ManagerUser { get; set; }
+
+		public User CreatedByUser { get; set; } = null!;
+		public User? ModifiedByUser { get; set; }
+		public User? DeletedByUser { get; set; }
 
 		private Department() {
 			Users = new List<User>();

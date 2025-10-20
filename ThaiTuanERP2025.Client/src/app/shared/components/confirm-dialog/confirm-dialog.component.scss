@@ -1,16 +1,11 @@
 .confirm-dialog {
       padding: 20px;
+      user-select: none;
 }
 
-.warning-icon {
-      display: inline-block;
-      width: 100px;
-      height: 100px;
-
-      background: url('/assets/icons/alert-warning.png') no-repeat center;
-      background-size: contain;
-
-      /* hoạt ảnh nhấp nháy */
+.dialog-icon {
+      font-size: 80px;
+      line-height: 0.5;
       animation: pulseWarning 1.2s infinite;
 }
 
@@ -18,4 +13,34 @@
       0%   { transform: scale(1); opacity: 1; }
       50%  { transform: scale(1.2); opacity: 0.7; }
       100% { transform: scale(1); opacity: 1; }
+}
+
+.dialog-message {
+      text-align: center;
+      padding-top: 20px;
+}
+
+.danger-background {
+      background-color: #a20000;
+      border-radius: 8px;
+      color: white;
+      box-shadow: rgba(255, 255, 255, 0.77) 0px 10px 36px 0px, rgba(255, 255, 255, 0.09) 0px 0px 0px 1px;
+      
+      .danger-cancel-button {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+
+            .danger-cancel {
+                  width: 100%;
+                  cursor: pointer;
+                  border: none !important;
+                  background-color: white;
+                  font-weight: bold;
+            }
+            .danger-cancel:hover {
+                  color: red;
+                  box-shadow: rgba(238, 237, 237, 0.51) 0px 4px 6px -1px, rgba(245, 243, 243, 0.64) 0px 2px 4px -1px;
+            }
+      }
 }

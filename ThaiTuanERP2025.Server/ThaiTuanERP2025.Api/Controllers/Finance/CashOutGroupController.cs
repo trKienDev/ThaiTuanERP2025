@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Api.Common;
+using ThaiTuanERP2025.Presentation.Common;
 using ThaiTuanERP2025.Application.Finance.Commands.CashoutGroups.CashoutOutGroup;
 using ThaiTuanERP2025.Application.Finance.Commands.CashoutGroups.CreateCashoutGroup;
 using ThaiTuanERP2025.Application.Finance.Commands.CashoutGroups.DeleteCashoutGroup;
@@ -10,7 +10,7 @@ using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Application.Finance.Queries.CashoutGroups.GetAllCashoutGroups;
 using ThaiTuanERP2025.Application.Finance.Queries.CashoutGroups.GetCashoutGroupById;
 
-namespace ThaiTuanERP2025.Api.Controllers.Finance
+namespace ThaiTuanERP2025.Presentation.Controllers.Finance
 {
 	[ApiController]
 	[Authorize]

@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnInit } from "@angular/core";
 import { InvoiceService } from "../../../services/invoice.service";
-import { invoiceDto } from "../../../models/invoice.model";
+import { InvoiceDto } from "../../../models/invoice.model";
 import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
 import { InvoiceStatusPipe } from "../../../pipes/invoice-status.pipe";
 import { MatDialogRef } from "@angular/material/dialog";
@@ -17,7 +17,7 @@ export class MyInvoicesDialogComponent implements OnInit {
       private invoiceService = inject(InvoiceService);
       private ref = inject(MatDialogRef<MyInvoicesDialogComponent>);
 
-      myInvoices: invoiceDto[] = [];
+      myInvoices: InvoiceDto[] = [];
       total: number = 0;
 
       ngOnInit(): void {
@@ -38,7 +38,7 @@ export class MyInvoicesDialogComponent implements OnInit {
             this.ref.close();
       }
 
-      selectInvoice(inv: invoiceDto) {
+      selectInvoice(inv: InvoiceDto) {
             this.ref.close({
                   success: true,
                   invoiceId: inv.id,

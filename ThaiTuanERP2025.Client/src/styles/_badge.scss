@@ -1,14 +1,14 @@
 .badge {
-      padding: 0.25rem 0.45rem;
+      padding: 6px 10px;
       border-radius: 0.25rem;
       color: #fff;
       font-size: 12px;
       text-align: center;
       width: fit-content;
-      min-height: 21px;   // ép badge cao bằng cell
       display: flex;
       align-items: center; 
       user-select: none;
+      font-weight: bold;
 }
 
 .primary-badge { background-color: var(--bright-blue-color); }
@@ -22,8 +22,8 @@
       background-color: rgba(var(--bright-blue-color), 0.1) !important;
       color: var(--bright-blue-color) !important;
 }
-.success-light-bagde {
-      background-color: rgba(var(--kelly-green-color), 0.1) !important;
+.success-light-badgde {
+      background-color: #E9FDE0;
       color: var(--kelly-green-color) !important;
 }
 .danger-light-badge {

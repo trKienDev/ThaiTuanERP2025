@@ -3,6 +3,7 @@ using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Expense.Repositories;
 using ThaiTuanERP2025.Application.Files.Repositories;
 using ThaiTuanERP2025.Application.Finance.Repositories;
+using ThaiTuanERP2025.Application.Followers.Repositories;
 using ThaiTuanERP2025.Application.Notifications.Repositories;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
@@ -43,6 +44,8 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			IInvoiceFollowerRepository invoiceFollowers,
 			ISupplierRepository suppliers,
 			IBankAccountRepository bankAccounts,
+			IOutgoingBankAccountRepository outgoingBankAccounts,
+			IOutgoingPaymentRepository outgoingPayments,
 
 			// Workflow	
 			IApprovalStepTemplateRepository approvalStepTemplates,
@@ -52,9 +55,16 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 
 			// Expense Payment
 			IExpensePaymentRepository expensePayments,
+			IExpensePaymentCommentRepository expensePaymentComments,
+			IExpensePaymentCommentTagRepository expensePaymentCommentTags,
+			IExpensePaymentCommentAttachmentRepository expensePaymentCommentAttachments,
 
 			// Notification
-			INotificationRepository notifications
+			INotificationRepository notifications,
+			ITaskReminderRepository taskReminders,
+
+			// Follow
+			IFollowerRepository followers
 		)
 		{
 			_dbContext = dbContext;
@@ -85,6 +95,8 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			InvoiceFollowers = invoiceFollowers;
 			Suppliers = suppliers;
 			BankAccounts = bankAccounts;
+			OutgoingBankAccounts = outgoingBankAccounts;
+			OutgoingPayments = outgoingPayments;
 
 			ApprovalStepTemplates = approvalStepTemplates;
 			ApprovalWorkflowTemplates = approvalWorkflowTemplates;
@@ -92,8 +104,14 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			ApprovalWorkflowInstances = approvalWorkflowInstances;
 
 			ExpensePayments = expensePayments;
+			ExpensePaymentComments = expensePaymentComments;
+			ExpensePaymentCommentAttachments = expensePaymentCommentAttachments;
+			ExpensePaymentCommentTags = expensePaymentCommentTags;
 
 			Notifications = notifications;
+			TaskReminders = taskReminders;
+
+			Followers = followers;
 		}
 
 		public IStoredFilesRepository StoredFiles { get; }
@@ -123,6 +141,8 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		public IInvoiceFollowerRepository InvoiceFollowers { get; }
 		public ISupplierRepository Suppliers { get; }
 		public IBankAccountRepository BankAccounts { get; }
+		public IOutgoingBankAccountRepository OutgoingBankAccounts { get; }
+		public IOutgoingPaymentRepository OutgoingPayments { get; }
 
 		// Workflow
 		public IApprovalWorkflowTemplateRepository ApprovalWorkflowTemplates { get; }
@@ -132,9 +152,16 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 
 		// Expense Payment
 		public IExpensePaymentRepository ExpensePayments { get; }
+		public IExpensePaymentCommentRepository ExpensePaymentComments { get; }
+		public IExpensePaymentCommentAttachmentRepository ExpensePaymentCommentAttachments { get; }
+		public IExpensePaymentCommentTagRepository ExpensePaymentCommentTags { get; }
 
 		// Notification
 		public INotificationRepository Notifications { get; }
+		public ITaskReminderRepository TaskReminders { get; }
+
+		// Followers
+		public IFollowerRepository Followers { get; }
 
 		public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{

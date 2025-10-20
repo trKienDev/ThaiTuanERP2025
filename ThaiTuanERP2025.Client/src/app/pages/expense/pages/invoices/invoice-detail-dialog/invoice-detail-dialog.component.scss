@@ -1,0 +1,101 @@
+.dialog {
+      width: 1000px;
+      .dialog-body {
+            display: flex;
+            gap: 20px;
+            flex-direction: column;
+      }
+      .primary-row {
+            display: flex;
+            gap: 20px;
+            align-items: stretch;
+      }
+}
+
+.primary-card {
+      width: 100%;
+      .card-body {
+            display: flex;
+            gap: 16px;
+            flex-direction: column;
+      }
+}
+
+.invoice-information {
+      flex: 1;
+      .infor-heading {
+            display: flex;
+            font-size: 16px;
+            align-items: center;
+
+            .invoice-name {
+                  font-weight: 600;
+                  color: var(--bright-blue-color);
+                  margin-right: 10px;
+            }
+            .invoice-number span {
+                  color: var(--dark-gray);
+                  font-size: 12px;
+                  display: flex;
+                  align-items: center;
+                  margin-right: 10px;
+                  font-weight: lighter;
+            }
+      }
+
+      .primary-infor, .sub-infor {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            flex-direction: column;
+
+            .block-infor {
+                  display: flex;
+                  flex-wrap: wrap;
+                  gap: 10px;
+                  flex-direction: column;
+
+                  .infor-row {
+                        display: grid;
+                        grid-template-columns: 160px 1fr;
+                        align-items: center;
+
+                        .infor-label {
+                              margin-right: 10px;
+                              font-style: italic;
+                              color: #797171;
+                        }
+                        
+                  }
+
+            }
+      }
+}
+
+.invoice-preview {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+
+      .invoice-pdf-frame {
+            flex: 1;        
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      }
+      .no-file-placeholder {
+            text-align: center;
+            color: #888;
+            padding: 20px;
+            font-style: italic;
+      }
+}
+
+.avatar-image {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #eee;
+}

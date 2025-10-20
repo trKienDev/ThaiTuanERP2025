@@ -1,6 +1,12 @@
 export function resolveAvatarUrl(
       baseUrl: string,
-      user: { avatarFileObjectKey?: string | null } | null | undefined
+      user: { avatarFileId?: string | null; avatarFileObjectKey?: string | null } | null | undefined
 ): string {
-      return user?.avatarFileObjectKey ? `${baseUrl}/files/public/${user.avatarFileObjectKey}` : 'default-user-avatar.jpg'; // nhớ có sẵn ảnh mặc định
+      if (user?.avatarFileId && user.avatarFileId.startsWith('data:image')) {
+            return user.avatarFileId; // base64 preview
+      }
+      if (user?.avatarFileObjectKey) {
+            return `${baseUrl}/files/public/${user.avatarFileObjectKey}`;
+      }
+      return 'default-user-avatar.jpg';
 }

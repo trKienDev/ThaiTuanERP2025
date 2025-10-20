@@ -1,13 +1,13 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Api.Common;
+using ThaiTuanERP2025.Presentation.Common;
 using ThaiTuanERP2025.Application.Expense.Commands.ApprovalWorkflows.CreateApprovalWorkflowTemplate;
 using ThaiTuanERP2025.Application.Expense.Dtos;
 using ThaiTuanERP2025.Application.Expense.Queries.ApprovalWorkflow.GetApprovalWorkflowTemplateDetail;
 using ThaiTuanERP2025.Application.Expense.Queries.ApprovalWorkflow.GetWorkflowTemplateById;
 using ThaiTuanERP2025.Application.Expense.Queries.ApprovalWorkflow.GetWorkflowTemplatesByFilter;
 
-namespace ThaiTuanERP2025.Api.Controllers.Expense
+namespace ThaiTuanERP2025.Presentation.Controllers.Expense
 {
 	[ApiController]
 	[Route("api/workflow-templates")]

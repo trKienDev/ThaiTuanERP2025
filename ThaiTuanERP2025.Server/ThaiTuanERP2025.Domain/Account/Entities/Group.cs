@@ -13,11 +13,11 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		private static readonly Regex SlugRegex = new(@"^[a-z0-9._-]+$", RegexOptions.Compiled);
 		public string Description { get; private set; } = string.Empty;
 
-		public ICollection<UserGroup> UserGroups { get; private set; }
-
 		public User CreatedByUser { get; set; } = null!;
 		public User? ModifiedByUser { get; set; }
 		public User? DeletedByUser { get; set; }
+
+		public ICollection<UserGroup> UserGroups { get; private set; }
 
 		private Group()
 		{

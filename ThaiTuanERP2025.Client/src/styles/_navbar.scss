@@ -1,15 +1,18 @@
-// _navbar.scss
 .navbar {
       background-image: linear-gradient(to top, #ffffff, #fefeff, #fcfdff, #f9fcff, #f6fbff);
       padding: 0 10px;
       display: flex;
       justify-content: flex-start;
-      position: relative;
       z-index: 1;
-      border-bottom: 1px solid aliceblue;
+      border-bottom: 1px solid #e0fffc;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      height: var(--navbar-height);
 
       &__container {
             width: 100%;
+
       }
 
       &__list {
@@ -69,8 +72,10 @@
 
       &__content {
             padding: 10px;
-            height: 100%;
-            position: relative;
-            overflow-y: auto;
+            margin-top: 10px;
+            min-height: 84vh;
+            max-height: 84vh;
+            overflow: scroll;
+            box-sizing: border-box;
       }
 }
