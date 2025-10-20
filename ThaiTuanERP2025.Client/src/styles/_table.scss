@@ -46,6 +46,15 @@
             color: #018601;
             font-weight: 800;
       }
+
+      .link {
+            cursor: pointer;
+            :hover {
+                  text-decoration: underline;
+                  color: var(--bright-blue-color) !important;
+            }     
+      }
+
 }
 
 thead, tr, td {

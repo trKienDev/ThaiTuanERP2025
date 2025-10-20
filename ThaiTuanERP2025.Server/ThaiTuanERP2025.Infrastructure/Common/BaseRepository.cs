@@ -108,6 +108,12 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 				.Where(predicate)
 				.ToListAsync(cancellationToken);
 		}
+		public IQueryable<T> FindQueryable(Expression<Func<T, bool>> predicate, bool asNoTracking = true)
+		{
+			if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+			var query = asNoTracking ? _dbSet.AsNoTracking() : _dbSet.AsQueryable();
+			return query.Where(predicate);
+		}
 
 		public async Task AddAsync(T entity, CancellationToken cancellationToken = default)
 		{

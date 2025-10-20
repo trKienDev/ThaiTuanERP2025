@@ -11,7 +11,7 @@ import { TextareaNoSpellcheckDirective } from "../../../../../../shared/directiv
 @Component({
       selector: 'expense-payment-detail-dialog',
       standalone: true,
-      imports: [CommonModule, ExpensePaymentStatusPipe, AvatarUrlPipe, TextareaNoSpellcheckDirective],
+      imports: [CommonModule, ExpensePaymentStatusPipe, AvatarUrlPipe ],
       templateUrl: './expense-payment-detail-dialog.component.html',
       styleUrls: ['./expense-payment-detail-dialog.component.scss']
 })
