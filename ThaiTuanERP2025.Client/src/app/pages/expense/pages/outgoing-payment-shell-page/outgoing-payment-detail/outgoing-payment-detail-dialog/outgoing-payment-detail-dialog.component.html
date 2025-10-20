@@ -10,139 +10,147 @@
                         </button>
                   </div>
             </div>
-            <div class="dialog-body">
-                  <ng-container *ngIf="loading()">Đang tải...</ng-container>
-                  <ng-container *ngIf="error()">{{ error() }}</ng-container>
-                  <div block-label="outgoing-payment-detail" class="container">
-                        <div class="detail-heading display-flex align-items-center gap-10px">
-                              <ng-container *ngIf="outgoingPaymentDetail?.status === 'Pending'">
-                                    <div class="action-button">
-                                          <button type="button" class="button pintura-button" (click)="onApprove()">Duyệt</button>
+            <ng-container *ngIf="loading(); else contentTpl">
+                  <kit-loading-spinner></kit-loading-spinner>
+            </ng-container>
+            <ng-template #contentTpl>
+                  <ng-container *ngIf="outgoingPaymentDetail; else errorTpl">
+                        <div class="dialog-body">
+                              <div block-label="outgoing-payment-detail" class="container">
+                                    <div class="detail-heading display-flex align-items-center gap-10px">
+                                          <ng-container *ngIf="outgoingPaymentDetail?.status === 'Pending'">
+                                                <div class="action-button">
+                                                      <button type="button" class="button pintura-button" (click)="onApprove()">Duyệt</button>
+                                                </div>
+                                          </ng-container>
+                                          <ng-container *ngIf="outgoingPaymentDetail?.status === 'Approved'">
+                                                <div class="action-button">
+                                                      <button type="button" class="button submit-button" (click)="markCreated()">Tạo lệnh</button>
+                                                </div>
+                                          </ng-container>
+                                          <h3 class="payment-name">{{ outgoingPaymentDetail.name }}</h3>
+                                          <div class="detail-status">
+                                                <span  class="outgoing-status-badge" [ngClass]="outgoingPaymentDetail.status | outgoingPaymentStatus : 'class'">
+                                                      {{ outgoingPaymentDetail.status | outgoingPaymentStatus : 'label' }}
+                                                </span>
+                                          </div>
                                     </div>
-                              </ng-container>
-                              <ng-container *ngIf="outgoingPaymentDetail?.status === 'Approved'">
-                                    <div class="action-button">
-                                          <button type="button" class="button submit-button" (click)="markCreated()">Tạo lệnh</button>
+                                    <div class="detail-body">
+                                          <div class="general-information-block primary-card">
+                                                <div class="card-header">Thông tin chung</div>
+                                                <div class="card-body general-grid">
+                                                      <div class="row">
+                                                            <label for="detail-subid">ID</label>
+                                                            <span class="value">{{ outgoingPaymentDetail.subId }}</span>
+                                                      </div>
+                                                      <div class="row">
+                                                            <label for="detail-createdby">Tạo bởi</label>
+                                                            <div class="value flex">
+                                                                  <img class="avatar" [src]="outgoingPaymentDetail.createdBy | avatarUrlPipe" alt="avatar">
+                                                                  <span>{{ outgoingPaymentDetail.createdBy.fullName }}</span>
+                                                            </div>
+                                                      </div>
+                                                      <div class="row">
+                                                            <label for="">Tạo lúc</label>
+                                                            <div class="value">{{ outgoingPaymentDetail.createdDate | date: 'HH:mm dd/MM/yyyy' }}</div>
+                                                      </div>
+                                                      <div class="row">
+                                                            <label for="">Tài khoản tiền</label>
+                                                            <div class="value">{{ outgoingPaymentDetail.outgoingBankAccount.name }}</div>
+                                                      </div>
+                                                      <div class="row">
+                                                            <label for="">Tên ngân hàng thụ hưởng</label>
+                                                            <div class="value">{{ outgoingPaymentDetail.bankName }}</div>
+                                                      </div>
+                                                      <div class="row">
+                                                            <label for="">Tài khoản thụ hưởng</label>
+                                                            <div class="value">{{ outgoingPaymentDetail.accountNumber }}</div>
+                                                      </div>
+                                                      <div class="row">
+                                                            <label for="">Người thụ hưởng</label>
+                                                            <div class="value">{{ outgoingPaymentDetail.beneficiaryName }}</div>
+                                                      </div>
+                                                      <div class="row">
+                                                            <label for="">Chi phí gốc</label>
+                                                            <div class="value">{{ outgoingPaymentDetail.expensePayment.name }}</div>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                          <div class="amount-information-block primary-card margin-top-20px">
+                                                <div class="card-body">
+                                                      <div class="display-flex gap-10px justify-content-center">
+                                                            <div class="amount-block">
+                                                                  <label class="amount-label">Số tiền thanh toán</label>
+                                                                  <span>{{ outgoingPaymentDetail.expensePayment.totalWithTax | number:'1.0-0' }} VNĐ</span>
+                                                                  <span class="amount-date">Ngày phát sinh: 
+                                                                        <span style="font-weight: bold;">{{ outgoingPaymentDetail.expensePayment.createdDate | date: 'dd/MM/yyyy' }}</span>
+                                                                  </span>
+                                                            </div>
+                                                            <div class="amount-block">
+                                                                  <label class="amount-label">Số tiền khoản chi</label>
+                                                                  <span>{{ outgoingPaymentDetail.outgoingAmount | number:'1.0-0' }} VNĐ</span>
+                                                                  <span class="amount-date">Hạn thanh toán:
+                                                                        <span style="font-weight: bold;">{{ outgoingPaymentDetail.dueDate | date: 'dd/MM/yyyy' }}</span>
+                                                                  </span>
+                                                            </div>
+                                                      </div>
+                                                      <div class="amount-item-block">
+                                                            <div class="payment-item-table margin-top-20px">
+                                                                  <table class="table table-center-text">
+                                                                        <thead>
+                                                                              <tr>
+                                                                                    <th style="width: 1%;">#</th>
+                                                                                    <th>Hạng mục</th>
+                                                                                    <th class="head-quanity" style="width: 7%;">Số lượng</th>
+                                                                                    <th>Đơn giá</th>
+                                                                                    <th>Thành tiền</th>
+                                                                                    <th class="head-tax" style="width: 6%;">Thuế</th>
+                                                                                    <th>Số tiền thuế</th>
+                                                                                    <th>Số tiền có thuế</th>
+                                                                                    <th class="head-extension">Ngân sách</th>
+                                                                                    <th class="head-invoice">Hóa đơn</th>
+                                                                              </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                              <tr *ngFor="let item of outgoingPaymentDetail?.expensePayment?.items; let i = index">
+                                                                                    <td>{{ i + 1 }}</td>
+                                                                                    <td class="item-name">{{ item.itemName }}</td>
+                                                                                    <td class="item-quanity">{{ item.quantity | number:'1.0-0' }}</td>
+                                                                                    <td class="item-unit-price">{{ item.unitPrice | number:'1.0-0' }} VNĐ</td>
+                                                                                    <td class="item-amount">{{ item.amount | number:'1.0-0' }} VNĐ</td>
+                                                                                    <td class="item-tax">{{ (item.taxRate * 100) | number:'1.0-0' }}%</td>
+                                                                                    <td class="item-tax-amount">{{ item.taxAmount | number:'1.0-0' }} VNĐ</td>
+                                                                                    <td class="item-total-with-tax">{{ item.totalWithTax | number:'1.0-0' }} VNĐ</td>
+                                                                                    <td class="item-budget-code">{{ item.budgetCode?.code}} - {{ item.budgetCode?.name }}</td>
+                                                                                    <td class="item-invoice">
+                                                                                          <button type="button" class="button" [ngClass]="item.invoice ? 'default-button' : 'cancel-button'">
+                                                                                                {{ item.invoice ? 'Xem hóa đơn' : 'Không hóa đơn' }}
+                                                                                          </button>
+                                                                                    </td>
+                                                                              </tr>
+                                                                        </tbody>
+                                                                        <tfoot *ngIf="outgoingPaymentDetail?.expensePayment?.items?.length">
+                                                                              <tr class="total-row">
+                                                                                    <td colspan="4" class=""><strong>Tổng</strong></td>
+                                                                                    <td>{{ outgoingPaymentDetail.expensePayment.totalAmount | number:'1.0-0' }} VNĐ</td>
+                                                                                    <td></td>
+                                                                                    <td>{{ outgoingPaymentDetail.expensePayment.totalTax | number:'1.0-0' }} VNĐ</td>
+                                                                                    <td>{{ outgoingPaymentDetail.expensePayment.totalWithTax | number:'1.0-0' }} VNĐ</td>
+                                                                                    <td colspan="4"></td>
+                                                                              </tr>
+                                                                        </tfoot>
+                                                                  </table>
+                                                            </div>
+                                                      </div>
+                                                </div>
+                                          </div>
                                     </div>
-                              </ng-container>
-                              <h3 class="payment-name">{{ outgoingPaymentDetail?.name }}</h3>
-                              <div class="detail-status">
-                                    <span  class="outgoing-status-badge" [ngClass]="outgoingPaymentDetail?.status | outgoingPaymentStatus : 'class'">
-                                          {{ outgoingPaymentDetail?.status | outgoingPaymentStatus : 'label' }}
-                                    </span>
                               </div>
                         </div>
-                        <div class="detail-body">
-                              <div class="general-information-block primary-card">
-                                    <div class="card-header">Thông tin chung</div>
-                                    <div class="card-body general-grid">
-                                          <div class="row">
-                                                <label for="detail-subid">ID</label>
-                                                <span class="value">{{ outgoingPaymentDetail?.subId }}</span>
-                                          </div>
-                                          <div class="row">
-                                                <label for="detail-createdby">Tạo bởi</label>
-                                                <div class="value flex">
-                                                      <img class="avatar" [src]="outgoingPaymentDetail?.createdBy | avatarUrlPipe" alt="avatar">
-                                                      <span>{{ outgoingPaymentDetail?.createdBy?.fullName }}</span>
-                                                </div>
-                                          </div>
-                                          <div class="row">
-                                                <label for="">Tạo lúc</label>
-                                                <div class="value">{{ outgoingPaymentDetail?.createdDate | date: 'HH:mm dd/MM/yyyy' }}</div>
-                                          </div>
-                                          <div class="row">
-                                                <label for="">Tài khoản tiền</label>
-                                                <div class="value">{{ outgoingPaymentDetail?.outgoingBankAccount?.name }}</div>
-                                          </div>
-                                          <div class="row">
-                                                <label for="">Tên ngân hàng thụ hưởng</label>
-                                                <div class="value">{{ outgoingPaymentDetail?.bankName }}</div>
-                                          </div>
-                                          <div class="row">
-                                                <label for="">Tài khoản thụ hưởng</label>
-                                                <div class="value">{{ outgoingPaymentDetail?.accountNumber }}</div>
-                                          </div>
-                                          <div class="row">
-                                                <label for="">Người thụ hưởng</label>
-                                                <div class="value">{{ outgoingPaymentDetail?.beneficiaryName }}</div>
-                                          </div>
-                                          <div class="row">
-                                                <label for="">Chi phí gốc</label>
-                                                <div class="value">{{ outgoingPaymentDetail?.expensePayment?.name }}</div>
-                                          </div>
-                                    </div>
-                              </div>
-                              <div class="amount-information-block primary-card margin-top-20px">
-                                    <div class="card-body">
-                                          <div class="display-flex gap-10px justify-content-center">
-                                                <div class="amount-block">
-                                                      <label class="amount-label">Số tiền thanh toán</label>
-                                                      <span>{{ outgoingPaymentDetail?.expensePayment?.totalWithTax | number:'1.0-0' }} VNĐ</span>
-                                                      <span class="amount-date">Ngày phát sinh: 
-                                                            <span style="font-weight: bold;">{{ outgoingPaymentDetail?.expensePayment?.createdDate | date: 'dd/MM/yyyy' }}</span>
-                                                      </span>
-                                                </div>
-                                                <div class="amount-block">
-                                                      <label class="amount-label">Số tiền khoản chi</label>
-                                                      <span>{{ outgoingPaymentDetail?.outgoingAmount| number:'1.0-0' }} VNĐ</span>
-                                                      <span class="amount-date">Hạn thanh toán:
-                                                            <span style="font-weight: bold;">{{ outgoingPaymentDetail?.dueDate | date: 'dd/MM/yyyy' }}</span>
-                                                      </span>
-                                                </div>
-                                          </div>
-                                          <div class="amount-item-block">
-                                                <div class="payment-item-table margin-top-20px">
-                                                      <table class="table table-center-text">
-                                                            <thead>
-                                                                  <tr>
-                                                                        <th style="width: 1%;">#</th>
-                                                                        <th>Hạng mục</th>
-                                                                        <th class="head-quanity" style="width: 7%;">Số lượng</th>
-                                                                        <th>Đơn giá</th>
-                                                                        <th>Thành tiền</th>
-                                                                        <th class="head-tax" style="width: 6%;">Thuế</th>
-                                                                        <th>Số tiền thuế</th>
-                                                                        <th>Số tiền có thuế</th>
-                                                                        <th class="head-extension">Ngân sách</th>
-                                                                        <th class="head-invoice">Hóa đơn</th>
-                                                                  </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                  <tr *ngFor="let item of outgoingPaymentDetail?.expensePayment?.items; let i = index">
-                                                                        <td>{{ i + 1 }}</td>
-                                                                        <td class="item-name">{{ item.itemName }}</td>
-                                                                        <td class="item-quanity">{{ item.quantity | number:'1.0-0' }}</td>
-                                                                        <td class="item-unit-price">{{ item.unitPrice | number:'1.0-0' }} VNĐ</td>
-                                                                        <td class="item-amount">{{ item.amount | number:'1.0-0' }} VNĐ</td>
-                                                                        <td class="item-tax">{{ (item.taxRate * 100) | number:'1.0-0' }}%</td>
-                                                                        <td class="item-tax-amount">{{ item.taxAmount | number:'1.0-0' }} VNĐ</td>
-                                                                        <td class="item-total-with-tax">{{ item.totalWithTax | number:'1.0-0' }} VNĐ</td>
-                                                                        <td class="item-budget-code">{{ item.budgetCode?.code}} - {{ item.budgetCode?.name }}</td>
-                                                                        <td class="item-invoice">
-                                                                              <button type="button" class="button" [ngClass]="item.invoice ? 'default-button' : 'cancel-button'">
-                                                                                    {{ item.invoice ? 'Xem hóa đơn' : 'Không hóa đơn' }}
-                                                                              </button>
-                                                                        </td>
-                                                                  </tr>
-                                                            </tbody>
-                                                            <tfoot *ngIf="outgoingPaymentDetail?.expensePayment?.items?.length">
-                                                                  <tr class="total-row">
-                                                                        <td colspan="4" class=""><strong>Tổng</strong></td>
-                                                                        <td>{{ outgoingPaymentDetail?.expensePayment?.totalAmount | number:'1.0-0' }} VNĐ</td>
-                                                                        <td></td>
-                                                                        <td>{{ outgoingPaymentDetail?.expensePayment?.totalTax | number:'1.0-0' }} VNĐ</td>
-                                                                        <td>{{ outgoingPaymentDetail?.expensePayment?.totalWithTax | number:'1.0-0' }} VNĐ</td>
-                                                                        <td colspan="4"></td>
-                                                                  </tr>
-                                                            </tfoot>
-                                                      </table>
-                                                </div>
-                                          </div>
-                                    </div>
-                              </div>
-                        </div>
-                  </div>
-            </div>
+                  </ng-container>
+            </ng-template>
+            <ng-template #errorTpl>
+                  <kit-404-page title="⛔ Không thể tải dữ liệu thanh toán"></kit-404-page>
+            </ng-template>
       </div>
 </div>

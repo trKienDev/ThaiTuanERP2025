@@ -24,6 +24,10 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 			builder.Property(x => x.TotalTax).HasPrecision(18, 2);
 			builder.Property(x => x.TotalWithTax).HasPrecision(18, 2);
 
+			// outgoing-amount
+			builder.Property(x => x.OutgoingAmountPaid).HasPrecision(18, 2).HasDefaultValue(0);
+			builder.Property(x => x.RemainingOutgoingAmount).HasPrecision(18, 2);
+
 			builder.Property(x => x.Status).HasConversion<int>();
 			builder.Property(x => x.PayeeType).HasConversion<int>();
 
