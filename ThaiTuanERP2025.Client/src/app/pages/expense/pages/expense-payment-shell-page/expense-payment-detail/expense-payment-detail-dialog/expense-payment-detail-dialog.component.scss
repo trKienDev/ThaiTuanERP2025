@@ -1,0 +1,89 @@
+.primary-card {
+      width: 100%;
+}
+.close-button:focus-visible {
+      outline: none;
+      box-shadow: none;
+}
+.general-information-block {
+      .general-grid {
+            display: grid;
+            grid-template-columns: 160px 1fr;
+            row-gap: 10px;
+            column-gap: 16px;
+      }
+      .row {
+            display: contents; // để label & value bám theo grid
+      }
+      label {
+            color: #666;
+            font-size: 13px;
+            line-height: 28px;
+      }
+      .value {
+            line-height: 28px;
+            &.flex {
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+            }
+            &.ellipsis {
+                  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+            }
+            &.prewrap { white-space: pre-wrap; }
+      }
+      .avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #eee;
+      }
+      .avatar-stack {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+
+            li { display: inline-flex; }
+            .more {
+                  font-size: 12px;
+                  color: #666;
+            }
+      }
+}
+.avatar-stack {
+      gap: 0;
+      li { margin-left: -8px; }
+      li:first-child { margin-left: 0; }
+      .avatar { border: 2px solid #fff; }
+}
+
+.payment-amount-block {
+      gap: 10px;
+
+      .total-amount-block {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+
+            .amount-infor-block {
+                  display: flex;
+                  flex-direction: column;
+                  gap: 10px;
+                  background-image: linear-gradient(to top, #ffffff, #feffff, #fcffff, #faffff, #f8fffe, #f5fffc, #f2fff9, #f1fff5, #ecfff2, #e7ffee, #e1ffeb, #dcffe8);
+                  padding: 15px;
+                  border-radius: 10px;
+                  text-align: center;
+                  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+                  text-wrap: nowrap;
+
+                  .amount-infor-label {
+                        font-weight: bold;
+                        color: #018601;
+                  }
+            }
+      }
+}

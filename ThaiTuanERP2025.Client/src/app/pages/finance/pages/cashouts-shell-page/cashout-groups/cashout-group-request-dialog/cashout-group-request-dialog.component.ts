@@ -58,7 +58,6 @@ export class CashoutGroupRequestDialogComponent implements OnInit {
                   }, 
                   error: (err => {
                         const message = handleHttpError(err);
-                        console.log('error: ', err);
                         this.toast.errorRich('Lỗi khi tải nhóm cha');
                   })
             })
@@ -83,15 +82,12 @@ export class CashoutGroupRequestDialogComponent implements OnInit {
                         ...raw,
                         parentId: raw.parentId || null, // quan trọng: '' -> null
                   } as CashoutGroupRequest;
-                  console.log('payload: ', payload);
                   const created = await firstValueFrom(this.cashoutGroupService.create(payload));
                   this.toast.successRich('Thêm nhóm dòng tiền ra thành công');
                   this.dialogRef.close(true);
             } catch(error) {  
                   const msg = handleHttpError(error);
                   const message = Array.isArray(msg) ? msg.join('\n') : String(msg);
-                  console.log(error);
-                  console.log(message);
                   this.toast.errorRich(message);
             } finally {
                   this.saving = false;

@@ -5,5 +5,7 @@ namespace ThaiTuanERP2025.Application.Expense.Repositories
 {
 	public interface IExpensePaymentRepository : IBaseRepository<ExpensePayment>
 	{
+		Task<ExpensePayment?> GetDetailByIdAsync(Guid id, CancellationToken cancellationToken = default);
+		Task<ApprovalWorkflowInstance?> GetWorkflowInstanceAsync(Guid documentId, CancellationToken cancellationToken = default);
 	}
 }
