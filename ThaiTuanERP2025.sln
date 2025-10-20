@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ThaiTuanERP2025.Server", "ThaiTuanERP2025.Server", "{F3A26960-E66E-4F8D-A462-2C05DB90857A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThaiTuanERP2025.Api", "ThaiTuanERP2025.Server\ThaiTuanERP2025.Api\ThaiTuanERP2025.Api.csproj", "{E3881206-82EA-47DE-9E1E-599DAE41BB72}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThaiTuanERP2025.Presentation", "ThaiTuanERP2025.Server\ThaiTuanERP2025.Api\ThaiTuanERP2025.Presentation.csproj", "{E3881206-82EA-47DE-9E1E-599DAE41BB72}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThaiTuanERP2025.Application", "ThaiTuanERP2025.Server\ThaiTuanERP2025.Application\ThaiTuanERP2025.Application.csproj", "{7A7C0440-6500-4798-BC2E-438FA2264425}"
 EndProject

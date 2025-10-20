@@ -24,7 +24,6 @@ export class UserService extends BaseCrudService<UserDto, UserRequest> {
       updateAvatar(file: File, userId: string): Observable<string> {
             return this.fileService.uploadFile(file, 'account', 'user', userId, false).pipe(
                   switchMap((uploadResult) => {
-                        console.log('upload result: ', uploadResult);
                         const body = { fileId: uploadResult.data?.id };
                         return this.http.put<ApiResponse<string>>(`${this.endpoint}/${userId}/avatar`, body)
                               .pipe(handleApiResponse$<string>());

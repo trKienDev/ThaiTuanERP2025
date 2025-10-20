@@ -1,0 +1,25 @@
+#nprogress {
+      pointer-events: none;
+}
+
+#nprogress .bar {
+      background: #A50021;/* 💚 màu thương hiệu ThaiTuanERP2025, có thể đổi */
+      position: fixed;
+      z-index: 9999;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px; /* độ dày của thanh */
+}
+
+/* Tùy chọn: thêm glow nhẹ */
+#nprogress .peg {
+      display: block;
+      position: absolute;
+      right: 0;
+      width: 100px;
+      height: 100%;
+      box-shadow: 0 0 10px #A50021, 0 0 5px #A50021;
+      opacity: 1.0;
+      transform: rotate(3deg) translate(0px, -4px);
+}

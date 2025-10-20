@@ -1,0 +1,21 @@
+<div class="shell">
+      <aside class="sidebar" >
+            <nav class="tab-list">
+                  <button
+                  *ngFor="let tab of displayTabs; trackBy: trackById"
+                  class="tab-item"
+                  [class.active]="tab.id === selectedId"
+                  (click)="selectTab(tab.id)"
+                  [attr.aria-selected]="tab.id === selectedId"
+                  role="tab">
+                  {{ tab.label }}
+                  </button>
+            </nav>
+      </aside>
+
+      <main class="content" role="tabpanel">
+            <!-- Ưu tiên render child-route (form tạo mới) -->
+            <router-outlet></router-outlet>
+            <div class="white-space"></div>
+      </main>
+</div>

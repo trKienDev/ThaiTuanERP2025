@@ -28,14 +28,11 @@ export class CashoutCodePanelComponent implements OnInit {
       loadCashoutCodes(): void {
             this.cashoutCodeService.getAll().subscribe({
                   next: (cashoutCodes) => {
-                        console.log(cashoutCodes);
                         this.cashoutCodes = cashoutCodes;
                   },
                   error: (err => {
                         const msg = handleHttpError(err);
                         const message = Array.isArray(msg) ? msg.join('\n') : String(msg);
-                        console.log(err);
-                        console.log(message);
                         this.toastService.errorRich('Lỗi lấy mã dòng tiền ra');
                   })
             })

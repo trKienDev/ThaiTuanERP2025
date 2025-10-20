@@ -1,0 +1,36 @@
+<section class="notification-panel">
+      <header class="panel-header">
+            <h3 style="color: var(--main-foreground-hover);">Thông báo 🔔</h3>
+      </header>
+
+      <ng-container *ngIf="(notifications$ | async) as items; else loadingTpl">
+            <ng-container *ngIf="items.length > 0; else emptyState">
+                  <ul class="notification-list">
+                        <li class="notification-item" *ngFor="let n of items; trackBy: trackById" [class.unread]="!n.isRead" (click)="onClickItem(n)">
+                              <div class="content">
+                                    <div class="title-wrapper display-flex gap-10px align-items-center">
+                                          <div class="unread-dot" *ngIf="!n.isRead"></div>
+                                          <div class="title-text">{{ n.title || 'Thông báo' }}</div>
+                                    </div>
+                                    <div class="message" *ngIf="n.message">{{ n.message }}</div>
+                                    <div class="meta">{{ formatTime(n.createdAt) }}</div>
+                              </div>
+                        </li>
+                  </ul>
+            </ng-container>
+      </ng-container>
+
+      <ng-template #emptyState>
+            <div class="empty">
+                  <div class="empty-icon">
+                        <span class="material-icons-round">notifications</span>
+                  </div>
+                  <div class="empty-title">Thông báo của bạn hiển thị ở đây</div>
+                  <div class="empty-sub">Khi có thông báo mới, chúng sẽ xuất hiện tại đây.</div>
+            </div>
+      </ng-template>
+
+      <ng-template #loadingTpl>
+            <div class="loading">Đang tải thông báo…</div>
+      </ng-template>
+</section>
