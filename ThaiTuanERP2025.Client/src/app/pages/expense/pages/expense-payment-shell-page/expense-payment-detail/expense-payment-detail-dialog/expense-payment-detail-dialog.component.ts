@@ -6,7 +6,6 @@ import { ExpensePaymentStatusPipe } from "../../../../pipes/expense-payment-stat
 import { AvatarUrlPipe } from "../../../../../../shared/pipes/avatar-url.pipe";
 import { Router } from "@angular/router";
 import { usePaymentDetail } from "../../../../composables/use-payment-detail";
-import { TextareaNoSpellcheckDirective } from "../../../../../../shared/directives/money/textarea/textarea-no-spellcheck.directive";
 
 @Component({
       selector: 'expense-payment-detail-dialog',

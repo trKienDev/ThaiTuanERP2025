@@ -41,9 +41,16 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 
 		public string Name { get; private set; } = string.Empty;
+		public string SubId { get; private set; } = default!;
 		public string Description { get; private set; } = string.Empty;
 		public decimal OutgoingAmount { get; private set; }
 		public OutgoingPaymentStatus Status { get; private set; }
+
+		public PayeeType PayeeType { get; private set; }
+		public Guid? SupplierId { get; private set; }
+		public Supplier? Supplier { get; private set; }
+		public Guid? EmployeeId { get; private set; }
+		public User? Employee { get; private set; }
 
 		public string BankName { get; private set; } = string.Empty;
 		public string AccountNumber { get; private set; } = string.Empty;
@@ -66,6 +73,21 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public User CreatedByUser { get; set; } = null!;
 		public User? ModifiedByUser { get; set; }
 		public User? DeletedByUser { get; set; }
+
+		public void SetSubId(string id) {
+			if (string.IsNullOrWhiteSpace(id))
+				throw new ArgumentException("SubId is required");
+			SubId = id;
+ 		}
+
+		public void SetSupplierId(Guid? supplierId)
+		{
+			SupplierId = supplierId;
+		}
+		
+		public void SetEmployeeId(Guid? employeeId) {
+			EmployeeId = employeeId;
+		}
 
 		public void UpdateDescription(string? description)
 			=> Description = description?.Trim() ?? string.Empty;
