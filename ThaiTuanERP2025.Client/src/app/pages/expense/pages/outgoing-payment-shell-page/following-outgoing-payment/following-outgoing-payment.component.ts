@@ -15,10 +15,14 @@ import { OutgoingPaymentFacade } from "../../../facades/outgoing-payment.facade"
       templateUrl: './following-outgoing-payment.component.html',
       imports: [CommonModule, OutgoingPaymentStatusPipe],
 })
-export class FollowingOutgoingPaymentComponent {
+export class FollowingOutgoingPaymentComponent implements OnInit {
       private dialog = inject(MatDialog);
       private outgoingPaymentFacade = inject(OutgoingPaymentFacade);
-      public outgoingPayments$ = this.outgoingPaymentFacade.outgoingPayments$;
+      public outgoingPayments$ = this.outgoingPaymentFacade.followingPayments$;
+
+      ngOnInit(): void {
+            console.log('following payments: ', this.outgoingPayments$);
+      }
 
       trackById(index: number, item: OutgoingPaymentDto) { return item.id; }
 

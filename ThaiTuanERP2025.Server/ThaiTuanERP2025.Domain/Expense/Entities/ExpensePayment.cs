@@ -45,6 +45,11 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public decimal TotalTax { get; private set; }        // 18,2
 		public decimal TotalWithTax { get; private set; }    // 18,2
 
+		// Tổng số tiền khoản chi đã tạo lệnh
+		public decimal OutgoingAmountPaid { get; private set; } = 0;
+		public decimal RemainingOutgoingAmount { get; private set; }
+
+
 		// Trạng thái luồng duyệt/chi
 		public ExpensePaymentStatus Status { get; private set; }
 
@@ -54,9 +59,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		// Đính kèm (tùy dự án, có thể dùng bảng chung Attachment; ở đây minh họa entity riêng)
 		private readonly List<ExpensePaymentAttachment> _attachments = new();
 		public IReadOnlyCollection<ExpensePaymentAttachment> Attachments => _attachments;
-
-		// Payment followers
-
 
 		// Workflow instance id (nếu có)
 		public Guid? CurrentWorkflowInstanceId { get; private set; }
@@ -172,6 +174,16 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 				Status = ExpensePaymentStatus.FullyPaid;
 
 			return outgoing;
+		}
+
+		public void UpdateOutgoingAmountPaid(IEnumerable<OutgoingPayment> outgoingPayments)
+		{
+			OutgoingAmountPaid = outgoingPayments.Where(x => x.Status == OutgoingPaymentStatus.Created).Sum(x => x.OutgoingAmount);
+		}
+
+		public void RecalculateRemaining()
+		{
+			RemainingOutgoingAmount = TotalWithTax - OutgoingAmountPaid;
 		}
 	}
 }
