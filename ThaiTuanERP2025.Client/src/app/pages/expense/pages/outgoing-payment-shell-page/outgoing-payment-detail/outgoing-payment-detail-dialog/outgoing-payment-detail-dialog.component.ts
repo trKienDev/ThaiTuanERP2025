@@ -8,13 +8,15 @@ import { AvatarUrlPipe } from "../../../../../../shared/pipes/avatar-url.pipe";
 import { ToastService } from "../../../../../../shared/components/toast/toast.service";
 import { OutgoingPaymentService } from "../../../../services/outgoing-payment.service";
 import { first, firstValueFrom } from "rxjs";
+import { KitLoadingSpinnerComponent } from "../../../../../../shared/components/kit-loading-spinner/kit-loading-spinner.component";
+import { Kit404PageComponent } from "../../../../../../shared/components/kit-404-page/kit-404-page.component";
 
 @Component({
       selector: 'outgoing-payment-detail-dialog',
       templateUrl: './outgoing-payment-detail-dialog.component.html',
       styleUrls: ['./outgoing-payment-detail-dialog.component.scss'],
       standalone: true,
-      imports: [CommonModule, OutgoingPaymentStatusPipe, AvatarUrlPipe]
+      imports: [CommonModule, OutgoingPaymentStatusPipe, AvatarUrlPipe, KitLoadingSpinnerComponent, Kit404PageComponent]
 })
 export class OutgoingPaymentDetailDialogComponent {
       private dialogRef = inject(MatDialogRef<OutgoingPaymentDetailDialogComponent>);
