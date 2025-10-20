@@ -1,16 +1,18 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Api.Common;
+using ThaiTuanERP2025.Presentation.Common;
+using ThaiTuanERP2025.Application.Expense.Commands.ApprovalSteps.ApproveCurrentStep;
+using ThaiTuanERP2025.Application.Expense.Commands.ApprovalSteps.RejectCurrentStep;
 using ThaiTuanERP2025.Application.Expense.Commands.ApprovalWorkflows.CreateApprovalWorkflowInstance;
 using ThaiTuanERP2025.Application.Expense.Dtos;
 using ThaiTuanERP2025.Application.Expense.Queries.ApprovalWorkflow.GetApprovalWorkflowInstanceDetail;
 using ThaiTuanERP2025.Application.Expense.Queries.ApprovalWorkflow.GetApprovalWorkflowInstancesByFilter;
 using ThaiTuanERP2025.Domain.Expense.Enums;
 
-namespace ThaiTuanERP2025.Api.Controllers.Expense
+namespace ThaiTuanERP2025.Presentation.Controllers.Expense
 {
 	[ApiController]
-	[Route("api/workflows")]
+	[Route("api/approval-workflow-instances")]
 	public class WorkflowInstanceController : ControllerBase
 	{
 		private readonly IMediator _mediator;
@@ -48,6 +50,19 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
 				return BadRequest(ApiResponse<string>.Fail("Dữ liệu không hợp lệ"));
 			var result = await _mediator.Send(new CreateApprovalWorkflowInstanceCommand(body), cancellationToken);
 			return Ok(ApiResponse<ApprovalWorkflowInstanceDto>.Success(result, "Tạo snapshot luồng duyệt thành công"));
+		}
+
+		[HttpPost("{instanceId}/steps/{stepId}/approve")]
+		public async Task<IActionResult> ApproveStep(Guid instanceId, Guid stepId, [FromBody] ApproveStepRequest body, CancellationToken cancellationToken)
+		{
+			var result = await _mediator.Send(new ApproveCurrentStepCommand(instanceId, stepId, body.UserId, body.PaymentId, body.Comment), cancellationToken);
+			return Ok(ApiResponse<object>.Success("Step approved successfully"));
+		}
+		[HttpPost("{instanceId}/steps/{stepId}/reject")]
+		public async Task<IActionResult> RejectStep(Guid instanceId, Guid stepId, [FromBody] RejectStepRequest body, CancellationToken cancellationToken)
+		{
+			var result = await _mediator.Send(new RejectCurrentStepCommand(instanceId, stepId, body.UserId, body.PaymentId, body.Comment), cancellationToken);
+			return Ok(ApiResponse<object>.Success("Step rejected successfully"));
 		}
 	}
 }

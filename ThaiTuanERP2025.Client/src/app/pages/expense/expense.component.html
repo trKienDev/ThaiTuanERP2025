@@ -1,16 +1,34 @@
-<div class="expense-navbar">
+<div class="expense-navbar dom-animation-content" >
       <nav class="expense-navbar__container">
             <ul class="expense-navbar__list">
                   <li class="expense-navbar__item">
-                        <a class="expense-navbar__link" routerLink="/expense/payment-request" routerLinkActive="selected"  [routerLinkActiveOptions]="{ exact: true }">
+                        <a class="expense-navbar__link" routerLink="/expense/expense-payment-shell" routerLinkActive="selected">
                               <span class="expense-navbar__icon material-icons-round">payment</span>
                               <span class="expense-navbar__name">Thanh toán</span>
+                        </a>
+                  </li>
+                  <li class="expense-navbar__item"  *ngIf="isPaymentDetailPage">
+                        <a class="expense-navbar__link" routerLink="/expense/payment-detail" routerLinkActive="selected"  [routerLinkActiveOptions]="{ exact: true }">
+                              <span class="expense-navbar__icon material-icons-round">payment</span>
+                              <span class="expense-navbar__name">Chi tiết thanh toán</span>
+                        </a>
+                  </li>
+                  <li class="expense-navbar__item">
+                        <a class="expense-navbar__link" routerLink="/expense/outgoing-payment-shell" routerLinkActive="selected">
+                              <span class="expense-navbar__icon material-icons-round">credit_score</span>
+                              <span class="expense-navbar__name">Khoản tiền ra</span>
                         </a>
                   </li>
                   <li class="expense-navbar__item">
                         <a class="expense-navbar__link" routerLink="/expense/supplier" routerLinkActive="selected"  [routerLinkActiveOptions]="{ exact: true }">
                               <span class="expense-navbar__icon material-icons-round">contacts</span>
                               <span class="expense-navbar__name">Nhà cung cấp</span>
+                        </a>
+                  </li>
+                  <li class="expense-navbar__item">
+                        <a class="expense-navbar__link" routerLink="/expense/bank-account-shell-page" routerLinkActive="selected">
+                              <span class="expense-navbar__icon material-icons-round">account_balance</span>
+                              <span class="expense-navbar__name">Ngân hàng</span>
                         </a>
                   </li>
                   <li class="expense-navbar__item">

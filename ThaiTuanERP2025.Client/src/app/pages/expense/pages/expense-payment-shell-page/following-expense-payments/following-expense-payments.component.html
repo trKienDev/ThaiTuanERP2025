@@ -1,0 +1,50 @@
+<div class="payments-container">
+      <div class="page-heading">
+            <div class="page-title">
+                  <h3 class="icon">💵</h3>
+                  <h3 class="title">Thanh toán của bạn</h3>
+            </div>
+      </div>
+      <div class="page-body">
+            <table class="table margin-top-20px">
+                  <thead>
+                        <tr>
+                              <th>Tên thanh toán</th>
+                              <th>Trạng thái</th>
+                              <th>Người duyệt</th>
+                              <th>Thành tiền</th>
+                              <th>Tổng thuế</th>
+                              <th>Tổng tiền</th>
+                              <th>Số tiền đã tạo lệnh</th>
+                              <th>Người tạo</th>
+                              <th>Tạo lúc</th>
+                        </tr>
+                  </thead>
+                  <tbody>
+                        <tr *ngFor="let payment of expensePayments">
+                              <td>
+                                    <span class="payment-name" (click)="openExpensePaymentDetailDialog(payment.id)">{{ payment.name }}</span>
+                              </td>
+                              <td>
+                                    <span  class="payment-status-badge" [ngClass]="(payment.status | expensePaymentStatus).class">
+                                          {{ (payment.status | expensePaymentStatus).text}}
+                                    </span>
+                              </td>
+                              <td>
+                                    <ng-container *ngFor="let step of payment.workflowInstanceStatus.steps">
+                                          <img class="approver-avatar" [src]="step.approvedByUser | avatarUrlPipe" alt="approved by">
+                                    </ng-container>
+                              </td>
+                              <td>{{ payment.totalAmount | number:'1.0-0' }}</td>
+                              <td>{{ payment.totalTax | number:'1.0-0' }}</td>
+                              <td>{{ payment.totalWithTax | number:'1.0-0' }}</td>
+                              <td></td>
+                              <td>
+                                    <img class="approver-avatar" [src]="payment.createdByUser | avatarUrlPipe" alt="created by">
+                              </td>
+                              <td>{{ payment.createdDate | date:'dd/MM/yyyy' }}</td>
+                        </tr>
+                  </tbody>
+            </table>
+      </div>
+</div>
