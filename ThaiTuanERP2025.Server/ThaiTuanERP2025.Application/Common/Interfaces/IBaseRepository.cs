@@ -15,6 +15,7 @@ namespace ThaiTuanERP2025.Application.Common.Interfaces
 		IQueryable<T> Query(bool asNoTracking = true);
 		IQueryable<T> Query(Expression<Func<T, bool>> predicate, bool asNoTracking = true);
 		IQueryable<T> QueryIncluding(bool asNoTracking = true, params Expression<Func<T, object>>[] includes);
+		IQueryable<T> FindQueryable(Expression<Func<T, bool>> predicate, bool asNoTracking = true);
 
 		Task<List<T>> FindAsync(Expression<Func<T, bool>> predicate);
 		Task<List<T>> FindIncludingAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken, params Expression<Func<T, object>>[] includes);
