@@ -33,6 +33,7 @@ namespace ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetFollowin
 			var expensePayments = await _unitOfWork.ExpensePayments.FindIncludingAsync(
 				p => idArr.Contains(p.Id),
 				cancellationToken,
+				asNoTracking: false,
 				p => p.CreatedByUser,
 				p => p.CurrentWorkflowInstance!,
 				p => p.CurrentWorkflowInstance!.Steps

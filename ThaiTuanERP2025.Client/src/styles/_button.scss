@@ -89,7 +89,7 @@ button, .button {
 .submit-button:hover { box-shadow: rgba(39, 174, 96, .2) 0 6px 12px; }
 
 /* close-button */
-.close-button { padding: unset !important; border: none !important; background-color: unset !important; cursor: pointer;}
+.close-button { padding: unset !important; border: none !important; background-color: unset !important; cursor: pointer; outline: none; box-shadow: none;}
 .close-button span { font-weight: bold; font-size: 25px !important;  color: #ffa8a8; transition: color 0.5s ease-in-out; }
 .close-button:hover span { color: red; }
 
@@ -103,6 +103,6 @@ button, .button {
 .plus-button--small { font-size: 12px; }
 
 /* CSS */
-.pintura-button { background: linear-gradient(to bottom right, #EF4765, #FF9A5A); border: 0 !important; color: #FFFFFF; cursor: pointer; display: inline-block; font-weight: 500; outline: transparent; text-align: center; text-decoration: none; transition: box-shadow .2s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: manipulation; white-space: nowrap; }
+.pintura-button { background: linear-gradient(to bottom right, #EF4765, #FF9A5A); border: 0 !important; color: #FFFFFF; cursor: pointer; display: inline-block; font-weight: 500; outline: transparent; text-align: center; text-decoration: none; transition: box-shadow .2s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: manipulation; white-space: nowrap; font-weight: bold; }
 .pintura-button:not([disabled]):focus { box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5); }
 .pintura-button:not([disabled]):hover { box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5); }

@@ -5,6 +5,9 @@ import { useOutgoingPaymentDetail } from "../../../../composables/use-outgoing-p
 import { OutgoingPaymentDetailDto } from "../../../../models/outgoing-payment.model";
 import { OutgoingPaymentStatusPipe } from "../../../../pipes/outgoing-payment-status.pipe";
 import { AvatarUrlPipe } from "../../../../../../shared/pipes/avatar-url.pipe";
+import { ToastService } from "../../../../../../shared/components/toast/toast.service";
+import { OutgoingPaymentService } from "../../../../services/outgoing-payment.service";
+import { first, firstValueFrom } from "rxjs";
 
 @Component({
       selector: 'outgoing-payment-detail-dialog',
@@ -16,19 +19,48 @@ import { AvatarUrlPipe } from "../../../../../../shared/pipes/avatar-url.pipe";
 export class OutgoingPaymentDetailDialogComponent {
       private dialogRef = inject(MatDialogRef<OutgoingPaymentDetailDialogComponent>);
       private outgoingPaymentLogic = useOutgoingPaymentDetail();
+      private toastService = inject(ToastService);
+      private outgoingPaymentService = inject(OutgoingPaymentService);
       loading = this.outgoingPaymentLogic.isLoading;
       error = this.outgoingPaymentLogic.error;
+      processing = false;
 
       constructor(@Inject(MAT_DIALOG_DATA) private data: string) {
             if(data) {
-                  console.log('Loading outgoing payment detail for id', data);
                   this.outgoingPaymentLogic.load(data);
             }
       }
 
       get outgoingPaymentDetail(): OutgoingPaymentDetailDto | null { 
-            console.log('outgoingPaymentDetail', this.outgoingPaymentLogic.outgoingPaymentDetail());
             return this.outgoingPaymentLogic.outgoingPaymentDetail();
+      }
+
+      async onApprove(): Promise<void> {
+            this.processing = true;
+            try {
+                  await firstValueFrom(this.outgoingPaymentService.onApprove(this.outgoingPaymentDetail!.id));
+                  this.toastService.successRich("Duyệt khoản chi thành công");
+                  this.outgoingPaymentLogic.refresh();
+            } catch (error) {
+                  console.error('Error approving outgoing payment', error);
+                  this.toastService.errorRich("Không thể duyệt khoản chi");
+            } finally {
+                  this.processing = false;
+            }
+      }
+
+      async markCreated(): Promise<void> {
+            this.processing = true;
+            try {
+                  await firstValueFrom(this.outgoingPaymentService.markCreated(this.outgoingPaymentDetail!.id));
+                  this.toastService.successRich("Đánh dấu khoản chi đã tạo thành công");
+                  this.outgoingPaymentLogic.refresh();
+            } catch (error) {
+                  console.error('Error marking outgoing payment as created', error);
+                  this.toastService.errorRich("Không thể đánh dấu khoản chi đã tạo");
+            } finally {
+                  this.processing = false;
+            }
       }
 
       close(): void {

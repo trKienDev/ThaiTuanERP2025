@@ -26,7 +26,7 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 				.FirstOrDefaultAsync(g => g.Id == id);
 		}
 
-		public override async Task<List<Group>> GetAllAsync() {
+		public override async Task<List<Group>> GetAllAsync(CancellationToken cancellationToken) {
 			return await DbContext.Groups
 				.Include(g => g.UserGroups)
 				.ThenInclude(ug => ug.User)

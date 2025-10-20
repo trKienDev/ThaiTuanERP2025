@@ -1,5 +1,4 @@
 import { UserDto } from "../../account/models/user.model";
-import { OutgoingBankAccountComponent } from "../pages/bank-account-shell-page/outgoing-bank-account/outgoing-bank-account.component";
 import { ExpensePaymentDetailDto } from "./expense-payment.model";
 import { OutgoingBankAccountDto } from "./outgoing-bank-account.model";
 import { SupplierDto } from "./supplier.model";
@@ -8,8 +7,7 @@ export enum OutgoingPaymentStatus {
       pending = 0, // chờ tạo lệnh
       approved = 1, // đã duyệt
       created = 2, // đã tạo lệnh
-      recorded = 3, // đã ghi sổ
-      cancelled = 4, // đã hủy
+      cancelled = 3, // đã hủy
 }
 
 export interface OutgoingPayment {

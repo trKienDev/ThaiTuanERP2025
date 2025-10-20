@@ -19,6 +19,7 @@ namespace ThaiTuanERP2025.Application.Finance.Queries.CashoutCodes.GetAllCashout
 			var list = await _unitOfWork.CashoutCodes.FindIncludingAsync(
 				_ => true,
 				cancellationToken: cancellationToken,
+				asNoTracking: true,
 				x => x.CashoutGroup,
 				x => x.PostingLedgerAccount
 			);
