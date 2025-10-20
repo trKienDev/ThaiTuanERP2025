@@ -1,4 +1,4 @@
-﻿namespace ThaiTuanERP2025.Api.Common
+﻿namespace ThaiTuanERP2025.Presentation.Common
 {
 	public class ApiResponse<T>
 	{

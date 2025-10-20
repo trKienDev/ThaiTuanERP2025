@@ -2,7 +2,6 @@
       <div class="dialog-container">
             <h2 class="dialog-title">Thêm ngân sách mới</h2>
             <form class="dialog-body" [formGroup]="form" (ngSubmit)="save()">
-
                   <div class="dialog-row">
                         <div class="form-input">
                               <input class="" type="text" formControlName="name" autocomplete="on" required/>
@@ -25,9 +24,9 @@
                         <kit-dropdown [options]="cashoutCodeOptions" (selectionChange)="onCashoutCodeSelected($event)" [placeholder]="'Chọn dòng tiền ra'" [width]="'100%'"></kit-dropdown>
                   </div>
 
-                  <div class="actions d-flex gap-10p mar-top-20">
+                  <div class="actions display-flex gap-10px margin-top-20px">
                         <button type="button" class="width-50pt button cancel-button" (click)="close()">Hủy</button>
-                        <button type="submit" class="width-50pt button save-button d-flex justify-content-center" [disabled]="submitting">
+                        <button type="submit" class="width-50pt button save-button display-flex justify-content-center" [disabled]="submitting">
                               {{ submitting ? 'Đang lưu...' : 'Lưu' }}
                         </button>
                   </div>

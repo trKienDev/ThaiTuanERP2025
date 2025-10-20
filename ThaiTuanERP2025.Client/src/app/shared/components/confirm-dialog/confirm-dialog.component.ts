@@ -24,8 +24,8 @@ export class KitConfirmDialogComponent {
             @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogData
       ) {}
 
-      get buttonColor(): 'primary' | 'warn' | undefined {
-            if(this.data?.tone === 'danger') return 'warn';
+      get buttonColor(): 'primary' | 'warn' | 'danger'  | undefined {
+            if(this.data?.tone === 'danger') return 'danger';
             if(this.data?.tone === 'warning') return 'warn';
             return 'primary';
       }

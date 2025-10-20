@@ -9,8 +9,6 @@ import { RouterLink } from "@angular/router";
 import { ApprovalWorkflowTemplateService } from "../../services/approval-workflow-template.service";
 import { ApprovalWorkflowTemplateDto } from "../../models/approval-workflow-template.model";
 import { ApprovalWorkflowTemplateFacade } from "../../facades/approval-workflow-template.facade";
-import { SaveApprovalWorkflowTemplateComponent } from "./expense-approval-workflow-engine-request/save-approval-workflow-template/save-approval-workflow-template.component";
-
 
 @Component({
       selector: 'expense-approval-workflow-engine',
