@@ -60,6 +60,7 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.OutgoingPayments.CreateOu
 				request.Description
 			);
 			entity.SetSubId(subId);
+			entity.Approve(currentUserId);
 
 			if (request.SupplierId.HasValue && !request.EmployeeId.HasValue)
 				entity.SetSupplierId(request.SupplierId.Value);

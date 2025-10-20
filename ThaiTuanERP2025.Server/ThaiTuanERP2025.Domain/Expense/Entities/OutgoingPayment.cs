@@ -145,5 +145,43 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 			Status = newStatus;
 		}
+
+		public void Approve(Guid actorUserId) {
+			if (actorUserId == Guid.Empty)
+				throw new ArgumentException("Thiếu người thực hiện.", nameof(actorUserId));
+
+			if (Status != OutgoingPaymentStatus.Pending)
+				throw new InvalidOperationException("Chỉ chứng từ ở trạng thái Pending mới được duyệt.");
+
+			if (actorUserId != CreatedByUserId)
+				throw new InvalidOperationException("Chỉ người tạo chứng từ mới có quyền duyệt.");
+
+			ChangeStatus(OutgoingPaymentStatus.Approved);
+		}
+
+		public void MarkCreated(Guid actorUserId)
+		{
+			if (actorUserId == Guid.Empty)
+				throw new ArgumentException("Thiếu người thực hiện.", nameof(actorUserId));
+
+			if (Status != OutgoingPaymentStatus.Approved)
+				throw new InvalidOperationException("Chỉ chứng từ ở trạng thái duyệt mới được tạo lệnh.");
+
+			if (actorUserId != CreatedByUserId)
+				throw new InvalidOperationException("Chỉ người tạo chứng từ mới có quyền duyệt.");
+
+			ChangeStatus(OutgoingPaymentStatus.Created);
+		}
+
+		public void Cancel(Guid actorUserId)
+		{
+			if (actorUserId == Guid.Empty)
+				throw new ArgumentException("Thiếu người thực hiện.", nameof(actorUserId));
+			if (Status == OutgoingPaymentStatus.Cancelled)
+				throw new InvalidOperationException("Chứng từ đã ở trạng thái Hủy.");
+			if (actorUserId != CreatedByUserId)
+				throw new InvalidOperationException("Chỉ người tạo chứng từ mới có quyền hủy.");
+			ChangeStatus(OutgoingPaymentStatus.Cancelled);
+		}	
 	}
 }

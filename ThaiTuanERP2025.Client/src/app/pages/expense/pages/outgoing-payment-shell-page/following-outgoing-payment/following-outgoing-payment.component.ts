@@ -7,6 +7,7 @@ import { OutgoingPaymentStatusPipe } from "../../../pipes/outgoing-payment-statu
 import { ExpensePaymentDetailDialogComponent } from "../../expense-payment-shell-page/expense-payment-detail/expense-payment-detail-dialog/expense-payment-detail-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { OutgoingPaymentDetailDialogComponent } from "../outgoing-payment-detail/outgoing-payment-detail-dialog/outgoing-payment-detail-dialog.component";
+import { OutgoingPaymentFacade } from "../../../facades/outgoing-payment.facade";
 
 @Component({
       selector: 'following-outgoing-payment',
@@ -14,18 +15,12 @@ import { OutgoingPaymentDetailDialogComponent } from "../outgoing-payment-detail
       templateUrl: './following-outgoing-payment.component.html',
       imports: [CommonModule, OutgoingPaymentStatusPipe],
 })
-export class FollowingOutgoingPaymentComponent implements OnInit {
+export class FollowingOutgoingPaymentComponent {
       private dialog = inject(MatDialog);
-      followingPayments: OutgoingPaymentSummaryDto[] = [];
-      constructor(private outgoingPaymentService: OutgoingPaymentService) {}
+      private outgoingPaymentFacade = inject(OutgoingPaymentFacade);
+      public outgoingPayments$ = this.outgoingPaymentFacade.outgoingPayments$;
 
-      async ngOnInit(): Promise<void> {
-            await this.loadFollowingOutgoingPayments();
-      }
-
-      private async loadFollowingOutgoingPayments() {
-            this.followingPayments = await firstValueFrom(this.outgoingPaymentService.getFollowing()) ?? [];
-      }
+      trackById(index: number, item: OutgoingPaymentDto) { return item.id; }
 
       openExpensePaymentDetailDialog(paymentId: string) {
             const dialogRef = this.dialog.open(ExpensePaymentDetailDialogComponent, {

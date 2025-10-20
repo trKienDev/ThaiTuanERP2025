@@ -15,12 +15,22 @@
                   <ng-container *ngIf="error()">{{ error() }}</ng-container>
                   <div block-label="outgoing-payment-detail" class="container">
                         <div class="detail-heading display-flex align-items-center gap-10px">
+                              <ng-container *ngIf="outgoingPaymentDetail?.status === 'Pending'">
+                                    <div class="action-button">
+                                          <button type="button" class="button pintura-button" (click)="onApprove()">Duyệt</button>
+                                    </div>
+                              </ng-container>
+                              <ng-container *ngIf="outgoingPaymentDetail?.status === 'Approved'">
+                                    <div class="action-button">
+                                          <button type="button" class="button submit-button" (click)="markCreated()">Tạo lệnh</button>
+                                    </div>
+                              </ng-container>
+                              <h3 class="payment-name">{{ outgoingPaymentDetail?.name }}</h3>
                               <div class="detail-status">
                                     <span  class="outgoing-status-badge" [ngClass]="outgoingPaymentDetail?.status | outgoingPaymentStatus : 'class'">
                                           {{ outgoingPaymentDetail?.status | outgoingPaymentStatus : 'label' }}
                                     </span>
                               </div>
-                              <h3 class="payment-name">{{ outgoingPaymentDetail?.name }}</h3>
                         </div>
                         <div class="detail-body">
                               <div class="general-information-block primary-card">
@@ -69,12 +79,16 @@
                                                 <div class="amount-block">
                                                       <label class="amount-label">Số tiền thanh toán</label>
                                                       <span>{{ outgoingPaymentDetail?.expensePayment?.totalWithTax | number:'1.0-0' }} VNĐ</span>
-                                                      <span class="amount-date">Ngày phát sinh: {{ outgoingPaymentDetail?.expensePayment?.createdDate | date: 'dd/MM/yyyy' }}</span>
+                                                      <span class="amount-date">Ngày phát sinh: 
+                                                            <span style="font-weight: bold;">{{ outgoingPaymentDetail?.expensePayment?.createdDate | date: 'dd/MM/yyyy' }}</span>
+                                                      </span>
                                                 </div>
                                                 <div class="amount-block">
                                                       <label class="amount-label">Số tiền khoản chi</label>
                                                       <span>{{ outgoingPaymentDetail?.outgoingAmount| number:'1.0-0' }} VNĐ</span>
-                                                      <span class="amount-date">Hạn thanh toán: {{ outgoingPaymentDetail?.dueDate | date: 'dd/MM/yyyy' }}</span>
+                                                      <span class="amount-date">Hạn thanh toán:
+                                                            <span style="font-weight: bold;">{{ outgoingPaymentDetail?.dueDate | date: 'dd/MM/yyyy' }}</span>
+                                                      </span>
                                                 </div>
                                           </div>
                                           <div class="amount-item-block">
