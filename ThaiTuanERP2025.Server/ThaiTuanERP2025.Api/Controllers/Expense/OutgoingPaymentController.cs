@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Presentation.Common;
+using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Expense.Commands.OutgoingPayments.CreateOutgoingPayment;
 using ThaiTuanERP2025.Application.Expense.Dtos;
 using ThaiTuanERP2025.Application.Expense.Queries.OutgoingPayments.GetFollowingOutgoingPayments;
@@ -9,7 +9,7 @@ using ThaiTuanERP2025.Application.Expense.Queries.OutgoingPayments.GetOutgoingPa
 using ThaiTuanERP2025.Application.Expense.Commands.OutgoingPayments.ApproveOutgoingPayment;
 using ThaiTuanERP2025.Application.Expense.Commands.OutgoingPayments.MarkOutgoingPaymentCreated;
 
-namespace ThaiTuanERP2025.Presentation.Controllers.Expense
+namespace ThaiTuanERP2025.Api.Controllers.Expense
 {
 	[Authorize]
 	[ApiController]
