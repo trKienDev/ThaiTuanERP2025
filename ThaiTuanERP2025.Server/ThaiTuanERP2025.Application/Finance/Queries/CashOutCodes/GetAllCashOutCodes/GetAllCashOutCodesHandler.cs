@@ -20,6 +20,7 @@ namespace ThaiTuanERP2025.Application.Finance.Queries.CashoutCodes.GetAllCashout
 				_ => true,
 				cancellationToken: cancellationToken,
 				asNoTracking: true,
+				orderBy: q => q.OrderBy(x => x.CreatedDate),
 				x => x.CashoutGroup,
 				x => x.PostingLedgerAccount
 			);

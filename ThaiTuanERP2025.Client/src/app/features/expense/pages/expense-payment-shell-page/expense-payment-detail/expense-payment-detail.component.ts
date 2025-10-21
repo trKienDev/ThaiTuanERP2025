@@ -53,7 +53,6 @@ import { InvoiceDetailDialogComponent } from "../../invoices/invoice-detail-dial
                         animate('220ms ease-in', style({ opacity: 0 }))
                   ])
             ])
-            
       ],
 })
 export class ExpensePaymentDetailPanelComponent { 

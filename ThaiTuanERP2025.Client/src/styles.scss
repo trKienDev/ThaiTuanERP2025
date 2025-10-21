@@ -153,7 +153,11 @@ input[type=number] { -moz-appearance: textfield; }
 
 .mat-datepicker-content .mat-calendar { width: 300px !important; height: unset !important; border-top-left-radius: var(--default-border-color-radius); border-top-right-radius: var(--default-border-color-radius); }
 .kit-datepicker { 
-      background-image: linear-gradient(to bottom, #ffffff, #fcfcff, #f8f9ff, #f3f6ff, #edf4ff);
+      background: #f2faff;
+      background: -webkit-linear-gradient(0deg, rgba(242, 250, 255, 1) 0%, rgba(246, 248, 250, 1) 50%, rgba(255, 255, 255, 1) 100%);
+      background: -moz-linear-gradient(0deg, rgba(242, 250, 255, 1) 0%, rgba(246, 248, 250, 1) 50%, rgba(255, 255, 255, 1) 100%);
+      background: linear-gradient(0deg, rgba(242, 250, 255, 1) 0%, rgba(246, 248, 250, 1) 50%, rgba(255, 255, 255, 1) 100%);
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#F2FAFF", endColorstr="#FFFFFF", GradientType=0);
       box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px; 
       border-bottom-left-radius: var(--default-border-color-radius); border-bottom-right-radius: var(--default-border-color-radius); user-select: none; }
 .kit-datepicker button { border: none !important; }

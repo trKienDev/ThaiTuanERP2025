@@ -34,6 +34,7 @@ namespace ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetFollowin
 				p => idArr.Contains(p.Id),
 				cancellationToken,
 				asNoTracking: false,
+				orderBy: q => q.OrderByDescending(p => p.CreatedDate),
 				p => p.CreatedByUser,
 				p => p.CurrentWorkflowInstance!,
 				p => p.CurrentWorkflowInstance!.Steps
