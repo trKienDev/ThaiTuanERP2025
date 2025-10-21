@@ -1,11 +1,11 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Presentation.Common;
+using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Expense.Dtos;
 using ThaiTuanERP2025.Application.Expense.Queries.OutgoingBankAccounts.GetAllOutgoingBankAccount;
 
-namespace ThaiTuanERP2025.Presentation.Controllers.Expense
+namespace ThaiTuanERP2025.Api.Controllers.Expense
 {
 	[ApiController]
 	[Authorize]

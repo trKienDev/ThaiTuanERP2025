@@ -10,12 +10,12 @@
                         </button>
                   </div>
             </div>
-            <ng-container *ngIf="loading(); else contentTpl">
-                  <kit-loading-spinner></kit-loading-spinner>
-            </ng-container>
-            <ng-template #contentTpl>
-                  <ng-container *ngIf="outgoingPaymentDetail; else errorTpl">
-                        <div class="dialog-body">
+            <div class="dialog-body">
+                  <ng-container *ngIf="loading(); else contentTpl">
+                        <kit-loading-spinner></kit-loading-spinner>
+                  </ng-container>
+                  <ng-template #contentTpl>
+                        <ng-container *ngIf="outgoingPaymentDetail; else errorTpl">
                               <div block-label="outgoing-payment-detail" class="container">
                                     <div class="detail-heading display-flex align-items-center gap-10px">
                                           <ng-container *ngIf="outgoingPaymentDetail?.status === 'Pending'">
@@ -46,8 +46,8 @@
                                                       <div class="row">
                                                             <label for="detail-createdby">Tạo bởi</label>
                                                             <div class="value flex">
-                                                                  <img class="avatar" [src]="outgoingPaymentDetail.createdBy | avatarUrlPipe" alt="avatar">
-                                                                  <span>{{ outgoingPaymentDetail.createdBy.fullName }}</span>
+                                                                  <img class="avatar" [src]="outgoingPaymentDetail.createdByUser | avatarUrlPipe" alt="avatar">
+                                                                  <span>{{ outgoingPaymentDetail.createdByUser.fullName }}</span>
                                                             </div>
                                                       </div>
                                                       <div class="row">
@@ -146,11 +146,11 @@
                                           </div>
                                     </div>
                               </div>
-                        </div>
-                  </ng-container>
-            </ng-template>
-            <ng-template #errorTpl>
-                  <kit-404-page title="⛔ Không thể tải dữ liệu thanh toán"></kit-404-page>
-            </ng-template>
+                        </ng-container>
+                  </ng-template>
+                  <ng-template #errorTpl>
+                        <kit-404-page title="⛔ Không thể tải dữ liệu khoản chi" variant="error"></kit-404-page>
+                  </ng-template>
+            </div>
       </div>
 </div>

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
-using ThaiTuanERP2025.Presentation.Common;
+using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Finance.Commands.BudgetPeridos.CreateBudgetPeriod;
 using ThaiTuanERP2025.Application.Finance.Commands.BudgetPeriods.DeleteBudgetPeriod;
 using ThaiTuanERP2025.Application.Finance.Commands.BudgetPeriods.UpdateBudgetPeriod;
@@ -10,7 +10,7 @@ using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Application.Finance.Queries.BudgetPeriods.GetAllActiveBudgetPeriods;
 using ThaiTuanERP2025.Application.Finance.Queries.BudgetPeriods.GetAllBudgetPeriods;
 
-namespace ThaiTuanERP2025.Presentation.Controllers.Finance
+namespace ThaiTuanERP2025.Api.Controllers.Finance
 {
 	[Authorize]
 	[Route("api/budget-period")]

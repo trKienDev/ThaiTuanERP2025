@@ -1,8 +1,6 @@
 // topbar.component.ts (đã chỉnh)
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { UserFacade } from '../../pages/account/facades/user.facade';
-import { UserDto } from '../../pages/account/models/user.model';
 import { firstValueFrom, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { NotificationPanelService } from './notification-panel/services/notification-panel.service';
@@ -11,6 +9,8 @@ import { NotificationFacade } from './notification-panel/facade/notification.fac
 import { TaskReminderFacade } from './task-reminder-panel/facades/task-reminder.facade';
 import { TaskReminderDrawerService } from './task-reminder-panel/services/task-reminder-drawer.service';
 import { resolveAvatarUrl } from '../../shared/utils/avatar.utils';
+import { UserFacade } from '../../features/account/facades/user.facade';
+import { UserDto } from '../../features/account/models/user.model';
 
 @Component({
       selector: 'app-topbar',
