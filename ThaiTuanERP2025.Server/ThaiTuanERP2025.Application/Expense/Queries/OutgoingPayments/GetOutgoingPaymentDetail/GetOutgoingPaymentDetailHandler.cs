@@ -30,6 +30,9 @@ namespace ThaiTuanERP2025.Application.Expense.Queries.OutgoingPayments.GetOutgoi
 				?? throw new NotFoundException("Không tìm thấy thanh toán liên quan đến khoản chi này");
 			var expensePaymentDto = _mapper.Map<ExpensePaymentDetailDto>(expensePayment);
 
+			UserDto createdByUser = _mapper.Map<UserDto>(
+				await _unitOfWork.Users.GetByIdAsync(outgoingPayment.CreatedByUserId, cancellationToken)
+			);
 
 			Supplier? supplier = null;
 			if (outgoingPayment.SupplierId.HasValue)
@@ -49,7 +52,8 @@ namespace ThaiTuanERP2025.Application.Expense.Queries.OutgoingPayments.GetOutgoi
 				ExpensePayment = expensePaymentDto,
 				Supplier = supplierDto,
 				Employee = employeeDto,
-				OutgoingBankAccount = outgoingBankAccountDto
+				OutgoingBankAccount = outgoingBankAccountDto,
+				CreatedByUser = createdByUser
 			};
 			return outgoingPaymentDto;
 		}

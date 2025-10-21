@@ -1,6 +1,6 @@
 ﻿using ThaiTuanERP2025.Application;
 using ThaiTuanERP2025.Infrastructure.Persistence; // call AssemblyReference
-using ThaiTuanERP2025.Presentation.Middleware;
+using ThaiTuanERP2025.Api.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -19,10 +19,10 @@ using ThaiTuanERP2025.Infrastructure.Expense.Contracts.Resolvers;
 using ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows;
 using ThaiTuanERP2025.Application.Notifications.Services;
 using ThaiTuanERP2025.Infrastructure.Notifications.Services;
-using ThaiTuanERP2025.Presentation.Hubs;
+using ThaiTuanERP2025.Api.Hubs;
 using Microsoft.AspNetCore.SignalR;
-using ThaiTuanERP2025.Presentation.SignalR;
-using ThaiTuanERP2025.Presentation.Notifications;
+using ThaiTuanERP2025.Api.SignalR;
+using ThaiTuanERP2025.Api.Notifications;
 using ThaiTuanERP2025.Infrastructure.Notifications.Background;
 using ThaiTuanERP2025.Application.Common.Services;
 using ThaiTuanERP2025.Infrastructure.Common.Services;

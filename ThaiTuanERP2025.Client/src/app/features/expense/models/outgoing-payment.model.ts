@@ -41,7 +41,7 @@ export interface OutgoingPaymentRequest extends OutgoingPayment {
 
 export interface OutgoingPaymentDetailDto extends OutgoingPaymentDto {
       subId: string;
-      createdBy: UserDto;
+      createdByUser: UserDto;
       createdDate: Date;   
       
       supplier?: SupplierDto | null;

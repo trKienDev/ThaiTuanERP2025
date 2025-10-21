@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Presentation.Common;
+using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Files.Commands.HardDelete;
 using ThaiTuanERP2025.Application.Files.Commands.SoftDeleteFile;
 using ThaiTuanERP2025.Application.Files.Commands.UploadFile;
@@ -9,7 +9,7 @@ using ThaiTuanERP2025.Application.Files.Commands.UploadMultipleFiles;
 using ThaiTuanERP2025.Application.Files.Common;
 using ThaiTuanERP2025.Application.Files.Queries.GetFileDownloadUrl;
 
-namespace ThaiTuanERP2025.Presentation.Controllers.Files
+namespace ThaiTuanERP2025.Api.Controllers.Files
 {
 	[ApiController]
 	[Authorize]

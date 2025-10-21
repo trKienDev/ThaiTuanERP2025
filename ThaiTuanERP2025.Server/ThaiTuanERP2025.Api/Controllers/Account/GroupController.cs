@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Presentation.Common;
+using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Account.Commands.Group.ChangeGroupAdmin;
 using ThaiTuanERP2025.Application.Account.Commands.Group.CreateGroup;
 using ThaiTuanERP2025.Application.Account.Commands.Group.DeleteGroup;
@@ -11,7 +11,7 @@ using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Application.Account.Queries.Groups.GetAllGroupsQuery;
 using ThaiTuanERP2025.Application.Account.Validators;
 
-namespace ThaiTuanERP2025.Presentation.Controllers.Account
+namespace ThaiTuanERP2025.Api.Controllers.Account
 {
 	[Route("api/[controller]")]	
 	[ApiController]
