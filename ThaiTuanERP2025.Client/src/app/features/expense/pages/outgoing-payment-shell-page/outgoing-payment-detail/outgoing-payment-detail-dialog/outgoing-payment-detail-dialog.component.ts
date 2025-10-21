@@ -34,7 +34,6 @@ export class OutgoingPaymentDetailDialogComponent {
       }
 
       get outgoingPaymentDetail(): OutgoingPaymentDetailDto | null { 
-            console.log( 'detail: ',this.outgoingPaymentLogic.outgoingPaymentDetail());
             return this.outgoingPaymentLogic.outgoingPaymentDetail();
       }
 

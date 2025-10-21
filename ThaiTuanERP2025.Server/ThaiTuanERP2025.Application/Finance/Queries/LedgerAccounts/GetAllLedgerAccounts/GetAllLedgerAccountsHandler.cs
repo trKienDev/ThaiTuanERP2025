@@ -19,6 +19,7 @@ namespace ThaiTuanERP2025.Application.Finance.Queries.LedgerAccounts.GetAllLedge
 				_ => true,
 				cancellationToken: cancellationToken,
 				asNoTracking: true,
+				orderBy: q => q.OrderBy(x => x.CreatedDate),
 				a => a.LedgerAccountType
 			);
 			var ordered = list.OrderBy(x => x.Path).ToList();	
