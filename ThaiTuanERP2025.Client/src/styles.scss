@@ -16,6 +16,7 @@
 @import url('./app/core/services/ngprogress/ngprogress.scss');
 @import url('./styles/_expense-payment-status.scss');
 @import url('./styles/_outgoing-payment-status.scss');
+@import url('https://fonts.googleapis.com/css2?family=Allerta+Stencil&family=Orbitron:wght@400..900&display=swap');
 
 :root {
       --cadmium-red: #D22B2B;
@@ -86,6 +87,8 @@ input {
       border-radius: 5px;
       border: 1px solid var(--default-border-color);
 }
+
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 
 .logo-container {
       display: flex;

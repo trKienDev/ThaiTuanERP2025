@@ -10,16 +10,17 @@ import { ApprovalStepInstanceDetailDto, ApproveStepRequest, StepStatus } from ".
 import { UserFacade } from "../../../../../account/facades/user.facade";
 import { UserDto } from "../../../../../account/models/user.model";
 import { ToastService } from "../../../../../../shared/components/toast/toast.service";
-import { firstValueFrom } from "rxjs";
+import { firstValueFrom, interval, map, Observable, startWith } from "rxjs";
 import { ApprovalWorkflowInstanceService } from "../../../../services/approval-workflow-instance.service";
 import { trigger, transition, style, animate } from "@angular/animations";
 import { KitLoadingSpinnerComponent } from "../../../../../../shared/components/kit-loading-spinner/kit-loading-spinner.component";
 import { Kit404PageComponent } from "../../../../../../shared/components/kit-404-page/kit-404-page.component";
+import { KitFlipCountdownComponent } from "../../../../../../shared/components/kit-flip-countdown/kit-flip-countdown.component";
 
 @Component({
       selector: 'expense-payment-detail-dialog',
       standalone: true,
-      imports: [CommonModule, ExpensePaymentStatusPipe, AvatarUrlPipe, KitLoadingSpinnerComponent, Kit404PageComponent],
+      imports: [CommonModule, ExpensePaymentStatusPipe, AvatarUrlPipe, KitLoadingSpinnerComponent, Kit404PageComponent, KitFlipCountdownComponent],
       templateUrl: './expense-payment-detail-dialog.component.html',
       styleUrls: ['./expense-payment-detail-dialog.component.scss'],
       animations: [
@@ -63,14 +64,17 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
       loading = this.paymentLogic.isLoading;
       err = this.paymentLogic.error;
       commentText: string = '';
+      public currentStepOrder: number = 0;
 
       constructor(@Inject(MAT_DIALOG_DATA) public data: string) {
             if(data) this.paymentLogic.load(data);
             this.paymentId = data;
+
       }
 
       async ngOnInit(): Promise<void> {
             this.currentUser = await firstValueFrom(this.currentUser$);
+            this.currentStepOrder = this.paymentDetail?.workflowInstanceDetail?.workflowInstance.currentStepOrder || 0;
       }
 
       get paymentDetail(): ExpensePaymentDetailDto | null {
@@ -158,4 +162,45 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
 
             return !!(isPaymentPending && isStepWaiting && isCurrentUserApprover);
       }
+
+      leftTime(step: ApprovalStepInstanceDetailDto): Observable<string> {
+            return interval(1000).pipe(
+                  startWith(0),
+                  map(() => {
+                        const dueAtMs = this.getTimeSafe(step.dueAt) ?? 0;
+                        const sec = Math.max(0, Math.floor((dueAtMs - Date.now()) / 1000));
+                        if (sec <= 0) return 'Hết hạn';
+                        const h = Math.floor(sec / 3600);
+                        const m = Math.floor((sec % 3600) / 60);
+                        const s = sec % 60;
+                        return `${h}h ${m}m ${s}s`;
+                  })
+            );
+      }
+
+      isExpired(step?: ApprovalStepInstanceDetailDto | null): boolean {
+            const dueAtMs = this.getTimeSafe(step?.dueAt);
+            return dueAtMs !== null && dueAtMs <= Date.now();
+      }
+      private getTimeSafe(d?: Date | string | number | null): number | null {
+            if (d == null) return null;
+            if (d instanceof Date) return d.getTime();
+            const t = new Date(d as any).getTime();
+            return Number.isNaN(t) ? null : t;
+      }
+      get currentStepSafe(): ApprovalStepInstanceDetailDto | null {
+            const wf = this.paymentDetail?.workflowInstanceDetail;
+            if (!wf || !wf.steps || wf.steps.length === 0) return null;
+            return wf.steps[this.currentStepOrder] || null;
+      }
+      getSecondsRemaining(step: ApprovalStepInstanceDetailDto): number {
+            if (!step?.dueAt) return 0;
+            const dueAtMs = this.getTimeSafe(step.dueAt);
+            if (dueAtMs === null) return 0;
+            const diff = dueAtMs - Date.now();
+            console.log('diff', diff);
+            return diff > 0 ? Math.floor(diff / 1000) : 0;
+      }
+
+
 }

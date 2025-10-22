@@ -39,6 +39,7 @@
 
 	public sealed record ApprovalWorkflowInstanceDetailDto {
 		public ApprovalWorkflowInstanceDto WorkflowInstance { get; init; } = default!;
+		public int CurrentStepOrder { get; init; } = default!;
 		public IReadOnlyList<ApprovalStepInstanceDetailDto> Steps { get; init; } = Array.Empty<ApprovalStepInstanceDetailDto>();
 	}
 
