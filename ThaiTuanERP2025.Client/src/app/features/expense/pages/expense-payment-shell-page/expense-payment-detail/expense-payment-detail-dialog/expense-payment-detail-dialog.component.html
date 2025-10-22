@@ -71,11 +71,10 @@
                                                             <label>Luồng duyệt</label>
                                                             <div class="value">
                                                                   <ul class="avatar-stack">
-                                                                        <li *ngFor="let u of (paymentDetail?.workflowInstanceDetail?.steps || []); let i = index; trackBy: trackByIndex">
-                                                                              <img class="avatar" [src]="u?.approverCandidates?.[0] | avatarUrlPipe" alt="approver">
-                                                                        </li>
-                                                                        <li class="more" *ngIf="(paymentDetail?.workflowInstanceDetail?.steps?.length || 0) > 6">
-                                                                              +{{ (paymentDetail?.workflowInstanceDetail?.steps?.length || 0) - 6 }}
+                                                                        <li *ngFor="let step of (paymentDetail?.workflowInstanceDetail?.steps || []); let i = index; trackBy: trackByIndex">
+                                                                               <img *ngIf="step.approvedByUser" class="avatar-user approver-avatar" [src]="step.approvedByUser | avatarUrlPipe" alt="approved by">
+                                                                              <img *ngIf="step.rejectedByUser" class="avatar-user rejecter-avatar" [src]="step.rejectedByUser | avatarUrlPipe" alt="rejected by">
+                                                                              <img *ngIf="!step.approvedByUser && !step.rejectedByUser && step.status === 'Waiting'" class="avatar-user waiting-avatar" [src]="step.defaultApproverUser | avatarUrlPipe" alt="{{ step.status }}">
                                                                         </li>
                                                                   </ul>
                                                             </div>
