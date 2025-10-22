@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ExpensePaymentDetailDto, ExpensePaymentDto, ExpensePaymentRequest, ExpensePaymentSummaryDto } from "../models/expense-payment.model";
 import { BaseCrudService } from "../../../shared/services/base-crud.service";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { environment } from "../../../../environments/environment";
 import { catchError, Observable, throwError } from "rxjs";
 import { ApiResponse } from "../../../shared/models/api-response.model";
@@ -22,9 +22,17 @@ export class ExpensePaymentService extends BaseCrudService<ExpensePaymentDto, Ex
                   );
       }
 
-      getFollowingPayments(): Observable<ExpensePaymentSummaryDto[]> {
+      getFollowingPaymentsPaged(page: number, pageSize: number, updatedAfter?: string): Observable<ExpensePaymentSummaryDto[]> {
+            let params = new HttpParams()
+                  .set('page', page.toString())
+                  .set('pageSize', pageSize.toString());
+
+            if(updatedAfter) {
+                  params = params.set('updatedAfter', updatedAfter);
+            }
+
             return this.http.
-                  get<ApiResponse<ExpensePaymentSummaryDto[]>>(`${this.endpoint}/following`)
+                  get<ApiResponse<ExpensePaymentSummaryDto[]>>(`${this.endpoint}/following`, { params })
                   .pipe(
                         handleApiResponse$<ExpensePaymentSummaryDto[]>(),
                         catchError(err => throwError(() => err))

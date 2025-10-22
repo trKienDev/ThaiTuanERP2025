@@ -127,6 +127,6 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 		public UserDto CreatedByUser { get; init; } = default!;
 		public DateTime CreatedDate { get; init; }
 
-		public ApprovalWorkflowInstanceStatusDto WorkflowInstanceStatus { get; init; } = default!;
+		public ApprovalWorkflowInstanceStatusDto? WorkflowInstanceStatus { get; init; }
 	}
 }

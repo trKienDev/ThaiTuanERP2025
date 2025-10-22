@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-
-namespace ThaiTuanERP2025.Application.Expense.Dtos
+﻿namespace ThaiTuanERP2025.Application.Expense.Dtos
 {
 	public sealed record ApprovalWorkflowInstanceDto
 	{
