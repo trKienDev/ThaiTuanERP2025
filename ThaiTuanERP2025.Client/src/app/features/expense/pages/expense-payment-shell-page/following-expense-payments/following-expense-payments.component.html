@@ -41,16 +41,17 @@
                                     </td>
                                     <td>
                                           <ng-container *ngFor="let step of payment.workflowInstanceStatus.steps">
-                                                <img class="approver-avatar" [src]="step.approvedByUser | avatarUrlPipe" alt="approved by">
+                                                <img *ngIf="step.approvedByUser" class="avatar-user approver-avatar" [src]="step.approvedByUser | avatarUrlPipe" alt="approved by">
+                                                <img *ngIf="step.rejectedByUser" class="avatar-user rejecter-avatar" [src]="step.rejectedByUser | avatarUrlPipe" alt="rejected by">
+                                                <img *ngIf="!step.approvedByUser && !step.rejectedByUser && step.status === 'Waiting'" class="avatar-user waiting-avatar" [src]="step.defaultApproverUser | avatarUrlPipe" alt="{{ step.status }}">
                                           </ng-container>
                                     </td>
-
                                     <td>{{ payment.totalAmount   | number: '1.0-0' }}</td>
                                     <td>{{ payment.totalTax      | number: '1.0-0' }}</td>
                                     <td>{{ payment.totalWithTax  | number: '1.0-0' }}</td>
                                     <td><!-- TODO: bind OutgoingAmountPaid nếu có trong summary --></td>
                                     <td>
-                                          <img class="approver-avatar" [src]="payment.createdByUser | avatarUrlPipe" alt="created by">
+                                          <img class="avatar-user" [src]="payment.createdByUser | avatarUrlPipe" alt="created by">
                                     </td>
                                     <td>{{ payment.createdDate | date: 'dd/MM/yyyy' }}</td>
                               </tr>
