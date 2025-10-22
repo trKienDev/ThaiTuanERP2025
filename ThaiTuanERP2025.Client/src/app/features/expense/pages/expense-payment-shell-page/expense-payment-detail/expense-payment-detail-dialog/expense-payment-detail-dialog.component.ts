@@ -164,11 +164,12 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
       }
 
       leftTime(step: ApprovalStepInstanceDetailDto): Observable<string> {
+            console.log('leftTime called for step', step);
             return interval(1000).pipe(
                   startWith(0),
                   map(() => {
                         const dueAtMs = this.getTimeSafe(step.dueAt) ?? 0;
-                        const sec = Math.max(0, Math.floor((dueAtMs - Date.now()) / 1000));
+                        const sec = Math.max(0, Math.floor((new Date(dueAtMs).getTime() - Date.now()) / 1000));
                         if (sec <= 0) return 'Hết hạn';
                         const h = Math.floor(sec / 3600);
                         const m = Math.floor((sec % 3600) / 60);
@@ -184,8 +185,7 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
       }
       private getTimeSafe(d?: Date | string | number | null): number | null {
             if (d == null) return null;
-            if (d instanceof Date) return d.getTime();
-            const t = new Date(d as any).getTime();
+            const t = new Date(d).getTime();
             return Number.isNaN(t) ? null : t;
       }
       get currentStepSafe(): ApprovalStepInstanceDetailDto | null {
@@ -198,7 +198,6 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
             const dueAtMs = this.getTimeSafe(step.dueAt);
             if (dueAtMs === null) return 0;
             const diff = dueAtMs - Date.now();
-            console.log('diff', diff);
             return diff > 0 ? Math.floor(diff / 1000) : 0;
       }
 
