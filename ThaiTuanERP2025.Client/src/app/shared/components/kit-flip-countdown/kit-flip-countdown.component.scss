@@ -1,0 +1,32 @@
+.countdown-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Rubik", sans-serif;
+      font-weight: 600;
+      color: #fff;
+      background: #a23b29;
+      border-radius: 8px;
+      padding: 10px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+.time-group {
+      display: flex;
+      overflow: hidden;
+      height: fit-content;
+}
+
+.digit {
+      width: 11px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      will-change: transform, opacity;
+}
+
+.divider {
+      opacity: 0.6;
+      margin: 0 3px;
+}
