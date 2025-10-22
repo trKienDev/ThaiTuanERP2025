@@ -1,31 +1,41 @@
-import { CommonModule } from "@angular/common";
-import { Component, inject, OnInit } from "@angular/core";
-import { ExpensePaymentDetailDto, ExpensePaymentDto, ExpensePaymentSummaryDto } from "../../../models/expense-payment.model";
-import { firstValueFrom } from "rxjs";
-import { ExpensePaymentService } from "../../../services/expense-payment.service";
-import { ExpensePaymentStatusPipe } from "../../../pipes/expense-payment-status.pipe";
-import { AvatarUrlPipe } from "../../../../../shared/pipes/avatar-url.pipe";
-import { MatDialog } from "@angular/material/dialog";
-import { ExpensePaymentDetailDialogComponent } from "../expense-payment-detail/expense-payment-detail-dialog/expense-payment-detail-dialog.component";
+// following-expense-payments.component.ts (refactor)
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { ExpensePaymentStatusPipe } from '../../../pipes/expense-payment-status.pipe';
+import { AvatarUrlPipe } from '../../../../../shared/pipes/avatar-url.pipe';
+import { MatDialog } from '@angular/material/dialog';
+import { ExpensePaymentDetailDialogComponent } from '../expense-payment-detail/expense-payment-detail-dialog/expense-payment-detail-dialog.component';
+import { FollowingExpensePaymentFacade } from '../../../facades/following-expense-payment.facade';
+import { KitLoadingSpinnerComponent } from "../../../../../shared/components/kit-loading-spinner/kit-loading-spinner.component";
+import { KitRefreshButtonComponent } from "../../../../../shared/components/kit-refresh-button/kit-refresh-button.component";
 
 @Component({
-      selector: 'expense-payments-panel',
-      standalone: true,
-      templateUrl: './following-expense-payments.component.html',
-      styleUrls: ['./following-expense-payments.component.scss'],
-      imports: [CommonModule, ExpensePaymentStatusPipe, AvatarUrlPipe ]
+  selector: 'expense-payments-panel',
+  standalone: true,
+  templateUrl: './following-expense-payments.component.html',
+  styleUrls: ['./following-expense-payments.component.scss'],
+  imports: [CommonModule, ExpensePaymentStatusPipe, AvatarUrlPipe, KitLoadingSpinnerComponent, KitRefreshButtonComponent],
 })
-export class FollowingExpensePaymentsPanelComponent implements OnInit {
+export class FollowingExpensePaymentsPanelComponent implements OnInit, OnDestroy {
       private dialog = inject(MatDialog);
-      public expensePayments: ExpensePaymentSummaryDto[] = [];
-      private expensePaymentService = inject(ExpensePaymentService);
+      private facade = inject(FollowingExpensePaymentFacade);
+
+      trackById = (_: number, item: { id: string }) => item.id;
+
+      paymentsSig = this.facade.list$;         // signal<ExpensePaymentSummaryDto[]>
+      loadingSig = this.facade.loading$;       // signal<boolean>
+      endReachedSig = this.facade.endReached$; // signal<boolean>
+
+      @ViewChild('infiniteAnchor', { static: true }) infiniteAnchor!: ElementRef<HTMLElement>;
+      private observer?: IntersectionObserver;
 
       async ngOnInit(): Promise<void> {
-            await this.loadExpensePayments();
+            await this.facade.loadFirstPage();
+            this.setupObserver();
       }
 
-      private async loadExpensePayments() {
-            this.expensePayments = await firstValueFrom(this.expensePaymentService.getFollowingPayments());
+      ngOnDestroy(): void {
+            this.observer?.disconnect();
       }
 
       openExpensePaymentDetailDialog(paymentId: string) {
@@ -35,8 +45,28 @@ export class FollowingExpensePaymentsPanelComponent implements OnInit {
 
             dialogRef.afterClosed().subscribe((result: any) => {
                   if (result?.success) {
-                        // Handle success result if needed
-                  }     
+                        this.facade.refreshIncremental();
+                  }
             });
+      }
+
+      manualRefresh() {
+            this.facade.refreshIncremental();
+      }
+
+      private setupObserver() {
+            // Sentinel-based infinite scroll
+            this.observer = new IntersectionObserver(async (entries) => {
+                  const entry = entries[0];
+                  if (entry.isIntersecting && !this.loadingSig() && !this.endReachedSig()) {
+                        await this.facade.loadNextPage();
+                  }
+            }, {
+                  root: null, // viewport
+                  rootMargin: '0px',
+                  threshold: 1.0, // chạm hẳn vào đáy mới tải
+            });
+
+            this.observer.observe(this.infiniteAnchor.nativeElement);
       }
 }

@@ -31,6 +31,8 @@ using ThaiTuanERP2025.Infrastructure.Expense.Services;
 using ThaiTuanERP2025.Application.Followers.Services;
 using ThaiTuanERP2025.Infrastructure.Followers.Services;
 using ThaiTuanERP2025.Domain.Common.Enums;
+using AutoMapper;
+using ThaiTuanERP2025.Application.Expense.Mappings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -213,6 +215,12 @@ app.UseStaticFiles(new StaticFileOptions
 	FileProvider = new PhysicalFileProvider(storageOpt.BasePath),
 	RequestPath = storageOpt.PublicRequestPath
 });
+
+//var mapperConfig = new MapperConfiguration(cfg =>
+//{
+//	cfg.AddMaps(typeof(ExpensePaymentMappingProfile).Assembly);
+//});
+//mapperConfig.AssertConfigurationIsValid();
 
 app.Run();
 
