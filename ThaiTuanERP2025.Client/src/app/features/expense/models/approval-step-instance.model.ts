@@ -43,6 +43,8 @@ export interface ApprovalStepInstanceDetailDto extends ApprovalStepInstanceDto {
       approvedByUser?: UserDto;
       rejectedByUser?: UserDto;
       defaultApproverUser?: UserDto;
+
+      currentStepOrder: number;
 }
 
 export interface ApproveStepRequest {
