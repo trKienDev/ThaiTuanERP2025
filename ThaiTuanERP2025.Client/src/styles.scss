@@ -222,3 +222,20 @@ input[type=number] { -moz-appearance: textfield; }
       display: block;
       height: 300px;
 }
+
+.avatar-user {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      margin: 0px 5px;
+}
+.approver-avatar {
+      box-shadow:  rgba(54, 223, 12, 0.44) 0px 1px 3px, rgba(103, 197, 15, 0.79) 0px 1px 2px;
+}
+.rejecter-avatar {
+      box-shadow:  rgba(244, 31, 31, 0.44) 0px 1px 3px, rgba(240, 24, 24, 0.79) 0px 1px 2px;
+}
+.waiting-avatar {
+      animation: blink 2s infinite;
+}
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }

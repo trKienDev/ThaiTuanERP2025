@@ -27,8 +27,8 @@ export interface ApprovalStepInstanceDto {
       status: string;
       StartedAt?: Date;
       dueAt?: Date;
-      ApprovedAt?: Date;
-      ApprovedBy?: string;
+      approvedAt?: Date;
+      approvedBy?: string;
       rejectedAt?: Date;
       rejectedBy?: string;
 
@@ -39,6 +39,10 @@ export interface ApprovalStepInstanceDto {
 
 export interface ApprovalStepInstanceDetailDto extends ApprovalStepInstanceDto {
       approverCandidates: UserDto[];
+
+      approvedByUser?: UserDto;
+      rejectedByUser?: UserDto;
+      defaultApproverUser?: UserDto;
 }
 
 export interface ApproveStepRequest {
@@ -49,7 +53,7 @@ export interface ApproveStepRequest {
 export interface RejectStepRequest extends ApproveStepRequest {}
 
 export interface ApprovalStepInstanceStatusDto {
-      status: number;
+      status: StepStatus;
       startedAt?: Date;
       dueAt?: Date;
       
@@ -60,4 +64,7 @@ export interface ApprovalStepInstanceStatusDto {
       rejectedAt?: Date;
       rejectedBy?: string;
       rejectedByUser?: UserDto;
+
+      defaultApproverId: string;
+      defaultApproverUser: UserDto;
 }

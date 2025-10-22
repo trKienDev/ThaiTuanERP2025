@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using System.Text.Json;
 using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Expense.Dtos;
@@ -40,30 +41,42 @@ namespace ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetExpenseP
 			};
 
 			// 2) Gom tất cả GUID approver từ mọi step (lọc null & trùng)
-			var allIds = detail.Steps
-				.SelectMany(s => s.ResolvedApproverCandidateIds ?? Array.Empty<Guid>())
+			// 1) Gom toàn bộ GUID liên quan tới user (cả Default, Approved, Rejected)
+			var allIds = workflow.Steps
+				.SelectMany(s => (s.ResolvedApproverCandidatesJson is { Length: > 0 }
+					? JsonSerializer.Deserialize<string[]>(s.ResolvedApproverCandidatesJson) ?? Array.Empty<string>()
+					: Array.Empty<string>()))
+				.Select(id => Guid.TryParse(id, out var g) ? g : (Guid?)null)
+				.Where(g => g.HasValue).Select(g => g!.Value)
+				.Concat(workflow.Steps.Select(s => s.DefaultApproverId).Where(g => g.HasValue).Select(g => g!.Value))
+				.Concat(workflow.Steps.Select(s => s.ApprovedBy).Where(g => g.HasValue).Select(g => g!.Value))
+				.Concat(workflow.Steps.Select(s => s.RejectedBy).Where(g => g.HasValue).Select(g => g!.Value))
 				.Distinct()
 				.ToArray();
 
-			// 3) Lấy users theo batch
-			var users = allIds.Length == 0
-				? new List<Domain.Account.Entities.User>()
+			// 2) Load users batch
+			var users = allIds.Length == 0 ? new List<Domain.Account.Entities.User>()
 				: await _unitOfWork.Users.ListByIdsAsync(allIds, cancellationToken);
 
-			// 4) Map sang UserDto, đưa vào dict để tra nhanh
-			var userDtos = _mapper.Map<List<UserDto>>(users);
-			var userDict = userDtos.ToDictionary(u => u.Id, u => u);
+			// 3) Map sang dict
+			var userDtoDict = _mapper.Map<List<UserDto>>(users).ToDictionary(u => u.Id, u => u);
 
-			// 5) Gán ApproverCandidates cho từng step (record dùng with)
-			var enrichedSteps = detail.Steps
-				.Select(s => s with
-				{
-					ApproverCandidates = (s.ResolvedApproverCandidateIds ?? Array.Empty<Guid>())
-					.Select(id => userDict.TryGetValue(id, out var dto) ? dto : null)
-					.Where(u => u != null)
-					.ToArray()!
-				})
-				.ToList();
+			// 4) Map steps + TIÊM ctx.Items["UserDict"]
+			var steps = _mapper.Map<List<ApprovalStepInstanceDetailDto>>(
+				workflow.Steps,
+				opt => { opt.Items["UserDict"] = userDtoDict; }
+			);
+
+			// (Giữ nguyên phần enrich ApproverCandidates nếu muốn)
+			var enrichedSteps = steps
+			    .Select(s => s with
+			    {
+				    ApproverCandidates = (s.ResolvedApproverCandidateIds ?? Array.Empty<Guid>())
+				    .Select(id => userDtoDict.TryGetValue(id, out var dto) ? dto : null)
+				    .Where(u => u != null)
+				    .ToArray()!
+			    })
+			    .ToList();
 
 			detail = detail with { Steps = enrichedSteps };
 

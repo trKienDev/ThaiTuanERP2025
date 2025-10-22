@@ -4,11 +4,7 @@
       text-decoration: underline;
 }
 
-.approver-avatar {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-}
+
 
 .page-heading {
       display: flex; align-items: center; justify-content: space-between;
@@ -27,3 +23,4 @@
       text-align: center; padding: 8px 0;
       &.dim { opacity: .6; }
 }
+
