@@ -17,7 +17,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public OutgoingPayment(
 			string name, decimal outgoingAmount,
 			string bankName, string accountNumber, string beneficiaryName, 
-			DateTime postingDate,
+			DateTime dueDate,
 			Guid outgoingBankAccountId, Guid expensePaymentId,
 			string? description = null
 		) {
@@ -33,7 +33,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			AccountNumber = accountNumber?.Trim() ?? string.Empty;
 			BeneficiaryName = beneficiaryName?.Trim() ?? string.Empty;
 			OutgoingAmount = outgoingAmount;
-			PostingDate = postingDate;
+			DueDate = dueDate;
 			OutgoingBankAccountId = outgoingBankAccountId;
 			ExpensePaymentId = expensePaymentId;
 			Status = OutgoingPaymentStatus.Pending;
@@ -56,9 +56,9 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public string AccountNumber { get; private set; } = string.Empty;
 		public string BeneficiaryName { get; private set; } = string.Empty;
 
-		public DateTime PostingDate { get; private set; }
-		public DateTime PaymentDate { get; private set; }
-		public DateTime DueDate { get; private set; }
+		public DateTime PostingDate { get; private set; } // Ngày ghi nhận khi duyệt
+		public DateTime PaymentDate { get; private set; } // ngày tạo lệnh
+		public DateTime DueDate { get; private set; } // hạn thanh toán
 
 		public Guid OutgoingBankAccountId { get; private set; }
 		public OutgoingBankAccount OutgoingBankAccount { get; private set; } = null!;

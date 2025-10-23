@@ -13,8 +13,8 @@
       &.submitted  { color:#1565c0;background:#e3f2fd; }
       &.pending    { color: #967300ad; background: #fffcd6; border: 1px solid #ecdfd2; }
       &.approved   { color:#2e7d32;background:#e8f5e9; }
-      &.ready-for-payment { color:#ff6804;background:#ffe7d7; }
-      &.rejected   { color:#c62828;background:#ffebee; }
+      &.ready-for-payment { color: #fff; background: #ff8ca0; }
+      &.rejected   { color:#c62828;background:#ffebee; font-weight: 600;}
       &.cancelled  { color:#6d4c41;background:#efebe9; }
       &.unknown    { color:#555;   background:#eee; }
 }
