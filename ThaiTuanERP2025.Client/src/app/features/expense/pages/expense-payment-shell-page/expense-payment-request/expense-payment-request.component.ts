@@ -14,7 +14,6 @@ import { KitDropdownComponent, KitDropdownOption } from "../../../../../shared/c
 import { ToastService } from "../../../../../shared/components/toast/toast.service";
 import { provideMondayFirstDateAdapter } from "../../../../../shared/date/provide-monday-first-date-adapter";
 import { MoneyFormatDirective } from "../../../../../shared/directives/money/money-format.directive";
-import { FileService } from "../../../../../shared/services/file.service";
 import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
 import { UserFacade } from "../../../../account/facades/user.facade";
 import { UserDto } from "../../../../account/models/user.model";
@@ -36,6 +35,7 @@ import { KitFileUploaderComponent } from "../../../../../shared/components/kit-f
 import { TextareaNoSpellcheckDirective } from "../../../../../shared/directives/money/textarea/textarea-no-spellcheck.directive";
 import { KitSpinnerButtonComponent } from "../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 import { KitOverlaySpinnerComponent } from "../../../../../shared/components/kit-overlay-spinner/kit-overlay-spinner.component";
+import { Router } from "@angular/router";
 
 type UploadStatus = 'queued' | 'uploading' | 'done' | 'error';
 type UploadItem = {
@@ -66,9 +66,7 @@ type PaymentItem = {
 @Component({
       selector: 'new-expense-payment-request',
       templateUrl: './expense-payment-request.component.html',
-      imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule,
-    KitDropdownComponent, MatDialogModule, MoneyFormatDirective, OverlayModule, MatSnackBarModule,
-    MatDatepickerModule, HttpClientModule, KitFileUploaderComponent, TextareaNoSpellcheckDirective, KitSpinnerButtonComponent, KitOverlaySpinnerComponent],
+      imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule, KitDropdownComponent, MatDialogModule, MoneyFormatDirective, OverlayModule, MatSnackBarModule, MatDatepickerModule, HttpClientModule, KitFileUploaderComponent, TextareaNoSpellcheckDirective, KitSpinnerButtonComponent, KitOverlaySpinnerComponent],
       styleUrls: ['./expense-payment-request.component.scss'],
       standalone: true,
       providers: [...provideMondayFirstDateAdapter() ]
@@ -76,10 +74,8 @@ type PaymentItem = {
 export class ExpensePaymentRequestPanelComponent {
       private destroy$ = new Subject<void>();
       private formBuilder = inject(FormBuilder);
-      private taxRateById: Record<string, number> = {};
       private dialog = inject(MatDialog);
       private toast = inject(ToastService);
-      private fileService = inject(FileService);
       private userOptionsStore = inject(UserOptionStore);
       private supplierOptionStore = inject(SupplierOptionStore);
       private managerOptionStore = inject(ManagerOptionStore);
@@ -87,9 +83,7 @@ export class ExpensePaymentRequestPanelComponent {
       private supplierFacade = inject(SupplierFacade);
       public submitting = false;
       private readonly expensePaymentService = inject(ExpensePaymentService);
-
-      // private wait(ms: number) { return new Promise(res => setTimeout(res, ms)); } // demo
-      // private readonly DEMO_MIN_LOADING_MS = 300000000; // demo
+      private router = inject(Router);
 
       public readonly uploadMeta = {
             module: 'expense',
@@ -519,13 +513,10 @@ export class ExpensePaymentRequestPanelComponent {
             this.submitting = true;
             try {
                   const result = await firstValueFrom(this.expensePaymentService.create(payload));
-
-                  // demo
-                  // await Promise.all([
-                  //       firstValueFrom(this.expensePaymentService.create(payload)),
-                  //       this.wait(this.DEMO_MIN_LOADING_MS)   // đảm bảo chờ ít nhất 3s
-                  // ]);
-
+                  this.router.navigate(
+                        ['/expense/expense-payment-shell/following-payments'],
+                        { queryParams: { paymentId: result } }
+                  );
                   this.toast.successRich('Gửi phê duyệt thành công');
             } catch(error) {
                   console.error('Gửi phê duyệt thất bại', error);

@@ -1,7 +1,6 @@
 import { computed, inject, Injectable, signal, WritableSignal } from "@angular/core";
 import { ExpensePaymentService } from "../services/expense-payment.service";
 import { ExpensePaymentSummaryDto } from "../models/expense-payment.model";
-import { E } from "@angular/material/error-options.d-CGdTZUYk";
 import { firstValueFrom } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
@@ -44,6 +43,7 @@ export class FollowingExpensePaymentFacade {
        * Có thể gọi định kỳ hoặc khi user bấm nút Refresh.
        */
       async refreshIncremental(): Promise<void> {
+            console.log('lastSyncAt:', this.lastSyncAt);
             if (!this.lastSyncAt) {
                   // nếu chưa có mốc sync thì fallback loadFirstPage
                   return this.loadFirstPage();

@@ -188,7 +188,7 @@
             <div class="width-50pt">
                   <div class="display-flex gap-10px">
                         <label class="width-fit-content text-no-wrap align-content-center" for="name">Hạn thanh toán <span style="color: red;">  *</span></label>
-                        <input class="invoice-date" formControlName="paymentDate" matInput [matDatepicker]="picker" placeholder="chọn ngày/tháng/năm"
+                        <input class="invoice-date" formControlName="dueDate" matInput [matDatepicker]="picker" placeholder="chọn ngày/tháng/năm"
                               (focus)="picker.open()" (click)="picker.open()" (keydown.enter)="picker.open()" (keydown.arrowDown)="picker.open()" 
                         required/>
                         <mat-datepicker #picker panelClass="kit-datepicker"></mat-datepicker>
