@@ -24,10 +24,24 @@
                                                 </span>
                                           </div>
                                           <h3 class="payment-name">{{ paymentDetail?.name }}</h3>
-                                          <div class="payment-actions display-flex gap-10px align-items-center" *ngIf="canApproveOrReject">
-                                                <button type="button" class="button submit-button" (click)="onApprove()">Duyệt</button>
-                                                <button type="button" class="button danger-button" (click)="onReject()">Từ chối</button>
-                                          </div>
+                                          <ng-container *ngIf="canApproveOrReject">
+                                                <div class="payment-actions display-flex gap-10px align-items-center" >
+                                                      <button type="button" class="button submit-button" (click)="onApprove()">Duyệt</button>
+                                                      <button type="button" class="button danger-button" (click)="onReject()">Từ chối</button>
+                                                </div>
+                                                <ng-container *ngIf="currentStepSafe && isExpired(currentStepSafe)">
+                                                      <div class="payment-expired-badge margin-left-auto">
+                                                            <span class="badge danger-badge">Quá hạn duyệt</span>
+                                                      </div>
+                                                </ng-container>
+                                                <ng-container *ngIf="currentStepSafe as step">
+                                                      <ng-container *ngIf="!isExpired(step)">
+                                                            <div class="payment-due-time margin-left-auto">
+                                                                  <kit-flip-countdown [timeLeft]="getSecondsRemaining(step)"></kit-flip-countdown>
+                                                            </div>
+                                                      </ng-container>
+                                                </ng-container>
+                                          </ng-container>
                                           <ng-container *ngIf="paymentDetail?.status === 6">
                                                 <div class="payment-outgoing-btn margin-left-auto">
                                                       <button type="button" class="button pintura-button" (click)="navigateToOutgoingPaymentRequest()">
@@ -35,19 +49,6 @@
                                                       </button>
                                                 </div>
                                           </ng-container>
-                                          <ng-container *ngIf="currentStepSafe && isExpired(currentStepSafe)">
-                                                <div class="payment-expired-badge margin-left-auto">
-                                                      <span class="badge danger-badge">Quá hạn duyệt</span>
-                                                </div>
-                                          </ng-container>
-                                          <ng-container *ngIf="currentStepSafe as step">
-                                                <ng-container *ngIf="!isExpired(step)">
-                                                      <div class="payment-due-time margin-left-auto">
-                                                            <kit-flip-countdown [timeLeft]="getSecondsRemaining(step)"></kit-flip-countdown>
-                                                      </div>
-                                                </ng-container>
-                                          </ng-container>
-
                                     </div>
                                     <div class="payment-body margin-top-15px">
                                           <div class="general-information-block primary-card">

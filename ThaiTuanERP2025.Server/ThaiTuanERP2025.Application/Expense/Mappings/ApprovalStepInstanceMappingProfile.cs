@@ -62,11 +62,11 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 					s.DefaultApproverId,
 					s.SelectedApproverId,
 					s.Status.ToString(),
-					s.StartedAt,
-					s.DueAt,
-					s.ApprovedAt,
+					AsUtc(s.StartedAt),
+					 AsUtc(s.DueAt),
+					 AsUtc(s.ApprovedAt),
 					s.ApprovedBy,
-					s.RejectedAt,
+					AsUtc(s.RejectedAt),
 					s.RejectedBy,
 					s.Comments,
 					s.SlaBreached,
@@ -115,11 +115,11 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 					DefaultApproverId = s.DefaultApproverId,
 					SelectedApproverId = s.SelectedApproverId,
 					Status = s.Status.ToString(),
-					StartedAt = s.StartedAt,
-					DueAt = s.DueAt,
-					ApprovedAt = s.ApprovedAt,
+					StartedAt = AsUtc(s.StartedAt),
+					DueAt = AsUtc(s.DueAt),
+					ApprovedAt = AsUtc(s.ApprovedAt),
 					ApprovedBy = s.ApprovedBy,
-					RejectedAt = s.RejectedAt,
+					RejectedAt = AsUtc(s.RejectedAt),
 					RejectedBy = s.RejectedBy,
 					Comments = s.Comments,
 					SlaBreached = s.SlaBreached,
@@ -147,7 +147,6 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 			}
 		}
 
-
 		private sealed class DefaultApproverResolver : IValueResolver<ApprovalStepInstance, ApprovalStepInstanceStatusDto, UserDto?>
 		{
 			public UserDto? Resolve(ApprovalStepInstance s, ApprovalStepInstanceStatusDto d, UserDto? destMember, ResolutionContext ctx)
@@ -169,5 +168,13 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 			}
 			return null;
 		}
+
+		private static DateTime? AsUtc(DateTime? dt)
+		{
+			if (!dt.HasValue) return null;
+			// Gắn Kind=Utc, không đổi ticks
+			return DateTime.SpecifyKind(dt.Value, DateTimeKind.Utc);
+		}
+
 	}
 }
