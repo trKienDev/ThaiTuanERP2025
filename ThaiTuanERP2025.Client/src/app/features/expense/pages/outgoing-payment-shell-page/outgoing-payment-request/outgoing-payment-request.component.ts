@@ -16,12 +16,13 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
 import { OutgoingPaymentService } from "../../../services/outgoing-payment.service";
 import { first, firstValueFrom } from "rxjs";
 import { OutgoingPaymentRequest } from "../../../models/outgoing-payment.model";
+import { KitSpinnerButtonComponent } from "../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 
 @Component({
       selector: 'outgoing-payment-request',
       templateUrl: './outgoing-payment-request.component.html',
       standalone: true,
-      imports: [CommonModule, ReactiveFormsModule, KitDropdownComponent, KitFileUploaderComponent, MoneyFormatDirective, Kit404PageComponent, KitLoadingSpinnerComponent, MatDatepickerModule,],
+      imports: [CommonModule, ReactiveFormsModule, KitDropdownComponent, KitFileUploaderComponent, MoneyFormatDirective, Kit404PageComponent, KitLoadingSpinnerComponent, MatDatepickerModule, KitSpinnerButtonComponent],
       styleUrls: ['./outgoing-payment-request.component.scss'],
       providers: [...provideMondayFirstDateAdapter()]
 })
@@ -149,5 +150,7 @@ export class OutgoingPaymentRequestComponent {
       refresh() {
             this.paymentLogic.refresh();
       }
-
+      get isBusy() {
+            return this.submitting;
+      }
 }

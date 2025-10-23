@@ -132,11 +132,12 @@
       border-top-color: rgba(255, 255, 255, 0.6);
       border-top-color: #fff;
       border-radius: 50%;
-      animation: _ngcontent-ng-c934698783_epc_spin 0.8s linear infinite;
+      animation: spin 0.8s linear infinite;
       vertical-align: -2px;
 }
-
-@keyframes epc_spin { to { transform: rotate(360deg); } }
+@keyframes spin {
+      to { transform: rotate(360deg); }
+}
 
 /* Overlay toàn form khi isBusy */
 .form-loading-overlay {
@@ -167,7 +168,7 @@
       border: 3px solid #d1d5db;
       border-top-color: #3b82f6; /* dùng màu primary của bạn nếu có */
       border-radius: 50%;
-      animation: epc_spin 0.9s linear infinite;
+      animation: spin 0.9s linear infinite;
 }
 
 .overlay-text { font-weight: 500; }
