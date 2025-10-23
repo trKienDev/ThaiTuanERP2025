@@ -3,22 +3,22 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
-  selector: 'kit-flip-countdown',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './kit-flip-countdown.component.html',
-  styleUrls: ['./kit-flip-countdown.component.scss'],
-  animations: [
-    trigger('slideDigit', [
-      transition(':increment, :decrement', [
-        style({ transform: 'translateY(100%)', opacity: 0 }),
-        animate(
-          '300ms cubic-bezier(0.25, 0.1, 0.25, 1)',
-          style({ transform: 'translateY(0)', opacity: 1 })
-        )
-      ])
-    ])
-  ]
+      selector: 'kit-flip-countdown',
+      standalone: true,
+      imports: [CommonModule],
+      templateUrl: './kit-flip-countdown.component.html',
+      styleUrls: ['./kit-flip-countdown.component.scss'],
+      animations: [
+            trigger('slideDigit', [
+                  transition(':increment, :decrement', [
+                        style({ transform: 'translateY(100%)', opacity: 0 }),
+                        animate(
+                              '400ms cubic-bezier(0.25, 0.1, 0.25, 1)',
+                              style({ transform: 'translateY(0)', opacity: 1 })
+                        )
+                  ])
+            ])
+      ]
 })
 export class KitFlipCountdownComponent implements OnInit, OnDestroy {
       @Input() timeLeft: number = 0;
