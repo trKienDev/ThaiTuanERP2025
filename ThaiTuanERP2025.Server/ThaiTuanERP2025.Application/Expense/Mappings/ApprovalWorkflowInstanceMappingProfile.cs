@@ -19,7 +19,11 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 
 			CreateMap<ApprovalWorkflowInstance, ApprovalWorkflowInstanceStatusDto>()
 				.ForMember(d => d.Status, opt => opt.MapFrom(s => s.Status.ToString()))
-				.ForMember(d => d.Steps, opt => opt.MapFrom(s => s.Steps));
+				.ForMember(d => d.Steps, opt => opt.MapFrom(
+					s => s.Steps != null
+						? s.Steps.OrderBy(x => x.Order).ToList()
+						: new List<ApprovalStepInstance>()
+				));
 		}
 	}
 }

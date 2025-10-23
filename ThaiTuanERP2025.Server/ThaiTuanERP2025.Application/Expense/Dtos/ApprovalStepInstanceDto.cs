@@ -86,5 +86,7 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 		public DateTime? RejectedAt { get; init; }
 		public Guid? RejectedBy { get; init; }
 		public UserDto? RejectedByUser { get; init; }
+
+		public int Order { get; init; }
 	}
 }

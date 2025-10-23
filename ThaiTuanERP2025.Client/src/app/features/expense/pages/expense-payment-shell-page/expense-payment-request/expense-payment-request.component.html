@@ -215,12 +215,5 @@
             <kit-file-uploader [meta]="uploadMeta" [(uploads)]="uploads"></kit-file-uploader>
       </div>
 
-      <div class="form-loading-overlay" *ngIf="isBusy" aria-live="polite">
-            <div class="overlay-box">
-                  <div class="overlay-spinner" aria-hidden="true"></div>
-                  <div class="overlay-text">
-                        {{ submitting ? 'Đang gửi phê duyệt…' : 'Đang tải tệp lên…' }}
-                  </div>
-            </div>
-      </div>
+      <kit-overlay-spinner [show]="isBusy" [message]="submitting ? 'Đang gửi phê duyệt…' : 'Đang tải tệp lên…'"></kit-overlay-spinner>
 </form>

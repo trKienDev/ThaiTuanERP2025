@@ -17,12 +17,13 @@ import { OutgoingPaymentService } from "../../../services/outgoing-payment.servi
 import { first, firstValueFrom } from "rxjs";
 import { OutgoingPaymentRequest } from "../../../models/outgoing-payment.model";
 import { KitSpinnerButtonComponent } from "../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
+import { KitOverlaySpinnerComponent } from "../../../../../shared/components/kit-overlay-spinner/kit-overlay-spinner.component";
 
 @Component({
       selector: 'outgoing-payment-request',
       templateUrl: './outgoing-payment-request.component.html',
       standalone: true,
-      imports: [CommonModule, ReactiveFormsModule, KitDropdownComponent, KitFileUploaderComponent, MoneyFormatDirective, Kit404PageComponent, KitLoadingSpinnerComponent, MatDatepickerModule, KitSpinnerButtonComponent],
+      imports: [CommonModule, ReactiveFormsModule, KitDropdownComponent, KitFileUploaderComponent, MoneyFormatDirective, Kit404PageComponent, KitLoadingSpinnerComponent, MatDatepickerModule, KitSpinnerButtonComponent, KitOverlaySpinnerComponent],
       styleUrls: ['./outgoing-payment-request.component.scss'],
       providers: [...provideMondayFirstDateAdapter()]
 })

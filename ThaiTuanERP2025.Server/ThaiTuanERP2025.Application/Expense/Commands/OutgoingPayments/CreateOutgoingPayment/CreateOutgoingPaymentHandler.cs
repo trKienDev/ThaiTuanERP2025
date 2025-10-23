@@ -48,14 +48,6 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.OutgoingPayments.CreateOu
 			var beneficiaryName = request.BeneficiaryName.IsNormalized() ? request.BeneficiaryName : request.BeneficiaryName.Trim();
 			var subId = await _documentSubIdGeneratorService.NextSubIdAsync(DocumentType.OutgoingPayment, DateTime.UtcNow, cancellationToken);
 
-			//var entity = new OutgoingPayment (
-			//	name, request.OutgoingAmount,
-			//	bankName, accountNumber, beneficiaryName,
-			//	request.DueDate,
-			//	request.OutgoingBankAccountId,
-			//	request.ExpensePaymentId,
-			//	request.Description
-			//);
 			var outgoingPayment = expensePayment.AddOutgoingPayment(
 				name,
 				bankName, accountNumber, beneficiaryName,

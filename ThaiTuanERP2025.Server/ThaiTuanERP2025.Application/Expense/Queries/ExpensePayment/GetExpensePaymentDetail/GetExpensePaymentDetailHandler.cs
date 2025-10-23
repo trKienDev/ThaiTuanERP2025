@@ -65,7 +65,7 @@ namespace ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetExpenseP
 						.Select(id => userDtoDict.TryGetValue(id, out var dto) ? dto : null)
 						.Where(u => u != null)
 						.ToArray()!
-				}).ToList();
+				}).OrderBy(p => p.Order).ToList();
 
 			detail = detail with { Steps = enrichedSteps };
 

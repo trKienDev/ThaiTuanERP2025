@@ -10,17 +10,19 @@ import { ApprovalStepInstanceDetailDto, ApproveStepRequest, StepStatus } from ".
 import { UserFacade } from "../../../../../account/facades/user.facade";
 import { UserDto } from "../../../../../account/models/user.model";
 import { ToastService } from "../../../../../../shared/components/toast/toast.service";
-import { firstValueFrom, interval, map, Observable, startWith } from "rxjs";
+import { firstValueFrom } from "rxjs";
 import { ApprovalWorkflowInstanceService } from "../../../../services/approval-workflow-instance.service";
 import { trigger, transition, style, animate } from "@angular/animations";
 import { KitLoadingSpinnerComponent } from "../../../../../../shared/components/kit-loading-spinner/kit-loading-spinner.component";
 import { Kit404PageComponent } from "../../../../../../shared/components/kit-404-page/kit-404-page.component";
 import { KitFlipCountdownComponent } from "../../../../../../shared/components/kit-flip-countdown/kit-flip-countdown.component";
+import { KitOverlaySpinnerComponent } from "../../../../../../shared/components/kit-overlay-spinner/kit-overlay-spinner.component";
+import { KitSpinnerButtonComponent } from "../../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 
 @Component({
       selector: 'expense-payment-detail-dialog',
       standalone: true,
-      imports: [CommonModule, ExpensePaymentStatusPipe, AvatarUrlPipe, KitLoadingSpinnerComponent, Kit404PageComponent, KitFlipCountdownComponent],
+      imports: [CommonModule, ExpensePaymentStatusPipe, AvatarUrlPipe, KitLoadingSpinnerComponent, Kit404PageComponent, KitFlipCountdownComponent, KitSpinnerButtonComponent],
       templateUrl: './expense-payment-detail-dialog.component.html',
       styleUrls: ['./expense-payment-detail-dialog.component.scss'],
       animations: [
@@ -65,6 +67,7 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
       err = this.paymentLogic.error;
       commentText: string = '';
       public currentStepOrder: number = 0;
+      public approving = false;
 
       constructor(@Inject(MAT_DIALOG_DATA) public data: string) {
             if(data) this.paymentLogic.load(data);
@@ -78,7 +81,7 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
       }
 
       get paymentDetail(): ExpensePaymentDetailDto | null {
-            console.log('paymentDetail: ', this.paymentLogic.paymentDetail());
+            // console.log('paymentDetail: ', this.paymentLogic.paymentDetail());
             return this.paymentLogic.paymentDetail();
       }
 
@@ -98,27 +101,36 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
       }
 
       async onApprove() {
-            const workflowInstanceDetail = this.paymentDetail?.workflowInstanceDetail;
-            if(!workflowInstanceDetail) return;
-            const currentStep = workflowInstanceDetail.steps.find(s => s.order === workflowInstanceDetail.workflowInstance.currentStepOrder);
-            if(!currentStep) return;
-            if (!this.currentUser?.id) { alert('Không xác định được người dùng hiện tại'); return; }
-            if (!this.paymentId) { alert('Thiếu PaymentId'); return; }
+            if (this.approving) return;
+            this.approving = true;
 
-            const payload: ApproveStepRequest = {
-                  userId: this.currentUser.id,
-                  paymentId: this.paymentId,
-                  comment: this.commentText || ''
-            };
-            
-            const result = await firstValueFrom(this.workflowInstanceService.approveStep(
-                  workflowInstanceDetail.workflowInstance.id, 
-                  currentStep.id,
-                  payload
-            ));
-            if(result) { 
-                  this.toastService.successRich('Duyệt thành công'); 
-                  await this.paymentLogic.refresh();
+            try {
+                  const workflowInstanceDetail = this.paymentDetail?.workflowInstanceDetail;
+                  if(!workflowInstanceDetail) return;
+                  const currentStep = workflowInstanceDetail.steps.find(s => s.order === workflowInstanceDetail.workflowInstance.currentStepOrder);
+                  if(!currentStep) return;
+                  if (!this.currentUser?.id) { alert('Không xác định được người dùng hiện tại'); return; }
+                  if (!this.paymentId) { alert('Thiếu PaymentId'); return; }
+
+                  const payload: ApproveStepRequest = {
+                        userId: this.currentUser.id,
+                        paymentId: this.paymentId,
+                        comment: this.commentText || ''
+                  };
+                  
+                  const result = await firstValueFrom(this.workflowInstanceService.approveStep(
+                        workflowInstanceDetail.workflowInstance.id, 
+                        currentStep.id,
+                        payload
+                  ));
+                  if(result) { 
+                        this.toastService.successRich('Duyệt thành công'); 
+                        await this.paymentLogic.refresh();
+                  }
+            } catch (error) {
+                  this.toastService.errorRich('Duyệt thất bại. Vui lòng thử lại.');
+            } finally {
+                  this.approving = false;
             }
       }
 
@@ -176,6 +188,7 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
       }
 
       isExpired(item: ApprovalStepInstanceDetailDto): boolean {
+            console.log('DueAt:', item.dueAt, 'Now:', new Date().toISOString());
             return new Date(item.dueAt).getTime() <= Date.now();
       }
 }
