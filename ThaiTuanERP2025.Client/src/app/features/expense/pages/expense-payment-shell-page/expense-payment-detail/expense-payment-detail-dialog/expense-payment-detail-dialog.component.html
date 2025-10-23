@@ -18,7 +18,7 @@
                        <ng-container *ngIf="!err(); else errorTpl">
                               <div class="expense-payment-detail-container">
                                     <div class="payment-heading display-flex gap-10px align-items-center">
-                                          <div class="payment-status">
+                                          <div class="payment-status" [@statusChangeFade]="paymentDetail?.status">
                                                 <span class="payment-status-badge" [ngClass]="(paymentDetail?.status | expensePaymentStatus).class">
                                                       {{ (paymentDetail?.status | expensePaymentStatus).text }}
                                                 </span>
@@ -27,8 +27,9 @@
                                           <ng-container *ngIf="canApproveOrReject">
                                                 <div class="payment-actions display-flex gap-10px align-items-center" >
                                                       <!-- <button type="button" class="button submit-button" (click)="onApprove()">Duyệt</button> -->
-                                                      <kit-spinner-button type="button" cssClass="submit-button" [loading]="approving" [disabled]="loading()" text="Duyệt" loadingText="Đang duyệt…" (click)="onApprove()"></kit-spinner-button>
-                                                      <button type="button" class="button danger-button" (click)="onReject()">Từ chối</button>
+                                                      <kit-spinner-button type="button" cssClass="submit-button" [loading]="processing" [disabled]="loading()" text="Duyệt" loadingText="Đang duyệt…" (click)="onApprove()"></kit-spinner-button>
+                                                      <kit-spinner-button type="button" cssClass="danger-button" [loading]="processing" [disabled]="loading()" text="Từ chối" loadingText="Đang từ chối…" (click)="onReject()"></kit-spinner-button>
+                                                      <!-- <button type="button" class="button danger-button" (click)="onReject()">Từ chối</button> -->
                                                 </div>
                                                 <ng-container *ngIf="currentStepSafe && isExpired(currentStepSafe)">
                                                       <div class="payment-expired-badge margin-left-auto">

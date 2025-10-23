@@ -112,6 +112,8 @@ export interface ExpensePaymentSummaryDto {
 	totalTax: number;
 	totalWithTax: number;
 
+      outgoingAmountPaid: number;
+
 	status: number;
 
 	createdByUser: UserDto;

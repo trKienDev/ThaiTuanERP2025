@@ -8,17 +8,19 @@ import { ExpensePaymentDetailDialogComponent } from '../expense-payment-detail/e
 import { FollowingExpensePaymentFacade } from '../../../facades/following-expense-payment.facade';
 import { KitLoadingSpinnerComponent } from "../../../../../shared/components/kit-loading-spinner/kit-loading-spinner.component";
 import { KitRefreshButtonComponent } from "../../../../../shared/components/kit-refresh-button/kit-refresh-button.component";
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'expense-payments-panel',
-  standalone: true,
-  templateUrl: './following-expense-payments.component.html',
-  styleUrls: ['./following-expense-payments.component.scss'],
-  imports: [CommonModule, ExpensePaymentStatusPipe, AvatarUrlPipe, KitLoadingSpinnerComponent, KitRefreshButtonComponent],
+      selector: 'expense-payments-panel',
+      standalone: true,
+      templateUrl: './following-expense-payments.component.html',
+      styleUrls: ['./following-expense-payments.component.scss'],
+      imports: [CommonModule, ExpensePaymentStatusPipe, AvatarUrlPipe, KitLoadingSpinnerComponent, KitRefreshButtonComponent],
 })
 export class FollowingExpensePaymentsPanelComponent implements OnInit, OnDestroy {
       private dialog = inject(MatDialog);
       private facade = inject(FollowingExpensePaymentFacade);
+      private route = inject(ActivatedRoute);
 
       trackById = (_: number, item: { id: string }) => item.id;
 
@@ -32,6 +34,13 @@ export class FollowingExpensePaymentsPanelComponent implements OnInit, OnDestroy
       async ngOnInit(): Promise<void> {
             await this.facade.loadFirstPage();
             this.setupObserver();
+
+            this.route.queryParamMap.subscribe(params => {
+                  const paymentId = params.get('paymentId');
+                  if (paymentId) {
+                        this.openExpensePaymentDetailDialog(paymentId);
+                  }
+            });
       }
 
       ngOnDestroy(): void {

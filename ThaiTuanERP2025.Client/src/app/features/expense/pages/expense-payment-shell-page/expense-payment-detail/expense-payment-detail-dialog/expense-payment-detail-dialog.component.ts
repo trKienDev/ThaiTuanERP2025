@@ -16,8 +16,8 @@ import { trigger, transition, style, animate } from "@angular/animations";
 import { KitLoadingSpinnerComponent } from "../../../../../../shared/components/kit-loading-spinner/kit-loading-spinner.component";
 import { Kit404PageComponent } from "../../../../../../shared/components/kit-404-page/kit-404-page.component";
 import { KitFlipCountdownComponent } from "../../../../../../shared/components/kit-flip-countdown/kit-flip-countdown.component";
-import { KitOverlaySpinnerComponent } from "../../../../../../shared/components/kit-overlay-spinner/kit-overlay-spinner.component";
 import { KitSpinnerButtonComponent } from "../../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
+import { FollowingExpensePaymentFacade } from "../../../../facades/following-expense-payment.facade";
 
 @Component({
       selector: 'expense-payment-detail-dialog',
@@ -50,6 +50,12 @@ import { KitSpinnerButtonComponent } from "../../../../../../shared/components/k
                         animate('220ms ease-in', style({ opacity: 0 }))
                   ])
             ]),
+            trigger('statusChangeFade', [
+                  transition('* => *', [
+                        style({ opacity: 0, transform: 'scale(0.98)' }),
+                        animate('280ms ease-out', style({ opacity: 1, transform: 'scale(1)' }))
+                  ])
+            ]),
       ],
 })
 export class ExpensePaymentDetailDialogComponent implements OnInit {
@@ -67,7 +73,8 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
       err = this.paymentLogic.error;
       commentText: string = '';
       public currentStepOrder: number = 0;
-      public approving = false;
+      public processing = false;
+      private facade = inject(FollowingExpensePaymentFacade);
 
       constructor(@Inject(MAT_DIALOG_DATA) public data: string) {
             if(data) this.paymentLogic.load(data);
@@ -101,8 +108,8 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
       }
 
       async onApprove() {
-            if (this.approving) return;
-            this.approving = true;
+            if (this.processing) return;
+            this.processing = true;
 
             try {
                   const workflowInstanceDetail = this.paymentDetail?.workflowInstanceDetail;
@@ -126,11 +133,12 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
                   if(result) { 
                         this.toastService.successRich('Duyệt thành công'); 
                         await this.paymentLogic.refresh();
+                        await this.facade.loadFirstPage();
                   }
             } catch (error) {
                   this.toastService.errorRich('Duyệt thất bại. Vui lòng thử lại.');
             } finally {
-                  this.approving = false;
+                  this.processing = false;
             }
       }
 
@@ -156,6 +164,7 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
             if(result) { 
                   this.toastService.successRich(result); 
                   await this.paymentLogic.refresh();
+                  await this.facade.loadFirstPage();
             }
       }
 
@@ -188,7 +197,6 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
       }
 
       isExpired(item: ApprovalStepInstanceDetailDto): boolean {
-            console.log('DueAt:', item.dueAt, 'Now:', new Date().toISOString());
             return new Date(item.dueAt).getTime() <= Date.now();
       }
 }
