@@ -1,0 +1,4 @@
+<button [type]="type" [disabled]="disabled || loading" [ngClass]="['button', cssClass]" >
+      <span class="btn-spinner" *ngIf="loading" aria-hidden="true"></span>
+      <span>{{ loading ? loadingText : text }}</span>
+</button>

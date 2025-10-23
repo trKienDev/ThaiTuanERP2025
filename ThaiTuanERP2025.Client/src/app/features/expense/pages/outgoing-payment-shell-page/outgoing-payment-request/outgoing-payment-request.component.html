@@ -14,10 +14,7 @@
                         </div>
                         <div class="process-button-container display-flex gap-10px">
                               <button type="button" class="button cancel-button" [disabled]="loading()">Hủy</button>
-                              <button type="submit" class="button save-button" [disabled]="loading() || submitting">
-                                    <span class="btn-spinner" *ngIf="submitting" aria-hidden="true"></span>
-                                    <span>{{ submitting ? 'Đang gửi…' : 'Gửi phê duyệt' }}</span>
-                              </button>
+                              <kit-spinner-button type="submit" cssClass="save-button" [loading]="submitting" [disabled]="isBusy || form.invalid" text="Gửi phê duyệt" loadingText="Đang gửi…"></kit-spinner-button>
                         </div>
                   </div>
 

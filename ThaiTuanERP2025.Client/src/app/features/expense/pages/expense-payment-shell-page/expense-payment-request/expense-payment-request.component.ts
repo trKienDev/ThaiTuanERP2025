@@ -34,6 +34,7 @@ import { ExpenseBudgetCodeDialogComponent } from "../../../../finance/pages/budg
 import { SupplierRequestDialogComponent } from "../../suppliers/supplier-request-dialog/supplier-request-dialog.component";
 import { KitFileUploaderComponent } from "../../../../../shared/components/kit-file-uploader/kit-file-uploader.component";
 import { TextareaNoSpellcheckDirective } from "../../../../../shared/directives/money/textarea/textarea-no-spellcheck.directive";
+import { KitSpinnerButtonComponent } from "../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 
 type UploadStatus = 'queued' | 'uploading' | 'done' | 'error';
 type UploadItem = {
@@ -65,8 +66,8 @@ type PaymentItem = {
       selector: 'new-expense-payment-request',
       templateUrl: './expense-payment-request.component.html',
       imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule,
-      KitDropdownComponent, MatDialogModule, MoneyFormatDirective, OverlayModule, MatSnackBarModule,
-      MatDatepickerModule, HttpClientModule, KitFileUploaderComponent, TextareaNoSpellcheckDirective],
+    KitDropdownComponent, MatDialogModule, MoneyFormatDirective, OverlayModule, MatSnackBarModule,
+    MatDatepickerModule, HttpClientModule, KitFileUploaderComponent, TextareaNoSpellcheckDirective, KitSpinnerButtonComponent],
       styleUrls: ['./expense-payment-request.component.scss'],
       standalone: true,
       providers: [...provideMondayFirstDateAdapter() ]
@@ -116,9 +117,7 @@ export class ExpensePaymentRequestPanelComponent {
             private budegetCodeService: BudgetCodeService,
             private cashoutCodeService: CashoutCodeService,
             private confirmService: ConfirmService,
-      ) {
-
-      }
+      ) { }
 
       // reactive form
       form = this.formBuilder.group({
@@ -541,7 +540,6 @@ export class ExpensePaymentRequestPanelComponent {
       }
       // 3. trạng thái bận chung
       get isBusy() {
-
             return this.submitting || this.isUploading;
       }
 }
