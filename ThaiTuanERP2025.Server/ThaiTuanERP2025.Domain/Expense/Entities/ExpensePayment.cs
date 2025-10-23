@@ -152,7 +152,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public decimal RemainingAmount => TotalWithTax - TotalOutgoing;
 		public OutgoingPayment AddOutgoingPayment(
 			string name, string bankName, string accountNumber, string beneficiaryName,
-			decimal amount, DateTime postingDate, DateTime paymentDate, Guid outgoingBankAccountId,
+			decimal amount, DateTime dueDate, Guid outgoingBankAccountId,
 			string? description = null 
 		) {
 			if (amount <= 0)
@@ -163,7 +163,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			var outgoing = new OutgoingPayment(
 				name, amount,
 				bankName, accountNumber, beneficiaryName,
-				postingDate, outgoingBankAccountId, this.Id,
+				dueDate, outgoingBankAccountId, this.Id,
 				description
 			);
 
