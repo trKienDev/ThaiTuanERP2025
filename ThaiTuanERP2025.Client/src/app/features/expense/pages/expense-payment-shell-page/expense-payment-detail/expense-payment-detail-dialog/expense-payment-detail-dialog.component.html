@@ -26,7 +26,8 @@
                                           <h3 class="payment-name">{{ paymentDetail?.name }}</h3>
                                           <ng-container *ngIf="canApproveOrReject">
                                                 <div class="payment-actions display-flex gap-10px align-items-center" >
-                                                      <button type="button" class="button submit-button" (click)="onApprove()">Duyệt</button>
+                                                      <!-- <button type="button" class="button submit-button" (click)="onApprove()">Duyệt</button> -->
+                                                      <kit-spinner-button type="button" cssClass="submit-button" [loading]="approving" [disabled]="loading()" text="Duyệt" loadingText="Đang duyệt…" (click)="onApprove()"></kit-spinner-button>
                                                       <button type="button" class="button danger-button" (click)="onReject()">Từ chối</button>
                                                 </div>
                                                 <ng-container *ngIf="currentStepSafe && isExpired(currentStepSafe)">
@@ -42,7 +43,7 @@
                                                       </ng-container>
                                                 </ng-container>
                                           </ng-container>
-                                          <ng-container *ngIf="paymentDetail?.status === 6">
+                                          <ng-container *ngIf="paymentDetail?.status === 6 || paymentDetail?.status === 7">
                                                 <div class="payment-outgoing-btn margin-left-auto">
                                                       <button type="button" class="button pintura-button" (click)="navigateToOutgoingPaymentRequest()">
                                                             Ghi nhận khoản tiền ra
@@ -118,7 +119,11 @@
                                                             </div>
                                                             <div class="amount-infor-block">
                                                                   <label class="amount-infor-label" for="payment-date">Số tiền đã tạo lệnh</label>
-                                                                  <span></span>
+                                                                  <span>{{ paymentDetail?.outgoingAmountPaid | number:'1.0-0' }} VNĐ</span>
+                                                            </div>
+                                                            <div class="amount-infor-block">
+                                                                  <label class="amount-infor-label" for="payment-date">Số tiền chờ tạo lệnh</label>
+                                                                  <span>{{ paymentDetail?.remainingOutgoingAmount | number:'1.0-0' }} VNĐ</span>
                                                             </div>
                                                       </div>
                                                       <div class="amount-item-block">

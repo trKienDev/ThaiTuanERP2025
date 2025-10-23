@@ -1,8 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnInit } from "@angular/core";
-import { OutgoingPaymentDto, OutgoingPaymentSummaryDto } from "../../../models/outgoing-payment.model";
-import { OutgoingPaymentService } from "../../../services/outgoing-payment.service";
-import { firstValueFrom } from "rxjs";
+import { OutgoingPaymentDto } from "../../../models/outgoing-payment.model";
 import { OutgoingPaymentStatusPipe } from "../../../pipes/outgoing-payment-status.pipe";
 import { ExpensePaymentDetailDialogComponent } from "../../expense-payment-shell-page/expense-payment-detail/expense-payment-detail-dialog/expense-payment-detail-dialog.component";
 import { MatDialog } from "@angular/material/dialog";

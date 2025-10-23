@@ -35,6 +35,7 @@ import { SupplierRequestDialogComponent } from "../../suppliers/supplier-request
 import { KitFileUploaderComponent } from "../../../../../shared/components/kit-file-uploader/kit-file-uploader.component";
 import { TextareaNoSpellcheckDirective } from "../../../../../shared/directives/money/textarea/textarea-no-spellcheck.directive";
 import { KitSpinnerButtonComponent } from "../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
+import { KitOverlaySpinnerComponent } from "../../../../../shared/components/kit-overlay-spinner/kit-overlay-spinner.component";
 
 type UploadStatus = 'queued' | 'uploading' | 'done' | 'error';
 type UploadItem = {
@@ -67,7 +68,7 @@ type PaymentItem = {
       templateUrl: './expense-payment-request.component.html',
       imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule,
     KitDropdownComponent, MatDialogModule, MoneyFormatDirective, OverlayModule, MatSnackBarModule,
-    MatDatepickerModule, HttpClientModule, KitFileUploaderComponent, TextareaNoSpellcheckDirective, KitSpinnerButtonComponent],
+    MatDatepickerModule, HttpClientModule, KitFileUploaderComponent, TextareaNoSpellcheckDirective, KitSpinnerButtonComponent, KitOverlaySpinnerComponent],
       styleUrls: ['./expense-payment-request.component.scss'],
       standalone: true,
       providers: [...provideMondayFirstDateAdapter() ]

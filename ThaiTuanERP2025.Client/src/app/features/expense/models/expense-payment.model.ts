@@ -80,6 +80,8 @@ export interface ExpensePaymentDetailDto extends ExpensePaymentDto {
       createdByDepartmentName?: string;
 
       status: number;
+      outgoingAmountPaid: number;
+      remainingOutgoingAmount: number;
 
       createdDate: Date;
       updatedBy?: UserDto;
