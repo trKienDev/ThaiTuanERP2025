@@ -1,0 +1,27 @@
+<div class="primary-card">
+      <div class="card-header">Quy định thời gian lập ngân sách</div>
+      <div class="card-body">
+            <form [formGroup]="form">
+                  <div class="display-flex gap-10px">
+                        <div class="form-input">
+                              <input class="" type="number" formControlName="month" autocomplete="on" required/>
+                              <label for="name">Tháng <span style="color: red;">  *</span></label>
+                        </div>
+                        <div class="form-input">
+                              <input class="" type="year" formControlName="year" autocomplete="on" required/>
+                              <label for="name">Năm <span style="color: red;">  *</span></label>
+                        </div>
+                        <div class="">
+                              <input class="invoice-date" formControlName="dueDate" matInput [matDatepicker]="picker" placeholder="chọn ngày lập" (focus)="picker.open()" (click)="picker.open()" (keydown.enter)="picker.open()" (keydown.arrowDown)="picker.open()"  required/>
+                              <mat-datepicker #picker panelClass="kit-datepicker"></mat-datepicker>
+                        </div>
+                  </div>
+                  <div class="form-actions display-flex gap-10px margin-top-20px">
+                        <button type="button" class="width-50pt button cancel-button">Hủy</button>
+                        <button type="submit" class="width-50pt button save-button display-flex justify-content-center" [disabled]="submitting">
+                              {{ submitting ? 'Đang lưu...' : 'Lưu' }}
+                        </button>
+                  </div>
+            </form>
+      </div>
+</div>
