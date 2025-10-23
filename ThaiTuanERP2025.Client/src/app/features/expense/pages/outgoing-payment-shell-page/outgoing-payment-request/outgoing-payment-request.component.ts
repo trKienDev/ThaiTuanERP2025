@@ -134,6 +134,7 @@ export class OutgoingPaymentRequestComponent {
 
             try {
                   const payload = this.form.getRawValue() as OutgoingPaymentRequest;
+                  console.log('Submitting payload:', payload);
                   const result = await firstValueFrom(this.outgoingPaymentService.create(payload));
                   this.toast.successRich("Tạo yêu cầu khoản tiền ra thành công");
                   return;

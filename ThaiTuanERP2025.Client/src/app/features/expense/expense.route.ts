@@ -34,7 +34,7 @@ export const expenseRoutes: Routes = [
                               { path: '', redirectTo: 'following-outgoing-payments', pathMatch: 'full' },
                               { path: 'following-outgoing-payments', component: FollowingOutgoingPaymentComponent },
                               { path: 'outgoing-payment-request/:id', component: OutgoingPaymentRequestComponent },
-                              { path: 'outgoing-payment-detail', component: OutgoingPaymentDetailComponent }
+                              { path: 'outgoing-payment-detail', component: OutgoingPaymentDetailComponent },
                         ]
                   },
                   { 
@@ -43,6 +43,7 @@ export const expenseRoutes: Routes = [
                         children: [
                               { path: '', redirectTo: 'outgoing-bank-account', pathMatch: 'full' },
                               { path: 'outgoing-bank-account', component: OutgoingBankAccountComponent },
+                              { path: 'supplier-bank-account', loadComponent: () => import('./pages/bank-account-shell-page/supplier-bank-account/supplier-bank-account.component').then((m) => m.SupplierBankAccountComponent) },
                         ]
                   },
                   { path: 'approval-workflow-engine', data: { animation: 'ApprovalWorkflowEnginePage' }, loadComponent: () => import('./pages/expense-approval-workflow-engine/expense-approval-workflow-engine.component').then((m) => m.ExpenseApprovalWorkflowEngineComponent )},

@@ -33,14 +33,6 @@ namespace ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetExpenseP
 				return baseDto;
 			}
 
-			// 1) Map phần lõi + steps detail
-			var detail = new ApprovalWorkflowInstanceDetailDto
-			{
-				WorkflowInstance = _mapper.Map<ApprovalWorkflowInstanceDto>(workflow), // map cái lõi
-				Steps = _mapper.Map<List<ApprovalStepInstanceDetailDto>>(workflow.Steps) // map detail steps
-			};
-
-			// 2) Gom tất cả GUID approver từ mọi step (lọc null & trùng)
 			// 1) Gom toàn bộ GUID liên quan tới user (cả Default, Approved, Rejected)
 			var allIds = workflow.Steps
 				.SelectMany(s => (s.ResolvedApproverCandidatesJson is { Length: > 0 }
@@ -55,28 +47,25 @@ namespace ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetExpenseP
 				.ToArray();
 
 			// 2) Load users batch
-			var users = allIds.Length == 0 ? new List<Domain.Account.Entities.User>()
+			var users = allIds.Length == 0 
+				? new List<Domain.Account.Entities.User>()
 				: await _unitOfWork.Users.ListByIdsAsync(allIds, cancellationToken);
 
 			// 3) Map sang dict
-			var userDtoDict = _mapper.Map<List<UserDto>>(users).ToDictionary(u => u.Id, u => u);
+			var userDtoDict = users.Select(u => _mapper.Map<UserDto>(u)).ToDictionary(u => u.Id, u => u);
 
-			// 4) Map steps + TIÊM ctx.Items["UserDict"]
-			var steps = _mapper.Map<List<ApprovalStepInstanceDetailDto>>(
-				workflow.Steps,
+			var detail = _mapper.Map<ApprovalWorkflowInstanceDetailDto>(
+				workflow,
 				opt => { opt.Items["UserDict"] = userDtoDict; }
 			);
 
-			// (Giữ nguyên phần enrich ApproverCandidates nếu muốn)
-			var enrichedSteps = steps
-			    .Select(s => s with
-			    {
-				    ApproverCandidates = (s.ResolvedApproverCandidateIds ?? Array.Empty<Guid>())
-				    .Select(id => userDtoDict.TryGetValue(id, out var dto) ? dto : null)
-				    .Where(u => u != null)
-				    .ToArray()!
-			    })
-			    .ToList();
+			var enrichedSteps = detail.Steps
+				.Select(s => s with {
+					ApproverCandidates = (s.ResolvedApproverCandidateIds ?? Array.Empty<Guid>())
+						.Select(id => userDtoDict.TryGetValue(id, out var dto) ? dto : null)
+						.Where(u => u != null)
+						.ToArray()!
+				}).ToList();
 
 			detail = detail with { Steps = enrichedSteps };
 

@@ -4,7 +4,6 @@ using ThaiTuanERP2025.Application.Common.Services;
 using ThaiTuanERP2025.Application.Followers.Services;
 using ThaiTuanERP2025.Domain.Common.Enums;
 using ThaiTuanERP2025.Domain.Exceptions;
-using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Followers.Enums;
 
 namespace ThaiTuanERP2025.Application.Expense.Commands.OutgoingPayments.CreateOutgoingPayment
@@ -30,10 +29,13 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.OutgoingPayments.CreateOu
 			var currentUserId = _currentUserService.UserId ?? throw new NotFoundException("Bạn không có quyền truy cập");
 
 			var request = command.Request;
+
 			var existing = await _unitOfWork.OutgoingPayments.SingleOrDefaultIncludingAsync(
 				x => x.Name == request.Name,
 				cancellationToken: cancellationToken
 			);
+			if (existing is not null)
+				throw new InvalidOperationException("Khoản chi này đã tồn tại");
 
 			var expensePayment = await _unitOfWork.ExpensePayments.SingleOrDefaultIncludingAsync(
 				q => q.Id == request.ExpensePaymentId,
@@ -44,28 +46,31 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.OutgoingPayments.CreateOu
 			var bankName = request.BankName.IsNormalized() ? request.BankName : request.BankName.Trim();
 			var accountNumber = request.AccountNumber.IsNormalized() ? request.AccountNumber : request.AccountNumber.Trim();
 			var beneficiaryName = request.BeneficiaryName.IsNormalized() ? request.BeneficiaryName : request.BeneficiaryName.Trim();
-			var subId = await _documentSubIdGeneratorService.NextSubIdAsync(DocumentType.OutgoingPayment, DateTime.UtcNow, cancellationToken);				
+			var subId = await _documentSubIdGeneratorService.NextSubIdAsync(DocumentType.OutgoingPayment, DateTime.UtcNow, cancellationToken);
 
-			if (existing is not null)
-			{
-				throw new InvalidOperationException("Khoản chi này đã tồn tại");
-			}
-
-			var entity = new OutgoingPayment(
-				name, request.OutgoingAmount,
+			//var entity = new OutgoingPayment (
+			//	name, request.OutgoingAmount,
+			//	bankName, accountNumber, beneficiaryName,
+			//	request.DueDate,
+			//	request.OutgoingBankAccountId,
+			//	request.ExpensePaymentId,
+			//	request.Description
+			//);
+			var outgoingPayment = expensePayment.AddOutgoingPayment(
+				name,
 				bankName, accountNumber, beneficiaryName,
-				request.DueDate,
+				request.OutgoingAmount, 
+				request.DueDate, 
 				request.OutgoingBankAccountId,
-				request.ExpensePaymentId,
 				request.Description
 			);
-			entity.SetSubId(subId);
-			entity.Approve(currentUserId);
+			outgoingPayment.SetSubId(subId);
+			//entity.Approve(currentUserId);
 
 			if (request.SupplierId.HasValue && !request.EmployeeId.HasValue)
-				entity.SetSupplierId(request.SupplierId.Value);
+				outgoingPayment.SetSupplierId(request.SupplierId.Value);
 			else if(request.EmployeeId.HasValue && !request.SupplierId.HasValue)
-				entity.SetEmployeeId(request.EmployeeId.Value);
+				outgoingPayment.SetEmployeeId(request.EmployeeId.Value);
 			else if(request.SupplierId.HasValue && request.EmployeeId.HasValue)
 				throw new InvalidOperationException("Chỉ được chọn một trong Nhà cung cấp hoặc Nhân viên.");
 			else if(!request.SupplierId.HasValue && !request.EmployeeId.HasValue)
@@ -78,9 +83,9 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.OutgoingPayments.CreateOu
 
 			var followerIds = new HashSet<Guid>() { currentUserId };
 			followerIds.UnionWith(paymentFollowerIds); 
-			await _followerService.FollowManyAsync(SubjectType.OutgoingPayment, entity.Id, followerIds, cancellationToken);
+			await _followerService.FollowManyAsync(SubjectType.OutgoingPayment, outgoingPayment.Id, followerIds, cancellationToken);
 
-			await _unitOfWork.OutgoingPayments.AddAsync(entity);
+			await _unitOfWork.OutgoingPayments.AddAsync(outgoingPayment);
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 
 			return Unit.Value;

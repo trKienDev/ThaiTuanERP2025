@@ -78,6 +78,7 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
       }
 
       get paymentDetail(): ExpensePaymentDetailDto | null {
+            console.log('paymentDetail: ', this.paymentLogic.paymentDetail());
             return this.paymentLogic.paymentDetail();
       }
 

@@ -15,9 +15,6 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 				.ConvertUsing<StepInstanceConverter>();
 
 			CreateMap<ApprovalStepInstance, ApprovalStepInstanceDetailDto>()
-				.ForMember(d => d.DefaultApproverUser, o => o.MapFrom((s, d, destMember, ctx) => s.DefaultApproverId.HasValue ? ApprovalStepInstanceMappingProfile.TryGetUserDto(ctx, s.DefaultApproverId.Value) : null))
-				.ForMember(d => d.ApprovedByUser, o => o.MapFrom<ApprovedUserResolver<ApprovalStepInstanceDetailDto>>())
-				.ForMember(d => d.RejectedByUser, o => o.MapFrom<RejectedUserResolver<ApprovalStepInstanceDetailDto>>())
 				.ConvertUsing<StepInstanceDetailConverter>();
 
 
@@ -96,9 +93,9 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 					try { history = JsonSerializer.Deserialize<object>(s.HistoryJson); } catch { }
 				}
 
-				var defaultApproverUser = s.DefaultApproverId.HasValue
-				    ? ApprovalStepInstanceMappingProfile.TryGetUserDto(ctx, s.DefaultApproverId.Value)
-				    : null;
+				var defaultApproverUser = s.DefaultApproverId.HasValue? ApprovalStepInstanceMappingProfile.TryGetUserDto(ctx, s.DefaultApproverId.Value) : null;
+				var approvedByUser = s.ApprovedBy.HasValue ? ApprovalStepInstanceMappingProfile.TryGetUserDto(ctx, s.ApprovedBy.Value) : null;
+				var rejectedByUser = s.RejectedBy.HasValue ? ApprovalStepInstanceMappingProfile.TryGetUserDto(ctx, s.RejectedBy.Value) : null;
 
 				return new ApprovalStepInstanceDetailDto
 				{
@@ -119,8 +116,10 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 					DueAt = AsUtc(s.DueAt),
 					ApprovedAt = AsUtc(s.ApprovedAt),
 					ApprovedBy = s.ApprovedBy,
+					ApprovedByUser = approvedByUser,
 					RejectedAt = AsUtc(s.RejectedAt),
 					RejectedBy = s.RejectedBy,
+					RejectedByUser = rejectedByUser,
 					Comments = s.Comments,
 					SlaBreached = s.SlaBreached,
 					History = history,

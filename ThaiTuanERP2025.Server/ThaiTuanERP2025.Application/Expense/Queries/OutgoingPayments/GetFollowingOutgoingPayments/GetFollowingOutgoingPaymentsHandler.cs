@@ -35,6 +35,7 @@ namespace ThaiTuanERP2025.Application.Expense.Queries.OutgoingPayments.GetFollow
 			// ListProjectedAsync<TDto> : EF Core chỉ select các cột cần thiết
 			var summaries = await _unitOfWork.OutgoingPayments.ListProjectedAsync<OutgoingPaymentSummaryDto>(
 				q => q.Where(p => idList.Contains(p.Id))
+					.OrderByDescending(p => p.CreatedDate)
 					.ProjectTo<OutgoingPaymentSummaryDto>(_mapper.ConfigurationProvider),
 				cancellationToken: cancellationToken
 			);
