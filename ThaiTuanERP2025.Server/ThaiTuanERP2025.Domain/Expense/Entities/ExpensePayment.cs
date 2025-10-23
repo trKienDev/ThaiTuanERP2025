@@ -1,4 +1,5 @@
-﻿using ThaiTuanERP2025.Domain.Account.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Expense.Enums;
 
@@ -96,10 +97,11 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		public void SetGoodsReceipt(bool hasGoodsReceipt) => HasGoodsReceipt = hasGoodsReceipt;
 
-		public ExpensePaymentItem AddItem(string itemName, int quantity, decimal unitPrice,
-						  decimal taxRate, Guid? budgetCodeId, Guid? cashoutCodeId,
-						  Guid? invoiceId = null, decimal? overrideTaxAmount = null)
-		{
+		public ExpensePaymentItem AddItem (
+			string itemName, int quantity, decimal unitPrice,
+			decimal taxRate, Guid? budgetCodeId, Guid? cashoutCodeId,
+			Guid? invoiceId = null, decimal? overrideTaxAmount = null
+		) {
 			var item = new ExpensePaymentItem(Id, itemName, quantity, unitPrice, taxRate, budgetCodeId, cashoutCodeId, invoiceId, overrideTaxAmount);
 			_items.Add(item);
 			RecalculateTotals();
@@ -121,6 +123,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			TotalAmount = _items.Sum(i => i.Amount);
 			TotalTax = _items.Sum(i => i.TaxAmount);
 			TotalWithTax = _items.Sum(i => i.TotalWithTax);
+			RemainingOutgoingAmount = TotalWithTax;
 		}
 
 		public void ReplaceItems(IEnumerable<ExpensePaymentItem> items)
@@ -146,11 +149,19 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public void LinkWorkflow(Guid instanceId) => CurrentWorkflowInstanceId = instanceId;
 		public void UnlinkWorkflow() => CurrentWorkflowInstanceId = null;
 
+		/// <summary>
+		/// Tổng số tiền đã chi (bao gồm tất cả lệnh chi con)
+		/// </summary>
+		[NotMapped]
 		public decimal TotalOutgoing => _outgoingPayments.Sum(o => o.OutgoingAmount);
 
-		// === Tổng còn lại chưa chi ===
+		/// <summary>
+		/// Số tiền còn lại chưa chi (computed runtime, không lưu DB)
+		/// </summary>
+		[NotMapped]
 		public decimal RemainingAmount => TotalWithTax - TotalOutgoing;
-		public OutgoingPayment AddOutgoingPayment(
+
+		public OutgoingPayment AddOutgoingPayment (
 			string name, string bankName, string accountNumber, string beneficiaryName,
 			decimal amount, DateTime dueDate, Guid outgoingBankAccountId,
 			string? description = null 
@@ -178,12 +189,22 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		public void UpdateOutgoingAmountPaid(IEnumerable<OutgoingPayment> outgoingPayments)
 		{
-			OutgoingAmountPaid = outgoingPayments.Where(x => x.Status == OutgoingPaymentStatus.Created).Sum(x => x.OutgoingAmount);
+			var sum = outgoingPayments.Where(x => x.Status == OutgoingPaymentStatus.Approved).Sum(x => x.OutgoingAmount);
+			OutgoingAmountPaid = sum;
 		}
 
-		public void RecalculateRemaining()
+		public void RecalculateOutgoingRemaining()
 		{
 			RemainingOutgoingAmount = TotalWithTax - OutgoingAmountPaid;
 		}
+
+		public void EvaluatePaymentStatus()
+		{
+			if (RemainingOutgoingAmount > 0)
+				PartiallyPaid();
+			else if (RemainingOutgoingAmount == 0)
+				FullyPaid();
+		}
+
 	}
 }

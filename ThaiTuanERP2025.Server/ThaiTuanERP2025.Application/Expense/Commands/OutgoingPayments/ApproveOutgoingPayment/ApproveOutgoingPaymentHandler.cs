@@ -15,9 +15,9 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.OutgoingPayments.ApproveO
 		}
 
 		public async Task<Unit> Handle(ApproveOutgoingPaymentCommand command, CancellationToken cancellationToken) {
-			var currentUserId = _currentUserService.UserId ?? throw new Exception("Bạn không có quyền truy cập");
+			var currentUserId = _currentUserService.UserId ?? throw new UnauthorizedAccessException("Bạn không có quyền truy cập");
 
-			var outgoingPayment = await _unitOfWork.OutgoingPayments.GetByIdAsync(command.Id) 
+			var outgoingPayment = await _unitOfWork.OutgoingPayments.GetByIdAsync(command.Id, cancellationToken) 
 				?? throw new NotFoundException("Không tìm thấy khoản chi yêu cầu");
 				
 			if(outgoingPayment.Status != Domain.Expense.Enums.OutgoingPaymentStatus.Pending) 
@@ -27,6 +27,19 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.OutgoingPayments.ApproveO
 				throw new InvalidOperationException("Chỉ người tạo khoản chi mới có quyền duyệt.");
 
 			outgoingPayment.Approve(currentUserId);
+
+			var expensePayment = await _unitOfWork.ExpensePayments.GetByIdAsync(outgoingPayment.ExpensePaymentId, cancellationToken)
+				?? throw new NotFoundException("Không tìm thấy khoản thanh toán tương ứng");
+			var allOutgoingPayments = await _unitOfWork.OutgoingPayments.ListAsync(
+				q => q.Where(o => o.ExpensePaymentId ==expensePayment.Id),
+				asNoTracking: false,
+				cancellationToken: cancellationToken
+			 );
+
+			expensePayment.UpdateOutgoingAmountPaid(allOutgoingPayments);
+			expensePayment.RecalculateOutgoingRemaining();
+			expensePayment.EvaluatePaymentStatus();
+
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 
 			return Unit.Value;

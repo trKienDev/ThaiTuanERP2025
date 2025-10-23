@@ -91,6 +91,9 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 
 		public DateTime CreatedDate { get; init; }
 
+		public decimal OutgoingAmountPaid { get; init; }
+		public decimal RemainingOutgoingAmount { get; init; }
+
 		// Items
 		public IReadOnlyList<ExpensePaymentItemDetailDto> Items { get; init; } = Array.Empty<ExpensePaymentItemDetailDto>();
 		public IReadOnlyList<ExpensePaymentAttachmentDto> Attachments { get; init; } = Array.Empty<ExpensePaymentAttachmentDto>();

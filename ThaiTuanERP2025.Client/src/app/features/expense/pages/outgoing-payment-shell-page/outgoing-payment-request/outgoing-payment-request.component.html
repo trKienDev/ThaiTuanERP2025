@@ -14,7 +14,7 @@
                         </div>
                         <div class="process-button-container display-flex gap-10px">
                               <button type="button" class="button cancel-button" [disabled]="loading()">Hủy</button>
-                              <kit-spinner-button type="submit" cssClass="save-button" [loading]="submitting" [disabled]="isBusy || form.invalid" text="Gửi phê duyệt" loadingText="Đang gửi…"></kit-spinner-button>
+                              <kit-spinner-button type="submit" cssClass="save-button" [loading]="submitting" [disabled]="isBusy || form.invalid" text="Tạo khoản chi" loadingText="Đang xử lý…"></kit-spinner-button>
                         </div>
                   </div>
 
@@ -68,8 +68,12 @@
                                     <input class="dark dark-alert user-select-none margin-top-10px" [value]="paymentDetail()?.totalWithTax | number:'1.0-2'" disabled />
                               </div>
                               <div class="form-column flex-1">
+                                    <label class="form-label" for="name">Số tiền đã tạo lệnh 🔒</label>
+                                    <input class="dark dark-alert user-select-none margin-top-10px" [value]="paymentDetail()?.outgoingAmountPaid | number:'1.0-2'" disabled />
+                              </div>
+                              <div class="form-column flex-1">
                                     <label class="form-label" for="name">Số tiền chờ tạo lệnh 🔒</label>
-                                    <input class="dark dark-alert user-select-none margin-top-10px" [value]="form.get('totalOutgoing')?.value | number:'1.0-2'" disabled />
+                                    <input class="dark dark-alert user-select-none margin-top-10px" [value]="paymentDetail()?.remainingOutgoingAmount | number:'1.0-2'" disabled />
                               </div>
                               <div class="form-column flex-1">
                                     <label class="form-label" for="name">Số tiền khoản tiền ra <span style="color: red;">  *</span></label>
@@ -149,6 +153,7 @@
                               <span>Tệp đính khoản tiền ra</span>
                               <kit-file-uploader [meta]="uploadMeta" [(uploads)]="uploads"></kit-file-uploader>
                         </div>
+                        <kit-overlay-spinner [show]="isBusy" [message]="submitting ? 'Đang gửi phê duyệt…' : 'Đang tải tệp lên…'"></kit-overlay-spinner>
                   </div>
             </form>
       </ng-container>

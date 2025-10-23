@@ -157,6 +157,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 				throw new InvalidOperationException("Chỉ người tạo chứng từ mới có quyền duyệt.");
 
 			ChangeStatus(OutgoingPaymentStatus.Approved);
+			PostingDate = DateTime.UtcNow;
 		}
 
 		public void MarkCreated(Guid actorUserId)
@@ -171,6 +172,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 				throw new InvalidOperationException("Chỉ người tạo chứng từ mới có quyền duyệt.");
 
 			ChangeStatus(OutgoingPaymentStatus.Created);
+			PaymentDate = DateTime.UtcNow;
 		}
 
 		public void Cancel(Guid actorUserId)
