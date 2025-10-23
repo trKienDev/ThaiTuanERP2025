@@ -49,7 +49,7 @@
                                     <td>{{ payment.totalAmount   | number: '1.0-0' }}</td>
                                     <td>{{ payment.totalTax      | number: '1.0-0' }}</td>
                                     <td>{{ payment.totalWithTax  | number: '1.0-0' }}</td>
-                                    <td><!-- TODO: bind OutgoingAmountPaid nếu có trong summary --></td>
+                                    <td>{{ payment.outgoingAmountPaid | number: '1.0-0' }}</td>
                                     <td>
                                           <img class="avatar-user" [src]="payment.createdByUser | avatarUrlPipe" alt="created by">
                                     </td>

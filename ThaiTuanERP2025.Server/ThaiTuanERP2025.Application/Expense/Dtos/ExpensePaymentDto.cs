@@ -126,6 +126,7 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 		public decimal TotalWithTax { get; init; }
 
 		public int Status { get; init; }
+		public decimal OutgoingAmountPaid { get; init; }	
 
 		public UserDto CreatedByUser { get; init; } = default!;
 		public DateTime CreatedDate { get; init; }
