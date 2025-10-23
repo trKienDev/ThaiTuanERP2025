@@ -1,12 +1,12 @@
-export interface BudgetPeriodModel {
+export interface BudgetPeriodDto {
       id: string;
       year: number;
       month: number;
       isActive: boolean;
-      createdDate: string;
-      updatedDate?: string;
+      budgetPreparationDate: Date;
 }
-export interface CreateBudgetPeriodModel {
+export interface BudgetPeriodRequest {
       year: number;
       month: number;
+      budgetPreparationDate: Date;
 }
