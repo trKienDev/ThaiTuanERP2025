@@ -163,43 +163,18 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
             return !!(isPaymentPending && isStepWaiting && isCurrentUserApprover);
       }
 
-      leftTime(step: ApprovalStepInstanceDetailDto): Observable<string> {
-            console.log('leftTime called for step', step);
-            return interval(1000).pipe(
-                  startWith(0),
-                  map(() => {
-                        const dueAtMs = this.getTimeSafe(step.dueAt) ?? 0;
-                        const sec = Math.max(0, Math.floor((new Date(dueAtMs).getTime() - Date.now()) / 1000));
-                        if (sec <= 0) return 'Hết hạn';
-                        const h = Math.floor(sec / 3600);
-                        const m = Math.floor((sec % 3600) / 60);
-                        const s = sec % 60;
-                        return `${h}h ${m}m ${s}s`;
-                  })
-            );
-      }
-
-      isExpired(step?: ApprovalStepInstanceDetailDto | null): boolean {
-            const dueAtMs = this.getTimeSafe(step?.dueAt);
-            return dueAtMs !== null && dueAtMs <= Date.now();
-      }
-      private getTimeSafe(d?: Date | string | number | null): number | null {
-            if (d == null) return null;
-            const t = new Date(d).getTime();
-            return Number.isNaN(t) ? null : t;
-      }
       get currentStepSafe(): ApprovalStepInstanceDetailDto | null {
             const wf = this.paymentDetail?.workflowInstanceDetail;
             if (!wf || !wf.steps || wf.steps.length === 0) return null;
             return wf.steps[this.currentStepOrder] || null;
       }
+
       getSecondsRemaining(step: ApprovalStepInstanceDetailDto): number {
-            if (!step?.dueAt) return 0;
-            const dueAtMs = this.getTimeSafe(step.dueAt);
-            if (dueAtMs === null) return 0;
-            const diff = dueAtMs - Date.now();
-            return diff > 0 ? Math.floor(diff / 1000) : 0;
+            const sec = Math.max(0, Math.floor((new Date(step.dueAt).getTime() - Date.now()) / 1000));
+            return sec
       }
 
-
+      isExpired(item: ApprovalStepInstanceDetailDto): boolean {
+            return new Date(item.dueAt).getTime() <= Date.now();
+      }
 }

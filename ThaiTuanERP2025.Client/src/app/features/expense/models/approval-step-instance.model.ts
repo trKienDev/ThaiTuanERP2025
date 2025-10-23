@@ -26,7 +26,7 @@ export interface ApprovalStepInstanceDto {
 
       status: string;
       StartedAt?: Date;
-      dueAt?: Date;
+      dueAt: string;
       approvedAt?: Date;
       approvedBy?: string;
       rejectedAt?: Date;
