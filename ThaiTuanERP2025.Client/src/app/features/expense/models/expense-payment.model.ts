@@ -1,8 +1,8 @@
 import { UserDto } from "../../account/models/user.model";
-import { ApprovalWorkflowInstanceDetailDto, ApprovalWorkflowInstanceDto, ApprovalWorkflowIntanceStatusDto } from "./approval-workflow-instance.model";
+import { ApprovalWorkflowInstanceDetailDto, ApprovalWorkflowIntanceStatusDto } from "./approval-workflow-instance.model";
 import { ExpensePaymentAttachmentDto, ExpensePaymentAttachmentRequest } from "./expense-payment-attachment.model";
-import { ExpensePaymentItemDetailDto, ExpensePaymentItemDto, ExpensePaymentItemRequest } from "./expense-paymnet-item.model";
-import { InvoiceDto } from "./invoice.model";
+import { ExpensePaymentItemDetailDto, ExpensePaymentItemRequest } from "./expense-paymnet-item.model";
+import { OutgoingPaymentStatusDto } from "./outgoing-payment.model";
 import { SupplierDto } from "./supplier.model";
 
 export enum PayeeType {
@@ -90,6 +90,8 @@ export interface ExpensePaymentDetailDto extends ExpensePaymentDto {
       followers: UserDto[];
 
       workflowInstanceDetail?: ApprovalWorkflowInstanceDetailDto;
+
+      outgoingPayments: OutgoingPaymentStatusDto[];
 }
 
 export interface ExpensePaymentSummaryDto {

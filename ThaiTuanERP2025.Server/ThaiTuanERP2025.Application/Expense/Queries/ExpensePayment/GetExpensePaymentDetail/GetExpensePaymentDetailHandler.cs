@@ -85,11 +85,23 @@ namespace ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetExpenseP
 				followerDtos = followerUsers.Select(u => _mapper.Map<UserDto>(u)).ToArray();
 			}
 
-			// 7 ) Nhét vào ExpensePaymentDetailDto
+			// OutogingPayments
+			var outgoingPayments = await _unitOfWork.OutgoingPayments.ListAsync(
+				q => q.Where(o => o.ExpensePaymentId == payment.Id)
+					.OrderByDescending(o => o.CreatedDate),
+				cancellationToken: cancellationToken
+			);
+
+			var outgoingDtos = outgoingPayments
+				.Select(o => _mapper.Map<OutgoingPaymentStatusDto>(o))
+				.ToArray();
+
+			//  Mapping ExpensePaymentDetailDto
 			var dto = _mapper.Map<ExpensePaymentDetailDto>(payment) with
 			{
 				Followers = followerDtos,
-				WorkflowInstanceDetail = detail
+				WorkflowInstanceDetail = detail,
+				OutgoingPayments = outgoingDtos,
 			};
 
 			return dto;
