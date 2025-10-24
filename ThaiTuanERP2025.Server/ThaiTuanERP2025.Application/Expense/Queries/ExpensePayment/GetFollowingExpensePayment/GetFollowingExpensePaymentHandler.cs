@@ -22,8 +22,15 @@ namespace ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetFollowin
 		public async Task<IReadOnlyCollection<ExpensePaymentSummaryDto>> Handle(GetFollowingExpensePaymentQuery query, CancellationToken cancellationToken)
 		{
 			var currentUserId = _currentUserService.UserId;
+			var page = query.Page;
+			var pageSize = query.PageSize;
+
 			var expensePaymentIds = await _unitOfWork.Followers.ListAsync(
-				q => q.Where(f => f.UserId == currentUserId && f.SubjectType == SubjectType.ExpensePayment).Select(f => f.SubjectId),
+				q => q.Where(f => f.UserId == currentUserId && f.SubjectType == SubjectType.ExpensePayment)
+					.OrderByDescending(f => f.CreatedDate)
+					.Select(f => f.SubjectId)
+					.Skip((query.Page - 1) * query.PageSize)
+					.Take(query.PageSize),
 				cancellationToken: cancellationToken
 			);
 			if (expensePaymentIds.Count == 0)
@@ -31,8 +38,11 @@ namespace ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetFollowin
 
 			var idArr = expensePaymentIds.ToArray();
 			var expensePayments = await _unitOfWork.ExpensePayments.FindIncludingAsync(
-				p => idArr.Contains(p.Id),
+				p => idArr.Contains(p.Id) && (!query.UpdatedAfter.HasValue || (p.DateModified.HasValue && p.DateModified >= query.UpdatedAfter.Value)),
 				cancellationToken,
+				true,
+				p => p.OrderByDescending(ep => ep.CreatedDate),
+				p => p.CurrentWorkflowInstance!.Steps,
 				p => p.CreatedByUser,
 				p => p.CurrentWorkflowInstance!,
 				p => p.CurrentWorkflowInstance!.Steps
@@ -46,7 +56,7 @@ namespace ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetFollowin
 				.Distinct().ToArray();
 
 			var users = userIds.Length == 0 ? new List<Domain.Account.Entities.User>()
-			    : await _unitOfWork.Users.ListAsync(q => q.Where(u => userIds.Contains(u.Id)),cancellationToken: cancellationToken);
+			    : await _unitOfWork.Users.ListAsync(q => q.Where(u => userIds.Contains(u.Id)), cancellationToken: cancellationToken);
 
 			var userDtoDict = users.Select(u => _mapper.Map<UserDto>(u))
 								.ToDictionary(u => u.Id, u => u);

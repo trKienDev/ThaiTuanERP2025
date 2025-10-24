@@ -36,9 +36,11 @@ secrets.json
 
 # Environment files
 .env
+.env.*
 
 # appsettings files
 appsettings.Development.json
+appsettings.Production.json
 appsettings.Local.json
 
 ####################################################
