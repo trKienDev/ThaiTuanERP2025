@@ -194,7 +194,37 @@
                                                                   <!-- Tab 2: Khoản tiền ra -->
                                                                   <ng-container *ngSwitchCase="'outgoings'">
                                                                         <div class="" [@tabSwitchFade]>
-                                                                              <p class="text-muted margin-top-20px">Khoản tiền ra</p>
+                                                                              <div class="outgoing-payments-table">
+                                                                                    <table class="table table-center-text">
+                                                                                          <thead>
+                                                                                                <tr>
+                                                                                                      <th style="width: 1%;">#</th>
+                                                                                                      <th>Khoản chi</th>
+                                                                                                      <th>Trạng thái</th>
+                                                                                                      <th>Ngày ghi nhận</th>
+                                                                                                      <th>Số tiền ghi nhận</th>
+                                                                                                </tr>
+                                                                                          </thead>
+                                                                                          <tbody>
+                                                                                                <tr *ngFor="let outgoing of paymentDetail?.outgoingPayments; let i = index">                                                                                                      
+                                                                                                      <td>{{ i + 1 }}</td>
+                                                                                                      <td>
+                                                                                                            <div class="link">
+                                                                                                                  <span>🔗</span>
+                                                                                                                  <span (click)="openOutgoingPaymentDetailDialog(outgoing.id)">{{ outgoing.name }}</span>
+                                                                                                            </div>
+                                                                                                      </td>
+                                                                                                      <td>
+                                                                                                            <span  class="outgoing-status-badge" [ngClass]="outgoing.status | outgoingPaymentStatus : 'class'">
+                                                                                                                  {{ outgoing.status | outgoingPaymentStatus : 'label' }}
+                                                                                                            </span>
+                                                                                                      </td>
+                                                                                                      <td>{{ outgoing.postingDate | date: 'shortDate' }}</td>
+                                                                                                      <td>{{ outgoing.outgoingAmount | number:'1.0-0' }} VNĐ</td>
+                                                                                                </tr>
+                                                                                          </tbody>
+                                                                                    </table>
+                                                                              </div>
                                                                         </div>
                                                                   </ng-container>
                                                             </ng-container>

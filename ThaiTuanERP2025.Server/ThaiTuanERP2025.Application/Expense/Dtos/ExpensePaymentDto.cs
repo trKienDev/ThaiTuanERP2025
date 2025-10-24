@@ -103,6 +103,9 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 
 		// Workflow
 		public ApprovalWorkflowInstanceDetailDto WorkflowInstanceDetail { get; init; } = default!;
+
+		// OutgoingPayments
+		public IReadOnlyList<OutgoingPaymentStatusDto> OutgoingPayments { get; init; } = Array.Empty<OutgoingPaymentStatusDto>();
 	}
 
 	public sealed record ExpensePaymentSummaryDto {

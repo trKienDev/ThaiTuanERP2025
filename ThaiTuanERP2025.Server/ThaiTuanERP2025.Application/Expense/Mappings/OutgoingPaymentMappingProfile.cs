@@ -19,6 +19,8 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 			CreateMap<OutgoingPayment, OutgoingPaymentSummaryDto>()
 				.ForMember(d => d.OutgoingBankAccountName, opt => opt.MapFrom(s => s.OutgoingBankAccount.Name))
 				.ForMember(d => d.ExpensePaymentName, opt => opt.MapFrom(s => s.ExpensePayment.Name));
+
+			CreateMap<OutgoingPayment, OutgoingPaymentStatusDto>();
 		}
 	}
 }

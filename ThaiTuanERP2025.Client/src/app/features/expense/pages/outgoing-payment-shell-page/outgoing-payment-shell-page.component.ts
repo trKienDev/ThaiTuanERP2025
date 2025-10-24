@@ -3,7 +3,6 @@ import { Component } from "@angular/core";
 import { KitShellTab, KitShellTabsComponent } from "../../../../shared/components/kit-shell-tabs/kit-shell-tabs.component";
 import { FollowingOutgoingPaymentComponent } from "./following-outgoing-payment/following-outgoing-payment.component";
 import { OutgoingPaymentRequestComponent } from "./outgoing-payment-request/outgoing-payment-request.component";
-import { OutgoingPaymentDetailComponent } from "./outgoing-payment-detail/outgoing-payment-detail.component";
 
 @Component({
       selector: 'outgoing-payment-shell-page',
@@ -13,8 +12,7 @@ import { OutgoingPaymentDetailComponent } from "./outgoing-payment-detail/outgoi
 })
 export class OutgoingPaymentShellPageComponent {
       readonly tabs: KitShellTab[] = [
-            { id: 'following-outgoing-payments', label: 'Khoản tiền ra', component: FollowingOutgoingPaymentComponent },
-            { id: 'outgoing-payment-request', label: 'Khoản tiền mới', component: OutgoingPaymentRequestComponent, hidden: true },
-            { id: 'outgoing-payment-detail/:id', label: 'Chi tiết khoản tiền ra', component: OutgoingPaymentDetailComponent, hidden: true }
+            { id: 'following-outgoing-payments', label: 'Khoản chi', component: FollowingOutgoingPaymentComponent },
+            { id: 'outgoing-payment-request', label: 'Khoản chi mới', component: OutgoingPaymentRequestComponent, hidden: true },
       ]
 }

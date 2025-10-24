@@ -55,7 +55,7 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 		public Guid ExpensePaymentId { get; init; }
 		public string ExpensePaymentName { get; init; } = string.Empty;
 
-		public OutgoingPaymentStatus Status { get; init; }
+		public OutgoingPaymentStatus Status { get; init; } = default!;
 	};
 
 	public record OutgoingPaymentDetailDto
@@ -80,7 +80,7 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 		public Guid ExpensePaymentId { get; init; }
 		public ExpensePaymentDetailDto ExpensePayment { get; init; } = default!;
 
-		public OutgoingPaymentStatus Status { get; init; }
+		public OutgoingPaymentStatus Status { get; init; } = default!;
 
 		public Guid? SupplierId { get; init; }
 		public SupplierDto? Supplier { get; init; } = default!;
@@ -91,4 +91,12 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 		public UserDto CreatedByUser { get; init; } = default!;
 		public DateTime CreatedDate { get; init; }
 	};
+
+	public record OutgoingPaymentStatusDto {
+		public Guid Id { get; private set; }
+		public string Name { get; private set; } = default!;
+		public OutgoingPaymentStatus Status { get; init; } = default!;
+		public DateTime PostingDate { get; private set; }
+		public decimal OutgoingAmount { get; private set; }
+	}
 }
