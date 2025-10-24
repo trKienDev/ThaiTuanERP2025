@@ -10,14 +10,14 @@
                         </button>
                   </div>
             </div>
-            <div class="dialog-body"  >
+            <div class="dialog-body"  #dialogBody>
                   <ng-container *ngIf="loading(); else contentTpl">
                         <kit-loading-spinner></kit-loading-spinner>
                   </ng-container>
                   <ng-template #contentTpl >
                        <ng-container *ngIf="!err(); else errorTpl">
                               <div class="expense-payment-detail-container">
-                                    <div class="payment-heading display-flex gap-10px align-items-center">
+                                    <div class="payment-heading display-flex gap-10px align-items-center" [class.scrolled]="isScrolled">
                                           <div class="payment-status" [@statusChangeFade]="paymentDetail?.status">
                                                 <span class="payment-status-badge" [ngClass]="(paymentDetail?.status | expensePaymentStatus).class">
                                                       {{ (paymentDetail?.status | expensePaymentStatus).text }}
@@ -46,7 +46,7 @@
                                           </ng-container>
                                           <ng-container *ngIf="paymentDetail?.status === 6 || paymentDetail?.status === 7">
                                                 <div class="payment-outgoing-btn margin-left-auto">
-                                                      <button type="button" class="button pintura-button" (click)="navigateToOutgoingPaymentRequest()">
+                                                      <button type="button" class="blue-button" (click)="navigateToOutgoingPaymentRequest()">
                                                             Ghi nhận khoản tiền ra
                                                       </button>
                                                 </div>
@@ -127,54 +127,78 @@
                                                                   <span>{{ paymentDetail?.remainingOutgoingAmount | number:'1.0-0' }} VNĐ</span>
                                                             </div>
                                                       </div>
-                                                      <div class="amount-item-block">
-                                                            <div class="payment-item-table margin-top-20px">
-                                                                  <table class="table table-center-text">
-                                                                        <thead>
-                                                                              <tr>
-                                                                                    <th style="width: 1%;">#</th>
-                                                                                    <th>Hạng mục</th>
-                                                                                    <th class="head-quanity" style="width: 7%;">Số lượng</th>
-                                                                                    <th>Đơn giá</th>
-                                                                                    <th>Thành tiền</th>
-                                                                                    <th class="head-tax" style="width: 6%;">Thuế</th>
-                                                                                    <th>Số tiền thuế</th>
-                                                                                    <th>Số tiền có thuế</th>
-                                                                                    <th class="head-extension">Ngân sách</th>
-                                                                                    <th class="head-invoice">Hóa đơn</th>
-                                                                              </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                              <tr *ngFor="let item of paymentDetail?.items; let i = index">
-                                                                                    <td>{{ i + 1 }}</td>
-                                                                                    <td class="item-name">{{ item.itemName }}</td>
-                                                                                    <td class="item-quanity">{{ item.quantity | number:'1.0-0' }}</td>
-                                                                                    <td class="item-unit-price">{{ item.unitPrice | number:'1.0-0' }} VNĐ</td>
-                                                                                    <td class="item-amount">{{ item.amount | number:'1.0-0' }} VNĐ</td>
-                                                                                    <td class="item-tax">{{ (item.taxRate * 100) | number:'1.0-0' }}%</td>
-                                                                                    <td class="item-tax-amount">{{ item.taxAmount | number:'1.0-0' }} VNĐ</td>
-                                                                                    <td class="item-total-with-tax">{{ item.totalWithTax | number:'1.0-0' }} VNĐ</td>
-                                                                                    <td class="item-budget-code">{{ item.budgetCode?.code}} - {{ item.budgetCode?.name }}</td>
-                                                                                    <td class="item-invoice">
-                                                                                          <button type="button" class="button" [ngClass]="item.invoice ? 'default-button' : 'cancel-button'">
-                                                                                                {{ item.invoice ? 'Xem hóa đơn' : 'Không hóa đơn' }}
-                                                                                          </button>
-                                                                                    </td>
-                                                                              </tr>
-                                                                        </tbody>
-                                                                        <tfoot *ngIf="paymentDetail?.items?.length">
-                                                                              <tr class="total-row">
-                                                                                    <td colspan="4" class=""><strong>Tổng</strong></td>
-                                                                                    <td>{{ paymentDetail?.totalAmount | number:'1.0-0' }} VNĐ</td>
-                                                                                    <td></td>
-                                                                                    <td>{{ paymentDetail?.totalTax | number:'1.0-0' }} VNĐ</td>
-                                                                                    <td>{{ paymentDetail?.totalWithTax | number:'1.0-0' }} VNĐ</td>
-                                                                                    <td colspan="4"></td>
-                                                                              </tr>
-                                                                        </tfoot>
-                                                                  </table>
+                                                      <div class="payment-tab-wrapper">
+                                                            <div class="payment-tab-nav display-flex gap-5px border-bottom margin-bottom-10px">
+                                                                  <button type="button" class="tab-button" [ngClass]="{ 'active': activeTab === 'items' }" (click)="setActiveTab('items')">
+                                                                        Bảng hạng mục
+                                                                  </button>
+                                                                  <button  type="button" class="tab-button" [ngClass]="{ 'active': activeTab === 'outgoings' }" (click)="setActiveTab('outgoings')">
+                                                                        Khoản tiền ra
+                                                                  </button>
                                                             </div>
-                                                      </div>
+                                                            <ng-container [ngSwitch]="activeTab">
+                                                                  <!-- Tab 1: Hạng mục thanh toán -->
+                                                                  <ng-container *ngSwitchCase="'items'">
+                                                                        <div [@tabSwitchFade]>
+                                                                              <div class="amount-item-block" >
+                                                                                    <div class="payment-item-table margin-top-20px">
+                                                                                          <table class="table table-center-text">
+                                                                                                <thead>
+                                                                                                      <tr>
+                                                                                                            <th style="width: 1%;">#</th>
+                                                                                                            <th>Hạng mục</th>
+                                                                                                            <th class="head-quanity" style="width: 7%;">Số lượng</th>
+                                                                                                            <th>Đơn giá</th>
+                                                                                                            <th>Thành tiền</th>
+                                                                                                            <th class="head-tax" style="width: 6%;">Thuế</th>
+                                                                                                            <th>Số tiền thuế</th>
+                                                                                                            <th>Số tiền có thuế</th>
+                                                                                                            <th class="head-extension">Ngân sách</th>
+                                                                                                            <th class="head-invoice">Hóa đơn</th>
+                                                                                                      </tr>
+                                                                                                </thead>
+                                                                                                <tbody>
+                                                                                                      <tr *ngFor="let item of paymentDetail?.items; let i = index">
+                                                                                                            <td>{{ i + 1 }}</td>
+                                                                                                            <td class="item-name">{{ item.itemName }}</td>
+                                                                                                            <td class="item-quanity">{{ item.quantity | number:'1.0-0' }}</td>
+                                                                                                            <td class="item-unit-price">{{ item.unitPrice | number:'1.0-0' }} VNĐ</td>
+                                                                                                            <td class="item-amount">{{ item.amount | number:'1.0-0' }} VNĐ</td>
+                                                                                                            <td class="item-tax">{{ (item.taxRate * 100) | number:'1.0-0' }}%</td>
+                                                                                                            <td class="item-tax-amount">{{ item.taxAmount | number:'1.0-0' }} VNĐ</td>
+                                                                                                            <td class="item-total-with-tax">{{ item.totalWithTax | number:'1.0-0' }} VNĐ</td>
+                                                                                                            <td class="item-budget-code">{{ item.budgetCode?.code}} - {{ item.budgetCode?.name }}</td>
+                                                                                                            <td class="item-invoice">
+                                                                                                                  <button type="button" class="button" [ngClass]="item.invoice ? 'default-button' : 'cancel-button'">
+                                                                                                                        {{ item.invoice ? 'Xem hóa đơn' : 'Không hóa đơn' }}
+                                                                                                                  </button>
+                                                                                                            </td>
+                                                                                                      </tr>
+                                                                                                </tbody>
+                                                                                                <tfoot *ngIf="paymentDetail?.items?.length">
+                                                                                                      <tr class="total-row">
+                                                                                                            <td colspan="4" class=""><strong>Tổng</strong></td>
+                                                                                                            <td>{{ paymentDetail?.totalAmount | number:'1.0-0' }} VNĐ</td>
+                                                                                                            <td></td>
+                                                                                                            <td>{{ paymentDetail?.totalTax | number:'1.0-0' }} VNĐ</td>
+                                                                                                            <td>{{ paymentDetail?.totalWithTax | number:'1.0-0' }} VNĐ</td>
+                                                                                                            <td colspan="4"></td>
+                                                                                                      </tr>
+                                                                                                </tfoot>
+                                                                                          </table>
+                                                                                    </div>
+                                                                              </div>
+                                                                        </div>
+                                                                  </ng-container>
+
+                                                                  <!-- Tab 2: Khoản tiền ra -->
+                                                                  <ng-container *ngSwitchCase="'outgoings'">
+                                                                        <div class="" [@tabSwitchFade]>
+                                                                              <p class="text-muted margin-top-20px">Khoản tiền ra</p>
+                                                                        </div>
+                                                                  </ng-container>
+                                                            </ng-container>
+                                                      </div>                                                      
                                                 </div>
                                           </div>
                                     </div>
@@ -185,5 +209,6 @@
                         <kit-404-page title="⛔ Không thể tải dữ liệu thanh toán" variant="error"></kit-404-page>
                   </ng-template>
             </div>
+            <div class="dialog-footer"></div>
       </div>
 </div>
