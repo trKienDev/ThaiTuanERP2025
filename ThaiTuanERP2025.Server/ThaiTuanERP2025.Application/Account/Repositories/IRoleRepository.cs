@@ -3,8 +3,7 @@ using ThaiTuanERP2025.Domain.Account.Entities;
 
 namespace ThaiTuanERP2025.Application.Account.Repositories
 {
-	public interface IGroupRepository : IBaseRepository<Group>
+	public interface IRoleRepository : IBaseRepository<Role>
 	{
-		Task<bool> ExistAsync(Guid id);
 	}
 }

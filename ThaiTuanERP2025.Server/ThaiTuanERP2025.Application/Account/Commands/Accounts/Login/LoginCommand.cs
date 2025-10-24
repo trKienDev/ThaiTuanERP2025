@@ -1,10 +1,4 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ThaiTuanERP2025.Domain.Account.Enums;
 
 namespace ThaiTuanERP2025.Application.Account.Commands.Login
 {
@@ -16,6 +10,9 @@ namespace ThaiTuanERP2025.Application.Account.Commands.Login
 
 	public class LoginResultDto {
 		public string AccessToken { get; set; } = default!;
-		public UserRole UserRole { get; set; }
+		public string FullName { get; set; } = default!;
+		public string Username { get; set; } = default!;
+		public List<string> Roles { get; set; } = new();
+		public List<string> Permissions { get; set; } = new();
 	}
 }

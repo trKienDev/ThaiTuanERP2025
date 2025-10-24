@@ -10,10 +10,7 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 	public class UserRepository : BaseRepository<User>, IUserRepository {
 		private ThaiTuanERP2025DbContext DbContext => (ThaiTuanERP2025DbContext)_context;
 		public UserRepository(ThaiTuanERP2025DbContext context, IConfigurationProvider configurationProvider) 
-			: base(context, configurationProvider)
-		{
-
-		}
+			: base(context, configurationProvider) {}
 
 		public async Task<List<User>> ListByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken)
 		{
@@ -105,6 +102,16 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 		public Task AddAssignmentsAsync(IEnumerable<UserManagerAssignment> assignments, CancellationToken cancellationToken = default) {
 			DbContext.UserManagerAssignments.AddRange(assignments);
 			return Task.CompletedTask;
+		}
+
+		public async Task<User?> GetWithRolesAndPermissionsAsync(string employeeCode, CancellationToken cancellationToken)
+		{
+			return await _dbSet
+			    .Include(u => u.UserRoles)
+				.ThenInclude(ur => ur.Role)
+				    .ThenInclude(r => r.RolePermissions)
+					.ThenInclude(rp => rp.Permission)
+			    .FirstOrDefaultAsync(u => u.EmployeeCode == employeeCode, cancellationToken);
 		}
 	}
 }

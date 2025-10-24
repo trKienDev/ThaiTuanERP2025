@@ -1,5 +1,4 @@
 ﻿using ThaiTuanERP2025.Domain.Common;
-using ThaiTuanERP2025.Domain.Account.Enums;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 
 namespace ThaiTuanERP2025.Domain.Account.Entities
@@ -14,7 +13,6 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public string EmployeeCode { get; private set; } = string.Empty;
 		public string PasswordHash { get; private set; } = string.Empty;
 		public Guid? AvatarFileId { get; private set; }
-		public UserRole Role { get; private set; }
 		public string Position { get; private set; } = string.Empty;
 		
 		public Email? Email { get; private set; }
@@ -27,6 +25,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public User? Manager { get; private set; }
 
 		public ICollection<UserGroup> UserGroups { get; private set; }
+		public ICollection<UserRole> UserRoles { get; private set; } = new List<UserRole>();
 
 		public bool IsSuperAdmin { get; private set; } = false;
 		public bool IsActive { get; private set; } = true;
@@ -48,7 +47,6 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			string userName, 
 			string employeeCode,
 			string passwordHash,
-			UserRole role,
 			string position,
 			Guid? departmentId,
 			Email? email = null,
@@ -67,7 +65,6 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			Email = email;
 			Phone = phone;
 			AvatarFileId = avatarFileId;
-			Role = role;
 			Position = position;
 			DepartmentId = departmentId;
 			UserGroups = new List<UserGroup>();
@@ -80,7 +77,6 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			if (managerId == Id) throw new InvalidOperationException("Không thể tự làm quản lý chính mình");
 			ManagerId = managerId;
 		}
-		public bool HasRole(UserRole role) => Role == role;
 		public void SetSuperAdmin(bool isSuper) => IsSuperAdmin = isSuper;
 		public void Activate() => IsActive = true;
 		public void Deactivate() => IsActive = false;
@@ -105,9 +101,20 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			Phone = phone;	
 		}
 
-		public void SetRole(UserRole role) => Role = role;
 		public void SetDepartment(Guid departmentId) =>DepartmentId = departmentId;
 		public void UpdateAvatar(Guid? fileId) => AvatarFileId = fileId;
 
+		public void AssignRole(Guid roleId)
+		{
+			if (UserRoles.Any(r => r.RoleId == roleId)) return;
+			UserRoles.Add(new UserRole(Id, roleId));
+		}
+
+		public void RemoveRole(Guid roleId)
+		{
+			var role = UserRoles.FirstOrDefault(r => r.RoleId == roleId);
+			if (role != null)
+				UserRoles.Remove(role);
+		}
 	}
 }
