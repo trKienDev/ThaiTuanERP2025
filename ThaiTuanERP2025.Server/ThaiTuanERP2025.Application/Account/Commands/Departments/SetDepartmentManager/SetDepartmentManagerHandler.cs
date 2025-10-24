@@ -31,9 +31,13 @@ namespace ThaiTuanERP2025.Application.Account.Commands.Departments.SetDepartment
 
 			department.SetManager(command.ManagerId);
 
+			var userRole = await _unitOfWork.Roles.SingleOrDefaultIncludingAsync(r => r.Name == "User");
+			if (userRole == null)
+				throw new NotFoundException("Vai trò 'User' không tồn tại.");
+
 			var users = await _unitOfWork.Users.FindIncludingAsync(
 				u => u.DepartmentId == department.Id &&
-					u.Role == Domain.Account.Enums.UserRole.user &&
+					u.UserRoles.Any(ur => ur.Role.Name == "User") &&
 					u.Id != command.ManagerId,
 				cancellationToken: cancellationToken
 			);

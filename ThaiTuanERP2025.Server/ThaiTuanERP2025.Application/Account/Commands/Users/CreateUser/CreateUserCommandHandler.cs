@@ -7,6 +7,7 @@ using ThaiTuanERP2025.Application.Common.Security;
 using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Account.Enums;
 using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Exceptions;
 
 namespace ThaiTuanERP2025.Application.Account.Commands.Users.CreateUser
 {
@@ -24,25 +25,28 @@ namespace ThaiTuanERP2025.Application.Account.Commands.Users.CreateUser
 		{
 			try
 			{
+				var department = await _unitOfWork.Departments.GetByIdAsync(request.DepartmentId)
+					?? throw new NotFoundException("Phòng ban không tồn tại");
+
 				var email = string.IsNullOrWhiteSpace(request.Email) ? null : new Email(request.Email);
 				var phone = string.IsNullOrWhiteSpace(request.Phone) ? null : new Phone(request.Phone);
-				var role = Enum.Parse<UserRole>(request.Role, true);
+				var role = await _unitOfWork.Roles.SingleOrDefaultIncludingAsync(
+					q => q.Name.ToLower() == request.Role.ToLower(), 
+					cancellationToken: cancellationToken
+				) ?? throw new NotFoundException($"Vai trò '{request.Role}' không tồn tại trong hệ thống.");
 
 				var user = new User(
 					fullName: request.FullName,
 					userName: request.Username,
 					employeeCode: request.EmployeeCode,
 					passwordHash: PasswordHasher.Hash(request.Password),
-					role: role,
 					position: request.Position,
 					departmentId: request.DepartmentId,
 					email: email,
 					phone: phone
 				);
+				user.AssignRole(role.Id);
 
-				var department = await _unitOfWork.Departments.GetByIdAsync(request.DepartmentId);
-				if (department is null)
-					throw new Exception("Phòng ban không tồn tại trong DB");
 				if (department.ManagerUserId is Guid mgrId)
 				{
 					var manager = await _unitOfWork.Users.GetByIdAsync(mgrId);

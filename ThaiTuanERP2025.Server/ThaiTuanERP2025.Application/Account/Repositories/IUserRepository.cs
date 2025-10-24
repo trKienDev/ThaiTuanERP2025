@@ -13,5 +13,6 @@ namespace ThaiTuanERP2025.Application.Account.Repositories
 		Task<List<UserManagerAssignment>> GetActiveManagerAssignmentsAsync(Guid userId, CancellationToken cancellationToken = default);
 		Task AddAssignmentsAsync(IEnumerable<UserManagerAssignment> assignments, CancellationToken cancellationToken = default);
 		Task<List<User>> ListByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken);
+		Task<User?> GetWithRolesAndPermissionsAsync(string employeeCode, CancellationToken cancellationToken);
 	}
 }

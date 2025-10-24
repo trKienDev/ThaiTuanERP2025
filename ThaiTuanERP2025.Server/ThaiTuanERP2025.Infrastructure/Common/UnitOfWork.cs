@@ -1,4 +1,5 @@
-﻿using ThaiTuanERP2025.Application.Account.Repositories;
+﻿using Microsoft.Identity.Client;
+using ThaiTuanERP2025.Application.Account.Repositories;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Expense.Repositories;
 using ThaiTuanERP2025.Application.Files.Repositories;
@@ -9,11 +10,11 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Common
 {
-	public class AppUnitOfWork : IUnitOfWork
+	public class UnitOfWork : IUnitOfWork
 	{
 		private readonly ThaiTuanERP2025DbContext _dbContext;
 
-		public AppUnitOfWork(
+		public UnitOfWork(
 			ThaiTuanERP2025DbContext dbContext,
 
 			IStoredFilesRepository storedFiles, 
@@ -64,7 +65,13 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			ITaskReminderRepository taskReminders,
 
 			// Follow
-			IFollowerRepository followers
+			IFollowerRepository followers,
+
+			// RBAC
+			IRoleRepository roles,
+			IPermissionRepository permissions,
+			IRolePermissionRepository rolePermissions,
+			IUserRoleRepository userRoles
 		)
 		{
 			_dbContext = dbContext;
@@ -112,6 +119,11 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			TaskReminders = taskReminders;
 
 			Followers = followers;
+
+			Roles = roles;
+			Permissions = permissions;
+			RolePermissions = rolePermissions;
+			UserRoles = userRoles;
 		}
 
 		public IStoredFilesRepository StoredFiles { get; }
@@ -162,6 +174,12 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 
 		// Followers
 		public IFollowerRepository Followers { get; }
+
+		// RBAC
+		public IUserRoleRepository UserRoles { get; }
+		public IRoleRepository Roles { get; }
+		public IPermissionRepository Permissions { get; }
+		public IRolePermissionRepository RolePermissions { get; }
 
 		public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{
