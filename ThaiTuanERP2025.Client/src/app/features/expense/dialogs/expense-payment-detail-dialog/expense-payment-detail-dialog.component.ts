@@ -1,8 +1,8 @@
 import { trigger, transition, style, animate } from "@angular/animations";
 import { CommonModule } from "@angular/common";
 import { Component, OnInit, inject, Inject, HostListener, ElementRef, ViewChild } from "@angular/core";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { ActivatedRoute, Router } from "@angular/router";
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from "@angular/material/dialog";
+import {  Router } from "@angular/router";
 import { firstValueFrom } from "rxjs";
 import { Kit404PageComponent } from "../../../../shared/components/kit-404-page/kit-404-page.component";
 import { KitFlipCountdownComponent } from "../../../../shared/components/kit-flip-countdown/kit-flip-countdown.component";
@@ -18,12 +18,13 @@ import { ApproveStepRequest, ApprovalStepInstanceDetailDto, StepStatus } from ".
 import { ExpensePaymentDetailDto, ExpensePaymentStatus } from "../../models/expense-payment.model";
 import { ExpensePaymentStatusPipe } from "../../pipes/expense-payment-status.pipe";
 import { ApprovalWorkflowInstanceService } from "../../services/approval-workflow-instance.service";
-
+import { OutgoingPaymentStatusPipe } from "../../pipes/outgoing-payment-status.pipe";
+import { OutgoingPaymentDetailDialogComponent } from "../outgoing-payment-detail-dialog/outgoing-payment-detail-dialog.component";
 
 @Component({
       selector: 'expense-payment-detail-dialog',
       standalone: true,
-      imports: [CommonModule, ExpensePaymentStatusPipe, AvatarUrlPipe, KitLoadingSpinnerComponent, Kit404PageComponent, KitFlipCountdownComponent, KitSpinnerButtonComponent],
+      imports: [CommonModule, ExpensePaymentStatusPipe, AvatarUrlPipe, KitLoadingSpinnerComponent, Kit404PageComponent, KitFlipCountdownComponent, KitSpinnerButtonComponent, OutgoingPaymentStatusPipe],
       templateUrl: './expense-payment-detail-dialog.component.html',
       styleUrls: ['./expense-payment-detail-dialog.component.scss'],
       animations: [
@@ -69,8 +70,8 @@ import { ApprovalWorkflowInstanceService } from "../../services/approval-workflo
       ],
 })
 export class ExpensePaymentDetailDialogComponent implements OnInit {
-      private route = inject(ActivatedRoute);
       private dialogRef = inject(MatDialogRef<ExpensePaymentDetailDialogComponent>);
+      private matDialog = inject(MatDialog);
       private router = inject(Router);
       private userFacade = inject(UserFacade);
       currentUser$ = this.userFacade.currentUser$;
@@ -108,7 +109,7 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
       }
 
       get paymentDetail(): ExpensePaymentDetailDto | null {
-            // console.log('paymentDetail: ', this.paymentLogic.paymentDetail());
+            console.log('paymentDetail: ', this.paymentLogic.paymentDetail());
             return this.paymentLogic.paymentDetail();
       }
 
@@ -224,5 +225,17 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
 
       setActiveTab(tab: 'items' | 'outgoings') {
             this.activeTab = tab;
+      }
+
+      openOutgoingPaymentDetailDialog(outgoingPaymentId: string) {
+            const dialogRef = this.matDialog.open(OutgoingPaymentDetailDialogComponent, {
+                  data: outgoingPaymentId,
+            });
+            
+            dialogRef.afterClosed().subscribe((result: any) => {
+                  if (result?.success) {
+                        // Handle success result if needed
+                  }
+            });
       }
 }

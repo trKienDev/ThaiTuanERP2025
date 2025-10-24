@@ -3,9 +3,9 @@ import { Component, inject, OnInit } from "@angular/core";
 import { OutgoingPaymentDto } from "../../../models/outgoing-payment.model";
 import { OutgoingPaymentStatusPipe } from "../../../pipes/outgoing-payment-status.pipe";
 import { MatDialog } from "@angular/material/dialog";
-import { OutgoingPaymentDetailDialogComponent } from "../outgoing-payment-detail/outgoing-payment-detail-dialog/outgoing-payment-detail-dialog.component";
 import { OutgoingPaymentFacade } from "../../../facades/outgoing-payment.facade";
 import { ExpensePaymentDetailDialogComponent } from "../../../dialogs/expense-payment-detail-dialog/expense-payment-detail-dialog.component";
+import { OutgoingPaymentDetailDialogComponent } from "../../../dialogs/outgoing-payment-detail-dialog/outgoing-payment-detail-dialog.component";
 
 @Component({
       selector: 'following-outgoing-payment',
