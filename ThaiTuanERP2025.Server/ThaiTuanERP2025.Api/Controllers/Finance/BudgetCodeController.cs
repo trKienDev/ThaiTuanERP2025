@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Presentation.Common;
+using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Finance.Commands.BudgetCodes.CreateBudgetCode;
 using ThaiTuanERP2025.Application.Finance.Commands.BudgetCodes.UpdateBudgetCodeStatus;
 using ThaiTuanERP2025.Application.Finance.DTOs;
@@ -8,7 +8,7 @@ using ThaiTuanERP2025.Application.Finance.Queries.BudgetCodes.GetAllActiveBudget
 using ThaiTuanERP2025.Application.Finance.Queries.BudgetCodes.GetAllBudgetCodes;
 using ThaiTuanERP2025.Application.Finance.Queries.BudgetCodes.GetBudgetCodesWithAmountForPeriod;
 
-namespace ThaiTuanERP2025.Presentation.Controllers.Finance
+namespace ThaiTuanERP2025.Api.Controllers.Finance
 {
 	[Route("api/budget-code")]
 	[ApiController]

@@ -1,13 +1,14 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Presentation.Common;
+using Microsoft.EntityFrameworkCore.Update.Internal;
+using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Expense.Commands.ExpensePayments.CreateExpensePayments;
 using ThaiTuanERP2025.Application.Expense.Dtos;
 using ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetExpensePaymentDetail;
 using ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetFollowingExpensePayment;
 
-namespace ThaiTuanERP2025.Presentation.Controllers.Expense
+namespace ThaiTuanERP2025.Api.Controllers.Expense
 {
 	[ApiController]
 	[Route("api/expense-payments")]
@@ -37,9 +38,13 @@ namespace ThaiTuanERP2025.Presentation.Controllers.Expense
 		}
 
 		[HttpGet("following")]
-		public async Task<IActionResult> GetFollowingExpensePayments(CancellationToken cancellationToken)
-		{
-			var dtos = await _mediator.Send(new GetFollowingExpensePaymentQuery(), cancellationToken);
+		public async Task<IActionResult> GetFollowingExpensePayments (
+			[FromQuery] int page = 1,
+			[FromQuery] int pageSize = 50,
+			[FromQuery] DateTime? updatedAfter = null,
+			CancellationToken cancellationToken = default
+		) {
+			var dtos = await _mediator.Send(new GetFollowingExpensePaymentQuery(page, pageSize, updatedAfter), cancellationToken);
 			return Ok(ApiResponse<IReadOnlyCollection<ExpensePaymentSummaryDto>>.Success(dtos));
 		}
 	}

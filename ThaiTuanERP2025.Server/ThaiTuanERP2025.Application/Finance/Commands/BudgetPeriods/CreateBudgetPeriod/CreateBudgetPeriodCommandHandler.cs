@@ -1,10 +1,5 @@
 ﻿using AutoMapper;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Domain.Exceptions;
@@ -22,22 +17,20 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.BudgetPeridos.CreateBudge
 			_mapper = mapper;
 		}
 
-		public async Task<BudgetPeriodDto> Handle(CreateBudgetPeriodCommand request, CancellationToken cancellationToken)
+		public async Task<BudgetPeriodDto> Handle(CreateBudgetPeriodCommand command, CancellationToken cancellationToken)
 		{
+			var request = command.Request;
 			var exists = await _unitOfWork.BudgetPeriods.AnyAsync(
 				x => x.Year == request.Year && x.Month == request.Month
 			);
 
 			if (exists) throw new ConflictException("Kỳ ngân sách đã tồn tại");
 
-			var entity = new BudgetPeriod
-			{
-				Id = Guid.NewGuid(),
-				Year = request.Year,
-				Month = request.Month,
-				IsActive = true,
-				CreatedDate = DateTime.UtcNow
-			};
+			var entity = new BudgetPeriod (
+				request.Year,
+				request.Month,
+				request.BudgetPreparationDate
+			);
 
 			await _unitOfWork.BudgetPeriods.AddAsync(entity);
 			await _unitOfWork.SaveChangesAsync(cancellationToken);

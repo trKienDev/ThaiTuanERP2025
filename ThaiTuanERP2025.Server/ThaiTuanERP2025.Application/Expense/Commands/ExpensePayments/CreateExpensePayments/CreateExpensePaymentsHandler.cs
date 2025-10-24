@@ -3,6 +3,7 @@ using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Common.Services;
 using ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows;
 using ThaiTuanERP2025.Application.Followers.Services;
+using ThaiTuanERP2025.Domain.Common.Enums;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Expense.Enums;
@@ -35,7 +36,7 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ExpensePayments.CreateExp
 		public async Task<Guid> Handle(CreateExpensePaymentCommand command, CancellationToken cancellationToken)
 		{
 			var request = command.Request;
-			var subId = await _documentSubIdGeneratorService.NextSubIdAsync("ExpensePayment", DateTime.UtcNow, cancellationToken);
+			var subId = await _documentSubIdGeneratorService.NextSubIdAsync(DocumentType.ExpensePayment, DateTime.UtcNow, cancellationToken);
 			// payment
 			var payment = new ExpensePayment(request.Name, request.PayeeType, request.DueDate, request.ManagerApproverId, request.Description);
 			payment.SetSubId(subId);

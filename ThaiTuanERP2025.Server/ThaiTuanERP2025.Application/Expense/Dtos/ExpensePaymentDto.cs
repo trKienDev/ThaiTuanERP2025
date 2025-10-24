@@ -91,6 +91,9 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 
 		public DateTime CreatedDate { get; init; }
 
+		public decimal OutgoingAmountPaid { get; init; }
+		public decimal RemainingOutgoingAmount { get; init; }
+
 		// Items
 		public IReadOnlyList<ExpensePaymentItemDetailDto> Items { get; init; } = Array.Empty<ExpensePaymentItemDetailDto>();
 		public IReadOnlyList<ExpensePaymentAttachmentDto> Attachments { get; init; } = Array.Empty<ExpensePaymentAttachmentDto>();
@@ -100,6 +103,9 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 
 		// Workflow
 		public ApprovalWorkflowInstanceDetailDto WorkflowInstanceDetail { get; init; } = default!;
+
+		// OutgoingPayments
+		public IReadOnlyList<OutgoingPaymentStatusDto> OutgoingPayments { get; init; } = Array.Empty<OutgoingPaymentStatusDto>();
 	}
 
 	public sealed record ExpensePaymentSummaryDto {
@@ -123,10 +129,11 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 		public decimal TotalWithTax { get; init; }
 
 		public int Status { get; init; }
+		public decimal OutgoingAmountPaid { get; init; }	
 
 		public UserDto CreatedByUser { get; init; } = default!;
 		public DateTime CreatedDate { get; init; }
 
-		public ApprovalWorkflowInstanceStatusDto WorkflowInstanceStatus { get; init; } = default!;
+		public ApprovalWorkflowInstanceStatusDto? WorkflowInstanceStatus { get; init; }
 	}
 }

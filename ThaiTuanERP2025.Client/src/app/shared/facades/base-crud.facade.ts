@@ -21,7 +21,7 @@ export abstract class BaseCrudFacade<Dto, Request> {
       create(req: Request) {
             return this.service.create(req).pipe(tap(() => this.refresh()));
       }
-      upadte(id: string, req: Request) {
+      update(id: string, req: Request) {
             return this.service.update(id, req).pipe(tap(() => this.refresh()));
       }
       delete(id: string) {

@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ThaiTuanERP2025.Server\ThaiTuanERP2025.Api\ThaiTuanERP2025.Presentation.csproj" />
+    <ProjectReference Include="..\ThaiTuanERP2025.Server\ThaiTuanERP2025.Api\ThaiTuanERP2025.Api.csproj" />
     <ProjectReference Include="..\ThaiTuanERP2025.Server\ThaiTuanERP2025.Application\ThaiTuanERP2025.Application.csproj" />
     <ProjectReference Include="..\ThaiTuanERP2025.Server\ThaiTuanERP2025.Domain\ThaiTuanERP2025.Domain.csproj" />
     <ProjectReference Include="..\ThaiTuanERP2025.Server\ThaiTuanERP2025.Infrastructure\ThaiTuanERP2025.Infrastructure.csproj" />

@@ -18,6 +18,8 @@ namespace ThaiTuanERP2025.Application.Finance.Queries.LedgerAccounts.GetAllLedge
 			var list = await _unitOfWork.LedgerAccounts.FindIncludingAsync(
 				_ => true,
 				cancellationToken: cancellationToken,
+				asNoTracking: true,
+				orderBy: q => q.OrderBy(x => x.CreatedDate),
 				a => a.LedgerAccountType
 			);
 			var ordered = list.OrderBy(x => x.Path).ToList();	

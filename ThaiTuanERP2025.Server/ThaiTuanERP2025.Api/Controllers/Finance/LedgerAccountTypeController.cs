@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Presentation.Common;
+using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Finance.Commands.LedgerAccountTypes.CreateLedgerAccountType;
 using ThaiTuanERP2025.Application.Finance.Commands.LedgerAccountTypes.DeleteLedgerAccountType;
 using ThaiTuanERP2025.Application.Finance.Commands.LedgerAccountTypes.ToggleLedgerAccountTypeStatus;
@@ -10,7 +10,7 @@ using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Application.Finance.Queries.LedgerAccountTypes.GetAllLedgerAccountTypes;
 using ThaiTuanERP2025.Application.Finance.Queries.LedgerAccountTypes.GetLedgerAccountTypeById;
 
-namespace ThaiTuanERP2025.Presentation.Controllers.Finance
+namespace ThaiTuanERP2025.Api.Controllers.Finance
 {
 	[Authorize]
 	[ApiController]

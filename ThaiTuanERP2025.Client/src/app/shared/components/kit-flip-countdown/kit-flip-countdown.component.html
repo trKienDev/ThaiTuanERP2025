@@ -1,0 +1,21 @@
+<div class="countdown-wrapper">
+      <!-- HOURS -->
+      <div class="time-group">
+            <div class="digit" [@slideDigit]="hoursTens">{{ hoursTens }}</div>
+            <div class="digit" [@slideDigit]="hoursOnes">{{ hoursOnes }}</div>
+      </div>
+      <span class="divider"> : </span>
+
+      <!-- MINUTES -->
+      <div class="time-group">
+            <div class="digit" [@slideDigit]="minutesTens">{{ minutesTens }}</div>
+            <div class="digit" [@slideDigit]="minutesOnes">{{ minutesOnes }}</div>
+      </div>
+      <span class="divider"> : </span>
+
+      <!-- SECONDS -->
+      <div class="time-group">
+            <div class="digit" [@slideDigit]="secondsTens">{{ secondsTens }}</div>
+            <div class="digit" [@slideDigit]="secondsOnes">{{ secondsOnes }}</div>
+      </div>
+</div>
