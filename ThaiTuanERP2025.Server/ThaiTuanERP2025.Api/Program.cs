@@ -186,11 +186,15 @@ builder.Services.AddOptions<FileStorageOptions>()
 var app = builder.Build();
 
 // Seed roles + admin user
-using (var scope = app.Services.CreateScope())
+if (args.Contains("seed"))
 {
-	var dbContext = scope.ServiceProvider.GetRequiredService<ThaiTuanERP2025DbContext>();
-	DbInitializer.Seed(dbContext);
+	using (var scope = app.Services.CreateScope())
+	{
+		var db = scope.ServiceProvider.GetRequiredService<ThaiTuanERP2025DbContext>();
+		await DbInitializer.InitializeAsync(db);
+	}
 }
+
 
 // Middleware
 if (app.Environment.IsDevelopment())

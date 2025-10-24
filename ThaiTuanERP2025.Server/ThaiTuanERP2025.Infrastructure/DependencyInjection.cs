@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ThaiTuanERP2025.Application.Account.Repositories;
+using ThaiTuanERP2025.Application.Authentication;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Common.Services;
 using ThaiTuanERP2025.Application.Expense.Repositories;
@@ -36,11 +37,11 @@ namespace ThaiTuanERP2025.Infrastructure
 					sqlOptions.EnableRetryOnFailure();
 				});
 			});
-			services.AddScoped<IUnitOfWork, AppUnitOfWork>();
+			services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 			// ========= Repositories =========
 			services.AddScoped<iJWTProvider, JwtProvider>();
-			services.AddScoped<IUnitOfWork, AppUnitOfWork>();
+			services.AddScoped<IUnitOfWork, UnitOfWork>();
 			services.AddScoped<ICodeGenerator, CodeGenerator>();
 			services.AddScoped<IStoredFilesRepository, StoredFilesRepository>();
 			services.AddScoped<IUserRepository, UserRepository>();
@@ -78,6 +79,10 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<INotificationRepository, NotificationRepository>();
 			services.AddScoped<ITaskReminderRepository, TaskReminderRepository>();
 			services.AddScoped<IFollowerRepository, FollowerRepository>();
+			services.AddScoped<IRoleRepository, RoleRepository>();
+			services.AddScoped<IPermissionRepository, PermissionRepository>();
+			services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
+			services.AddScoped<IUserRoleRepository, UserRoleRepository>();
 
 			// ========= File Storage (MinIO) =========
 			services.Configure<FileStorageOptions>(cfg.GetSection("Minio"));
