@@ -1,23 +1,24 @@
-import { CommonModule } from "@angular/common";
-import { Component, Inject, inject, OnInit } from "@angular/core";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { ExpensePaymentDetailDto, ExpensePaymentStatus } from "../../../../models/expense-payment.model";
-import { ExpensePaymentStatusPipe } from "../../../../pipes/expense-payment-status.pipe";
-import { AvatarUrlPipe } from "../../../../../../shared/pipes/avatar-url.pipe";
-import { ActivatedRoute, Router } from "@angular/router";
-import { usePaymentDetail } from "../../../../composables/use-payment-detail";
-import { ApprovalStepInstanceDetailDto, ApproveStepRequest, StepStatus } from "../../../../models/approval-step-instance.model";
-import { UserFacade } from "../../../../../account/facades/user.facade";
-import { UserDto } from "../../../../../account/models/user.model";
-import { ToastService } from "../../../../../../shared/components/toast/toast.service";
-import { firstValueFrom } from "rxjs";
-import { ApprovalWorkflowInstanceService } from "../../../../services/approval-workflow-instance.service";
 import { trigger, transition, style, animate } from "@angular/animations";
-import { KitLoadingSpinnerComponent } from "../../../../../../shared/components/kit-loading-spinner/kit-loading-spinner.component";
-import { Kit404PageComponent } from "../../../../../../shared/components/kit-404-page/kit-404-page.component";
-import { KitFlipCountdownComponent } from "../../../../../../shared/components/kit-flip-countdown/kit-flip-countdown.component";
-import { KitSpinnerButtonComponent } from "../../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
-import { FollowingExpensePaymentFacade } from "../../../../facades/following-expense-payment.facade";
+import { CommonModule } from "@angular/common";
+import { Component, OnInit, inject, Inject, HostListener, ElementRef, ViewChild } from "@angular/core";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { ActivatedRoute, Router } from "@angular/router";
+import { firstValueFrom } from "rxjs";
+import { Kit404PageComponent } from "../../../../shared/components/kit-404-page/kit-404-page.component";
+import { KitFlipCountdownComponent } from "../../../../shared/components/kit-flip-countdown/kit-flip-countdown.component";
+import { KitLoadingSpinnerComponent } from "../../../../shared/components/kit-loading-spinner/kit-loading-spinner.component";
+import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
+import { ToastService } from "../../../../shared/components/toast/toast.service";
+import { AvatarUrlPipe } from "../../../../shared/pipes/avatar-url.pipe";
+import { UserFacade } from "../../../account/facades/user.facade";
+import { UserDto } from "../../../account/models/user.model";
+import { usePaymentDetail } from "../../composables/use-payment-detail";
+import { FollowingExpensePaymentFacade } from "../../facades/following-expense-payment.facade";
+import { ApproveStepRequest, ApprovalStepInstanceDetailDto, StepStatus } from "../../models/approval-step-instance.model";
+import { ExpensePaymentDetailDto, ExpensePaymentStatus } from "../../models/expense-payment.model";
+import { ExpensePaymentStatusPipe } from "../../pipes/expense-payment-status.pipe";
+import { ApprovalWorkflowInstanceService } from "../../services/approval-workflow-instance.service";
+
 
 @Component({
       selector: 'expense-payment-detail-dialog',
@@ -56,6 +57,15 @@ import { FollowingExpensePaymentFacade } from "../../../../facades/following-exp
                         animate('280ms ease-out', style({ opacity: 1, transform: 'scale(1)' }))
                   ])
             ]),
+            trigger('tabSwitchFade', [
+                  transition(':enter', [
+                        style({ opacity: 0, transform: 'translateX(20px)' }),
+                        animate('250ms cubic-bezier(0.25, 0.1, 0.25, 1)', style({ opacity: 1, transform: 'translateX(0)' }))
+                  ]),
+                  transition(':leave', [
+                        animate('200ms cubic-bezier(0.25, 0.1, 0.25, 1)', style({ opacity: 0, transform: 'translateX(-20px)' }))
+                  ])
+            ]),
       ],
 })
 export class ExpensePaymentDetailDialogComponent implements OnInit {
@@ -79,7 +89,17 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
       constructor(@Inject(MAT_DIALOG_DATA) public data: string) {
             if(data) this.paymentLogic.load(data);
             this.paymentId = data;
+      }
 
+      @ViewChild('dialogBody') dialogBody!: ElementRef<HTMLDivElement>;
+      isScrolled = false;
+
+      ngAfterViewInit() {
+            const body = this.dialogBody.nativeElement;
+            body.addEventListener('scroll', () => {
+                  const y = body.scrollTop;
+                  this.isScrolled = y > 5;
+            });
       }
 
       async ngOnInit(): Promise<void> {
@@ -198,5 +218,11 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
 
       isExpired(item: ApprovalStepInstanceDetailDto): boolean {
             return new Date(item.dueAt).getTime() <= Date.now();
+      }
+
+      activeTab: 'items' | 'outgoings' = 'items';
+
+      setActiveTab(tab: 'items' | 'outgoings') {
+            this.activeTab = tab;
       }
 }

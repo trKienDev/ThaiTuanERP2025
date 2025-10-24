@@ -2,7 +2,6 @@ import { Routes } from "@angular/router";
 import { ExpenseComponent } from "./expense.component";
 import { FollowingExpensePaymentsPanelComponent } from "./pages/expense-payment-shell-page/following-expense-payments/following-expense-payments.component";
 import { ExpensePaymentRequestPanelComponent } from "./pages/expense-payment-shell-page/expense-payment-request/expense-payment-request.component";
-import { ExpensePaymentDetailPanelComponent } from "./pages/expense-payment-shell-page/expense-payment-detail/expense-payment-detail.component";
 import { FollowingOutgoingPaymentComponent } from "./pages/outgoing-payment-shell-page/following-outgoing-payment/following-outgoing-payment.component";
 import { OutgoingPaymentRequestComponent } from "./pages/outgoing-payment-shell-page/outgoing-payment-request/outgoing-payment-request.component";
 import { OutgoingBankAccountComponent } from "./pages/bank-account-shell-page/outgoing-bank-account/outgoing-bank-account.component";
@@ -24,7 +23,6 @@ export const expenseRoutes: Routes = [
                               { path: '', redirectTo: 'following-payments', pathMatch: 'full' },
                               { path: 'following-payments', component: FollowingExpensePaymentsPanelComponent },
                               { path: 'payment-request', component: ExpensePaymentRequestPanelComponent },
-                              { path: 'payment-detail', component: ExpensePaymentDetailPanelComponent }
                         ]
                   },
                   { 

@@ -1,3 +1,25 @@
+.dialog {
+      width: 70vw;
+      height: 80vh;
+}
+.dialog-body {
+      position: relative;
+}
+.payment-heading {
+      position: sticky;
+      top: 0;
+      background: #fff;
+      z-index: 10;
+      transition: box-shadow 0.2s ease;
+
+      &.scrolled {
+            box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px;
+      }
+}
+.payment-body {
+      padding: 0px 2px;
+}
+
 .primary-card {
       width: 100%;
 }
@@ -84,6 +106,41 @@
                         font-weight: bold;
                         color: #018601;
                   }
+            }
+      }
+}
+
+.payment-tab-nav {
+      border-bottom: 1px solid #e0e0e0;
+      margin: 12px 0px;
+
+      .tab-button {
+            background: none;
+            border: none !important;
+            padding: 6px 12px;
+            font-weight: 500;
+            color: #555;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.2s;
+
+            &.active {
+                  color: var(--bright-blue-color);
+                  background-color: aliceblue;
+            }
+
+            &.active::after {
+                  content: '';
+                  position: absolute;
+                  bottom: -1px;
+                  left: 0;
+                  right: 0;
+                  height: 2px;
+                  background-color: var(--bright-blue-color);
+            }
+
+            &:hover {
+                  color: var(--bright-blue-color);
             }
       }
 }

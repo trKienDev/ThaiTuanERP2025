@@ -31,10 +31,12 @@ using ThaiTuanERP2025.Infrastructure.Expense.Services;
 using ThaiTuanERP2025.Application.Followers.Services;
 using ThaiTuanERP2025.Infrastructure.Followers.Services;
 using ThaiTuanERP2025.Domain.Common.Enums;
-using AutoMapper;
-using ThaiTuanERP2025.Application.Expense.Mappings;
+using DotNetEnv;
 
 var builder = WebApplication.CreateBuilder(args);
+
+Env.TraversePath().Load();
+builder.Configuration.AddEnvironmentVariables();
 
 // Add services 
 builder.Services.AddOpenApi();
