@@ -20,7 +20,7 @@
                                     <div class="detail-heading display-flex align-items-center gap-10px">
                                           <ng-container *ngIf="outgoingPaymentDetail?.status === 'Pending'">
                                                 <div class="action-button">
-                                                      <button type="button" class="button pintura-button" (click)="onApprove()">Duyệt</button>
+                                                      <button type="button" class="pintura-button" (click)="onApprove()">Duyệt</button>
                                                 </div>
                                           </ng-container>
                                           <ng-container *ngIf="outgoingPaymentDetail?.status === 'Approved'">

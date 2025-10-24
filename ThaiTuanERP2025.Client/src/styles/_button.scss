@@ -22,7 +22,7 @@ button, .button {
 .button-1:hover { box-shadow: 0 10px 15px -3px #488aec4f, 0 4px 6px -2px #488aec17; }
 .button-1:focus, .button-1:active { opacity: 0.85; box-shadow: none; }
 
-// *** button-62 ***
+// *** pintura-button ***
 .button-login { background: linear-gradient( to bottom right, #7E133D, #FF1973); border: 0 !important; color: #FFFFFF; cursor: pointer; display: inline-block; font-weight: 500; outline: transparent; text-align: center; text-decoration: none; transition: box-shadow .2s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: manipulation; white-space: nowrap; }
 .button-login:focus { box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5); }
 .button-login:hover { box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5); }
@@ -102,9 +102,19 @@ button, .button {
 }
 .plus-button--small { font-size: 12px; }
 
-.pintura-button { background-image: linear-gradient(to left top, #f4afcc, #f2a8c8, #f0a0c3, #ee99bf, #ec91bb, #ed8bb9, #ee86b8, #ef80b6, #f37bb6, #f775b5, #fb6fb5, #ff69b4); border: 0 !important; color: #FFFFFF; cursor: pointer; display: inline-block; font-weight: 500; outline: transparent; text-align: center; text-decoration: none; transition: box-shadow .2s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: manipulation; white-space: nowrap; font-weight: bold; }
+
+.pintura-button { background: linear-gradient(to bottom right, #EF4765, #FF9A5A); border: 0 !important; color: #FFFFFF; cursor: pointer; display: inline-block; font-weight: 500; line-height: 2.5; outline: transparent; padding: 0 1rem !important;  text-align: center; text-decoration: none; transition: box-shadow .2s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: manipulation; white-space: nowrap; }
 .pintura-button:not([disabled]):focus { box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5); }
 .pintura-button:not([disabled]):hover { box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5); }
 
 
+.blue-button { border: none !important; color: white; 
+      background-image: linear-gradient(to right bottom, #0c30d6, #0042df, #0053e7, #0062ed, #0070f3, #0078f3, #0080f2, #0087f1, #0d8aea, #1f8de3, #2f90db, #3d92d3);
+      background-size: 100% auto; padding: 0.6em 1.5em !important; cursor: pointer; }
+.blue-button:hover { background-position: right center; background-size: 200% auto; -webkit-animation: pulse 2s infinite; animation: pulse512 1.5s infinite; }
 
+@keyframes pulse512 {
+      0% { box-shadow: 0 0 0 0 #05bada66; }
+      70% { box-shadow: 0 0 0 10px rgb(218 103 68 / 0%); }
+      100% { box-shadow: 0 0 0 0 rgb(218 103 68 / 0%); }
+}

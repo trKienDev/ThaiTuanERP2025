@@ -4,11 +4,11 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild, inject } from '@an
 import { ExpensePaymentStatusPipe } from '../../../pipes/expense-payment-status.pipe';
 import { AvatarUrlPipe } from '../../../../../shared/pipes/avatar-url.pipe';
 import { MatDialog } from '@angular/material/dialog';
-import { ExpensePaymentDetailDialogComponent } from '../expense-payment-detail/expense-payment-detail-dialog/expense-payment-detail-dialog.component';
 import { FollowingExpensePaymentFacade } from '../../../facades/following-expense-payment.facade';
 import { KitLoadingSpinnerComponent } from "../../../../../shared/components/kit-loading-spinner/kit-loading-spinner.component";
 import { KitRefreshButtonComponent } from "../../../../../shared/components/kit-refresh-button/kit-refresh-button.component";
 import { ActivatedRoute } from '@angular/router';
+import { ExpensePaymentDetailDialogComponent } from '../../../dialogs/expense-payment-detail-dialog/expense-payment-detail-dialog.component';
 
 @Component({
       selector: 'expense-payments-panel',
