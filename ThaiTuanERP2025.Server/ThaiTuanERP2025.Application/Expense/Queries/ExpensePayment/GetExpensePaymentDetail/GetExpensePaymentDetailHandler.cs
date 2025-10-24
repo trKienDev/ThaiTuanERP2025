@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using System.Text.Json;
 using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Expense.Dtos;
@@ -32,38 +33,39 @@ namespace ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetExpenseP
 				return baseDto;
 			}
 
-			// 1) Map phần lõi + steps detail
-			var detail = new ApprovalWorkflowInstanceDetailDto
-			{
-				WorkflowInstance = _mapper.Map<ApprovalWorkflowInstanceDto>(workflow), // map cái lõi
-				Steps = _mapper.Map<List<ApprovalStepInstanceDetailDto>>(workflow.Steps) // map detail steps
-			};
-
-			// 2) Gom tất cả GUID approver từ mọi step (lọc null & trùng)
-			var allIds = detail.Steps
-				.SelectMany(s => s.ResolvedApproverCandidateIds ?? Array.Empty<Guid>())
+			// 1) Gom toàn bộ GUID liên quan tới user (cả Default, Approved, Rejected)
+			var allIds = workflow.Steps
+				.SelectMany(s => (s.ResolvedApproverCandidatesJson is { Length: > 0 }
+					? JsonSerializer.Deserialize<string[]>(s.ResolvedApproverCandidatesJson) ?? Array.Empty<string>()
+					: Array.Empty<string>()))
+				.Select(id => Guid.TryParse(id, out var g) ? g : (Guid?)null)
+				.Where(g => g.HasValue).Select(g => g!.Value)
+				.Concat(workflow.Steps.Select(s => s.DefaultApproverId).Where(g => g.HasValue).Select(g => g!.Value))
+				.Concat(workflow.Steps.Select(s => s.ApprovedBy).Where(g => g.HasValue).Select(g => g!.Value))
+				.Concat(workflow.Steps.Select(s => s.RejectedBy).Where(g => g.HasValue).Select(g => g!.Value))
 				.Distinct()
 				.ToArray();
 
-			// 3) Lấy users theo batch
-			var users = allIds.Length == 0
+			// 2) Load users batch
+			var users = allIds.Length == 0 
 				? new List<Domain.Account.Entities.User>()
 				: await _unitOfWork.Users.ListByIdsAsync(allIds, cancellationToken);
 
-			// 4) Map sang UserDto, đưa vào dict để tra nhanh
-			var userDtos = _mapper.Map<List<UserDto>>(users);
-			var userDict = userDtos.ToDictionary(u => u.Id, u => u);
+			// 3) Map sang dict
+			var userDtoDict = users.Select(u => _mapper.Map<UserDto>(u)).ToDictionary(u => u.Id, u => u);
 
-			// 5) Gán ApproverCandidates cho từng step (record dùng with)
+			var detail = _mapper.Map<ApprovalWorkflowInstanceDetailDto>(
+				workflow,
+				opt => { opt.Items["UserDict"] = userDtoDict; }
+			);
+
 			var enrichedSteps = detail.Steps
-				.Select(s => s with
-				{
+				.Select(s => s with {
 					ApproverCandidates = (s.ResolvedApproverCandidateIds ?? Array.Empty<Guid>())
-					.Select(id => userDict.TryGetValue(id, out var dto) ? dto : null)
-					.Where(u => u != null)
-					.ToArray()!
-				})
-				.ToList();
+						.Select(id => userDtoDict.TryGetValue(id, out var dto) ? dto : null)
+						.Where(u => u != null)
+						.ToArray()!
+				}).OrderBy(p => p.Order).ToList();
 
 			detail = detail with { Steps = enrichedSteps };
 
@@ -83,11 +85,23 @@ namespace ThaiTuanERP2025.Application.Expense.Queries.ExpensePayment.GetExpenseP
 				followerDtos = followerUsers.Select(u => _mapper.Map<UserDto>(u)).ToArray();
 			}
 
-			// 7 ) Nhét vào ExpensePaymentDetailDto
+			// OutogingPayments
+			var outgoingPayments = await _unitOfWork.OutgoingPayments.ListAsync(
+				q => q.Where(o => o.ExpensePaymentId == payment.Id)
+					.OrderByDescending(o => o.CreatedDate),
+				cancellationToken: cancellationToken
+			);
+
+			var outgoingDtos = outgoingPayments
+				.Select(o => _mapper.Map<OutgoingPaymentStatusDto>(o))
+				.ToArray();
+
+			//  Mapping ExpensePaymentDetailDto
 			var dto = _mapper.Map<ExpensePaymentDetailDto>(payment) with
 			{
 				Followers = followerDtos,
-				WorkflowInstanceDetail = detail
+				WorkflowInstanceDetail = detail,
+				OutgoingPayments = outgoingDtos,
 			};
 
 			return dto;

@@ -1,0 +1,14 @@
+@use '../../../styles/navbar';
+
+.expense-navbar {
+      @extend .navbar;
+      &__container { @extend .navbar__container; }
+      &__list { @extend .navbar__list; }
+      &__item { @extend .navbar__item; }
+      &__link { @extend .navbar__link; }
+      &__icon { @extend .navbar__icon; }
+      &__content { @extend .navbar__content; }
+      &__footer { @extend .navbar__footer; }
+}
+
+

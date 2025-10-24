@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using ThaiTuanERP2025.Presentation.Hubs;
+using ThaiTuanERP2025.Api.Hubs;
 using ThaiTuanERP2025.Application.Notifications.Services;
 
-namespace ThaiTuanERP2025.Presentation.Notifications
+namespace ThaiTuanERP2025.Api.Notifications
 {
 	public class SignalRealtimeNotifier : IRealtimeNotifier
 	{

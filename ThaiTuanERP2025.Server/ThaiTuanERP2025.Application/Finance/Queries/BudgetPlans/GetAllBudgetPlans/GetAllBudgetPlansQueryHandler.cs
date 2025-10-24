@@ -23,6 +23,7 @@ namespace ThaiTuanERP2025.Application.Finance.Queries.BudgetPlans.GetAllBudgetPl
 		public async Task<List<BudgetPlanDto>> Handle(GetAllBudgetPlansQuery request, CancellationToken cancellationToken)
 		{
 			var entities = await _unitOfWork.BudgetPlans.GetAllIncludingAsync(
+				cancellationToken,
 				x => x.Department,
 				x => x.BudgetCode,
 				x => x.BudgetPeriod

@@ -17,12 +17,12 @@ namespace ThaiTuanERP2025.Application.Common.Interfaces
 		IQueryable<T> QueryIncluding(bool asNoTracking = true, params Expression<Func<T, object>>[] includes);
 		IQueryable<T> FindQueryable(Expression<Func<T, bool>> predicate, bool asNoTracking = true);
 
-		Task<List<T>> FindAsync(Expression<Func<T, bool>> predicate);
-		Task<List<T>> FindIncludingAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken, params Expression<Func<T, object>>[] includes);
+		Task<List<T>> FindAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
+		Task<List<T>> FindIncludingAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken, bool asNoTracking = true, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, params Expression<Func<T, object>>[] includes);
 
-		Task<T?> GetByIdAsync(Guid id);
-		Task<List<T>> GetAllAsync();
-		Task<List<T>> GetAllIncludingAsync(params Expression<Func<T, object>>[] includes);
+		Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+		Task<List<T>> GetAllAsync(CancellationToken cancellationToken = default);
+		Task<List<T>> GetAllIncludingAsync(CancellationToken cancellationToken, params Expression<Func<T, object>>[] includes);
 
 		Task<TDto?> GetByIdProjectedAsync<TDto>(Guid id, CancellationToken cancellationToken = default);
 		Task<List<TDto>> ListProjectedAsync<TDto>(Func<IQueryable<T>, IQueryable<TDto>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default);

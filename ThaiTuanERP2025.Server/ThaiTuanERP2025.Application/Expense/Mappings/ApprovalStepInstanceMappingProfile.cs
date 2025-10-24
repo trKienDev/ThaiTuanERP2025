@@ -17,10 +17,12 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 			CreateMap<ApprovalStepInstance, ApprovalStepInstanceDetailDto>()
 				.ConvertUsing<StepInstanceDetailConverter>();
 
+
 			CreateMap<ApprovalStepInstance, ApprovalStepInstanceStatusDto>()
 				.ForMember(d => d.Status, o => o.MapFrom(s => s.Status.ToString()))
-				.ForMember(d => d.ApprovedByUser, o => o.MapFrom<ApprovedUserResolver>())
-				.ForMember(d => d.RejectedByUser, o => o.MapFrom<RejectedUserResolver>());
+				.ForMember(d => d.DefaultApproverUser, o => o.MapFrom((s, d, destMember, ctx) => s.DefaultApproverId.HasValue ? ApprovalStepInstanceMappingProfile.TryGetUserDto(ctx, s.DefaultApproverId.Value) : null))
+				.ForMember(d => d.ApprovedByUser, o => o.MapFrom<ApprovedUserResolver<ApprovalStepInstanceStatusDto>>())
+				.ForMember(d => d.RejectedByUser, o => o.MapFrom<RejectedUserResolver<ApprovalStepInstanceStatusDto>>());
 		}
 
 		private sealed class StepInstanceConverter : ITypeConverter<ApprovalStepInstance, ApprovalStepInstanceDto>
@@ -57,11 +59,11 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 					s.DefaultApproverId,
 					s.SelectedApproverId,
 					s.Status.ToString(),
-					s.StartedAt,
-					s.DueAt,
-					s.ApprovedAt,
+					AsUtc(s.StartedAt),
+					 AsUtc(s.DueAt),
+					 AsUtc(s.ApprovedAt),
 					s.ApprovedBy,
-					s.RejectedAt,
+					AsUtc(s.RejectedAt),
 					s.RejectedBy,
 					s.Comments,
 					s.SlaBreached,
@@ -74,7 +76,6 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 		{
 			public ApprovalStepInstanceDetailDto Convert(ApprovalStepInstance s, ApprovalStepInstanceDetailDto d, ResolutionContext ctx)
 			{
-				// copy logic parse candidates/history giống StepInstanceConverter
 				Guid[]? candidates = null;
 				if (!string.IsNullOrWhiteSpace(s.ResolvedApproverCandidatesJson))
 				{
@@ -92,48 +93,65 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 					try { history = JsonSerializer.Deserialize<object>(s.HistoryJson); } catch { }
 				}
 
-				return new ApprovalStepInstanceDetailDto(
-					s.Id,
-					s.WorkflowInstanceId,
-					s.TemplateStepId,
-					s.Name,
-					s.Order,
-					s.FlowType == FlowType.OneOfN ? "OneOfN" : "Single",
-					s.SlaHours,
-					s.ApproverMode == ApproverMode.Condition ? "Condition" : "Standard",
-					candidates,
-					/* ApproverCandidates */ null, // sẽ fill sau nếu bạn muốn load UserDto
-					s.DefaultApproverId,
-					s.SelectedApproverId,
-					s.Status.ToString(),
-					s.StartedAt,
-					s.DueAt,
-					s.ApprovedAt,
-					s.ApprovedBy,
-					s.RejectedAt,
-					s.RejectedBy,
-					s.Comments,
-					s.SlaBreached,
-					history
-				);
+				var defaultApproverUser = s.DefaultApproverId.HasValue? ApprovalStepInstanceMappingProfile.TryGetUserDto(ctx, s.DefaultApproverId.Value) : null;
+				var approvedByUser = s.ApprovedBy.HasValue ? ApprovalStepInstanceMappingProfile.TryGetUserDto(ctx, s.ApprovedBy.Value) : null;
+				var rejectedByUser = s.RejectedBy.HasValue ? ApprovalStepInstanceMappingProfile.TryGetUserDto(ctx, s.RejectedBy.Value) : null;
+
+				return new ApprovalStepInstanceDetailDto
+				{
+					Id = s.Id,
+					WorkflowInstanceId = s.WorkflowInstanceId,
+					TemplateStepId = s.TemplateStepId,
+					Name = s.Name,
+					Order = s.Order,
+					FlowType = s.FlowType == FlowType.OneOfN ? "OneOfN" : "Single",
+					SlaHours = s.SlaHours,
+					ApprovalMode = s.ApproverMode == ApproverMode.Condition ? "Condition" : "Standard",
+					ResolvedApproverCandidateIds = candidates,
+					ApproverCandidates = null, // sẽ fill sau
+					DefaultApproverId = s.DefaultApproverId,
+					SelectedApproverId = s.SelectedApproverId,
+					Status = s.Status.ToString(),
+					StartedAt = AsUtc(s.StartedAt),
+					DueAt = AsUtc(s.DueAt),
+					ApprovedAt = AsUtc(s.ApprovedAt),
+					ApprovedBy = s.ApprovedBy,
+					ApprovedByUser = approvedByUser,
+					RejectedAt = AsUtc(s.RejectedAt),
+					RejectedBy = s.RejectedBy,
+					RejectedByUser = rejectedByUser,
+					Comments = s.Comments,
+					SlaBreached = s.SlaBreached,
+					History = history,
+					DefaultApproverUser = defaultApproverUser!,
+				};
 			}
 		}
 
-		private sealed class ApprovedUserResolver : IValueResolver<ApprovalStepInstance, ApprovalStepInstanceStatusDto, UserDto?>
+		private sealed class ApprovedUserResolver<TDestination> : IValueResolver<ApprovalStepInstance, TDestination, UserDto?>
 		{
-			public UserDto? Resolve(ApprovalStepInstance s, ApprovalStepInstanceStatusDto d, UserDto? destMember, ResolutionContext ctx)
+			public UserDto? Resolve(ApprovalStepInstance s, TDestination d, UserDto? destMember, ResolutionContext ctx)
 			{
 				if (!s.ApprovedBy.HasValue) return null;
-				return TryGetUserDto(ctx, s.ApprovedBy.Value);
+				return ApprovalStepInstanceMappingProfile.TryGetUserDto(ctx, s.ApprovedBy.Value);
 			}
 		}
 
-		private sealed class RejectedUserResolver : IValueResolver<ApprovalStepInstance, ApprovalStepInstanceStatusDto, UserDto?>
+		private sealed class RejectedUserResolver<TDestination> : IValueResolver<ApprovalStepInstance, TDestination, UserDto?>
+		{
+			public UserDto? Resolve(ApprovalStepInstance s, TDestination d, UserDto? destMember, ResolutionContext ctx)
+			{
+				if (!s.RejectedBy.HasValue) return null;
+				return ApprovalStepInstanceMappingProfile.TryGetUserDto(ctx, s.RejectedBy.Value);
+			}
+		}
+
+		private sealed class DefaultApproverResolver : IValueResolver<ApprovalStepInstance, ApprovalStepInstanceStatusDto, UserDto?>
 		{
 			public UserDto? Resolve(ApprovalStepInstance s, ApprovalStepInstanceStatusDto d, UserDto? destMember, ResolutionContext ctx)
 			{
-				if (!s.RejectedBy.HasValue) return null;
-				return TryGetUserDto(ctx, s.RejectedBy.Value);
+				if (!s.DefaultApproverId.HasValue) return null;
+				return TryGetUserDto(ctx, s.DefaultApproverId.Value);
 			}
 		}
 
@@ -149,5 +167,13 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 			}
 			return null;
 		}
+
+		private static DateTime? AsUtc(DateTime? dt)
+		{
+			if (!dt.HasValue) return null;
+			// Gắn Kind=Utc, không đổi ticks
+			return DateTime.SpecifyKind(dt.Value, DateTimeKind.Utc);
+		}
+
 	}
 }
