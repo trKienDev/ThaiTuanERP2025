@@ -1,74 +1,71 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
+import { LoginResponseDto } from '../../../features/login/login-response.model';
 import { ApiResponse } from '../../../shared/models/api-response.model';
-import { LoginResponse } from '../../../shared/models/login-response.model';
-import { NotificationSignalRService } from '../../../layout/topbar/notification-panel/services/notification-signalr.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-      private readonly API_URL = `${environment.apiUrl}/account`;
-      private readonly TOKEN_KEY = 'access_token';
-      private readonly ROLE_KEY = 'user_role';
+      private readonly TOKEN_KEY = 'token';
+      private readonly USER_KEY = 'user';
+      private readonly ROLES_KEY = 'roles';
+      private readonly PERMS_KEY = 'permissions';
 
-      private tokenSubject = new BehaviorSubject<string | null>(null);
-      private roleSubject = new BehaviorSubject<string | null>(null);
-      private signalR = inject(NotificationSignalRService);
-
+      private tokenSubject = new BehaviorSubject<string | null>(this.getToken());
       public token$ = this.tokenSubject.asObservable();
-      public role$ = this.tokenSubject.asObservable();
 
-      constructor(private http: HttpClient) {
-            // Load from localStorage on app start
-            const storedToken = localStorage.getItem(this.TOKEN_KEY);
-            const storedRole = localStorage.getItem(this.ROLE_KEY);
+      constructor(private http: HttpClient) {}
 
-            if (storedToken) this.tokenSubject.next(storedToken);
-            if(storedRole) this.roleSubject.next(storedRole);
+      login(employeeCode: string, password: string) {
+            return this.http.post<ApiResponse<LoginResponseDto>>(`${environment.apiUrl}/account/login`, {
+                  employeeCode,
+                  password
+            });
       }
 
-      login(employeeCode: string, password: string): Observable<ApiResponse<LoginResponse>> {
-            return this.http.post<ApiResponse<LoginResponse>>(`${this.API_URL}/login`, { employeeCode, password });
+      loginSuccess(response: LoginResponseDto) {
+            localStorage.setItem(this.TOKEN_KEY, response.accessToken);
+            localStorage.setItem(this.USER_KEY, JSON.stringify({
+                  id: response.userId,
+                  username: response.username,
+                  fullName: response.fullName
+            }));
+            localStorage.setItem(this.ROLES_KEY, JSON.stringify(response.roles));
+            localStorage.setItem(this.PERMS_KEY, JSON.stringify(response.permissions));
+
+            this.tokenSubject.next(response.accessToken);
       }
-      loginSuccess(token: string, role: string) {
-            localStorage.setItem(this.TOKEN_KEY, token);
-            localStorage.setItem(this.ROLE_KEY, role);
-            this.tokenSubject.next(token);
-            this.roleSubject.next(role);
-            this.signalR.start(() => this.getToken());
-      }
+
       logout() {
-            localStorage.removeItem(this.TOKEN_KEY);
-            localStorage.removeItem(this.ROLE_KEY);
+            localStorage.clear();
             this.tokenSubject.next(null);
-            this.roleSubject.next(null);
-            this.signalR.stop();
       }
 
-      // Ưu tiên lấy từ BehaviorSubject nếu đã có
-      // ==> Fallback sang localStorage nếu chưa có (reload trang)
-      getToken(): string | null { 
-            const token = this.tokenSubject.value;
-            if(token) return token;
-
-            const stored = localStorage.getItem(this.TOKEN_KEY);
-            if(stored) this.tokenSubject.next(stored);
-            return stored;
-      }
-      getUserRole(): string | null {
-            const role = this.roleSubject.value;
-            if(role) return role;
-
-            const stored = localStorage.getItem(this.ROLE_KEY);
-            if(stored) this.roleSubject.next(stored);
-            return stored;
-      }
-      isAdmin(): boolean {
-            return this.roleSubject.value === 'admin';
+      getToken(): string | null {
+            return localStorage.getItem(this.TOKEN_KEY);
       }
 
-      isLoggedIn(): boolean {
-            return !!this.getToken();
+      getUser() {
+            const user = localStorage.getItem(this.USER_KEY);
+            return user ? JSON.parse(user) : null;
+      }
+
+      getUserRoles(): string[] {
+            var roles = JSON.parse(localStorage.getItem(this.ROLES_KEY) || '[]');
+            console.log('roles: ', roles);
+            return roles;
+      }
+
+      getUserPermissions(): string[] {
+            return JSON.parse(localStorage.getItem(this.PERMS_KEY) || '[]');
+      }
+
+      hasPermission(code: string): boolean {
+            return this.getUserPermissions().includes(code);
+      }
+
+      hasRole(role: string): boolean {
+            return this.getUserRoles().some(r => r.toLowerCase() === role.toLowerCase());
       }
 }

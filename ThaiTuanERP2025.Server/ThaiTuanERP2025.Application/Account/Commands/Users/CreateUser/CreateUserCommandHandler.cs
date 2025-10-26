@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using MediatR;
-using System.Runtime.Intrinsics.X86;
 using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Common.Security;
 using ThaiTuanERP2025.Domain.Account.Entities;
-using ThaiTuanERP2025.Domain.Account.Enums;
 using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Exceptions;
 
@@ -15,10 +13,12 @@ namespace ThaiTuanERP2025.Application.Account.Commands.Users.CreateUser
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly IMapper _mapper;
-		public CreateUserCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
+		private readonly IPasswordHasher _pashwordHasher;
+		public CreateUserCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IPasswordHasher passwordHashser)
 		{
 			_unitOfWork = unitOfWork;
 			_mapper = mapper;
+			_pashwordHasher = passwordHashser;
 		}
 
 		public async Task<UserDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
@@ -39,7 +39,7 @@ namespace ThaiTuanERP2025.Application.Account.Commands.Users.CreateUser
 					fullName: request.FullName,
 					userName: request.Username,
 					employeeCode: request.EmployeeCode,
-					passwordHash: PasswordHasher.Hash(request.Password),
+					passwordHash: _pashwordHasher.Hash(request.Password),
 					position: request.Position,
 					departmentId: request.DepartmentId,
 					email: email,

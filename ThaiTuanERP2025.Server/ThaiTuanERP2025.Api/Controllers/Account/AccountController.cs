@@ -3,10 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using ThaiTuanERP2025.Api.Common;
-using ThaiTuanERP2025.Application.Account.Commands.ChangePassword;
 using ThaiTuanERP2025.Application.Account.Commands.Login;
 using ThaiTuanERP2025.Application.Account.Dtos;
-using ThaiTuanERP2025.Application.Account.Queries.Users.GetCurrentUser;
 
 namespace ThaiTuanERP2025.Api.Controllers.Account
 {
@@ -20,31 +18,45 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			_mediator = mediator;
 		}
 
+		/// <summary>
+		/// Đăng nhập vào hệ thống ERP.
+		/// </summary>
+		/// <param name="command">Thông tin đăng nhập (EmployeeCode + Password)</param>
+		/// <returns>JWT Token + Thông tin cơ bản của user</returns>
+		[AllowAnonymous]
 		[HttpPost("login")]
-		public async Task<IActionResult> Login(LoginCommand command) {
+		[ProducesResponseType(typeof(ApiResponse<LoginResponseDto>), StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		public async Task<IActionResult> Login([FromBody] LoginCommand command)
+		{
 			var result = await _mediator.Send(command);
-			return Ok(ApiResponse<LoginResultDto>.Success(result));
+			return Ok(ApiResponse<LoginResponseDto>.Success(result));
 		}
 
+		/// <summary>
+		/// Lấy thông tin user hiện tại từ JWT token.
+		/// </summary>
 		[Authorize]
 		[HttpGet("me")]
-		public async Task<IActionResult> GetCurrentUser() {
-			var query = new GetCurrentUserQuery(User); // lấy từ JWT Claims
-			var result = await _mediator.Send(query);
-			return Ok(ApiResponse<UserDto>.Success(result));
-		}
+		[ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status200OK)]
+		public IActionResult GetCurrentUser()
+		{
+			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			var username = User.FindFirstValue(ClaimTypes.Name);
+			var email = User.FindFirstValue(ClaimTypes.Email);
+			var roles = User.FindAll(ClaimTypes.Role).Select(c => c.Value).ToList();
+			var permissions = User.FindAll("permission").Select(c => c.Value).ToList();
 
-		[Authorize]
-		[HttpPut("change-password")]
-		public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordCommand command) {
-			var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+			var response = new
+			{
+				Id = userId,
+				Username = username,
+				Email = email,
+				Roles = roles,
+				Permissions = permissions
+			};
 
-			if(!Guid.TryParse(userId, out Guid id)) 
-				return Unauthorized(ApiResponse<string>.Fail("Token không hợp lệ"));
-
-			command.UserId = id;
-			var result = await _mediator.Send(command);
-			return Ok(ApiResponse<string>.Success(result));
+			return Ok(ApiResponse<object>.Success(response));
 		}
 	}
 }
