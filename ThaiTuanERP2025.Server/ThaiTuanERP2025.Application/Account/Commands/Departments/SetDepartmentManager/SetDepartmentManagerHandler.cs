@@ -35,7 +35,7 @@ namespace ThaiTuanERP2025.Application.Account.Commands.Departments.SetDepartment
 			if (userRole == null)
 				throw new NotFoundException("Vai trò 'User' không tồn tại.");
 
-			var users = await _unitOfWork.Users.FindIncludingAsync(
+			var users = await _unitOfWork.Users.FindAsync(
 				u => u.DepartmentId == department.Id &&
 					u.UserRoles.Any(ur => ur.Role.Name == "User") &&
 					u.Id != command.ManagerId,

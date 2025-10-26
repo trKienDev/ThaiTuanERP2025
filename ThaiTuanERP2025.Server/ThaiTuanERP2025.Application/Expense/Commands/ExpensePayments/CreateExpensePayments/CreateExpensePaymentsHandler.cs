@@ -46,7 +46,7 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ExpensePayments.CreateExp
 
 			// 1 ) gom các budgetCodeId trong request
 			var budgetIds = request.Items.Select(i => i.BudgetCodeId).Distinct().ToList();
-			var budgetCodes = await _unitOfWork.BudgetCodes.FindIncludingAsync(bc => budgetIds.Contains(bc.Id), cancellationToken);
+			var budgetCodes = await _unitOfWork.BudgetCodes.FindAsync(bc => budgetIds.Contains(bc.Id), cancellationToken);
 			var bcToCashout = budgetCodes.ToDictionary(x => x.Id, x => x.CashoutCodeId);
 			// items
 			foreach (var item in request.Items)

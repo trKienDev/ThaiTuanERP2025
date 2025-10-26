@@ -22,7 +22,7 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 			builder.HasMany(r => r.RolePermissions)
 			    .WithOne(rp => rp.Role)
 			    .HasForeignKey(rp => rp.RoleId)
-			    .OnDelete(DeleteBehavior.Cascade);
+			    .OnDelete(DeleteBehavior.Restrict);
 		}
 	}
 }

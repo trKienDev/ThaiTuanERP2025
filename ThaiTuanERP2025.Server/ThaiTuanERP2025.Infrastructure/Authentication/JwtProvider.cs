@@ -1,19 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
-using ThaiTuanERP2025.Application.Authentication;
+using ThaiTuanERP2025.Application.Common.Authentication;
 using ThaiTuanERP2025.Domain.Account.Entities;
 
 namespace ThaiTuanERP2025.Infrastructure.Authentication
 {
-	public class JwtProvider : iJWTProvider
+	public class JwtProvider : IJWTProvider
 	{
 		private readonly IConfiguration _configuration;
 		public JwtProvider(IConfiguration configuration)

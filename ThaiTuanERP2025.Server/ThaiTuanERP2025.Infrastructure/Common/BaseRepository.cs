@@ -146,6 +146,12 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			if (entity == null) throw new ArgumentNullException(nameof(entity));
 			_dbSet.Update(entity);
 		}
+		public async Task ReplaceRangeAsync(Expression<Func<T, bool>> filter, IEnumerable<T> newEntities, CancellationToken cancellationToken = default)
+		{
+			var existing = _dbSet.Where(filter);
+			_dbSet.RemoveRange(existing);
+			await _dbSet.AddRangeAsync(newEntities, cancellationToken);
+		}
 
 		public void Delete(T entity)
 		{

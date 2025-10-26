@@ -32,11 +32,31 @@ using ThaiTuanERP2025.Application.Followers.Services;
 using ThaiTuanERP2025.Infrastructure.Followers.Services;
 using ThaiTuanERP2025.Domain.Common.Enums;
 using DotNetEnv;
+using ThaiTuanERP2025.Application.Common.Security;
 
 var builder = WebApplication.CreateBuilder(args);
 
 Env.TraversePath().Load();
 builder.Configuration.AddEnvironmentVariables();
+
+builder.Services.AddAuthorization(options =>
+{
+	// Kiểm tra quyền
+	options.AddPolicy("RequirePermission", policy =>
+	{
+		policy.RequireAssertion(context =>
+		{
+			var requiredPermission = context.Resource?.ToString();
+			return context.User.HasClaim("permission", requiredPermission!);
+		});
+	});
+
+	// Ví dụ policy cho từng chức năng
+	options.AddPolicy("Expense.Create", policy => policy.RequireClaim("permission", "expense.create"));
+	options.AddPolicy("Expense.Approve", policy => policy.RequireClaim("permission", "expense.approve"));
+	options.AddPolicy("Expense.View", policy => policy.RequireClaim("permission", "expense.view"));
+});
+
 
 // Add services 
 builder.Services.AddOpenApi();
@@ -52,6 +72,7 @@ builder.Services.AddScoped<ITaskReminderService, TaskReminderService>();
 builder.Services.AddScoped<IDocumentSubIdGeneratorService, DocumentSubIdGeneratorService>();
 builder.Services.AddScoped<IApprovalStepService, ApprovalStepService>();
 builder.Services.AddScoped<IFollowerService, FollowerService>();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
 builder.Services.AddHostedService<TaskReminderExpiryHostedService>();
 builder.Services.Configure<TaskReminderExpiryOptions>(
@@ -146,13 +167,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 		};
 	}
 );
-builder.Services.AddAuthorization(options => {
-	// Chính sách chỉ Admin
-	options.AddPolicy("AdminOnly", p => p.RequireRole("Admin"));
-
-	// chính sách nhieefuu role
-	options.AddPolicy("CanManagerUser", p => p.RequireRole("Admin", "HR"));
-});
 
 // CORS
 builder.Services.AddCors(options =>
@@ -188,11 +202,11 @@ var app = builder.Build();
 // Seed roles + admin user
 if (args.Contains("seed"))
 {
-	using (var scope = app.Services.CreateScope())
-	{
-		var db = scope.ServiceProvider.GetRequiredService<ThaiTuanERP2025DbContext>();
-		await DbInitializer.InitializeAsync(db);
-	}
+	using var scope = app.Services.CreateScope();
+	var db = scope.ServiceProvider.GetRequiredService<ThaiTuanERP2025DbContext>();
+	var initializer = scope.ServiceProvider.GetRequiredService<DbInitializer>();
+	await initializer.InitializeAsync(db);
+	return;
 }
 
 
@@ -221,12 +235,6 @@ app.UseStaticFiles(new StaticFileOptions
 	FileProvider = new PhysicalFileProvider(storageOpt.BasePath),
 	RequestPath = storageOpt.PublicRequestPath
 });
-
-//var mapperConfig = new MapperConfiguration(cfg =>
-//{
-//	cfg.AddMaps(typeof(ExpensePaymentMappingProfile).Assembly);
-//});
-//mapperConfig.AssertConfigurationIsValid();
 
 app.Run();
 

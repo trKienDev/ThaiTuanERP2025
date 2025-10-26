@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ThaiTuanERP2025.Application.Account.Repositories;
-using ThaiTuanERP2025.Application.Authentication;
+using ThaiTuanERP2025.Application.Common.Authentication;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Common.Services;
 using ThaiTuanERP2025.Application.Expense.Repositories;
@@ -40,7 +40,7 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 			// ========= Repositories =========
-			services.AddScoped<iJWTProvider, JwtProvider>();
+			services.AddScoped<IJWTProvider, JwtProvider>();
 			services.AddScoped<IUnitOfWork, UnitOfWork>();
 			services.AddScoped<ICodeGenerator, CodeGenerator>();
 			services.AddScoped<IStoredFilesRepository, StoredFilesRepository>();
