@@ -21,6 +21,11 @@ export const accountRoutes: Routes = [
                         canActivate: [adminGuard], 
                         loadComponent: () => import('./pages/account-department/account-department.component').then((m) => m.AccountDepartmentComponent )
                   }, 
+                  { 
+                        path: 'permissions',
+                        canActivate: [ adminGuard ],
+                        loadComponent: () => import('./pages/account-permissions/account-permission.component').then((m) => m.AccountPermissionComponent )
+                  }
             ],
       },
 ];

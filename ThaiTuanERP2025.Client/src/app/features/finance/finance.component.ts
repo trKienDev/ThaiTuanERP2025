@@ -16,6 +16,6 @@ export class FinanceComponent implements OnInit {
       constructor(private auth: AuthService) {}
 
       ngOnInit(): void {
-            this.isAdmin = this.auth.getUserRole() === 'admin';
+            this.isAdmin = this.auth.getUserRoles().some(r => r.toLowerCase() === 'superadmin');
       }
 }

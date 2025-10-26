@@ -106,12 +106,14 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 
 		public async Task<User?> GetWithRolesAndPermissionsAsync(string employeeCode, CancellationToken cancellationToken)
 		{
-			return await _dbSet
+			var result = await _dbSet
 			    .Include(u => u.UserRoles)
 				.ThenInclude(ur => ur.Role)
 				    .ThenInclude(r => r.RolePermissions)
 					.ThenInclude(rp => rp.Permission)
-			    .FirstOrDefaultAsync(u => u.EmployeeCode == employeeCode, cancellationToken);
+			    .SingleOrDefaultAsync(u => u.EmployeeCode == employeeCode, cancellationToken);
+
+			return result;
 		}
 	}
 }

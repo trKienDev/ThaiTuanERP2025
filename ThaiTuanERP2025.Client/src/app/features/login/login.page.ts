@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoginResponse } from '../../shared/models/login-response.model.js';
 import { AuthService } from '../../core/services/auth/auth.service.js';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { catchError, EMPTY, finalize, tap } from 'rxjs';
-import { handleHttpError } from '../../shared/utils/handle-http-errors.util.js';
+import { catchError, finalize, tap } from 'rxjs';
 import { FieldErrorComponent } from '../../shared/components/messages/field-error.component.js';
 import { AlertMesssageComponent } from '../../shared/components/messages/alert-message.component.js';
 import { handleApiResponse$ } from '../../shared/operators/handle-api-response.operator.js';
+import { LoginResponseDto } from './login-response.model.js';
+import { ToastService } from '../../shared/components/toast/toast.service.js';
 
 @Component({
       selector: 'app-login',
@@ -24,6 +24,7 @@ export class LoginComponent implements OnInit{
       traceId: string | null = null;
       isLoading = false;
       submitted = false;
+      private toast = inject(ToastService);
 
       alertClosed = {
             employeeCode: false,
@@ -89,18 +90,16 @@ export class LoginComponent implements OnInit{
             this.isLoading = true;
 
             this.authService.login(employeeCode, password).pipe(
-                  handleApiResponse$<LoginResponse>(),
-                  tap((data) => this.authService.loginSuccess(data.accessToken, data.userRole)),
-                  catchError((err) => {
-                        const msgs = handleHttpError(err);
-                        this.message = msgs[0];
-                        return EMPTY; // nuốt lỗi để subscribe.next không chạy, và không gọi error callback
+                  handleApiResponse$<LoginResponseDto>(),
+                  tap(response => this.authService.loginSuccess(response)),
+                  catchError(err => {
+                        this.toast.errorRich('Sai tài khoản hoặc mật khẩu');
+                        console.error('error: ', err);
+                        throw err;
                   }),
                   finalize(() => (this.isLoading = false))
             ).subscribe({
-                  next: () => {
-                        this.router.navigateByUrl('/splash')
-                  }
+                  next: () => this.router.navigateByUrl('/splash')
             });
       };
 }

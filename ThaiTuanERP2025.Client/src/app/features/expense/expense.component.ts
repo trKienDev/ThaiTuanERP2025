@@ -18,7 +18,7 @@ export class ExpenseComponent implements OnInit {
       constructor(private auth: AuthService, private router: Router) {}
 
       ngOnInit(): void {
-            this.isAdmin = this.auth.getUserRole() === 'admin';
+            this.isAdmin = this.auth.getUserRoles().some(r => r.toLowerCase() === 'superadmin');
       }
 
       get isPaymentDetailPage(): boolean {

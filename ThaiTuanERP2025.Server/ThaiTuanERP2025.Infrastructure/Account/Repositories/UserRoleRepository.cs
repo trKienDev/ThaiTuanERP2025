@@ -13,5 +13,7 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 		{
 			_dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
 		}
+
+
 	}
 }
