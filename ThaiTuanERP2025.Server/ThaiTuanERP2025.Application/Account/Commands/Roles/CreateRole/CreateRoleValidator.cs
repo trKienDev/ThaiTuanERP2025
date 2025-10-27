@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace ThaiTuanERP2025.Application.Account.Commands.RBAC.CreateRole
+namespace ThaiTuanERP2025.Application.Account.Commands.Roles.CreateRole
 {
 	public sealed class CreateRoleValidator : AbstractValidator<CreateRoleCommand> 
 	{

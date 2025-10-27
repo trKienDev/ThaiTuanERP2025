@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
+using ThaiTuanERP2025.Application.Account.Commands.Permissions.AssignPermissionToRole;
 using ThaiTuanERP2025.Application.Account.Commands.Permissions.CreateNewPermission;
-using ThaiTuanERP2025.Application.Account.Commands.RBAC.AssignPermissionToRole;
 using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Application.Account.Queries.Permissions.GetAllPermissions;
 using ThaiTuanERP2025.Application.Account.Queries.Permissions.GetPermissionsByRoleId;
@@ -41,10 +41,11 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			return Ok(ApiResponse<Unit>.Success(result));
 		}
 
-		[HttpPost("assign-to-role")]
-		public async Task<IActionResult> AssignPermissionToRole([FromBody] AssignPermissionToRoleCommand command)
+		[HttpPost("{id:guid}/assign-permissions")]
+		public async Task<IActionResult> AssignPermissionToRole(Guid id, [FromBody] AssignPermissionToRoleRequest request, CancellationToken cancellationToken)
 		{
-			var result = await _mediator.Send(command);
+			var command = new AssignPermissionToRoleCommand(id, request.PermissionIds);
+			var result = await _mediator.Send(command, cancellationToken);
 			return Ok(ApiResponse<Unit>.Success(result));
 		}
 	}

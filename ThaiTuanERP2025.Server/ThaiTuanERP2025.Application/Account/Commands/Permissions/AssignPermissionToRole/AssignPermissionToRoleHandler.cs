@@ -3,7 +3,7 @@ using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 
-namespace ThaiTuanERP2025.Application.Account.Commands.RBAC.AssignPermissionToRole
+namespace ThaiTuanERP2025.Application.Account.Commands.Permissions.AssignPermissionToRole
 {
 	public class AssignPermissionToRoleHandler : IRequestHandler<AssignPermissionToRoleCommand>
 	{
@@ -22,16 +22,22 @@ namespace ThaiTuanERP2025.Application.Account.Commands.RBAC.AssignPermissionToRo
 				r => r.RolePermissions
 			) ?? throw new NotFoundException("Role not found.");
 
-			var permission = await _unitOfWork.Permissions.GetByIdAsync(request.PermissionId, cancellationToken);
-			if (permission == null)
-				throw new InvalidOperationException("Permission not found.");
+			var existingPermissionIds = role.RolePermissions.Select(rp => rp.PermissionId).ToList();
 
-			var alreadyAssigned = role.RolePermissions.Any(rp => rp.PermissionId == permission.Id);
-			if (alreadyAssigned)
-				throw new InvalidOperationException("Permission already assigned to role.");
+			var toAdd = request.PermissionIds.Except(existingPermissionIds).ToList();
+			var toRemove = existingPermissionIds.Except(request.PermissionIds).ToList();
 
-			var rolePermission = new RolePermission(role.Id, permission.Id);
-			await _unitOfWork.RolePermissions.AddAsync(rolePermission, cancellationToken);
+			if (toAdd.Any())
+			{
+				var newRolePermissions = toAdd.Select(pid => new RolePermission(role.Id, pid)).ToList();
+				await _unitOfWork.RolePermissions.AddRangeAsync(newRolePermissions, cancellationToken);
+			}
+
+			if (toRemove.Any())
+			{
+				var removeEntities = role.RolePermissions.Where(rp => toRemove.Contains(rp.PermissionId)).ToList();
+				_unitOfWork.RolePermissions.RemoveRange(removeEntities);
+			}
 
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 			return Unit.Value;
