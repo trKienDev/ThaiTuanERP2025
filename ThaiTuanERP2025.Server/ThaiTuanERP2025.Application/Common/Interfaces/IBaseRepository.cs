@@ -33,6 +33,7 @@ namespace ThaiTuanERP2025.Application.Common.Interfaces
 		void Update(T entity);
 		Task ReplaceRangeAsync(Expression<Func<T, bool>> filter, IEnumerable<T> newEntities, CancellationToken cancellationToken = default);
 
+		void RemoveRange(IEnumerable<T> entities);
 		void Delete(T entity);
 	}
 }

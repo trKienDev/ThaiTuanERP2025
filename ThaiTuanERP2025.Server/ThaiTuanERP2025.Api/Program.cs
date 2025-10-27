@@ -203,17 +203,24 @@ builder.Services.AddOptions<FileStorageOptions>()
 
 var app = builder.Build();
 
-// Seed roles + admin user
+if (args.Contains("seed"))
+{
+	using (var scope = app.Services.CreateScope())
+	{
+		var db = scope.ServiceProvider.GetRequiredService<ThaiTuanERP2025DbContext>();
+		var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
+		var initializer = new DbInitializer(passwordHasher, db);
+		await initializer.Seed();
+
+		Console.WriteLine("✅ Database seeding completed. Exiting...");
+		return;
+	}
+}
+	// Seed roles + admin user
 using (var scope = app.Services.CreateScope())
 {
-	var db = scope.ServiceProvider.GetRequiredService<ThaiTuanERP2025DbContext>();
-	var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
-	var initializer = new DbInitializer(passwordHasher, db);
-	await initializer.Seed();
-
 	var serviceProvider = scope.ServiceProvider;
 	var authorizationOptions = serviceProvider.GetRequiredService<IOptions<AuthorizationOptions>>().Value;
-
 	await authorizationOptions.AddPermissionPoliciesFromDatabaseAsync(serviceProvider);
 }
 
