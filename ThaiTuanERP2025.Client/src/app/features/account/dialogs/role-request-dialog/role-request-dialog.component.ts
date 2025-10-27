@@ -5,7 +5,6 @@ import { ToastService } from "../../../../shared/components/toast/toast.service"
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { RoleRequest } from "../../models/role.model";
 import { firstValueFrom } from "rxjs";
-import { RoleService } from "../../services/role.service";
 import { RoleFacade } from "../../facades/role.facade";
 
 @Component({
@@ -56,7 +55,6 @@ export class RoleRequestDialogComponent {
             this.submitting = true;
             try {
                   const payload = this.form.getRawValue() as RoleRequest;
-                  console.log('Submitting role request:', payload);
                   await firstValueFrom(this.roleFacade.create(payload));
                   this.toast.successRich("Tạo role mới thành công");
                   this.roleFacade.refresh();
