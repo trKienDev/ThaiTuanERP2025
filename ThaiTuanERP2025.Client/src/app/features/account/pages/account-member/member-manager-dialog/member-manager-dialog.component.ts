@@ -83,6 +83,7 @@ export class MemberManagerDialog implements OnInit {
                   this.dialogRef.close({ isSuccess: true, response: created });
             } catch(error) {
                   const messages = handleHttpError(error).join('\n');
+                  console.error('Lỗi khi thêm quản lý', error);
                   this.toastService.errorRich(messages || 'Lỗi khi thêm quản lý');
             } finally {
                   this.submitting = false;
