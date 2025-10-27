@@ -35,7 +35,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 			return Ok(ApiResponse<LedgerAccountTypeDto>.Success(dto));
 		}
 
-		[HttpPost]
+		[HttpPost("new")]
 		public async Task<ActionResult> Create([FromBody] CreateLedgerAccountTypeCommand command) {
 			var result = await _mediator.Send(command);
 			return Ok(ApiResponse<LedgerAccountTypeDto>.Success(result));	

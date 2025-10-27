@@ -42,7 +42,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
 			return Ok(ApiResponse<ApprovalWorkflowTemplateDetailDto>.Success(result));
 		}
 
-		[HttpPost]
+		[HttpPost("new")]
 		public async Task<IActionResult> Create([FromBody] ApprovalWorkflowTemplateRequest body, CancellationToken cancellationToken) {
 			if(body is null) 
 				return BadRequest(ApiResponse<string>.Fail("Dữ liệu không hợp lệ"));

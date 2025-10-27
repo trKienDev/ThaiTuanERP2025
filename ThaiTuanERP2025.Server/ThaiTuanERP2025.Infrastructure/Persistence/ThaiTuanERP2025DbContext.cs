@@ -9,7 +9,6 @@ using ThaiTuanERP2025.Domain.Files.Entities;
 using ThaiTuanERP2025.Domain.Finance.Entities;
 using ThaiTuanERP2025.Domain.Followers.Entities;
 using ThaiTuanERP2025.Domain.Notifications;
-using ThaiTuanERP2025.Infrastructure.Persistence.Seeds;
 
 namespace ThaiTuanERP2025.Infrastructure.Persistence
 {
@@ -69,7 +68,6 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			modelBuilder.SeedRolesAndPermissions();
 			modelBuilder.ApplyConfigurationsFromAssembly(typeof(ThaiTuanERP2025DbContext).Assembly);
 			ApplySoftDeleteFilters(modelBuilder);
 			ConfigureNumberSeries(modelBuilder);

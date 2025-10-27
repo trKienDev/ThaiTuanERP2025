@@ -4,7 +4,7 @@ using ThaiTuanERP2025.Domain.Account.Entities;
 
 namespace ThaiTuanERP2025.Application.Account.Commands.RBAC.CreateRole
 {
-	public class CreateRoleHandler : IRequestHandler<CreateRoleCommand, Guid>
+	public class CreateRoleHandler : IRequestHandler<CreateRoleCommand, Unit>
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		public CreateRoleHandler(IUnitOfWork unitOfWork)
@@ -12,8 +12,9 @@ namespace ThaiTuanERP2025.Application.Account.Commands.RBAC.CreateRole
 			_unitOfWork = unitOfWork;
 		}
 
-		public async Task<Guid> Handle(CreateRoleCommand request, CancellationToken cancellationToken)
+		public async Task<Unit> Handle(CreateRoleCommand command, CancellationToken cancellationToken)
 		{
+			var request = command.Request;
 			var exists = await _unitOfWork.Roles.SingleOrDefaultIncludingAsync(r => r.Name == request.Name, cancellationToken: cancellationToken);
 			if (exists is not null)
 				throw new InvalidOperationException($"Role '{request.Name}' đã tồn tại.");
@@ -23,7 +24,7 @@ namespace ThaiTuanERP2025.Application.Account.Commands.RBAC.CreateRole
 			await _unitOfWork.Roles.AddAsync(role, cancellationToken);
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-			return role.Id;
+			return Unit.Value;
 		}
 	}
 }

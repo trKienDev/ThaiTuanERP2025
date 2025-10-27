@@ -51,7 +51,7 @@ export abstract class BaseCrudService<TDto, TRequest> {
 
       create(payload: TRequest): Observable<TDto> {
             return this.http
-                  .post<ApiResponse<TDto>>(this.endpoint, payload)
+                  .post<ApiResponse<TDto>>(`${this.endpoint}/new`, payload)
                   .pipe(
                         handleApiResponse$<TDto>(), 
                         catchError(err => throwError(() => err))

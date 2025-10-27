@@ -29,7 +29,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			return Ok(ApiResponse<List<DepartmentDto>>.Success(departments));
 		}
 
-		[HttpPost]
+		[HttpPost("new")]
 		public async Task<IActionResult> Create([FromBody] AddDepartmentCommand command)
 		{
 			if (command == null)

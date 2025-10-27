@@ -2,11 +2,11 @@ import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
 
 @Component({
-      selector: 'account-permission',
+      selector: "account-permission-panel",
+      templateUrl: './account-permission.component.html',
       standalone: true,
       imports: [ CommonModule ],
-      templateUrl: './account-permission.component.html'
 })
-export class AccountPermissionComponent {
+export class AccountPermissionPanelComponent {
       
 }

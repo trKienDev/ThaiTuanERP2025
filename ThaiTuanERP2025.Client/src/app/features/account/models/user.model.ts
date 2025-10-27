@@ -1,5 +1,5 @@
 import { DepartmentDto } from "./department.model";
-import { UserRole } from "./user-roles.enum";
+import { RoleDto } from "./role.model";
 
 export interface UserDto {
       id: string;
@@ -12,7 +12,7 @@ export interface UserDto {
       avatarFileId?: string;
       avatarFileObjectKey?: string;
 
-      role: UserRole;
+      role: RoleDto;
       phone?: number | null;
       departmentId?: string;  
       department?: DepartmentDto;
@@ -28,7 +28,7 @@ export interface UserRequest {
       employeeCode: string;
       email?: string | null;
       password: string;
-      role: string;
+      roleId?: string | null;
       phone?: number | null;
       departmentId?: string | null;
       position: string;

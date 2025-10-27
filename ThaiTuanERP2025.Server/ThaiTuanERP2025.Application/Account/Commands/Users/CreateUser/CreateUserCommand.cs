@@ -10,7 +10,7 @@ namespace ThaiTuanERP2025.Application.Account.Commands.Users.CreateUser
 		public string EmployeeCode { get; set; } = default!;
 		public string Password { get; set; } = default!;
 		public string AvatarUrl { get; set; } = string.Empty;
-		public string Role { get; set; } = default!;
+		public Guid RoleId { get; set; }
 		public string Position { get; set; } = default!;
 		public Guid DepartmentId { get; set; }
 

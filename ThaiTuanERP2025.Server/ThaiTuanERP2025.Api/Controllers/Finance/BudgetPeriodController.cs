@@ -33,7 +33,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 			return Ok(ApiResponse<List<BudgetPeriodDto>>.Success(result));
 		}
 
-		[HttpPost]
+		[HttpPost("new")]
 		public async Task<IActionResult> Create(CreateBudgetPeriodCommand command) {
 			var result = await _mediator.Send(command);
 			return Ok(ApiResponse<BudgetPeriodDto>.Success(result));

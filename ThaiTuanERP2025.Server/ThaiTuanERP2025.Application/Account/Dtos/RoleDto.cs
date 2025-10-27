@@ -6,4 +6,9 @@
 		public string Name { get; set; } = default!;
 		public string Description { get; set; } = string.Empty;
 	}
+
+	public record RoleRequest {
+		public string Name { get; set; } = default!;
+		public string Description { get; set; } = string.Empty;
+	}
 }
