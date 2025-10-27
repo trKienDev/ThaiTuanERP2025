@@ -6,6 +6,7 @@ using ThaiTuanERP2025.Application.Account.Commands.Permissions.CreateNewPermissi
 using ThaiTuanERP2025.Application.Account.Commands.RBAC.AssignPermissionToRole;
 using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Application.Account.Queries.Permissions.GetAllPermissions;
+using ThaiTuanERP2025.Application.Account.Queries.Permissions.GetPermissionsByRoleId;
 
 namespace ThaiTuanERP2025.Api.Controllers.Account
 {
@@ -24,6 +25,13 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 		public async Task<IActionResult> GetAllPermissions()
 		{
 			var result = await _mediator.Send(new GetAllPermissionsQuery());
+			return Ok(ApiResponse<IEnumerable<PermissionDto>>.Success(result));
+		}
+
+		[HttpGet("by-role-id/{roleId:guid}")]
+		public async Task<IActionResult>  GetByRoleId([FromRoute] Guid roleId)
+		{
+			var result = await _mediator.Send(new GetPermissionsByRoleIdQuery(roleId));
 			return Ok(ApiResponse<IEnumerable<PermissionDto>>.Success(result));
 		}
 

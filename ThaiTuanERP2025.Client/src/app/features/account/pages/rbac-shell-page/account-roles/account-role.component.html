@@ -23,7 +23,8 @@
                               <td>{{ i + 1 }}</td>
                               <td>{{ role.name }}</td>
                               <td>{{ role.description }}</td>
-                              <td>
+                              <td class="display-flex justify-content-center">
+                                    <kit-action-menu [actions]="buildRoleActions(role)"></kit-action-menu>
                               </td>
                         </tr>
                   </tbody>
