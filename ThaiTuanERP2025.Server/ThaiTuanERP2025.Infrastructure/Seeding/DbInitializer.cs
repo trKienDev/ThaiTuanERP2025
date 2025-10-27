@@ -6,48 +6,66 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Seeding
 {
-	public class DbInitializer
+	public sealed class DbInitializer
 	{
 		private readonly IPasswordHasher _passwordHasher;
-		public DbInitializer(IPasswordHasher passwordHasher) {
+		private readonly ThaiTuanERP2025DbContext _db;
+		public DbInitializer(IPasswordHasher passwordHasher, ThaiTuanERP2025DbContext db) {
 			_passwordHasher = passwordHasher;
+			_db = db;
 		}
 
-		public async Task InitializeAsync(ThaiTuanERP2025DbContext context)
+		public async Task Seed()
 		{
 			Console.WriteLine(">>> [DbInitializer] Checking for admin user...");
 
-			await context.Database.MigrateAsync();
+			await _db.Database.MigrateAsync();
 
-			var existingAdmin = await context.Users.FirstOrDefaultAsync(u => u.Username == "admin");
-
-			if (existingAdmin != null)
+			if (!await _db.Roles.AnyAsync())
 			{
-				Console.WriteLine(">>> [DbInitializer] Admin user already exists.");
-				return;
+				Console.WriteLine(">>> [DbInitializer] Creating default Roles...");
+
+				var roles = new List<Role>
+				{
+					    new Role("SuperAdmin", "Toàn quyền hệ thống"),
+				};
+
+				await _db.Roles.AddRangeAsync(roles);
+				await _db.SaveChangesAsync();
 			}
 
-			Console.WriteLine(">>> [DbInitializer] Creating new admin user...");
+			if (!await _db.Users.AnyAsync(u => u.Username == "admin"))
+			{
+				Console.WriteLine(">>> [DbInitializer] Creating Admin User...");
 
-			var admin = new User(
-				fullName: "Administrator",
-				userName: "admin",
-				employeeCode: "ADMIN001",
-				passwordHash: _passwordHasher.Hash("Th@iTu@n2025"),
-				position: "System Admin",
-				departmentId: null,
-				email: new Email("admin@thaituan.com.vn"),
-				phone: new Phone("0900000000")
-			);
+				var adminUser = new User(
+				    fullName: "Admin",
+				    userName: "admin",
+				    employeeCode: "ADMIN",
+				    passwordHash: _passwordHasher.Hash("Th@iTu@n2025"),
+				    position: "System Admin",
+				    departmentId: null,
+				    email: new Email("itcenter@thaituan.com.vn")
+				);
 
-			admin.SetSuperAdmin(true);
+				await _db.Users.AddAsync(adminUser);
+				await _db.SaveChangesAsync();
 
-			context.Users.Add(admin);
-			await context.SaveChangesAsync();
+				// Gán quyền SuperAdmin
+				var superAdminRole = await _db.Roles.FirstAsync(r => r.Name == "SuperAdmin");
+				var adminUserRole = new UserRole(adminUser.Id, superAdminRole.Id);
 
-			Console.WriteLine(">>> [DbInitializer] Admin user created successfully!");
-			Console.WriteLine(">>> Username: admin");
-			Console.WriteLine(">>> Password: Th@iTu@n2025");
+				await _db.UserRoles.AddAsync(adminUserRole);
+				await _db.SaveChangesAsync();
+
+				Console.WriteLine(">>> [DbInitializer] Admin User created successfully.");
+			}
+			else
+			{
+				Console.WriteLine(">>> [DbInitializer] Admin User already exists, skipping creation.");
+			}
+
+			Console.WriteLine(">>> [DbInitializer] Seeding completed successfully!");
 		}
 	}
 }

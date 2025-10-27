@@ -23,7 +23,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			_mediator = mediator;
 		}
 
-		[HttpPost]
+		[HttpPost("new")]
 		public async Task<IActionResult> Create(CreateGroupCommand command) {
 			var group = await _mediator.Send(command);
 			return Ok(ApiResponse<GroupDto>.Success(group, "Tạo nhóm thành công"));

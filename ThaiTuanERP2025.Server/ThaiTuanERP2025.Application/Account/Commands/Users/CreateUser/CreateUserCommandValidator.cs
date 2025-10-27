@@ -18,8 +18,6 @@ namespace ThaiTuanERP2025.Application.Account.Commands.Users.CreateUser
 			RuleFor(x => x.Password)
 				.NotEmpty().WithMessage("Mật khẩu không được để trống")
 				.MinimumLength(6).WithMessage("Mật khẩu tối đa 6 ký tự");
-			RuleFor(x => x.Role)
-				.NotEmpty().WithMessage("Vai trò không được để trống");
 			RuleFor(x => x.Position)
 				.NotEmpty().WithMessage("Chức vụ không được để trống");
 			RuleFor(x => x.DepartmentId)

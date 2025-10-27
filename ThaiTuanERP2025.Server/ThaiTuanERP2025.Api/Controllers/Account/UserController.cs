@@ -66,7 +66,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 		/// <summary>
 		/// Tạo người dùng
 		/// </summary>
-		[HttpPost]
+		[HttpPost("new")]
 		public async Task<IActionResult> Create([FromBody] CreateUserCommand command)
 		{
 			var result = await _mediator.Send(command);
