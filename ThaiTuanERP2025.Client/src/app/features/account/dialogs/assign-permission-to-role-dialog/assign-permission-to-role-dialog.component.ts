@@ -4,9 +4,9 @@ import { ToastService } from "../../../../shared/components/toast/toast.service"
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { FormBuilder } from "@angular/forms";
 import { RoleDto } from "../../models/role.model";
-import { PermissionFacade } from "../../facades/permission.facade";
 import { PermissionService } from "../../services/permission.service";
 import { PermissionDto } from "../../models/permission.model";
+import { firstValueFrom } from "rxjs";
 
 @Component({
       selector: 'assign-permission-to-role-dialog',
@@ -21,30 +21,35 @@ export class AssignPermissionToRoleDialogComponent implements OnInit {
       private formBuilder = inject(FormBuilder);
       public role!: RoleDto;
       public submitting = false;
-      private readonly permissionFacade = inject(PermissionFacade);
-      public permissions$ = this.permissionFacade.permissions$;
       private readonly permissionService = inject(PermissionService);
       public permissionsByRole: PermissionDto[] = [];
+
+      availablePermissions: PermissionDto[] = [];
+      selectedPermissions: PermissionDto[] = [];
+
+      selectedAvailable: PermissionDto[] = [];
+      selectedAssigned: PermissionDto[] = [];
 
       constructor(
             @Inject(MAT_DIALOG_DATA) public data: RoleDto
       ) {}
 
-      ngOnInit(): void {
+      async ngOnInit(): Promise<void> {
             this.role = this.data;
-            console.log('Role in dialog:', this.role);
-            this.loadPermissionsByRole();
+            await this.loadPermissions();
       }
 
-      loadPermissionsByRole(): void {
-            this.permissionService.getByRoleId(this.role.id).subscribe({
-                  next: (permissions) => {
-                        this.permissionsByRole = permissions;
-                  },
-                  error: (error) => {
-                        this.toastService.errorRich("Không thể lấy danh sách permission của role này");
-                  }
-            });
+      private async loadPermissions() {
+            try {
+                  const all = await firstValueFrom(this.permissionService.getAll());
+                  const byRole = await firstValueFrom(this.permissionService.getByRoleId(this.role.id));
+
+                  this.selectedPermissions = byRole;
+                  this.availablePermissions = all.filter(p => !byRole.some(br => br.id === p.id));
+            } catch (error) {
+                  this.toastService.errorRich("Không thể lấy danh sách permission");
+                  return
+            }
       }
 
       closeDialog(): void {
