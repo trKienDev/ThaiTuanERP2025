@@ -1,14 +1,14 @@
 import { CommonModule } from "@angular/common";
 import { Component, Inject, inject, OnInit } from "@angular/core";
-import { KitDropdownComponent, KitDropdownOption } from "../../../../../shared/components/kit-dropdown/kit-dropdown.component";
+import { KitDropdownComponent, KitDropdownOption } from "../../../../shared/components/kit-dropdown/kit-dropdown.component";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { FormBuilder, ReactiveFormsModule } from "@angular/forms";
-import { UserFacade } from "../../../facades/user.facade";
-import { UserOptionStore } from "../../../options/user-dropdown-options.store";
-import { SetUserManagerRequest, UserDto } from "../../../models/user.model";
-import { UserService } from "../../../services/user.service";
-import { ToastService } from "../../../../../shared/components/toast/toast.service";
-import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
+import { UserFacade } from "../../facades/user.facade";
+import { UserOptionStore } from "../../options/user-dropdown-options.store";
+import { SetUserManagerRequest, UserDto } from "../../models/user.model";
+import { UserService } from "../../services/user.service";
+import { ToastService } from "../../../../shared/components/toast/toast.service";
+import { handleHttpError } from "../../../../shared/utils/handle-http-errors.util";
 import { firstValueFrom } from "rxjs";
 
 @Component({
