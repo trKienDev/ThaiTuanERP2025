@@ -200,13 +200,12 @@ builder.Services.AddOptions<FileStorageOptions>()
 var app = builder.Build();
 
 // Seed roles + admin user
-if (args.Contains("seed"))
+using (var scope = app.Services.CreateScope())
 {
-	using var scope = app.Services.CreateScope();
 	var db = scope.ServiceProvider.GetRequiredService<ThaiTuanERP2025DbContext>();
-	var initializer = scope.ServiceProvider.GetRequiredService<DbInitializer>();
-	await initializer.InitializeAsync(db);
-	return;
+	var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
+	var initializer = new DbInitializer(passwordHasher, db);
+	await initializer.Seed();
 }
 
 

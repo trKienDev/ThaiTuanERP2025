@@ -37,7 +37,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
 			return Ok(ApiResponse<bool>.Success(available));
 		}
 
-		[HttpPost]
+		[HttpPost("new")]
 		public async Task<ActionResult<SupplierDto>> Create([FromBody] CreateSupplierRequest body, CancellationToken cancellationToken) {
 			var result = await _meidator.Send(new CreateSupplierCommand(body), cancellationToken);
 			return Ok(ApiResponse<SupplierDto>.Success(result));

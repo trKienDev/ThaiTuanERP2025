@@ -1,6 +1,7 @@
 ﻿using MediatR;
+using ThaiTuanERP2025.Application.Account.Dtos;
 
 namespace ThaiTuanERP2025.Application.Account.Commands.RBAC.CreateRole
 {
-	public sealed record CreateRoleCommand (string Name, string Description) : IRequest<Guid>;
+	public sealed record CreateRoleCommand (RoleRequest Request) : IRequest<Unit>;
 }

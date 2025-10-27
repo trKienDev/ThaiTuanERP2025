@@ -51,7 +51,7 @@
                         </div>
                         <div class="dialog-row display-flex gap-10px">
                               <div class="width-50pt">
-                                    <kit-dropdown [options]="userRoleOptions" [placeholder]="'Chọn vai trò'" (selectionChange)="onUserRoleSelected($event)"></kit-dropdown>
+                                    <kit-dropdown [options]="(roleOptions$ | async) ?? []" [placeholder]="'Chọn vai trò'" (selectionChange)="onUserRoleSelected($event)"></kit-dropdown>
                               </div>
                               <div class="form-input width-50pt">
                                     <input class="" type="text" formControlName="position" autocomplete="on" required/>

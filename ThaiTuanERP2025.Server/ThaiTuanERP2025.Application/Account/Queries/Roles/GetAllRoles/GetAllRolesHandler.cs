@@ -17,11 +17,7 @@ namespace ThaiTuanERP2025.Application.Account.Queries.Roles.GetAllRoles
 
 		public async Task<IEnumerable<RoleDto>> Handle(GetAllRolesQuery request, CancellationToken cancellationToken)
 		{
-			var roles = await _unitOfWork.Roles.GetAllIncludingAsync(
-				cancellationToken,
-				r => r.RolePermissions,
-				r => r.RolePermissions.Select(rp => rp.Permission)
-			);
+			var roles = await _unitOfWork.Roles.GetAllAsync(cancellationToken);
 
 			return _mapper.Map<IEnumerable<RoleDto>>(roles);
 		}

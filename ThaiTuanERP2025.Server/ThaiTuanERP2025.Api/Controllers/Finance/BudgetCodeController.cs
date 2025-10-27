@@ -41,7 +41,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 			return Ok(ApiResponse<List<BudgetCodeWithAmountDto>>.Success(data));
 		}
 
-		[HttpPost]
+		[HttpPost("new")]
 		public async Task<IActionResult> Create([FromBody] CreateBudgetCodeCommand command)
 		{
 			var result = await _mediator.Send(command);

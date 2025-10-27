@@ -23,11 +23,11 @@ namespace ThaiTuanERP2025.Api.Controllers.Notification
 
 		[HttpGet]
 		public async Task<ActionResult<ApiResponse<IReadOnlyCollection<AppNotificationDto>>>> GetList(
-	[FromQuery] bool unreadOnly = false,
-	[FromQuery] int page = 1,
-	[FromQuery] int pageSize = 30,
-	CancellationToken cancellationToken = default)
-		{
+			[FromQuery] bool unreadOnly = false,
+			[FromQuery] int page = 1,
+			[FromQuery] int pageSize = 30,
+			CancellationToken cancellationToken = default
+		) {
 			var result = await _mediator.Send(new GetAllNotificationsQuery(unreadOnly, page, pageSize), cancellationToken);
 			return Ok(ApiResponse<IReadOnlyCollection<AppNotificationDto>>.Success(result));
 		}

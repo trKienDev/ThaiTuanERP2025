@@ -34,7 +34,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 			return Ok(ApiResponse<BudgetGroupDto>.Success(budgetGroup));
 		}
 
-		[HttpPost]
+		[HttpPost("new")]
 		public async Task<ActionResult<ApiResponse<BudgetGroupDto>>> Create([FromBody] CreateBudgetGroupCommand command)
 		{
 			var result = await _mediator.Send(command);
