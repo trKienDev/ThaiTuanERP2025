@@ -33,6 +33,8 @@ using ThaiTuanERP2025.Infrastructure.Followers.Services;
 using ThaiTuanERP2025.Domain.Common.Enums;
 using DotNetEnv;
 using ThaiTuanERP2025.Application.Common.Security;
+using Microsoft.AspNetCore.Authorization;
+using ThaiTuanERP2025.Api.Security;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,6 +58,8 @@ builder.Services.AddAuthorization(options =>
 	options.AddPolicy("Expense.Approve", policy => policy.RequireClaim("permission", "expense.approve"));
 	options.AddPolicy("Expense.View", policy => policy.RequireClaim("permission", "expense.view"));
 });
+
+
 
 
 // Add services 
@@ -206,6 +210,11 @@ using (var scope = app.Services.CreateScope())
 	var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
 	var initializer = new DbInitializer(passwordHasher, db);
 	await initializer.Seed();
+
+	var serviceProvider = scope.ServiceProvider;
+	var authorizationOptions = serviceProvider.GetRequiredService<IOptions<AuthorizationOptions>>().Value;
+
+	await authorizationOptions.AddPermissionPoliciesFromDatabaseAsync(serviceProvider);
 }
 
 

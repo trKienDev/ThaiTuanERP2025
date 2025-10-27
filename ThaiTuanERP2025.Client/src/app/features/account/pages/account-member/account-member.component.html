@@ -17,7 +17,7 @@
                         <th>Mã nhân viên</th>
                         <th>Phòng ban</th>
                         <th>Quản lý</th>
-                        <th></th>
+                        <th>Hành động</th>
                   </tr>
             </thead>
             <tbody>
@@ -27,7 +27,7 @@
                         <td>{{ user.employeeCode }}</td>
                         <td>{{ user.department?.name }}</td>
                         <td>{{ user.manager?.fullName }}</td>
-                        <td>
+                        <td class="display-flex justify-content-center">
                               <kit-action-menu [actions]="buildUserActions(user)"></kit-action-menu>
                         </td>
                   </tr>

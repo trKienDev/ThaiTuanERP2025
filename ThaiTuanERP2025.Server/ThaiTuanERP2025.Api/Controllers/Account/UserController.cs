@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Api.Contracts.Users;
+using ThaiTuanERP2025.Api.Security;
 using ThaiTuanERP2025.Application.Account.Commands.Users.CreateUser;
 using ThaiTuanERP2025.Application.Account.Commands.Users.SetUserManagers;
 using ThaiTuanERP2025.Application.Account.Commands.Users.UpdateUserAvatarFileId;
@@ -79,7 +80,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			return Ok(ApiResponse<string>.Success("Cập nhật avatar thành công"));
 		}
 
-		[Authorize(Roles = "admin")]
+		[HasPermission("account.set-manager")]
 		[HttpPut("{id:guid}/managers")]
 		public async Task<IActionResult> SetManagers(Guid id, [FromBody] SetUserManagerRequest request, CancellationToken cancellationToken)
 		{

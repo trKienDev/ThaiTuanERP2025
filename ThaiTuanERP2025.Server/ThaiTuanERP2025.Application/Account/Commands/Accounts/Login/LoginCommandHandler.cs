@@ -38,8 +38,21 @@ namespace ThaiTuanERP2025.Application.Account.Commands.Login
 				new(System.Security.Claims.ClaimTypes.Email, user.Email?.Value ?? string.Empty)
 			};
 
-			roles.ForEach(r => claims.Add(new Claim(ClaimTypes.Role, r)));
-			permissions.ForEach(p => claims.Add(new Claim("permission", p)));
+			foreach (var role in user.UserRoles.Select(ur => ur.Role.Name))
+			{
+				claims.Add(new Claim(ClaimTypes.Role, role));
+			}
+
+			// Add permissions
+			var permissionCodes = user.UserRoles
+			    .SelectMany(ur => ur.Role.RolePermissions)
+			    .Select(rp => rp.Permission.Code)
+			    .Distinct();
+
+			foreach (var permission in permissionCodes)
+			{
+				claims.Add(new Claim("permission", permission));
+			}
 
 			var token = _jwtProvider.GenerateToken(user, claims);
 			var expiresAt = DateTime.UtcNow.AddMinutes(1440); // hoặc lấy từ cấu hình JwtSettings
