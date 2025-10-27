@@ -172,6 +172,13 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			}
 		}
 
+		public void RemoveRange(IEnumerable<T> entities)
+		{
+			if (entities == null) throw new ArgumentNullException(nameof(entities));
+			_dbSet.RemoveRange(entities);
+		}
+
+
 		public async Task<TDto?> GetByIdProjectedAsync<TDto>(Guid id, CancellationToken cancellationToken = default)
 		{
 			return await Query() // AsNoTracking mặc định

@@ -2,7 +2,7 @@
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Domain.Account.Entities;
 
-namespace ThaiTuanERP2025.Application.Account.Commands.RBAC.CreateRole
+namespace ThaiTuanERP2025.Application.Account.Commands.Roles.CreateRole
 {
 	public class CreateRoleHandler : IRequestHandler<CreateRoleCommand, Unit>
 	{
