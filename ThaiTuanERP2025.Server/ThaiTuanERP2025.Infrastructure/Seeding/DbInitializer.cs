@@ -1,44 +1,71 @@
-﻿using ThaiTuanERP2025.Application.Common.Security;
+﻿using Microsoft.EntityFrameworkCore;
 using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Application.Common.Security;
 using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Infrastructure.Persistence;
-using ThaiTuanERP2025.Domain.Account.Enums;
 
 namespace ThaiTuanERP2025.Infrastructure.Seeding
 {
-	public class DbInitializer
+	public sealed class DbInitializer
 	{
-		public static void Seed(ThaiTuanERP2025DbContext context)
+		private readonly IPasswordHasher _passwordHasher;
+		private readonly ThaiTuanERP2025DbContext _db;
+		public DbInitializer(IPasswordHasher passwordHasher, ThaiTuanERP2025DbContext db) {
+			_passwordHasher = passwordHasher;
+			_db = db;
+		}
+
+		public async Task Seed()
 		{
-			if (!context.Users.Any(u => u.Username == "admin"))
+			Console.WriteLine(">>> [DbInitializer] Checking for admin user...");
+
+			await _db.Database.MigrateAsync();
+
+			if (!await _db.Roles.AnyAsync())
 			{
-				// 1) Tạo admin CHƯA gán department
-				var admin = new User(
+				Console.WriteLine(">>> [DbInitializer] Creating default Roles...");
+
+				var roles = new List<Role>
+				{
+					    new Role("SuperAdmin", "Toàn quyền hệ thống"),
+				};
+
+				await _db.Roles.AddRangeAsync(roles);
+				await _db.SaveChangesAsync();
+			}
+
+			if (!await _db.Users.AnyAsync(u => u.Username == "admin"))
+			{
+				Console.WriteLine(">>> [DbInitializer] Creating Admin User...");
+
+				var adminUser = new User(
 				    fullName: "Admin",
 				    userName: "admin",
-				    employeeCode: "ITC01",
-				    passwordHash: PasswordHasher.Hash("Th@iTu@n2025"),
-				    role: UserRole.admin,
+				    employeeCode: "ADMIN",
+				    passwordHash: _passwordHasher.Hash("Th@iTu@n2025"),
 				    position: "System Admin",
-				    departmentId: null,                                    // ✅
+				    departmentId: null,
 				    email: new Email("itcenter@thaituan.com.vn")
 				);
-				admin.SetSuperAdmin(true);
-				context.Users.Add(admin);
-				context.SaveChanges();
 
-				// 2) Tạo phòng ban, gán CreatedByUserId = admin.Id
-				var dept = new Department("Phòng IT", "ITC", Region.South);
-				// nếu AuditableEntity có CreatedByUserId:
-				// dept.CreatedByUserId = admin.Id;
-				// hoặc: dept.CreatedByUser = admin;
-				context.Departments.Add(dept);
-				context.SaveChanges();
+				await _db.Users.AddAsync(adminUser);
+				await _db.SaveChangesAsync();
 
-				// 3) Gán admin vào phòng ban vừa tạo
-				admin.SetDepartment(dept.Id);
-				context.SaveChanges();
+				// Gán quyền SuperAdmin
+				var superAdminRole = await _db.Roles.FirstAsync(r => r.Name == "SuperAdmin");
+				var adminUserRole = new UserRole(adminUser.Id, superAdminRole.Id);
+
+				await _db.UserRoles.AddAsync(adminUserRole);
+				await _db.SaveChangesAsync();
+
+				Console.WriteLine(">>> [DbInitializer] Admin User created successfully.");
 			}
+			else
+			{
+				Console.WriteLine(">>> [DbInitializer] Admin User already exists, skipping creation.");
+			}
+
+			Console.WriteLine(">>> [DbInitializer] Seeding completed successfully!");
 		}
 	}
 }

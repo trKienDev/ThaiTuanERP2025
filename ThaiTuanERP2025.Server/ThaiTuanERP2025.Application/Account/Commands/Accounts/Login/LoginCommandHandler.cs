@@ -1,40 +1,63 @@
 ﻿using MediatR;
 using System.Security.Claims;
-using ThaiTuanERP2025.Application.Account.Repositories;
+using ThaiTuanERP2025.Application.Account.Dtos;
+using ThaiTuanERP2025.Application.Common.Authentication;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Common.Security;
-using ThaiTuanERP2025.Domain.Exceptions;
 
 namespace ThaiTuanERP2025.Application.Account.Commands.Login
 {
-	public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResultDto>
+	public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponseDto>
 	{
-		private readonly IUserRepository _userRepository;
-		private readonly iJWTProvider _jwtProvider;
+		private readonly IUnitOfWork _unitOfWork;
+		private readonly IJWTProvider _jwtProvider;
+		private readonly IPasswordHasher _passwordHasher;
 
-		public LoginCommandHandler(IUserRepository userRepository, iJWTProvider jwtProvider)
+		public LoginCommandHandler(IUnitOfWork unitOfWork, IJWTProvider jwtProvider, IPasswordHasher passwordHasher)
 		{
-			_userRepository = userRepository;
+			_unitOfWork = unitOfWork;
 			_jwtProvider = jwtProvider;
+			_passwordHasher = passwordHasher;
 		}
 
-		public async Task<LoginResultDto> Handle(LoginCommand request, CancellationToken cancellationToken) { 
-			var user = await _userRepository.GetByEmployeeCode(request.EmployeeCode);
-			if (user == null || !PasswordHasher.Verify(request.Password, user.PasswordHash)) {
-				throw new AppException("Tên đăng nhập hoặc mật khẩu không đúng");
-			}
+		public async Task<LoginResponseDto> Handle(LoginCommand request, CancellationToken cancellationToken) {
+			var user = await _unitOfWork.Users.GetWithRolesAndPermissionsAsync(request.EmployeeCode, cancellationToken);
+			if(user is null) throw new UnauthorizedAccessException("Invalid credentials.");
 
-			if(!user.IsActive) {
-				throw new AppException("Tài khoản đã bị khóa!");
-			}
+			if (!_passwordHasher.Verify(request.Password, user.PasswordHash))
+				throw new UnauthorizedAccessException("Invalid credentials.");
 
-			var token = _jwtProvider.GenerateToken(user);
+			// Claims
+			var roles = user.UserRoles.Select(ur => ur.Role.Name).Distinct().ToList();
+			var permissions = user.UserRoles.SelectMany(ur => ur.Role.RolePermissions.Select(rp => rp.Permission.Code)).Distinct().ToList();
 
-			return new LoginResultDto
+			var claims = new List<Claim>
 			{
-				AccessToken = token,
-				UserRole = user.Role
+				new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+				new(ClaimTypes.Name, user.Username),
+				new(System.Security.Claims.ClaimTypes.Email, user.Email?.Value ?? string.Empty)
 			};
+
+			foreach (var role in user.UserRoles.Select(ur => ur.Role.Name))
+			{
+				claims.Add(new Claim(ClaimTypes.Role, role));
+			}
+
+			// Add permissions
+			var permissionCodes = user.UserRoles
+			    .SelectMany(ur => ur.Role.RolePermissions)
+			    .Select(rp => rp.Permission.Code)
+			    .Distinct();
+
+			foreach (var permission in permissionCodes)
+			{
+				claims.Add(new Claim("permission", permission));
+			}
+
+			var token = _jwtProvider.GenerateToken(user, claims);
+			var expiresAt = DateTime.UtcNow.AddMinutes(1440); // hoặc lấy từ cấu hình JwtSettings
+
+			return new LoginResponseDto(user.Id, user.FullName, user.Username, token, expiresAt, roles, permissions);
 		}
 	}
 }

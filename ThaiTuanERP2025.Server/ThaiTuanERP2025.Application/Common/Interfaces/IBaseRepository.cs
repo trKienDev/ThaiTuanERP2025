@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+﻿	using System.Linq.Expressions;
 
 
 namespace ThaiTuanERP2025.Application.Common.Interfaces
@@ -31,7 +31,9 @@ namespace ThaiTuanERP2025.Application.Common.Interfaces
 		Task AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default);
 
 		void Update(T entity);
+		Task ReplaceRangeAsync(Expression<Func<T, bool>> filter, IEnumerable<T> newEntities, CancellationToken cancellationToken = default);
 
+		void RemoveRange(IEnumerable<T> entities);
 		void Delete(T entity);
 	}
 }

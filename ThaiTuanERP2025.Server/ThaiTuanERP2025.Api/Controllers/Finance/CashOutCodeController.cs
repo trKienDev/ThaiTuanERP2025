@@ -16,10 +16,10 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 	[ApiController]
 	[Authorize]
 	[Route("api/cashout-codes")]
-	public class CashOutCodeController : ControllerBase
+	public class CashoutCodeController : ControllerBase
 	{
 		private readonly IMediator _mediator;
-		public CashOutCodeController(IMediator mediator)
+		public CashoutCodeController(IMediator mediator)
 		{
 			_mediator = mediator;
 		}
@@ -36,7 +36,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 			return Ok(ApiResponse<CashoutCodeDto>.Success(dto)); 
 		}
 
-		[HttpPost]
+		[HttpPost("new")]
 		public async Task<ActionResult> Create([FromBody] CreateCashoutCodeCommand command) {
 			var result = await _mediator.Send(command);
 			return Ok(ApiResponse<CashoutCodeDto>.Success(result));

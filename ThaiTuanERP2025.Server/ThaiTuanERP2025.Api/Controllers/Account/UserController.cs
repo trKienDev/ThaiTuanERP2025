@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Api.Contracts.Users;
+using ThaiTuanERP2025.Api.Security;
 using ThaiTuanERP2025.Application.Account.Commands.Users.CreateUser;
 using ThaiTuanERP2025.Application.Account.Commands.Users.SetUserManagers;
-using ThaiTuanERP2025.Application.Account.Commands.Users.UpdateUser;
 using ThaiTuanERP2025.Application.Account.Commands.Users.UpdateUserAvatarFileId;
 using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Application.Account.Queries.Users.GetAllUsers;
@@ -67,17 +67,9 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 		/// <summary>
 		/// Tạo người dùng
 		/// </summary>
-		[HttpPost]
+		[HttpPost("new")]
 		public async Task<IActionResult> Create([FromBody] CreateUserCommand command)
 		{
-			var result = await _mediator.Send(command);
-			return Ok(ApiResponse<UserDto>.Success(result));
-		}
-
-		[Authorize(Roles = "admin")]
-		[HttpPut("{id:guid}")]
-		public async Task<IActionResult> Update(Guid id, [FromBody] UpdateUserCommand command) {
-			if(id != command.Id) return BadRequest(ApiResponse<string>.Fail("ID không khớp"));
 			var result = await _mediator.Send(command);
 			return Ok(ApiResponse<UserDto>.Success(result));
 		}
@@ -88,7 +80,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			return Ok(ApiResponse<string>.Success("Cập nhật avatar thành công"));
 		}
 
-		[Authorize(Roles = "admin")]
+		[HasPermission("account.set-manager")]
 		[HttpPut("{id:guid}/managers")]
 		public async Task<IActionResult> SetManagers(Guid id, [FromBody] SetUserManagerRequest request, CancellationToken cancellationToken)
 		{

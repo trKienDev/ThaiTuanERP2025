@@ -50,7 +50,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 			return Ok(ApiResponse<List<LedgerAccountLookupDto>>.Success(result));
 		}
 
-		[HttpPost]
+		[HttpPost("new")]
 		public async Task<ActionResult> Create([FromBody] CreateLedgerAccountCommand command) {
 			var result = await _mediator.Send(command);
 			return Ok(ApiResponse<LedgerAccountDto>.Success(result));

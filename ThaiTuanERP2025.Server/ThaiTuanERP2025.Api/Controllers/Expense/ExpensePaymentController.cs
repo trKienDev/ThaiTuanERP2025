@@ -21,7 +21,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
 			_mediator = mediator;
 		}
 
-		[HttpPost]
+		[HttpPost("new")]
 		public async Task<IActionResult> CreateExpensePayment([FromBody] ExpensePaymentRequest request, CancellationToken cancellationToken)
 		{
 			var result = await _mediator.Send(new CreateExpensePaymentCommand(request), cancellationToken);

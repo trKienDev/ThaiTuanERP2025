@@ -61,6 +61,12 @@ namespace ThaiTuanERP2025.Application.Common.Interfaces
 		// Follow
 		IFollowerRepository Followers { get; }
 
+		// RBAC
+		IRoleRepository Roles { get; }
+		IRolePermissionRepository RolePermissions { get; }
+		IPermissionRepository Permissions { get; }
+		IUserRoleRepository UserRoles { get; }
+
 		Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 	}
 }
