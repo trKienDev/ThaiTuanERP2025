@@ -3,20 +3,42 @@
       display: inline-block;
       background-color: #fff;
       border-radius: 5px;
-      box-shadow: 0 0 2px rgb(204, 204, 204);
       transition: all .5s ease;
       position: relative;
       color: #474747;
       text-align: left;
+      border: 1px solid var(--default-border-color);
+}
+.kit-dropdown::before {
+      content: attr(data-placeholder);
+      position: absolute;
+      top: 50%;
+      margin-left: 0.5em;
+      transform: translateY(-50%);
+      color: rgb(100, 100, 100);
+      padding: 0.8em;
+      pointer-events: none;
+      transition: all 0.3s ease;
+}
+
+.kit-dropdown[aria-expanded='true']::before, 
+.kit-dropdown:focus-within::before, 
+.kit-dropdown.has-value::before { 
+      top: 0; 
+      margin: 0;
+      padding: 0.4em;
+      transform: translateY(-50%) scale(0.9); color: #aaa; 
+      background-color: white; 
 }
 
 .kit-dropdown-select {
       cursor: pointer;
-      padding: 10px;
+      padding: 0.8em;
       display: flex;
       white-space: nowrap;
       overflow-x: auto;
       overflow-y: hidden;
+      position: relative;
 
       .multi-selected {
             display: inline-flex;
@@ -46,9 +68,14 @@
       line-height: 20px;
 }
 
-.kit-dropdown:hover, .kit-dropdown.active {
+.kit-dropdown.active {
       box-shadow: 0 0 4px rgb(204, 204, 204);
-      background-color: #f8f8f8;
+      background-color: var(--main-bg-color);
+}
+
+/* Ẩn chữ thật trong <span> khi chưa có giá trị */
+.kit-dropdown:not(.has-value) .kit-dropdown-select span {
+      color: transparent;
 }
 
 .kit-dropdown.active .kit-dropdown-select > i {
@@ -78,16 +105,16 @@
       align-items: center;
       gap: 6px;
 }
-.kit-dropdown .kit-dropdown-menu li:hover { background-color: #f2f2f2; }
+.kit-dropdown .kit-dropdown-menu li:hover { background-color: var(--main-bg-color); }
 .kit-dropdown .kit-dropdown-menu li:active { 
       outline: none;  
-      background: #f2f2f2; 
+      background: var(--main-bg-color); 
 }
 
 
 /* hover vẫn hoạt động như cũ, có thể sáng hơn chút */
 .kit-dropdown .kit-dropdown-menu li[aria-selected="true"]:hover {
-      background-color: #f2f2f2;
+      background-color: var(--main-bg-color);
 }
 .kit-dropdown .option-img {
       width: 15px;
