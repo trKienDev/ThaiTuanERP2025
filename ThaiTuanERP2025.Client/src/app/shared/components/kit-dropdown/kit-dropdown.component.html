@@ -1,4 +1,4 @@
-<div class="kit-dropdown" role="combobox" [attr.aria-expanded]="isOpen" [attr.aria-disabled]="disabled" aria-haspopup="listbox" tabindex="0" [style.width]="computedWidth">
+<div class="kit-dropdown" role="combobox" [attr.aria-expanded]="isOpen" [attr.aria-disabled]="disabled" aria-haspopup="listbox" tabindex="0" [style.width]="computedWidth" [attr.data-placeholder]="placeholder">
       <!-- SINGLE  -->
       <div class="kit-dropdown-select" (click)="onToggle()">
             <ng-container *ngIf="!multiple; else multiSelected">

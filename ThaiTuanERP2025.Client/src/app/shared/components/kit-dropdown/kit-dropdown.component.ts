@@ -62,6 +62,7 @@ export class KitDropdownComponent implements ControlValueAccessor, OnChanges {
             } else {
                   this._value = (typeof val === 'string' ? val : null);
                   this.syncLabelFromValue();
+                  this.eRef.nativeElement.classList.toggle('has-value', !!this._value);
             }
       }
       registerOnChange(fn: any): void { this.onChange = fn; }
@@ -158,6 +159,7 @@ export class KitDropdownComponent implements ControlValueAccessor, OnChanges {
             this.onTouched();
             this.selectionChange.emit(opt);
             this.clearFilter(); // Đóng menu rồi thì dọn filter
+            this.eRef.nativeElement.classList.toggle('has-value', !!this._value);
       }
 
       /** Danh sách option đã chọn (giữ thứ tự theo options gốc) */

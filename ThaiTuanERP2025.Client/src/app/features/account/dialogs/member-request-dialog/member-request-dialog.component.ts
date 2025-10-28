@@ -44,10 +44,10 @@ export class MemberRequestDialog implements OnInit {
             fullName: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required, Validators.maxLength(100) ]}),
             username: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required, Validators.minLength(4), Validators.maxLength(100) ]}),
             employeeCode: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required, Validators.minLength(4), Validators.maxLength(100) ]}),
-            email: this.formBuilder.control<string | null>(null, {validators: [ Validators.email, Validators.maxLength(100) ]}),
+            email: this.formBuilder.control<string | null>('', {  validators: [ Validators.email, Validators.maxLength(100) ]}),
             password: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required, Validators.minLength(6), Validators.maxLength(100) ]}),
             roleId: this.formBuilder.control<string | null>(null),
-            phone: this.formBuilder.control<number | null>(null, {}),
+            phone: this.formBuilder.control<number | null>(null),
             departmentId: this.formBuilder.control<string | null>(null),
             position: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required, Validators.maxLength(100) ]}),
       });
