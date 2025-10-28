@@ -49,7 +49,7 @@ export class MemberRequestDialog implements OnInit {
             roleId: this.formBuilder.control<string | null>(null),
             phone: this.formBuilder.control<number | null>(null, {}),
             departmentId: this.formBuilder.control<string | null>(null),
-            position: this.formBuilder.control<string>('', { nonNullable: true })
+            position: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required, Validators.maxLength(100) ]}),
       });
 
       ngOnInit(): void {
