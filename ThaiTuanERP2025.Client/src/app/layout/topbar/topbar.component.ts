@@ -13,11 +13,12 @@ import { UserFacade } from '../../features/account/facades/user.facade';
 import { UserDto } from '../../features/account/models/user.model';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { Router } from '@angular/router';
+import { AvatarUrlPipe } from "../../shared/pipes/avatar-url.pipe";
 
 @Component({
       selector: 'app-topbar',
       standalone: true,
-      imports: [CommonModule],
+      imports: [CommonModule, AvatarUrlPipe],
       templateUrl: './topbar.component.html',
       styleUrl: './topbar.component.scss'
 })
@@ -51,8 +52,6 @@ export class TopbarComponent implements OnInit {
       );
 
       async ngOnInit(): Promise<void> {
-            this.currentUser = await firstValueFrom(this.currentUser$);
-
             // Khởi tạo state: REST + SignalR đã được thực hiện bên trong NotificationStateService
             await this.notificationFacade.init();
 
@@ -85,9 +84,6 @@ export class TopbarComponent implements OnInit {
             }
       }
 
-      get avatarSrc(): string {
-            return resolveAvatarUrl(this.baseUrl, this.currentUser);
-      }
 
       // Optional: giữ các hàm này nếu bạn gọi từ nơi khác
       onMarkAllRead() {

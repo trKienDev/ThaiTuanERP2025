@@ -75,9 +75,9 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 		}
 
 		[HttpPut("{id:guid}/avatar")]
-		public async Task<ActionResult<ApiResponse<string>>> SetAvatar(Guid id, [FromBody] SetUserAvatarRequest request, CancellationToken cancellationToken) {
-			await _mediator.Send(new UpdateUserAvatarFileIdCommand(id, request.FileId), cancellationToken);
-			return Ok(ApiResponse<string>.Success("Cập nhật avatar thành công"));
+		public async Task<IActionResult> SetAvatar(Guid id, [FromBody] SetUserAvatarRequest request, CancellationToken cancellationToken) {
+			var result = await _mediator.Send(new UpdateUserAvatarFileIdCommand(id, request.FileId), cancellationToken);
+			return Ok(ApiResponse<Unit>.Success(result));
 		}
 
 		[HasPermission("account.set-manager")]
