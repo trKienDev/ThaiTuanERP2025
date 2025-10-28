@@ -8,4 +8,5 @@ import { Component } from "@angular/core";
       imports: [ CommonModule],
 })
 export class SupplierBankAccountComponent {
+      
 }
