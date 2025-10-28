@@ -119,3 +119,53 @@ $topbar-padding: 1.5rem;
       100%  { transform: rotate(0); color: black; }
 }
 
+.user-avatar-wrapper {
+      position: relative;
+      cursor: pointer;
+
+      .user-menu {
+            position: absolute;
+            right: 0;
+            top: 45px;
+            background: #fff;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+            border-radius: 8px;
+            min-width: 180px;
+            z-index: 1000;
+            padding: 8px;
+            animation: fadeIn 0.15s ease-in-out;
+
+            .user-menu-item {
+                  display: flex;
+                  align-items: center;
+                  gap: 10px;
+                  width: 100%;
+                  padding: 8px 14px;
+                  background: transparent;
+                  border: none;
+                  text-align: left;
+                  cursor: pointer;
+                  color: #333;
+
+                  &:hover {
+                        background-color: var(--main-bg-color);
+                  }
+
+                  .icon {
+                        font-size: 20px;
+                  }
+                  &.logout {
+                        color: #c0392b;
+                        font-weight: 500;
+                        border: none !important;
+                  }
+            }
+      }
+}
+
+@keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+}
+
+
