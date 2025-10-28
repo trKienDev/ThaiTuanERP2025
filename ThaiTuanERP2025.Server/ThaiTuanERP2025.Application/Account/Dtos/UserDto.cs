@@ -13,11 +13,12 @@
 		public string? AvatarFileId { get; set; }
 		public string? AvatarFileObjectKey { get; set; }
 
-		public List<RoleDto> Roles { get; set; } = new();
+		public IReadOnlyCollection<RoleDto> Roles { get; set; } = Array.Empty<RoleDto>();
+		public IReadOnlyCollection<UserDto> Managers { get; set; } = Array.Empty<UserDto>();
+
 		public List<PermissionDto> Permissions { get; set; } = new();
 
 		public Guid? DepartmentId { get; set; }
-
 		public DepartmentDto? Department { get; set; } = default!;
 	}
 

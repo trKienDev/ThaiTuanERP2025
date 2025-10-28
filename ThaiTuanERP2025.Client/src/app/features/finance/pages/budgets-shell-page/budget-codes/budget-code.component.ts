@@ -63,7 +63,7 @@ export class BudgetCodePanelComponent {
             const oldValue = budgetCode.isActive;
             budgetCode.isActive = !oldValue;
 
-            this.budgetCodeService.toggleActive(budgetCode.id, budgetCode.isActive).subscribe({
+            this.budgetCodeService.toggleActive(budgetCode.id).subscribe({
                   next: () => {},
                   error: err => {
                         budgetCode.isActive = !budgetCode.isActive;

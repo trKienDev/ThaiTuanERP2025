@@ -37,5 +37,4 @@ export class ConfirmService {
       validateBudgetLimit$({ title = 'Cảnh báo', message }: { title?: string; message: string }): Observable<boolean> {
             return this.danger$(message, title, '', 'Hủy');
       }
-
 }

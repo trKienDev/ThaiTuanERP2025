@@ -8,6 +8,7 @@ export abstract class BaseCrudFacade<Dto, Request> {
             create: (req: Request) => Observable<Dto>;
             update: (id: string, req: Request) => Observable<Dto>;
             delete: (id: string) => Observable<boolean>;
+            toggleActive: (id: string) => Observable<boolean>;
       }) {}
 
       /** Stream danh sách chung cho subclass alias lại  */
@@ -26,5 +27,10 @@ export abstract class BaseCrudFacade<Dto, Request> {
       }
       delete(id: string) {
             return this.service.delete(id).pipe(tap(() => this.refresh()));
+      }
+      toggleActive(id: string) {
+            return this.service.toggleActive(id).pipe(
+                  tap(() => this.refresh())
+            );
       }
 }

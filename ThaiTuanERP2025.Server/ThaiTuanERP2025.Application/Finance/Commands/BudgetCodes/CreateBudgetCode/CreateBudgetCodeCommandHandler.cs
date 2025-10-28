@@ -19,16 +19,12 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.BudgetCodes.CreateBudgetC
 
 		public async Task<BudgetCodeDto> Handle(CreateBudgetCodeCommand request, CancellationToken cancellationToken)
 		{
-			var entity = new BudgetCode
-			{
-				Id = Guid.NewGuid(),
-				Code = request.Code,
-				Name = request.Name,
-				BudgetGroupId = request.BudgetGroupId,
-				CashoutCodeId = request.CashoutCodeId,
-				CreatedDate = DateTime.UtcNow,
-				IsActive = true
-			};
+			var entity = new BudgetCode (
+				request.Code,
+				request.Name,
+				request.BudgetGroupId,
+				request.CashoutCodeId
+			);
 
 			await _unitOfWork.BudgetCodes.AddAsync(entity);
 			await _unitOfWork.SaveChangesAsync(cancellationToken);

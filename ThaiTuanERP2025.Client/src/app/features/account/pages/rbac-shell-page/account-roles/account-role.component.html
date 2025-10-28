@@ -15,6 +15,7 @@
                               <th>#</th>
                               <th>Tên vai trò</th>
                               <th>Mô tả</th>
+                              <th>Hiệu lực</th>
                               <th>Hành động</th>
                         </tr>
                   </thead>
@@ -23,6 +24,12 @@
                               <td>{{ i + 1 }}</td>
                               <td>{{ role.name }}</td>
                               <td>{{ role.description }}</td>
+                              <td>
+                                    <label class="switch-1">
+                                          <input type="checkbox" [checked]="role.isActive" (change)="onToggleActive(role)">
+                                          <span class="slider"></span>
+                                    </label>
+                              </td>
                               <td class="display-flex justify-content-center">
                                     <kit-action-menu [actions]="buildRoleActions(role)"></kit-action-menu>
                               </td>

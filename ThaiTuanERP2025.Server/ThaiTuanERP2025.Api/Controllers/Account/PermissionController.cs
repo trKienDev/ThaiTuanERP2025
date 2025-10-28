@@ -42,9 +42,9 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 		}
 
 		[HttpPost("{id:guid}/assign-permissions")]
-		public async Task<IActionResult> AssignPermissionToRole(Guid id, [FromBody] AssignPermissionToRoleRequest request, CancellationToken cancellationToken)
+		public async Task<IActionResult> AssignPermissionToRole(Guid id, [FromBody] List<Guid> permissionIds, CancellationToken cancellationToken)
 		{
-			var command = new AssignPermissionToRoleCommand(id, request.PermissionIds);
+			var command = new AssignPermissionToRoleCommand(id, permissionIds);
 			var result = await _mediator.Send(command, cancellationToken);
 			return Ok(ApiResponse<Unit>.Success(result));
 		}

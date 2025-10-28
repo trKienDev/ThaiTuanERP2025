@@ -1,9 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Sprache;
 using ThaiTuanERP2025.Api.Common;
-using ThaiTuanERP2025.Application.Account.Commands.RBAC.AssignRoleToUser;
-using ThaiTuanERP2025.Application.Account.Commands.RBAC.CreateRole;
+using ThaiTuanERP2025.Application.Account.Commands.Roles.AssignRoleToUser;
+using ThaiTuanERP2025.Application.Account.Commands.Roles.CreateRole;
+using ThaiTuanERP2025.Application.Account.Commands.Roles.DeleteRole;
+using ThaiTuanERP2025.Application.Account.Commands.Roles.ToggleRoleActive;
 using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Application.Account.Queries.Roles.GetAllRoles;
 
@@ -38,6 +41,19 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 		public async Task<IActionResult> AssignRoleToUser([FromBody] AssignRoleToUserCommand command)
 		{
 			var result = await _mediator.Send(command);
+			return Ok(ApiResponse<Unit>.Success(result));
+		}
+
+		[HttpPatch("{roleId:guid}/toggle-activate")]
+		public async Task<IActionResult> ToogleActive(Guid roleId, CancellationToken cancellationToken) {
+			var result = await _mediator.Send(new ToggleRoleActiveCommand(roleId), cancellationToken);
+			return Ok(ApiResponse<Unit>.Success(result));
+		}
+
+		[HttpDelete("{roleId:guid}")]
+		public async Task<IActionResult> Delete(Guid roleId, CancellationToken cancellationToken)
+		{
+			var result = await _mediator.Send(new DeleteRoleCommand(roleId), cancellationToken);
 			return Ok(ApiResponse<Unit>.Success(result));
 		}
 	}
