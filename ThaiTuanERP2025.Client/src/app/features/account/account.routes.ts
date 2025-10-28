@@ -21,6 +21,15 @@ export const accountRoutes: Routes = [
                         canActivate: [adminGuard], 
                         loadComponent: () => import('./pages/account-department/account-department.component').then((m) => m.AccountDepartmentComponent )
                   }, 
+                  { 
+                        path: 'rbac',
+                        canActivate: [ adminGuard ],
+                        loadComponent: () => import('./pages/rbac-shell-page/rbac-shell-page.component').then((m) => m.RBACShellPageComponent ),
+                        children: [
+                              { path: 'roles', loadComponent: () => import('./pages/rbac-shell-page/account-roles/account-role.component').then((m) => m.AccountRolePanelComponent) },
+                              { path: 'permissions', loadComponent: () => import('./pages/rbac-shell-page/account-permissions/account-permission.component').then((m) => m.AccountPermissionPanelComponent) },
+                        ]
+                  }
             ],
       },
 ];

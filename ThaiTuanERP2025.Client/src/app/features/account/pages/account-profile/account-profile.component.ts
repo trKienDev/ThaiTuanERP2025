@@ -86,6 +86,7 @@ export class AccountProfileComponent implements OnInit {
                         this.currentUser!.avatarFileId = url; // gán đường dẫn mới trả về
                         this.selectedAvatarFile = null;
                         this.toastService.successRich('Cập nhật avatar thành công');
+                        this.userFacade.refreshCurrentUser();
                         this.isUploading = false;
                   }, 
                   error: (err) => {

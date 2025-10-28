@@ -21,8 +21,8 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 			if (!string.IsNullOrWhiteSpace(keyword))
 				query = query.Where(u => EF.Functions.Like(u.FullName, $"%{keyword}%") || EF.Functions.Like(u.Username, $"%{keyword}%"));
 
-			if (!string.IsNullOrWhiteSpace(role) && Enum.TryParse<UserRole>(role, true, out var parsedRole))
-				query = query.Where(u => u.Role == parsedRole);
+			//if (!string.IsNullOrWhiteSpace(role) && Enum.TryParse<UserRole>(role, true, out var parsedRole))
+			//	query = query.Where(u => u.Role == parsedRole);
 
 			return await query.Select(u => new UserDto
 			{
@@ -37,7 +37,7 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 				AvatarFileObjectKey = u.AvatarFileId.HasValue
 					? _dbContext.StoredFiles.Where(f => f.Id == u.AvatarFileId.Value).Select(f => f.ObjectKey).FirstOrDefault()
 					: null,
-				Role = u.Role,
+				//Role = u.Role,
 				DepartmentId = u.DepartmentId,
 				Department = u.Department == null ? null : new DepartmentDto
 				{

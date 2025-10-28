@@ -3,10 +3,10 @@ import { Component, inject } from "@angular/core";
 import { UserDto } from "../../models/user.model";
 import { MatDialog } from "@angular/material/dialog";
 import { UserFacade } from "../../facades/user.facade";
-import { MemberRequestDialog } from "./member-request-dialog/member-request-dialog.component";
-import { MemberManagerDialog } from "./member-manager-dialog/member-manager-dialog.component";
+import { MemberManagerDialog } from "../../dialogs/member-manager-dialog/member-manager-dialog.component";
 import { KitActionMenuComponent } from "../../../../shared/components/kit-action-menu/kit-action-menu.component";
 import { ActionMenuOption } from "../../../../shared/components/kit-action-menu/kit-action-menu.model";
+import { MemberRequestDialog } from "../../dialogs/member-request-dialog/member-request-dialog.component";
 
 @Component({
       selector: 'account-member',

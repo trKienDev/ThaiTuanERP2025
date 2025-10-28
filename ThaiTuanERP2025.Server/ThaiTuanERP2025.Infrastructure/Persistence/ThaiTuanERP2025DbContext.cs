@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using System.Linq.Expressions;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Domain.Account.Entities;
@@ -57,10 +58,13 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<ExpensePaymentCommentAttachment> ExpensePaymentCommentAttachments => Set<ExpensePaymentCommentAttachment>();
 		public DbSet<ExpensePaymentCommentTag> expensePaymentCommentTags => Set<ExpensePaymentCommentTag>();
 		public DbSet<OutgoingPayment> outgoingPayments => Set<OutgoingPayment>();
-
 		public DbSet<AppNotification> AppNotification => Set<AppNotification>();
 		public DbSet<TaskReminder> TaskReminders => Set<TaskReminder>();
-		public DbSet<Follower> followers => Set<Follower>();
+		public DbSet<Follower> Followers => Set<Follower>();
+		public DbSet<Role> Roles => Set<Role>();
+		public DbSet<Permission> Permissions => Set<Permission>();
+		public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
+		public DbSet<UserRole> UserRoles => Set<UserRole>();
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -85,7 +89,16 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 				b.Property(x => x.RowVersion).IsRowVersion(); // concurrency token
 			});
 		}
-		
+
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		{
+			base.OnConfiguring(optionsBuilder);
+
+			// ⚠️ Bỏ qua cảnh báo "PendingModelChangesWarning"
+			optionsBuilder.ConfigureWarnings(w =>
+			    w.Ignore(RelationalEventId.PendingModelChangesWarning));
+		}
+
 		public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{
 			var entries = ChangeTracker.Entries<AuditableEntity>();

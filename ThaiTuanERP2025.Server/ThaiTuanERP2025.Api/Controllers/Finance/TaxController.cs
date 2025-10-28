@@ -77,7 +77,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 			return Ok(ApiResponse<PagedResult<TaxDto>>.Success(result));
 		}
 
-		[HttpPost]
+		[HttpPost("new")]
 		public async Task<ActionResult<ApiResponse<TaxDto>>> Create([FromBody] CreateTaxCommand command, CancellationToken cancellationToken) {
 			var dto = await _mediator.Send(command, cancellationToken);
 			return Ok(ApiResponse<TaxDto>.Success(dto));

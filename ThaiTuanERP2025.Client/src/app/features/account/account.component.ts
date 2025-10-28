@@ -11,11 +11,11 @@ import { AuthService } from '../../core/services/auth/auth.service';
       styleUrls: ['./account.component.scss']
 })
 export class AccountComponent implements OnInit {
-      isAdmin = false;
+      isSuperAdmin = false;
 
       constructor(private auth: AuthService) {}
 
       ngOnInit(): void {
-            this.isAdmin = this.auth.getUserRole() === 'admin';
+            this.isSuperAdmin = this.auth.getUserRoles().some(r => r.toLowerCase() === 'superadmin');
       }
 }

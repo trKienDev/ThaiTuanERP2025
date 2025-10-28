@@ -15,5 +15,5 @@ bootstrapApplication(AppComponent, {
             provideAnimations(),
             importProvidersFrom(MatIconModule),
             importProvidersFrom(BrowserAnimationsModule),
-      ]
+      ],
 });

@@ -146,6 +146,12 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			if (entity == null) throw new ArgumentNullException(nameof(entity));
 			_dbSet.Update(entity);
 		}
+		public async Task ReplaceRangeAsync(Expression<Func<T, bool>> filter, IEnumerable<T> newEntities, CancellationToken cancellationToken = default)
+		{
+			var existing = _dbSet.Where(filter);
+			_dbSet.RemoveRange(existing);
+			await _dbSet.AddRangeAsync(newEntities, cancellationToken);
+		}
 
 		public void Delete(T entity)
 		{
@@ -165,6 +171,13 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 				_dbSet.Remove(entity);
 			}
 		}
+
+		public void RemoveRange(IEnumerable<T> entities)
+		{
+			if (entities == null) throw new ArgumentNullException(nameof(entities));
+			_dbSet.RemoveRange(entities);
+		}
+
 
 		public async Task<TDto?> GetByIdProjectedAsync<TDto>(Guid id, CancellationToken cancellationToken = default)
 		{
