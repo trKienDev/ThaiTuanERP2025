@@ -8,11 +8,12 @@ import { firstValueFrom } from "rxjs";
 import { ToastService } from "../../../../shared/components/toast/toast.service";
 import { UserService } from "../../services/user.service";
 import { resolveAvatarUrl } from "../../../../shared/utils/avatar.utils";
+import { AvatarUrlPipe } from "../../../../shared/pipes/avatar-url.pipe";
 
 @Component({
       selector: 'account-profile',
       standalone: true,
-      imports: [CommonModule, MatSnackBarModule ],
+      imports: [CommonModule, MatSnackBarModule, AvatarUrlPipe],
       templateUrl: './account-profile.component.html',
       styleUrl: './account-profile.component.scss',
 })
@@ -27,6 +28,8 @@ export class AccountProfileComponent implements OnInit {
 
       selectedAvatarFile: File | null = null;
       isUploading: boolean = false;
+
+      previewAvatarSrc: string | null = null;
       
       async ngOnInit(): Promise<void> {
             this.currentUser = await firstValueFrom(this.currentUser$);
@@ -34,38 +37,34 @@ export class AccountProfileComponent implements OnInit {
 
       triggerAvatarUpload(): void {
             const fileInput = document.getElementById('avatar-input') as HTMLInputElement;
-            fileInput?.click();
-      }
-
-      get avatarSrc(): string {
-            return resolveAvatarUrl(this.baseUrl, this.currentUser);
+            if (fileInput) {
+                  fileInput.value = '';
+                  fileInput.click();
+            }
       }
 
       onAvatarSelected(event: Event): void {
             const input = event.target as HTMLInputElement;
-            if(input.files && input.files.length > 0) {
-                  const file = input.files[0];
+            if (!input.files || input.files.length === 0) return;
 
-                  const allowedTypes = ['image/jpg', 'image/jpeg', 'image/png'];
-                  if(!allowedTypes.includes(file.type)) {
-                        this.toastService.errorRich('Chỉ hỗ trợ ảnh .JPEG, .JPG hoặc .PNG', 'Đóng');
-                        return;
-                  }
+            const file = input.files[0];
+            const allowedTypes = ['image/jpg', 'image/jpeg', 'image/png'];
 
-                  this.selectedAvatarFile = file;
-
-                  // preview ảnh bằng base64
-                  const reader = new FileReader();
-                  reader.onload = () => {
-                        if(this.currentUser) {
-                              this.currentUser.avatarFileId = reader.result as string;
-                        }
-                  };
-                  reader.readAsDataURL(file); 
-            
+            if (!allowedTypes.includes(file.type)) {
+                  this.toastService.errorRich('Chỉ hỗ trợ ảnh .JPEG, .JPG hoặc .PNG', 'Đóng');
+                  return;
             }
+
+            this.selectedAvatarFile = file;
+
+            // ✅ Preview ảnh base64 tạm thời
+            const reader = new FileReader();
+            reader.onload = () => {
+                  this.previewAvatarSrc = reader.result as string;
+            };
+            reader.readAsDataURL(file);
       }
-      
+            
       async uploadAvatar(): Promise<void> {
             if (!this.selectedAvatarFile || !this.currentUser?.id) {
                   this.toastService.errorRich('Thiếu thông tin người dùng hoặc file');
@@ -74,11 +73,10 @@ export class AccountProfileComponent implements OnInit {
 
             this.isUploading = true;
             try {
-                  const url = await firstValueFrom(this.userService.updateAvatar(this.selectedAvatarFile, this.currentUser.id));
-                  this.currentUser.avatarFileId = url;
+                  await firstValueFrom(this.userService.updateAvatar(this.selectedAvatarFile, this.currentUser.id));
+                  await this.userFacade.refreshCurrentUser();
+                  this.currentUser = await firstValueFrom(this.currentUser$);
                   this.toastService.successRich('Cập nhật avatar thành công');
-                  this.userFacade.refreshCurrentUser();
-                  resolveAvatarUrl(this.baseUrl, this.currentUser);
             } catch (err) {
                   console.error(err);
                   this.toastService.errorRich('Không thể cập nhật ảnh đại diện');
