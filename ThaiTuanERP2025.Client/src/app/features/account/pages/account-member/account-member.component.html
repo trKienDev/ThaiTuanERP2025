@@ -16,6 +16,7 @@
                         <th>Họ và tên</th>
                         <th>Mã nhân viên</th>
                         <th>Phòng ban</th>
+                        <th>Vai trò</th>
                         <th>Quản lý</th>
                         <th>Hành động</th>
                   </tr>
@@ -23,12 +24,28 @@
             <tbody>
                   <tr *ngFor="let user of (users$ | async) ?? []; trackBy: trackById; let i = index;">
                         <td>{{ i + 1 }}</td>
-                        <td>{{ user.fullName }}</td>
+                        <td>
+                              <div class="display-flex justify-content-center align-items-center gap-5px">
+                                    <img class="avatar-user" [src]="user | avatarUrlPipe" alt="avatar-user">
+                                    <span>{{ user.fullName }}</span> 
+                              </div>
+                        </td>
                         <td>{{ user.employeeCode }}</td>
                         <td>{{ user.department?.name }}</td>
-                        <td>{{ user.manager?.fullName }}</td>
-                        <td class="display-flex justify-content-center">
-                              <kit-action-menu [actions]="buildUserActions(user)"></kit-action-menu>
+                        <td>
+                              <ul *ngFor="let role of user.roles">
+                                    <li>{{ role.name }}</li>
+                              </ul>
+                        </td>
+                        <td>
+                              <ul *ngFor="let manager of user.managers">
+                                    <li><img class="avatar-user" [src]="manager | avatarUrlPipe" alt="avatar-user"></li>
+                              </ul>
+                        </td>
+                        <td>
+                              <div  class="display-flex justify-content-center">
+                                    <kit-action-menu [actions]="buildUserActions(user)"></kit-action-menu>
+                              </div>
                         </td>
                   </tr>
             </tbody>

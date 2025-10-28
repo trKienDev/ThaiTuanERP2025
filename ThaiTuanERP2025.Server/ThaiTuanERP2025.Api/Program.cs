@@ -203,6 +203,7 @@ builder.Services.AddOptions<FileStorageOptions>()
 
 var app = builder.Build();
 
+// Seed roles + admin user
 if (args.Contains("seed"))
 {
 	using (var scope = app.Services.CreateScope())
@@ -216,7 +217,7 @@ if (args.Contains("seed"))
 		return;
 	}
 }
-	// Seed roles + admin user
+
 using (var scope = app.Services.CreateScope())
 {
 	var serviceProvider = scope.ServiceProvider;

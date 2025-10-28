@@ -79,6 +79,7 @@ textarea {
 ul, ol {
       margin: 0;
       padding: 0;
+      list-style: none;
 }
 input {
       width: 100%;
@@ -150,7 +151,7 @@ input[type=number] { -moz-appearance: textfield; }
 
 .mat-mdc-tooltip-surface { font-family: 'Lexend' !important; user-select: none; background-color: var(--gold-color) !important; color: black !important; }
 /* target đúng nơi Material render (overlay) */
-.cdk-overlay-pane .mat-mdc-dialog-surface {  overflow-y: unset; }
+.cdk-overlay-pane .mat-mdc-dialog-surface {  overflow-y: unset; border-radius: 8px; }
 .cdk-overlay-pane .cdk-overlay-black-backdrop { background: rgba(15, 15, 15, 0.5); }
 
 /* mat-calendar */

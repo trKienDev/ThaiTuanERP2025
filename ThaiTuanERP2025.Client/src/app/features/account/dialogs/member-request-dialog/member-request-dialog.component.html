@@ -24,6 +24,18 @@
                                     <label for="username">username <span style="color: red;">  *</span></label>
                               </div>
                         </div>
+                        <div class="dialog-row display-flex gap-10px">
+                              <div class="width-50pt">
+                                    <kit-dropdown [options]="(roleOptions$ | async) ?? []" [placeholder]="'Chọn vai trò'" (selectionChange)="onUserRoleSelected($event)"></kit-dropdown>
+                              </div>
+                              <div class="form-input width-50pt">
+                                    <input class="" type="text" formControlName="position" autocomplete="on" required/>
+                                    <label for="name">Chức vụ (HR, Kế toán, ...)</label>
+                              </div>
+                        </div>
+                        <div class="dialog-row">
+                              <kit-dropdown [options]="(departmentOptions$ | async) ?? []" [placeholder]="'Chọn phòng ban (nếu có)'" (selectionChange)="onDepartmentSelected($event)"></kit-dropdown>
+                        </div>
                         <div class="dialog-row">
                               <div class="form-input">
                                     <input class="" type="text" formControlName="employeeCode" autocomplete="on" required/>
@@ -36,9 +48,6 @@
                                     <label for="password">Mật khẩu <span style="color: red;">  *</span></label>
                               </div>
                         </div>
-                        <div class="dialog-row">
-                              <kit-dropdown [options]="(departmentOptions$ | async) ?? []" [placeholder]="'Chọn phòng ban (nếu có)'" (selectionChange)="onDepartmentSelected($event)"></kit-dropdown>
-                        </div>
                         <div class="dialog-row display-flex gap-10px">
                               <div class="form-input width-50pt">
                                     <input class="" type="text" formControlName="email" autocomplete="on">
@@ -47,15 +56,6 @@
                               <div class="form-input width-50pt">
                                     <input class="" type="text" formControlName="phone" autocomplete="on">
                                     <label for="phone">Số điện thoại</label>
-                              </div>
-                        </div>
-                        <div class="dialog-row display-flex gap-10px">
-                              <div class="width-50pt">
-                                    <kit-dropdown [options]="(roleOptions$ | async) ?? []" [placeholder]="'Chọn vai trò'" (selectionChange)="onUserRoleSelected($event)"></kit-dropdown>
-                              </div>
-                              <div class="form-input width-50pt">
-                                    <input class="" type="text" formControlName="position" autocomplete="on" required/>
-                                    <label for="name">Chức vụ (HR, Kế toán, ...)</label>
                               </div>
                         </div>
                         <div class="dialog-row">

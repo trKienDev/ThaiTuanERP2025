@@ -53,7 +53,6 @@ export class AuthService {
 
       getUserRoles(): string[] {
             var roles = JSON.parse(localStorage.getItem(this.ROLES_KEY) || '[]');
-            console.log('roles: ', roles);
             return roles;
       }
 

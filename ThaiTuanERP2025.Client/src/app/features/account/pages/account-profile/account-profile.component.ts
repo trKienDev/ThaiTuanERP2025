@@ -66,34 +66,24 @@ export class AccountProfileComponent implements OnInit {
             }
       }
       
-      uploadAvatar(): void {
-            if(!this.selectedAvatarFile) {
-                  this.toastService.errorRich('Vui lòng chọn avatar trước');
+      async uploadAvatar(): Promise<void> {
+            if (!this.selectedAvatarFile || !this.currentUser?.id) {
+                  this.toastService.errorRich('Thiếu thông tin người dùng hoặc file');
                   return;
             }
-
-            if(!this.currentUser) 
-                  return;
 
             this.isUploading = true;
-            if (!this.currentUser || !this.currentUser.id) {
-                  this.toastService.errorRich('Không xác định được ID người dùng');
-                  return;
+            try {
+                  const url = await firstValueFrom(this.userService.updateAvatar(this.selectedAvatarFile, this.currentUser.id));
+                  this.currentUser.avatarFileId = url;
+                  this.toastService.successRich('Cập nhật avatar thành công');
+                  this.userFacade.refreshCurrentUser();
+                  resolveAvatarUrl(this.baseUrl, this.currentUser);
+            } catch (err) {
+                  console.error(err);
+                  this.toastService.errorRich('Không thể cập nhật ảnh đại diện');
+            } finally {
+                  this.isUploading = false;
             }
-
-            this.userService.updateAvatar(this.selectedAvatarFile, this.currentUser.id).subscribe({
-                  next: (url) => {
-                        this.currentUser!.avatarFileId = url; // gán đường dẫn mới trả về
-                        this.selectedAvatarFile = null;
-                        this.toastService.successRich('Cập nhật avatar thành công');
-                        this.userFacade.refreshCurrentUser();
-                        this.isUploading = false;
-                  }, 
-                  error: (err) => {
-                        this.isUploading = false;
-                        console.error('Upload avatar error: ', err);
-                        this.toastService.errorRich('Không thể cập nhật ảnh đại diện');
-                  }
-            })
       }
 }

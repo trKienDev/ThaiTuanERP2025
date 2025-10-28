@@ -7,11 +7,12 @@ import { MemberManagerDialog } from "../../dialogs/member-manager-dialog/member-
 import { KitActionMenuComponent } from "../../../../shared/components/kit-action-menu/kit-action-menu.component";
 import { ActionMenuOption } from "../../../../shared/components/kit-action-menu/kit-action-menu.model";
 import { MemberRequestDialog } from "../../dialogs/member-request-dialog/member-request-dialog.component";
+import { AvatarUrlPipe } from "../../../../shared/pipes/avatar-url.pipe";
 
 @Component({
       selector: 'account-member',
       standalone: true,
-      imports: [CommonModule, KitActionMenuComponent],
+      imports: [CommonModule, KitActionMenuComponent, AvatarUrlPipe],
       templateUrl: './account-member.component.html',
 }) 
 export class AccountMemberComponent {

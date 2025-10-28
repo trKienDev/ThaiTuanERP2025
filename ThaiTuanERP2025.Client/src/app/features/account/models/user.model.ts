@@ -12,14 +12,14 @@ export interface UserDto {
       avatarFileId?: string;
       avatarFileObjectKey?: string;
 
-      role: RoleDto;
+      roles: RoleDto[];
       phone?: number | null;
       departmentId?: string;  
       department?: DepartmentDto;
       position: string;
 
       managerId?: string;
-      manager?: UserDto;
+      managers?: UserDto[];
 }
 
 export interface UserRequest {

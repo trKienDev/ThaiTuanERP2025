@@ -177,16 +177,16 @@ export class LedgerAccountComponent implements OnInit {
             return this.numToLabel[this.toBalanceNum(v)] ?? '';
       }
 
-      // ====== Toggle IsActive (optimistic) ======
-      toggleActive(row: LedgerAccountRow, ev: Event) {
-            const input = ev.target as HTMLInputElement;
-            const next = input.checked;
-            const prev = row.isActive;
-            row.isActive = next; // optimistic
-            this.service.toggleActive(row.id, next).subscribe({
-                  error: _ => { row.isActive = prev; } // rollback on error
-            });
-      }
+      // // ====== Toggle IsActive (optimistic) ======
+      // toggleActive(row: LedgerAccountRow, ev: Event) {
+      //       const input = ev.target as HTMLInputElement;
+      //       const next = input.checked;
+      //       const prev = row.isActive;
+      //       row.isActive = next; // optimistic
+      //       this.service.toggleActive(row.id, next).subscribe({
+      //             error: _ => { row.isActive = prev; } // rollback on error
+      //       });
+      // }
 
       // ====== Drawer – Create / Edit ======
       openCreate() {

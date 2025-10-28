@@ -2,7 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component, Inject, inject, OnInit } from "@angular/core";
 import { ToastService } from "../../../../shared/components/toast/toast.service";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { FormBuilder } from "@angular/forms";
+import { FormBuilder, FormsModule } from "@angular/forms";
 import { RoleDto } from "../../models/role.model";
 import { PermissionService } from "../../services/permission.service";
 import { AssignPermissionToRoleRequest, PermissionDto } from "../../models/permission.model";
@@ -14,7 +14,7 @@ import { trigger, transition, style, animate } from "@angular/animations";
       templateUrl: './assign-permission-to-role-dialog.component.html',
       styleUrls: ['./assign-permission-to-role-dialog.component.scss'],
       standalone: true,
-      imports: [ CommonModule ],
+      imports: [ CommonModule, FormsModule ],
       animations: [
             trigger('slideList', [
                   transition(':enter', [
@@ -100,7 +100,7 @@ export class AssignPermissionToRoleDialogComponent implements OnInit {
             this.submitting = true;
             try {
                   const ids = this.selectedPermissions.map(p => p.id);
-                  await this.permissionService.assignPermissionsToRole(this.role.id, ids);
+                  await firstValueFrom(this.permissionService.assignPermissionsToRole(this.role.id, ids));
                   this.toastService.successRich('Phân quyền thành công');
                   return;
             } catch(error) {
