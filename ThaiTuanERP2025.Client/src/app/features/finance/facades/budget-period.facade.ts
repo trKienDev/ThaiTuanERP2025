@@ -11,4 +11,6 @@ export class BudgetPeriodFacade extends BaseCrudFacade<BudgetPeriodDto, BudgetPe
       }
       
       readonly budgetPeriods$: Observable<BudgetPeriodDto[]> = this.list$;
+
+      
 }

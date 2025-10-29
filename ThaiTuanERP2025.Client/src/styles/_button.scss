@@ -72,10 +72,12 @@ button, .button {
 .cancel-button:hover { cursor: pointer; opacity: 0.8; }
 
 /* save */   
-.save-button { align-items: center; appearance: button; background-color: #0276FF; box-shadow: rgba(255, 255, 255, 0.26) 0 1px 2px inset; box-sizing: border-box; color: #fff; cursor: pointer; display: flex; flex-direction: row; flex-shrink: 0; margin: 0; text-align: center; text-transform: none; transition: color .13s ease-in-out,background .13s ease-in-out,opacity .13s ease-in-out,box-shadow .13s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: manipulation; border: none !important;}
-.save-button:active { background-color: #006AE8; }
-.save-button:hover { background-color: #1C84FF; }
+// .save-button { align-items: center; appearance: button; background-color: #0276FF; box-shadow: rgba(255, 255, 255, 0.26) 0 1px 2px inset; box-sizing: border-box; color: #fff; cursor: pointer; display: flex; flex-direction: row; flex-shrink: 0; margin: 0; text-align: center; text-transform: none; transition: color .13s ease-in-out,background .13s ease-in-out,opacity .13s ease-in-out,box-shadow .13s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: manipulation; border: none !important;}
+// .save-button:active { background-color: #006AE8; }
+// .save-button:hover { background-color: #1C84FF; }
 
+.save-button { background-color: var(--bright-blue-color); cursor: pointer; transition: all ease-in-out 0.2s; color: white !important; }
+.save-button:hover { background-color: #0071e2; }
 /* submit */
 /* CSS */
 .submit-button { appearance: none; backface-visibility: hidden; background-color: #27ae60; border-radius: 8px; border-style: none; box-shadow: rgba(39, 174, 96, .15) 0 4px 9px; box-sizing: border-box; color: #fff; cursor: pointer; display: inline-block; font-weight: 600; letter-spacing: normal; line-height: 1.5; outline: none; overflow: hidden; position: relative; text-align: center; text-decoration: none; transform: translate3d(0, 0, 0); transition: all .3s; user-select: none; -webkit-user-select: none; touch-action: manipulation; vertical-align: top; white-space: nowrap; }
@@ -128,3 +130,4 @@ button, .button {
 	display: flex; padding: 5px 10px;  border: 1px solid var(--default-border-color) !important; border-radius: 5px;   background-color: var(--main-bg-color);  transition: duration ease 80ms;
 	&:hover { cursor: pointer; background-color: white !important; }
 }
+
