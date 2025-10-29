@@ -1,26 +1,29 @@
 .primary-card {
-      border-radius: 5px;
-      background-color: white;
-      border: 1px solid var(--default-border-color);
-      width: fit-content;
-      height: fit-content;
-
-      .card-header {
-            font-size: 15px;
-            font-weight: bold;
-            padding: 15px;
-            border-bottom: 1px solid var(--default-border-color);
-      }
-
-      .card-body {
-            padding: 15px;
-      }
-
-      .card-box {
-            width: 80%;
-            border: 1px solid var(--default-border-color);
+      .card-wrapper {
             border-radius: 5px;
-            padding: 10px;
-            user-select: none;
+            background-color: white;
+            border: 1px solid var(--default-border-color);
+            width: 100%;
+            height: fit-content;
+
+            .card-header {
+                  font-size: 15px;
+                  font-weight: bold;
+                  padding: 15px;
+                  border-bottom: 1px solid var(--default-border-color);
+                  background-color: var(--main-bg-color);
+            }
+
+            .card-body {
+                  padding: 15px;
+            }
+
+            .card-box {
+                  width: 80%;
+                  border: 1px solid var(--default-border-color);
+                  border-radius: 5px;
+                  padding: 10px;
+                  user-select: none;
+            }
       }
 }

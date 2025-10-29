@@ -15,15 +15,17 @@
                         <div class="dialog-row display-flex gap-10px justify-content-between">
                               <div class="dialog-column">
                                     <div class="primary-card">
-                                          <div class="card-header">
-                                                <label for="selected-permisions">Quyền đã chọn</label>
-                                          </div>
-                                          <div class="card-body">
-                                                <ul class="selected-permissions" *ngFor="let permission of selectedPermissions">
-                                                      <li [@slideList] class="selected-permission" [class.active]="selectedAssigned.includes(permission)" (click)="toggleAssigned(permission)">
-                                                            {{ permission.name }}
-                                                      </li>
-                                                </ul>
+                                          <div class="card-wrapper">
+                                                <div class="card-header">
+                                                      <label for="selected-permisions">Quyền đã chọn</label>
+                                                </div>
+                                                <div class="card-body">
+                                                      <ul class="selected-permissions" *ngFor="let permission of selectedPermissions">
+                                                            <li [@slideList] class="selected-permission" [class.active]="selectedAssigned.includes(permission)" (click)="toggleAssigned(permission)">
+                                                                  {{ permission.name }}
+                                                            </li>
+                                                      </ul>
+                                                </div>
                                           </div>
                                     </div>
                               </div>
@@ -33,15 +35,17 @@
                               </div>
                               <div class="dialog-column">
                                     <div class="primary-card">
-                                          <div class="card-header">
-                                                <label for="available-permisions">Quyền khả dụng</label>
-                                          </div>
-                                          <div class="card-body">
-                                                <ul class="available-permissions" *ngFor="let permission of availablePermissions">
-                                                      <li [@slideList] class="available-permission" [class.active]="selectedAvailable.includes(permission)" (click)="toggleAvailable(permission)">
-                                                            {{ permission.name }}
-                                                      </li>
-                                                </ul>
+                                          <div class="card-wrapper">
+                                                <div class="card-header">
+                                                      <label for="available-permisions">Quyền khả dụng</label>
+                                                </div>
+                                                <div class="card-body">
+                                                      <ul class="available-permissions" *ngFor="let permission of availablePermissions">
+                                                            <li [@slideList] class="available-permission" [class.active]="selectedAvailable.includes(permission)" (click)="toggleAvailable(permission)">
+                                                                  {{ permission.name }}
+                                                            </li>
+                                                      </ul>
+                                                </div>
                                           </div>
                                     </div>
                               </div>

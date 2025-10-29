@@ -76,7 +76,7 @@ button, .button {
 // .save-button:active { background-color: #006AE8; }
 // .save-button:hover { background-color: #1C84FF; }
 
-.save-button { background-color: var(--bright-blue-color); cursor: pointer; transition: all ease-in-out 0.2s; color: white !important; }
+.save-button { background-color: var(--bright-blue-color); cursor: pointer; transition: all ease-in-out 0.2s; color: white !important; border: none !important; box-shadow: 0px 4px 6px -1px #0276FF31, 0px 2px 4px -1px #0276FF17; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
 .save-button:hover { background-color: #0071e2; }
 /* submit */
 /* CSS */

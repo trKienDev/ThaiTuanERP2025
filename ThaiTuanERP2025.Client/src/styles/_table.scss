@@ -54,7 +54,11 @@
                   color: var(--bright-blue-color) !important;
             }     
       }
-
+      
+      .text-muted {
+            color: #aaa;
+            user-select: none;
+      }
 }
 
 thead, tr, td {

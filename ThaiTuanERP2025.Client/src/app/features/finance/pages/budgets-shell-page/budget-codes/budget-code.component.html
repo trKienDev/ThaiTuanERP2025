@@ -1,10 +1,7 @@
-<button class="button default-button" (click)="openAddBudgetCodeRequestDialog()">Thêm ngân sách</button>
+<button class="button default-button" (click)="openNewBudgetCodeDialog()">Thêm ngân sách</button>
 <table class=" table table-budget-codes margin-top-20px">
       <thead>
             <tr>
-                  <th>
-                        <input #masterCheckbox type="checkbox">
-                  </th>
                   <th>Nhóm ngân sách</th>
                   <th>Mã ngân sách</th>
                   <th>Tên ngân sách</th>
@@ -13,7 +10,6 @@
       </thead>
       <tbody>
             <tr *ngFor="let budgetCode of budgetCodes" [ngClass]="{ 'inactive-budget-code': !budgetCode.isActive}">
-                  <td><input type="checkbox"></td>
                   <td>{{ budgetCode.budgetGroupName }}</td>
                   <td>{{ budgetCode.code }}</td>
                   <td>
@@ -26,6 +22,9 @@
                               <span class="slider"></span>
                         </label>
                   </td>
+            </tr>
+            <tr *ngIf="budgetCodes.length === 0">
+                  <td colspan="6" class="text-center text-muted">Không có dữ liệu</td>
             </tr>
       </tbody>
 </table>
