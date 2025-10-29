@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
-using ThaiTuanERP2025.Application.Finance.Commands.BudgetPeridos.CreateBudgetPeriod;
-using ThaiTuanERP2025.Application.Finance.DTOs;
-using ThaiTuanERP2025.Application.Finance.Queries.BudgetPeriods.GetAllActiveBudgetPeriods;
-using ThaiTuanERP2025.Application.Finance.Queries.BudgetPeriods.GetAllBudgetPeriods;
-
+using ThaiTuanERP2025.Application.Finance.Budgets.Commands.BudgetPeriods.CreateBudgetPeriod;
+using ThaiTuanERP2025.Application.Finance.Budgets.Commands.BudgetPeriods.CreateBudgetPeriodsForYear;
+using ThaiTuanERP2025.Application.Finance.Budgets.DTOs;
+using ThaiTuanERP2025.Application.Finance.Budgets.Queries.BudgetPeriods.GetBudgetPeriodsForYear;
+using ThaiTuanERP2025.Application.Finance.Budgets.Requests;
 namespace ThaiTuanERP2025.Api.Controllers.Finance
 {
 	[Authorize]
@@ -20,23 +20,24 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 			_mediator = mediator;
 		}
 
-		[HttpGet("all")]
-		public async Task<IActionResult> GetAll()
+		[HttpGet("for-year/{year:int}")]
+		public async Task<IActionResult> GetForYear([FromRoute] int year, CancellationToken cancellationToken)
 		{
-			var budgetPeriods = await _mediator.Send(new GetAllBudgetPeriodsQuery());
-			return Ok(ApiResponse<List<BudgetPeriodDto>>.Success(budgetPeriods));
-		}
-
-		[HttpGet("active")]
-		public async Task<IActionResult> GetAllActive() {
-			var result = await _mediator.Send(new GetAllActiveBudgetPeriodsQuery());
-			return Ok(ApiResponse<List<BudgetPeriodDto>>.Success(result));
+			var result = await _mediator.Send(new GetBudgetPeriodsForYearQuery(year), cancellationToken);
+			return Ok(ApiResponse<IReadOnlyList<BudgetPeriodDto>>.Success(result));
 		}
 
 		[HttpPost("new")]
-		public async Task<IActionResult> Create(CreateBudgetPeriodCommand command) {
-			var result = await _mediator.Send(command);
-			return Ok(ApiResponse<BudgetPeriodDto>.Success(result));
+		public async Task<IActionResult> Create([FromBody] BudgetPeriodRequest request, CancellationToken cancellationToken) {
+			var result = await _mediator.Send(new CreateBudgetPeriodCommand(request), cancellationToken);
+			return Ok(ApiResponse<Unit>.Success(result));
+		}
+
+		[HttpPost("auto-generate")]
+		public async Task<IActionResult> AutoGenerate( [FromBody] AutoGenerateYearRequest request, CancellationToken cancellationToken)
+		{
+			var result = await _mediator.Send(new CreateBudgetPeriodsForYearCommand(request.Year), cancellationToken);
+			return Ok(ApiResponse<Unit>.Success(result));
 		}
 	}
 }

@@ -13,8 +13,6 @@ namespace ThaiTuanERP2025.Application.Finance.Mappings
 			CreateMap<BudgetCode, BudgetCodeDto>()
 				.ForMember(d => d.BudgetGroupName, o => o.MapFrom(s => s.BudgetGroup.Name)); ;
 
-			CreateMap<BudgetPeriod, BudgetPeriodDto>();
-
 			CreateMap<BudgetPlan, BudgetPlanDto>()
 				.ForMember(dest => dest.DepartmentName, opt => opt.MapFrom(src => src.Department.Name))
 				.ForMember(dest => dest.BudgetCodeName, opt => opt.MapFrom(src => src.BudgetCode.Name))

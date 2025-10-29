@@ -1,77 +1,74 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnInit } from "@angular/core";
-import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
-import { ToastService } from "../../../../../shared/components/toast/toast.service";
-import { MatDatepickerModule } from "@angular/material/datepicker";
 import { provideMondayFirstDateAdapter } from "../../../../../shared/date/provide-monday-first-date-adapter";
-import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
-import { BudgetPeriodRequest } from "../../../models/budget-period.model";
-import { catchError, firstValueFrom, throwError } from "rxjs";
-import { BudgetPeriodFacade } from "../../../facades/budget-period.facade";
-import { KitDropdownComponent, KitDropdownOption } from "../../../../../shared/components/kit-dropdown/kit-dropdown.component";
+import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
+import { BudgetPeriodService } from "../../../services/budget-period.service";
+import { ToastService } from "../../../../../shared/components/toast/toast.service";
+import { catchError, firstValueFrom, of } from "rxjs";
+import { BudgetPeriodDto } from "../../../models/budget-period.model";
+import { KitSpinnerButtonComponent } from "../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 
 @Component({
       selector: 'budget-period-panel',
       standalone: true,
-      imports: [CommonModule, ReactiveFormsModule, MatDatepickerModule, KitDropdownComponent ],
+      imports: [CommonModule, ReactiveFormsModule, KitSpinnerButtonComponent],
       templateUrl: './budget-period.component.html',
       styleUrls: ['./budget-period.component.scss'],
       providers: [...provideMondayFirstDateAdapter() ]
 })
 export class BudgetPeriodPanelComponent implements OnInit {
       private formBuilder = inject(FormBuilder);
-      private toast = inject(ToastService);
-      public submitting = false;
       private now = new Date();
-      private budgetPeriodFacade = inject(BudgetPeriodFacade);
+      private budgetPeriodService = inject(BudgetPeriodService);
+      private toastService = inject(ToastService);    
+      public budgetPeriods: BudgetPeriodDto[] = [];   
+      public isLoading = false;
+      public submitting = false;
 
-      form = this.formBuilder.group({
-            month: this.formBuilder.control<string>(String(this.now.getMonth() + 1), { nonNullable: true, validators: [ Validators.required ] }),
+      autoGenerateForm = this.formBuilder.group({
             year: this.formBuilder.control<number>(this.now.getFullYear(), { nonNullable: true, validators: [ Validators.required ] }),
       });
 
-      months = Array.from({ length: 12 }, (_, i) => ({
-            id: String(i + 1),
-            label: `Tháng ${i + 1}`,
-      }));
-
       ngOnInit(): void {
-            this.form.get('year')?.disable();
+            this.autoGenerateForm.get('year')?.disable();
+            this.loadBudgetPeriodsForYear();
       }
 
-      onMonthSelected(opt: KitDropdownOption) {
-            this.form.patchValue({ month: opt.id })
-      }
-
-      async onSubmit(): Promise<void> {
-            if(this.form.invalid) {
-                  this.form.markAllAsTouched();
-                  this.toast.warning('Vui lòng điền đầy đủ thông tin');
-                  return;
-            }
-            this.submitting = true;
-
+      async loadBudgetPeriodsForYear() {
+            this.isLoading = true;
             try {
-                  const payload = {
-                        month: Number(this.form.value.month),
-                        year: this.form.value.year!,
-                  } as BudgetPeriodRequest;
-                  
-                  this.budgetPeriodFacade.create(payload).pipe(
-                        catchError(err => {
-                              this.toast.errorRich("Tạo ngân sách thất bại");
-                              this.submitting = false;
-                              return throwError(() => err);
-                        })
-                  ).subscribe((created) => {
-                        this.toast.successRich("Tạo kỳ ngân sách thành công")
-                  });
-            } catch(error) {
-                  const messages = handleHttpError(error);
-                  this.toast.errorRich("Thêm kỳ ngân sách thất bại");
+                  const year = this.autoGenerateForm.getRawValue().year;
+                  this.budgetPeriods = await firstValueFrom(this.budgetPeriodService.getForYear(year));
+            } catch (err) {
+                  console.error(err);
+                  this.toastService?.errorRich('Không thể tải danh sách kỳ ngân sách');
+            } finally {
+                  this.isLoading = false;
+            }
+      }
+
+      async autoGenerateForYear() {
+            if (this.autoGenerateForm.invalid) return;
+            const year = this.autoGenerateForm.getRawValue().year;
+
+            this.submitting = true;
+            try {
+                  const result = await firstValueFrom(
+                        this.budgetPeriodService.autoGenerateForYear(year).pipe(
+                              catchError(err => {
+                                    this.toastService?.errorRich('Tạo kỳ ngân sách thất bại');
+                                    console.error(err);
+                                    return of(null);
+                              })
+                        )
+                  );
+
+                  if (result) {
+                        this.toastService?.successRich('Tạo kỳ ngân sách thành công');
+                        await this.loadBudgetPeriodsForYear();
+                  }
             } finally {
                   this.submitting = false;
             }
       }
-
 }
