@@ -3,16 +3,13 @@
       <div class="card-body">
             <form [formGroup]="form">
                   <div class="display-flex gap-10px">
-                        <div class="form-column">
-                              <label for="employeeCode">Chọn tháng <span style="color: red;">  *</span></label>
-                              <kit-dropdown formControlName="month" [options]="months" [placeholder]="'Chọn tháng'" [enableFilter]="false" (selectionChange)="onMonthSelected($event)" ></kit-dropdown>
+                        <div class="" style="width: 30%;">
+                              <kit-dropdown [options]="months" [placeholder]="'Chọn tháng'" [enableFilter]="false" (selectionChange)="onMonthSelected($event)" ></kit-dropdown>
                         </div>
                         <div class="form-column">
-                              <label for="employeeCode">Năm <span style="color: red;">  *</span></label>
                               <input class="" type="year" formControlName="year" autocomplete="on" />
                         </div>
                         <div class="form-column">
-                              <label for="employeeCode">Ngày lập ngân sách <span style="color: red;">  *</span></label>
                               <input class="invoice-date" formControlName="dueDate" matInput [matDatepicker]="picker" placeholder="chọn ngày lập ngân sách" (focus)="picker.open()" (click)="picker.open()" (keydown.enter)="picker.open()" (keydown.arrowDown)="picker.open()" required/>
                               <mat-datepicker #picker panelClass="kit-datepicker"></mat-datepicker>
                         </div>

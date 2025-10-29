@@ -1,13 +1,18 @@
-<div class="kit-dropdown" role="combobox" [attr.aria-expanded]="isOpen" [attr.aria-disabled]="disabled" aria-haspopup="listbox" tabindex="0" [style.width]="computedWidth">
-      <!-- SINGLE  -->
+<div class="kit-dropdown" role="combobox" [attr.aria-expanded]="isOpen" [attr.aria-disabled]="disabled" aria-haspopup="listbox" tabindex="0" [style.width]="computedWidth" [class.has-value]="hasValue" [class.active]="isOpen">
       <div class="kit-dropdown-select" (click)="onToggle()">
+              <!-- SINGLE  -->
             <ng-container *ngIf="!multiple; else multiSelected">
-                  <img *ngIf="selectedImgUrl" [src]="selectedImgUrl" class="option-img" />
-                  <span>{{ selectedText }}</span>
+                  
+                  <ng-container *ngIf="selectedLabel" >
+                        <img *ngIf="selectedImgUrl" [src]="selectedImgUrl" class="option-img" />
+                        <span>{{ selectedLabel }}</span>
+                  </ng-container>
             </ng-container>
+
 
             <!-- MULTIPLE -->
             <ng-template #multiSelected>
+                  <!-- <ng-container *ngIf="selectedOptions.length; else placeholderTpl"> -->
                   <ng-container *ngIf="selectedOptions.length; else placeholderTpl">
                         <span class="multi-selected" *ngFor="let opt of selectedOptions" 
                         role="button" tabindex="0"
@@ -20,14 +25,14 @@
                   </ng-container>
 
                   <ng-template #placeholderTpl>
-                        <span class="">{{ placeholder }}</span>
+                        <label class="placeholder-text">{{ placeholder }}</label>
                   </ng-template>
             </ng-template>
       </div>
 
       <ul class="kit-dropdown-menu" role="listbox" [@slide]="isOpen ? 'open' : 'closed'">
             <!-- Filter bar -->
-            <li *ngIf="enableFilter" class="kit-dropdown-filter" (keydown)="onFilterKeydown($event)">
+            <li *ngIf="enableFilter" class="kit-dropdown-filter" (keydown)="onFilterKeydown($event)" #optRef>
                   <input #filterInput type="text" [placeholder]="filterPlaceholder"
                   [value]="filterText"
                   (input)="onFilterInput($event)"
@@ -42,9 +47,11 @@
             [class.active]="i === focusedIndex"
             [class.selected] = "isSelected(opt.id)"
             (click)="selectOption(opt)">
-                  <span  class="check" *ngIf="multiple" [class.d-none]="!isSelected(opt.id)">{{ isSelected(opt.id) ? '✔' : '' }}</span>
+                  <span class="check" *ngIf="multiple" [class.d-none]="!isSelected(opt.id)">{{ isSelected(opt.id) ? '✔' : '' }}</span>
                   <img *ngIf="opt.imgUrl" [src]="opt.imgUrl" class="option-img" />
                   <span>{{ opt.label }}</span>
             </li>
       </ul>
+
+      <label class="placeholder-text">{{ placeholder }}</label>
 </div>
