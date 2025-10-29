@@ -26,10 +26,10 @@
       </div>
 
       <div class="payee-container display-flex gap-10px pad-10p">
-            <div class="payee-type-wrapper display-flex gap-10px align-items-center">
-                  <div>
-                        <span>Công ty trả cho</span><span style="color: red;">  *</span>
-                  </div>
+            <div class="display-flex align-items-center">
+                  <span>Công ty trả cho</span><span style="color: red;">  *</span>
+            </div>
+            <div class="payee-type">
                   <kit-dropdown [options]="payeeOptions" placeholder="chọn đối tượng" [enableFilter]="false" (selectionChange)="onPayeeSelected($event)" [width]="120"></kit-dropdown>
             </div>
             <div class="payee-selection">
