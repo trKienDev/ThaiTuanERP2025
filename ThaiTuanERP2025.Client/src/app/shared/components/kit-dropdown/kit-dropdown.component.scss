@@ -27,7 +27,7 @@
 }
 .kit-dropdown.active .placeholder-text, .kit-dropdown.has-value .placeholder-text {
       top: 0;
-      transform: translateY(-60%) scale(0.9);
+      transform: translateY(-60%) scale(0.8);
       left: 0;    
       color: #aaa;
       background-color: white;
@@ -43,23 +43,26 @@
       overflow-y: hidden;
       min-height: 16px; 
 
-      .multi-selected {
-            display: inline-flex;
-            flex: 0 0 auto;
-            white-space: nowrap;
-            padding: 5px;
-            background-color: white;
-            color: var(--dark-gray);
-            border-radius: var(--default-border-color-radius);
-            border: 1px solid var(--platinum);
-            font-size: 12px;
-            user-select: none;
-            transition: 0.3s all;
-            margin-right: 5px;
-      }
-      .multi-selected:hover {
-            color: red;
-            border: 1px solid red;
+      .multi-selection {
+            display: flex;
+            gap: 10px;
+            flex-wrap: nowrap;
+
+            .multi-selected {
+                  display: flex;
+                  align-items: center;
+                  background-color: var(--main-bg-color);
+                  padding: 0 3px;
+                  border-left: 1px solid var(--bright-blue-color);
+                  border-radius: 3px;
+                  
+                  &:hover {
+                        background-color: rgb(255, 226, 226);
+                        border-left: 1px solid red;
+                        color: red;
+                        cursor: pointer;
+                  }
+            }
       }
 }
 

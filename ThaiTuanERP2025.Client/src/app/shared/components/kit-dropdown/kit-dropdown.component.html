@@ -14,14 +14,16 @@
             <ng-template #multiSelected>
                   <!-- <ng-container *ngIf="selectedOptions.length; else placeholderTpl"> -->
                   <ng-container *ngIf="selectedOptions.length; else placeholderTpl">
-                        <span class="multi-selected" *ngFor="let opt of selectedOptions" 
-                        role="button" tabindex="0"
-                        (click)="remove(opt.id); $event.stopPropagation()" 
-                        (keydown.enter)="remove(opt.id); $event.stopPropagation()"
-                        (keydown.space)="remove(opt.id); $event.preventDefault(); $event.stopPropagation()">
-                              <img *ngIf="opt.imgUrl" [src]="opt.imgUrl" class="option-img" />
-                              <span class="">{{ opt.label }}</span>
-                        </span>
+                        <div class="multi-selection">
+                              <span class="multi-selected" *ngFor="let opt of selectedOptions" 
+                              role="button" tabindex="0"
+                              (click)="remove(opt.id); $event.stopPropagation()" 
+                              (keydown.enter)="remove(opt.id); $event.stopPropagation()"
+                              (keydown.space)="remove(opt.id); $event.preventDefault(); $event.stopPropagation()">
+                                    <img *ngIf="opt.imgUrl" [src]="opt.imgUrl" class="option-img" />
+                                    <span class="">{{ opt.label }}</span>
+                              </span>
+                        </div>
                   </ng-container>
 
                   <ng-template #placeholderTpl>
