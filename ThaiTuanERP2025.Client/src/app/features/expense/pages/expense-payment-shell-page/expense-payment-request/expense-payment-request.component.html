@@ -30,15 +30,15 @@
                   <span>Công ty trả cho</span><span style="color: red;">  *</span>
             </div>
             <div class="payee-type">
-                  <kit-dropdown [options]="payeeOptions" placeholder="chọn đối tượng" [enableFilter]="false" (selectionChange)="onPayeeSelected($event)" [width]="120"></kit-dropdown>
+                  <kit-dropdown [options]="payeeOptions" placeholder="chọn đối tượng" [enableFilter]="false" (selectionChange)="onPayeeSelected($event)" [width]="132" [required]="true"></kit-dropdown>
             </div>
             <div class="payee-selection">
                   <div class="supplier-selection  display-inline-flex gap-10px" *ngIf="selectedPayee === 1">
-                        <kit-dropdown formControlName="supplierId" [options]="(supplierOptions$ | async) ?? []" (selectionChange)="onSupplierSelected($event)" [width]="320" [placeholder]="'chọn nhà cung cấp thụ hưởng'"></kit-dropdown>
+                        <kit-dropdown formControlName="supplierId" [options]="(supplierOptions$ | async) ?? []" (selectionChange)="onSupplierSelected($event)" [width]="320" [placeholder]="'chọn nhà cung cấp thụ hưởng'" [required]="true"></kit-dropdown>
                         <button class="button default-button" (click)="openCreateSupplierDialog()" style="font-size: 11px;">Thêm nhà cung cấp mới</button>
                   </div>
                   <div class="employee-selection" *ngIf="selectedPayee === 2">
-                        <kit-dropdown [options]="(userOptions$ | async) ?? []" (selectionChange)="onUserSelected($event)" [width]="200" [placeholder]="'chọn nhân viên thụ hưởng'"></kit-dropdown>
+                        <kit-dropdown [options]="(userOptions$ | async) ?? []" (selectionChange)="onUserSelected($event)" [width]="200" [placeholder]="'chọn nhân viên thụ hưởng'" [required]="true"></kit-dropdown>
                   </div>
             </div>
       </div>
