@@ -4,16 +4,15 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth/auth.service.js';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { catchError, finalize, tap } from 'rxjs';
-import { FieldErrorComponent } from '../../shared/components/messages/field-error.component.js';
-import { AlertMesssageComponent } from '../../shared/components/messages/alert-message.component.js';
 import { handleApiResponse$ } from '../../shared/operators/handle-api-response.operator.js';
 import { LoginResponseDto } from './login-response.model.js';
 import { ToastService } from '../../shared/components/toast/toast.service.js';
+import { KitSpinnerButtonComponent } from "../../shared/components/kit-spinner-button/kit-spinner-button.component";
 
 @Component({
       selector: 'app-login',
       standalone: true,
-      imports: [CommonModule, ReactiveFormsModule, FieldErrorComponent, AlertMesssageComponent ],
+      imports: [CommonModule, ReactiveFormsModule, KitSpinnerButtonComponent],
       templateUrl: './login.page.html',
       styleUrls: ['./login.page.scss'],
 })
@@ -22,8 +21,7 @@ export class LoginComponent implements OnInit{
       showPassword = false;
       message: string | null = null;
       traceId: string | null = null;
-      isLoading = false;
-      submitted = false;
+      public submitting = false;
       private toast = inject(ToastService);
 
       alertClosed = {
@@ -74,8 +72,8 @@ export class LoginComponent implements OnInit{
             this.showPassword = !this.showPassword;
       }
 
-      onSubmit(): void {
-            this.submitted = true;
+      onLogging(): void {
+            this.submitting = true;
 
             // Reset trạng thái đóng alert khi submit lại
             this.alertClosed = { employeeCode: false, password: false, global: false };
@@ -87,7 +85,6 @@ export class LoginComponent implements OnInit{
 
             const { employeeCode, password } = this.loginForm.value;
             this.message = null;
-            this.isLoading = true;
 
             this.authService.login(employeeCode, password).pipe(
                   handleApiResponse$<LoginResponseDto>(),
@@ -97,7 +94,7 @@ export class LoginComponent implements OnInit{
                         console.error('error: ', err);
                         throw err;
                   }),
-                  finalize(() => (this.isLoading = false))
+                  finalize(() => (this.submitting = false))
             ).subscribe({
                   next: () => this.router.navigateByUrl('/splash')
             });

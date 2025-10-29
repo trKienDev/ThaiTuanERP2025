@@ -14,8 +14,6 @@ namespace ThaiTuanERP2025.Application.Account.Mappings
 				.ForMember(dest => dest.AvatarFileId, opt => opt.MapFrom(src => src.AvatarFileId))
 				.AfterMap<UserAvatarObjectKeyResolver>();
 
-			CreateMap<Role, RoleDto>();
-
 			CreateMap<Permission, PermissionDto>();
 		}
 

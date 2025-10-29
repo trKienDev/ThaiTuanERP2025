@@ -16,6 +16,7 @@ export class BudgetGroupPanelComponent {
       successMessage: string | null = null;
       errorMessages: string[] = [];
       budgetGroups: (BudgetGroupModel & { selected: boolean})[] = [];
+      public submitting = false;
       
       @ViewChild('masterCheckbox', { static: false }) masterCheckbox!: ElementRef<HTMLInputElement>;
      
