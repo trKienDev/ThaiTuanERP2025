@@ -27,7 +27,7 @@
 
       <div class="payee-container display-flex gap-10px pad-10p">
             <div class="display-flex align-items-center">
-                  <span>Công ty trả cho</span><span style="color: red;">  *</span>
+                  <span>Công ty trả cho</span>
             </div>
             <div class="payee-type">
                   <kit-dropdown [options]="payeeOptions" placeholder="chọn đối tượng" [enableFilter]="false" (selectionChange)="onPayeeSelected($event)" [width]="132" [required]="true"></kit-dropdown>
@@ -43,20 +43,20 @@
             </div>
       </div>
 
-      <div class="bank-account-input-container display-flex gap-10px margin-top-20px">
-            <div class="form-row">
+      <div class="form-row bank-account-input-container display-flex gap-10px">
+            <div class="form-column flex-1">
                   <div class="form-input">
                         <input class="" type="text" formControlName="bankName" autocomplete="on" required/>
                         <label for="name">Tên ngân hàng <span style="color: red;">  *</span></label>
                   </div>
             </div>
-            <div class="form-row">
+            <div class="form-column flex-1">
                   <div class="form-input">
                         <input class="" type="text" formControlName="accountNumber" autocomplete="on" required/>
                         <label for="name">Số tài khoản <span style="color: red;">  *</span></label>
                   </div>
             </div>
-            <div class="form-row">
+            <div class="form-column flex-1">
                   <div class="form-input">
                         <input class="" type="text" formControlName="beneficiaryName" autocomplete="on" required/>
                         <label for="name">Người thụ hưởng <span style="color: red;">  *</span>  </label>
@@ -64,7 +64,7 @@
             </div>
       </div>
 
-      <div class="payment-categories margin-top-20px pad-10p">
+      <div class="payment-categories form-row">
             <div class="payment-categories-heading display-flex gap-10px">
                   <div class="payment-categories-title align-content-center">
                         <span>Bảng hạng mục</span><span style="color: red;">  *</span>
@@ -178,7 +178,7 @@
             </div>
       </div>
 
-      <div class="form-row display-flex gap-20px margin-top-20px">
+      <div class="form-row display-flex gap-20px">
             <div class="width-50pt">
                   <div class="display-flex gap-10px">
                         <label class="width-fit-content text-no-wrap align-content-center" for="name">Tổng thanh toán 🔒</label>
@@ -209,7 +209,7 @@
             </div>
       </div>
 
-      <div class="margin-top-20px">
+      <div class="">
             <span class="form-row">Tệp đính kèm chi phí    </span>
             <kit-file-uploader [meta]="uploadMeta" [(uploads)]="uploads"></kit-file-uploader>
       </div>
