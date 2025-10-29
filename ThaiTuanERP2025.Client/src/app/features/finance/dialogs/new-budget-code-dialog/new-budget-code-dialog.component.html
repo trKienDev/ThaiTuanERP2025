@@ -24,11 +24,11 @@
                         <kit-dropdown [options]="cashoutCodeOptions" (selectionChange)="onCashoutCodeSelected($event)" [placeholder]="'Chọn dòng tiền ra'" [width]="'100%'"></kit-dropdown>
                   </div>
 
-                  <div class="actions display-flex gap-10px margin-top-20px">
+                  <div class="actions display-flex gap-10px dialog-row">
                         <button type="button" class="width-50pt button cancel-button" (click)="close()">Hủy</button>
-                        <button type="submit" class="width-50pt button save-button display-flex justify-content-center" [disabled]="submitting">
-                              {{ submitting ? 'Đang lưu...' : 'Lưu' }}
-                        </button>
+                        <div class="width-50pt">
+                              <kit-spinner-button type="submit" cssClass="button save-button width-100pt" [loading]="submitting" [disabled]="form.invalid || submitting" text="Lưu" loadingText="Đang xử lý…"></kit-spinner-button>
+                        </div>
                   </div>
 
             </form>

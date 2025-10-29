@@ -1,11 +1,11 @@
 import { CommonModule } from "@angular/common";
 import { Component, ElementRef, inject, ViewChild } from "@angular/core";
-import { AddBudgetCodeRequestDialogComponent } from "./add-budget-code-request/add-budget-code-request.component";
 import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
 import { BudgetCodeDto } from "../../../models/budget-code.model";
 import { BudgetCodeService } from "../../../services/budget-code.service";
 import { MatDialog } from "@angular/material/dialog";
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { NewBudgetCodeDialogComponent } from "../../../dialogs/new-budget-code-dialog/new-budget-code-dialog.component";
 
 @Component({
       selector: 'budget-code-panel',
@@ -72,8 +72,8 @@ export class BudgetCodePanelComponent {
             })
       }
 
-      openAddBudgetCodeRequestDialog() {
-            const ref = this.dialog.open(AddBudgetCodeRequestDialogComponent, {
+      openNewBudgetCodeDialog() {
+            const ref = this.dialog.open(NewBudgetCodeDialogComponent, {
                   width: 'fit-content',
             });
 

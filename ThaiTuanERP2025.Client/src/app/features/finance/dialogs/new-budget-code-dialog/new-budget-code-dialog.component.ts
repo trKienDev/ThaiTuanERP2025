@@ -5,25 +5,26 @@ import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angu
 import { MatInputModule } from "@angular/material/input";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { firstValueFrom } from "rxjs";
-import { BudgetCodeService } from "../../../../services/budget-code.service";
-import { BudgetGroupService } from "../../../../services/budget-group.service";
-import { CashoutCodeService } from "../../../../services/cashout-code.service";
-import { ToastService } from "../../../../../../shared/components/toast/toast.service";
-import { KitDropdownComponent, KitDropdownOption } from "../../../../../../shared/components/kit-dropdown/kit-dropdown.component";
-import { handleHttpError } from "../../../../../../shared/utils/handle-http-errors.util";
-import { BudgetCodeRequest } from "../../../../models/budget-code.model";
+import { BudgetCodeService } from "../../services/budget-code.service";
+import { BudgetGroupService } from "../../services/budget-group.service";
+import { CashoutCodeService } from "../../services/cashout-code.service";
+import { ToastService } from "../../../../shared/components/toast/toast.service";
+import { KitDropdownComponent, KitDropdownOption } from "../../../../shared/components/kit-dropdown/kit-dropdown.component";
+import { handleHttpError } from "../../../../shared/utils/handle-http-errors.util";
+import { BudgetCodeRequest } from "../../models/budget-code.model";
+import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 
 @Component({
       selector: 'add-budget-code-request',
       standalone: true,
-      imports: [CommonModule, MatInputModule, FormsModule, ReactiveFormsModule, MatSnackBarModule, KitDropdownComponent],
-      templateUrl: './add-budget-code-request.component.html',
+      imports: [CommonModule, MatInputModule, FormsModule, ReactiveFormsModule, MatSnackBarModule, KitDropdownComponent, KitSpinnerButtonComponent],
+      templateUrl: './new-budget-code-dialog.component.html',
 }) 
-export class AddBudgetCodeRequestDialogComponent implements OnInit {
+export class NewBudgetCodeDialogComponent implements OnInit {
       private budgetCodeService = inject(BudgetCodeService);
       private budgetGroupService = inject(BudgetGroupService);
       private cashoutCodeService = inject(CashoutCodeService);
-      private ref = inject(MatDialogRef<AddBudgetCodeRequestDialogComponent>);
+      private ref = inject(MatDialogRef<NewBudgetCodeDialogComponent>);
       private formBuilder = inject(FormBuilder);
       private toast = inject(ToastService);
 

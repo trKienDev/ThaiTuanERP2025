@@ -22,7 +22,7 @@
                         <tr *ngFor="let permission of (permissions$ | async) ?? []; trackBy: trackById; let i = index">
                               <td>{{ i + 1 }}</td>
                               <td>{{ permission.name }}</td>
-                              <td>{{ permission.code }}</td>
+                              <td style="color: var(--bright-blue-color);">{{ permission.code }}</td>
                               <td>{{ permission.description }}</td>
                         </tr>
                   </tbody>

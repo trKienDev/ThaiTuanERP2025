@@ -1,43 +1,42 @@
-<div class="primary-card">
-      <div class="card-header">
-            <div class="card-title">Thêm nhóm ngân sách</div>
+<div class="page-container">
+      <div class="page-heading">
+            <div class="page-title">
+                  <h3 class="icon">🧮</h3>
+                  <h3 class="title">Nhóm ngân sách</h3>
+            </div>
       </div>
-      <div class="card-body">
-            <form class="display-flex gap-10px" (ngSubmit)="createBudgetGroup()" #budgetGroupForm="ngForm">
-                  <input class="w-30" type="text" name="code" [(ngModel)]="newBudgetGroup.code" placeholder="Mã nhóm ngân sách" required/>
-                  <input class="w-70" type="text" name="name" [(ngModel)]="newBudgetGroup.name" placeholder="Tên nhóm ngân sách" required/>
-                  <button class="save-button" type="submit" [disabled]="!budgetGroupForm.valid">Thêm</button>
-            </form>
+      <div class="page-body">
+            <div class="primary-card" style="width: 35%;">
+                  <div class="card-wrapper">
+                        <div class="card-header">
+                              <div class="card-title">Thêm nhóm ngân sách</div>
+                        </div>
+                        <div class="card-body">
+                              <form class="display-flex gap-10px" (ngSubmit)="createBudgetGroup()" #budgetGroupForm="ngForm">
+                                    <input style="width: 45%;" type="text" name="code" [(ngModel)]="newBudgetGroup.code" placeholder="Mã nhóm ngân sách" required/>
+                                    <input class="" type="text" name="name" [(ngModel)]="newBudgetGroup.name" placeholder="Tên nhóm ngân sách" required/>
+                                    <button class="save-button" type="submit" [disabled]="!budgetGroupForm.valid">Thêm</button>
+                              </form>
+                        </div>
+                  </div>
+            </div>
+
+            <table class="table margin-top-20px">
+                  <thead>
+                        <tr>
+                              <th>Mã nhóm ngân sách</th>
+                              <th>Tên nhóm ngân sách</th>
+                        </tr>
+                  </thead>
+                  <tbody>
+                        <tr *ngFor="let bg of budgetGroups">
+                              <td>{{ bg.code }}</td>
+                              <td>{{ bg.name }}</td>
+                        </tr>
+                        <tr *ngIf="budgetGroups && budgetGroups.length === 0">
+                              <td colspan="2" class="text-center">Không có dữ liệu.</td>
+                        </tr>
+                  </tbody>
+            </table>
       </div>
 </div>
-
-<div *ngIf="successMessage" class="alert-success">
-      {{ successMessage }}
-</div>
-<div *ngIf="errorMessages.length" class="alert alert-danger">
-      <ul>
-            <li *ngFor="let err of errorMessages">{{ err }}</li>
-      </ul>
-</div>
-
-
-<table class="table margin-top-20px">
-      <thead>
-            <tr>
-                  <th>
-                        <input #masterCheckbox type="checkbox" [checked]="isdAllSelected()" (change)="toggleAll($event)">
-                  </th>
-                  <th>Mã nhóm ngân sách</th>
-                  <th>Tên nhóm ngân sách</th>
-            </tr>
-      </thead>
-      <tbody>
-            <tr *ngFor="let bg of budgetGroups">
-                  <td>
-                        <input type="checkbox" [(ngModel)]="bg.selected" (change)="updateMasterCheckboxState()">
-                  </td>
-                  <td>{{ bg.code }}</td>
-                  <td>{{ bg.name }}</td>
-            </tr>
-      </tbody>
-</table>
