@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, inject } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ToastService } from "../../../../../shared/components/toast/toast.service";
 import { MatDatepickerModule } from "@angular/material/datepicker";
@@ -8,15 +8,17 @@ import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.
 import { BudgetPeriodRequest } from "../../../models/budget-period.model";
 import { catchError, firstValueFrom, throwError } from "rxjs";
 import { BudgetPeriodFacade } from "../../../facades/budget-period.facade";
+import { KitDropdownComponent, KitDropdownOption } from "../../../../../shared/components/kit-dropdown/kit-dropdown.component";
 
 @Component({
       selector: 'budget-period-panel',
       standalone: true,
-      imports: [CommonModule, ReactiveFormsModule, MatDatepickerModule],
+      imports: [CommonModule, ReactiveFormsModule, MatDatepickerModule, KitDropdownComponent ],
       templateUrl: './budget-period.component.html',
+      styleUrls: ['./budget-period.component.scss'],
       providers: [...provideMondayFirstDateAdapter() ]
 })
-export class BudgetPeriodPanelComponent {
+export class BudgetPeriodPanelComponent implements OnInit {
       private formBuilder = inject(FormBuilder);
       private toast = inject(ToastService);
       public submitting = false;
@@ -24,9 +26,22 @@ export class BudgetPeriodPanelComponent {
       private budgetPeriodFacade = inject(BudgetPeriodFacade);
 
       form = this.formBuilder.group({
-            month: this.formBuilder.control<number>(this.now.getMonth() + 1, { nonNullable: true, validators: [ Validators.required ] }),
+            month: this.formBuilder.control<string>(String(this.now.getMonth() + 1), { nonNullable: true, validators: [ Validators.required ] }),
             year: this.formBuilder.control<number>(this.now.getFullYear(), { nonNullable: true, validators: [ Validators.required ] }),
       });
+
+      months = Array.from({ length: 12 }, (_, i) => ({
+            id: String(i + 1),
+            label: `Tháng ${i + 1}`,
+      }));
+
+      ngOnInit(): void {
+            this.form.get('year')?.disable();
+      }
+
+      onMonthSelected(opt: KitDropdownOption) {
+            this.form.patchValue({ month: opt.id })
+      }
 
       async onSubmit(): Promise<void> {
             if(this.form.invalid) {
@@ -37,7 +52,10 @@ export class BudgetPeriodPanelComponent {
             this.submitting = true;
 
             try {
-                  const payload: BudgetPeriodRequest = this.form.getRawValue() as BudgetPeriodRequest;
+                  const payload = {
+                        month: Number(this.form.value.month),
+                        year: this.form.value.year!,
+                  } as BudgetPeriodRequest;
                   
                   this.budgetPeriodFacade.create(payload).pipe(
                         catchError(err => {
