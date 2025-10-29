@@ -1,4 +1,6 @@
-﻿namespace ThaiTuanERP2025.Application.Account.Dtos
+﻿using ThaiTuanERP2025.Application.Account.RBAC.Dtos;
+
+namespace ThaiTuanERP2025.Application.Account.Dtos
 {
 	public class UserDto
 	{

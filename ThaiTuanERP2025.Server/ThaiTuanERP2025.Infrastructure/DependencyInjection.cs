@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ThaiTuanERP2025.Application.Account.RBAC.Repositories;
 using ThaiTuanERP2025.Application.Account.Repositories;
 using ThaiTuanERP2025.Application.Common.Authentication;
 using ThaiTuanERP2025.Application.Common.Interfaces;
