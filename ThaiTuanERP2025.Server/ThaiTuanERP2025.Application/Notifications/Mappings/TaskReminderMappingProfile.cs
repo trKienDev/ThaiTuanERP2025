@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using ThaiTuanERP2025.Application.Notifications.Dtos;
-using ThaiTuanERP2025.Domain.Notifications;
+using ThaiTuanERP2025.Domain.Notifications.Entities;
 
 namespace ThaiTuanERP2025.Application.Notifications.Mappings
 {

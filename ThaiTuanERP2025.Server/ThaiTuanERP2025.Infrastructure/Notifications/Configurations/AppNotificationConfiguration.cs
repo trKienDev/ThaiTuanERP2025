@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ThaiTuanERP2025.Domain.Notifications;
+using ThaiTuanERP2025.Domain.Notifications.Entities;
 
 namespace ThaiTuanERP2025.Infrastructure.Notifications.Configurations
 {

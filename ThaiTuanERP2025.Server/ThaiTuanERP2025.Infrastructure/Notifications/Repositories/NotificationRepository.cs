@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using ThaiTuanERP2025.Application.Notifications.Repositories;
-using ThaiTuanERP2025.Domain.Notifications;
+using ThaiTuanERP2025.Domain.Notifications.Entities;
 using ThaiTuanERP2025.Infrastructure.Common;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 

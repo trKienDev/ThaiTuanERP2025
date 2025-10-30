@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using ThaiTuanERP2025.Application.Finance.DTOs;
-using ThaiTuanERP2025.Application.Finance.Repositories;
 using ThaiTuanERP2025.Domain.Finance.Entities;
+using ThaiTuanERP2025.Domain.Finance.Repositories;
 using ThaiTuanERP2025.Infrastructure.Common;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 

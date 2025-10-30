@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Account.Commands.Departments.UpdateDepartment;
-using ThaiTuanERP2025.Application.Account.Repositories;
 using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Domain.Account.Repositories;
 using ThaiTuanERP2025.Domain.Common;
 
 namespace ThaiTuanERP2025.Application.Account.Commands.Departments.UpdateDepartment
 {
-    public class UpdateDepartmentHandler : IRequestHandler<UpdateDepartmentCommand>
+	public class UpdateDepartmentHandler : IRequestHandler<UpdateDepartmentCommand>
     {
         private readonly IDepartmentRepository _repo;
 

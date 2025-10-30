@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using ThaiTuanERP2025.Domain.Common.ValueObjects;
 
 namespace ThaiTuanERP2025.Domain.Common
 {

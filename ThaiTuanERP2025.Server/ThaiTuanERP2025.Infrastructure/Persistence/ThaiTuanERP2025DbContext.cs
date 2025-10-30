@@ -8,18 +8,23 @@ using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Files.Entities;
 using ThaiTuanERP2025.Domain.Finance.Entities;
 using ThaiTuanERP2025.Domain.Followers.Entities;
-using ThaiTuanERP2025.Domain.Notifications;
+using ThaiTuanERP2025.Domain.Notifications.Entities;
+using ThaiTuanERP2025.Infrastructure.Common;
 
 namespace ThaiTuanERP2025.Infrastructure.Persistence
 {
 	public class ThaiTuanERP2025DbContext : DbContext
 	{
 		private readonly ICurrentUserService _currentUserService;
+		private readonly DomainEventDispatcher? _dispatcher;
+
 		public ThaiTuanERP2025DbContext(
 			DbContextOptions<ThaiTuanERP2025DbContext> options,
-			ICurrentUserService currentUserService	
+			ICurrentUserService currentUserService,
+			DomainEventDispatcher? dispatcher = null
 		) : base(options) {
 			_currentUserService = currentUserService;
+			_dispatcher = dispatcher;
 		}
 
 		// DbSet
@@ -99,7 +104,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 			    w.Ignore(RelationalEventId.PendingModelChangesWarning));
 		}
 
-		public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+		public async override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{
 			var entries = ChangeTracker.Entries<AuditableEntity>();
 			var currentUserId = _currentUserService?.UserId ?? Guid.Empty;
@@ -116,7 +121,20 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 						break;
 				}
 			}
-			return base.SaveChangesAsync(cancellationToken);
+			
+			var result = await base.SaveChangesAsync(cancellationToken);
+
+			if (_dispatcher is not null)
+			{
+				var entitiesWithEvents = ChangeTracker.Entries<AuditableEntity>().Select(e => e.Entity)
+					.Where(e => e.DomainEvents.Any())
+					.ToArray();
+
+				// 3️⃣ Publish qua MediatR
+				await _dispatcher.DispatchAsync(entitiesWithEvents, cancellationToken);
+			}
+
+			return result;
 		}
 
 		private static void ApplySoftDeleteFilters(ModelBuilder modelBuilder)

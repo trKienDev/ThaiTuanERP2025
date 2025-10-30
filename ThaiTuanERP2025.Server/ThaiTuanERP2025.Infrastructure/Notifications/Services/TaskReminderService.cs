@@ -2,7 +2,7 @@
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Notifications.Dtos;
 using ThaiTuanERP2025.Application.Notifications.Services;
-using ThaiTuanERP2025.Domain.Notifications;
+using ThaiTuanERP2025.Domain.Notifications.Entities;
 
 namespace ThaiTuanERP2025.Infrastructure.Notifications.Services
 {

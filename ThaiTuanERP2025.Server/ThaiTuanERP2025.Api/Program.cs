@@ -35,6 +35,10 @@ using DotNetEnv;
 using ThaiTuanERP2025.Application.Common.Security;
 using Microsoft.AspNetCore.Authorization;
 using ThaiTuanERP2025.Api.Security;
+using MediatR;
+using ThaiTuanERP2025.Infrastructure.Common;
+using System.Reflection;
+using ThaiTuanERP2025.Domain.Common.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,8 +63,12 @@ builder.Services.AddAuthorization(options =>
 	options.AddPolicy("Expense.View", policy => policy.RequireClaim("permission", "expense.view"));
 });
 
-
-
+builder.Services.AddScoped<DomainEventDispatcher>();
+builder.Services.AddMediatR(
+	typeof(IDomainEvent).Assembly,           // Domain Layer
+	typeof(AssemblyMarker).Assembly,         // Application Layer
+	Assembly.GetExecutingAssembly()          // API Layer
+);
 
 // Add services 
 builder.Services.AddOpenApi();

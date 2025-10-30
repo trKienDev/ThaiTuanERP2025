@@ -2,8 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Application.Account.RBAC.Dtos;
-using ThaiTuanERP2025.Application.Account.Repositories;
 using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Domain.Account.Repositories;
 using ThaiTuanERP2025.Infrastructure.Common;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
