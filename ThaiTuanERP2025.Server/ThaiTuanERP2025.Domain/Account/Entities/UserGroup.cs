@@ -1,4 +1,5 @@
-﻿using ThaiTuanERP2025.Domain.Common;
+﻿using ThaiTuanERP2025.Domain.Account.Events.UserGroups;
+using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Exceptions;
 
 namespace ThaiTuanERP2025.Domain.Account.Entities

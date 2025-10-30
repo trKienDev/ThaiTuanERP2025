@@ -5,35 +5,77 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
 	public class Supplier : AuditableEntity
 	{
-		public string Name { get; private set; } = null!;
-		public string? TaxCode { get; private set; }
-		public bool IsActive { get; private set; } = true;
+		private readonly List<BankAccount> _bankAccounts = new();
 
-		public ICollection<BankAccount> BankAccounts { get; private set; }
-		
-		private Supplier() {
-			BankAccounts = new List<BankAccount>();
-		}
+		private Supplier() { } // EF
 
-		public Supplier(string name, string? taxCode) {
-			if (string.IsNullOrWhiteSpace(name)) 
-				throw new DomainException("Tên nhà cung cấp không được để trống");
-
+		public Supplier(string name, string? taxCode)
+		{
+			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
 			Id = Guid.NewGuid();
 			Name = name.Trim();
 			TaxCode = string.IsNullOrWhiteSpace(taxCode) ? null : taxCode.Trim();
 			IsActive = true;
-			BankAccounts = new List<BankAccount>();
+
+			AddDomainEvent(new SupplierCreatedEvent(this));
 		}
 
-		public void Activate() => IsActive = true;
-		public void Deactive() => IsActive = false;
-		public void Rename(string name) {
-			if (string.IsNullOrWhiteSpace(name))
-				throw new DomainException("Tên nhà cung cấp không được để trống");
-				Name = name.Trim();
-		}
-		public void SetTaxCode(string? taxCode) => TaxCode = string.IsNullOrWhiteSpace(taxCode) ? null : taxCode.Trim();
+		public string Name { get; private set; } = null!;
+		public string? TaxCode { get; private set; }
+		public bool IsActive { get; private set; } = true;
 
+		public IReadOnlyCollection<BankAccount> BankAccounts => _bankAccounts.AsReadOnly();
+
+		// ===== Domain behaviors =====
+		public void Rename(string name)
+		{
+			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
+			if (Name.Equals(name.Trim(), StringComparison.OrdinalIgnoreCase)) return;
+
+			Name = name.Trim();
+			AddDomainEvent(new SupplierRenamedEvent(this));
+		}
+
+		public void SetTaxCode(string? taxCode)
+		{
+			TaxCode = string.IsNullOrWhiteSpace(taxCode) ? null : taxCode.Trim();
+			AddDomainEvent(new SupplierUpdatedEvent(this));
+		}
+
+		public void Activate()
+		{
+			if (!IsActive)
+			{
+				IsActive = true;
+				AddDomainEvent(new SupplierActivatedEvent(this));
+			}
+		}
+
+		public void Deactivate()
+		{
+			if (IsActive)
+			{
+				IsActive = false;
+				AddDomainEvent(new SupplierDeactivatedEvent(this));
+			}
+		}
+
+		public void AddBankAccount(BankAccount account)
+		{
+			if (account == null)
+				throw new DomainException("Tài khoản ngân hàng không hợp lệ.");
+
+			if (_bankAccounts.Any(b => b.AccountNumber == account.AccountNumber))
+				throw new DomainException("Tài khoản ngân hàng đã tồn tại.");
+
+			_bankAccounts.Add(account);
+		}
+
+		public void RemoveBankAccount(Guid bankAccountId)
+		{
+			var existing = _bankAccounts.FirstOrDefault(b => b.Id == bankAccountId);
+			if (existing != null)
+				_bankAccounts.Remove(existing);
+		}
 	}
 }

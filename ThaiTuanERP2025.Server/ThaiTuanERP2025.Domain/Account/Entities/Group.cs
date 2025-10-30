@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
+using ThaiTuanERP2025.Domain.Account.Events.Groups;
 using ThaiTuanERP2025.Domain.Common;
 
 namespace ThaiTuanERP2025.Domain.Account.Entities

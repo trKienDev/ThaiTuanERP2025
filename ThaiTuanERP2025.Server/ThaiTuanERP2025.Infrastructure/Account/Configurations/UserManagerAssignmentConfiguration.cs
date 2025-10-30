@@ -9,29 +9,25 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 		public void Configure(EntityTypeBuilder<UserManagerAssignment> builder)
 		{
 			builder.ToTable("UserManagerAssignments", "Account");
-			builder.HasKey(x => new { x.UserId, x.ManagerId });
 
-			// FK: UserId -> User
+			builder.HasKey(x => x.Id);
+
+			builder.Property(x => x.IsPrimary).IsRequired();
+			builder.Property(x => x.IsActive).HasDefaultValue(true);
+			builder.Property(x => x.AssignedAt).IsRequired();
+
+			// Relations
 			builder.HasOne(x => x.User)
-				.WithMany(u => u.DirectReportsAssignments)
-				.HasForeignKey(x => x.UserId)
-				.OnDelete(DeleteBehavior.Cascade);
-
-			// FK: ManagerId -> User
-			builder.HasOne(x => x.Manager)
 				.WithMany(u => u.ManagerAssignments)
+				.HasForeignKey(x => x.UserId)
+				.OnDelete(DeleteBehavior.Restrict);
+
+			builder.HasOne(x => x.Manager)
+				.WithMany(u => u.DirectReportsAssignments)
 				.HasForeignKey(x => x.ManagerId)
 				.OnDelete(DeleteBehavior.Restrict);
 
-			builder.HasIndex(x => new { x.UserId, x.IsPrimary })
-				.IsUnique()
-				.HasFilter("[IsPrimary] = 1");
-
-			// Không tự quản lý chính mình
-			builder.ToTable("UserManagerAssignments", "Core", t =>
-			{
-				t.HasCheckConstraint("CK_UserManagerAssignments_NoSelfManagement", "[UserId] <> [ManagerId]");
-			});
+			builder.HasIndex(x => new { x.UserId, x.ManagerId }).IsUnique();
 		}
 	}
 }

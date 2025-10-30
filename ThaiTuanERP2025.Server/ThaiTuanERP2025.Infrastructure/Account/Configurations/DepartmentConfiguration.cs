@@ -9,25 +9,25 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 		public void Configure(EntityTypeBuilder<Department> builder)
 		{
 			builder.ToTable("Departments", "Account");
-			builder.HasKey(x => x.Id);
 
-			builder.Property(x => x.Code).IsRequired().HasMaxLength(64);
-			builder.Property(x => x.Name).IsRequired().HasMaxLength(200);
-			builder.Property(x => x.Region).HasConversion<int>().IsRequired();
-			builder.Property(x => x.Level).IsRequired();
+			builder.HasKey(d => d.Id);
 
-			builder.HasOne(x => x.Parent)
-				.WithMany(x => x.Children)
-				.HasForeignKey(x => x.ParentId)
+			builder.Property(d => d.Name).IsRequired().HasMaxLength(150);
+			builder.Property(d => d.Code).IsRequired().HasMaxLength(50);
+			builder.Property(d => d.Level).HasDefaultValue(0);
+			builder.Property(d => d.IsActive).HasDefaultValue(true);
+
+			// Self reference (Parent)
+			builder.HasOne(d => d.Parent)
+				.WithMany(p => p.Children)
+				.HasForeignKey(d => d.ParentId)
 				.OnDelete(DeleteBehavior.Restrict);
 
-			builder.HasIndex(x => x.Code).IsUnique();
-			builder.HasIndex(x => x.Name);
-
-			builder.HasOne(d => d.ManagerUser)
-				.WithMany()                
+			// Manager (User)
+			builder.HasOne<User>()
+				.WithMany()
 				.HasForeignKey(d => d.ManagerUserId)
-				.OnDelete(DeleteBehavior.Restrict);
+				.OnDelete(DeleteBehavior.SetNull);
 
 			builder.HasOne(e => e.CreatedByUser)
 				.WithMany()
@@ -47,6 +47,16 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 			builder.HasIndex(e => e.CreatedByUserId);
 			builder.HasIndex(e => e.ModifiedByUserId);
 			builder.HasIndex(e => e.DeletedByUserId);
+
+			// Private collections
+			builder.Metadata.FindNavigation(nameof(Department.Users))!
+				.SetPropertyAccessMode(PropertyAccessMode.Field);
+
+			builder.Metadata.FindNavigation(nameof(Department.Children))!
+				.SetPropertyAccessMode(PropertyAccessMode.Field);
+
+			// Indexes
+			builder.HasIndex(d => d.Code).IsUnique();
 		}
 	}
 }

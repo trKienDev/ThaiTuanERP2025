@@ -1,5 +1,4 @@
-﻿using ThaiTuanERP2025.Domain.Account.Enums;
-using ThaiTuanERP2025.Domain.Account.Events.Departments;
+﻿using ThaiTuanERP2025.Domain.Account.Events.Departments;
 using ThaiTuanERP2025.Domain.Common;
 
 namespace ThaiTuanERP2025.Domain.Account.Entities
@@ -10,7 +9,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		private readonly List<Department> _children = new();
 
 		private Department() { }
-		public Department(string name, string code, Region region, Guid? managerUserId = null)
+		public Department(string name, string code, Guid? managerUserId = null)
 		{
 			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
 			Guard.AgainstNullOrWhiteSpace(code, nameof(code));
@@ -18,7 +17,6 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			Id = Guid.NewGuid();
 			Name = name.Trim();
 			Code = code.ToUpperInvariant();
-			Region = region;
 			ManagerUserId = managerUserId;
 			IsActive = true;
 
@@ -29,10 +27,13 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public string Code { get; private set; } = string.Empty;
 		public bool IsActive { get; private set; }
 		public int Level { get; private set; }
-		public Region Region { get; private set; }
 		public Guid? ManagerUserId { get; private set; }
 		public Guid? ParentId { get; private set; }
 		public Department? Parent { get; private set; }
+
+		public User CreatedByUser { get; set; } = null!;
+		public User? ModifiedByUser { get; set; }
+		public User? DeletedByUser { get; set; }
 
 		public IReadOnlyCollection<User> Users => _users.AsReadOnly();
 		public IReadOnlyCollection<Department> Children => _children.AsReadOnly();

@@ -1,4 +1,6 @@
-﻿using ThaiTuanERP2025.Domain.Common;
+﻿using System.Text.RegularExpressions;
+using ThaiTuanERP2025.Domain.Account.Events.Permissions;
+using ThaiTuanERP2025.Domain.Common;
 
 namespace ThaiTuanERP2025.Domain.Account.Entities
 {
@@ -29,6 +31,10 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public string Code { get; private set; } = string.Empty;
 		public string Description { get; private set; } = string.Empty;
 		public bool IsActive { get; private set; } = true;
+
+		public User CreatedByUser { get; set; } = null!;
+		public User? ModifiedByUser { get; set; }
+		public User? DeletedByUser { get; set; }
 
 		public IReadOnlyCollection<RolePermission> RolePermissions => _rolePermissions.AsReadOnly();
 
