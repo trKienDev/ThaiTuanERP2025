@@ -1,25 +1,98 @@
-﻿using ThaiTuanERP2025.Domain.Account.Entities;
-using ThaiTuanERP2025.Domain.Common;
+﻿using ThaiTuanERP2025.Domain.Common;
 
 namespace ThaiTuanERP2025.Domain.Files.Entities
 {
+
 	public class StoredFile : AuditableEntity
 	{
-		// Vị trí trong MinIO
-		public string Bucket { get; set; } = null!;
-		public string ObjectKey { get; set; } = null!;  // vd: expense/invoices/yyyy/MM/{guid}.pdf
+		public string Bucket { get; private set; } = null!;
+		public string ObjectKey { get; private set; } = null!;
+		public string FileName { get; private set; } = null!;
+		public string ContentType { get; private set; } = null!;
+		public long Size { get; private set; }
+		public string? Hash { get; private set; }
 
-		// Thông tin File
-		public string FileName { get; set; } = null!;
-		public string ContentType { get; set; } = null!;
-		public long Size { get; set; }	
-		public string? Hash { get; set; } // tuỳ chọn: sha256 để chống trùng
+		public string Module { get; private set; } = null!;
+		public string Entity { get; private set; } = null!;
+		public string? EntityId { get; private set; }
 
-		// Thông tin File
-		public string Module { get; set; } = null!; // vd: "expense"
-		public string Entity { get; set; } = null!; // vd: "invoice"
-		public string? EntityId { get; set; } // id chứng từ
+		public bool IsPublic { get; private set; }
 
-		public bool IsPublic { get; set; } = false;
+		private StoredFile() { } // EF only
+
+		public StoredFile(
+		    string bucket,
+		    string objectKey,
+		    string fileName,
+		    string contentType,
+		    long size,
+		    string module,
+		    string entity,
+		    string? entityId = null,
+		    string? hash = null,
+		    bool isPublic = false)
+		{
+			Guard.AgainstNullOrWhiteSpace(bucket, nameof(bucket));
+			Guard.AgainstNullOrWhiteSpace(objectKey, nameof(objectKey));
+			Guard.AgainstNullOrWhiteSpace(fileName, nameof(fileName));
+			Guard.AgainstNullOrWhiteSpace(contentType, nameof(contentType));
+			Guard.AgainstNegative(size, nameof(size));
+			Guard.AgainstNullOrWhiteSpace(module, nameof(module));
+			Guard.AgainstNullOrWhiteSpace(entity, nameof(entity));
+
+			Id = Guid.NewGuid();
+
+			Bucket = bucket.Trim();
+			ObjectKey = objectKey.Trim();
+			FileName = fileName.Trim();
+			ContentType = contentType.Trim();
+			Size = size;
+			Module = module.Trim();
+			Entity = entity.Trim();
+			EntityId = entityId;
+			Hash = hash;
+			IsPublic = isPublic;
+
+			AddDomainEvent(new StoredFileCreatedEvent(this));
+		}
+
+		#region Domain Behaviors
+
+		public void MakePublic()
+		{
+			if (IsPublic) return;
+			IsPublic = true;
+			AddDomainEvent(new StoredFileMadePublicEvent(this));
+		}
+
+		public void MakePrivate()
+		{
+			if (!IsPublic) return;
+			IsPublic = false;
+			AddDomainEvent(new StoredFileMadePrivateEvent(this));
+		}
+
+		public void ChangeEntityReference(string module, string entity, string? entityId)
+		{
+			Guard.AgainstNullOrWhiteSpace(module, nameof(module));
+			Guard.AgainstNullOrWhiteSpace(entity, nameof(entity));
+
+			Module = module;
+			Entity = entity;
+			EntityId = entityId;
+			AddDomainEvent(new StoredFileEntityReferenceChangedEvent(this));
+		}
+
+		public void UpdateMetadata(string newFileName, string newContentType)
+		{
+			Guard.AgainstNullOrWhiteSpace(newFileName, nameof(newFileName));
+			Guard.AgainstNullOrWhiteSpace(newContentType, nameof(newContentType));
+
+			FileName = newFileName.Trim();
+			ContentType = newContentType.Trim();
+			AddDomainEvent(new StoredFileMetadataUpdatedEvent(this));
+		}
+
+		#endregion
 	}
 }

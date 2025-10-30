@@ -6,7 +6,7 @@ using ThaiTuanERP2025.Application.Account.Commands.Departments.AddDepartment;
 using ThaiTuanERP2025.Application.Account.Commands.Departments.DeleteDepartment;
 using ThaiTuanERP2025.Application.Account.Commands.Departments.SetDepartmentManager;
 using ThaiTuanERP2025.Application.Account.Commands.Departments.UpdateDepartment;
-using ThaiTuanERP2025.Application.Account.Dtos;
+using ThaiTuanERP2025.Application.Account.Departments;
 using ThaiTuanERP2025.Application.Account.Queries.Departments.GetAllDepartments;
 
 namespace ThaiTuanERP2025.Api.Controllers.Account

@@ -1,5 +1,5 @@
-﻿using ThaiTuanERP2025.Application.Expense.Repositories;
-using ThaiTuanERP2025.Domain.Account.Repositories;
+﻿using ThaiTuanERP2025.Domain.Account.Repositories;
+using ThaiTuanERP2025.Domain.Expense.Repositories;
 using ThaiTuanERP2025.Domain.Files.Repositories;
 using ThaiTuanERP2025.Domain.Finance.Repositories;
 using ThaiTuanERP2025.Domain.Followers.Repositories;
@@ -26,8 +26,6 @@ namespace ThaiTuanERP2025.Application.Common.Interfaces
 
 		ILedgerAccountRepository LedgerAccounts { get; }
 		ILedgerAccountTypeRepository LedgerAccountTypes { get; }
-		ITaxRepository Taxes { get; }
-		IWithholdingTaxTypeRepository WithholdingTaxTypes { get; }
 		ICashoutCodeRepository CashoutCodes { get; }
 		ICashoutGroupRepository CashoutGroups { get; }
 

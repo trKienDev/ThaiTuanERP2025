@@ -7,86 +7,138 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 {
 	public class Group : AuditableEntity
 	{
-		public Guid AdminId { get; private set; }
+		private readonly List<UserGroup> _userGroups = new();
+		private static readonly Regex SlugRegex = new(@"^[a-z0-9._-]+$", RegexOptions.Compiled);
+
+		private Group() { } // EF only
+
+		public Group(string name, string slug, string description)
+		{
+			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
+			Guard.AgainstNullOrWhiteSpace(slug, nameof(slug));
+
+			Id = Guid.NewGuid();
+			Name = name.Trim();
+			Slug = NormalizeSlug(slug ?? Slugify(Name));
+			Description = description?.Trim() ?? string.Empty;
+			IsActive = true;
+
+			AddDomainEvent(new GroupCreatedEvent(this));
+		}
+
 		public string Name { get; private set; } = string.Empty;
 		public string Slug { get; private set; } = string.Empty;
-		private static readonly Regex SlugRegex = new(@"^[a-z0-9._-]+$", RegexOptions.Compiled);
 		public string Description { get; private set; } = string.Empty;
+		public bool IsActive { get; private set; } = true;
+		public Guid AdminId { get; private set; }
+
+		public IReadOnlyCollection<UserGroup> UserGroups => _userGroups.AsReadOnly();
 
 		public User CreatedByUser { get; set; } = null!;
 		public User? ModifiedByUser { get; set; }
 		public User? DeletedByUser { get; set; }
 
-		public ICollection<UserGroup> UserGroups { get; private set; }
-
-		private Group()
-		{
-			UserGroups = new List<UserGroup>();
-		} // EF
-		public Group(string name, string slug, string description)
-		{
-			if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException("Tên group  không được để trống");
-			Id = Guid.NewGuid();
-			Name = name.Trim();
-			Slug = NormalizeSlug(slug ?? Slugify(Name));
-			Description = description?.Trim() ?? string.Empty;
-			UserGroups = new List<UserGroup>();
-		}
-
+		#region Domain Behaviors
 		public void Rename(string newName)
 		{
-			if (string.IsNullOrWhiteSpace(newName)) throw new ArgumentNullException("Tên mới không hợp lệ");
+			Guard.AgainstNullOrWhiteSpace(newName, nameof(newName));
 			Name = newName.Trim();
+			AddDomainEvent(new GroupRenamedEvent(this));
 		}
 
 		public void UpdateDescription(string newDescription)
 		{
 			Description = newDescription?.Trim() ?? string.Empty;
+			AddDomainEvent(new GroupDescriptionUpdatedEvent(this));
 		}
 
 		public void SetAdmin(Guid userId)
 		{
 			if (userId == Guid.Empty)
-			{
-				throw new ArgumentNullException("UserId không hợp lệ");
-			}
+				throw new ArgumentException("UserId không hợp lệ", nameof(userId));
+
+			if (AdminId == userId)
+				return;
 
 			AdminId = userId;
+			AddDomainEvent(new GroupAdminChangedEvent(this, userId));
 		}
 
 		public void SetSlug(string newSlug)
 		{
-			Slug = NormalizeSlug(newSlug);
+			var normalized = NormalizeSlug(newSlug);
+			if (normalized == Slug)
+				return;
+
+			Slug = normalized;
+			AddDomainEvent(new GroupSlugChangedEvent(this));
 		}
 
+		public void AddUser(Guid userId)
+		{
+			if (_userGroups.Any(ug => ug.UserId == userId))
+				return;
+
+			_userGroups.Add(new UserGroup(userId, Id));
+			AddDomainEvent(new UserAddedToGroupEvent(this, userId));
+		}
+
+		public void RemoveUser(Guid userId)
+		{
+			var existing = _userGroups.FirstOrDefault(ug => ug.UserId == userId);
+			if (existing == null)
+				return;
+
+			_userGroups.Remove(existing);
+			AddDomainEvent(new UserRemovedFromGroupEvent(this, userId));
+		}
+
+		public void Activate()
+		{
+			if (IsActive) return;
+			IsActive = true;
+			AddDomainEvent(new GroupActivatedEvent(this));
+		}
+
+		public void Deactivate()
+		{
+			if (!IsActive) return;
+			IsActive = false;
+			AddDomainEvent(new GroupDeactivatedEvent(this));
+		}
+		#endregion
+
+		#region Helpers
 		private static string Slugify(string input)
 		{
 			var s = input.Trim().ToLowerInvariant();
 
 			// remove diacritics
 			var norm = s.Normalize(NormalizationForm.FormD);
-			var sb = new System.Text.StringBuilder();
+			var sb = new StringBuilder();
 			foreach (var c in norm)
 			{
-				var uc = CharUnicodeInfo.GetUnicodeCategory(c);
-				if (uc != UnicodeCategory.NonSpacingMark) sb.Append(c);
+				if (CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
+					sb.Append(c);
 			}
-			s = sb.ToString().Normalize(NormalizationForm.FormC);
 
-			// non [a-z0-9] -> '-'
+			s = sb.ToString().Normalize(NormalizationForm.FormC);
 			s = Regex.Replace(s, @"[^a-z0-9]+", "-");
-			// collapse '-'
 			s = Regex.Replace(s, @"-+", "-").Trim('-');
-			if (string.IsNullOrWhiteSpace(s)) s = "group";
-			return s;
+			return string.IsNullOrWhiteSpace(s) ? "group" : s;
 		}
 
 		private static string NormalizeSlug(string slug)
 		{
-			if (string.IsNullOrWhiteSpace(slug)) throw new ArgumentException("Slug không hợp lệ");
+			if (string.IsNullOrWhiteSpace(slug))
+				throw new ArgumentException("Slug không hợp lệ", nameof(slug));
+
 			var h = slug.Trim().ToLowerInvariant();
-			if (!SlugRegex.IsMatch(h)) throw new ArgumentException("Slug chỉ gồm a–z, 0–9, '.', '_', '-'");
+			if (!SlugRegex.IsMatch(h))
+				throw new ArgumentException("Slug chỉ gồm a–z, 0–9, '.', '_', '-'", nameof(slug));
+
 			return h;
 		}
+		#endregion
 	}
 }

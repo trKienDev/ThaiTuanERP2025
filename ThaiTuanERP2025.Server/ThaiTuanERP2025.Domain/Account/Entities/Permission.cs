@@ -4,26 +4,61 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 {
 	public class Permission : AuditableEntity
 	{
-		public string Name { get; private set; } = default!; // ví dụ: "Tạo chi phí"
-		public string Code { get; private set; } = default!; // ví dụ: "expense.create"
-		public string Description { get; private set; } = string.Empty;
+		private readonly List<RolePermission> _rolePermissions = new();
+		private static readonly Regex CodePattern = new(@"^[a-z0-9]+\.[a-z0-9.]+$", RegexOptions.Compiled);
 
-		public ICollection<RolePermission> RolePermissions { get; private set; } = new List<RolePermission>();
+		private Permission() { } // EF only
 
-		private Permission() { }
-
-		public Permission( string name, string code, string description = "")
+		public Permission(string name, string code, string description = "")
 		{
-			if(string.IsNullOrWhiteSpace(name))
-				throw new ArgumentException("Tên quyền không hợp lệ", nameof(name));
-
-			if (string.IsNullOrWhiteSpace(code))
-				throw new ArgumentException("Mã quyền không hợp lệ", nameof(code));
+			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
+			Guard.AgainstNullOrWhiteSpace(code, nameof(code));
+			if (!CodePattern.IsMatch(code))
+				throw new ArgumentException("Mã quyền phải có dạng 'module.action', ví dụ 'expense.create'");
 
 			Id = Guid.NewGuid();
-			Name = name;
-			Code = code;
-			Description = description;
+			Name = name.Trim();
+			Code = code.Trim().ToLowerInvariant();
+			Description = description?.Trim() ?? string.Empty;
+			IsActive = true;
+
+			AddDomainEvent(new PermissionCreatedEvent(this));
 		}
+
+		public string Name { get; private set; } = string.Empty;
+		public string Code { get; private set; } = string.Empty;
+		public string Description { get; private set; } = string.Empty;
+		public bool IsActive { get; private set; } = true;
+
+		public IReadOnlyCollection<RolePermission> RolePermissions => _rolePermissions.AsReadOnly();
+
+		#region Domain Behaviors
+		public void Rename(string newName)
+		{
+			Guard.AgainstNullOrWhiteSpace(newName, nameof(newName));
+			Name = newName.Trim();
+			AddDomainEvent(new PermissionRenamedEvent(this));
+		}
+
+		public void UpdateDescription(string newDescription)
+		{
+			Description = newDescription?.Trim() ?? string.Empty;
+			AddDomainEvent(new PermissionDescriptionUpdatedEvent(this));
+		}
+
+		public void Deactivate()
+		{
+			if (!IsActive) return;
+			IsActive = false;
+			AddDomainEvent(new PermissionDeactivatedEvent(this));
+		}
+
+		public void Activate()
+		{
+			if (IsActive) return;
+			IsActive = true;
+			AddDomainEvent(new PermissionActivatedEvent(this));
+		}
+		#endregion
 	}
 }

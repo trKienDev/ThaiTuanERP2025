@@ -17,7 +17,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		public Supplier(string name, string? taxCode) {
 			if (string.IsNullOrWhiteSpace(name)) 
-				throw new ValidationException("Supplier", "Tên nhà cung cấp không được để trống");
+				throw new DomainException("Tên nhà cung cấp không được để trống");
 
 			Id = Guid.NewGuid();
 			Name = name.Trim();
@@ -30,7 +30,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public void Deactive() => IsActive = false;
 		public void Rename(string name) {
 			if (string.IsNullOrWhiteSpace(name))
-				throw new ValidationException("Supplier", "Tên nhà cung cấp không được để trống");
+				throw new DomainException("Tên nhà cung cấp không được để trống");
 				Name = name.Trim();
 		}
 		public void SetTaxCode(string? taxCode) => TaxCode = string.IsNullOrWhiteSpace(taxCode) ? null : taxCode.Trim();

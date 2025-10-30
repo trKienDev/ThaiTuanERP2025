@@ -28,8 +28,14 @@ namespace ThaiTuanERP2025.Domain.Common
 				throw new DomainException($"{paramName} không được là Guid rỗng");
 		}
 
-		// === Numeric Checks ===
+		// === Default Value Check ===
+		public static void AgainstDefault<T>(T value, string paramName)
+		{
+			if (EqualityComparer<T>.Default.Equals(value, default!))
+				throw new DomainException($"{paramName} không được có giá trị mặc định");
+		}
 
+		// === Numeric Checks ===
 		public static void AgainstNegative(decimal value, string paramName)
 		{
 			if (value < 0)

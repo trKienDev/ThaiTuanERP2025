@@ -15,7 +15,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Account\Departments\Commands\" />
+    <Folder Include="Account\Departments\Queries\" />
+    <Folder Include="Account\RBAC\" />
     <Folder Include="Expense\Commands\BankAccounts\NewFolder\" />
+    <Folder Include="Finance\Budgets\Repositories\" />
     <Folder Include="Finance\Commands\BudgetPeriods\" />
     <Folder Include="Finance\Requests\" />
     <Folder Include="Finance\Validators\" />

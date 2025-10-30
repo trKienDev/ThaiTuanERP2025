@@ -1,19 +1,48 @@
 ﻿using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Files.Entities;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
-	public class InvoiceFile 
+	public class InvoiceFile : AuditableEntity
 	{
-		public Guid Id { get; set; } = Guid.NewGuid();
-		public Guid InvoiceId { get; set; }
-		public Guid FileId { get; set; }
+		private InvoiceFile() { } // EF only
 
-		public bool IsMain { get; set; } = false;
-		public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+		public InvoiceFile(Guid invoiceId, Guid fileId, bool isMain = false)
+		{
+			Guard.AgainstDefault(invoiceId, nameof(invoiceId));
+			Guard.AgainstDefault(fileId, nameof(fileId));
 
-		// Navigation
-		public Invoice Invoice { get; set; } = default!;
-		public StoredFile File { get; set; } = default!;
+			Id = Guid.NewGuid();
+			InvoiceId = invoiceId;
+			FileId = fileId;
+			IsMain = isMain;
+			CreatedAt = DateTime.UtcNow;
+		}
+
+		#region Properties
+		public Guid InvoiceId { get; private set; }
+		public Guid FileId { get; private set; }
+		public bool IsMain { get; private set; }
+		public DateTime CreatedAt { get; private set; }
+
+		public Invoice Invoice { get; private set; } = default!;
+		public StoredFile File { get; private set; } = default!;
+		#endregion
+
+		#region Domain Behaviors
+		public void MarkAsMain()
+		{
+			if (IsMain) return;
+
+			IsMain = true;
+			AddDomainEvent(new InvoiceFileMarkedAsMainEvent(this));
+		}
+
+		public void UnmarkMain()
+		{
+			IsMain = false;
+		}
+		#endregion
 	}
 }

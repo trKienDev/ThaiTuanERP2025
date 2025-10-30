@@ -9,7 +9,7 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 	{
 		public void Configure(EntityTypeBuilder<User> builder)
 		{
-			builder.ToTable("Users", "Core");
+			builder.ToTable("Users", "Account");
 			builder.HasKey(x => x.Id);
 
 			builder.Property(u => u.FullName).IsRequired().HasMaxLength(255);

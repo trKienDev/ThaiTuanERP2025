@@ -8,7 +8,7 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 	{
 		public void Configure(EntityTypeBuilder<Department> builder)
 		{
-			builder.ToTable("Departments", "Core");
+			builder.ToTable("Departments", "Account");
 			builder.HasKey(x => x.Id);
 
 			builder.Property(x => x.Code).IsRequired().HasMaxLength(64);

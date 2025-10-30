@@ -1,4 +1,5 @@
-﻿using ThaiTuanERP2025.Application.Account.RBAC.Roles;
+﻿using ThaiTuanERP2025.Application.Account.Departments;
+using ThaiTuanERP2025.Application.Account.Roles;
 
 namespace ThaiTuanERP2025.Application.Account.Dtos
 {

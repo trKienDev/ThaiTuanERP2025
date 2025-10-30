@@ -1,23 +1,37 @@
 ﻿using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Expense.Events.ExpensePaymentComments;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
 	public class ExpensePaymentCommentAttachment : AuditableEntity
 	{
-		private ExpensePaymentCommentAttachment() { }
+		private ExpensePaymentCommentAttachment() { } // EF Core
 
-		public ExpensePaymentCommentAttachment(Guid commentId, string fileName, string fileUrl, long fileSize, string? mimeType, Guid? fileId, Guid createdByUserId)
+		public ExpensePaymentCommentAttachment(
+		    Guid commentId,
+		    string fileName,
+		    string fileUrl,
+		    long fileSize,
+		    string? mimeType,
+		    Guid? fileId,
+		    Guid createdByUserId)
 		{
+			Guard.AgainstDefault(commentId, nameof(commentId));
+			Guard.AgainstNullOrWhiteSpace(fileName, nameof(fileName));
+			Guard.AgainstNullOrWhiteSpace(fileUrl, nameof(fileUrl));
+			Guard.AgainstZeroOrNegative(fileSize, nameof(fileSize));
+			Guard.AgainstDefault(createdByUserId, nameof(createdByUserId));
+
 			Id = Guid.NewGuid();
 			CommentId = commentId;
-			FileName = fileName;
-			FileUrl = fileUrl;
+			FileName = fileName.Trim();
+			FileUrl = fileUrl.Trim();
 			FileSize = fileSize;
-			MimeType = mimeType ?? "application/octet-stream";
+			MimeType = string.IsNullOrWhiteSpace(mimeType) ? "application/octet-stream" : mimeType.Trim();
 			FileId = fileId;
-			CreatedByUserId = createdByUserId;
-			CreatedDate = DateTime.UtcNow;
+
+			AddDomainEvent(new ExpensePaymentCommentAttachmentAddedEvent(this));
 		}
 
 		public Guid CommentId { get; private set; }

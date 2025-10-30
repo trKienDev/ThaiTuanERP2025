@@ -1,53 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Expense.Enums;
+using ThaiTuanERP2025.Domain.Expense.Events.ApprovalStepTemplates;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
 	public class ApprovalStepTemplate : AuditableEntity
 	{
-		// FK → Workflow Template
-		public Guid WorkflowTemplateId { get; private set; }
-		public ApprovalWorkflowTemplate WorkflowTemplate { get; private set; } = null!;
-
-		[MaxLength(200)]
-		public string Name { get; private set; } = string.Empty;
-
-		/// <summary>Thứ tự hiển thị/thực thi (unique trong một template)</summary>
-		public int Order { get; private set; }
-
-		public FlowType FlowType { get; private set; } // single / one-of-n
-		public int SlaHours { get; private set; }
-
-		public ApproverMode ApproverMode { get; private set; } // standard / condition
-
-		/// <summary>
-		/// JSON array of GUIDs (["...","..."]) khi ApproverMode=Standard.
-		/// Dùng string để map NVARCHAR(MAX). Validate JSON qua CHECK constraint.
-		/// </summary>
-		public string? FixedApproverIdsJson { get; private set; }
-
-		/// <summary>
-		/// Khóa resolver (vd: 'creator-manager', 'creator-department-manager', …) khi ApproverMode=Condition.
-		/// </summary>
-		[MaxLength(100)]
-		public string? ResolverKey { get; private set; }
-
-		/// <summary>
-		/// Tham số hóa resolver (JSON) — tùy chọn.
-		/// </summary>
-		public string? ResolverParamsJson { get; private set; }
-
-		/// <summary>
-		/// Cho phép người lập override người duyệt (khi condition) trong phạm vi candidates hợp lệ.
-		/// </summary>
-		public bool AllowOverride { get; private set; }
-
 		private ApprovalStepTemplate() { }
 
 		public ApprovalStepTemplate(
-			Guid workflowTemplateId, 
-			string name, 
+			Guid workflowTemplateId,
+			string name,
 			int order,
 			FlowType flowType,
 			int slaHours,
@@ -57,18 +21,68 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			string? resolverParamsJson = null,
 			bool allowOverride = false
 		) {
+			Guard.AgainstDefault(workflowTemplateId, nameof(workflowTemplateId));
+			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
+			Guard.AgainstInvalidEnumValue(flowType, nameof(flowType));
+			Guard.AgainstInvalidEnumValue(approverMode, nameof(approverMode));
+			Guard.AgainstNegative(slaHours, nameof(slaHours));
+
+			Id = Guid.NewGuid();
 			WorkflowTemplateId = workflowTemplateId;
-			Name = string.IsNullOrWhiteSpace(name) ? throw new ArgumentException("Name cannot be null or empty.", nameof(name)) : name;
+			Name = name.Trim();
 			Order = order;
 			FlowType = flowType;
-			SlaHours = slaHours >= 0 ? slaHours : throw new ArgumentOutOfRangeException(nameof(slaHours), "SlaHours cannot be negative.");
+			SlaHours = slaHours;
 			ApproverMode = approverMode;
 			FixedApproverIdsJson = fixedApproverIdsJson;
 			ResolverKey = resolverKey;
 			ResolverParamsJson = resolverParamsJson;
 			AllowOverride = allowOverride;
+
+			AddDomainEvent(new ApprovalStepTemplateCreatedEvent(this));
 		}
 
-		public void MarkDeleted() => IsDeleted = true;
+		public Guid WorkflowTemplateId { get; private set; }
+		public ApprovalWorkflowTemplate WorkflowTemplate { get; private set; } = null!;
+		public string Name { get; private set; } = string.Empty;
+		public int Order { get; private set; }
+		public FlowType FlowType { get; private set; }
+		public int SlaHours { get; private set; }
+		public ApproverMode ApproverMode { get; private set; }
+		public string? FixedApproverIdsJson { get; private set; }
+		public string? ResolverKey { get; private set; }
+		public string? ResolverParamsJson { get; private set; }
+		public bool AllowOverride { get; private set; }
+
+		#region Domain Behaviors
+		public void Rename(string newName)
+		{
+			Guard.AgainstNullOrWhiteSpace(newName, nameof(newName));
+			Name = newName.Trim();
+			AddDomainEvent(new ApprovalStepTemplateRenamedEvent(this));
+		}
+
+		public void ChangeApproverMode(ApproverMode newMode, string? fixedApproversJson = null, string? resolverKey = null)
+		{
+			Guard.AgainstInvalidEnumValue(newMode, nameof(newMode));
+			ApproverMode = newMode;
+			FixedApproverIdsJson = fixedApproversJson;
+			ResolverKey = resolverKey;
+			AddDomainEvent(new ApprovalStepTemplateApproverModeChangedEvent(this));
+		}
+
+		public void UpdateSla(int newSlaHours)
+		{
+			Guard.AgainstNegative(newSlaHours, nameof(newSlaHours));
+			SlaHours = newSlaHours;
+			AddDomainEvent(new ApprovalStepTemplateSlaUpdatedEvent(this));
+		}
+
+		public void ToggleOverride(bool allow)
+		{
+			AllowOverride = allow;
+			AddDomainEvent(new ApprovalStepTemplateOverrideSettingChangedEvent(this));
+		}
+		#endregion
 	}
 }

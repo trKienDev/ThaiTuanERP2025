@@ -1,6 +1,5 @@
-﻿using ThaiTuanERP2025.Application.Account.Dtos;
-using ThaiTuanERP2025.Application.Common.Interfaces;
-using ThaiTuanERP2025.Domain.Account.Entities;
+﻿using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Domain.Common.Repositories;
 
 namespace ThaiTuanERP2025.Domain.Account.Repositories
 {
@@ -15,6 +14,5 @@ namespace ThaiTuanERP2025.Domain.Account.Repositories
 		Task AddAssignmentsAsync(IEnumerable<UserManagerAssignment> assignments, CancellationToken cancellationToken = default);
 		Task<List<User>> ListByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken);
 		Task<User?> GetWithRolesAndPermissionsAsync(string employeeCode, CancellationToken cancellationToken);
-		Task<List<UserDto>> ListUserDtosWithAvatarAsync(string? keyword, string? role, Guid? departmentId, CancellationToken cancellationToken = default);
 	}
 }

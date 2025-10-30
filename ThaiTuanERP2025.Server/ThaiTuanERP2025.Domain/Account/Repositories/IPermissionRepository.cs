@@ -1,5 +1,5 @@
-﻿using ThaiTuanERP2025.Application.Common.Interfaces;
-using ThaiTuanERP2025.Domain.Account.Entities;
+﻿using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Domain.Common.Repositories;
 
 namespace ThaiTuanERP2025.Domain.Account.Repositories
 {

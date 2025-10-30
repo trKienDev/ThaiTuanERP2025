@@ -1,27 +1,48 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using ThaiTuanERP2025.Domain.Common;
-using ThaiTuanERP2025.Domain.Followers.Enums;
+﻿using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Exceptions;
+using ThaiTuanERP2025.Domain.Followers.Events;
+using ThaiTuanERP2025.Domain.Followers.ValueObjects;
 
 namespace ThaiTuanERP2025.Domain.Followers.Entities
 {
 	public class Follower : AuditableEntity
 	{
-		private Follower() { }
+		public SubjectRef Subject { get; private set; }   // ✅ value object
+		public Guid UserId { get; private set; }
+		public bool IsActive { get; private set; } = true;
 
-		public Follower(SubjectType subjectType, Guid subjectId, Guid userId)
+		private Follower() { } // EF only
+
+		public Follower(SubjectRef subject, Guid userId)
 		{
+			Guard.AgainstDefault(userId, nameof(userId));
+
 			Id = Guid.NewGuid();
-			SubjectType = subjectType;
-			SubjectId = subjectId;
+			Subject = subject;
 			UserId = userId;
+			IsActive = true;
+
+			AddDomainEvent(new FollowerCreatedEvent(this));
 		}
 
-		public SubjectType SubjectType { get; private set; } = default!;
-		public Guid SubjectId { get; private set; }
-		public Guid UserId { get; private set; }
+		#region Domain Behaviors
+		public void Unfollow()
+		{
+			if (!IsActive)
+				throw new DomainException("Follower đã bị huỷ trước đó.");
 
-		// (tuỳ chọn) tiện đọc code, không map
-		[NotMapped]
-		public SubjectRef Subject => new(SubjectType, SubjectId);
+			IsActive = false;
+			AddDomainEvent(new FollowerRemovedEvent(this));
+		}
+
+		public void Reactivate()
+		{
+			if (IsActive)
+				return;
+
+			IsActive = true;
+			AddDomainEvent(new FollowerReactivatedEvent(this));
+		}
+		#endregion
 	}
 }

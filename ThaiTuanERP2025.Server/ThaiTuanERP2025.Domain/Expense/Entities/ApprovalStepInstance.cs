@@ -4,22 +4,53 @@ using ThaiTuanERP2025.Domain.Expense.Enums;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
+	using ThaiTuanERP2025.Domain.Approvals.Events;
+	using ThaiTuanERP2025.Domain.Common;
+	using ThaiTuanERP2025.Domain.Exceptions;
+	using ThaiTuanERP2025.Domain.Expense.Events.ApprovalStepInstances;
+
 	public class ApprovalStepInstance : AuditableEntity
 	{
+		private ApprovalStepInstance() { }
+
+		public ApprovalStepInstance(
+			Guid workflowInstanceId, Guid? templateStepId, string name, int order,
+			FlowType flowType, int slaHours, ApproverMode approverMode,
+			string? candidatesJson, Guid? defaultApproverId, Guid? selectedApproverId,
+			StepStatus status = StepStatus.Pending)
+		{
+			Guard.AgainstDefault(workflowInstanceId, nameof(workflowInstanceId));
+			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
+			Guard.AgainstInvalidEnumValue(flowType, nameof(flowType));
+			Guard.AgainstInvalidEnumValue(approverMode, nameof(approverMode));
+
+			Id = Guid.NewGuid();
+			WorkflowInstanceId = workflowInstanceId;
+			TemplateStepId = templateStepId;
+			Name = name.Trim();
+			Order = order;
+			FlowType = flowType;
+			SlaHours = slaHours;
+			ApproverMode = approverMode;
+			ResolvedApproverCandidatesJson = candidatesJson;
+			DefaultApproverId = defaultApproverId;
+			SelectedApproverId = selectedApproverId;
+			Status = status;
+
+			AddDomainEvent(new ApprovalStepCreatedEvent(this));
+		}
+
 		public Guid WorkflowInstanceId { get; private set; }
 		public ApprovalWorkflowInstance WorkflowInstance { get; private set; } = null!;
-
 		public Guid? TemplateStepId { get; private set; }
 
 		public string Name { get; private set; } = string.Empty;
 		public int Order { get; private set; }
-
 		public FlowType FlowType { get; private set; }
 		public int SlaHours { get; private set; }
 		public ApproverMode ApproverMode { get; private set; }
 
-		// JSON
-		public string? ResolvedApproverCandidatesJson { get; private set; } // ["guid","guid"]
+		public string? ResolvedApproverCandidatesJson { get; private set; }
 		public Guid? DefaultApproverId { get; private set; }
 		public Guid? SelectedApproverId { get; private set; }
 
@@ -30,99 +61,71 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		public DateTime? ApprovedAt { get; private set; }
 		public Guid? ApprovedBy { get; private set; }
-		public User? ApprovedByUser { get; set; }
+		public User? ApprovedByUser { get; private set; }
 
 		public DateTime? RejectedAt { get; private set; }
 		public Guid? RejectedBy { get; private set; }
-		public User? RejectedByUser { get; set; }
+		public User? RejectedByUser { get; private set; }
 
 		public string? Comments { get; private set; }
-		public bool SlaBreached { get; private set; } = false;
+		public bool SlaBreached { get; private set; }
 
-		public string? HistoryJson { get; private set; } // escalation, notify, reassign…
+		public string? HistoryJson { get; private set; }
 
-		private ApprovalStepInstance() { }
-
-		public ApprovalStepInstance(
-			Guid workflowInstanceId, Guid? templateStepId, string name, int order,
-			FlowType flowType, int slaHours, ApproverMode approverMode,
-			string? candidatesJson, Guid? defaultApproverId, Guid? selectedApproverId,
-			StepStatus status = StepStatus.Pending
-		)
-		{
-			Id = Guid.NewGuid();
-			WorkflowInstanceId = workflowInstanceId;
-			TemplateStepId = templateStepId;
-			Name = name;
-			Order = order;
-			FlowType = flowType;
-			SlaHours = slaHours;
-			ApproverMode = approverMode;
-			ResolvedApproverCandidatesJson = candidatesJson;
-			DefaultApproverId = defaultApproverId;
-			SelectedApproverId = selectedApproverId;
-			Status = status;
-		}
-
+		#region Domain Behaviors
 		public void Activate(DateTime utcNow)
 		{
+			if (Status != StepStatus.Pending)
+				throw new DomainException("Chỉ bước đang chờ mới được kích hoạt.");
 			Status = StepStatus.Waiting;
 			StartedAt = utcNow;
 			DueAt = utcNow.AddHours(SlaHours);
+			AddDomainEvent(new ApprovalStepInstanceActivatedEvent(this));
 		}
-
-		public void MarkSlaBreached() => SlaBreached = true;
 
 		public void Approve(Guid by, DateTime utcNow)
 		{
+			if (Status != StepStatus.Waiting)
+				throw new DomainException("Không thể duyệt bước không ở trạng thái 'Waiting'.");
 			Status = StepStatus.Approved;
 			ApprovedBy = by;
 			ApprovedAt = utcNow;
+			AddDomainEvent(new ApprovalStepInstanceApprovedEvent(this));
 		}
 
 		public void Reject(Guid by, string? comment, DateTime utcNow)
 		{
+			if (Status != StepStatus.Waiting)
+				throw new DomainException("Không thể từ chối bước không ở trạng thái 'Waiting'.");
 			Status = StepStatus.Rejected;
 			RejectedBy = by;
 			RejectedAt = utcNow;
 			Comments = comment;
+			AddDomainEvent(new ApprovalStepInstanceRejectedEvent(this));
 		}
 
 		public void Skip(string? reason)
 		{
+			if (Status is StepStatus.Approved or StepStatus.Skipped)
+				return;
 			Status = StepStatus.Skipped;
 			Comments = reason;
+			AddDomainEvent(new ApprovalStepInstanceSkippedEvent(this));
 		}
 
-		public void SetHistory(string? historyJson) => HistoryJson = historyJson;
-
-		public void MarkApproved(string? reason = null)
+		public void MarkSlaBreached()
 		{
-			if (Status is StepStatus.Approved or StepStatus.Skipped)
-				return;
-			Status = StepStatus.Approved;
-			 ApprovedAt = DateTime.UtcNow;
-			AppendHistory("completed", reason);
-		}
-
-		public void MarkSkipped(string reason)
-		{
-			if (Status is StepStatus.Approved or StepStatus.Skipped)
-				return;
-			Status = StepStatus.Skipped;
-			ApprovedAt = DateTime.UtcNow;
-			AppendHistory("skipped", reason);
+			if (SlaBreached) return;
+			SlaBreached = true;
+			AddDomainEvent(new ApprovalStepInstanceSlaBreachedEvent(this));
 		}
 
 		public void SetResolvedApproverCandidates(IEnumerable<Guid> ids)
 		{
-			ResolvedApproverCandidatesJson = System.Text.Json.JsonSerializer.Serialize(ids?.Distinct() ?? Enumerable.Empty<Guid>());
+			ResolvedApproverCandidatesJson =
+				System.Text.Json.JsonSerializer.Serialize(ids?.Distinct() ?? Enumerable.Empty<Guid>());
 		}
-
-		private void AppendHistory(string action, string? note)
-		{
-			// tuỳ bạn đang lưu HistoryJson thế nào, ở đây chỉ gợi ý
-			// HistoryJsonAdd(new { at = DateTime.Now, action, note });
-		}
+		#endregion
 	}
+
 }

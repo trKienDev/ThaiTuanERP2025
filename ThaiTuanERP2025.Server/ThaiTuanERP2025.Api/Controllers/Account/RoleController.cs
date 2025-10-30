@@ -6,8 +6,8 @@ using ThaiTuanERP2025.Application.Account.RBAC.Commands.Roles.CreateRole;
 using ThaiTuanERP2025.Application.Account.RBAC.Commands.Roles.DeleteRole;
 using ThaiTuanERP2025.Application.Account.RBAC.Commands.Roles.ToggleRoleActive;
 using ThaiTuanERP2025.Application.Account.RBAC.Queries.Roles.GetAllRoles;
-using ThaiTuanERP2025.Application.Account.RBAC.Roles;
-using ThaiTuanERP2025.Application.Account.RBAC.Roles.Commands.AssignRoleToUser;
+using ThaiTuanERP2025.Application.Account.Roles;
+using ThaiTuanERP2025.Application.Account.Roles.Commands.AssignRoleToUser;
 
 namespace ThaiTuanERP2025.Api.Controllers.Account
 {

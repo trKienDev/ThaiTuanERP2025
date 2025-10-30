@@ -7,7 +7,7 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 	public class GroupConfiguration : IEntityTypeConfiguration<Group>
 	{
 		public void Configure(EntityTypeBuilder<Group> builder) {
-			builder.ToTable("Group", "Core").HasKey(x => x.Id);
+			builder.ToTable("Group", "Account").HasKey(x => x.Id);
 			builder.Property(g => g.Name).IsRequired().HasMaxLength(100);
 			builder.Property(g => g.Description).HasMaxLength(255);
 			builder.Property(g => g.Slug).IsRequired().HasMaxLength(100);

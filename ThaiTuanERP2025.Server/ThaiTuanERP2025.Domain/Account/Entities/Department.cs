@@ -1,51 +1,91 @@
 ﻿using ThaiTuanERP2025.Domain.Account.Enums;
+using ThaiTuanERP2025.Domain.Account.Events.Departments;
 using ThaiTuanERP2025.Domain.Common;
 
 namespace ThaiTuanERP2025.Domain.Account.Entities
 {
 	public class Department : AuditableEntity
 	{
-		public string Name { get;  set; } = string.Empty;
-		public string Code { get;  set; } = string.Empty;
-		public bool IsActive { get; set; } = true;
-		public int Level { get; set; }
+		private readonly List<User> _users = new();
+		private readonly List<Department> _children = new();
 
-		public ICollection<User> Users { get; private set; }
-		
-		public Guid? ParentId { get; set; }
-		public Department? Parent { get; set; }
-		public ICollection<Department> Children { get; private set; } = new List<Department>();	
-
-		public Region Region { get; set; } = Region.None;
-
-		public Guid? ManagerUserId { get; set; }	
-		public User? ManagerUser { get; set; }
-
-		public User CreatedByUser { get; set; } = null!;
-		public User? ModifiedByUser { get; set; }
-		public User? DeletedByUser { get; set; }
-
-		private Department() {
-			Users = new List<User>();
-		} // EF
-		public Department(string name, string code, Region region, Guid? managerUserId = null) {
-			if(string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException("Tên phòng ban không được trống");
-			if(string.IsNullOrWhiteSpace(code)) throw new ArgumentNullException("Mã phòng ban không được trống");
+		private Department() { }
+		public Department(string name, string code, Region region, Guid? managerUserId = null)
+		{
+			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
+			Guard.AgainstNullOrWhiteSpace(code, nameof(code));
 
 			Id = Guid.NewGuid();
 			Name = name.Trim();
 			Code = code.ToUpperInvariant();
 			Region = region;
 			ManagerUserId = managerUserId;
-			Users = new List<User>();
+			IsActive = true;
+
+			AddDomainEvent(new DepartmentCreatedEvent(this));
 		}
 
-		public  void Rename(string newName) {
-			if (string.IsNullOrWhiteSpace(newName)) throw new ArgumentNullException("Tên mới không hợp lệ");
+		public string Name { get; private set; } = string.Empty;
+		public string Code { get; private set; } = string.Empty;
+		public bool IsActive { get; private set; }
+		public int Level { get; private set; }
+		public Region Region { get; private set; }
+		public Guid? ManagerUserId { get; private set; }
+		public Guid? ParentId { get; private set; }
+		public Department? Parent { get; private set; }
+
+		public IReadOnlyCollection<User> Users => _users.AsReadOnly();
+		public IReadOnlyCollection<Department> Children => _children.AsReadOnly();
+
+		#region Domain Behaviors
+		public void Rename(string newName)
+		{
+			Guard.AgainstNullOrWhiteSpace(newName, nameof(newName));
 			Name = newName.Trim();
+			AddDomainEvent(new DepartmentRenamedEvent(this));
 		}
 
-		public void SetRegion(Region region) => Region = region;	
-		public void SetManager(Guid? userId) => ManagerUserId = userId;
+		public void AssignManager(Guid? userId)
+		{
+			if (userId.HasValue)
+				Guard.AgainstDefault(userId.Value, nameof(userId));
+			ManagerUserId = userId;
+			AddDomainEvent(new DepartmentManagerChangedEvent(this, userId));
+		}
+
+		public void Activate()
+		{
+			if (IsActive) return;
+			IsActive = true;
+			AddDomainEvent(new DepartmentActivatedEvent(this));
+		}
+
+		public void Deactivate()
+		{
+			if (!IsActive) return;
+			IsActive = false;
+			AddDomainEvent(new DepartmentDeactivatedEvent(this));
+		}
+
+		public void AddChild(Department child)
+		{
+			if (child == null) throw new ArgumentNullException(nameof(child));
+			if (_children.Any(c => c.Id == child.Id))
+				throw new InvalidOperationException("Phòng ban con đã tồn tại.");
+
+			_children.Add(child);
+			child.ParentId = Id;
+			AddDomainEvent(new DepartmentChildAddedEvent(this, child));
+		}
+
+		public void RemoveChild(Guid childId)
+		{
+			var child = _children.FirstOrDefault(c => c.Id == childId);
+			if (child == null) return;
+
+			_children.Remove(child);
+			AddDomainEvent(new DepartmentChildRemovedEvent(this, child));
+		}
+		#endregion
 	}
 }

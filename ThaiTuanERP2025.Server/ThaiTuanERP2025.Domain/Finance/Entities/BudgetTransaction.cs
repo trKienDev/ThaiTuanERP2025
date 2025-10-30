@@ -8,36 +8,47 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 	/// </summary>
 	public class BudgetTransaction : AuditableEntity
 	{
-		private BudgetTransaction() { }
+		private BudgetTransaction() { } // EF only
 
 		public BudgetTransaction(Guid budgetPlanId, Guid paymentId, decimal amount, BudgetTransactionType type)
 		{
-			if (amount <= 0)
-				throw new ArgumentException("Số tiền phải lớn hơn 0.", nameof(amount));
+			Guard.AgainstDefault(budgetPlanId, nameof(budgetPlanId));
+			Guard.AgainstDefault(paymentId, nameof(paymentId));
+			Guard.AgainstZeroOrNegative(amount, nameof(amount));
+			Guard.AgainstInvalidEnumValue(type, nameof(type));
 
+			Id = Guid.NewGuid();
 			BudgetPlanId = budgetPlanId;
 			PaymentId = paymentId;
 			Amount = amount;
 			Type = type;
 			TransactionDate = DateTime.UtcNow;
+
+			AddDomainEvent(new BudgetTransactionCreatedEvent(this));
 		}
 
-		/// Foreign key - BudgetPlan.
 		public Guid BudgetPlanId { get; private set; }
-
-		/// Id của thực thể nghiệp vụ gây ra giao dịch (ExpensePaymentId, RefundId...).
 		public Guid PaymentId { get; private set; }
-
-		/// Số tiền thay đổi ngân sách.
 		public decimal Amount { get; private set; }
-
-		/// Loại giao dịch ngân sách: Expense, Refund, Reserve, Adjust...
 		public BudgetTransactionType Type { get; private set; }
-
-		/// Ngày ghi nhận giao dịch.
 		public DateTime TransactionDate { get; private set; }
 
-		// --- Navigation ---
-		public BudgetPlan BudgetPlan { get; private set; } = null!;
+		internal BudgetPlan BudgetPlan { get; private set; } = null!;
+
+		#region Domain Behaviors
+
+		public void Reverse()
+		{
+			AddDomainEvent(new BudgetTransactionReversedEvent(this));
+		}
+
+		public void AdjustAmount(decimal newAmount)
+		{
+			Guard.AgainstZeroOrNegative(newAmount, nameof(newAmount));
+			Amount = newAmount;
+			AddDomainEvent(new BudgetTransactionAdjustedEvent(this));
+		}
+
+		#endregion
 	}
 }

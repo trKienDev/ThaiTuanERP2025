@@ -8,7 +8,7 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 	{
 		public void Configure(EntityTypeBuilder<UserManagerAssignment> builder)
 		{
-			builder.ToTable("UserManagerAssignments", "Core");
+			builder.ToTable("UserManagerAssignments", "Account");
 			builder.HasKey(x => new { x.UserId, x.ManagerId });
 
 			// FK: UserId -> User

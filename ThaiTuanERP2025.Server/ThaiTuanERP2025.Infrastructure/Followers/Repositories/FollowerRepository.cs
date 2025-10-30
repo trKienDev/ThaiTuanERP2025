@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using ThaiTuanERP2025.Application.Followers.Repositories;
+using ThaiTuanERP2025.Domain.Followers.Repositories;
 using ThaiTuanERP2025.Domain.Followers.Entities;
-using ThaiTuanERP2025.Infrastructure.Common;
 using ThaiTuanERP2025.Infrastructure.Persistence;
+using ThaiTuanERP2025.Infrastructure.Common.Repositories;
 
 namespace ThaiTuanERP2025.Infrastructure.Followers.Repositories
 {

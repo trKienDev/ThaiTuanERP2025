@@ -1,6 +1,7 @@
 ﻿using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Domain.Account.Entities;
 using AutoMapper;
+using ThaiTuanERP2025.Application.Account.Departments;
 
 namespace ThaiTuanERP2025.Application.Account.Mappings
 {
