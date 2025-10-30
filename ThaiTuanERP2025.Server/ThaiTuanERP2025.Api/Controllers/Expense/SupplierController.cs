@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Presentation.Common;
+using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Expense.Commands.Suppliers.CreateSupplier;
 using ThaiTuanERP2025.Application.Expense.Commands.Suppliers.UpdateSupplier;
 using ThaiTuanERP2025.Application.Expense.Dtos;
@@ -9,7 +9,7 @@ using ThaiTuanERP2025.Application.Expense.Queries.Suppliers.CheckSupplierNameAva
 using ThaiTuanERP2025.Application.Expense.Queries.Suppliers.GetSupplierById;
 using ThaiTuanERP2025.Application.Expense.Queries.Suppliers.GetSuppliers;
 
-namespace ThaiTuanERP2025.Presentation.Controllers.Expense
+namespace ThaiTuanERP2025.Api.Controllers.Expense
 {
 	[Authorize]
 	[ApiController]
@@ -37,7 +37,7 @@ namespace ThaiTuanERP2025.Presentation.Controllers.Expense
 			return Ok(ApiResponse<bool>.Success(available));
 		}
 
-		[HttpPost]
+		[HttpPost("new")]
 		public async Task<ActionResult<SupplierDto>> Create([FromBody] CreateSupplierRequest body, CancellationToken cancellationToken) {
 			var result = await _meidator.Send(new CreateSupplierCommand(body), cancellationToken);
 			return Ok(ApiResponse<SupplierDto>.Success(result));

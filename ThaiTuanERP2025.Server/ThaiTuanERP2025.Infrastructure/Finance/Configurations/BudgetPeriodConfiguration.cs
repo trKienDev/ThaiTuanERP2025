@@ -1,10 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ThaiTuanERP2025.Domain.Finance.Entities;
 
 namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
@@ -19,6 +14,14 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 			builder.HasIndex(e => new { e.Year, e.Month }).IsUnique();
 			builder.Property(e => e.Year).IsRequired();
 			builder.Property(e => e.Month).IsRequired();
+			builder.Property(e => e.StartDate).IsRequired().HasColumnType("date");
+			builder.Property(e => e.EndDate).IsRequired().HasColumnType("date");
+			builder.Property(e => e.IsActive).IsRequired().HasDefaultValue(true);
+
+			builder.HasMany(e => e.BudgetPlans)
+				.WithOne(bp => bp.BudgetPeriod)
+				.HasForeignKey(bp => bp.BudgetPeriodId)
+				.OnDelete(DeleteBehavior.Restrict); 
 
 			builder.HasOne(e => e.CreatedByUser)
 				.WithMany()
@@ -37,6 +40,8 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 				.HasForeignKey(e => e.DeletedByUserId)
 				.OnDelete(DeleteBehavior.Restrict);
 			builder.HasIndex(e => e.DeletedByUserId);
+
+
 		}
 	}
 }

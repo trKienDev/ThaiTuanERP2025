@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Presentation.Common;
+using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Finance.Commands.LedgerAccounts.CreateLedgerAccount;
 using ThaiTuanERP2025.Application.Finance.Commands.LedgerAccounts.DeleteLedgerAccount;
 using ThaiTuanERP2025.Application.Finance.Commands.LedgerAccounts.ToggleLedgerAccountStatus;
@@ -12,7 +12,7 @@ using ThaiTuanERP2025.Application.Finance.Queries.LedgerAccounts.GetLedgerAccoun
 using ThaiTuanERP2025.Application.Finance.Queries.LedgerAccounts.GetLedgerAccountsByType;
 using ThaiTuanERP2025.Application.Finance.Queries.LedgerAccounts.LookupLedgerAccounts;
 
-namespace ThaiTuanERP2025.Presentation.Controllers.Finance
+namespace ThaiTuanERP2025.Api.Controllers.Finance
 {
 	[Authorize]
 	[ApiController]
@@ -50,7 +50,7 @@ namespace ThaiTuanERP2025.Presentation.Controllers.Finance
 			return Ok(ApiResponse<List<LedgerAccountLookupDto>>.Success(result));
 		}
 
-		[HttpPost]
+		[HttpPost("new")]
 		public async Task<ActionResult> Create([FromBody] CreateLedgerAccountCommand command) {
 			var result = await _mediator.Send(command);
 			return Ok(ApiResponse<LedgerAccountDto>.Success(result));

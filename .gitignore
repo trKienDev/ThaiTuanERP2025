@@ -36,6 +36,7 @@ secrets.json
 
 # Environment files
 .env
+.env.*
 
 # appsettings files
 appsettings.Development.json

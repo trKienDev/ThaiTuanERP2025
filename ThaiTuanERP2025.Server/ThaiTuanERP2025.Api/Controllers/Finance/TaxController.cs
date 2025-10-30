@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
-using ThaiTuanERP2025.Presentation.Common;
+using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Common.Models;
 using ThaiTuanERP2025.Application.Finance.Commands.Taxes.CreateTax;
 using ThaiTuanERP2025.Application.Finance.Commands.Taxes.DeleteTax;
@@ -15,7 +15,7 @@ using ThaiTuanERP2025.Application.Finance.Queries.Taxes.GetTaxById;
 using ThaiTuanERP2025.Application.Finance.Queries.Taxes.GetTaxByName;
 using ThaiTuanERP2025.Application.Finance.Queries.Taxes.GetTaxPaged;
 
-namespace ThaiTuanERP2025.Presentation.Controllers.Finance
+namespace ThaiTuanERP2025.Api.Controllers.Finance
 {
 	[ApiController]
 	[Authorize]
@@ -77,7 +77,7 @@ namespace ThaiTuanERP2025.Presentation.Controllers.Finance
 			return Ok(ApiResponse<PagedResult<TaxDto>>.Success(result));
 		}
 
-		[HttpPost]
+		[HttpPost("new")]
 		public async Task<ActionResult<ApiResponse<TaxDto>>> Create([FromBody] CreateTaxCommand command, CancellationToken cancellationToken) {
 			var dto = await _mediator.Send(command, cancellationToken);
 			return Ok(ApiResponse<TaxDto>.Success(dto));

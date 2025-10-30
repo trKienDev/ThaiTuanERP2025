@@ -1,0 +1,26 @@
+.payment-name:hover  {
+      color: var(--bright-blue-color);
+      cursor: pointer;
+      text-decoration: underline;
+}
+
+
+
+.page-heading {
+      display: flex; align-items: center; justify-content: space-between;
+      .actions {
+            .btn.refresh { padding: 6px 12px; border-radius: 8px; border: 1px solid #ddd; cursor: pointer; }
+            .btn[disabled] { opacity: .6; cursor: not-allowed; }
+      }
+}
+.table-wrapper {
+      position: relative;
+}
+.infinite-anchor {
+      height: 1px;
+}
+.list-state {
+      text-align: center; padding: 8px 0;
+      &.dim { opacity: .6; }
+}
+

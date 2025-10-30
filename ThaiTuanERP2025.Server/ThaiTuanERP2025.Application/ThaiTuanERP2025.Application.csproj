@@ -16,6 +16,8 @@
 
   <ItemGroup>
     <Folder Include="Expense\Commands\BankAccounts\NewFolder\" />
+    <Folder Include="Finance\Commands\BudgetPeriods\" />
+    <Folder Include="Finance\Requests\" />
     <Folder Include="Finance\Validators\" />
   </ItemGroup>
 

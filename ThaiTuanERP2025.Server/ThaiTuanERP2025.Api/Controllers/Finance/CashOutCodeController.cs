@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
-using ThaiTuanERP2025.Presentation.Common;
+using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Finance.Commands.CashoutCodes.DeleteCashoutCode;
 using ThaiTuanERP2025.Application.Finance.Commands.CashoutCodes.ToggleCashoutCodeActivate;
 using ThaiTuanERP2025.Application.Finance.Commands.CashoutCodes.UpdateCashoutCode;
@@ -11,15 +11,15 @@ using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Application.Finance.Queries.CashoutCodes.GetAllCashoutCodes;
 using ThaiTuanERP2025.Application.Finance.Queries.CashoutCodes.GetCashoutCodeById;
 
-namespace ThaiTuanERP2025.Presentation.Controllers.Finance
+namespace ThaiTuanERP2025.Api.Controllers.Finance
 {
 	[ApiController]
 	[Authorize]
 	[Route("api/cashout-codes")]
-	public class CashOutCodeController : ControllerBase
+	public class CashoutCodeController : ControllerBase
 	{
 		private readonly IMediator _mediator;
-		public CashOutCodeController(IMediator mediator)
+		public CashoutCodeController(IMediator mediator)
 		{
 			_mediator = mediator;
 		}
@@ -36,7 +36,7 @@ namespace ThaiTuanERP2025.Presentation.Controllers.Finance
 			return Ok(ApiResponse<CashoutCodeDto>.Success(dto)); 
 		}
 
-		[HttpPost]
+		[HttpPost("new")]
 		public async Task<ActionResult> Create([FromBody] CreateCashoutCodeCommand command) {
 			var result = await _mediator.Send(command);
 			return Ok(ApiResponse<CashoutCodeDto>.Success(result));

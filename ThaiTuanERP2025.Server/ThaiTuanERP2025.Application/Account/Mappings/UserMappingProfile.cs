@@ -12,8 +12,9 @@ namespace ThaiTuanERP2025.Application.Account.Mappings
 				.ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email != null ? src.Email.Value : null))
 				.ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Phone != null ? src.Phone.Value : null))
 				.ForMember(dest => dest.AvatarFileId, opt => opt.MapFrom(src => src.AvatarFileId))
-				// AvatarFileObjectKey được xử lý sau khi map xong
 				.AfterMap<UserAvatarObjectKeyResolver>();
+
+			CreateMap<Permission, PermissionDto>();
 		}
 
 		/// <summary>

@@ -1,0 +1,49 @@
+<div class="account-navbar">
+      <nav class="account-navbar__container">
+            <ul class="account-navbar__list">
+                  <li class="account-navbar__item">
+                        <a class="account-navbar__link" routerLink="/account/profile" routerLinkActive="selected" [routerLinkActiveOptions]="{ exact: true }">
+                              <span class="account-navbar__icon material-icons-round">account_circle</span>
+                              <span class="account-navbar__name">Thông tin</span>
+                        </a>
+                  </li>
+                  <li class="account-navbar__item">
+                        <a class="account-navbar__link" routerLink="/account/setting" routerLinkActive="selected">
+                              <span class="account-navbar__icon material-icons-round">settings</span>
+                              <span class="account-navbar__name">Tùy chỉnh</span>
+                        </a>
+                  </li>
+                  <li class="account-navbar__item">
+                        <a class="account-navbar__link" routerLink="/account/group" routerLinkActive="selected">
+                              <span class="account-navbar__icon material-icons-round">groups</span>
+                              <span class="account-navbar__name">Nhóm chung</span>
+                        </a>
+                  </li>
+                  <li class="account-navbar__item" *ngIf="isSuperAdmin">
+                        <a class="account-navbar__link" routerLink="/account/members" routerLinkActive="selected">
+                              <span class="account-navbar__icon material-icons-round">supervised_user_circle</span>
+                              <span class="account-navbar__name">Thành viên</span>
+                        </a>
+                  </li>
+                  <li class="account-navbar__item" *ngIf="isSuperAdmin">
+                        <a class="account-navbar__link" routerLink="/account/departments" routerLinkActive="selected">
+                              <span class="account-navbar__icon material-icons-round">hub</span>
+                              <span class="account-navbar__name">Phòng ban</span>
+                        </a>
+                  </li>
+                  <li class="account-navbar__item" *ngIf="isSuperAdmin">
+                        <a class="account-navbar__link" routerLink="/account/rbac" routerLinkActive="selected">
+                              <span class="account-navbar__icon material-icons-round">lock_person</span>
+                              <span class="account-navbar__name">Phân quyền</span>
+                        </a>
+                  </li>
+            </ul>
+      </nav>
+</div>
+
+
+
+<div class="account-navbar__content">
+      <router-outlet></router-outlet>
+</div>
+

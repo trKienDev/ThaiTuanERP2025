@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnChanges, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { booleanAttribute, Component, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnChanges, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -33,6 +33,7 @@ export class KitDropdownComponent implements ControlValueAccessor, OnChanges {
       @Input() filterPlaceholder = '🔎 Tìm...';
       @Input() caseSensitive = false;       /** Có phân biệt hoa/thường không */
       @Input() autoFocusFilter = true;       /** Khi mở menu, tự động focus vào ô filter */     
+      @Input() required = false;
 
       @Output() selectionChange = new EventEmitter<KitDropdownOption>();
       @Output() selectionChangeMany = new EventEmitter<KitDropdownOption[]>();    // Output cho multi-select 
@@ -74,6 +75,10 @@ export class KitDropdownComponent implements ControlValueAccessor, OnChanges {
             }
       }
 
+      get hasValue(): boolean {
+            return this.multiple ? this._values.size > 0 : !!this._value;
+      }
+
       get computedWidth(): string | null {
             if(this.width === null || this.width === undefined) 
                   return null;
@@ -99,15 +104,6 @@ export class KitDropdownComponent implements ControlValueAccessor, OnChanges {
             // Sau khi xóa filter, đảm bảo focusedIndex hợp lệ
             this.focusedIndex = this.filteredOptions.length > 0 ? 0 : -1;
             this.ensureItemVisible();
-      }
-
-      // ** Hiển thị label ô chọn **
-      get selectedText(): string {
-            if(!this.multiple) return this.selectedLabel ?? this.placeholder;
-            const labels = this.options.filter(o => this._values.has(o.id)).map(o => o.label);
-            if(labels.length === 0) return this.placeholder;
-            if(labels.length <= 2) return labels.join(', ');
-            return `${labels[0]}, ${labels[1]} +${labels.length - 2}`;
       }
 
       // ===== Toggle mở/đóng =====

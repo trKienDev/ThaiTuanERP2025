@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.SignalR;
 
-namespace ThaiTuanERP2025.Presentation.SignalR;
+namespace ThaiTuanERP2025.Api.SignalR;
 
 public sealed class CustomUserIdProvider : IUserIdProvider
 {

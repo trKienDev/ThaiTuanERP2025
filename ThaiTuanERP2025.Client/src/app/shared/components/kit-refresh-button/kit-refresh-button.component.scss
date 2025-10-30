@@ -1,0 +1,27 @@
+/* From Uiverse.io by andrew-demchenk0 */ 
+.default-button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+}
+
+.label {
+      color: black;
+}
+
+
+.default-button:hover .svg-icon {
+      animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+      0% {
+            transform: rotate(0deg);
+      }
+
+      100% {
+            transform: rotate(-360deg);
+      }
+}

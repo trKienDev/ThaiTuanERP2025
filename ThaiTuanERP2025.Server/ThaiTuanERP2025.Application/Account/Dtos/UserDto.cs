@@ -1,4 +1,4 @@
-﻿using ThaiTuanERP2025.Domain.Account.Enums;
+﻿using ThaiTuanERP2025.Application.Account.RBAC.Dtos;
 
 namespace ThaiTuanERP2025.Application.Account.Dtos
 {
@@ -15,9 +15,12 @@ namespace ThaiTuanERP2025.Application.Account.Dtos
 		public string? AvatarFileId { get; set; }
 		public string? AvatarFileObjectKey { get; set; }
 
-		public UserRole Role { get; set; } = default!;
-		public Guid? DepartmentId { get; set; }
+		public IReadOnlyCollection<RoleDto> Roles { get; set; } = Array.Empty<RoleDto>();
+		public IReadOnlyCollection<UserDto> Managers { get; set; } = Array.Empty<UserDto>();
 
+		public List<PermissionDto> Permissions { get; set; } = new();
+
+		public Guid? DepartmentId { get; set; }
 		public DepartmentDto? Department { get; set; } = default!;
 	}
 

@@ -4,6 +4,10 @@
 // align-content
 .align-content-center { align-content: center; }
 
+// border
+.border-transparent { border: 1px solid transparent !important; }
+.border-white { border: 1px solid #ffffff !important; }
+
 // cursort
 .cursor-pointer { cursor: pointer; }
 
@@ -12,6 +16,9 @@
 .display-inline-flex { display: inline-flex;}
 .d-none { display: none !important; }
 .display-block { display: block;}
+
+// flex-direction
+.flex-column { flex-direction: column; }
 
 // flex-wrap
 .fl-wrap { flex-wrap: wrap;}
@@ -35,6 +42,9 @@
 .gap-5px { gap: 5px; }
 .gap-10px { gap: 10px; }
 .gap-20px { gap: 20px; }
+
+// height
+.height-100pt { height: 100%; }
 
 // overflow-y
 .overflow-y-scroll { overflow-y: scroll; }

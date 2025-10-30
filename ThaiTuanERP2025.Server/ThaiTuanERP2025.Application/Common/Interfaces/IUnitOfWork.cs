@@ -1,6 +1,8 @@
-﻿using ThaiTuanERP2025.Application.Account.Repositories;
+﻿using ThaiTuanERP2025.Application.Account.RBAC.Repositories;
+using ThaiTuanERP2025.Application.Account.Repositories;
 using ThaiTuanERP2025.Application.Expense.Repositories;
 using ThaiTuanERP2025.Application.Files.Repositories;
+using ThaiTuanERP2025.Application.Finance.Budgets.Repositories;
 using ThaiTuanERP2025.Application.Finance.Repositories;
 using ThaiTuanERP2025.Application.Followers.Repositories;
 using ThaiTuanERP2025.Application.Notifications.Repositories;
@@ -60,6 +62,12 @@ namespace ThaiTuanERP2025.Application.Common.Interfaces
 
 		// Follow
 		IFollowerRepository Followers { get; }
+
+		// RBAC
+		IRoleRepository Roles { get; }
+		IRolePermissionRepository RolePermissions { get; }
+		IPermissionRepository Permissions { get; }
+		IUserRoleRepository UserRoles { get; }
 
 		Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 	}

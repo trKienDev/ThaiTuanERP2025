@@ -1,0 +1,25 @@
+<div class="login-container">
+      <div class="logo-container">
+            <div class="logo-wrapper">
+                  <img src="thaituanlogo.png" alt="thaituangroup-logo" class="thaituan-logo" />
+            </div>
+      </div>
+      <form [formGroup]="loginForm" (ngSubmit)="onLogging()" novalidate>
+            <div class="form-group">
+                  <label for="username">Mã nhân viên</label>
+                  <input type="text" formControlName="employeeCode" />
+            </div>
+            <div class="form-group">
+                  <label for="password">Mật khẩu</label>
+                  <div class="password-wrapper">
+                        <input [type]="showPassword ? 'text' : 'password'" formControlName="password" />
+                        <div class="icon-wrapper">
+                              <img [src]="'assets/icons/' + (showPassword ? 'eye-off.svg' : 'eye.svg')" class="toggle-password" width="24" height="24" alt="Toggle visibility" (click)="togglePassword()" />
+                        </div>
+                  </div>
+            </div>
+            <div class="button-wrapper">
+                  <kit-spinner-button type="submit" cssClass="button button-login" [loading]="submitting" [disabled]="submitting" text="Duyệt" loadingText="Đang duyệt…"></kit-spinner-button>
+            </div>
+      </form>
+</div>

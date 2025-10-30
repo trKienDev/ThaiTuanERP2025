@@ -1,11 +1,11 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Presentation.Common;
-using ThaiTuanERP2025.Presentation.Contracts.Users;
+using ThaiTuanERP2025.Api.Common;
+using ThaiTuanERP2025.Api.Contracts.Users;
+using ThaiTuanERP2025.Api.Security;
 using ThaiTuanERP2025.Application.Account.Commands.Users.CreateUser;
 using ThaiTuanERP2025.Application.Account.Commands.Users.SetUserManagers;
-using ThaiTuanERP2025.Application.Account.Commands.Users.UpdateUser;
 using ThaiTuanERP2025.Application.Account.Commands.Users.UpdateUserAvatarFileId;
 using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Application.Account.Queries.Users.GetAllUsers;
@@ -14,7 +14,7 @@ using ThaiTuanERP2025.Application.Account.Queries.Users.GetUserById;
 using ThaiTuanERP2025.Application.Account.Queries.Users.GetUserManagerIds;
 using ThaiTuanERP2025.Application.Account.Queries.Users.GetUserManagers;
 
-namespace ThaiTuanERP2025.Presentation.Controllers.Account
+namespace ThaiTuanERP2025.Api.Controllers.Account
 {
 	[Authorize]
 	[ApiController]
@@ -67,28 +67,20 @@ namespace ThaiTuanERP2025.Presentation.Controllers.Account
 		/// <summary>
 		/// Tạo người dùng
 		/// </summary>
-		[HttpPost]
+		[HttpPost("new")]
 		public async Task<IActionResult> Create([FromBody] CreateUserCommand command)
 		{
 			var result = await _mediator.Send(command);
 			return Ok(ApiResponse<UserDto>.Success(result));
 		}
 
-		[Authorize(Roles = "admin")]
-		[HttpPut("{id:guid}")]
-		public async Task<IActionResult> Update(Guid id, [FromBody] UpdateUserCommand command) {
-			if(id != command.Id) return BadRequest(ApiResponse<string>.Fail("ID không khớp"));
-			var result = await _mediator.Send(command);
-			return Ok(ApiResponse<UserDto>.Success(result));
-		}
-
 		[HttpPut("{id:guid}/avatar")]
-		public async Task<ActionResult<ApiResponse<string>>> SetAvatar(Guid id, [FromBody] SetUserAvatarRequest request, CancellationToken cancellationToken) {
-			await _mediator.Send(new UpdateUserAvatarFileIdCommand(id, request.FileId), cancellationToken);
-			return Ok(ApiResponse<string>.Success("Cập nhật avatar thành công"));
+		public async Task<IActionResult> SetAvatar(Guid id, [FromBody] SetUserAvatarRequest request, CancellationToken cancellationToken) {
+			var result = await _mediator.Send(new UpdateUserAvatarFileIdCommand(id, request.FileId), cancellationToken);
+			return Ok(ApiResponse<Unit>.Success(result));
 		}
 
-		[Authorize(Roles = "admin")]
+		[HasPermission("account.set-manager")]
 		[HttpPut("{id:guid}/managers")]
 		public async Task<IActionResult> SetManagers(Guid id, [FromBody] SetUserManagerRequest request, CancellationToken cancellationToken)
 		{

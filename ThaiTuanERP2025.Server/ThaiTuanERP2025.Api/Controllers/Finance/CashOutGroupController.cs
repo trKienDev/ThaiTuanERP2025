@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Presentation.Common;
+using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Finance.Commands.CashoutGroups.CashoutOutGroup;
 using ThaiTuanERP2025.Application.Finance.Commands.CashoutGroups.CreateCashoutGroup;
 using ThaiTuanERP2025.Application.Finance.Commands.CashoutGroups.DeleteCashoutGroup;
@@ -10,15 +10,15 @@ using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Application.Finance.Queries.CashoutGroups.GetAllCashoutGroups;
 using ThaiTuanERP2025.Application.Finance.Queries.CashoutGroups.GetCashoutGroupById;
 
-namespace ThaiTuanERP2025.Presentation.Controllers.Finance
+namespace ThaiTuanERP2025.Api.Controllers.Finance
 {
 	[ApiController]
 	[Authorize]
 	[Route("api/cashout-groups")]
-	public class CashOutGroupController : ControllerBase
+	public class CashoutGroupController : ControllerBase
 	{
 		private readonly IMediator _mediator;
-		public CashOutGroupController(IMediator mediator)
+		public CashoutGroupController(IMediator mediator)
 		{
 			_mediator = mediator;
 		}
@@ -35,7 +35,7 @@ namespace ThaiTuanERP2025.Presentation.Controllers.Finance
 			return Ok(ApiResponse<CashoutGroupDto>.Success(data));
 		}
 
-		[HttpPost]
+		[HttpPost("new")]
 		public async Task<ActionResult> Create([FromBody] CreateCashoutGroupCommand command) {
 			var dto = await _mediator.Send(command);
 			return Ok(ApiResponse<CashoutGroupDto>.Success(dto));

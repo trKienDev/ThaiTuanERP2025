@@ -1,14 +1,14 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Presentation.Common;
+using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Finance.Commands.BudgetCodes.CreateBudgetCode;
-using ThaiTuanERP2025.Application.Finance.Commands.BudgetCodes.UpdateBudgetCodeStatus;
+using ThaiTuanERP2025.Application.Finance.Commands.BudgetCodes.ToggleBudgetCodeActive;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Application.Finance.Queries.BudgetCodes.GetAllActiveBudgetCodes;
 using ThaiTuanERP2025.Application.Finance.Queries.BudgetCodes.GetAllBudgetCodes;
 using ThaiTuanERP2025.Application.Finance.Queries.BudgetCodes.GetBudgetCodesWithAmountForPeriod;
 
-namespace ThaiTuanERP2025.Presentation.Controllers.Finance
+namespace ThaiTuanERP2025.Api.Controllers.Finance
 {
 	[Route("api/budget-code")]
 	[ApiController]
@@ -41,19 +41,18 @@ namespace ThaiTuanERP2025.Presentation.Controllers.Finance
 			return Ok(ApiResponse<List<BudgetCodeWithAmountDto>>.Success(data));
 		}
 
-		[HttpPost]
+		[HttpPost("new")]
 		public async Task<IActionResult> Create([FromBody] CreateBudgetCodeCommand command)
 		{
 			var result = await _mediator.Send(command);
 			return Ok(ApiResponse<BudgetCodeDto>.Success(result));
 		}
 
-		[HttpPut("{id}/status")]
-		public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] bool isActive)
+		[HttpPut("{id}/toggle-active")]
+		public async Task<IActionResult> ToggleActvie(Guid id, CancellationToken cancellationToken)
 		{
-			var command = new UpdateBudgetCodeStatusCommand { Id = id, IsActive = isActive };
-			await _mediator.Send(command);
-			return Ok(ApiResponse<bool>.Success(true));
+			var result = await _mediator.Send(new ToggleBudgetCodeActiveCommand(id), cancellationToken);
+			return Ok(ApiResponse<Unit>.Success(result));
 		}
 	}
 }

@@ -23,7 +23,7 @@ namespace ThaiTuanERP2025.Application.Notifications.Queries.TaskReminders.GetMyR
 			var uid = _currentUserService.UserId;
 			var items = await _unitOfWork.TaskReminders.ListProjectedAsync<TaskReminderDto>(
 				q => q.Where(a => a.UserId == uid && !a.IsResolved)
-					.OrderBy(a => a.DueAt)
+					.OrderByDescending(a => a.CreatedDate)
 					.ProjectTo<TaskReminderDto>(_mapper.ConfigurationProvider),
 				cancellationToken: cancellationToken
 			 );

@@ -14,6 +14,7 @@ export class Kit404PageComponent {
       @Input() message?: string;
       @Input() primaryLabel?: string;
       @Input() secondaryLabel?: string;
+      @Input() variant: 'error' | '404' = '404';
 
       @Output() primary = new EventEmitter<void>();
       @Output() secondary = new EventEmitter<void>();

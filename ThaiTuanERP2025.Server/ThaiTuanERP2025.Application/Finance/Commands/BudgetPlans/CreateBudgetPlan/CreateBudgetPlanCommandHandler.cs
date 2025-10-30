@@ -37,14 +37,12 @@ namespace ThaiTuanERP2025.Application.Finance.Commands.BudgetPlans.CreateBudgetP
 			var department = await _unitOfWork.Departments.GetByIdAsync(request.DepartmentId)
 				?? throw new NotFoundException("Không tìm thấy phòng ban");
 
-			var plan = new BudgetPlan
-			{
-				BudgetPeriodId = request.BudgetPeriodId,
-				BudgetCodeId = request.BudgetCodeId,
-				DepartmentId = request.DepartmentId,
-				Amount = request.Amount,
-				Status = "Draft",
-			};
+			var plan = new BudgetPlan (
+				request.BudgetPeriodId,
+				request.BudgetCodeId,
+				request.DepartmentId,
+				request.Amount
+			);
 
 			await _unitOfWork.BudgetPlans.AddAsync(plan);
 			await _unitOfWork.SaveChangesAsync(cancellationToken);

@@ -1,19 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
-using ThaiTuanERP2025.Application.Common.Interfaces;
+using ThaiTuanERP2025.Application.Common.Authentication;
 using ThaiTuanERP2025.Domain.Account.Entities;
 
 namespace ThaiTuanERP2025.Infrastructure.Authentication
 {
-	public class JwtProvider : iJWTProvider
+	public class JwtProvider : IJWTProvider
 	{
 		private readonly IConfiguration _configuration;
 		public JwtProvider(IConfiguration configuration)
@@ -21,7 +16,11 @@ namespace ThaiTuanERP2025.Infrastructure.Authentication
 			_configuration = configuration;
 		}
 
-		public string GenerateToken(User user) {
+		/// <summary>
+		/// Sinh JWT Token dựa trên danh sách claims (bao gồm Role + Permission)
+		/// </summary>
+		public string GenerateToken(User user, IEnumerable<Claim> claims)
+		{ 
 			var jwtSettings = _configuration.GetSection("Jwt");
 			var secretkey = jwtSettings["Key"] ?? throw new InvalidOperationException("JWT Secret Key is missing.");
 			var issuer = jwtSettings["Issuer"] ?? throw new InvalidOperationException("JWT Issuer is missing.");
@@ -32,18 +31,21 @@ namespace ThaiTuanERP2025.Infrastructure.Authentication
 			var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretkey));
 			var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-			var claims = new[] {
+			var baseClaims = new List<Claim>
+			{
 				new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
 				new Claim(JwtRegisteredClaimNames.UniqueName, user.Username),
-				new Claim(ClaimTypes.Name, user.FullName),
-				new Claim(ClaimTypes.Role, user.Role.ToString())
+				new Claim("fullName", user.FullName)
 			};
 
+			var allClaims = new List<Claim>(baseClaims);
+			if (claims != null)
+				allClaims.AddRange(claims);
 
 			var token = new JwtSecurityToken(
 				issuer: issuer,
 				audience: audience,
-				claims: claims,
+				claims: allClaims,
 				expires: DateTime.UtcNow.AddMinutes(expiresInMinutes),
 				signingCredentials: creds
 			);

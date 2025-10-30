@@ -1,11 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ThaiTuanERP2025.Application.Account.RBAC.Repositories;
 using ThaiTuanERP2025.Application.Account.Repositories;
+using ThaiTuanERP2025.Application.Common.Authentication;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Common.Services;
 using ThaiTuanERP2025.Application.Expense.Repositories;
 using ThaiTuanERP2025.Application.Files.Repositories;
+using ThaiTuanERP2025.Application.Finance.Budgets.Repositories;
 using ThaiTuanERP2025.Application.Finance.Repositories;
 using ThaiTuanERP2025.Application.Followers.Repositories;
 using ThaiTuanERP2025.Application.Notifications.Repositories;
@@ -36,16 +39,15 @@ namespace ThaiTuanERP2025.Infrastructure
 					sqlOptions.EnableRetryOnFailure();
 				});
 			});
-			services.AddScoped<IUnitOfWork, AppUnitOfWork>();
+			services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 			// ========= Repositories =========
-			services.AddScoped<iJWTProvider, JwtProvider>();
-			services.AddScoped<IUnitOfWork, AppUnitOfWork>();
+			services.AddScoped<IJWTProvider, JwtProvider>();
+			services.AddScoped<IUnitOfWork, UnitOfWork>();
 			services.AddScoped<ICodeGenerator, CodeGenerator>();
 			services.AddScoped<IStoredFilesRepository, StoredFilesRepository>();
 			services.AddScoped<IUserRepository, UserRepository>();
 			services.AddScoped<IUserManagerAssignmentRepository, UserManagerAssignmentRepository>();
-			services.AddScoped<IUserReadRepository, UserReadRepository>();
 			services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 			services.AddScoped<IGroupRepository, GroupRepository>();
 			services.AddScoped<IUserGroupRepository, UserGroupRepository>();
@@ -78,6 +80,10 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<INotificationRepository, NotificationRepository>();
 			services.AddScoped<ITaskReminderRepository, TaskReminderRepository>();
 			services.AddScoped<IFollowerRepository, FollowerRepository>();
+			services.AddScoped<IRoleRepository, RoleRepository>();
+			services.AddScoped<IPermissionRepository, PermissionRepository>();
+			services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
+			services.AddScoped<IUserRoleRepository, UserRoleRepository>();
 
 			// ========= File Storage (MinIO) =========
 			services.Configure<FileStorageOptions>(cfg.GetSection("Minio"));

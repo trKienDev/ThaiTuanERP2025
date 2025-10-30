@@ -1,14 +1,13 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Presentation.Common;
+using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Finance.Dtos;
 using ThaiTuanERP2025.Application.Finance.Commands.BudgetPlans.CreateBudgetPlan;
 using ThaiTuanERP2025.Application.Finance.Commands.BudgetPlans.DeleteBudgetPlan;
-using ThaiTuanERP2025.Application.Finance.Commands.BudgetPlans.UpdateBudgetPlan;
 using ThaiTuanERP2025.Application.Finance.Queries.BudgetPlans.GetAllBudgetPlans;
 
-namespace ThaiTuanERP2025.Presentation.Controllers.Finance
+namespace ThaiTuanERP2025.Api.Controllers.Finance
 {
 	[Authorize]
 	[ApiController]
@@ -28,20 +27,9 @@ namespace ThaiTuanERP2025.Presentation.Controllers.Finance
 			return Ok(ApiResponse<List<BudgetPlanDto>>.Success(result));
 		}
 
-		[HttpPost]
+		[HttpPost("new")]
 		public async Task<IActionResult> Create(CreateBudgetPlanCommand command)
 		{
-			var result = await _mediator.Send(command);
-			return Ok(ApiResponse<BudgetPlanDto>.Success(result));
-		}
-
-		[HttpPut("{id}")]
-		public async Task<IActionResult> Update(Guid id, UpdateBudgetPlanCommand command)
-		{
-			if (id != command.Id)
-			{
-				return BadRequest(ApiResponse<BudgetPlanDto>.Fail("Id Kế hoạch ngân sách không hợp lệ"));
-			}
 			var result = await _mediator.Send(command);
 			return Ok(ApiResponse<BudgetPlanDto>.Success(result));
 		}

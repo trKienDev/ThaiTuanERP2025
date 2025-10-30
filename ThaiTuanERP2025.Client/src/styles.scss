@@ -16,6 +16,7 @@
 @import url('./app/core/services/ngprogress/ngprogress.scss');
 @import url('./styles/_expense-payment-status.scss');
 @import url('./styles/_outgoing-payment-status.scss');
+@import url('https://fonts.googleapis.com/css2?family=Allerta+Stencil&family=Orbitron:wght@400..900&display=swap');
 
 :root {
       --cadmium-red: #D22B2B;
@@ -78,6 +79,7 @@ textarea {
 ul, ol {
       margin: 0;
       padding: 0;
+      list-style: none;
 }
 input {
       width: 100%;
@@ -86,6 +88,8 @@ input {
       border-radius: 5px;
       border: 1px solid var(--default-border-color);
 }
+
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 
 .logo-container {
       display: flex;
@@ -132,6 +136,7 @@ html, body { height: 100%; margin: 0; }
       h3 { margin: 0px; }
       .title { line-height: 1.6; color: #4c607a; }
 }
+.page-body { margin-top: 20px; }
 
 .default-title { font-size: 20px; font-weight: 900; color: var(--main-foreground-hover); }
 .ahref-non-decoration { text-decoration: none; color: black; }
@@ -146,14 +151,18 @@ input[type=number] { -moz-appearance: textfield; }
 
 .mat-mdc-tooltip-surface { font-family: 'Lexend' !important; user-select: none; background-color: var(--gold-color) !important; color: black !important; }
 /* target đúng nơi Material render (overlay) */
-.cdk-overlay-pane .mat-mdc-dialog-surface {  overflow-y: unset; }
+.cdk-overlay-pane .mat-mdc-dialog-surface {  overflow-y: unset; border-radius: 8px; }
 .cdk-overlay-pane .cdk-overlay-black-backdrop { background: rgba(15, 15, 15, 0.5); }
 
 /* mat-calendar */
 
 .mat-datepicker-content .mat-calendar { width: 300px !important; height: unset !important; border-top-left-radius: var(--default-border-color-radius); border-top-right-radius: var(--default-border-color-radius); }
 .kit-datepicker { 
-      background-image: linear-gradient(to bottom, #ffffff, #fcfcff, #f8f9ff, #f3f6ff, #edf4ff);
+      background: #f2faff;
+      background: -webkit-linear-gradient(0deg, rgba(242, 250, 255, 1) 0%, rgba(246, 248, 250, 1) 50%, rgba(255, 255, 255, 1) 100%);
+      background: -moz-linear-gradient(0deg, rgba(242, 250, 255, 1) 0%, rgba(246, 248, 250, 1) 50%, rgba(255, 255, 255, 1) 100%);
+      background: linear-gradient(0deg, rgba(242, 250, 255, 1) 0%, rgba(246, 248, 250, 1) 50%, rgba(255, 255, 255, 1) 100%);
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#F2FAFF", endColorstr="#FFFFFF", GradientType=0);
       box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px; 
       border-bottom-left-radius: var(--default-border-color-radius); border-bottom-right-radius: var(--default-border-color-radius); user-select: none; }
 .kit-datepicker button { border: none !important; }
@@ -216,5 +225,23 @@ input[type=number] { -moz-appearance: textfield; }
 
 .white-space {
       display: block;
-      height: 300px;
+      // height: 300px;
 }
+
+.avatar-user {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      margin: 0px 5px;
+}
+.approver-avatar {
+      box-shadow:  rgba(54, 223, 12, 0.44) 0px 1px 3px, rgba(103, 197, 15, 0.79) 0px 1px 2px;
+}
+.rejecter-avatar {
+      box-shadow:  rgba(244, 31, 31, 0.44) 0px 1px 3px, rgba(240, 24, 24, 0.79) 0px 1px 2px;
+}
+.waiting-avatar {
+      animation: blink 2s infinite;
+}
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+

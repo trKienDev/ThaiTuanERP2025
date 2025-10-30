@@ -20,8 +20,16 @@
                   <span class="topbar-icon material-icons-round">notifications</span>
                   <span class="notification-badge" *ngIf="(unreadCount$ | async) as c" [style.display]="c>0 ? null : 'none'">{{ c }}</span>
             </div>
-            <div class="user-avatar-wrapper">
-                  <img class="user-avatar" [src]="avatarSrc" alt="user avatar">
+            <div class="user-avatar-wrapper"  (click)="toggleUserMenu($event)" tabindex="0">
+                  <img class="user-avatar" [src]="(currentUser$ | async) | avatarUrlPipe" alt="user avatar">
+                  <div class="user-menu" *ngIf="menuVisible" 
+                  [class.fade-in]="menuState === 'entering'"
+                  [class.fade-out]="menuState === 'leaving'">
+                        <button class="user-menu-item logout" (click)="onLogout()">
+                              <span class="icon material-icons-outlined">logout</span>      
+                              <span>Đăng xuất</span>
+                        </button>
+                  </div>
             </div>
-      </div>
+      </div>      
 </header>

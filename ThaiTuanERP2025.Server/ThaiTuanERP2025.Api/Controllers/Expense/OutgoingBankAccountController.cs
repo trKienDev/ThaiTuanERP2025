@@ -1,11 +1,11 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Presentation.Common;
+using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Expense.Dtos;
 using ThaiTuanERP2025.Application.Expense.Queries.OutgoingBankAccounts.GetAllOutgoingBankAccount;
 
-namespace ThaiTuanERP2025.Presentation.Controllers.Expense
+namespace ThaiTuanERP2025.Api.Controllers.Expense
 {
 	[ApiController]
 	[Authorize]
@@ -25,7 +25,7 @@ namespace ThaiTuanERP2025.Presentation.Controllers.Expense
 			return Ok(ApiResponse<IReadOnlyList<OutgoingBankAccountDto>>.Success(result, "Lấy danh sách tài khoản tiền ra thành công"));
 		}
 
-		[HttpPost]
+		[HttpPost("new")]
 		public async Task<ActionResult> Create([FromBody] OutgoingBankAccountRequest body, CancellationToken cancellationToken)
 		{
 			var result = await _mediator.Send(new Application.Expense.Commands.OutgoingBankAccounts.NewOutgoingBankAccount.NewOutgoingBankAccountCommand(body), cancellationToken);

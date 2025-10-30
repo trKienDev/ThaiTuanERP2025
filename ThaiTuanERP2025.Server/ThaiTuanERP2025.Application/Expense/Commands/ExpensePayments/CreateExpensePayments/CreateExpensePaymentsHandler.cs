@@ -1,8 +1,10 @@
-﻿using MediatR;
+﻿using AutoMapper.Execution;
+using MediatR;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Common.Services;
 using ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows;
 using ThaiTuanERP2025.Application.Followers.Services;
+using ThaiTuanERP2025.Domain.Common.Enums;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Expense.Enums;
@@ -35,7 +37,7 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ExpensePayments.CreateExp
 		public async Task<Guid> Handle(CreateExpensePaymentCommand command, CancellationToken cancellationToken)
 		{
 			var request = command.Request;
-			var subId = await _documentSubIdGeneratorService.NextSubIdAsync("ExpensePayment", DateTime.UtcNow, cancellationToken);
+			var subId = await _documentSubIdGeneratorService.NextSubIdAsync(DocumentType.ExpensePayment, DateTime.UtcNow, cancellationToken);
 			// payment
 			var payment = new ExpensePayment(request.Name, request.PayeeType, request.DueDate, request.ManagerApproverId, request.Description);
 			payment.SetSubId(subId);
@@ -45,7 +47,7 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ExpensePayments.CreateExp
 
 			// 1 ) gom các budgetCodeId trong request
 			var budgetIds = request.Items.Select(i => i.BudgetCodeId).Distinct().ToList();
-			var budgetCodes = await _unitOfWork.BudgetCodes.FindIncludingAsync(bc => budgetIds.Contains(bc.Id), cancellationToken);
+			var budgetCodes = await _unitOfWork.BudgetCodes.FindAsync(bc => budgetIds.Contains(bc.Id), cancellationToken);
 			var bcToCashout = budgetCodes.ToDictionary(x => x.Id, x => x.CashoutCodeId);
 			// items
 			foreach (var item in request.Items)
@@ -120,14 +122,16 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ExpensePayments.CreateExp
 				if (!planMap.TryGetValue(grp.BudgetCodeId, out var plan))
 					throw new ConflictException($"Không tìm thấy BudgetPlan cho BudgetCodeId={grp.BudgetCodeId} Dept={departmentId} Period={month}/{year}.");
 
-				if (plan.Amount < grp.TotalWithTax)
-					throw new ConflictException($"Ngân sách không đủ cho BudgetCodeId={grp.BudgetCodeId}. Còn lại {plan.Amount:n0}, cần {grp.TotalWithTax:n0}.");
+				if (!plan.CanAfford(grp.TotalWithTax))
+					throw new ConflictException(
+					    $"Ngân sách không đủ cho BudgetCodeId={grp.BudgetCodeId}. Còn lại {plan.Amount:n0}, cần {grp.TotalWithTax:n0}."
+					);
 
-				plan.Amount -= grp.TotalWithTax; // TRỪ TRỰC TIẾP THEO YÊU CẦU
+				plan.RecordPayment(grp.TotalWithTax, payment.Id); // TRỪ TRỰC TIẾP THEO YÊU CẦU
 				// nếu muốn an toàn concurrency: thêm RowVersion vào BudgetPlan và bật ConcurrencyCheck
 			}
 
-			await _unitOfWork.ExpensePayments.AddAsync(payment);
+			await _unitOfWork.ExpensePayments.AddAsync(payment, cancellationToken);
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 
 			await _approvalWorkflowService.CreateInstanceForExpensePaymentAsync(

@@ -1,14 +1,8 @@
 <div class="shell">
       <aside class="sidebar" >
             <nav class="tab-list">
-                  <button
-                  *ngFor="let tab of displayTabs; trackBy: trackById"
-                  class="tab-item"
-                  [class.active]="tab.id === selectedId"
-                  (click)="selectTab(tab.id)"
-                  [attr.aria-selected]="tab.id === selectedId"
-                  role="tab">
-                  {{ tab.label }}
+                  <button *ngFor="let tab of displayTabs; trackBy: trackById" class="tab-item" [class.active]="tab.id === selectedId" (click)="selectTab(tab.id)" [attr.aria-selected]="tab.id === selectedId" role="tab">
+                        {{ tab.label }}
                   </button>
             </nav>
       </aside>

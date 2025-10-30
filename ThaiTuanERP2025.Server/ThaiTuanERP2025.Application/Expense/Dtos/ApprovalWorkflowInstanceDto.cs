@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-
-namespace ThaiTuanERP2025.Application.Expense.Dtos
+﻿namespace ThaiTuanERP2025.Application.Expense.Dtos
 {
 	public sealed record ApprovalWorkflowInstanceDto
 	{
@@ -41,6 +39,7 @@ namespace ThaiTuanERP2025.Application.Expense.Dtos
 
 	public sealed record ApprovalWorkflowInstanceDetailDto {
 		public ApprovalWorkflowInstanceDto WorkflowInstance { get; init; } = default!;
+		public int CurrentStepOrder { get; init; } = default!;
 		public IReadOnlyList<ApprovalStepInstanceDetailDto> Steps { get; init; } = Array.Empty<ApprovalStepInstanceDetailDto>();
 	}
 

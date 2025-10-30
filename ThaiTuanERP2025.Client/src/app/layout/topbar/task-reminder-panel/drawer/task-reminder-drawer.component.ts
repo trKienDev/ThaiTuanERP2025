@@ -1,8 +1,11 @@
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, OnInit, Output } from "@angular/core";
 import { combineLatest, interval, map, Observable, startWith } from "rxjs";
 import { TaskReminderDto } from "../models/task-reminder.model";
 import { NavigationExtras, Router } from "@angular/router";
+import { MatDialog } from "@angular/material/dialog";
+import { FollowingExpensePaymentFacade } from "../../../../features/expense/facades/following-expense-payment.facade";
+import { ExpensePaymentDetailDialogComponent } from "../../../../features/expense/dialogs/expense-payment-detail-dialog/expense-payment-detail-dialog.component";
 
 @Component({
       selector: 'app-task-reminder-drawer',
@@ -15,6 +18,9 @@ export class TaskReminderDrawerComponent implements OnInit {
       @Input() reminders$!: Observable<TaskReminderDto[]>;
       @Output() dismiss = new EventEmitter<string>();
       @Output() closed = new EventEmitter<void>();
+
+      private dialog = inject(MatDialog);
+      private facade = inject(FollowingExpensePaymentFacade);
 
       sortedReminders$!: Observable<TaskReminderDto[]>;   // <-- khai báo, chưa khởi tạo
 
@@ -79,5 +85,17 @@ export class TaskReminderDrawerComponent implements OnInit {
             if ((event.target as HTMLElement).classList.contains('closing')) {
                   this.closed.emit();
             }
+      }
+
+      openExpensePaymentDetailDialog(item: TaskReminderDto) {
+            const dialogRef = this.dialog.open(ExpensePaymentDetailDialogComponent, {
+                  data: item.documentId,
+            });
+
+            dialogRef.afterClosed().subscribe((result: any) => {
+                  if (result?.success) {
+                        this.facade.refreshIncremental();
+                  }
+            });
       }
 }

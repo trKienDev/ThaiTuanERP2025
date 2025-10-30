@@ -51,7 +51,7 @@ export abstract class BaseCrudService<TDto, TRequest> {
 
       create(payload: TRequest): Observable<TDto> {
             return this.http
-                  .post<ApiResponse<TDto>>(this.endpoint, payload)
+                  .post<ApiResponse<TDto>>(`${this.endpoint}/new`, payload)
                   .pipe(
                         handleApiResponse$<TDto>(), 
                         catchError(err => throwError(() => err))
@@ -76,9 +76,10 @@ export abstract class BaseCrudService<TDto, TRequest> {
                   );
       }
 
-      toggleActive(id: string, isActive: boolean): Observable<boolean> {
+      toggleActive(id: string): Observable<boolean> {
+            console.log('Toggle active called for id:', id);
             return this.http
-                  .patch<ApiResponse<boolean>>(`${this.endpoint}/${id}/status`, { isActive })
+                  .patch<ApiResponse<boolean>>(`${this.endpoint}/${id}/toggle-activate`, null)
                   .pipe(
                         handleApiResponse$<boolean>(),
                         catchError(err => throwError(() => err))

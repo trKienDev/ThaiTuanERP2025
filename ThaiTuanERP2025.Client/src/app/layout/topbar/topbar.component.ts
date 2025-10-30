@@ -1,8 +1,6 @@
 // topbar.component.ts (đã chỉnh)
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
-import { UserFacade } from '../../pages/account/facades/user.facade';
-import { UserDto } from '../../pages/account/models/user.model';
+import { Component, ElementRef, HostListener, inject, OnInit } from '@angular/core';
 import { firstValueFrom, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { NotificationPanelService } from './notification-panel/services/notification-panel.service';
@@ -11,17 +9,26 @@ import { NotificationFacade } from './notification-panel/facade/notification.fac
 import { TaskReminderFacade } from './task-reminder-panel/facades/task-reminder.facade';
 import { TaskReminderDrawerService } from './task-reminder-panel/services/task-reminder-drawer.service';
 import { resolveAvatarUrl } from '../../shared/utils/avatar.utils';
+import { UserFacade } from '../../features/account/facades/user.facade';
+import { UserDto } from '../../features/account/models/user.model';
+import { AuthService } from '../../core/services/auth/auth.service';
+import { Router } from '@angular/router';
+import { AvatarUrlPipe } from "../../shared/pipes/avatar-url.pipe";
 
 @Component({
       selector: 'app-topbar',
       standalone: true,
-      imports: [CommonModule],
+      imports: [CommonModule, AvatarUrlPipe],
       templateUrl: './topbar.component.html',
       styleUrl: './topbar.component.scss'
 })
 export class TopbarComponent implements OnInit {
       private userFacade = inject(UserFacade);
-
+      private authService = inject(AuthService); // Giả sử UserFacade có phương thức logout()
+      showUserMenu = false;
+      private elRef = inject(ElementRef);
+      private router = inject(Router);
+      
       // Notification
       private notificationFacade = inject(NotificationFacade);
       private notificationPanel = inject(NotificationPanelService);
@@ -45,8 +52,6 @@ export class TopbarComponent implements OnInit {
       );
 
       async ngOnInit(): Promise<void> {
-            this.currentUser = await firstValueFrom(this.currentUser$);
-
             // Khởi tạo state: REST + SignalR đã được thực hiện bên trong NotificationStateService
             await this.notificationFacade.init();
 
@@ -79,9 +84,6 @@ export class TopbarComponent implements OnInit {
             }
       }
 
-      get avatarSrc(): string {
-            return resolveAvatarUrl(this.baseUrl, this.currentUser);
-      }
 
       // Optional: giữ các hàm này nếu bạn gọi từ nơi khác
       onMarkAllRead() {
@@ -91,4 +93,40 @@ export class TopbarComponent implements OnInit {
       onMarkRead(id: string) {
             this.notificationFacade.markRead(id);
       }
+
+
+      // animation state
+      menuVisible = false;
+      menuState: 'entering' | 'leaving' | null = null;
+
+      toggleUserMenu(event: MouseEvent) {
+            event.stopPropagation();
+
+            if (!this.menuVisible) {
+                  this.menuVisible = true;
+                  requestAnimationFrame(() => (this.menuState = 'entering'));
+            } else {
+                  this.startClosingAnimation();
+            }
+      }
+      
+      onLogout() {
+            this.startClosingAnimation();
+            this.authService.logout();
+            this.router.navigateByUrl('/login');
+      }
+      @HostListener('document:click', ['$event'])
+      onClickOutside(event: Event) {
+            if (this.menuVisible && !this.elRef.nativeElement.contains(event.target)) {
+                  this.startClosingAnimation();
+            }
+      }
+      private startClosingAnimation() {
+            this.menuState = 'leaving';
+            setTimeout(() => {
+                  this.menuVisible = false;
+                  this.menuState = null;
+            }, 150); // phải khớp với duration CSS
+      }
 }
+

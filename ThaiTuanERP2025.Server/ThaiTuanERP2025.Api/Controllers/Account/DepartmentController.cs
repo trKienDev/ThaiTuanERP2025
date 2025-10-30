@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Presentation.Common;
+using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Account.Commands.Departments.AddDepartment;
 using ThaiTuanERP2025.Application.Account.Commands.Departments.DeleteDepartment;
 using ThaiTuanERP2025.Application.Account.Commands.Departments.SetDepartmentManager;
@@ -9,7 +9,7 @@ using ThaiTuanERP2025.Application.Account.Commands.Departments.UpdateDepartment;
 using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Application.Account.Queries.Departments.GetAllDepartments;
 
-namespace ThaiTuanERP2025.Presentation.Controllers.Account
+namespace ThaiTuanERP2025.Api.Controllers.Account
 {
 	[Authorize]
 	[ApiController]
@@ -29,7 +29,7 @@ namespace ThaiTuanERP2025.Presentation.Controllers.Account
 			return Ok(ApiResponse<List<DepartmentDto>>.Success(departments));
 		}
 
-		[HttpPost]
+		[HttpPost("new")]
 		public async Task<IActionResult> Create([FromBody] AddDepartmentCommand command)
 		{
 			if (command == null)
