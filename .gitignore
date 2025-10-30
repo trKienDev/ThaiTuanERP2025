@@ -40,6 +40,8 @@ secrets.json
 # appsettings files
 appsettings.Development.json
 appsettings.Local.json
+appsettings.json
+appsettings.*.json
 
 ####################################################
 # Node / Angular
