@@ -2,6 +2,8 @@
 using System.Reflection;
 using MediatR;
 using FluentValidation;
+using ThaiTuanERP2025.Application.Behaviors;
+using ThaiTuanERP2025.Domain.Common.Events;
 
 namespace ThaiTuanERP2025.Application
 {
@@ -19,12 +21,22 @@ namespace ThaiTuanERP2025.Application
 			services.AddValidatorsFromAssembly(appAssembly);
 
 			// 3) AutoMapper (nếu bạn có Profile trong Application)
-			// Nếu chưa có profile nào thì dòng này vẫn an toàn.
 			services.AddAutoMapper(appAssembly);
 
-			// 4) Pipeline Behaviors (tuỳ chọn nhưng nên có)
-			//    - ValidationBehavior: tự động chạy FluentValidation trước khi vào Handler
-			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(Behaviors.ValidationBehavior<,>));
+			// 4) Pipeline Behavior
+			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehavior<,>));
+			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestCorrelationBehavior<,>));
+			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UserLoggingContextBehavior<,>));
+			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehavior<,>));
+			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+
+			// MediatR
+			services.AddMediatR(
+				typeof(IDomainEvent).Assembly,           // Domain Layer
+				typeof(AssemblyMarker).Assembly,         // Application Layer
+				Assembly.GetExecutingAssembly()          // API Layer
+			);
 
 			return services;
 		}

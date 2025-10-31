@@ -26,6 +26,11 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 using ThaiTuanERP2025.Infrastructure.StoredFiles.Configurations;
 using ThaiTuanERP2025.Infrastructure.StoredFiles.FileStorage;
 using ThaiTuanERP2025.Infrastructure.StoredFiles.Repositories;
+using Microsoft.Extensions.Options;
+using ThaiTuanERP2025.Application.Common.Options;
+using ThaiTuanERP2025.Domain.Common.Enums;
+using ThaiTuanERP2025.Infrastructure.Notifications.Background;
+using ThaiTuanERP2025.Application.Common.Events;
 
 namespace ThaiTuanERP2025.Infrastructure
 {
@@ -104,6 +109,33 @@ namespace ThaiTuanERP2025.Infrastructure
 			// ========= File Storage (MinIO) =========
 			services.Configure<FileStorageOptions>(cfg.GetSection("Minio"));
 			services.AddScoped<IFileStorage, LocalFileStorage>();
+			services.AddOptions<FileStorageOptions>()
+				.Bind(cfg.GetSection(FileStorageOptions.SectionName))
+				.ValidateDataAnnotations()
+				.Validate(o => !string.IsNullOrWhiteSpace(o.BasePath), "BasePath is required")
+				.PostConfigure(o =>
+				{
+					// Chuẩn hoá path tuyệt đối (dùng forward/backward đều OK)
+					o.BasePath = Path.GetFullPath(o.BasePath);
+				});
+
+			// Host Service
+			services.AddHostedService<TaskReminderExpiryHostedService>();
+			
+			// Task Reminder
+			services.Configure<TaskReminderExpiryOptions>(
+				cfg.GetSection("TaskReminderExpiry")
+			);
+
+			// DocumentSubIdOptions
+			services.Configure<DocumentSubIdOptions>(opt => {
+				opt.TypeDigits[DocumentType.ExpensePayment] = "01";
+				opt.TypeDigits[DocumentType.OutgoingPayment] = "02";
+				opt.TypeDigits[DocumentType.Invoice] = "03";
+			});
+
+			// DomainEventDispatcher
+			services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
 
 			return services;
 		}

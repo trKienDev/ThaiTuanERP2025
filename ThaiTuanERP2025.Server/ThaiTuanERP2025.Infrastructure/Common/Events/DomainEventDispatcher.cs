@@ -1,11 +1,12 @@
 ﻿using MediatR;
-using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Application.Common.Events;
+using ThaiTuanERP2025.Domain.Common.Events;
 namespace ThaiTuanERP2025.Infrastructure.Common
 {
 	/// <summary>
 	/// Dịch vụ trung gian dùng để publish các domain event sau khi SaveChangesAsync().
 	/// </summary>
-	public sealed class DomainEventDispatcher
+	public sealed class DomainEventDispatcher : IDomainEventDispatcher
 	{
 		private readonly IMediator _mediator;
 
@@ -14,17 +15,11 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			_mediator = mediator;
 		}
 
-		public async Task DispatchAsync(IEnumerable<AuditableEntity> entitiesWithEvents, CancellationToken cancellationToken = default)
+		public async Task DispatchAsync(IEnumerable<IDomainEvent> domainEvents, CancellationToken cancellationToken = default)
 		{
-			foreach (var entity in entitiesWithEvents)
+			foreach (var domainEvent in domainEvents)
 			{
-				var domainEvents = entity.DomainEvents.ToList();
-				entity.ClearDomainEvents();
-
-				foreach (var domainEvent in domainEvents)
-				{
-					await _mediator.Publish(domainEvent, cancellationToken);
-				}
+				await _mediator.Publish(domainEvent, cancellationToken);
 			}
 		}
 	}
