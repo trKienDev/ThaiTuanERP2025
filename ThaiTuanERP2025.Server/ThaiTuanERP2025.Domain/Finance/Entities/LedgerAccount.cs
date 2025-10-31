@@ -2,13 +2,13 @@
 using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Finance.Enums;
+using ThaiTuanERP2025.Domain.Finance.Events.LedgerAccounts;
 
 namespace ThaiTuanERP2025.Domain.Finance.Entities
 {
 	public class LedgerAccount : AuditableEntity
 	{
 		private LedgerAccount() { }
-
 		public LedgerAccount(
 			string number,
 			string name,
@@ -95,7 +95,6 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			IsActive = false;
 			AddDomainEvent(new LedgerAccountDeactivatedEvent(this));
 		}
-
 		#endregion
 	}
 }

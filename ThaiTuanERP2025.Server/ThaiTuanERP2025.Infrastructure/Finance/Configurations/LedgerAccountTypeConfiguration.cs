@@ -1,24 +1,33 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ThaiTuanERP2025.Domain.Finance.Entities;
+using ThaiTuanERP2025.Infrastructure.Persistence.Configurations;
 
 namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 {
-	public class LedgerAccountTypeConfiguration : IEntityTypeConfiguration<LedgerAccountType>
+	public class LedgerAccountTypeConfiguration : BaseEntityConfiguration<LedgerAccountType>
 	{
-		public void Configure(EntityTypeBuilder<LedgerAccountType> builer) {
-			builer.ToTable("LedgerAccountTypes", "Finance").HasKey(x => x.Id);
-			builer.Property(x => x.Code).IsRequired().HasMaxLength(64);
-			builer.Property(x => x.Name).IsRequired().HasMaxLength(250);
-			builer.Property(x => x.Description).HasMaxLength(1000);
-			builer.Property(x => x.IsActive).HasDefaultValue(true);
-			builer.HasIndex(x => x.Code).IsUnique();
-			builer.HasIndex(x => x.Name);
+		public override void Configure(EntityTypeBuilder<LedgerAccountType> builder) {
+			builder.ToTable("LedgerAccountTypes", "Finance").HasKey(x => x.Id);
+
+			builder.Property(x => x.Code).HasMaxLength(50).IsRequired();
+			builder.Property(x => x.Name).HasMaxLength(200).IsRequired();
+			builder.Property(x => x.Description).HasMaxLength(500);
+			builder.Property(x => x.IsActive).IsRequired();
+			builder.Property(x => x.LedgerAccountTypeKind).HasConversion<int>().IsRequired();
+
+			// EF truy cập private field _ledgerAccounts
+			builder.Navigation(nameof(LedgerAccountType.LedgerAccounts))
+				.UsePropertyAccessMode(PropertyAccessMode.Field);
+
+			builder.HasMany(typeof(LedgerAccount), "_ledgerAccounts")
+				.WithOne(nameof(LedgerAccount.LedgerAccountType))
+				.HasForeignKey(nameof(LedgerAccount.LedgerAccountTypeId))
+				.OnDelete(DeleteBehavior.Cascade);
+
+			// --------- Indexes ------------
+			builder.HasIndex(x => x.Code).IsUnique();
+			builder.HasIndex(x => x.IsActive);
 		}
 	}
 }

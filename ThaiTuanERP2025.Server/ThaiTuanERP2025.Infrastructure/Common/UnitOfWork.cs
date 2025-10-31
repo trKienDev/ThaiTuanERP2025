@@ -50,10 +50,10 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			IOutgoingPaymentRepository outgoingPayments,
 
 			// Workflow	
-			IApprovalStepTemplateRepository approvalStepTemplates,
-			IApprovalWorkflowTemplateRepository approvalWorkflowTemplates,
-			IApprovalStepInstanceRepository approvalStepInstances,
-			IApprovalWorkflowInstanceRepository approvalWorkflowInstances,
+			IExpenseStepTemplateRepository approvalStepTemplates,
+			IExpenseWorkflowTemplateRepository approvalWorkflowTemplates,
+			IExpenseStepInstanceRepository approvalStepInstances,
+			IExpenseWorkflowInstanceRepository approvalWorkflowInstances,
 
 			// Expense Payment
 			IExpensePaymentRepository expensePayments,
@@ -158,10 +158,10 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		public IOutgoingPaymentRepository OutgoingPayments { get; }
 
 		// Workflow
-		public IApprovalWorkflowTemplateRepository ApprovalWorkflowTemplates { get; }
-		public IApprovalStepTemplateRepository ApprovalStepTemplates { get; }
-		public IApprovalWorkflowInstanceRepository ApprovalWorkflowInstances { get; }
-		public IApprovalStepInstanceRepository ApprovalStepInstances { get; }
+		public IExpenseWorkflowTemplateRepository ApprovalWorkflowTemplates { get; }
+		public IExpenseStepTemplateRepository ApprovalStepTemplates { get; }
+		public IExpenseWorkflowInstanceRepository ApprovalWorkflowInstances { get; }
+		public IExpenseStepInstanceRepository ApprovalStepInstances { get; }
 
 		// Expense Payment
 		public IExpensePaymentRepository ExpensePayments { get; }

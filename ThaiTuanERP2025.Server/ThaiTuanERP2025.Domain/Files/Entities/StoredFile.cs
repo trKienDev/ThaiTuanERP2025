@@ -1,8 +1,8 @@
 ﻿using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Files.Events.StoredFiles;
 
 namespace ThaiTuanERP2025.Domain.Files.Entities
 {
-
 	public class StoredFile : AuditableEntity
 	{
 		public string Bucket { get; private set; } = null!;
@@ -21,17 +21,9 @@ namespace ThaiTuanERP2025.Domain.Files.Entities
 		private StoredFile() { } // EF only
 
 		public StoredFile(
-		    string bucket,
-		    string objectKey,
-		    string fileName,
-		    string contentType,
-		    long size,
-		    string module,
-		    string entity,
-		    string? entityId = null,
-		    string? hash = null,
-		    bool isPublic = false)
-		{
+		    string bucket, string objectKey, string fileName, string contentType, long size, string module,
+		    string entity, string? entityId = null, string? hash = null, bool isPublic = false
+		) {
 			Guard.AgainstNullOrWhiteSpace(bucket, nameof(bucket));
 			Guard.AgainstNullOrWhiteSpace(objectKey, nameof(objectKey));
 			Guard.AgainstNullOrWhiteSpace(fileName, nameof(fileName));

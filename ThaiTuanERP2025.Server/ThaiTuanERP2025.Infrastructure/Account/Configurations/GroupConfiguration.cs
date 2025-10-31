@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Infrastructure.Persistence.Configurations;
 
 namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 {
-	public class GroupConfiguration : IEntityTypeConfiguration<Group>
+	public class GroupConfiguration : BaseEntityConfiguration<Group>
 	{
-		public void Configure(EntityTypeBuilder<Group> builder)
+		public override void Configure(EntityTypeBuilder<Group> builder)
 		{
 			builder.ToTable("Groups", "Account");
 
@@ -24,21 +25,6 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 			builder.HasOne<User>()
 				.WithMany()
 				.HasForeignKey(g => g.AdminId)
-				.OnDelete(DeleteBehavior.Restrict);
-
-			builder.HasOne(g => g.CreatedByUser)
-				.WithMany()
-				.HasForeignKey("CreatedByUserId")
-				.OnDelete(DeleteBehavior.Restrict);
-
-			builder.HasOne(g => g.ModifiedByUser)
-				.WithMany()
-				.HasForeignKey("ModifiedByUserId")
-				.OnDelete(DeleteBehavior.Restrict);
-
-			builder.HasOne(g => g.DeletedByUser)
-				.WithMany()
-				.HasForeignKey("DeletedByUserId")
 				.OnDelete(DeleteBehavior.Restrict);
 
 			// Private collection

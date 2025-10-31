@@ -30,9 +30,9 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories
 
 
 
-		public async Task<ApprovalWorkflowInstance?> GetWorkflowInstanceAsync(Guid documentId, CancellationToken cancellationToken = default)
+		public async Task<ExpenseWorkflowInstance?> GetWorkflowInstanceAsync(Guid documentId, CancellationToken cancellationToken = default)
 		{
-			return await _context.Set<ApprovalWorkflowInstance>()
+			return await _context.Set<ExpenseWorkflowInstance>()
 				.AsNoTracking()
 				.AsSplitQuery()
 				.Include(i => i.Steps)

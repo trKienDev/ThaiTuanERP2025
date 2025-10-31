@@ -59,7 +59,7 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 				throw new ConflictException("Workflow template has no steps");
 
 			// 2 ) Tạo instance (Draft)
-			var awi = new ApprovalWorkflowInstance(
+			var awi = new ExpenseWorkflowInstance(
 				templateId: tpl.Id,
 				templateVersion: tpl.Version,
 				documentType: "ExpensePayment",
@@ -98,7 +98,7 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 
 				ovMap.TryGetValue(s.Order, out var selected);
 
-				var step = new ApprovalStepInstance(
+				var step = new ExpenseStepInstance(
 					workflowInstanceId: awi.Id,
 					templateStepId: s.Id,
 					name: s.Name,
@@ -154,7 +154,7 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 		}
 
-		private async Task<ApprovalWorkflowInstance> LoadInstanceWithStepsAsync(Guid instanceId, CancellationToken cancellationToken)
+		private async Task<ExpenseWorkflowInstance> LoadInstanceWithStepsAsync(Guid instanceId, CancellationToken cancellationToken)
 		{
 			var ins = await _unitOfWork.ApprovalWorkflowInstances.SingleOrDefaultIncludingAsync(
 				i => i.Id == instanceId,
@@ -174,7 +174,7 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 			return ins;
 		}
 
-		private async Task ActivateStepAsync(ApprovalWorkflowInstance ins, ApprovalStepInstance step, CancellationToken ct)
+		private async Task ActivateStepAsync(ExpenseWorkflowInstance ins, ExpenseStepInstance step, CancellationToken ct)
 		{
 			if (step.Status != StepStatus.Pending) return;
 
@@ -195,7 +195,7 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 			ins.SetCurrentStep(step.Order);
 		}
 
-		private async Task<IReadOnlyCollection<Guid>> ResolveApproversAsync(ApprovalWorkflowInstance ins, ApprovalStepInstance step, CancellationToken cancellationToken)
+		private async Task<IReadOnlyCollection<Guid>> ResolveApproversAsync(ExpenseWorkflowInstance ins, ExpenseStepInstance step, CancellationToken cancellationToken)
 		{
 			// 0) Nếu đã resolve sẵn thì dùng luôn
 			if (!string.IsNullOrWhiteSpace(step.ResolvedApproverCandidatesJson))
@@ -209,7 +209,7 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 			}
 
 			// 1) Load template step
-			ApprovalStepTemplate? tpl = null;
+			ExpenseStepTemplate? tpl = null;
 			if (step.TemplateStepId.HasValue)
 			{
 				tpl = await _unitOfWork.ApprovalStepTemplates
@@ -273,7 +273,7 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 		}
 
 		// Trong ApprovalWorkflowService.cs (cùng lớp với MoveToNextStepAsync)
-		private ApprovalStepInstance? GetNextStep(ApprovalWorkflowInstance ins, ApprovalStepInstance current)
+		private ExpenseStepInstance? GetNextStep(ExpenseWorkflowInstance ins, ExpenseStepInstance current)
 		{
 			// Sắp xếp bước theo Order
 			var ordered = ins.Steps.OrderBy(s => s.Order).ToList();

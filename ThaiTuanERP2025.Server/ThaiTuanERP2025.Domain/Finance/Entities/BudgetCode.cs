@@ -75,7 +75,6 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			IsActive = false;
 			AddDomainEvent(new BudgetCodeDeactivatedEvent(this));
 		}
-
 		#endregion
 	}
 }

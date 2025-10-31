@@ -7,40 +7,35 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 {
 	public sealed class BankAccountConfiguration : IEntityTypeConfiguration<BankAccount>
 	{
-		public void Configure(EntityTypeBuilder<BankAccount> builder) {
-			builder.ToTable("BankAccounts", "Expense", t => {
-				// CHECK: đúng 1 trong 2 FK(UserId, SupplierId) được set
-				t.HasCheckConstraint(
-					"CK_Finance_BankAccount_Owner",
-					"(CASE WHEN [UserId] IS NOT NULL THEN 1 ELSE 0 END) + " +
-					"(CASE WHEN [SupplierId] IS NOT NULL THEN 1 ELSE 0 END) = 1"
-				);
-			});
+		public void Configure(EntityTypeBuilder<BankAccount> builder)
+		{
+			builder.ToTable("BankAccounts");
+
 			builder.HasKey(x => x.Id);
 
-			builder.Property(x => x.BankName).IsRequired().HasMaxLength(128);
-			builder.Property(x => x.AccountNumber).IsRequired().HasMaxLength(64);
-			builder.Property(x => x.BeneficiaryName).IsRequired().HasMaxLength(128);
+			// ========== Thuộc tính cơ bản ==========
+			builder.Property(x => x.BankName).HasMaxLength(200).IsRequired();
+			builder.Property(x => x.AccountNumber).HasMaxLength(100).IsRequired();
+			builder.Property(x => x.BeneficiaryName).HasMaxLength(200).IsRequired();
+			builder.Property(x => x.IsActive).IsRequired();
 
-			// Owner: hoặc User hoặc Supplier
+			// ========== Relationship Supplier ==========
+			builder.HasOne(x => x.Supplier)
+				.WithMany("_bankAccounts")
+				.HasForeignKey(x => x.SupplierId)
+				.OnDelete(DeleteBehavior.Cascade);
+
+			// ========== Relationship User ==========
 			builder.HasOne(x => x.User)
-				.WithMany(u => u.BankAccounts)
+				.WithMany()
 				.HasForeignKey(x => x.UserId)
 				.OnDelete(DeleteBehavior.Restrict);
-			builder.HasOne(x => x.Supplier)
-				.WithMany(s => s.BankAccounts)
-				.HasForeignKey(x => x.SupplierId)
-				.OnDelete(DeleteBehavior.Restrict);
 
-			// Mỗi User không được lặp AccountNumber
-			builder.HasIndex(x => new { x.UserId, x.AccountNumber })
-				.IsUnique()
-				.HasFilter("[UserId] IS NOT NULL");
+			// ========== Index ==========
+			builder.HasIndex(x => x.AccountNumber).IsUnique(); // tránh trùng số tài khoản
 
-			// Mỗi Supplier không được lặp AccountNumber
-			builder.HasIndex(x => new { x.SupplierId, x.AccountNumber })
-				.IsUnique()
-				.HasFilter("[SupplierId] IS NOT NULL");
+			builder.HasIndex(x => new { x.SupplierId, x.IsActive });
+			builder.HasIndex(x => new { x.UserId, x.IsActive });
 		}
 	}
 }

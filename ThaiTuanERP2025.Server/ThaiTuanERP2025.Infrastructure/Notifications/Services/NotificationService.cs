@@ -16,7 +16,7 @@ namespace ThaiTuanERP2025.Infrastructure.Notifications.Services
 			_realtime = realtime;
 		}
 
-		public async Task NotifyStepActivatedAsync(ApprovalWorkflowInstance instance, ApprovalStepInstance step, IReadOnlyCollection<Guid> targetUserIds, CancellationToken cancellationToken)
+		public async Task NotifyStepActivatedAsync(ExpenseWorkflowInstance instance, ExpenseStepInstance step, IReadOnlyCollection<Guid> targetUserIds, CancellationToken cancellationToken)
 		{
 			if (targetUserIds == null || targetUserIds.Count == 0) return;
 
@@ -67,7 +67,7 @@ namespace ThaiTuanERP2025.Infrastructure.Notifications.Services
 			await _realtime.NotifyStepActivatedAsync(targetUserIds, payloads, cancellationToken);
 		}
 
-		public async Task NotifyWorkflowRejectedAsync(ApprovalWorkflowInstance workflow, ApprovalStepInstance step, string docName, Guid docId, string docType, IReadOnlyCollection<Guid> targetUserIds, CancellationToken cancellationToken) { 
+		public async Task NotifyWorkflowRejectedAsync(ExpenseWorkflowInstance workflow, ExpenseStepInstance step, string docName, Guid docId, string docType, IReadOnlyCollection<Guid> targetUserIds, CancellationToken cancellationToken) { 
 			if (targetUserIds == null || targetUserIds.Count == 0) return;
 
 			var title = $"{docName} đã bị từ chối";
@@ -102,7 +102,7 @@ namespace ThaiTuanERP2025.Infrastructure.Notifications.Services
 			await _realtime.NotifyStepActivatedAsync(targetUserIds, payloads, cancellationToken);
 		}
 
-		public async Task NotifyWorkflowApprovedAsync(ApprovalWorkflowInstance workflow, ApprovalStepInstance step, IReadOnlyCollection<Guid> targetUserIds, string approver, string docName, Guid documentId, string documentType, CancellationToken cancellationToken = default) {
+		public async Task NotifyWorkflowApprovedAsync(ExpenseWorkflowInstance workflow, ExpenseStepInstance step, IReadOnlyCollection<Guid> targetUserIds, string approver, string docName, Guid documentId, string documentType, CancellationToken cancellationToken = default) {
 			if (targetUserIds == null || targetUserIds.Count == 0) return;
 
 			var title = $"{docName} đã được chấp thuận";
@@ -137,10 +137,10 @@ namespace ThaiTuanERP2025.Infrastructure.Notifications.Services
 			await _realtime.NotifyStepActivatedAsync(targetUserIds, payloads, cancellationToken);
 		}
 
-		private static string BuildLink(ApprovalWorkflowInstance i)
+		private static string BuildLink(ExpenseWorkflowInstance i)
 			=> i.DocumentType == "ExpensePayment" ? $"/expense/payments/{i.DocumentId}" : "/";
 
-		private static string BuildMessage(ApprovalWorkflowInstance i, ApprovalStepInstance s)
+		private static string BuildMessage(ExpenseWorkflowInstance i, ExpenseStepInstance s)
 			=> $"Tài liệu: {i.DocumentType} • Bước: {s.Name}" + (s.DueAt.HasValue ? $" • Hạn SLA: {s.DueAt.Value:HH:mm dd/MM}" : string.Empty);
 	}
 }

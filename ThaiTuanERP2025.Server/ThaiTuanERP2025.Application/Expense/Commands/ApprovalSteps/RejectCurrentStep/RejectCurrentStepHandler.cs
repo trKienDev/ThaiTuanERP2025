@@ -47,7 +47,7 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ApprovalSteps.RejectCurre
 			// authorize
 			var userId = command.UserId;
 			var candidates = JsonUtils.ParseGuidArray(currentStep.ResolvedApproverCandidatesJson).ToHashSet();
-			if (currentStep.FlowType == FlowType.Single) {
+			if (currentStep.FlowType == ExpenseFlowType.Single) {
 				if (currentStep.DefaultApproverId != userId)
 					throw new ForbiddenException("Bạn không phải người duyệt được chỉ định ở bước này.");
 			} else {

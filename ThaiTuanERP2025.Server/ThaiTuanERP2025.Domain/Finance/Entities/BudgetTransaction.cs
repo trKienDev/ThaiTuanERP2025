@@ -1,5 +1,6 @@
 ﻿using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Finance.Enums;
+using ThaiTuanERP2025.Domain.Finance.Events.BudgetTransactions;
 
 namespace ThaiTuanERP2025.Domain.Finance.Entities
 {
@@ -33,7 +34,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public BudgetTransactionType Type { get; private set; }
 		public DateTime TransactionDate { get; private set; }
 
-		internal BudgetPlan BudgetPlan { get; private set; } = null!;
+		public BudgetPlan BudgetPlan { get; private set; } = null!;
 
 		#region Domain Behaviors
 

@@ -1,6 +1,5 @@
 ﻿using ThaiTuanERP2025.Domain.Common.Events;
-using ThaiTuanERP2025.Domain.Finance.Entities.ThaiTuanERP2025.Domain.Finance.Entities;
-
+using ThaiTuanERP2025.Domain.Finance.Entities;
 namespace ThaiTuanERP2025.Domain.Finance.Events.CashoutGroups
 {
 	public sealed class CashoutGroupActivatedEvent : IDomainEvent

@@ -39,7 +39,7 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ApprovalWorkflows.CreateA
 				throw new ConflictException("Luồng phê duyệt không có bước duyệt nào");
 
 			// 2 ) Build instance root
-			var instance = new ApprovalWorkflowInstance(
+			var instance = new ExpenseWorkflowInstance(
 				templateId: template.Id,
 				    templateVersion: template.Version,        // <-- nhớ dùng version
 				    documentType: request.DocumentType,
@@ -90,7 +90,7 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ApprovalWorkflows.CreateA
 					selectedApprover = s.AllowOverride ? @default : @default;
 				}
 
-				var stepInstance = new ApprovalStepInstance(
+				var stepInstance = new ExpenseStepInstance(
 					workflowInstanceId: instance.Id,
 					templateStepId: s.Id,
 					name: s.Name,

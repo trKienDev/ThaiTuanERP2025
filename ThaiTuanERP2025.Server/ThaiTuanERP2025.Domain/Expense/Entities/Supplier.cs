@@ -1,5 +1,7 @@
-﻿using ThaiTuanERP2025.Domain.Common;
+﻿using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Exceptions;
+using ThaiTuanERP2025.Domain.Expense.Events.Suppliers;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
@@ -23,6 +25,10 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public string Name { get; private set; } = null!;
 		public string? TaxCode { get; private set; }
 		public bool IsActive { get; private set; } = true;
+
+		public User CreatedByUser { get; set; } = null!;
+		public User? ModifiedByUser { get; set; }
+		public User? DeletedByUser { get; set; }
 
 		public IReadOnlyCollection<BankAccount> BankAccounts => _bankAccounts.AsReadOnly();
 

@@ -5,13 +5,13 @@ namespace ThaiTuanERP2025.Domain.Expense.Events.ApprovalStepTemplates
 {
 	public sealed class ApprovalStepTemplateSlaUpdatedEvent : IDomainEvent
 	{
-		public ApprovalStepTemplateSlaUpdatedEvent(ApprovalStepTemplate stepTemplate)
+		public ApprovalStepTemplateSlaUpdatedEvent(ExpenseStepTemplate stepTemplate)
 		{
 			StepTemplate = stepTemplate;
 			OccurredOn = DateTime.UtcNow;
 		}
 
-		public ApprovalStepTemplate StepTemplate { get; }
+		public ExpenseStepTemplate StepTemplate { get; }
 		public DateTime OccurredOn { get; }
 	}
 }

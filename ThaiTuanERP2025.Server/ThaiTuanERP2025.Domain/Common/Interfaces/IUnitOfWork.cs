@@ -43,10 +43,10 @@ namespace ThaiTuanERP2025.Application.Common.Interfaces
 		IOutgoingPaymentRepository OutgoingPayments { get; }
 
 		// Workflow
-		IApprovalStepTemplateRepository ApprovalStepTemplates { get; }
-		IApprovalWorkflowTemplateRepository ApprovalWorkflowTemplates { get; }
-		IApprovalWorkflowInstanceRepository ApprovalWorkflowInstances { get; }
-		IApprovalStepInstanceRepository ApprovalStepInstances { get; }
+		IExpenseStepTemplateRepository ApprovalStepTemplates { get; }
+		IExpenseWorkflowTemplateRepository ApprovalWorkflowTemplates { get; }
+		IExpenseWorkflowInstanceRepository ApprovalWorkflowInstances { get; }
+		IExpenseStepInstanceRepository ApprovalStepInstances { get; }
 
 		// Expense Payment
 		IExpensePaymentRepository ExpensePayments { get; }

@@ -11,23 +11,23 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 	{
 		public ApprovalStepInstanceMappingProfile()
 		{
-			CreateMap<ApprovalStepInstance, ApprovalStepInstanceDto>()
+			CreateMap<ExpenseStepInstance, ApprovalStepInstanceDto>()
 				.ConvertUsing<StepInstanceConverter>();
 
-			CreateMap<ApprovalStepInstance, ApprovalStepInstanceDetailDto>()
+			CreateMap<ExpenseStepInstance, ApprovalStepInstanceDetailDto>()
 				.ConvertUsing<StepInstanceDetailConverter>();
 
 
-			CreateMap<ApprovalStepInstance, ApprovalStepInstanceStatusDto>()
+			CreateMap<ExpenseStepInstance, ApprovalStepInstanceStatusDto>()
 				.ForMember(d => d.Status, o => o.MapFrom(s => s.Status.ToString()))
 				.ForMember(d => d.DefaultApproverUser, o => o.MapFrom((s, d, destMember, ctx) => s.DefaultApproverId.HasValue ? ApprovalStepInstanceMappingProfile.TryGetUserDto(ctx, s.DefaultApproverId.Value) : null))
 				.ForMember(d => d.ApprovedByUser, o => o.MapFrom<ApprovedUserResolver<ApprovalStepInstanceStatusDto>>())
 				.ForMember(d => d.RejectedByUser, o => o.MapFrom<RejectedUserResolver<ApprovalStepInstanceStatusDto>>());
 		}
 
-		private sealed class StepInstanceConverter : ITypeConverter<ApprovalStepInstance, ApprovalStepInstanceDto>
+		private sealed class StepInstanceConverter : ITypeConverter<ExpenseStepInstance, ApprovalStepInstanceDto>
 		{
-			public ApprovalStepInstanceDto Convert(ApprovalStepInstance s, ApprovalStepInstanceDto d, ResolutionContext ctx)
+			public ApprovalStepInstanceDto Convert(ExpenseStepInstance s, ApprovalStepInstanceDto d, ResolutionContext ctx)
 			{
 				Guid[]? candidates = null;
 				if (!string.IsNullOrWhiteSpace(s.ResolvedApproverCandidatesJson))
@@ -52,7 +52,7 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 					s.TemplateStepId,
 					s.Name,
 					s.Order,
-					s.FlowType == FlowType.OneOfN ? "OneOfN" : "Single",
+					s.FlowType == ExpenseFlowType.OneOfN ? "OneOfN" : "Single",
 					s.SlaHours,
 					s.ApproverMode == ApproverMode.Condition ? "Condition" : "Standard",
 					candidates,
@@ -72,9 +72,9 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 			}
 		}
 
-		private sealed class StepInstanceDetailConverter : ITypeConverter<ApprovalStepInstance, ApprovalStepInstanceDetailDto>
+		private sealed class StepInstanceDetailConverter : ITypeConverter<ExpenseStepInstance, ApprovalStepInstanceDetailDto>
 		{
-			public ApprovalStepInstanceDetailDto Convert(ApprovalStepInstance s, ApprovalStepInstanceDetailDto d, ResolutionContext ctx)
+			public ApprovalStepInstanceDetailDto Convert(ExpenseStepInstance s, ApprovalStepInstanceDetailDto d, ResolutionContext ctx)
 			{
 				Guid[]? candidates = null;
 				if (!string.IsNullOrWhiteSpace(s.ResolvedApproverCandidatesJson))
@@ -104,7 +104,7 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 					TemplateStepId = s.TemplateStepId,
 					Name = s.Name,
 					Order = s.Order,
-					FlowType = s.FlowType == FlowType.OneOfN ? "OneOfN" : "Single",
+					FlowType = s.FlowType == ExpenseFlowType.OneOfN ? "OneOfN" : "Single",
 					SlaHours = s.SlaHours,
 					ApprovalMode = s.ApproverMode == ApproverMode.Condition ? "Condition" : "Standard",
 					ResolvedApproverCandidateIds = candidates,
@@ -128,27 +128,27 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 			}
 		}
 
-		private sealed class ApprovedUserResolver<TDestination> : IValueResolver<ApprovalStepInstance, TDestination, UserDto?>
+		private sealed class ApprovedUserResolver<TDestination> : IValueResolver<ExpenseStepInstance, TDestination, UserDto?>
 		{
-			public UserDto? Resolve(ApprovalStepInstance s, TDestination d, UserDto? destMember, ResolutionContext ctx)
+			public UserDto? Resolve(ExpenseStepInstance s, TDestination d, UserDto? destMember, ResolutionContext ctx)
 			{
 				if (!s.ApprovedBy.HasValue) return null;
 				return ApprovalStepInstanceMappingProfile.TryGetUserDto(ctx, s.ApprovedBy.Value);
 			}
 		}
 
-		private sealed class RejectedUserResolver<TDestination> : IValueResolver<ApprovalStepInstance, TDestination, UserDto?>
+		private sealed class RejectedUserResolver<TDestination> : IValueResolver<ExpenseStepInstance, TDestination, UserDto?>
 		{
-			public UserDto? Resolve(ApprovalStepInstance s, TDestination d, UserDto? destMember, ResolutionContext ctx)
+			public UserDto? Resolve(ExpenseStepInstance s, TDestination d, UserDto? destMember, ResolutionContext ctx)
 			{
 				if (!s.RejectedBy.HasValue) return null;
 				return ApprovalStepInstanceMappingProfile.TryGetUserDto(ctx, s.RejectedBy.Value);
 			}
 		}
 
-		private sealed class DefaultApproverResolver : IValueResolver<ApprovalStepInstance, ApprovalStepInstanceStatusDto, UserDto?>
+		private sealed class DefaultApproverResolver : IValueResolver<ExpenseStepInstance, ApprovalStepInstanceStatusDto, UserDto?>
 		{
-			public UserDto? Resolve(ApprovalStepInstance s, ApprovalStepInstanceStatusDto d, UserDto? destMember, ResolutionContext ctx)
+			public UserDto? Resolve(ExpenseStepInstance s, ApprovalStepInstanceStatusDto d, UserDto? destMember, ResolutionContext ctx)
 			{
 				if (!s.DefaultApproverId.HasValue) return null;
 				return TryGetUserDto(ctx, s.DefaultApproverId.Value);

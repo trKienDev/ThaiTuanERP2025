@@ -1,13 +1,14 @@
 ﻿using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Exceptions;
+using ThaiTuanERP2025.Domain.Expense.Events.BankAccounts;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
 	public class BankAccount : AuditableEntity
 	{
+		#region EF Core Constructor
 		private BankAccount() { } // EF only
-
 		public BankAccount(string bankName, string accountNumber, string beneficiaryName, Guid? userId = null, Guid? supplierId = null)
 		{
 			Guard.AgainstNullOrWhiteSpace(bankName, nameof(bankName));
@@ -30,7 +31,9 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 			AddDomainEvent(new BankAccountCreatedEvent(this));
 		}
+		#endregion
 
+		#region Properties
 		public string BankName { get; private set; } = null!;
 		public string AccountNumber { get; private set; } = null!;
 		public string BeneficiaryName { get; private set; } = null!;
@@ -43,8 +46,12 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		public bool IsActive { get; private set; } = true;
 
-		#region Domain Behaviors
+		public User CreatedByUser { get; set; } = null!;
+		public User? ModifiedByUser { get; set; }
+		public User? DeletedByUser { get; set; }
+		#endregion
 
+		#region Domain Behaviors
 		public void Deactivate()
 		{
 			if (!IsActive) return;

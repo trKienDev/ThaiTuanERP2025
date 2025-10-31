@@ -8,6 +8,21 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		private readonly List<User> _users = new();
 		private readonly List<Department> _children = new();
 
+		#region Properties
+		public string Name { get; private set; } = string.Empty;
+		public string Code { get; private set; } = string.Empty;
+		public bool IsActive { get; private set; }
+		public int Level { get; private set; }
+		public Guid? ManagerUserId { get; private set; }
+		public Guid? ParentId { get; private set; }
+		public Department? Parent { get; private set; }
+
+		public User CreatedByUser { get; set; } = null!;
+		public User? ModifiedByUser { get; set; }
+		public User? DeletedByUser { get; set; }
+		#endregion
+
+		#region Constructor
 		private Department() { }
 		public Department(string name, string code, Guid? managerUserId = null)
 		{
@@ -22,18 +37,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 
 			AddDomainEvent(new DepartmentCreatedEvent(this));
 		}
-
-		public string Name { get; private set; } = string.Empty;
-		public string Code { get; private set; } = string.Empty;
-		public bool IsActive { get; private set; }
-		public int Level { get; private set; }
-		public Guid? ManagerUserId { get; private set; }
-		public Guid? ParentId { get; private set; }
-		public Department? Parent { get; private set; }
-
-		public User CreatedByUser { get; set; } = null!;
-		public User? ModifiedByUser { get; set; }
-		public User? DeletedByUser { get; set; }
+		#endregion
 
 		public IReadOnlyCollection<User> Users => _users.AsReadOnly();
 		public IReadOnlyCollection<Department> Children => _children.AsReadOnly();

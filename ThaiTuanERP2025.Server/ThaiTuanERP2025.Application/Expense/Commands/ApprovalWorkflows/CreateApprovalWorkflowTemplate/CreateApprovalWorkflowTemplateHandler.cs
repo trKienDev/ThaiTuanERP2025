@@ -84,10 +84,10 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ApprovalWorkflows.CreateA
 			return _mapper.Map<ApprovalWorkflowTemplateDto>(entity);
 		}
 
-		private static FlowType ParseFlowType(string value) =>
+		private static ExpenseFlowType ParseFlowType(string value) =>
 			value?.Trim().ToLowerInvariant() switch {
-				"single" => FlowType.Single,
-				"one-of-n" => FlowType.OneOfN,
+				"single" => ExpenseFlowType.Single,
+				"one-of-n" => ExpenseFlowType.OneOfN,
 				_ => throw new ConflictException($"FlowType không hợp lệ: {value}")
 			};
 

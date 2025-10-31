@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Infrastructure.Persistence.Configurations;
 
 namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 {
-	public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
+	public class DepartmentConfiguration : BaseEntityConfiguration<Department>
 	{
-		public void Configure(EntityTypeBuilder<Department> builder)
+		public override void Configure(EntityTypeBuilder<Department> builder)
 		{
 			builder.ToTable("Departments", "Account");
 
@@ -28,21 +29,6 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 				.WithMany()
 				.HasForeignKey(d => d.ManagerUserId)
 				.OnDelete(DeleteBehavior.SetNull);
-
-			builder.HasOne(e => e.CreatedByUser)
-				.WithMany()
-				.HasForeignKey(e => e.CreatedByUserId)
-				.OnDelete(DeleteBehavior.Restrict);
-
-			builder.HasOne(e => e.ModifiedByUser)
-				.WithMany()
-				.HasForeignKey(e => e.ModifiedByUserId)
-				.OnDelete(DeleteBehavior.Restrict);
-
-			builder.HasOne(e => e.DeletedByUser)
-				.WithMany()
-				.HasForeignKey(e => e.DeletedByUserId)
-				.OnDelete(DeleteBehavior.Restrict);
 
 			builder.HasIndex(e => e.CreatedByUserId);
 			builder.HasIndex(e => e.ModifiedByUserId);

@@ -7,22 +7,22 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 	public sealed class ApprovalWorkflowInstanceMappingProfile : Profile
 	{
 		public ApprovalWorkflowInstanceMappingProfile() {
-			CreateMap<ApprovalWorkflowInstance, ApprovalWorkflowInstanceDto>()
+			CreateMap<ExpenseWorkflowInstance, ApprovalWorkflowInstanceDto>()
 				.ForMember(d => d.Status, opt => opt.MapFrom(s => s.Status.ToString()))
 				.ForMember(d => d.Steps, opt => opt.MapFrom(s => s.Steps != null
 					? s.Steps.OrderBy(x => x.Order).ToList()
-					: new List<ApprovalStepInstance>()));
+					: new List<ExpenseStepInstance>()));
 
-			CreateMap<ApprovalWorkflowInstance, ApprovalWorkflowInstanceDetailDto>()
+			CreateMap<ExpenseWorkflowInstance, ApprovalWorkflowInstanceDetailDto>()
 				.ForMember(d => d.WorkflowInstance, opt => opt.MapFrom(s => s))
-				.ForMember(d => d.Steps, opt => opt.MapFrom(s => s.Steps ?? new List<ApprovalStepInstance>()));
+				.ForMember(d => d.Steps, opt => opt.MapFrom(s => s.Steps ?? new List<ExpenseStepInstance>()));
 
-			CreateMap<ApprovalWorkflowInstance, ApprovalWorkflowInstanceStatusDto>()
+			CreateMap<ExpenseWorkflowInstance, ApprovalWorkflowInstanceStatusDto>()
 				.ForMember(d => d.Status, opt => opt.MapFrom(s => s.Status.ToString()))
 				.ForMember(d => d.Steps, opt => opt.MapFrom(
 					s => s.Steps != null
 						? s.Steps.OrderBy(x => x.Order).ToList()
-						: new List<ApprovalStepInstance>()
+						: new List<ExpenseStepInstance>()
 				));
 		}
 	}

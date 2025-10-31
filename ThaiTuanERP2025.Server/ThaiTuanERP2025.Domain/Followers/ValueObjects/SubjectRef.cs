@@ -3,10 +3,10 @@ using ThaiTuanERP2025.Domain.Followers.Enums;
 
 namespace ThaiTuanERP2025.Domain.Followers.ValueObjects
 {
-	public readonly record struct SubjectRef
+	public record class SubjectRef
 	{
-		public SubjectType Type { get; }
-		public Guid Id { get; }
+		public SubjectType Type { get; init; }
+		public Guid Id { get; init; }
 
 		public SubjectRef(SubjectType type, Guid id)
 		{

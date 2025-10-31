@@ -5,13 +5,13 @@ namespace ThaiTuanERP2025.Domain.Expense.Events.ApprovalWorkflowTemplates
 {
 	public sealed class ApprovalWorkflowTemplateDeactivatedEvent : IDomainEvent
 	{
-		public ApprovalWorkflowTemplateDeactivatedEvent(ApprovalWorkflowTemplate workflowTemplate)
+		public ApprovalWorkflowTemplateDeactivatedEvent(ExpenseWorkflowTemplate workflowTemplate)
 		{
 			WorkflowTemplate = workflowTemplate;
 			OccurredOn = DateTime.UtcNow;
 		}
 
-		public ApprovalWorkflowTemplate WorkflowTemplate { get; }
+		public ExpenseWorkflowTemplate WorkflowTemplate { get; }
 		public DateTime OccurredOn { get; }
 	}
 }

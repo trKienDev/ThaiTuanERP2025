@@ -12,14 +12,14 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 		public ApprovalStepTemplateMappingProfile()
 		{
 			// Dùng TypeConverter để map sau khi EF đã materialize entity (in-memory)
-			CreateMap<ApprovalStepTemplate, ApprovalStepTemplateDto>()
+			CreateMap<ExpenseStepTemplate, ApprovalStepTemplateDto>()
 				.ConvertUsing<ApprovalStepTemplateToDtoConverter>();
 		}
 	}
 
-	public sealed class ApprovalStepTemplateToDtoConverter : ITypeConverter<ApprovalStepTemplate, ApprovalStepTemplateDto>
+	public sealed class ApprovalStepTemplateToDtoConverter : ITypeConverter<ExpenseStepTemplate, ApprovalStepTemplateDto>
 	{
-		public ApprovalStepTemplateDto Convert( ApprovalStepTemplate src, ApprovalStepTemplateDto dest, ResolutionContext ctx)
+		public ApprovalStepTemplateDto Convert( ExpenseStepTemplate src, ApprovalStepTemplateDto dest, ResolutionContext ctx)
 		{
 			// 1) Tính sẵn các biến cần cho init
 			Guid[]? approverIds = null;
@@ -56,7 +56,7 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 				WorkflowTemplateId = src.WorkflowTemplateId,
 				Name = src.Name,
 				Order = src.Order,
-				FlowType = src.FlowType == FlowType.OneOfN ? "OneOfN" : "Single",
+				FlowType = src.FlowType == ExpenseFlowType.OneOfN ? "OneOfN" : "Single",
 				SlaHours = src.SlaHours,
 				ApproverMode = src.ApproverMode == ApproverMode.Condition ? "Condition" : "Standard",
 

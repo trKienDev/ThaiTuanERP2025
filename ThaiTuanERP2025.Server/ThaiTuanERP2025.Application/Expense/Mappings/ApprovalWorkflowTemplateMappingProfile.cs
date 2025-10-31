@@ -7,7 +7,7 @@ namespace ThaiTuanERP2025.Application.Expense.Mappings
 	public sealed class ApprovalWorkflowTemplateMappingProfile : Profile
 	{
 		public ApprovalWorkflowTemplateMappingProfile() {
-			CreateMap<ApprovalWorkflowTemplate, ApprovalWorkflowTemplateDto>();
+			CreateMap<ExpenseWorkflowTemplate, ApprovalWorkflowTemplateDto>();
 		}	
 	}
 }

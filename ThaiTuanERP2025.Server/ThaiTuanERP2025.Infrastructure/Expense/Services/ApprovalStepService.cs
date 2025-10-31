@@ -15,7 +15,7 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Services
 			_taskReminderService = taskReminderService;
 		}
 
-		public async Task PublishAsync(ApprovalWorkflowInstance workflowInstance, ApprovalStepInstance stepInstance, string docName, Guid docId, string docType, CancellationToken cancellationToken)
+		public async Task PublishAsync(ExpenseWorkflowInstance workflowInstance, ExpenseStepInstance stepInstance, string docName, Guid docId, string docType, CancellationToken cancellationToken)
 		{
 			var targets = ResolveTargetsForNotification(stepInstance);
 			if (targets.Count > 0)
@@ -33,7 +33,7 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Services
 			);
 		}
 
-		public static IReadOnlyCollection<Guid> ResolveTargetsForNotification(ApprovalStepInstance step)
+		public static IReadOnlyCollection<Guid> ResolveTargetsForNotification(ExpenseStepInstance step)
 		{
 			// 1) Nếu đã chọn SelectedApproverId → notify đúng 1 người
 			if (step.SelectedApproverId.HasValue && step.SelectedApproverId.Value != Guid.Empty)

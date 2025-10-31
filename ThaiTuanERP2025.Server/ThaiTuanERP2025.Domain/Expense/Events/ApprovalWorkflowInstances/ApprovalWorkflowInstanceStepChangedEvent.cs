@@ -5,14 +5,14 @@ namespace ThaiTuanERP2025.Domain.Expense.Events.ApprovalWorkflowInstances
 {
 	public sealed class ApprovalWorkflowInstanceStepChangedEvent : IDomainEvent
 	{
-		public ApprovalWorkflowInstanceStepChangedEvent(ApprovalWorkflowInstance workflowInstance, int newStepOrder)
+		public ApprovalWorkflowInstanceStepChangedEvent(ExpenseWorkflowInstance workflowInstance, int newStepOrder)
 		{
 			WorkflowInstance = workflowInstance;
 			NewStepOrder = newStepOrder;
 			OccurredOn = DateTime.UtcNow;
 		}
 
-		public ApprovalWorkflowInstance WorkflowInstance { get; }
+		public ExpenseWorkflowInstance WorkflowInstance { get; }
 		public int NewStepOrder { get; }
 		public DateTime OccurredOn { get; }
 	}

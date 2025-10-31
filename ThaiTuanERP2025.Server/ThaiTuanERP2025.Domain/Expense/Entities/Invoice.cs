@@ -1,6 +1,7 @@
 ﻿using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Exceptions;
+using ThaiTuanERP2025.Domain.Expense.Events.Invoices;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
@@ -9,7 +10,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		private readonly List<InvoiceFile> _files = new();
 
 		private Invoice() { } // EF only
-
 		public Invoice(
 			string invoiceNumber,
 			string invoiceName,
@@ -110,10 +110,12 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			TotalWithTax = totalAmount + totalTax;
 		}
 
-		public void AddFile(string fileName, string url, long size, string mimeType)
+		public void AddFile(Guid fileId, bool isMain = false)
 		{
-			_files.Add(new InvoiceFile(Id, fileName, url, size, mimeType));
-			AddDomainEvent(new InvoiceFileAddedEvent(Id, fileName));
+			Guard.AgainstDefault(fileId, nameof(fileId));
+
+			_files.Add(new InvoiceFile(Id, fileId, isMain));
+			AddDomainEvent(new InvoiceFileAddedEvent(Id, fileId.ToString()));
 		}
 		#endregion
 	}

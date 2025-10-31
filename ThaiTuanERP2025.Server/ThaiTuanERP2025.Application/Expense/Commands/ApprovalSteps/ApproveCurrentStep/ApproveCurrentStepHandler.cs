@@ -63,12 +63,12 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ApprovalSteps.ApproveCurr
 			var userId = command.UserId;
 			// parse candidates
 			var candidates = JsonUtils.ParseGuidArray(currentStep.ResolvedApproverCandidatesJson).ToHashSet();
-			if (currentStep.FlowType == Domain.Expense.Enums.FlowType.Single)
+			if (currentStep.FlowType == Domain.Expense.Enums.ExpenseFlowType.Single)
 			{
 				if(!candidates.Contains(userId))
 					throw new ForbiddenException("Bạn không có quyền duyệt bước này");
 			}
-			else if (currentStep.FlowType == Domain.Expense.Enums.FlowType.OneOfN)
+			else if (currentStep.FlowType == Domain.Expense.Enums.ExpenseFlowType.OneOfN)
 			{
 				var inCandidates = candidates.Contains(userId);
 				if(!inCandidates)
@@ -76,7 +76,7 @@ namespace ThaiTuanERP2025.Application.Expense.Commands.ApprovalSteps.ApproveCurr
 				if (currentStep.SelectedApproverId != userId)
 				{
 					// cập nhật người chịu trách nhiệm cuối cùng
-					typeof(ApprovalStepInstance).GetProperty(nameof(ApprovalStepInstance.SelectedApproverId))!
+					typeof(ExpenseStepInstance).GetProperty(nameof(ExpenseStepInstance.SelectedApproverId))!
 						.SetValue(currentStep, userId);
 				}
 			}

@@ -1,59 +1,48 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ThaiTuanERP2025.Domain.Expense.Entities;
+using ThaiTuanERP2025.Infrastructure.Persistence.Configurations;
 
 namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 {
-	public class InvoiceConfiguration : IEntityTypeConfiguration<Invoice>
+	public class InvoiceConfiguration : BaseEntityConfiguration<Invoice>
 	{
-		public void Configure(EntityTypeBuilder<Invoice> builder) {
+		public override void Configure(EntityTypeBuilder<Invoice> builder) {
 			builder.ToTable("Invoices", "Expense");
 			builder.HasKey(x => x.Id);
 
-			builder.Property(x => x.InvoiceNumber).IsRequired().HasMaxLength(50);
-			builder.Property(x => x.InvoiceName).IsRequired().HasMaxLength(250);
-			builder.Property(x => x.InvoiceNumber).IsRequired().HasMaxLength(50);
-			builder.Property(x => x.SellerName).IsRequired(false).HasMaxLength(250);
-			builder.Property(x => x.SellerTaxCode).IsRequired().HasMaxLength(50);
-			builder.Property(x => x.SellerAddress).HasMaxLength(500);
-			builder.Property(x => x.BuyerName).HasMaxLength(250);
+			builder.Property(x => x.InvoiceNumber).HasMaxLength(50).IsRequired();
+			builder.Property(x => x.InvoiceName).HasMaxLength(200).IsRequired();
+			builder.Property(x => x.SellerTaxCode).HasMaxLength(50).IsRequired();
+			builder.Property(x => x.SellerName).HasMaxLength(200);
+			builder.Property(x => x.SellerAddress).HasMaxLength(300);
+			builder.Property(x => x.BuyerName).HasMaxLength(200);
 			builder.Property(x => x.BuyerTaxCode).HasMaxLength(50);
-			builder.Property(x => x.BuyerAddress).HasMaxLength(500);
-			builder.Property(x => x.IsDraft).HasDefaultValue(true);
-			builder.Property(x => x.TotalAmount).HasPrecision(18, 2);
-			builder.Property(x => x.TotalTax).HasPrecision(18, 2);
-			builder.Property(x => x.TotalWithTax).HasPrecision(18, 2);
+			builder.Property(x => x.BuyerAddress).HasMaxLength(300);
 
-			// Relationship
-			builder.HasOne(e => e.CreatedByUser)
-				.WithMany()
-				.HasForeignKey(e => e.CreatedByUserId)
-				.OnDelete(DeleteBehavior.Restrict);
+			// Money columns
+			builder.Property(x => x.TotalAmount).HasColumnType("decimal(18,2)");
+			builder.Property(x => x.TotalTax).HasColumnType("decimal(18,2)");
+			builder.Property(x => x.TotalWithTax).HasColumnType("decimal(18,2)");
 
-			builder.HasOne(e => e.ModifiedByUser)
-				.WithMany()
-				.HasForeignKey(e => e.ModifiedByUserId)
-				.OnDelete(DeleteBehavior.Restrict);
+			// Flags and dates
+			builder.Property(x => x.IsDraft).IsRequired();
+			builder.Property(x => x.IssueDate).IsRequired();
+			builder.Property(x => x.PaymentDate).IsRequired(false);
 
-			builder.HasOne(e => e.DeletedByUser)
-				.WithMany()
-				.HasForeignKey(e => e.DeletedByUserId)
-				.OnDelete(DeleteBehavior.Restrict);
+			// Private field for files
+			builder.Navigation(nameof(Invoice.Files)).UsePropertyAccessMode(PropertyAccessMode.Field);
 
-			builder.HasMany(x => x.Lines)
-				.WithOne(l => l.Invoice)
-				.HasForeignKey(l => l.InvoiceId);
-
-			builder.HasMany(i => i.Files)
-				.WithOne(f => f.Invoice)
-				.HasForeignKey(f => f.InvoiceId)
+			builder.HasMany(typeof(InvoiceFile), "_files")
+				.WithOne(nameof(InvoiceFile.Invoice))
+				.HasForeignKey(nameof(InvoiceFile.InvoiceId))
 				.OnDelete(DeleteBehavior.Cascade);
 
-			builder.HasMany(x => x.Follwers)
-				.WithOne(f => f.Invoice)
-				.HasForeignKey(f => f.InvoiceId);
+			// Index
+			builder.HasIndex(x => x.InvoiceNumber)
+			    .IsUnique();
 
-
+			builder.HasIndex(x => x.IssueDate);
 		}
 	}
 }

@@ -1,6 +1,8 @@
 ﻿using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Domain.Account.Events;
 using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Expense.Enums;
+using ThaiTuanERP2025.Domain.Expense.Events.OutgoingPayments;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
@@ -123,7 +125,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 			ChangeStatus(OutgoingPaymentStatus.Created);
 			PaymentDate = DateTime.UtcNow;
-			AddDomainEvent(new OutgoingPaymentCreatedCommandEvent(this, actorUserId));
+			AddDomainEvent(new OutgoingPaymentCreatedDomainEvent(this, actorUserId));
 		}
 
 		public void Cancel(Guid actorUserId)

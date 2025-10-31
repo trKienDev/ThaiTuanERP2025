@@ -59,7 +59,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public IReadOnlyCollection<OutgoingPayment> OutgoingPayments => _outgoingPayments.AsReadOnly();
 
 		public Guid? CurrentWorkflowInstanceId { get; private set; }
-		public ApprovalWorkflowInstance? CurrentWorkflowInstance { get; private set; }
+		public ExpenseWorkflowInstance? CurrentWorkflowInstance { get; private set; }
 		public Guid ManagerApproverId { get; private set; }
 		#endregion
 

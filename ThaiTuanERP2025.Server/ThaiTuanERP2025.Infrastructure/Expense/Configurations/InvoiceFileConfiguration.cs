@@ -11,19 +11,25 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 			builder.ToTable("InvoiceFiles", "Expense");
 			builder.HasKey(f => f.Id);
 
-			builder.Property(x => x.IsMain).HasDefaultValue(false);
-			builder.Property(x => x.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
+			builder.Property(x => x.IsMain).IsRequired();
+			builder.Property(x => x.CreatedAt).IsRequired();
 
-			builder.HasOne(f => f.File)
+			// Foreign keys
+			builder.HasOne(x => x.Invoice)
+				.WithMany("_files")
+				.HasForeignKey(x => x.InvoiceId)
+				.OnDelete(DeleteBehavior.Cascade);
+
+			builder.HasOne(x => x.File)
 				.WithMany()
-				.HasForeignKey(f => f.FileId)
+				.HasForeignKey(x => x.FileId)
 				.OnDelete(DeleteBehavior.Restrict);
 
-			// mỗi invoice chỉ có 12 file IsMain = 1
-			builder.HasIndex(f => f.InvoiceId)
-				.HasDatabaseName("UX_InvoiceFiles_Main")
-				.HasFilter("[IsMain] = 1")
-				.IsUnique();
+			// Index: 1 hóa đơn chỉ có thể có 1 file chính
+			builder.HasIndex(x => new { x.InvoiceId, x.IsMain }).HasFilter("[IsMain] = 1").IsUnique();
+
+			// Index để truy xuất nhanh
+			builder.HasIndex(x => x.CreatedAt);
 		}
 	}
 }

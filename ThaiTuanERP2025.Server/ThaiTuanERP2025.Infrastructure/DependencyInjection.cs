@@ -87,10 +87,10 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IBankAccountRepository, BankAccountRepository>();
 			services.AddScoped<IOutgoingBankAccountRepository, OutgoingBankAccountRepository>();
 			services.AddScoped<IOutgoingPaymentRepository, OutgoingPaymentRepository>();
-			services.AddScoped<IApprovalWorkflowTemplateRepository, ApprovalWorkflowTemplateRepository>();
-			services.AddScoped<IApprovalStepTemplateRepository, ApprovalStepTemplateRepository>();
-			services.AddScoped<IApprovalStepInstanceRepository, ApprovalStepInstanceRepository>();
-			services.AddScoped<IApprovalWorkflowInstanceRepository, ApprovalWorkflowInstanceRepository>();
+			services.AddScoped<IExpenseWorkflowTemplateRepository, ExpenseWorkflowTemplateRepository>();
+			services.AddScoped<IExpenseStepTemplateRepository, ExpenseStepTemplateRepository>();
+			services.AddScoped<IExpenseStepInstanceRepository, ExpenseStepInstanceRepository>();
+			services.AddScoped<IExpenseWorkflowInstanceRepository, ExpenseWorkflowInstanceRepository>();
 			services.AddScoped<IExpensePaymentRepository, ExpensePaymentRepository>();
 			services.AddScoped<IExpensePaymentCommentRepository, ExpensePaymentCommentRepository>();
 			services.AddScoped<IExpensePaymentCommentTagRepository, ExpensePaymentCommentTagRepository>();

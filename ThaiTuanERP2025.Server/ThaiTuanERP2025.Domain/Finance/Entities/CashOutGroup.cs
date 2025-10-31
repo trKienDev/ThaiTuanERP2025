@@ -1,14 +1,10 @@
 ﻿using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Exceptions;
+using ThaiTuanERP2025.Domain.Finance.Events.CashoutGroups;
 
 namespace ThaiTuanERP2025.Domain.Finance.Entities
 {
-	using global::ThaiTuanERP2025.Domain.Exceptions;
-	using ThaiTuanERP2025.Domain.Common;
-	using ThaiTuanERP2025.Domain.Finance.Events.CashoutGroups;
-
-	namespace ThaiTuanERP2025.Domain.Finance.Entities;
-
 	public class CashoutGroup : AuditableEntity
 	{
 		private CashoutGroup() { }
@@ -90,5 +86,4 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 
 		#endregion
 	}
-
 }

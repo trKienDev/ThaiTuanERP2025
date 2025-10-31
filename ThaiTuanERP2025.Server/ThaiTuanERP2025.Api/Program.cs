@@ -39,6 +39,8 @@ using MediatR;
 using ThaiTuanERP2025.Infrastructure.Common;
 using System.Reflection;
 using ThaiTuanERP2025.Domain.Common.Events;
+using ThaiTuanERP2025.Application.Common.Events;
+using ThaiTuanERP2025.Infrastructure.Common.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -85,6 +87,7 @@ builder.Services.AddScoped<IDocumentSubIdGeneratorService, DocumentSubIdGenerato
 builder.Services.AddScoped<IApprovalStepService, ApprovalStepService>();
 builder.Services.AddScoped<IFollowerService, FollowerService>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+builder.Services.AddScoped<IApplicationEventPublisher, ApplicationEventPublisher>();
 
 builder.Services.AddHostedService<TaskReminderExpiryHostedService>();
 builder.Services.Configure<TaskReminderExpiryOptions>(
