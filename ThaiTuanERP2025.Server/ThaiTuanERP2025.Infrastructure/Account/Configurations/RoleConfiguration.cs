@@ -14,20 +14,25 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 
 			builder.Property(r => r.Description).HasMaxLength(250);
 
+			// ===== Value Object: RoleName =====
 			builder.OwnsOne(r => r.Name, name =>
 			{
-				name.Property(n => n.Value).HasColumnName("Name").IsRequired().HasMaxLength(100);
+				name.Property(n => n.Value)
+					.HasColumnName("RoleName")
+					.IsRequired()
+					.HasMaxLength(100);
+
+				name.HasIndex(n => n.Value).IsUnique();
 			});
 
 			builder.Property(r => r.IsActive).HasDefaultValue(true);
 
-			// UserRoles
-			builder.Metadata.FindNavigation(nameof(Role.UserRoles))!.SetPropertyAccessMode(PropertyAccessMode.Field);
+			// ===== Private collections =====
+			builder.Metadata.FindNavigation(nameof(Role.UserRoles))!
+				.SetPropertyAccessMode(PropertyAccessMode.Field);
 
-			// RolePermissions
-			builder.Metadata.FindNavigation(nameof(Role.RolePermissions))!.SetPropertyAccessMode(PropertyAccessMode.Field);
-
-			builder.HasIndex("Name").IsUnique();
+			builder.Metadata.FindNavigation(nameof(Role.RolePermissions))!
+				.SetPropertyAccessMode(PropertyAccessMode.Field);
 		}
 	}
 }

@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using ThaiTuanERP2025.Application.Common.Options;
 using ThaiTuanERP2025.Application.Common.Services;
-using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Common.Entities;
 using ThaiTuanERP2025.Domain.Common.Enums;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
@@ -42,7 +42,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common.Services
 				if (seq == null)
 				{
 					// khởi tạo record
-					seq = new DocumentSequence { Key = key, LastNumber = 0 };
+					seq = new DocumentSequence ( key, 0 );
 					_db.Add(seq);
 					await _db.SaveChangesAsync(ct);
 
@@ -52,11 +52,8 @@ namespace ThaiTuanERP2025.Infrastructure.Common.Services
 					    .SingleAsync(ct);
 				}
 
-				seq.LastNumber += 1;
+				nextNumber = seq.Next();
 				await _db.SaveChangesAsync(ct);
-
-				nextNumber = seq.LastNumber;
-
 				await tx.CommitAsync(ct);
 			});
 

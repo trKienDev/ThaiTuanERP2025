@@ -17,9 +17,9 @@ namespace ThaiTuanERP2025.Application.Account.Roles.Commands.DeleteRole
 			var role = await _unitOfWork.Roles.GetByIdAsync(command.RoleId, cancellationToken)
 				?? throw new NotFoundException("Không tìm thấy role yêu cầu");
 
-			if (role.Name.Equals("SuperAdmin", StringComparison.OrdinalIgnoreCase))
+			if (string.Equals(role.Name, "SuperAdmin", StringComparison.OrdinalIgnoreCase))
 				throw new InvalidOperationException("Không thể xóa vai trò hệ thống SuperAdmin.");
-			if (role.Name.Equals("Admin", StringComparison.OrdinalIgnoreCase))
+			if (string.Equals(role.Name, "Admin", StringComparison.OrdinalIgnoreCase))
 				throw new InvalidOperationException("Không thể xóa vai trò hệ thống Admin.");
 
 			_unitOfWork.RolePermissions.RemoveRange(role.RolePermissions);

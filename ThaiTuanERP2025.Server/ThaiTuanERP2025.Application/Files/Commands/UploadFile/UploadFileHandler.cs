@@ -31,18 +31,16 @@ namespace ThaiTuanERP2025.Application.Files.Commands.UploadFile
 
 			var bucketName = ( _storage as IFileStorageInfo)?.BucketName ?? string.Empty;
 			var entity = new StoredFile
-			{
-				Id = Guid.NewGuid(),
-				Bucket = bucketName,           // (giữ trường nếu schema còn; hạ tầng quản bucket → có thể để trống/ghi tên cố định khi save)
-				ObjectKey = objectKey,
-				FileName = request.File.FileName,
-				ContentType = contentType,
-				Size = request.File.Length,
-				IsPublic = request.IsPublic,
-				Module = request.Module,
-				Entity = request.Entity,
-				EntityId = request.EntityId
-			};
+			(
+				 bucketName,          
+				objectKey,
+				request.File.FileName,
+				contentType,
+				request.File.Length,
+				request.Module,
+				request.Entity,
+				request.EntityId
+			);
 
 			await _unitOfWork.StoredFiles.AddAsync(entity);
 			await _unitOfWork.SaveChangesAsync();
@@ -52,7 +50,6 @@ namespace ThaiTuanERP2025.Application.Files.Commands.UploadFile
 		}
 
 		private static string BuildObjectKey(string module, string entity, string? entityId, string originalName)
-			=> $"{module}/{entity}/{DateTime.UtcNow:yyyy/MM}/" +
-			   $"{Guid.NewGuid():N}{Path.GetExtension(originalName)}";
+			=> $"{module}/{entity}/{DateTime.UtcNow:yyyy/MM}/" + $"{Guid.NewGuid():N}{Path.GetExtension(originalName)}";
 	}
 }

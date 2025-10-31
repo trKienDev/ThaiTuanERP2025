@@ -3,6 +3,7 @@ using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Application.Common.Security;
 using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Infrastructure.Persistence;
+using ThaiTuanERP2025.Domain.Common.ValueObjects;
 
 namespace ThaiTuanERP2025.Infrastructure.Seeding
 {
@@ -39,13 +40,13 @@ namespace ThaiTuanERP2025.Infrastructure.Seeding
 				Console.WriteLine(">>> [DbInitializer] Creating Admin User...");
 
 				var adminUser = new User(
-				    fullName: "Admin",
-				    userName: "admin",
-				    employeeCode: "ADMIN",
-				    passwordHash: _passwordHasher.Hash("Th@iTu@n2025"),
-				    position: "System Admin",
-				    departmentId: null,
-				    email: new Email("itcenter@thaituan.com.vn")
+					fullName: "Admin",
+					username: "admin",
+					employeeCode: "ADMIN",
+					passwordHash: _passwordHasher.Hash("Th@iTu@n2025"),
+					position: "System Admin",
+					departmentId: null,
+					email: new Email("itcenter@thaituan.com.vn")
 				);
 
 				await _db.Users.AddAsync(adminUser);
@@ -53,9 +54,7 @@ namespace ThaiTuanERP2025.Infrastructure.Seeding
 
 				// Gán quyền SuperAdmin
 				var superAdminRole = await _db.Roles.FirstAsync(r => r.Name == "SuperAdmin");
-				var adminUserRole = new UserRole(adminUser.Id, superAdminRole.Id);
-
-				await _db.UserRoles.AddAsync(adminUserRole);
+				superAdminRole.AssignUser(adminUser.Id);
 				await _db.SaveChangesAsync();
 
 				Console.WriteLine(">>> [DbInitializer] Admin User created successfully.");

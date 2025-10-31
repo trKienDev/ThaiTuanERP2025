@@ -32,4 +32,9 @@
     <ProjectReference Include="..\ThaiTuanERP2025.Infrastructure\ThaiTuanERP2025.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\Expense\" />
+    <Folder Include="Controllers\Finance\" />
+  </ItemGroup>
+
 </Project>

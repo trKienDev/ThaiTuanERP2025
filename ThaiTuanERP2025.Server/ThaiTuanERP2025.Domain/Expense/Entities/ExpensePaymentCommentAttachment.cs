@@ -1,6 +1,7 @@
 ﻿using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Common;
-using ThaiTuanERP2025.Domain.Expense.Events.ExpensePaymentComments;
+using ThaiTuanERP2025.Domain.Common.Entities;
+using ThaiTuanERP2025.Domain.Expense.Events.ExpensePaymentCommentAttachments;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
@@ -9,14 +10,14 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		private ExpensePaymentCommentAttachment() { } // EF Core
 
 		public ExpensePaymentCommentAttachment(
-		    Guid commentId,
-		    string fileName,
-		    string fileUrl,
-		    long fileSize,
-		    string? mimeType,
-		    Guid? fileId,
-		    Guid createdByUserId)
-		{
+			Guid commentId,
+			string fileName,
+			string fileUrl,
+			long fileSize,
+			string? mimeType,
+			Guid? fileId,
+			Guid createdByUserId
+		) {
 			Guard.AgainstDefault(commentId, nameof(commentId));
 			Guard.AgainstNullOrWhiteSpace(fileName, nameof(fileName));
 			Guard.AgainstNullOrWhiteSpace(fileUrl, nameof(fileUrl));

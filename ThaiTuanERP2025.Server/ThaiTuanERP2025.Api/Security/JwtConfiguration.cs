@@ -33,7 +33,7 @@ namespace ThaiTuanERP2025.Api.Security
 					    ClockSkew = TimeSpan.Zero // không trễ thời gian
 				    };
 
-				    // 🧠 Cho phép SignalR đọc token qua query string
+				    // Cho phép SignalR đọc token qua query string
 				    options.Events = new JwtBearerEvents
 				    {
 					    OnMessageReceived = context =>

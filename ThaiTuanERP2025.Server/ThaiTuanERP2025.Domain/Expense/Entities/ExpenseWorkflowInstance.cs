@@ -1,6 +1,9 @@
 ﻿using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Common.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Enums;
+using ThaiTuanERP2025.Domain.Expense.Events.ApprovalWorkflowInstances;
+using ThaiTuanERP2025.Domain.Expense.Events.ExpenseWorkflowInstances;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
@@ -8,7 +11,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 	{
 		private ExpenseWorkflowInstance() { }
 
-		public ExpenseWorkflowInstance(
+		public ExpenseWorkflowInstance (
 			Guid templateId,
 			int templateVersion,
 			string documentType,
@@ -18,8 +21,8 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			string? currency = null,
 			string? budgetCode = null,
 			string? costCenter = null,
-			string? rawJson = null)
-		{
+			string? rawJson = null
+		) {
 			Guard.AgainstDefault(templateId, nameof(templateId));
 			Guard.AgainstDefault(documentId, nameof(documentId));
 			Guard.AgainstNullOrWhiteSpace(documentType, nameof(documentType));
@@ -38,7 +41,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			CostCenter = costCenter;
 			RawJson = rawJson;
 
-			AddDomainEvent(new ApprovalWorkflowInstanceCreatedEvent(this));
+			AddDomainEvent(new ExpenseWorkflowInstanceCreatedEvent(this));
 		}
 
 		public Guid TemplateId { get; private set; }
@@ -46,7 +49,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public string DocumentType { get; private set; } = string.Empty;
 		public Guid DocumentId { get; private set; }
 		public WorkflowStatus Status { get; private set; } = WorkflowStatus.Draft;
-		public int? CurrentStepOrder { get; private set; }
+		public int CurrentStepOrder { get; private set; } = 1;
 		public string? RawJson { get; private set; }
 
 		public decimal? Amount { get; private set; }
@@ -72,7 +75,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			Status = WorkflowStatus.InProgress;
 			CurrentStepOrder = firstOrder;
 
-			AddDomainEvent(new ApprovalWorkflowInstanceStartedEvent(this));
+			AddDomainEvent(new ExpenseWorkflowInstanceStartedEvent(this));
 		}
 
 		public void MoveToNextStep(int nextOrder)
@@ -81,7 +84,27 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 				throw new DomainException("Không thể chuyển bước khi workflow chưa ở trạng thái InProgress.");
 
 			CurrentStepOrder = nextOrder;
-			AddDomainEvent(new ApprovalWorkflowInstanceStepChangedEvent(this, nextOrder));
+			AddDomainEvent(new ExpenseWorkflowInstanceStepChangedEvent(this, nextOrder));
+		}
+
+		public void SetCurrentStepOrder(int newOrder)
+		{
+			if (Status != WorkflowStatus.InProgress)
+				throw new DomainException("Chỉ có thể thay đổi bước hiện tại khi workflow đang ở trạng thái InProgress.");
+
+			if (newOrder <= 0)
+				throw new DomainException("Thứ tự bước phải lớn hơn 0.");
+
+			if (newOrder == CurrentStepOrder)
+				return;
+
+			if (newOrder < CurrentStepOrder)
+				throw new DomainException("Không thể quay lại bước trước trong workflow.");
+
+			// Cập nhật
+			CurrentStepOrder = newOrder;
+
+			AddDomainEvent(new ExpenseWorkflowInstanceStepChangedEvent(this, newOrder));
 		}
 
 		public void MarkApproved(Guid byUserId, string? reason = null)
@@ -96,13 +119,13 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			ApprovedBy = byUserId;
 			ApprovedAt = DateTime.UtcNow;
 
-			AddDomainEvent(new ApprovalWorkflowInstanceApprovedEvent(this));
+			AddDomainEvent(new ExpenseWorkflowInstanceApprovedEvent(this));
 		}
 
 		public void MarkInProgress()
 		{
 			Status = WorkflowStatus.InProgress;
-			AddDomainEvent(new ApprovalWorkflowInstanceStatusChangedEvent(this, WorkflowStatus.InProgress));
+			AddDomainEvent(new ExpenseWorkflowInstanceStatusChangedEvent(this, WorkflowStatus.InProgress));
 		}
 
 		#endregion

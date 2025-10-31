@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ThaiTuanERP2025.Domain.Expense.Entities;
+using ThaiTuanERP2025.Infrastructure.Persistence.Configurations;
 
 namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 {
-	public class ExpensePaymentCommentConfiguration : IEntityTypeConfiguration<ExpensePaymentComment>
+	public class ExpensePaymentCommentConfiguration : BaseEntityConfiguration<ExpensePaymentComment>
 	{
-		public void Configure(EntityTypeBuilder<ExpensePaymentComment> builder) {
+		public override void Configure(EntityTypeBuilder<ExpensePaymentComment> builder) {
 			builder.ToTable("ExpensePaymentComments", "Expense");
 			builder.HasKey(x => x.Id);
 
@@ -32,21 +33,6 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 				.WithOne(t => t.Comment)
 				.HasForeignKey(t => t.CommentId)
 				.OnDelete(DeleteBehavior.Cascade);
-
-			builder.HasOne(e => e.CreatedByUser)
-				.WithMany()
-				.HasForeignKey(e => e.CreatedByUserId)
-				.OnDelete(DeleteBehavior.Restrict);
-
-			builder.HasOne(e => e.ModifiedByUser)
-				.WithMany()
-				.HasForeignKey(e => e.ModifiedByUserId)
-				.OnDelete(DeleteBehavior.Restrict);
-
-			builder.HasOne(e => e.DeletedByUser)
-				.WithMany()
-				.HasForeignKey(e => e.DeletedByUserId)
-				.OnDelete(DeleteBehavior.Restrict);
 
 			builder.HasIndex(x => x.ExpensePaymentId);
 			builder.HasIndex(x => x.ParentCommentId);

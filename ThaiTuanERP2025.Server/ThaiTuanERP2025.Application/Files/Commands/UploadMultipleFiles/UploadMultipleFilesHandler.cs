@@ -1,9 +1,4 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Files.Commands.UploadFile;
 using ThaiTuanERP2025.Domain.Exceptions;
@@ -38,19 +33,9 @@ namespace ThaiTuanERP2025.Application.Files.Commands.UploadMultipleFiles
 				await _storage.UploadAsync(key, stream, contentType, cancellationToken);
 
 				var bucketName = (_storage as IFileStorageInfo)?.BucketName ?? string.Empty;
-				var entity = new StoredFile
-				{
-					Id = Guid.NewGuid(),
-					Bucket = bucketName,
-					ObjectKey = key,
-					FileName = file.FileName,
-					ContentType = contentType,
-					Size = file.Length,
-					IsPublic = request.IsPublic,
-					Module = request.Module,
-					Entity = request.Entity,
-					EntityId = request.EntityId
-				};
+				var entity = new StoredFile (
+					bucketName, key ,file.FileName,  contentType, file.Length, request.Module,  request.Entity, request.EntityId
+				);
 
 				await _unitOfWork.StoredFiles.AddAsync(entity);
 				result.Add(new UploadFileResult(entity.Id, key, entity.Size, entity.FileName, entity.ContentType));
@@ -61,7 +46,6 @@ namespace ThaiTuanERP2025.Application.Files.Commands.UploadMultipleFiles
 		}
 
 		private static string BuildObjectKey(string module, string entity, string? entityId, string originalName)
-			=> $"{module}/{entity}/{DateTime.UtcNow:yyyy/MM}/" +
-			   $"{Guid.NewGuid():N}{Path.GetExtension(originalName)}";
+			=> $"{module}/{entity}/{DateTime.UtcNow:yyyy/MM}/" + $"{Guid.NewGuid():N}{Path.GetExtension(originalName)}";
 	}
 }

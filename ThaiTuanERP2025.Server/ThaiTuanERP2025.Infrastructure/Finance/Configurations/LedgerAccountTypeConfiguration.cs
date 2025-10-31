@@ -7,25 +7,37 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 {
 	public class LedgerAccountTypeConfiguration : BaseEntityConfiguration<LedgerAccountType>
 	{
-		public override void Configure(EntityTypeBuilder<LedgerAccountType> builder) {
-			builder.ToTable("LedgerAccountTypes", "Finance").HasKey(x => x.Id);
+		public override void Configure(EntityTypeBuilder<LedgerAccountType> builder)
+		{
+			builder.ToTable("LedgerAccountTypes", "Finance");
 
-			builder.Property(x => x.Code).HasMaxLength(50).IsRequired();
-			builder.Property(x => x.Name).HasMaxLength(200).IsRequired();
+			builder.HasKey(x => x.Id);
+
+			builder.Property(x => x.Code)
+				.IsRequired()
+				.HasMaxLength(50);
+
+			builder.Property(x => x.Name)
+				.IsRequired()
+				.HasMaxLength(200);
+
 			builder.Property(x => x.Description).HasMaxLength(500);
-			builder.Property(x => x.IsActive).IsRequired();
-			builder.Property(x => x.LedgerAccountTypeKind).HasConversion<int>().IsRequired();
+			builder.Property(x => x.IsActive).HasDefaultValue(true);
+			builder.Property(x => x.LedgerAccountTypeKind)
+				.HasConversion<int>()
+				.IsRequired();
 
-			// EF truy cập private field _ledgerAccounts
-			builder.Navigation(nameof(LedgerAccountType.LedgerAccounts))
-				.UsePropertyAccessMode(PropertyAccessMode.Field);
+			// Quan hệ 1-nhiều với LedgerAccount
+			builder.HasMany<LedgerAccount>("_ledgerAccounts")
+				.WithOne(a => a.LedgerAccountType)
+				.HasForeignKey(a => a.LedgerAccountTypeId)
+				.OnDelete(DeleteBehavior.Restrict);
 
-			builder.HasMany(typeof(LedgerAccount), "_ledgerAccounts")
-				.WithOne(nameof(LedgerAccount.LedgerAccountType))
-				.HasForeignKey(nameof(LedgerAccount.LedgerAccountTypeId))
-				.OnDelete(DeleteBehavior.Cascade);
+			// ✅ Chỉ set Field Access Mode nếu navigation tồn tại
+			var nav = builder.Metadata.FindNavigation(nameof(LedgerAccountType.LedgerAccounts));
+			if (nav != null)
+				nav.SetPropertyAccessMode(PropertyAccessMode.Field);
 
-			// --------- Indexes ------------
 			builder.HasIndex(x => x.Code).IsUnique();
 			builder.HasIndex(x => x.IsActive);
 		}

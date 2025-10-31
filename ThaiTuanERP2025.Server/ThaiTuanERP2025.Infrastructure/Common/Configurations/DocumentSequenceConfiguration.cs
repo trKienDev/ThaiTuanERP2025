@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Common.Entities;
 
 namespace ThaiTuanERP2025.Infrastructure.Common.Configurations
 {

@@ -1,4 +1,5 @@
 ﻿using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Common.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Followers.Events;
 using ThaiTuanERP2025.Domain.Followers.ValueObjects;
@@ -7,7 +8,7 @@ namespace ThaiTuanERP2025.Domain.Followers.Entities
 {
 	public class Follower : AuditableEntity
 	{
-		public SubjectRef Subject { get; private set; }   // ✅ value object
+		public SubjectRef Subject { get; private set; } = default!;
 		public Guid UserId { get; private set; }
 		public bool IsActive { get; private set; } = true;
 

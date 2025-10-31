@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using ThaiTuanERP2025.Domain.Account.Entities;
+﻿using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Common.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Enums;
+using ThaiTuanERP2025.Domain.Expense.Events.ExpensePayments;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
@@ -61,10 +62,13 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public Guid? CurrentWorkflowInstanceId { get; private set; }
 		public ExpenseWorkflowInstance? CurrentWorkflowInstance { get; private set; }
 		public Guid ManagerApproverId { get; private set; }
+
+		public User CreatedByUser { get; set; } = null!;
+		public User? ModifiedByUser { get; set; }
+		public User? DeletedByUser { get; set; }
 		#endregion
 
 		#region Domain Behaviors
-
 		public void SetSubId(string subId)
 		{
 			Guard.AgainstNullOrWhiteSpace(subId, nameof(subId));
@@ -132,6 +136,14 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		{
 			Status = ExpensePaymentStatus.FullyPaid;
 			AddDomainEvent(new ExpensePaymentFullyPaidEvent(this));
+		}
+
+		public void RecalculateTotals()
+		{
+			TotalAmount = _items.Sum(i => i.Amount);
+			TotalTax = _items.Sum(i => i.TaxAmount);
+			TotalWithTax = _items.Sum(i => i.TotalWithTax);
+			RemainingOutgoingAmount = TotalWithTax - OutgoingAmountPaid;
 		}
 
 		#endregion

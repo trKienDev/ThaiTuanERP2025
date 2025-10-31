@@ -3,8 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ThaiTuanERP2025.Application.Behaviors
 {
-	public sealed class UnhandledExceptionBehavior<TRequest, TResponse>
-		: IPipelineBehavior<TRequest, TResponse>
+	public sealed class UnhandledExceptionBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
 	{
 		private readonly ILogger<UnhandledExceptionBehavior<TRequest, TResponse>> _logger;
 

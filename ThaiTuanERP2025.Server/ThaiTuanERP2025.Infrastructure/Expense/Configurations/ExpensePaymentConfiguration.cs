@@ -2,12 +2,13 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Expense.Entities;
+using ThaiTuanERP2025.Infrastructure.Persistence.Configurations;
 
 namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 {
-	public class ExpensePaymentConfiguration : IEntityTypeConfiguration<ExpensePayment>
+	public class ExpensePaymentConfiguration : BaseEntityConfiguration<ExpensePayment>
 	{
-		public void Configure(EntityTypeBuilder<ExpensePayment> builder) {
+		public override void Configure(EntityTypeBuilder<ExpensePayment> builder) {
 			builder.ToTable("ExpensePayments", "Expense");
 			builder.HasKey(x => x.Id);
 
@@ -62,21 +63,6 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 				.WithOne(o => o.ExpensePayment)
 				.HasForeignKey(o => o.ExpensePaymentId)
 				.OnDelete(DeleteBehavior.Cascade);
-
-			builder.HasOne(e => e.CreatedByUser)
-				.WithMany()
-				.HasForeignKey(e => e.CreatedByUserId)
-				.OnDelete(DeleteBehavior.Restrict);
-
-			builder.HasOne(e => e.ModifiedByUser)
-				.WithMany()
-				.HasForeignKey(e => e.ModifiedByUserId)
-				.OnDelete(DeleteBehavior.Restrict);
-
-			builder.HasOne(e => e.DeletedByUser)
-				.WithMany()
-				.HasForeignKey(e => e.DeletedByUserId)
-				.OnDelete(DeleteBehavior.Restrict);
 
 			// Indexes
 			builder.HasIndex(p => p.SubId).IsUnique();

@@ -1,6 +1,7 @@
 ﻿using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Account.Events;
 using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Common.Entities;
 using ThaiTuanERP2025.Domain.Expense.Enums;
 using ThaiTuanERP2025.Domain.Expense.Events.OutgoingPayments;
 
@@ -61,8 +62,17 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public Guid ExpensePaymentId { get; private set; }
 		public ExpensePayment ExpensePayment { get; private set; } = null!;
 
+		public Guid? SupplierId { get; private set; }
+		public Supplier? Supplier { get; private set; }
+		public Guid? EmployeeId { get; private set; }
+		public User? Employee { get; private set; }
+
 		public IReadOnlyCollection<Guid> FollowerIds => _followerIds.AsReadOnly();
 		public IReadOnlyCollection<User> Followers => _followers.AsReadOnly();
+
+		public User CreatedByUser { get; set; } = null!;
+		public User? ModifiedByUser { get; set; }
+		public User? DeletedByUser { get; set; }
 		#endregion
 
 		#region Domain Behaviors

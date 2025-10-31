@@ -20,12 +20,12 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 			builder.HasOne(ug => ug.User)
 				.WithMany(u => u.UserGroups)
 				.HasForeignKey(ug => ug.UserId)
-				.OnDelete(DeleteBehavior.Cascade);
+				.OnDelete(DeleteBehavior.Restrict);
 
 			builder.HasOne(ug => ug.Group)
 				.WithMany(g => g.UserGroups)
 				.HasForeignKey(ug => ug.GroupId)
-				.OnDelete(DeleteBehavior.Cascade);
+				.OnDelete(DeleteBehavior.Restrict);
 
 			builder.HasIndex(ug => new { ug.UserId, ug.GroupId }).IsUnique();
 		}

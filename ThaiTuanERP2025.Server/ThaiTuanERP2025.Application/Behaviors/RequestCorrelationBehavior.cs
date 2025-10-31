@@ -1,40 +1,39 @@
 ﻿using MediatR;
+using ThaiTuanERP2025.Application.Common.Interfaces;
+using ThaiTuanERP2025.Application.Common.Services;
 
 namespace ThaiTuanERP2025.Application.Behaviors
 {
 	/// <summary>
 	/// Gắn CorrelationId (định danh duy nhất) cho mỗi request.
 	/// </summary>
-	public sealed class RequestCorrelationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+	public sealed class RequestCorrelationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> 
+	where TRequest : IRequest<TResponse>
 	{
-		private readonly IHttpContextAccessor _httpContextAccessor;
+		private readonly ICorrelationIdProvider _correlationIdProvider;
+		private readonly ILoggingService _logger;
 
-		public RequestCorrelationBehavior(IHttpContextAccessor httpContextAccessor)
+		public RequestCorrelationBehavior(ICorrelationIdProvider correlationIdProvider, ILoggingService logger)
 		{
-			_httpContextAccessor = httpContextAccessor;
+			_correlationIdProvider = correlationIdProvider;
+			_logger = logger;
 		}
 
 		public async Task<TResponse> Handle(
-		    TRequest request,
-		    RequestHandlerDelegate<TResponse> next,
-		    CancellationToken cancellationToken)
+			TRequest request,
+			RequestHandlerDelegate<TResponse> next,
+			CancellationToken cancellationToken)
 		{
-			const string key = "X-Correlation-ID";
+			var correlationId = _correlationIdProvider.GetCorrelationId();
+			var requestName = typeof(TRequest).Name;
 
-			string? correlationId = null;
+			_logger.LogInformation("➡ Handling {RequestName} (CorrelationId: {CorrelationId})", requestName, correlationId);
 
-			// Lấy từ HttpContext.Items nếu có (do middleware set)
-			var context = _httpContextAccessor.HttpContext;
-			if (context != null && context.Items.ContainsKey(key))
-				correlationId = context.Items[key]?.ToString();
+			var response = await next();
 
-			// Nếu không có (vd background job), thì tự tạo mới
-			correlationId ??= Guid.NewGuid().ToString("N");
+			_logger.LogInformation("✅ Completed {RequestName} (CorrelationId: {CorrelationId})", requestName, correlationId);
 
-			using (LogContext.PushProperty("CorrelationId", correlationId))
-			{
-				return await next();
-			}
+			return response;
 		}
 	}
 }

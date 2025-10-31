@@ -1,5 +1,7 @@
 ﻿using ThaiTuanERP2025.Domain.Account.Events.Users;
 using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Common.Entities;
+using ThaiTuanERP2025.Domain.Common.ValueObjects;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 
@@ -57,6 +59,8 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 
 		public bool IsSuperAdmin { get; private set; }
 		public bool IsActive { get; private set; }
+
+		public object? AvatarFileObjectKey;
 
 		public IReadOnlyCollection<UserRole> UserRoles => _userRoles.AsReadOnly();
 		public IReadOnlyCollection<UserGroup> UserGroups => _userGroups.AsReadOnly();

@@ -1,4 +1,6 @@
 ﻿using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Common.Entities;
+using ThaiTuanERP2025.Domain.Expense.Events.ExpensePaymentAttachments;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {

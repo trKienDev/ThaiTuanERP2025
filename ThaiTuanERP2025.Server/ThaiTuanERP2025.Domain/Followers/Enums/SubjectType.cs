@@ -2,8 +2,8 @@
 {
 	public enum SubjectType
 	{
-		ExpensePayment,
-		OutgoingPayment,
-		Invoice,
+		ExpensePayment = 1,
+		OutgoingPayment = 2,
+		Invoice = 3,
 	}
 }

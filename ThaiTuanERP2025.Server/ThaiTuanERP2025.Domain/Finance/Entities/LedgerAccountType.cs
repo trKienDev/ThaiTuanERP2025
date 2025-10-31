@@ -1,6 +1,8 @@
 ﻿using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Common.Entities;
 using ThaiTuanERP2025.Domain.Finance.Enums;
+using ThaiTuanERP2025.Domain.Finance.Events.LedgerAccountTypes;
 
 namespace ThaiTuanERP2025.Domain.Finance.Entities
 {

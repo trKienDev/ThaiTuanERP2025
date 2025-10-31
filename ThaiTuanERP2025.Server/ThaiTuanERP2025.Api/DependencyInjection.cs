@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using System.Text.Json.Serialization;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using ThaiTuanERP2025.Api.Notifications;
 using ThaiTuanERP2025.Api.Security;
+using ThaiTuanERP2025.Api.Services;
 using ThaiTuanERP2025.Api.SignalR;
 using ThaiTuanERP2025.Application.Common.Events;
 using ThaiTuanERP2025.Application.Common.Interfaces;
@@ -12,7 +13,7 @@ using ThaiTuanERP2025.Application.Expense.Contracts.Resolvers;
 using ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows;
 using ThaiTuanERP2025.Application.Followers.Services;
 using ThaiTuanERP2025.Application.Notifications.Services;
-using ThaiTuanERP2025.Infrastructure.Authentication;
+using ThaiTuanERP2025.Infrastructure.Authentication.Services;
 using ThaiTuanERP2025.Infrastructure.Common.Events;
 using ThaiTuanERP2025.Infrastructure.Common.Services;
 using ThaiTuanERP2025.Infrastructure.Expense.Contracts.Resolvers;
@@ -75,6 +76,9 @@ namespace ThaiTuanERP2025.Api
 
 			// HttpContext
 			services.AddHttpContextAccessor();
+
+			// Behavior
+			services.AddScoped<ICorrelationIdProvider, CorrelationIdProvider>();
 
 			return services;
 		}

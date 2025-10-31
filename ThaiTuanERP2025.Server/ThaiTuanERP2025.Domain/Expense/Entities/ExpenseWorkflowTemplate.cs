@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Common.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Events.ApprovalWorkflowTemplates;
+using ThaiTuanERP2025.Domain.Expense.Events.ExpenseWorkflowTemplates;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
@@ -21,7 +23,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			Version = version;
 			IsActive = true;
 
-			AddDomainEvent(new ApprovalWorkflowTemplateCreatedEvent(this));
+			AddDomainEvent(new ExpenseWorkflowTemplateCreatedEvent(this));
 		}
 
 		[MaxLength(200)]
@@ -44,27 +46,27 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 				throw new DomainException("Workflow template phải có ít nhất một bước phê duyệt trước khi kích hoạt.");
 
 			IsActive = true;
-			AddDomainEvent(new ApprovalWorkflowTemplateActivatedEvent(this));
+			AddDomainEvent(new ExpenseWorkflowTemplateActivatedEvent(this));
 		}
 
 		public void Deactivate()
 		{
 			if (!IsActive) return;
 			IsActive = false;
-			AddDomainEvent(new ApprovalWorkflowTemplateDeactivatedEvent(this));
+			AddDomainEvent(new ExpenseWorkflowTemplateDeactivatedEvent(this));
 		}
 
 		public void BumpVersion()
 		{
 			Version++;
-			AddDomainEvent(new ApprovalWorkflowTemplateVersionBumpedEvent(this, Version));
+			AddDomainEvent(new ExpenseWorkflowTemplateVersionBumpedEvent(this, Version));
 		}
 
 		public void MarkDeleted()
 		{
 			if (IsDeleted) return;
 			IsDeleted = true;
-			AddDomainEvent(new ApprovalWorkflowTemplateDeletedEvent(this));
+			AddDomainEvent(new ExpenseWorkflowTemplateDeletedEvent(this));
 		}
 
 		#endregion

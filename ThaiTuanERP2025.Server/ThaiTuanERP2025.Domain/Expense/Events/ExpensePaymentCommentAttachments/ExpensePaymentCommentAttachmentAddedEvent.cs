@@ -3,7 +3,6 @@ using ThaiTuanERP2025.Domain.Expense.Entities;
 
 namespace ThaiTuanERP2025.Domain.Expense.Events.ExpensePaymentCommentAttachments
 {
-
 	public sealed class ExpensePaymentCommentAttachmentAddedEvent : IDomainEvent
 	{
 		public ExpensePaymentCommentAttachmentAddedEvent(ExpensePaymentCommentAttachment attachment)

@@ -1,5 +1,6 @@
 ﻿using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Common.Entities;
 using ThaiTuanERP2025.Domain.Finance.Events.BudgetGroups;
 
 namespace ThaiTuanERP2025.Domain.Finance.Entities

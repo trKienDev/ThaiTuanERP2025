@@ -192,7 +192,7 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 			// Nếu không có ai để notify/duyệt → Skip và nhảy bướcc
 
 			// set current step
-			ins.SetCurrentStep(step.Order);
+			ins.SetCurrentStepOrder(step.Order);
 		}
 
 		private async Task<IReadOnlyCollection<Guid>> ResolveApproversAsync(ExpenseWorkflowInstance ins, ExpenseStepInstance step, CancellationToken cancellationToken)

@@ -1,6 +1,7 @@
 ﻿using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Common.Entities;
 using ThaiTuanERP2025.Domain.Expense.Enums;
-using ThaiTuanERP2025.Domain.Expense.Events.ApprovalStepTemplates;
+using ThaiTuanERP2025.Domain.Expense.Events.ExpenseStepTemplates;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
@@ -51,7 +52,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			ResolverParamsJson = resolverParamsJson;
 			AllowOverride = allowOverride;
 
-			AddDomainEvent(new ApprovalStepTemplateCreatedEvent(this));
+			AddDomainEvent(new ExpenseStepTemplateCreatedEvent(this));
 		}
 		#endregion
 
@@ -60,7 +61,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		{
 			Guard.AgainstNullOrWhiteSpace(newName, nameof(newName));
 			Name = newName.Trim();
-			AddDomainEvent(new ApprovalStepTemplateRenamedEvent(this));
+			AddDomainEvent(new ExpenseStepTemplateRenamedEvent(this));
 		}
 
 		public void ChangeApproverMode(ApproverMode newMode, string? fixedApproversJson = null, string? resolverKey = null)
@@ -69,20 +70,20 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			ApproverMode = newMode;
 			FixedApproverIdsJson = fixedApproversJson;
 			ResolverKey = resolverKey;
-			AddDomainEvent(new ApprovalStepTemplateApproverModeChangedEvent(this));
+			AddDomainEvent(new ExpenseStepTemplateApproverModeChangedEvent(this));
 		}
 
 		public void UpdateSla(int newSlaHours)
 		{
 			Guard.AgainstNegative(newSlaHours, nameof(newSlaHours));
 			SlaHours = newSlaHours;
-			AddDomainEvent(new ApprovalStepTemplateSlaUpdatedEvent(this));
+			AddDomainEvent(new ExpenseStepTemplateSlaUpdatedEvent(this));
 		}
 
 		public void ToggleOverride(bool allow)
 		{
 			AllowOverride = allow;
-			AddDomainEvent(new ApprovalStepTemplateOverrideSettingChangedEvent(this));
+			AddDomainEvent(new ExpenseStepTemplateOverrideSettingChangedEvent(this));
 		}
 		#endregion
 	}

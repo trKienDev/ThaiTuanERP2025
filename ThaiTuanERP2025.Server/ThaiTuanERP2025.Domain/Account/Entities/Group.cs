@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using ThaiTuanERP2025.Domain.Account.Events.Groups;
 using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Common.Entities;
 
 namespace ThaiTuanERP2025.Domain.Account.Entities
 {

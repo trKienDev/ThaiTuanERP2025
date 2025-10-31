@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using ThaiTuanERP2025.Application.Account.Departments;
 using ThaiTuanERP2025.Application.Account.Dtos;
+using ThaiTuanERP2025.Application.Account.Roles;
 using ThaiTuanERP2025.Application.Account.Users;
 using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Infrastructure.Common.Repositories;
@@ -83,5 +85,18 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 
 			return result;
 		}
+
+		public Task<User?> GetWithRolesAndPermissionsAsync(string employeeCode, CancellationToken cancellationToken)
+			=> IncludeRolesAndPermissions().SingleOrDefaultAsync(u => u.EmployeeCode == employeeCode, cancellationToken);
+
+		public Task<User?> GetWithRolesAndPermissionsByIdAsync(Guid userId, CancellationToken cancellationToken)
+			=> IncludeRolesAndPermissions().SingleOrDefaultAsync(u => u.Id == userId, cancellationToken);
+
+		private IQueryable<User> IncludeRolesAndPermissions()
+			=> _dbSet
+				.Include(u => u.UserRoles)
+					.ThenInclude(ur => ur.Role)
+						.ThenInclude(r => r.RolePermissions)
+							.ThenInclude(rp => rp.Permission);
 	}
 }

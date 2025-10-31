@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using ThaiTuanERP2025.Domain.Account.Events.Permissions;
 using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Common.Entities;
 
 namespace ThaiTuanERP2025.Domain.Account.Entities
 {

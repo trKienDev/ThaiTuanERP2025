@@ -16,13 +16,13 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 			builder.Property(x => x.IsActive).HasDefaultValue(true);
 			builder.Property(x => x.AssignedAt).IsRequired();
 
-			// Relations
-			builder.HasOne(x => x.User)
+			// Quan hệ đúng hướng
+			builder.HasOne(x => x.User) // người được quản lý
 				.WithMany(u => u.ManagerAssignments)
 				.HasForeignKey(x => x.UserId)
 				.OnDelete(DeleteBehavior.Restrict);
 
-			builder.HasOne(x => x.Manager)
+			builder.HasOne(x => x.Manager) // người quản lý
 				.WithMany(u => u.DirectReportsAssignments)
 				.HasForeignKey(x => x.ManagerId)
 				.OnDelete(DeleteBehavior.Restrict);

@@ -1,5 +1,6 @@
 ﻿using ThaiTuanERP2025.Domain.Account.Events.Departments;
 using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Common.Entities;
 
 namespace ThaiTuanERP2025.Domain.Account.Entities
 {
@@ -13,7 +14,10 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public string Code { get; private set; } = string.Empty;
 		public bool IsActive { get; private set; }
 		public int Level { get; private set; }
+
 		public Guid? ManagerUserId { get; private set; }
+		public User? ManagerUser { get; private set; }
+
 		public Guid? ParentId { get; private set; }
 		public Department? Parent { get; private set; }
 

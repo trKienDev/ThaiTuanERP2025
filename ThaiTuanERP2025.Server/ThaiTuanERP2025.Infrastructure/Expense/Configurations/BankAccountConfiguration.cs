@@ -27,13 +27,12 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 
 			// ========== Relationship User ==========
 			builder.HasOne(x => x.User)
-				.WithMany()
+				.WithMany(u => u.BankAccounts)
 				.HasForeignKey(x => x.UserId)
 				.OnDelete(DeleteBehavior.Restrict);
 
 			// ========== Index ==========
 			builder.HasIndex(x => x.AccountNumber).IsUnique(); // tránh trùng số tài khoản
-
 			builder.HasIndex(x => new { x.SupplierId, x.IsActive });
 			builder.HasIndex(x => new { x.UserId, x.IsActive });
 		}

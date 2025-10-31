@@ -1,5 +1,6 @@
 ﻿using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Common.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Finance.Enums;
 using ThaiTuanERP2025.Domain.Finance.Events.LedgerAccounts;
@@ -94,6 +95,23 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			if (!IsActive) return;
 			IsActive = false;
 			AddDomainEvent(new LedgerAccountDeactivatedEvent(this));
+		}
+
+		public void SetParent(LedgerAccount? parent)
+		{
+			if (parent is null)
+			{
+				Path = "/" + Number.Trim();
+				Level = 0;
+			}
+			else
+			{
+				Path = $"{parent.Path.TrimEnd('/')}/{Number.Trim()}";
+				Level = parent.Level + 1;
+			}
+
+			ParentLedgerAccountId = parent?.Id;
+			AddDomainEvent(new LedgerAccountHierarchyChangedEvent(this));
 		}
 		#endregion
 	}

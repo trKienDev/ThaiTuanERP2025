@@ -2,35 +2,37 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ThaiTuanERP2025.Application.Account.Users;
+using ThaiTuanERP2025.Application.Authentication.Repositories;
 using ThaiTuanERP2025.Application.Common.Authentication;
+using ThaiTuanERP2025.Application.Common.Events;
 using ThaiTuanERP2025.Application.Common.Interfaces;
+using ThaiTuanERP2025.Application.Common.Options;
+using ThaiTuanERP2025.Application.Common.Security;
 using ThaiTuanERP2025.Application.Common.Services;
 using ThaiTuanERP2025.Application.Expense.Invoices;
 using ThaiTuanERP2025.Application.Finance.BudgetCodes;
 using ThaiTuanERP2025.Application.Finance.LedgerAccounts;
 using ThaiTuanERP2025.Domain.Account.Repositories;
+using ThaiTuanERP2025.Domain.Common.Enums;
 using ThaiTuanERP2025.Domain.Expense.Repositories;
 using ThaiTuanERP2025.Domain.Files.Repositories;
 using ThaiTuanERP2025.Domain.Finance.Repositories;
 using ThaiTuanERP2025.Domain.Followers.Repositories;
 using ThaiTuanERP2025.Domain.Notifications.Repositories;
 using ThaiTuanERP2025.Infrastructure.Account.Repositories;
-using ThaiTuanERP2025.Infrastructure.Authentication;
+using ThaiTuanERP2025.Infrastructure.Authentication.Repositories;
 using ThaiTuanERP2025.Infrastructure.Common;
+using ThaiTuanERP2025.Infrastructure.Common.Security;
 using ThaiTuanERP2025.Infrastructure.Common.Services;
 using ThaiTuanERP2025.Infrastructure.Expense.Repositories;
 using ThaiTuanERP2025.Infrastructure.Finance.Repositories;
 using ThaiTuanERP2025.Infrastructure.Followers.Repositories;
+using ThaiTuanERP2025.Infrastructure.Notifications.Background;
 using ThaiTuanERP2025.Infrastructure.Notifications.Repositories;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 using ThaiTuanERP2025.Infrastructure.StoredFiles.Configurations;
 using ThaiTuanERP2025.Infrastructure.StoredFiles.FileStorage;
 using ThaiTuanERP2025.Infrastructure.StoredFiles.Repositories;
-using Microsoft.Extensions.Options;
-using ThaiTuanERP2025.Application.Common.Options;
-using ThaiTuanERP2025.Domain.Common.Enums;
-using ThaiTuanERP2025.Infrastructure.Notifications.Background;
-using ThaiTuanERP2025.Application.Common.Events;
 
 namespace ThaiTuanERP2025.Infrastructure
 {
@@ -85,8 +87,6 @@ namespace ThaiTuanERP2025.Infrastructure
 			// Expense
 			services.AddScoped<IInvoiceRepository, InvoiceRepository>();
 			services.AddScoped<IInvoiceReadRepository, InvoiceReadRepository>();
-			services.AddScoped<IInvoiceLineRepository, InvoiceLineRepository>();
-			services.AddScoped<IInvoiceFollowerRepository, InvoiceFollowerRepository>();
 			services.AddScoped<IInvoiceFileRepository, InvoiceFileRepository>();
 			services.AddScoped<ISupplierRepository, SupplierRepository>();
 			services.AddScoped<IBankAccountRepository, BankAccountRepository>();
@@ -104,7 +104,10 @@ namespace ThaiTuanERP2025.Infrastructure
 			// Notifications & Reminders
 			services.AddScoped<INotificationRepository, NotificationRepository>();
 			services.AddScoped<ITaskReminderRepository, TaskReminderRepository>();
-			services.AddScoped<IFollowerRepository, FollowerRepository>();		
+			services.AddScoped<IFollowerRepository, FollowerRepository>();
+
+			// Authentication
+			services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
 			// ========= File Storage (MinIO) =========
 			services.Configure<FileStorageOptions>(cfg.GetSection("Minio"));
@@ -136,6 +139,15 @@ namespace ThaiTuanERP2025.Infrastructure
 
 			// DomainEventDispatcher
 			services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
+
+			// Logging
+			services.AddScoped<ILoggingService, SerilogLoggingService>();
+
+			// Jwt
+			services.Configure<JwtSettings>(cfg.GetSection("Jwt"));
+
+			// Service
+			services.AddScoped<ICurrentRequestIpProvider, CurrentRequestIpProvider>();
 
 			return services;
 		}

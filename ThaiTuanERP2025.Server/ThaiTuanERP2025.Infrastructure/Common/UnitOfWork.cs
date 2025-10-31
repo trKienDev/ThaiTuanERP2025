@@ -1,12 +1,10 @@
-﻿using Microsoft.Identity.Client;
-using ThaiTuanERP2025.Application.Common.Interfaces;
-using ThaiTuanERP2025.Application.Files.Repositories;
-using ThaiTuanERP2025.Application.Finance.Budgets.Repositories;
-using ThaiTuanERP2025.Application.Followers.Repositories;
-using ThaiTuanERP2025.Application.Notifications.Repositories;
+﻿using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Domain.Account.Repositories;
 using ThaiTuanERP2025.Domain.Expense.Repositories;
+using ThaiTuanERP2025.Domain.Files.Repositories;
 using ThaiTuanERP2025.Domain.Finance.Repositories;
+using ThaiTuanERP2025.Domain.Followers.Repositories;
+using ThaiTuanERP2025.Domain.Notifications.Repositories;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Common
@@ -34,16 +32,12 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			IBudgetCodeRepository budgetCodes,
 			ILedgerAccountRepository ledgerAccounts,
 			ILedgerAccountTypeRepository ledgerAccountTypes,
-			ITaxRepository taxes,
-			IWithholdingTaxTypeRepository withholdingTaxTypes,
 			ICashoutCodeRepository cashoutCodes,
 			ICashoutGroupRepository cashoutGroups,
 
 			// Expense
 			IInvoiceRepository invoices,
-			IInvoiceLineRepository invoiceLines,
 			IInvoiceFileRepository invoiceFiles,
-			IInvoiceFollowerRepository invoiceFollowers,
 			ISupplierRepository suppliers,
 			IBankAccountRepository bankAccounts,
 			IOutgoingBankAccountRepository outgoingBankAccounts,
@@ -92,15 +86,11 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 
 			LedgerAccountTypes = ledgerAccountTypes;
 			LedgerAccounts = ledgerAccounts;
-			Taxes = taxes;
-			WithholdingTaxTypes = withholdingTaxTypes;
 			CashoutCodes = cashoutCodes;
 			CashoutGroups = cashoutGroups;
 
 			Invoices = invoices;
-			InvoiceLines = invoiceLines;
 			InvoiceFiles = invoiceFiles;
-			InvoiceFollowers = invoiceFollowers;
 			Suppliers = suppliers;
 			BankAccounts = bankAccounts;
 			OutgoingBankAccounts = outgoingBankAccounts;
@@ -142,16 +132,12 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		public IBudgetCodeRepository BudgetCodes { get; }
 		public ILedgerAccountRepository LedgerAccounts { get; }
 		public ILedgerAccountTypeRepository LedgerAccountTypes { get; }
-		public ITaxRepository Taxes { get; }
-		public IWithholdingTaxTypeRepository WithholdingTaxTypes { get; }
 		public ICashoutCodeRepository CashoutCodes { get; }
 		public ICashoutGroupRepository CashoutGroups { get; }
 
 		// Expense
 		public IInvoiceRepository Invoices { get; }
-		public IInvoiceLineRepository InvoiceLines { get; }
 		public IInvoiceFileRepository InvoiceFiles { get; }
-		public IInvoiceFollowerRepository InvoiceFollowers { get; }
 		public ISupplierRepository Suppliers { get; }
 		public IBankAccountRepository BankAccounts { get; }
 		public IOutgoingBankAccountRepository OutgoingBankAccounts { get; }

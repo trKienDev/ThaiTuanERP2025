@@ -2,7 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Common.Entities;
 using ThaiTuanERP2025.Domain.Common.Repositories;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 

@@ -1,4 +1,5 @@
 ﻿using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Common.Entities;
 using ThaiTuanERP2025.Domain.Expense.Events.InvoiceFiles;
 using ThaiTuanERP2025.Domain.Files.Entities;
 

@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace ThaiTuanERP2025.Application.Behaviors
 {
-	public sealed class PerformanceBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+	public sealed class PerformanceBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
 	{
 		private readonly ILogger<PerformanceBehavior<TRequest, TResponse>> _logger;
 		private readonly Stopwatch _timer;

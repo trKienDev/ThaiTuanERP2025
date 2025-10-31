@@ -2,6 +2,7 @@
 using ThaiTuanERP2025.Domain.Account.Specifications;
 using ThaiTuanERP2025.Domain.Account.ValueObjects;
 using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Common.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 
 namespace ThaiTuanERP2025.Domain.Account.Entities
@@ -12,10 +13,10 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		private readonly List<UserRole> _userRoles = new();
 
 		private Role() { } // EF
-		public Role(RoleName name, string description = "")
+		public Role(string name, string description = "")
 		{
-			Guard.AgainstNull(name, nameof(name));
-			Guard.AgainstNullOrWhiteSpace(name.Value, nameof(name));
+			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
+			Name = RoleName.Create(name);
 			Description = description;
 			IsActive = true;
 

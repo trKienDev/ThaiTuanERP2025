@@ -92,5 +92,11 @@ namespace ThaiTuanERP2025.Domain.Common
 			if (!Enum.IsDefined(typeof(TEnum), value))
 				throw new DomainException($"{paramName} có giá trị không hợp lệ: {value}");
 		}
+
+		public static void AgainstNegativeOrZero(decimal value, string paramName)
+		{
+			if (value <= 0)
+				throw new DomainException($"{paramName} phải lớn hơn 0");
+		}
 	}
 }

@@ -30,13 +30,24 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 				.HasForeignKey(d => d.ManagerUserId)
 				.OnDelete(DeleteBehavior.SetNull);
 
+			builder.HasMany<User>("_users")
+				.WithOne()
+				.HasForeignKey("DepartmentId")
+				.OnDelete(DeleteBehavior.Restrict);
+
+			// Indexes
 			builder.HasIndex(e => e.CreatedByUserId);
 			builder.HasIndex(e => e.ModifiedByUserId);
 			builder.HasIndex(e => e.DeletedByUserId);
 
 			// Private collections
-			builder.Metadata.FindNavigation(nameof(Department.Users))!
-				.SetPropertyAccessMode(PropertyAccessMode.Field);
+			builder.HasMany(d => d.Users)
+				.WithOne(u => u.Department)
+				.HasForeignKey(u => u.DepartmentId)
+				.OnDelete(DeleteBehavior.Restrict);
+			
+		     builder.Metadata.FindNavigation(nameof(Department.Users))!
+			    .SetPropertyAccessMode(PropertyAccessMode.Field);
 
 			builder.Metadata.FindNavigation(nameof(Department.Children))!
 				.SetPropertyAccessMode(PropertyAccessMode.Field);

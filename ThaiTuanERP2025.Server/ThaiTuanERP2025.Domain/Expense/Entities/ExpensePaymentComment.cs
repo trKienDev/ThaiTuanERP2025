@@ -1,6 +1,8 @@
 ﻿using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Common.Entities;
 using ThaiTuanERP2025.Domain.Expense.Enums;
+using ThaiTuanERP2025.Domain.Expense.Events.ExpensePaymentComments;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
@@ -43,9 +45,14 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public bool IsEdited { get; private set; }
 		public ExpensePaymentCommentType CommentType { get; private set; }
 
+
 		// Phụ trợ
 		public IReadOnlyCollection<ExpensePaymentCommentAttachment> Attachments => _attachments.AsReadOnly();
 		public IReadOnlyCollection<ExpensePaymentCommentTag> Tags => _tags.AsReadOnly();
+
+		public User CreatedByUser { get; set; } = null!;
+		public User? ModifiedByUser { get; set; }
+		public User? DeletedByUser { get; set; }
 
 		#region Behaviors
 
@@ -80,7 +87,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			var tag = new ExpensePaymentCommentTag(Id, userId, createdByUserId);
 			_tags.Add(tag);
 
-			AddDomainEvent(new ExpensePaymentCommentTagAddedEvent(this, userId));
+			AddDomainEvent(new ExpensePaymentCommentTagAddedEvent(this.Id, userId));
 		}
 
 		public void AddReply(ExpensePaymentComment reply)

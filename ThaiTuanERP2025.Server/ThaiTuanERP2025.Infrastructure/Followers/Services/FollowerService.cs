@@ -3,6 +3,7 @@ using ThaiTuanERP2025.Application.Followers.Services;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Followers.Entities;
 using ThaiTuanERP2025.Domain.Followers.Enums;
+using ThaiTuanERP2025.Domain.Followers.ValueObjects;
 
 namespace ThaiTuanERP2025.Infrastructure.Followers.Services
 {
@@ -28,14 +29,17 @@ namespace ThaiTuanERP2025.Infrastructure.Followers.Services
 
 			// Kiểm tra đã follow chưa
 			bool existsFollow = await _unitOfWork.Followers.AnyAsync(
-				f => f.SubjectType == subjectType && f.SubjectId == subjectId && f.UserId == userId,
+				f => f.Subject.Type == subjectType && f.Subject.Id == subjectId && f.UserId == userId,
 				cancellationToken
 			);
 
 			if (existsFollow)
 				return;
 
-			await _unitOfWork.Followers.AddAsync(new Follower(subjectType, subjectId, userId), cancellationToken);
+			var follower = new Follower(
+				new SubjectRef (subjectType, subjectId),
+				userId
+			);
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 		}
 
@@ -46,12 +50,12 @@ namespace ThaiTuanERP2025.Infrastructure.Followers.Services
 
 			// Lấy những follower đã tồn tại để tránh trùng
 			var existing = await _unitOfWork.Followers.ListAsync(
-				q => q.Where(f => f.SubjectType == subjectType && f.SubjectId == subjectId && set.Contains(f.UserId)),
+				q => q.Where(f => f.Subject.Type == subjectType && f.Subject.Id == subjectId && set.Contains(f.UserId)),
 				cancellationToken: cancellationToken
 			);
 			var existedUserIds = existing.Select(f => f.UserId).ToHashSet();
 
-			var toAdd = set.Except(existedUserIds).Select(uid => new Follower(subjectType, subjectId, uid)).ToList();
+			var toAdd = set.Except(existedUserIds).Select(uid => new Follower(new SubjectRef(subjectType, subjectId), uid)).ToList();
 
 			if (toAdd.Count > 0)
 			{
@@ -62,8 +66,8 @@ namespace ThaiTuanERP2025.Infrastructure.Followers.Services
 
 		public async Task UnfollowAsync(SubjectType subjectType, Guid subjectId, Guid userId, CancellationToken cancellationToken) {
 			var item = await _unitOfWork.Followers.SingleOrDefaultIncludingAsync(
-				f => f.SubjectType == subjectType &&
-					f.SubjectId == subjectId &&
+				f => f.Subject.Type == subjectType && 
+					f.Subject.Id == subjectId &&
 					f.UserId == userId,
 				cancellationToken: cancellationToken
 			);
@@ -76,7 +80,7 @@ namespace ThaiTuanERP2025.Infrastructure.Followers.Services
 
 		public async Task<bool> IsFollowingAsync(SubjectType subjectType, Guid subjectId, Guid userId, CancellationToken cancellationToken) {
 			return await _unitOfWork.Followers.AnyAsync(
-				f => f.SubjectType == subjectType && f.SubjectId == subjectId && f.UserId == userId,
+				f => f.Subject.Type == subjectType && f.Subject.Id == subjectId && f.UserId == userId,
 				cancellationToken
 			);
 		}

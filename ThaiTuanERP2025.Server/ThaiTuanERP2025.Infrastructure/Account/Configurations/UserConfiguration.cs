@@ -19,56 +19,60 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 			builder.Property(u => u.PasswordHash).IsRequired().HasMaxLength(256);
 			builder.Property(u => u.Position).HasMaxLength(100);
 
-			// Value Objects
+			// ===== Value Object: Email =====
 			builder.OwnsOne(u => u.Email, email =>
 			{
-				email.Property(e => e.Value).HasColumnName("Email").HasMaxLength(255);
+				email.Property(e => e.Value)
+					.HasColumnName("Email")
+					.HasMaxLength(255);
 			});
 
+			// ===== Value Object: Phone =====
 			builder.OwnsOne(u => u.Phone, phone =>
 			{
-				phone.Property(p => p.Value).HasColumnName("Phone").HasMaxLength(30);
+				phone.Property(p => p.Value)
+					.HasColumnName("Phone")
+					.HasMaxLength(30);
 			});
 
-			// Department (many-to-one)
+			// ===== Department =====
 			builder.HasOne(u => u.Department)
 				.WithMany(d => d.Users)
 				.HasForeignKey(u => u.DepartmentId)
 				.OnDelete(DeleteBehavior.Restrict);
 
-			// Manager (self-reference)
+			// ===== Manager =====
 			builder.HasOne(u => u.Manager)
 				.WithMany()
 				.HasForeignKey(u => u.ManagerId)
 				.OnDelete(DeleteBehavior.Restrict);
 
-			// AvatarFile (StoredFile)
+			// ===== AvatarFile =====
 			builder.HasOne<StoredFile>()
 				.WithMany()
 				.HasForeignKey(u => u.AvatarFileId)
 				.IsRequired(false)
 				.OnDelete(DeleteBehavior.SetNull);
 
-			// Field-based access for private collections (DDD)
-			builder.Metadata.FindNavigation(nameof(User.UserRoles))!
-				.SetPropertyAccessMode(PropertyAccessMode.Field);
-			
-			builder.Metadata.FindNavigation(nameof(User.UserGroups))!
-				.SetPropertyAccessMode(PropertyAccessMode.Field);
-			
-			builder.Metadata.FindNavigation(nameof(User.ManagerAssignments))!
-				.SetPropertyAccessMode(PropertyAccessMode.Field);
-			
-			builder.Metadata.FindNavigation(nameof(User.DirectReportsAssignments))!
-				.SetPropertyAccessMode(PropertyAccessMode.Field);
-			
-			builder.Metadata.FindNavigation(nameof(User.BankAccounts))!
-				.SetPropertyAccessMode(PropertyAccessMode.Field);
-
-			// Indexes
+			// ===== Indexes =====
 			builder.HasIndex(u => u.Username).IsUnique();
 			builder.HasIndex(u => u.EmployeeCode).IsUnique();
-			builder.HasIndex("Email");
+
+			// ===== Field-based access (SAFE VERSION) =====
+			SetFieldAccessModeSafe(builder, nameof(User.UserRoles));
+			SetFieldAccessModeSafe(builder, nameof(User.UserGroups));
+			SetFieldAccessModeSafe(builder, nameof(User.ManagerAssignments));
+			SetFieldAccessModeSafe(builder, nameof(User.DirectReportsAssignments));
+			SetFieldAccessModeSafe(builder, nameof(User.BankAccounts));
+		}
+
+		private static void SetFieldAccessModeSafe<TEntity>(EntityTypeBuilder<TEntity> builder, string navigationName)
+			where TEntity : class
+		{
+			var navigation = builder.Metadata.FindNavigation(navigationName);
+			if (navigation != null)
+				navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
 		}
 	}
+
 }

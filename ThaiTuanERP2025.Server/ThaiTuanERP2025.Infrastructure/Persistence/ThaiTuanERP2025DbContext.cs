@@ -3,7 +3,8 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using System.Linq.Expressions;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Domain.Account.Entities;
-using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Authentication.Entities;
+using ThaiTuanERP2025.Domain.Common.Entities;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Files.Entities;
 using ThaiTuanERP2025.Domain.Finance.Entities;
@@ -36,8 +37,6 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<NumberSeries> NumberSeries => Set<NumberSeries>();
 		public DbSet<LedgerAccountType> LedgerAccountTypes => Set<LedgerAccountType>();
 		public DbSet<LedgerAccount> LedgerAccounts => Set<LedgerAccount>();
-		public DbSet<Tax> Taxes => Set<Tax>();
-		public DbSet<WithholdingTaxType> WithholdingTaxTypes => Set<WithholdingTaxType>();
 		public DbSet<CashoutGroup> CashOutGroups => Set<CashoutGroup>();
 		public DbSet<CashoutCode> CashOutCodes => Set<CashoutCode>();
 		public DbSet<StoredFile> StoredFiles => Set<StoredFile>();
@@ -45,9 +44,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<OutgoingBankAccount> OutgoingBankAccounts => Set<OutgoingBankAccount>();
 		public DbSet<Supplier> Suppliers => Set<Supplier>();
 		public DbSet<Invoice> Invoices => Set<Invoice>();
-		public DbSet<InvoiceLine> InvoiceLines => Set<InvoiceLine>();
 		public DbSet<InvoiceFile> InvoiceFiles => Set<InvoiceFile>();
-		public DbSet<InvoiceFollwer> InvoiceFollwers => Set<InvoiceFollwer>();	
 		public DbSet<BudgetCode> BudgetCodes => Set<BudgetCode>();
 		public DbSet<BudgetGroup> BudgetGroups => Set<BudgetGroup>();
 		public DbSet<BudgetPeriod> BudgetPeriods => Set<BudgetPeriod>();
@@ -71,28 +68,21 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
 		public DbSet<UserRole> UserRoles => Set<UserRole>();
 
+		// Authentication
+		public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			modelBuilder.ApplyConfigurationsFromAssembly(typeof(ThaiTuanERP2025DbContext).Assembly);
-			ApplySoftDeleteFilters(modelBuilder);
-			ConfigureNumberSeries(modelBuilder);
-		}
-		
-		private void ConfigureNumberSeries(ModelBuilder modelBuilder) {
-			modelBuilder.Entity<NumberSeries>(b =>
+			try
 			{
-				b.ToTable("NumberSeries");
-				b.HasKey(x => x.Id);
-
-				b.HasIndex(x => x.Key).IsUnique();
-				b.Property(x => x.Key).IsRequired().HasMaxLength(100);
-
-				b.Property(x => x.Prefix).IsRequired().HasMaxLength(20);
-				b.Property(x => x.PadLength).IsRequired().HasDefaultValue(6); // độ dài padding, mặc định 6 ký tự
-				b.Property(x => x.NextNumber).IsRequired();
-
-				b.Property(x => x.RowVersion).IsRowVersion(); // concurrency token
-			});
+				modelBuilder.ApplyConfigurationsFromAssembly(typeof(ThaiTuanERP2025DbContext).Assembly);
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine("Lỗi trong ApplyConfigurationsFromAssembly:");
+				Console.WriteLine(ex);
+				throw;
+			}
 		}
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -126,12 +116,21 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 
 			if (_dispatcher is not null)
 			{
-				var entitiesWithEvents = ChangeTracker.Entries<AuditableEntity>().Select(e => e.Entity)
+				var entitiesWithEvents = ChangeTracker.Entries<AuditableEntity>()
+					.Select(e => e.Entity)
 					.Where(e => e.DomainEvents.Any())
 					.ToArray();
 
-				// 3️⃣ Publish qua MediatR
-				await _dispatcher.DispatchAsync(entitiesWithEvents, cancellationToken);
+				// Flatten tất cả domain events
+				var allEvents = entitiesWithEvents
+					.SelectMany(e => e.DomainEvents)
+					.ToArray();
+
+				await _dispatcher.DispatchAsync(allEvents, cancellationToken);
+
+				// Optionally: clear domain events sau khi publish
+				foreach (var entity in entitiesWithEvents)
+					entity.ClearDomainEvents();
 			}
 
 			return result;
@@ -142,19 +141,21 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 			foreach (var entityType in modelBuilder.Model.GetEntityTypes())
 			{
 				var clrType = entityType.ClrType;
-
-				// Bỏ qua các type không phải entity thực (owned/skip navigations etc.)
 				if (clrType == null || !typeof(AuditableEntity).IsAssignableFrom(clrType))
 					continue;
 
+				// Kiểm tra có property IsDeleted hay không
+				var propInfo = clrType.GetProperty(nameof(AuditableEntity.IsDeleted));
+				if (propInfo == null)
+					continue;
+
 				var parameter = Expression.Parameter(clrType, "e");
-				var prop = Expression.Property(parameter, nameof(AuditableEntity.IsDeleted));
-				var body = Expression.Not(prop); // !e.IsDeleted
+				var prop = Expression.Property(parameter, propInfo);
+				var body = Expression.Not(prop);
 				var lambda = Expression.Lambda(body, parameter);
 
 				modelBuilder.Entity(clrType).HasQueryFilter(lambda);
 			}
 		}
-
 	}
 }
