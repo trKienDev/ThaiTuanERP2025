@@ -4,6 +4,7 @@ using ThaiTuanERP2025.Application.Common.Security;
 using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 using ThaiTuanERP2025.Domain.Common.ValueObjects;
+using ThaiTuanERP2025.Domain.Account.ValueObjects;
 
 namespace ThaiTuanERP2025.Infrastructure.Seeding
 {

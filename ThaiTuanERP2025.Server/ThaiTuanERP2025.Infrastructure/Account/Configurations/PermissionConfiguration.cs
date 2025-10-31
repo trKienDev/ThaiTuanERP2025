@@ -24,6 +24,8 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 
 			// Unique Code
 			builder.HasIndex(p => p.Code).IsUnique();
+
+			ConfigureAuditUsers(builder);
 		}
 	}
 }

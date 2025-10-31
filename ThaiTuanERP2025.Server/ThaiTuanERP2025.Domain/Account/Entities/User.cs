@@ -1,13 +1,13 @@
 ﻿using ThaiTuanERP2025.Domain.Account.Events.Users;
+using ThaiTuanERP2025.Domain.Account.ValueObjects;
 using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Common.Entities;
-using ThaiTuanERP2025.Domain.Common.ValueObjects;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 
 namespace ThaiTuanERP2025.Domain.Account.Entities
 {
-	public class User : AuditableEntity
+	public class User : BaseEntity
 	{
 		private readonly List<UserRole> _userRoles = new();
 		private readonly List<UserGroup> _userGroups = new();

@@ -21,9 +21,6 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public Guid? ParentId { get; private set; }
 		public Department? Parent { get; private set; }
 
-		public User CreatedByUser { get; set; } = null!;
-		public User? ModifiedByUser { get; set; }
-		public User? DeletedByUser { get; set; }
 		#endregion
 
 		#region Constructor
@@ -43,8 +40,8 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		}
 		#endregion
 
-		public IReadOnlyCollection<User> Users => _users.AsReadOnly();
-		public IReadOnlyCollection<Department> Children => _children.AsReadOnly();
+		public ICollection<User> Users => _users;
+		public ICollection<Department> Children => _children;
 
 		#region Domain Behaviors
 		public void Rename(string newName)

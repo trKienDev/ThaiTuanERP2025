@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
-import { LoginResponseDto } from '../../../features/login/login-response.model';
 import { ApiResponse } from '../../../shared/models/api-response.model';
+import { LoginResponseDto } from '../../../layouts/login/login-response.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {

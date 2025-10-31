@@ -30,7 +30,6 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public IReadOnlyCollection<RolePermission> RolePermissions => _rolePermissions.AsReadOnly();
 		public IReadOnlyCollection<UserRole> UserRoles => _userRoles.AsReadOnly();
 
-
 		#region Domain Behaviors
 		public void Activate()
 		{

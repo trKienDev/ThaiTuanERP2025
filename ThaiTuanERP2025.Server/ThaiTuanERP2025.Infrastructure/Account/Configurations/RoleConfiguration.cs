@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Infrastructure.Persistence.Configurations;
 
 namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 {
-	public class RoleConfiguration : IEntityTypeConfiguration<Role>
+	public class RoleConfiguration : BaseEntityConfiguration<Role>
 	{
-		public void Configure(EntityTypeBuilder<Role> builder)
+		public override void Configure(EntityTypeBuilder<Role> builder)
 		{
 			builder.ToTable("Roles", "RBAC");
 
@@ -14,25 +15,24 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 
 			builder.Property(r => r.Description).HasMaxLength(250);
 
-			// ===== Value Object: RoleName =====
-			builder.OwnsOne(r => r.Name, name =>
-			{
-				name.Property(n => n.Value)
-					.HasColumnName("RoleName")
-					.IsRequired()
-					.HasMaxLength(100);
-
-				name.HasIndex(n => n.Value).IsUnique();
-			});
+			builder.OwnsOne(
+				r => r.Name,
+				name =>
+				{
+					name.Property(n => n.Value).HasColumnName("Name").IsRequired().HasMaxLength(100);
+					name.HasIndex(n => n.Value).IsUnique();
+				}
+			);
 
 			builder.Property(r => r.IsActive).HasDefaultValue(true);
 
-			// ===== Private collections =====
-			builder.Metadata.FindNavigation(nameof(Role.UserRoles))!
-				.SetPropertyAccessMode(PropertyAccessMode.Field);
+			// UserRoles
+			builder.Metadata.FindNavigation(nameof(Role.UserRoles))!.SetPropertyAccessMode(PropertyAccessMode.Field);
 
-			builder.Metadata.FindNavigation(nameof(Role.RolePermissions))!
-				.SetPropertyAccessMode(PropertyAccessMode.Field);
+			// RolePermissions
+			builder.Metadata.FindNavigation(nameof(Role.RolePermissions))!.SetPropertyAccessMode(PropertyAccessMode.Field);
+
+			ConfigureAuditUsers(builder);
 		}
 	}
 }

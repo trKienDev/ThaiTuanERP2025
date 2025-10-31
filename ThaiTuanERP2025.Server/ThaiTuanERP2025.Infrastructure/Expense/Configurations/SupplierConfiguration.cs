@@ -17,18 +17,17 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 			builder.Property(x => x.IsActive).IsRequired();
 
 			// ========== Navigation tới BankAccounts ==========
-			builder.Navigation(nameof(Supplier.BankAccounts)).UsePropertyAccessMode(PropertyAccessMode.Field);
-			// EF truy cập trực tiếp private field _bankAccounts
-
-			builder.HasMany(typeof(BankAccount), "_bankAccounts")
-				.WithOne(nameof(BankAccount.Supplier))
-				.HasForeignKey(nameof(BankAccount.SupplierId))
+			builder.HasMany(s => s.BankAccounts)
+				.WithOne(b => b.Supplier)
+				.HasForeignKey(b => b.SupplierId)
 				.OnDelete(DeleteBehavior.Cascade);
 			// Khi xóa Supplier thì xóa luôn BankAccounts (trong Aggregate)
 
 			// ========== Index ==========
 			builder.HasIndex(x => x.Name);
 			builder.HasIndex(x => x.TaxCode);
+
+			ConfigureAuditUsers(builder);
 		}
 	}
 }

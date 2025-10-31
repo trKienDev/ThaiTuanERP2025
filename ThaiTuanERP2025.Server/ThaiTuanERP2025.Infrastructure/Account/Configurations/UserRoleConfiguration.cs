@@ -13,15 +13,15 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 			builder.HasKey(ur => new { ur.UserId, ur.RoleId });
 
 			// Relationships
-			builder.HasOne(ur => ur.User)
+			builder.HasOne<User>()
 				.WithMany(u => u.UserRoles)
 				.HasForeignKey(ur => ur.UserId)
-				.OnDelete(DeleteBehavior.Restrict);
+				.OnDelete(DeleteBehavior.Cascade);
 
-			builder.HasOne(ur => ur.Role)
+			builder.HasOne<Role>()
 				.WithMany(r => r.UserRoles)
 				.HasForeignKey(ur => ur.RoleId)
-				.OnDelete(DeleteBehavior.Restrict);
+				.OnDelete(DeleteBehavior.Cascade);
 		}
 	}
 }

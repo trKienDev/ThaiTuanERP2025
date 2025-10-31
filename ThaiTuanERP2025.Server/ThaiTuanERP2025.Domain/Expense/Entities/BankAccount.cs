@@ -47,9 +47,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		public bool IsActive { get; private set; } = true;
 
-		public User CreatedByUser { get; set; } = null!;
-		public User? ModifiedByUser { get; set; }
-		public User? DeletedByUser { get; set; }
 		#endregion
 
 		#region Domain Behaviors

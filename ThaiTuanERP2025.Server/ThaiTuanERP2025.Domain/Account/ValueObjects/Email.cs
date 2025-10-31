@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
+using ThaiTuanERP2025.Domain.Common.ValueObjects;
 
-namespace ThaiTuanERP2025.Domain.Common.ValueObjects
+namespace ThaiTuanERP2025.Domain.Account.ValueObjects
 {
 	public sealed class Email : ValueObject
 	{

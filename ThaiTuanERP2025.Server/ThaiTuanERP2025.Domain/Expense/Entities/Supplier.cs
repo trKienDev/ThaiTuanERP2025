@@ -27,10 +27,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public string? TaxCode { get; private set; }
 		public bool IsActive { get; private set; } = true;
 
-		public User CreatedByUser { get; set; } = null!;
-		public User? ModifiedByUser { get; set; }
-		public User? DeletedByUser { get; set; }
-
 		public IReadOnlyCollection<BankAccount> BankAccounts => _bankAccounts.AsReadOnly();
 
 		// ===== Domain behaviors =====

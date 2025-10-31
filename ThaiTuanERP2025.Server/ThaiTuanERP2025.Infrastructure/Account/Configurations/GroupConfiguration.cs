@@ -14,11 +14,8 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 			builder.HasKey(g => g.Id);
 
 			builder.Property(g => g.Name).IsRequired().HasMaxLength(150);
-
 			builder.Property(g => g.Slug).IsRequired().HasMaxLength(100);
-
 			builder.Property(g => g.Description).HasMaxLength(500);
-
 			builder.Property(g => g.IsActive).HasDefaultValue(true);
 
 			// Relationships
@@ -32,6 +29,8 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 				.SetPropertyAccessMode(PropertyAccessMode.Field);
 
 			builder.HasIndex(g => g.Slug).IsUnique();
+
+			ConfigureAuditUsers(builder);
 		}
 	}
 }

@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Infrastructure.Persistence.Configurations;
 
 namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 {
-	public class UserManagerAssignmentConfiguration : IEntityTypeConfiguration<UserManagerAssignment>
+	public class UserManagerAssignmentConfiguration : BaseEntityConfiguration<UserManagerAssignment>
 	{
-		public void Configure(EntityTypeBuilder<UserManagerAssignment> builder)
+		public override void Configure(EntityTypeBuilder<UserManagerAssignment> builder)
 		{
 			builder.ToTable("UserManagerAssignments", "Account");
 
@@ -16,18 +17,20 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 			builder.Property(x => x.IsActive).HasDefaultValue(true);
 			builder.Property(x => x.AssignedAt).IsRequired();
 
-			// Quan hệ đúng hướng
-			builder.HasOne(x => x.User) // người được quản lý
+			// Relations
+			builder.HasOne(x => x.Manager)
 				.WithMany(u => u.ManagerAssignments)
-				.HasForeignKey(x => x.UserId)
-				.OnDelete(DeleteBehavior.Restrict);
-
-			builder.HasOne(x => x.Manager) // người quản lý
-				.WithMany(u => u.DirectReportsAssignments)
 				.HasForeignKey(x => x.ManagerId)
 				.OnDelete(DeleteBehavior.Restrict);
 
+			builder.HasOne(x => x.User)
+				.WithMany(u => u.DirectReportsAssignments)
+				.HasForeignKey(x => x.UserId)
+				.OnDelete(DeleteBehavior.Restrict);
+
 			builder.HasIndex(x => new { x.UserId, x.ManagerId }).IsUnique();
+
+			ConfigureAuditUsers(builder);
 		}
 	}
 }
