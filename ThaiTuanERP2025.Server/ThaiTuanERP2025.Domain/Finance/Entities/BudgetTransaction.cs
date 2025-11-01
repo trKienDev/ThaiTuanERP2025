@@ -8,10 +8,10 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 	/// <summary>
 	/// Ghi nhận bút toán thay đổi ngân sách (ledger entry) cho từng BudgetPlan.
 	/// </summary>
-	public class BudgetTransaction : AuditableEntity
+	public class BudgetTransaction : BaseEntity
 	{
-		private BudgetTransaction() { } // EF only
-
+		#region Constructors
+		private BudgetTransaction() { } 
 		public BudgetTransaction(Guid budgetPlanId, Guid paymentId, decimal amount, BudgetTransactionType type)
 		{
 			Guard.AgainstDefault(budgetPlanId, nameof(budgetPlanId));
@@ -28,7 +28,9 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 
 			AddDomainEvent(new BudgetTransactionCreatedEvent(this));
 		}
+		#endregion
 
+		#region Properties
 		public Guid BudgetPlanId { get; private set; }
 		public Guid PaymentId { get; private set; }
 		public decimal Amount { get; private set; }
@@ -36,6 +38,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public DateTime TransactionDate { get; private set; }
 
 		public BudgetPlan BudgetPlan { get; private set; } = null!;
+		#endregion
 
 		#region Domain Behaviors
 

@@ -19,8 +19,8 @@ namespace ThaiTuanERP2025.Domain.Files.Entities
 
 		public bool IsPublic { get; private set; }
 
-		private StoredFile() { } // EF only
-
+		#region Constructors
+		private StoredFile() { } 
 		public StoredFile(
 			string bucket, string objectKey, string fileName, string contentType, long size, string module,
 			string entity, string? entityId = null, string? hash = null, bool isPublic = true
@@ -48,6 +48,7 @@ namespace ThaiTuanERP2025.Domain.Files.Entities
 
 			AddDomainEvent(new StoredFileCreatedEvent(this));
 		}
+		#endregion
 
 		#region Domain Behaviors
 

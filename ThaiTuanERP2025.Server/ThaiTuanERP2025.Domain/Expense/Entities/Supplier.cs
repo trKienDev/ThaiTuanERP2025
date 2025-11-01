@@ -10,8 +10,8 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 	{
 		private readonly List<BankAccount> _bankAccounts = new();
 
-		private Supplier() { } // EF
-
+		#region Constructors
+		private Supplier() { }
 		public Supplier(string name, string? taxCode)
 		{
 			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
@@ -22,12 +22,15 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 			AddDomainEvent(new SupplierCreatedEvent(this));
 		}
+		#endregion
 
+		#region Properties
 		public string Name { get; private set; } = null!;
 		public string? TaxCode { get; private set; }
 		public bool IsActive { get; private set; } = true;
 
 		public IReadOnlyCollection<BankAccount> BankAccounts => _bankAccounts.AsReadOnly();
+		#endregion
 
 		// ===== Domain behaviors =====
 		public void Rename(string name)

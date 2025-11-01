@@ -7,8 +7,8 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 {
 	public class BudgetGroup : AuditableEntity
 	{
+		#region Constructors
 		private BudgetGroup() { }
-
 		public BudgetGroup(string code, string name)
 		{
 			Guard.AgainstNullOrWhiteSpace(code, nameof(code));
@@ -20,16 +20,16 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 
 			AddDomainEvent(new BudgetGroupCreatedEvent(this));
 		}
+		#endregion
 
+		#region properties
 		public string Code { get; private set; } = string.Empty;
 		public string Name { get; private set; } = string.Empty;
 
 		public ICollection<BudgetCode> BudgetCodes { get; private set; } = new List<BudgetCode>();
+		#endregion
 
-		public User CreatedByUser { get; private set; } = null!;
-		public User? ModifiedByUser { get; private set; }
-		public User? DeletedByUser { get; private set; }
-
+		#region Domain Behaviors
 		public void Update(string code, string name)
 		{
 			Guard.AgainstNullOrWhiteSpace(code, nameof(code));
@@ -73,5 +73,6 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 				AddDomainEvent(new BudgetCodeRemovedFromGroupEvent(this, code));
 			}
 		}
+		#endregion
 	}
 }

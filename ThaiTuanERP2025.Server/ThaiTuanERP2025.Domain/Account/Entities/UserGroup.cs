@@ -7,23 +7,8 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 {
 	public class UserGroup : AuditableEntity
 	{
-		public Guid UserId { get; private set; }
-		public Guid GroupId { get; private set; }
-
-		public User User { get; private set; } = default!;
-		public Group Group { get; private set; } = default!;
-
-		public DateTime JoinedAt { get; private set; } = DateTime.UtcNow;
-		public DateTime? LeftAt { get; private set; }
-
-		public bool IsActive { get; private set; } = true;
-
-		public User CreatedByUser { get; set; } = null!;
-		public User? ModifiedByUser { get; set; }
-		public User? DeletedByUser { get; set; }
-
-		private UserGroup() { } // EF only
-
+		#region Constructors
+		private UserGroup() { }
 		public UserGroup(Guid userId, Guid groupId)
 		{
 			Guard.AgainstDefault(userId, nameof(userId));
@@ -37,6 +22,20 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 
 			AddDomainEvent(new UserJoinedGroupEvent(userId, groupId));
 		}
+		#endregion
+
+		#region Properties
+		public Guid UserId { get; private set; }
+		public Guid GroupId { get; private set; }
+
+		public User User { get; private set; } = default!;
+		public Group Group { get; private set; } = default!;
+
+		public DateTime JoinedAt { get; private set; } = DateTime.UtcNow;
+		public DateTime? LeftAt { get; private set; }
+
+		public bool IsActive { get; private set; } = true;
+		#endregion
 
 		#region Domain Behaviors
 		public void Leave()

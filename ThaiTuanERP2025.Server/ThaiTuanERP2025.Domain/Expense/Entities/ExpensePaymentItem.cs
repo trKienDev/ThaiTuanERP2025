@@ -7,19 +7,14 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
 	public class ExpensePaymentItem : AuditableEntity
 	{
-		private ExpensePaymentItem() { } // EF Core
-
+		#region EF Constructor
+		private ExpensePaymentItem() { } 
 		internal ExpensePaymentItem(
-		    Guid expensePaymentId,
-		    string itemName,
-		    int quantity,
-		    decimal unitPrice,
-		    decimal taxRate,
-		    Guid? budgetCodeId,
-		    Guid? cashoutCodeId,
-		    Guid? invoiceId,
-		    decimal? overrideTaxAmount = null)
-		{
+			Guid expensePaymentId, string itemName, 
+			int quantity, decimal unitPrice, decimal taxRate,
+			Guid? budgetCodeId, Guid? cashoutCodeId, Guid? invoiceId,
+			decimal? overrideTaxAmount = null
+		) {
 			Guard.AgainstDefault(expensePaymentId, nameof(expensePaymentId));
 			Guard.AgainstNullOrWhiteSpace(itemName, nameof(itemName));
 			Guard.AgainstZeroOrNegative(quantity, nameof(quantity));
@@ -42,7 +37,9 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 			AddDomainEvent(new ExpensePaymentItemAddedEvent(this));
 		}
+		#endregion
 
+		#region Properties
 		public Guid ExpensePaymentId { get; private set; }
 		public ExpensePayment ExpensePayment { get; private set; } = null!;
 
@@ -64,9 +61,9 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		public Guid? CashoutCodeId { get; private set; }
 		public CashoutCode? CashoutCode { get; private set; }
+		#endregion
 
 		#region Domain Behaviors
-
 		public void UpdateQuantity(int quantity, decimal? overrideTaxAmount = null)
 		{
 			Guard.AgainstZeroOrNegative(quantity, nameof(quantity));

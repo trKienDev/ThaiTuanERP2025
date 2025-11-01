@@ -41,10 +41,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		public string? HistoryJson { get; private set; }
 
-		public User CreatedByUser { get; set; } = null!;
-		public User? ModifiedByUser { get; set; }
-		public User? DeletedByUser { get; set; }
-
 		#region Constructors
 		private ExpenseStepInstance() { }
 		public ExpenseStepInstance( 

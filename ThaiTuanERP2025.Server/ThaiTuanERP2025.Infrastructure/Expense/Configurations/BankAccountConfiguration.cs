@@ -10,7 +10,7 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 	{
 		public override void Configure(EntityTypeBuilder<BankAccount> builder)
 		{
-			builder.ToTable("BankAccounts");
+			builder.ToTable("BankAccounts", "Expense");
 
 			builder.HasKey(x => x.Id);
 

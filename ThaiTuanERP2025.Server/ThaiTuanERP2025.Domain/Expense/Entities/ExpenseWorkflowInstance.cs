@@ -7,10 +7,10 @@ using ThaiTuanERP2025.Domain.Expense.Events.ExpenseWorkflowInstances;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
-	public class ExpenseWorkflowInstance : AuditableEntity
+	public class ExpenseWorkflowInstance : BaseEntity
 	{
+		#region Constructors
 		private ExpenseWorkflowInstance() { }
-
 		public ExpenseWorkflowInstance (
 			Guid templateId,
 			int templateVersion,
@@ -33,7 +33,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			TemplateVersion = templateVersion;
 			DocumentType = documentType;
 			DocumentId = documentId;
-			CreatedByUserId = createdByUserId;
 			Status = WorkflowStatus.Draft;
 			Amount = amount;
 			Currency = currency;
@@ -43,7 +42,9 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 			AddDomainEvent(new ExpenseWorkflowInstanceCreatedEvent(this));
 		}
+		#endregion
 
+		#region Properties
 		public Guid TemplateId { get; private set; }
 		public int TemplateVersion { get; private set; }
 		public string DocumentType { get; private set; } = string.Empty;
@@ -61,6 +62,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public Guid? ApprovedBy { get; private set; }
 
 		public ICollection<ExpenseStepInstance> Steps { get; private set; } = new List<ExpenseStepInstance>();
+		#endregion
 
 		#region Domain Behaviors
 

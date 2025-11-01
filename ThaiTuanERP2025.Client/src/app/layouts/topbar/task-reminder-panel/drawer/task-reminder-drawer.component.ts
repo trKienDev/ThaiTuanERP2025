@@ -4,8 +4,8 @@ import { combineLatest, interval, map, Observable, startWith } from "rxjs";
 import { TaskReminderDto } from "../models/task-reminder.model";
 import { NavigationExtras, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
-import { FollowingExpensePaymentFacade } from "../../../../features/expense/facades/following-expense-payment.facade";
-import { ExpensePaymentDetailDialogComponent } from "../../../../features/expense/dialogs/expense-payment-detail-dialog/expense-payment-detail-dialog.component";
+import { ExpensePaymentDetailDialogComponent } from "../../../../modules/expense/components/expense-payment-detail-dialog/expense-payment-detail-dialog.component";
+import { FollowingExpensePaymentFacade } from "../../../../modules/expense/facades/following-expense-payment.facade";
 
 @Component({
       selector: 'app-task-reminder-drawer',

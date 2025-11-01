@@ -29,6 +29,9 @@ namespace ThaiTuanERP2025.Infrastructure.StoredFiles.Configurations
 			builder.HasIndex(x => new { x.Bucket, x.ObjectKey }).IsUnique(); // objectKey unique trong bucket
 			builder.HasIndex(x => new { x.Module, x.Entity, x.EntityId });
 			builder.HasIndex(x => x.IsPublic);
+
+			// Auditable
+			ConfigureAuditUsers(builder);
 		}
 	}
 }

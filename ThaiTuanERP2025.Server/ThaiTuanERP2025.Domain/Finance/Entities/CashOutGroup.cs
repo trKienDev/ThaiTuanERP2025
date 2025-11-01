@@ -38,11 +38,6 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 
 		public int Level { get; private set; }
 		public string? Path { get; private set; }
-
-		public User CreatedByUser { get; private set; } = null!;
-		public User? ModifiedByUser { get; private set; }
-		public User? DeletedByUser { get; private set; }
-
 		#region Domain Behaviors
 
 		public void Rename(string newName)

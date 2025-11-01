@@ -24,6 +24,9 @@ namespace ThaiTuanERP2025.Infrastructure.Followers.Configurations
 			// ===== Properties =====
 			builder.Property(x => x.UserId).IsRequired();
 			builder.Property(x => x.IsActive).IsRequired();
+
+			// ===== Auditable =====
+			ConfigureAuditUsers(builder);
 		}
 	}
 }

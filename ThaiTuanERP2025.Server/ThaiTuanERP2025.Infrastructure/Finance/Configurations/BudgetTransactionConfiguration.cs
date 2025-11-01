@@ -4,35 +4,22 @@ using ThaiTuanERP2025.Domain.Finance.Entities;
 
 namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 {
-	//public class BudgetTransactionConfiguration : IEntityTypeConfiguration<BudgetTransaction>
-	//{
-	//	public void Configure(EntityTypeBuilder<BudgetTransaction> builder)
-	//	{
-	//		builder.ToTable("BudgetTransaction", "Finance");
+	public class BudgetTransactionConfiguration : IEntityTypeConfiguration<BudgetTransaction>
+	{
+		public void Configure(EntityTypeBuilder<BudgetTransaction> builder)
+		{
+			builder.ToTable("BudgetTransaction", "Finance");
 
-	//		builder.HasKey(bt => bt.Id);
+			builder.HasKey(bt => bt.Id);
 
-	//		// ===== Basic properties =====
-	//		builder.Property(x => x.Amount)
-	//		    .HasColumnType("decimal(18,2)")
-	//		    .IsRequired();
+			// ===== Basic properties =====
+			builder.Property(x => x.Amount).HasColumnType("decimal(18,2)").IsRequired();
+			builder.Property(x => x.Type).HasConversion<int>().IsRequired();
+			builder.Property(x => x.TransactionDate).IsRequired();
 
-	//		builder.Property(x => x.Type)
-	//		    .HasConversion<int>()
-	//		    .IsRequired();
-
-	//		builder.Property(x => x.TransactionDate)
-	//		    .IsRequired();
-
-	//		// ===== Relationships =====
-	//		builder.HasOne(x => x.BudgetPlan)
-	//		    .WithMany("_transactions")
-	//		    .HasForeignKey(x => x.BudgetPlanId)
-	//		    .OnDelete(DeleteBehavior.Cascade);
-
-	//		// ===== Indexes =====
-	//		builder.HasIndex(x => x.TransactionDate);
-	//		builder.HasIndex(x => x.Type);
-	//	}
-	//}
+			// ===== Indexes =====
+			builder.HasIndex(x => x.TransactionDate);
+			builder.HasIndex(x => x.Type);
+		}
+	}
 }

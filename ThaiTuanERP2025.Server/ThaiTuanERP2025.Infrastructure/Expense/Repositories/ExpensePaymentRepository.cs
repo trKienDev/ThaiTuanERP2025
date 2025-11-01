@@ -38,8 +38,7 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories
 				.Include(i => i.Steps)
 				.SingleOrDefaultAsync(i =>
 					i.DocumentType == "ExpensePayment" &&
-					i.DocumentId == documentId &&
-					!i.IsDeleted,
+					i.DocumentId == documentId,
 					cancellationToken
 				);
 		}

@@ -1,13 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Transactions;
 using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Common.Entities;
 using ThaiTuanERP2025.Domain.Finance.Enums;
+using ThaiTuanERP2025.Domain.Finance.Events;
 
 namespace ThaiTuanERP2025.Domain.Finance.Entities
 {
 	public class BudgetPlan : AuditableEntity
 	{
-		public BudgetPlan() { }
+		#region Constructors
+		private BudgetPlan() { }
 		public BudgetPlan (Guid departmentId, Guid budgetCodeId, Guid budgetPeriodId, decimal amount ) {
 			if (amount <= 0)
 				throw new ArgumentException("Amount must be greater than zero", nameof(amount));
@@ -18,7 +21,9 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			this.Amount = amount;
 			this.IsActive = true;
 		}
+		#endregion
 
+		#region Properties
 		public Guid DepartmentId { get; private set; }
 		public Guid BudgetCodeId { get; private set; }
 		public Guid BudgetPeriodId { get; private set; }
@@ -43,13 +48,10 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public BudgetCode BudgetCode { get; private set; } = null!;
 		public BudgetPeriod BudgetPeriod { get; private set; } = null!;
 		public Department Department { get; private set; } = null!;
-
-		public User CreatedByUser { get; private set; } = null!;
-		public User? ModifiedByUser { get; private set; }
-		public User? DeletedByUser { get; private set; }
+		#endregion
 
 
-		#region Review & Approval Workflow
+		#region Domain Behaviors
 		public void MarkReviewed(Guid userId)
 		{
 			if (Status != BudgetPlanStatus.Draft)
@@ -58,6 +60,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			Status = BudgetPlanStatus.Reviewed;
 			ReviewedByUserId = userId;
 			ReviewedAt = DateTime.UtcNow;
+			AddDomainEvent(new BudgetPlanReviewedEvent(Id, userId));
 		}
 
 		public void Approve(Guid userId)
@@ -68,6 +71,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			Status = BudgetPlanStatus.Approved;
 			ApprovedByUserId = userId;
 			ApprovedAt = DateTime.UtcNow;
+			AddDomainEvent(new BudgetPlanApprovedEvent(Id, userId));
 		}
 
 		public void Reject(Guid userId)
@@ -78,15 +82,12 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			Status = BudgetPlanStatus.Rejected;
 			ApprovedByUserId = userId;
 			ApprovedAt = DateTime.UtcNow;
+			AddDomainEvent(new BudgetPlanRejectedEvent(Id, userId));
 		}
-		#endregion
 
-		#region Lifecycle
 		public void Activate() => IsActive = true;
 		public void Deactivate() => IsActive = false;
-		#endregion
 
-		#region Assignment
 		/// <summary>
 		/// Được gọi nội bộ trong aggregate BudgetPeriod để gán liên kết đúng kỳ ngân sách.
 		/// </summary>
@@ -94,9 +95,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		{
 			BudgetPeriodId = periodId;
 		}
-		#endregion
 
-		#region Amount operations
 		public void SetAmount(decimal amount)
 		{
 			if (amount <= 0)
@@ -135,12 +134,10 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 
 			Amount -= amount;
 
-			_transactions.Add(new BudgetTransaction(
-				budgetPlanId: Id,
-				paymentId: recordId,
-				amount: amount,
-				type: BudgetTransactionType.ExpensePayment
-			));
+			var transaction = new BudgetTransaction(Id, recordId, amount, BudgetTransactionType.ExpensePayment);
+			_transactions.Add(transaction);
+
+			AddDomainEvent(new BudgetPlanTransactionRecordedEvent(Id, transaction.Id, amount, BudgetTransactionType.ExpensePayment));
 		}
 
 		/// Hoàn lại (cộng lại) ngân sách khi có điều chỉnh hoặc hoàn tiền.

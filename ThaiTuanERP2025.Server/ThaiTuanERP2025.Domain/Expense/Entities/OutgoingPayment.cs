@@ -12,8 +12,8 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		private readonly List<Guid> _followerIds = new();
 		private readonly List<User> _followers = new();
 
-		private OutgoingPayment() { } // EF only
-
+		#region Constructors
+		private OutgoingPayment() { } 
 		public OutgoingPayment(
 			string name, decimal outgoingAmount,
 			string bankName, string accountNumber, string beneficiaryName,
@@ -40,6 +40,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 			AddDomainEvent(new OutgoingPaymentCreatedEvent(this));
 		}
+		#endregion
 
 		#region Properties
 		public string Name { get; private set; } = string.Empty;
@@ -69,10 +70,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		public IReadOnlyCollection<Guid> FollowerIds => _followerIds.AsReadOnly();
 		public IReadOnlyCollection<User> Followers => _followers.AsReadOnly();
-
-		public User CreatedByUser { get; set; } = null!;
-		public User? ModifiedByUser { get; set; }
-		public User? DeletedByUser { get; set; }
 		#endregion
 
 		#region Domain Behaviors

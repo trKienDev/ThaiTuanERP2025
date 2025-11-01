@@ -19,7 +19,7 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 				r => r.Name,
 				name =>
 				{
-					name.Property(n => n.Value).HasColumnName("Name").IsRequired().HasMaxLength(100);
+					name.Property(n => n.Value).HasColumnName("RoleName").IsRequired().HasMaxLength(100);
 					name.HasIndex(n => n.Value).IsUnique();
 				}
 			);

@@ -13,7 +13,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		private readonly List<ExpensePaymentComment> _replies = new();
 
 		private ExpensePaymentComment() { } // EF
-
 		public ExpensePaymentComment(Guid expensePaymentId, string content, Guid createdByUserId, Guid? parentCommentId = null)
 		{
 			Guard.AgainstDefault(expensePaymentId, nameof(expensePaymentId));
@@ -49,10 +48,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		// Phụ trợ
 		public IReadOnlyCollection<ExpensePaymentCommentAttachment> Attachments => _attachments.AsReadOnly();
 		public IReadOnlyCollection<ExpensePaymentCommentTag> Tags => _tags.AsReadOnly();
-
-		public User CreatedByUser { get; set; } = null!;
-		public User? ModifiedByUser { get; set; }
-		public User? DeletedByUser { get; set; }
 
 		#region Behaviors
 

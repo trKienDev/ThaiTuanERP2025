@@ -59,6 +59,9 @@ namespace ThaiTuanERP2025.Api
 			// CORS
 			services.AddCorsPolicy(configuration);
 
+			// SerialLog
+			services.AddScoped<ILoggingService, SerilogLoggingService>();
+
 			// SignalR
 			services.AddSignalR().AddJsonProtocol(o =>
 				{

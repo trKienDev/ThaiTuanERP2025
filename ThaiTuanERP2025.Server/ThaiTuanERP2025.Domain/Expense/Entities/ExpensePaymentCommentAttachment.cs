@@ -44,8 +44,5 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public string? MimeType { get; private set; }
 		public long FileSize { get; private set; }
 
-		public User CreatedByUser { get; set; } = null!;
-		public User? ModifiedByUser { get; set; }
-		public User? DeletedByUser { get; set; }
 	}
 }

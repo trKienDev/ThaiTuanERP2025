@@ -10,7 +10,6 @@ using ThaiTuanERP2025.Application.Common.Options;
 using ThaiTuanERP2025.Application.Common.Security;
 using ThaiTuanERP2025.Application.Common.Services;
 using ThaiTuanERP2025.Application.Expense.Invoices;
-using ThaiTuanERP2025.Application.Finance.BudgetCodes;
 using ThaiTuanERP2025.Application.Finance.LedgerAccounts;
 using ThaiTuanERP2025.Domain.Account.Repositories;
 using ThaiTuanERP2025.Domain.Common.Enums;
@@ -74,7 +73,6 @@ namespace ThaiTuanERP2025.Infrastructure
 
 			// Finance
 			services.AddScoped<IBudgetCodeRepository, BudgetCodeRepository>();
-			services.AddScoped<IBudgetCodeReadRepository, IBudgetCodeReadRepository>();
 			services.AddScoped<IBudgetGroupRepository, BudgetGroupRepository>();
 			services.AddScoped<IBudgetPeriodRepository, BudgetPeriodRepository>();
 			services.AddScoped<IBudgetPlanRepository, BudgetPlanRepository>();

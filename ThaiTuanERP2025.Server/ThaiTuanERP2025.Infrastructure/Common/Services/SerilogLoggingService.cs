@@ -9,9 +9,9 @@ namespace ThaiTuanERP2025.Infrastructure.Common.Services
 	/// </summary>
 	public sealed class SerilogLoggingService : ILoggingService
 	{
-		private readonly ILogger _logger;
+		private readonly ILogger<SerilogLoggingService> _logger;
 
-		public SerilogLoggingService(ILogger logger)
+		public SerilogLoggingService(ILogger<SerilogLoggingService> logger)
 		{
 			_logger = logger;
 		}

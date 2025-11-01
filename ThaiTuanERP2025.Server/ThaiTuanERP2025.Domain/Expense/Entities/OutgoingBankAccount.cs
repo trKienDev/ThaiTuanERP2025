@@ -7,8 +7,8 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
 	public class OutgoingBankAccount : AuditableEntity
 	{
-		private OutgoingBankAccount() { } // EF only
-
+		#region Constructors
+		private OutgoingBankAccount() { } 
 		public OutgoingBankAccount(string name, string bankName, string accountNumber, string ownerName)
 		{
 			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
@@ -25,6 +25,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 			AddDomainEvent(new OutgoingBankAccountCreatedEvent(this));
 		}
+		#endregion
 
 		#region Properties
 		public string Name { get; private set; } = null!;
@@ -32,10 +33,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public string AccountNumber { get; private set; } = null!;
 		public string OwnerName { get; private set; } = null!;
 		public bool IsActive { get; private set; } = true;
-
-		public User CreatedByUser { get; set; } = null!;
-		public User? ModifiedByUser { get; set; }
-		public User? DeletedByUser { get; set; }
 		#endregion
 
 		#region Domain Behaviors

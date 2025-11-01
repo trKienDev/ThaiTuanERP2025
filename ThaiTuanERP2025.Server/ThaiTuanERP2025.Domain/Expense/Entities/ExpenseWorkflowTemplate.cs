@@ -9,8 +9,8 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
 	public class ExpenseWorkflowTemplate : AuditableEntity
 	{
+		#region Constructors
 		private ExpenseWorkflowTemplate() { }
-
 		public ExpenseWorkflowTemplate(string name, string documentType, int version = 1)
 		{
 			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
@@ -25,7 +25,9 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 			AddDomainEvent(new ExpenseWorkflowTemplateCreatedEvent(this));
 		}
+		#endregion
 
+		#region Properties
 		[MaxLength(200)]
 		public string Name { get; private set; } = string.Empty;
 
@@ -36,6 +38,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public bool IsActive { get; private set; } = true;
 
 		public ICollection<ExpenseStepTemplate> Steps { get; private set; } = new List<ExpenseStepTemplate>();
+		#endregion
 
 		#region Domain Behaviors
 

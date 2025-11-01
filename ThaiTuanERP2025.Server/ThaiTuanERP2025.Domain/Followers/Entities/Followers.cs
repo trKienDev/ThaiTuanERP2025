@@ -12,8 +12,8 @@ namespace ThaiTuanERP2025.Domain.Followers.Entities
 		public Guid UserId { get; private set; }
 		public bool IsActive { get; private set; } = true;
 
-		private Follower() { } // EF only
-
+		#region Constructors
+		private Follower() { } 
 		public Follower(SubjectRef subject, Guid userId)
 		{
 			Guard.AgainstDefault(userId, nameof(userId));
@@ -25,6 +25,7 @@ namespace ThaiTuanERP2025.Domain.Followers.Entities
 
 			AddDomainEvent(new FollowerCreatedEvent(this));
 		}
+		#endregion
 
 		#region Domain Behaviors
 		public void Unfollow()

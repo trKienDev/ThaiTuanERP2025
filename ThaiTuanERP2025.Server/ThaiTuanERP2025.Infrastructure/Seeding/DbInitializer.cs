@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Application.Common.Security;
-using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Infrastructure.Persistence;
-using ThaiTuanERP2025.Domain.Common.ValueObjects;
 using ThaiTuanERP2025.Domain.Account.ValueObjects;
 
 namespace ThaiTuanERP2025.Infrastructure.Seeding
@@ -12,35 +10,26 @@ namespace ThaiTuanERP2025.Infrastructure.Seeding
 	{
 		private readonly IPasswordHasher _passwordHasher;
 		private readonly ThaiTuanERP2025DbContext _db;
-		public DbInitializer(IPasswordHasher passwordHasher, ThaiTuanERP2025DbContext db) {
+
+		public DbInitializer(IPasswordHasher passwordHasher, ThaiTuanERP2025DbContext db)
+		{
 			_passwordHasher = passwordHasher;
 			_db = db;
 		}
 
 		public async Task Seed()
 		{
-			Console.WriteLine(">>> [DbInitializer] Checking for admin user...");
+			Console.WriteLine(">>> [DbInitializer] Starting database initialization...");
 
 			await _db.Database.MigrateAsync();
 
-			if (!await _db.Roles.AnyAsync())
-			{
-				Console.WriteLine(">>> [DbInitializer] Creating default Roles...");
-
-				var roles = new List<Role>
-				{
-					    new Role("SuperAdmin", "Toàn quyền hệ thống"),
-				};
-
-				await _db.Roles.AddRangeAsync(roles);
-				await _db.SaveChangesAsync();
-			}
-
-			if (!await _db.Users.AnyAsync(u => u.Username == "admin"))
+			// 1️⃣ Tạo user Admin trước để có CreatedByUserId
+			var adminUser = await _db.Users.FirstOrDefaultAsync(u => u.Username == "admin");
+			if (adminUser == null)
 			{
 				Console.WriteLine(">>> [DbInitializer] Creating Admin User...");
 
-				var adminUser = new User(
+				adminUser = new User(
 					fullName: "Admin",
 					username: "admin",
 					employeeCode: "ADMIN",
@@ -53,19 +42,47 @@ namespace ThaiTuanERP2025.Infrastructure.Seeding
 				await _db.Users.AddAsync(adminUser);
 				await _db.SaveChangesAsync();
 
-				// Gán quyền SuperAdmin
-				var superAdminRole = await _db.Roles.FirstAsync(r => r.Name == "SuperAdmin");
-				superAdminRole.AssignUser(adminUser.Id);
-				await _db.SaveChangesAsync();
-
 				Console.WriteLine(">>> [DbInitializer] Admin User created successfully.");
 			}
 			else
 			{
-				Console.WriteLine(">>> [DbInitializer] Admin User already exists, skipping creation.");
+				Console.WriteLine(">>> [DbInitializer] Admin User already exists.");
 			}
 
-			Console.WriteLine(">>> [DbInitializer] Seeding completed successfully!");
+			// 2️⃣ Sau khi có adminUser.Id → tạo Role với CreatedByUserId = adminUser.Id
+			if (!await _db.Roles.AnyAsync())
+			{
+				Console.WriteLine(">>> [DbInitializer] Creating default Roles...");
+
+				var roles = new List<Role>
+				{
+					new Role("SuperAdmin", "Toàn quyền hệ thống")
+				};
+
+				await _db.Roles.AddRangeAsync(roles);
+				await _db.SaveChangesAsync();
+
+				Console.WriteLine(">>> [DbInitializer] Default roles created successfully.");
+			}
+			else
+			{
+				Console.WriteLine(">>> [DbInitializer] Roles already exist, skipping creation.");
+			}
+
+			// 3️⃣ Gán quyền SuperAdmin cho user admin
+			if (!await _db.UserRoles.AnyAsync(ur => ur.UserId == adminUser.Id))
+			{
+				Console.WriteLine(">>> [DbInitializer] Assigning SuperAdmin role to admin user...");
+
+				var superAdminRole = await _db.Roles.FirstAsync(r => r.Name == "SuperAdmin");
+				adminUser.AssignRole(superAdminRole.Id);
+
+				await _db.SaveChangesAsync();
+
+				Console.WriteLine(">>> [DbInitializer] SuperAdmin role assigned to admin user successfully.");
+			}
+
+			Console.WriteLine(">>> [DbInitializer] ✅ Seeding completed successfully!");
 		}
 	}
 }

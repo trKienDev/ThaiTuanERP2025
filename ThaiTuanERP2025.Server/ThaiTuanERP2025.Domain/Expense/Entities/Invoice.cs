@@ -10,7 +10,8 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 	{
 		private readonly List<InvoiceFile> _files = new();
 
-		private Invoice() { } // EF only
+		#region Constructors
+		private Invoice() { }
 		public Invoice(
 			string invoiceNumber,
 			string invoiceName,
@@ -49,6 +50,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 			AddDomainEvent(new InvoiceCreatedEvent(this));
 		}
+		#endregion
 
 		#region Properties
 		public string InvoiceNumber { get; private set; } = default!;
@@ -73,10 +75,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public decimal TotalWithTax { get; private set; }
 
 		public IReadOnlyCollection<InvoiceFile> Files => _files.AsReadOnly();
-
-		public User CreatedByUser { get; set; } = null!;
-		public User? ModifiedByUser { get; set; }
-		public User? DeletedByUser { get; set; }
 		#endregion
 
 		#region Domain Behaviors

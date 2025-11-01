@@ -14,12 +14,12 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 			builder.HasKey(rp => new { rp.RoleId, rp.PermissionId });
 
 			// Relationships
-			builder.HasOne<Role>()
+			builder.HasOne(rp => rp.Role)
 				.WithMany(r => r.RolePermissions)
 				.HasForeignKey(rp => rp.RoleId)
 				.OnDelete(DeleteBehavior.Cascade);
 
-			builder.HasOne<Permission>()
+			builder.HasOne(rp => rp.Permission)
 				.WithMany(p => p.RolePermissions)
 				.HasForeignKey(rp => rp.PermissionId)
 				.OnDelete(DeleteBehavior.Cascade);

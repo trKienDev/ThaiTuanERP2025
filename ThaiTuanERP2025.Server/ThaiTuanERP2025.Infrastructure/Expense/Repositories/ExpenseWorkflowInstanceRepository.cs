@@ -25,7 +25,7 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories
 			if (minAmount.HasValue) query = query.Where(x => x.Amount >= minAmount);
 			if (maxAmount.HasValue) query = query.Where(x => x.Amount <= maxAmount);
 
-			return await query.OrderByDescending(x => x.CreatedDate).ToListAsync(cancellationToken);
+			return await query.ToListAsync(cancellationToken);
 		}
 	}
 }

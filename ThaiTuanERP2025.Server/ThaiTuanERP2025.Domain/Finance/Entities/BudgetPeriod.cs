@@ -8,8 +8,8 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 {
 	public class BudgetPeriod : AuditableEntity
 	{
+		#region Constructors
 		private BudgetPeriod() { }
-
 		public BudgetPeriod(int year, int month, DateTime startDate, DateTime endDate)
 		{
 			Guard.AgainstOutOfRange(year, 2000, 2100, nameof(year));
@@ -25,7 +25,9 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 
 			AddDomainEvent(new BudgetPeriodCreatedEvent(this));
 		}
+		#endregion
 
+		#region Properties
 		public int Year { get; private set; }
 		public int Month { get; private set; }
 		public DateTime StartDate { get; private set; }
@@ -33,11 +35,9 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public bool IsActive { get; private set; }
 
 		public ICollection<BudgetPlan> BudgetPlans { get; private set; } = new List<BudgetPlan>();
+		#endregion
 
-		public User CreatedByUser { get; private set; } = null!;
-		public User? ModifiedByUser { get; private set; }
-		public User? DeletedByUser { get; private set; }
-
+		#region Domain Behaviors
 		public void AddBudgetPlan(BudgetPlan plan)
 		{
 			Guard.AgainstNull(plan, nameof(plan));
@@ -94,6 +94,6 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			IsActive = false;
 			AddDomainEvent(new BudgetPeriodDeactivatedEvent(this));
 		}
+		#endregion
 	}
-
 }

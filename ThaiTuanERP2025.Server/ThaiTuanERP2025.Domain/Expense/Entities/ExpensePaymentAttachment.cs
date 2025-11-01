@@ -7,15 +7,10 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 	public class ExpensePaymentAttachment : AuditableEntity
 	{
 		private ExpensePaymentAttachment() { } // EF Core
-
 		public ExpensePaymentAttachment(
-			Guid expensePaymentId,
-			string objectKey,
-			string fileName,
-			long size,
-			string? url = null,
-			Guid? fileId = null)
-		{
+			Guid expensePaymentId, string objectKey, string fileName,
+			long size, string? url = null, Guid? fileId = null
+		) {
 			Guard.AgainstDefault(expensePaymentId, nameof(expensePaymentId));
 			Guard.AgainstNullOrWhiteSpace(objectKey, nameof(objectKey));
 			Guard.AgainstNullOrWhiteSpace(fileName, nameof(fileName));

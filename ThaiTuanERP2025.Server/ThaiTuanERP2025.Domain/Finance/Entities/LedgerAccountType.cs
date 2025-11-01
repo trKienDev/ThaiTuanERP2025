@@ -10,8 +10,8 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 	{
 		private readonly List<LedgerAccount> _ledgerAccounts = new();
 
-		private LedgerAccountType() { } // EF only
-
+		#region Constructors
+		private LedgerAccountType() { } 
 		public LedgerAccountType(string code, string name, LedgerAccountTypeKind kind, string? description = null)
 		{
 			Guard.AgainstNullOrWhiteSpace(code, nameof(code));
@@ -27,7 +27,9 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 
 			AddDomainEvent(new LedgerAccountTypeCreatedEvent(this));
 		}
+		#endregion
 
+		#region Properties
 		public string Code { get; private set; } = null!;
 		public string Name { get; private set; } = null!;
 		public LedgerAccountTypeKind LedgerAccountTypeKind { get; private set; }
@@ -35,10 +37,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public bool IsActive { get; private set; }
 
 		public IReadOnlyCollection<LedgerAccount> LedgerAccounts => _ledgerAccounts.AsReadOnly();
-
-		public User CreatedByUser { get; private set; } = null!;
-		public User? ModifiedByUser { get; private set; }
-		public User? DeletedByUser { get; private set; }
+		#endregion
 
 		#region Domain Behaviors
 		public void Rename(string newName)

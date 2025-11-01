@@ -1,5 +1,4 @@
-﻿using ThaiTuanERP2025.Domain.Account.Entities;
-using ThaiTuanERP2025.Domain.Common;
+﻿using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Common.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Finance.Enums;
@@ -9,6 +8,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 {
 	public class LedgerAccount : AuditableEntity
 	{
+		#region Constructors
 		private LedgerAccount() { }
 		public LedgerAccount(
 			string number,
@@ -35,7 +35,9 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 
 			AddDomainEvent(new LedgerAccountCreatedEvent(this));
 		}
+		#endregion
 
+		#region Properties
 		public string Number { get; private set; } = null!;
 		public string Name { get; private set; } = null!;
 		public Guid? LedgerAccountTypeId { get; private set; }
@@ -51,10 +53,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public LedgerAccountBalanceType LedgerAccountBalanceType { get; private set; }
 		public ICollection<LedgerAccount> Children { get; private set; } = new List<LedgerAccount>();
 		public ICollection<CashoutCode> CashoutCodes { get; private set; } = new List<CashoutCode>();
-
-		public User CreatedByUser { get; private set; } = null!;
-		public User? ModifiedByUser { get; private set; }
-		public User? DeletedByUser { get; private set; }
+		#endregion
 
 		#region Domain Behaviors
 

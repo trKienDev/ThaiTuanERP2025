@@ -1,5 +1,4 @@
-﻿using ThaiTuanERP2025.Domain.Account.Entities;
-using ThaiTuanERP2025.Domain.Common;
+﻿using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Common.Entities;
 using ThaiTuanERP2025.Domain.Finance.Events.CashoutCodes;
 
@@ -7,8 +6,8 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 {
 	public class CashoutCode : AuditableEntity
 	{
-		private CashoutCode() { } // EF only
-
+		#region Constructors
+		private CashoutCode() { } 
 		public CashoutCode(string code, string name, Guid cashoutGroupId, Guid postingLedgerAccountId, string? description = null)
 		{
 			Guard.AgainstNullOrWhiteSpace(code, nameof(code));
@@ -26,7 +25,9 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 
 			AddDomainEvent(new CashoutCodeCreatedEvent(this));
 		}
+		#endregion
 
+		#region Properties
 		public string Code { get; private set; } = null!;
 		public string Name { get; private set; } = null!;
 		public Guid CashoutGroupId { get; private set; }
@@ -37,10 +38,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public CashoutGroup CashoutGroup { get; private set; } = null!;
 		public LedgerAccount PostingLedgerAccount { get; private set; } = null!;
 		public ICollection<BudgetCode> BudgetCodes { get; private set; } = new List<BudgetCode>();
-
-		public User CreatedByUser { get; private set; } = null!;
-		public User? ModifiedByUser { get; private set; }
-		public User? DeletedByUser { get; private set; }
+		#endregion
 
 		#region Domain Behaviors
 
