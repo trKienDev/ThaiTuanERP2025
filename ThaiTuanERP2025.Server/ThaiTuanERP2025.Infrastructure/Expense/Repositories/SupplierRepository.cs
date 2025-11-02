@@ -7,7 +7,7 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories
 {
-	public sealed class SupplierRepository : BaseRepository<Supplier>, ISupplierRepository
+	public sealed class SupplierRepository : BaseWriteRepository<Supplier>, ISupplierRepository
 	{
 		public SupplierRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider) { }
 

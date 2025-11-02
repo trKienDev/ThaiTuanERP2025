@@ -3,7 +3,7 @@ using ThaiTuanERP2025.Domain.Finance.Entities;
 
 namespace ThaiTuanERP2025.Domain.Finance.Repositories
 {
-	public interface ICashoutGroupRepository : IBaseRepository<CashoutGroup>
+	public interface ICashoutGroupRepository : IBaseWriteRepository<CashoutGroup>
 	{
 	}
 }

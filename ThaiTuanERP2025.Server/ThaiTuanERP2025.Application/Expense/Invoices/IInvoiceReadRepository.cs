@@ -5,7 +5,7 @@ using ThaiTuanERP2025.Domain.Expense.Entities;
 
 namespace ThaiTuanERP2025.Application.Expense.Invoices
 {
-	public interface IInvoiceReadRepository : IBaseRepository<Invoice>
+	public interface IInvoiceReadRepository : IBaseWriteRepository<Invoice>
 	{
 		Task<PagedResult<InvoiceDto>> GetInvoicesPagedAsync(int page, int pageSize, string? keyword, CancellationToken cancellationToken);
 		Task<PagedResult<InvoiceDto>> GetByCreatorPagedAsync(Guid userId, int page, int pageSize, CancellationToken cancellationToken);

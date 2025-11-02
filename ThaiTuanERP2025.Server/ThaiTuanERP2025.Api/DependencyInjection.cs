@@ -5,6 +5,8 @@ using ThaiTuanERP2025.Api.Notifications;
 using ThaiTuanERP2025.Api.Security;
 using ThaiTuanERP2025.Api.Services;
 using ThaiTuanERP2025.Api.SignalR;
+using ThaiTuanERP2025.Application.Alerts.Notifications;
+using ThaiTuanERP2025.Application.Alerts.TaskReminders;
 using ThaiTuanERP2025.Application.Common.Events;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Common.Security;
@@ -13,13 +15,13 @@ using ThaiTuanERP2025.Application.Expense.Contracts.Resolvers;
 using ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows;
 using ThaiTuanERP2025.Application.Followers.Services;
 using ThaiTuanERP2025.Application.Notifications.Services;
+using ThaiTuanERP2025.Infrastructure.Alerts.Services;
 using ThaiTuanERP2025.Infrastructure.Authentication.Services;
 using ThaiTuanERP2025.Infrastructure.Common.Events;
 using ThaiTuanERP2025.Infrastructure.Common.Services;
 using ThaiTuanERP2025.Infrastructure.Expense.Contracts.Resolvers;
 using ThaiTuanERP2025.Infrastructure.Expense.Services;
 using ThaiTuanERP2025.Infrastructure.Followers.Services;
-using ThaiTuanERP2025.Infrastructure.Notifications.Services;
 
 namespace ThaiTuanERP2025.Api
 {

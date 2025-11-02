@@ -12,7 +12,7 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Finance.Repositories
 {
-	public class CashoutGroupRepository : BaseRepository<CashoutGroup>, ICashoutGroupRepository
+	public class CashoutGroupRepository : BaseWriteRepository<CashoutGroup>, ICashoutGroupRepository
 	{
 		public CashoutGroupRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider) {}
 

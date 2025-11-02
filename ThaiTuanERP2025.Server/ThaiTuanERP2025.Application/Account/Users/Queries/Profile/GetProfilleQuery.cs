@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using System.Security.Claims;
-using ThaiTuanERP2025.Application.Account.Dtos;
 
 namespace ThaiTuanERP2025.Application.Account.Users.Queries.Profile
 {

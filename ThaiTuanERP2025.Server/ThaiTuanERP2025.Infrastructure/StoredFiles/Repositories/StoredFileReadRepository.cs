@@ -6,7 +6,7 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.StoredFiles.Repositories
 {
-	public sealed class StoredFileReadRepository : BaseRepository<StoredFile>, IStoredFileReadRepository
+	public sealed class StoredFileReadRepository : BaseWriteRepository<StoredFile>, IStoredFileReadRepository
 	{
 		private ThaiTuanERP2025DbContext DbContext => (ThaiTuanERP2025DbContext)_context;
 		public StoredFileReadRepository(ThaiTuanERP2025DbContext context, IConfigurationProvider configurationProvider)

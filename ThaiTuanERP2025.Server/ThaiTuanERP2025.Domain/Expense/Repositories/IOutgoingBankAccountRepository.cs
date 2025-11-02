@@ -3,7 +3,7 @@ using ThaiTuanERP2025.Domain.Expense.Entities;
 
 namespace ThaiTuanERP2025.Domain.Expense.Repositories
 {
-	public interface IOutgoingBankAccountRepository : IBaseRepository<OutgoingBankAccount>
+	public interface IOutgoingBankAccountRepository : IBaseWriteRepository<OutgoingBankAccount>
 	{
 	}
 }

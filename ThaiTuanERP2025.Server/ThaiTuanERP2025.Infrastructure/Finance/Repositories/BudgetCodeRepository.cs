@@ -8,7 +8,7 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Finance.Repositories
 {
-	public class BudgetCodeRepository : BaseRepository<BudgetCode>, IBudgetCodeRepository {
+	public class BudgetCodeRepository : BaseWriteRepository<BudgetCode>, IBudgetCodeRepository {
 		private readonly ThaiTuanERP2025DbContext _db;
 		public BudgetCodeRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider)
 		{

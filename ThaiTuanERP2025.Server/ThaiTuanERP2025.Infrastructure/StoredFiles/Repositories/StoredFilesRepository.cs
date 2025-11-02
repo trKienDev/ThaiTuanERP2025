@@ -7,7 +7,7 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.StoredFiles.Repositories
 {
-	public class StoredFilesRepository : BaseRepository<StoredFile>, IStoredFilesRepository
+	public class StoredFilesRepository : BaseWriteRepository<StoredFile>, IStoredFilesRepository
 	{
 		private readonly ThaiTuanERP2025DbContext _dbContext;
 		public StoredFilesRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider)

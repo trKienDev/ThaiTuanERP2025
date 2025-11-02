@@ -6,7 +6,7 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 {
-	public class DepartmentReadRepository : ReadRepositoryBase<Department, DepartmentDto>
+	public class DepartmentReadRepository : BaseReadRepository<Department, DepartmentDto>
 	{
 		public DepartmentReadRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider mapperConfig) : base(dbContext, mapperConfig) { }
 	}

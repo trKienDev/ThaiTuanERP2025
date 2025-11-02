@@ -7,7 +7,7 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 {
-	public class GroupRepository : BaseRepository<Group>, IGroupRepository
+	public class GroupRepository : BaseWriteRepository<Group>, IGroupRepository
 	{
 		private ThaiTuanERP2025DbContext DbContext => (ThaiTuanERP2025DbContext)_context;
 		public GroupRepository(ThaiTuanERP2025DbContext context, IConfigurationProvider configurationProvider) : base(context, configurationProvider)

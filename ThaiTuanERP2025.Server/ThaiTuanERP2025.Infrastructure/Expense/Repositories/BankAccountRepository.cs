@@ -7,7 +7,7 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories
 {
-	public sealed class BankAccountRepository : BaseRepository<BankAccount>, IBankAccountRepository
+	public sealed class BankAccountRepository : BaseWriteRepository<BankAccount>, IBankAccountRepository
 	{
 		public BankAccountRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider)
 			: base(dbContext, configurationProvider) { }

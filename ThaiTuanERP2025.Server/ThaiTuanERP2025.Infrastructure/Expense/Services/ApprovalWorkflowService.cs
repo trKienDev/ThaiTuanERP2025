@@ -1,8 +1,9 @@
-﻿using ThaiTuanERP2025.Application.Common.Interfaces;
+﻿using ThaiTuanERP2025.Application.Alerts.Notifications;
+using ThaiTuanERP2025.Application.Alerts.TaskReminders;
+using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Common.Utils;
 using ThaiTuanERP2025.Application.Exceptions;
 using ThaiTuanERP2025.Application.Followers.Services;
-using ThaiTuanERP2025.Application.Notifications.Services;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Expense.Enums;
@@ -47,7 +48,7 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 		public async Task<Guid> CreateInstanceForExpensePaymentAsync(ExpensePayment expensePayment, Guid workflowTemplateId, IReadOnlyCollection<StepOverrideRequest>? overrides, bool linkToPayment, CancellationToken cancellationToken) 
 		{
 			// 0) Chống trùng: đã có AWI Draft/InProgress cho document này?
-			var existed = await _unitOfWork.ApprovalWorkflowInstances.AnyAsync(
+			var existed = await _unitOfWork.ApprovalWorkflowInstances.ExistAsync(
 				x => x.DocumentType == "ExpensePayment"
 				&& x.DocumentId == expensePayment.Id
 				&& (x.Status == WorkflowStatus.Draft || x.Status == WorkflowStatus.InProgress)

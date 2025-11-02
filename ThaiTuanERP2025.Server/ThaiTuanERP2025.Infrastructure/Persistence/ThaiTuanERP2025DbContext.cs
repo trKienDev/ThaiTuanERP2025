@@ -3,13 +3,13 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using System.Linq.Expressions;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Domain.Alerts.Entities;
 using ThaiTuanERP2025.Domain.Authentication.Entities;
 using ThaiTuanERP2025.Domain.Common.Entities;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Files.Entities;
 using ThaiTuanERP2025.Domain.Finance.Entities;
 using ThaiTuanERP2025.Domain.Followers.Entities;
-using ThaiTuanERP2025.Domain.Notifications.Entities;
 using ThaiTuanERP2025.Infrastructure.Common;
 
 namespace ThaiTuanERP2025.Infrastructure.Persistence

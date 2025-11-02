@@ -6,7 +6,7 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 {
-	public class UserRoleRepository : BaseRepository<UserRole>, IUserRoleRepository
+	public class UserRoleRepository : BaseWriteRepository<UserRole>, IUserRoleRepository
 	{
 		private readonly ThaiTuanERP2025DbContext _dbContext;
 		public UserRoleRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider)

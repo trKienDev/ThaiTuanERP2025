@@ -3,7 +3,7 @@ using ThaiTuanERP2025.Domain.Expense.Entities;
 
 namespace ThaiTuanERP2025.Domain.Expense.Repositories
 {
-	public interface IBankAccountRepository : IBaseRepository<BankAccount>
+	public interface IBankAccountRepository : IBaseWriteRepository<BankAccount>
 	{
 		Task<bool> ExistsForUserAsync(Guid userId, CancellationToken cancellationToken);
 		Task<BankAccount?> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken);

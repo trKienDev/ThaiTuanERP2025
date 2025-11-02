@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
-using ThaiTuanERP2025.Application.Notifications.Command.TaskReminders.DismissReminder;
-using ThaiTuanERP2025.Application.Notifications.Dtos;
-using ThaiTuanERP2025.Application.Notifications.Queries.TaskReminders.GetMyReminders;
+using ThaiTuanERP2025.Application.Alerts.TaskReminders;
+using ThaiTuanERP2025.Application.Alerts.TaskReminders.Commands.DismissReminder;
+using ThaiTuanERP2025.Application.Alerts.TaskReminders.Queries.GetMyReminders;
 
 namespace ThaiTuanERP2025.Api.Controllers.Notification
 {

@@ -12,7 +12,7 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Finance.Repositories
 {
-	public class CashoutCodeRepository : BaseRepository<CashoutCode>, ICashoutCodeRepository
+	public class CashoutCodeRepository : BaseWriteRepository<CashoutCode>, ICashoutCodeRepository
 	{
 		public CashoutCodeRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider) { }
 		public Task<bool> CodeExistsAsync(string code, Guid? excludeId = null, CancellationToken cancellationToken = default)

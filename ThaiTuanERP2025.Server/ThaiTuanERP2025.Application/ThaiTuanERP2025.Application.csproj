@@ -18,7 +18,6 @@
   <ItemGroup>
     <Folder Include="Account\Departments\Commands\" />
     <Folder Include="Account\Departments\Queries\" />
-    <Folder Include="Account\Users\Commands\" />
     <Folder Include="Finance\BudgetCodes\" />
     <Folder Include="Finance\Budgets\Repositories\" />
     <Folder Include="Finance\Requests\" />

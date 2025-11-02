@@ -4,7 +4,7 @@ using ThaiTuanERP2025.Domain.Expense.Enums;
 
 namespace ThaiTuanERP2025.Domain.Expense.Repositories
 {
-	public interface IExpenseWorkflowInstanceRepository : IBaseRepository<ExpenseWorkflowInstance>
+	public interface IExpenseWorkflowInstanceRepository : IBaseWriteRepository<ExpenseWorkflowInstance>
 	{
 		Task<List<ExpenseWorkflowInstance>> ListByFilterAsync(
 			string? documentType, Guid? documentId, WorkflowStatus? status,

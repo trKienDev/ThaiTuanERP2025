@@ -1,10 +1,10 @@
 ﻿using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Domain.Account.Repositories;
+using ThaiTuanERP2025.Domain.Alerts.Repositories;
 using ThaiTuanERP2025.Domain.Expense.Repositories;
 using ThaiTuanERP2025.Domain.Files.Repositories;
 using ThaiTuanERP2025.Domain.Finance.Repositories;
 using ThaiTuanERP2025.Domain.Followers.Repositories;
-using ThaiTuanERP2025.Domain.Notifications.Repositories;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Common
@@ -19,9 +19,9 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			IStoredFilesRepository storedFiles, 
 
 			// Account
-			IUserRepository users,
+			IUserWriteRepository users,
 			IUserManagerAssignmentRepository userManagerAssignments,
-			IDepartmentRepository departments,
+			IDepartmentWriteRepository departments,
 			IGroupRepository groups,
 			IUserGroupRepository userGroups,
 
@@ -56,14 +56,14 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			IExpensePaymentCommentAttachmentRepository expensePaymentCommentAttachments,
 
 			// Notification
-			INotificationRepository notifications,
-			ITaskReminderRepository taskReminders,
+			INotificationWriteRepository notifications,
+			ITaskReminderWriteRepository taskReminders,
 
 			// Follow
 			IFollowerRepository followers,
 
 			// RBAC
-			IRoleRepository roles,
+			IRoleWriteRepository roles,
 			IPermissionRepository permissions,
 			IRolePermissionRepository rolePermissions,
 			IUserRoleRepository userRoles
@@ -119,9 +119,9 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 
 		public IStoredFilesRepository StoredFiles { get; }
 		// Account
-		public IUserRepository Users { get; }
+		public IUserWriteRepository Users { get; }
 		public IUserManagerAssignmentRepository UserManagerAssignments { get; }
-		public IDepartmentRepository Departments { get; }
+		public IDepartmentWriteRepository Departments { get; }
 		public IGroupRepository Groups { get; }
 		public IUserGroupRepository UserGroups { get; }
 
@@ -156,15 +156,15 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		public IExpensePaymentCommentTagRepository ExpensePaymentCommentTags { get; }
 
 		// Notification
-		public INotificationRepository Notifications { get; }
-		public ITaskReminderRepository TaskReminders { get; }
+		public INotificationWriteRepository Notifications { get; }
+		public ITaskReminderWriteRepository TaskReminders { get; }
 
 		// Followers
 		public IFollowerRepository Followers { get; }
 
 		// RBAC
 		public IUserRoleRepository UserRoles { get; }
-		public IRoleRepository Roles { get; }
+		public IRoleWriteRepository Roles { get; }
 		public IPermissionRepository Permissions { get; }
 		public IRolePermissionRepository RolePermissions { get; }
 

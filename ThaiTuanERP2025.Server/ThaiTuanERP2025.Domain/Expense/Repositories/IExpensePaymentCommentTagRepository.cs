@@ -3,7 +3,7 @@ using ThaiTuanERP2025.Domain.Expense.Entities;
 
 namespace ThaiTuanERP2025.Domain.Expense.Repositories
 {
-	public interface IExpensePaymentCommentTagRepository : IBaseRepository<ExpensePaymentCommentTag>
+	public interface IExpensePaymentCommentTagRepository : IBaseWriteRepository<ExpensePaymentCommentTag>
 	{
 	}
 }

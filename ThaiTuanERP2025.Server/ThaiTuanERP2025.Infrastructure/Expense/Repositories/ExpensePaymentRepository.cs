@@ -7,7 +7,7 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories
 {
-	public class ExpensePaymentRepository : BaseRepository<ExpensePayment>, IExpensePaymentRepository
+	public class ExpensePaymentRepository : BaseWriteRepository<ExpensePayment>, IExpensePaymentRepository
 	{
 		public ExpensePaymentRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider)
 		{

@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ThaiTuanERP2025.Application.Account.Users;
+using ThaiTuanERP2025.Application.Alerts.Notifications;
+using ThaiTuanERP2025.Application.Alerts.TaskReminders;
 using ThaiTuanERP2025.Application.Authentication.Repositories;
 using ThaiTuanERP2025.Application.Common.Authentication;
 using ThaiTuanERP2025.Application.Common.Events;
@@ -13,13 +15,18 @@ using ThaiTuanERP2025.Application.Expense.Invoices;
 using ThaiTuanERP2025.Application.Files;
 using ThaiTuanERP2025.Application.Finance.LedgerAccounts;
 using ThaiTuanERP2025.Domain.Account.Repositories;
+using ThaiTuanERP2025.Domain.Alerts.Repositories;
 using ThaiTuanERP2025.Domain.Common.Enums;
 using ThaiTuanERP2025.Domain.Expense.Repositories;
 using ThaiTuanERP2025.Domain.Files.Repositories;
 using ThaiTuanERP2025.Domain.Finance.Repositories;
 using ThaiTuanERP2025.Domain.Followers.Repositories;
-using ThaiTuanERP2025.Domain.Notifications.Repositories;
 using ThaiTuanERP2025.Infrastructure.Account.Repositories;
+using ThaiTuanERP2025.Infrastructure.Account.Repositories.Read;
+using ThaiTuanERP2025.Infrastructure.Account.Repositories.Write;
+using ThaiTuanERP2025.Infrastructure.Alerts.Background;
+using ThaiTuanERP2025.Infrastructure.Alerts.Repositories.Read;
+using ThaiTuanERP2025.Infrastructure.Alerts.Repositories.Write;
 using ThaiTuanERP2025.Infrastructure.Authentication.Repositories;
 using ThaiTuanERP2025.Infrastructure.Common;
 using ThaiTuanERP2025.Infrastructure.Common.Security;
@@ -27,8 +34,6 @@ using ThaiTuanERP2025.Infrastructure.Common.Services;
 using ThaiTuanERP2025.Infrastructure.Expense.Repositories;
 using ThaiTuanERP2025.Infrastructure.Finance.Repositories;
 using ThaiTuanERP2025.Infrastructure.Followers.Repositories;
-using ThaiTuanERP2025.Infrastructure.Notifications.Background;
-using ThaiTuanERP2025.Infrastructure.Notifications.Repositories;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 using ThaiTuanERP2025.Infrastructure.StoredFiles.Configurations;
 using ThaiTuanERP2025.Infrastructure.StoredFiles.FileStorage;
@@ -61,14 +66,14 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IStoredFileReadRepository, StoredFileReadRepository>();
 
 			// Account
-			services.AddScoped<IUserRepository, UserRepository>();
+			services.AddScoped<IUserWriteRepository, UserWriteRepository>();
 			services.AddScoped<IUserReadRepostiory, UserReadRepository>();
 			services.AddScoped<IUserManagerAssignmentRepository, UserManagerAssignmentRepository>();
-			services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+			services.AddScoped<IDepartmentWriteRepository, DepartmentWriteRepository>();
 			services.AddScoped<DepartmentReadRepository>();
 			services.AddScoped<IGroupRepository, GroupRepository>();
 			services.AddScoped<IUserGroupRepository, UserGroupRepository>();
-			services.AddScoped<IRoleRepository, RoleRepository>();
+			services.AddScoped<IRoleWriteRepository, RoleWriteRepository>();
 			services.AddScoped<IPermissionRepository, PermissionRepository>();
 			services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
 			services.AddScoped<IUserRoleRepository, UserRoleRepository>();
@@ -102,8 +107,10 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IExpensePaymentCommentAttachmentRepository, ExpensePaymentCommentAttachmentRepository>();
 
 			// Notifications & Reminders
-			services.AddScoped<INotificationRepository, NotificationRepository>();
-			services.AddScoped<ITaskReminderRepository, TaskReminderRepository>();
+			services.AddScoped<INotificationWriteRepository, NotificationWriteRepository>();
+			services.AddScoped<INotificationReadRepository, NotificationReadRepository>();
+			services.AddScoped<ITaskReminderWriteRepository, TaskReminderWriteRepository>();
+			services.AddScoped<ITaskReminderReadRepository, TaskReminderReadRepository>();
 			services.AddScoped<IFollowerRepository, FollowerRepository>();
 
 			// Authentication

@@ -10,7 +10,7 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories
 {
-	public class InvoiceReadRepository : BaseRepository<Invoice>, IInvoiceReadRepository
+	public class InvoiceReadRepository : BaseWriteRepository<Invoice>, IInvoiceReadRepository
 	{
 		private readonly IConfigurationProvider _mapperConfig;
 		public InvoiceReadRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider)

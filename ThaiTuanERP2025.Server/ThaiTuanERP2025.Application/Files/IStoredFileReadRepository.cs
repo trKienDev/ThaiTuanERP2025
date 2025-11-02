@@ -3,7 +3,7 @@ using ThaiTuanERP2025.Domain.Files.Entities;
 
 namespace ThaiTuanERP2025.Application.Files
 {
-	public interface IStoredFileReadRepository : IBaseRepository<StoredFile>
+	public interface IStoredFileReadRepository : IBaseWriteRepository<StoredFile>
 	{
 	}
 }

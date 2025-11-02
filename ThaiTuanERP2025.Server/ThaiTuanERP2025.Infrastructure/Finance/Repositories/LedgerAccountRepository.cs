@@ -7,7 +7,7 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Finance.Repositories
 {
-	public class LedgerAccountRepository : BaseRepository<LedgerAccount>, ILedgerAccountRepository
+	public class LedgerAccountRepository : BaseWriteRepository<LedgerAccount>, ILedgerAccountRepository
 	{
 		public LedgerAccountRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider) { }
 

@@ -43,7 +43,7 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 				.OnDelete(DeleteBehavior.Restrict);
 
 			// AvatarFile (StoredFile)
-			builder.HasOne<StoredFile>()
+			builder.HasOne(u => u.AvatarFile)
 				.WithMany()
 				.HasForeignKey(u => u.AvatarFileId)
 				.IsRequired(false)

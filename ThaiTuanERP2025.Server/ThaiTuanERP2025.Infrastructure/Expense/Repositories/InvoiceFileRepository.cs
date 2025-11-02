@@ -11,7 +11,7 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories
 {
-	public class InvoiceFileRepository : BaseRepository<InvoiceFile>, IInvoiceFileRepository
+	public class InvoiceFileRepository : BaseWriteRepository<InvoiceFile>, IInvoiceFileRepository
 	{
 		public InvoiceFileRepository(ThaiTuanERP2025DbContext context, IConfigurationProvider configurationProvider)
 			: base(context, configurationProvider) {}

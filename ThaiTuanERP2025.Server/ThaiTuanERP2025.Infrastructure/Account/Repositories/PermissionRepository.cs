@@ -6,7 +6,7 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 {
-	public class PermissionRepository : BaseRepository<Permission>, IPermissionRepository
+	public class PermissionRepository : BaseWriteRepository<Permission>, IPermissionRepository
 	{
 		private readonly ThaiTuanERP2025DbContext _dbContext;
 		public PermissionRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider)

@@ -4,6 +4,7 @@ using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Common.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Entities;
+using ThaiTuanERP2025.Domain.Files.Entities;
 
 namespace ThaiTuanERP2025.Domain.Account.Entities
 {
@@ -15,8 +16,8 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		private readonly List<UserManagerAssignment> _directReportsAssignments = new();
 		private readonly List<BankAccount> _bankAccounts = new();
 
-		private User() { } // EF
-
+		#region EF Constructor
+		private User() { } 
 		public User(
 			string fullName, string username, string employeeCode, string passwordHash, string position,
 			Guid? departmentId, Email? email = null, Phone? phone = null, Guid? avatarFileId = null
@@ -40,12 +41,17 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 
 			AddDomainEvent(new UserCreatedEvent(this));
 		}
+		#endregion
 
+		#region Properties
 		public string FullName { get; private set; } = string.Empty;
 		public string Username { get; private set; } = string.Empty;
 		public string EmployeeCode { get; private set; } = string.Empty;
 		public string PasswordHash { get; private set; } = string.Empty;
+
 		public Guid? AvatarFileId { get; private set; }
+		public StoredFile? AvatarFile { get; private set; }
+
 		public string Position { get; private set; } = string.Empty;
 
 		public Email? Email { get; private set; }
@@ -67,6 +73,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public IReadOnlyCollection<UserManagerAssignment> ManagerAssignments => _managerAssignments.AsReadOnly();
 		public IReadOnlyCollection<UserManagerAssignment> DirectReportsAssignments => _directReportsAssignments.AsReadOnly();
 		public IReadOnlyCollection<BankAccount> BankAccounts => _bankAccounts.AsReadOnly();
+		#endregion
 
 		#region Domain Behaviors
 		public void AssignManager(Guid managerId)

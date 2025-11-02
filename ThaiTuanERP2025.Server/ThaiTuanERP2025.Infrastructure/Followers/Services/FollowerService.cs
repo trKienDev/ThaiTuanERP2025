@@ -19,9 +19,9 @@ namespace ThaiTuanERP2025.Infrastructure.Followers.Services
 		public async Task FollowAsync(SubjectType subjectType, Guid subjectId, Guid userId, CancellationToken cancellationToken) {
 			bool exists = subjectType switch
 			{
-				SubjectType.ExpensePayment => await _unitOfWork.ExpensePayments.AnyAsync(e => e.Id == subjectId, cancellationToken),
-				SubjectType.OutgoingPayment => await _unitOfWork.OutgoingPayments.AnyAsync(e => e.Id == subjectId, cancellationToken),
-				SubjectType.Invoice => await _unitOfWork.Invoices.AnyAsync(e => e.Id == subjectId, cancellationToken),
+				SubjectType.ExpensePayment => await _unitOfWork.ExpensePayments.ExistAsync(e => e.Id == subjectId, cancellationToken),
+				SubjectType.OutgoingPayment => await _unitOfWork.OutgoingPayments.ExistAsync(e => e.Id == subjectId, cancellationToken),
+				SubjectType.Invoice => await _unitOfWork.Invoices.ExistAsync(e => e.Id == subjectId, cancellationToken),
 				_ => false
 			};
 
@@ -29,7 +29,7 @@ namespace ThaiTuanERP2025.Infrastructure.Followers.Services
 				throw new NotFoundException($"{subjectType}({subjectId}) not found");
 
 			// Kiểm tra đã follow chưa
-			bool existsFollow = await _unitOfWork.Followers.AnyAsync(
+			bool existsFollow = await _unitOfWork.Followers.ExistAsync(
 				f => f.Subject.Type == subjectType && f.Subject.Id == subjectId && f.UserId == userId,
 				cancellationToken
 			);
@@ -80,7 +80,7 @@ namespace ThaiTuanERP2025.Infrastructure.Followers.Services
 		}
 
 		public async Task<bool> IsFollowingAsync(SubjectType subjectType, Guid subjectId, Guid userId, CancellationToken cancellationToken) {
-			return await _unitOfWork.Followers.AnyAsync(
+			return await _unitOfWork.Followers.ExistAsync(
 				f => f.Subject.Type == subjectType && f.Subject.Id == subjectId && f.UserId == userId,
 				cancellationToken
 			);

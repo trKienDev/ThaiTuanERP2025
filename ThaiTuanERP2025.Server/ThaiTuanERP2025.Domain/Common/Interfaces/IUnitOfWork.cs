@@ -1,9 +1,9 @@
 ﻿using ThaiTuanERP2025.Domain.Account.Repositories;
+using ThaiTuanERP2025.Domain.Alerts.Repositories;
 using ThaiTuanERP2025.Domain.Expense.Repositories;
 using ThaiTuanERP2025.Domain.Files.Repositories;
 using ThaiTuanERP2025.Domain.Finance.Repositories;
 using ThaiTuanERP2025.Domain.Followers.Repositories;
-using ThaiTuanERP2025.Domain.Notifications.Repositories;
 
 namespace ThaiTuanERP2025.Application.Common.Interfaces
 {
@@ -12,9 +12,9 @@ namespace ThaiTuanERP2025.Application.Common.Interfaces
 		// Define the DbContext type
 
 		// Account
-		IUserRepository Users { get; }
+		IUserWriteRepository Users { get; }
 		IUserManagerAssignmentRepository UserManagerAssignments { get; }
-		IDepartmentRepository Departments { get; }
+		IDepartmentWriteRepository Departments { get; }
 		IGroupRepository Groups { get; }
 		IUserGroupRepository UserGroups { get; }
 
@@ -53,14 +53,14 @@ namespace ThaiTuanERP2025.Application.Common.Interfaces
 		IExpensePaymentCommentTagRepository ExpensePaymentCommentTags { get; }
 
 		// Notification
-		INotificationRepository Notifications { get; }
-		ITaskReminderRepository TaskReminders { get; }
+		INotificationWriteRepository Notifications { get; }
+		ITaskReminderWriteRepository TaskReminders { get; }
 
 		// Follow
 		IFollowerRepository Followers { get; }
 
 		// RBAC
-		IRoleRepository Roles { get; }
+		IRoleWriteRepository Roles { get; }
 		IRolePermissionRepository RolePermissions { get; }
 		IPermissionRepository Permissions { get; }
 		IUserRoleRepository UserRoles { get; }

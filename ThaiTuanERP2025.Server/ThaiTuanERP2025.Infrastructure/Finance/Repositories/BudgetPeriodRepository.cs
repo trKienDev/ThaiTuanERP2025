@@ -6,7 +6,7 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Finance.Repositories
 {
-	public class BudgetPeriodRepository : BaseRepository<BudgetPeriod>, IBudgetPeriodRepository 
+	public class BudgetPeriodRepository : BaseWriteRepository<BudgetPeriod>, IBudgetPeriodRepository 
 	{
 		public BudgetPeriodRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider)
 		{
