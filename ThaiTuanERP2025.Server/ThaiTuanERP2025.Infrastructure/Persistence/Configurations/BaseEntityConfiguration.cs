@@ -7,9 +7,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence.Configurations
 	/// <summary>
 	/// Base class hỗ trợ cấu hình 3 quan hệ audit: CreatedByUser, ModifiedByUser, DeletedByUser.
 	/// </summary>
-	public abstract class BaseEntityConfiguration<TEntity>
-    : IEntityTypeConfiguration<TEntity>
-    where TEntity : AuditableEntity
+	public abstract class BaseEntityConfiguration<TEntity> : IEntityTypeConfiguration<TEntity> where TEntity : AuditableEntity
 	{
 		public abstract void Configure(EntityTypeBuilder<TEntity> builder);
 

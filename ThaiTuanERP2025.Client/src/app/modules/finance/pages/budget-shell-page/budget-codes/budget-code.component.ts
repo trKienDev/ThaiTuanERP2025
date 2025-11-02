@@ -5,7 +5,7 @@ import { BudgetCodeDto } from "../../../models/budget-code.model";
 import { BudgetCodeService } from "../../../services/budget-code.service";
 import { MatDialog } from "@angular/material/dialog";
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { NewBudgetCodeDialogComponent } from "../../../dialogs/new-budget-code-dialog/new-budget-code-dialog.component";
+import { NewBudgetCodeDialogComponent } from "../../../components/new-budget-code-dialog/new-budget-code-dialog.component";
 
 @Component({
       selector: 'budget-code-panel',

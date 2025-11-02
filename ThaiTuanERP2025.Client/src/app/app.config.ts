@@ -1,9 +1,8 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
-import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
@@ -12,6 +11,7 @@ import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { MAT_DIALOG_DEFAULT_OPTIONS, MatDialogConfig } from '@angular/material/dialog';
 import { correlationIdInterceptor } from './core/interceptors/correlation-id.interceptor';
 import { httpLoggerInterceptor } from './core/interceptors/http-logger.interceptor';
+import { AuthInterceptor } from './core/auth/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
       providers: [
@@ -19,13 +19,13 @@ export const appConfig: ApplicationConfig = {
             provideRouter(routes),
             provideHttpClient(
                   withInterceptors([
-                        authInterceptor,
                         errorInterceptor,
                         correlationIdInterceptor,
                         httpLoggerInterceptor
                   ])
             ),
             provideAnimations(),
+            { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
             // mat-date-picker
             { provide: DateAdapter, useClass: MondayFirstDateAdapter },
             { provide: MAT_DATE_LOCALE, useValue: 'vi-VN' },

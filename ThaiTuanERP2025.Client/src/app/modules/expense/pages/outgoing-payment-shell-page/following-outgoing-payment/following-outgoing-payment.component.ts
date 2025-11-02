@@ -4,8 +4,8 @@ import { OutgoingPaymentDto } from "../../../models/outgoing-payment.model";
 import { OutgoingPaymentStatusPipe } from "../../../pipes/outgoing-payment-status.pipe";
 import { MatDialog } from "@angular/material/dialog";
 import { OutgoingPaymentFacade } from "../../../facades/outgoing-payment.facade";
-import { ExpensePaymentDetailDialogComponent } from "../../../dialogs/expense-payment-detail-dialog/expense-payment-detail-dialog.component";
-import { OutgoingPaymentDetailDialogComponent } from "../../../dialogs/outgoing-payment-detail-dialog/outgoing-payment-detail-dialog.component";
+import { ExpensePaymentDetailDialogComponent } from "../../../components/expense-payment-detail-dialog/expense-payment-detail-dialog.component";
+import { OutgoingPaymentDetailDialogComponent } from "../../../components/outgoing-payment-detail-dialog/outgoing-payment-detail-dialog.component";
 
 @Component({
       selector: 'following-outgoing-payment',

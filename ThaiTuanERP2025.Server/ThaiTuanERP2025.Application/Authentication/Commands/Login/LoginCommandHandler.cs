@@ -38,18 +38,18 @@ namespace ThaiTuanERP2025.Application.Authentication.Commands.Login
 			_currentRequestIpProvider = currentRequestIpProvider;
 		}
 
-		public async Task<LoginResponseDto> Handle(LoginCommand request, CancellationToken cancellationToken)
+		public async Task<LoginResponseDto> Handle(LoginCommand command, CancellationToken cancellationToken)
 		{
 			// 1 ) Guard
-			Guard.AgainstNull(request, nameof(request));
-			Guard.AgainstNullOrWhiteSpace(request.EmployeeCode, nameof(request.EmployeeCode));
-			Guard.AgainstNullOrWhiteSpace(request.Password, nameof(request.Password));
+			Guard.AgainstNull(command, nameof(command));
+			Guard.AgainstNullOrWhiteSpace(command.EmployeeCode, nameof(command.EmployeeCode));
+			Guard.AgainstNullOrWhiteSpace(command.Password, nameof(command.Password));
 
-			var user = await _userReadRepostiory.GetWithRolesAndPermissionsAsync(request.EmployeeCode, cancellationToken);
+			var user = await _userReadRepostiory.GetWithRolesAndPermissionsAsync(command.EmployeeCode, cancellationToken);
 			if (user is null) 
 				throw new UnauthorizedAccessException("Tài khoản không hợp lệ");
 
-			if (!_passwordHasher.Verify(request.Password, user.PasswordHash))
+			if (!_passwordHasher.Verify(command.Password, user.PasswordHash))
 				throw new UnauthorizedAccessException("Sai mật khẩu");
 
 			// 2 ) Claims
@@ -89,7 +89,7 @@ namespace ThaiTuanERP2025.Application.Authentication.Commands.Login
 		private (List<string> Roles, List<string> Permissions, List<Claim> Claims) BuildClaims(User user)
 		{
 			var roles = user.UserRoles
-				.Select(ur => ur.Role.Name.Value)
+				.Select(ur => ur.Role.Name)
 				.Distinct()
 				.ToList();
 

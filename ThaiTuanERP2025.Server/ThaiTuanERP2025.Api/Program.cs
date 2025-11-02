@@ -14,21 +14,24 @@ var builder = WebApplication.CreateBuilder(args);
 // Logging
 SerilogConfiguration.ConfigureSerilog(builder);
 
-// DI registration
+// Dependency Injection
 builder.Services
 	.AddApplication()
 	.AddInfrastructure(builder.Configuration)
 	.AddPresentation(builder.Configuration)
 	.AddAuthorizationPolicies();
 
+
+// ========= Swagger =========
+builder.Services.AddSwaggerDocumentation();
+
 Env.TraversePath().Load();
 builder.Configuration.AddEnvironmentVariables();
 
-builder.WebHost.CaptureStartupErrors(true);
-
+// Build app
 var app = builder.Build();
 
-// Startup tasks
+// Seed & Policies
 await app.SeedDataIfRequestedAsync(args);
 await app.LoadDynamicPoliciesAsync();
 
@@ -36,6 +39,7 @@ await app.LoadDynamicPoliciesAsync();
 if (app.Environment.IsDevelopment())
 {
 	app.UseSwaggerDocumentation();
+	builder.WebHost.CaptureStartupErrors(true);
 }
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
@@ -49,7 +53,6 @@ app.MapHub<NotificationsHub>("/hubs/notifications");
 app.MapControllers();
 
 await app.EnsureFileStorageReadyAsync();
-
 app.Run();
 
 

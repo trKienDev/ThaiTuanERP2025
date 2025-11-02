@@ -8,7 +8,7 @@ import { FollowingExpensePaymentFacade } from '../../../facades/following-expens
 import { KitLoadingSpinnerComponent } from "../../../../../shared/components/kit-loading-spinner/kit-loading-spinner.component";
 import { KitRefreshButtonComponent } from "../../../../../shared/components/kit-refresh-button/kit-refresh-button.component";
 import { ActivatedRoute } from '@angular/router';
-import { ExpensePaymentDetailDialogComponent } from '../../../dialogs/expense-payment-detail-dialog/expense-payment-detail-dialog.component';
+import { ExpensePaymentDetailDialogComponent } from '../../../components/expense-payment-detail-dialog/expense-payment-detail-dialog.component';
 
 @Component({
       selector: 'expense-payments-panel',

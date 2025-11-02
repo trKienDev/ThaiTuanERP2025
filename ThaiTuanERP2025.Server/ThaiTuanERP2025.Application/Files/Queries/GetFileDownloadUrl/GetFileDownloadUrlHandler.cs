@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ThaiTuanERP2025.Application.Common.Interfaces;
+using ThaiTuanERP2025.Application.Exceptions;
 using ThaiTuanERP2025.Domain.Exceptions;
 
 namespace ThaiTuanERP2025.Application.Files.Queries.GetFileDownloadUrl

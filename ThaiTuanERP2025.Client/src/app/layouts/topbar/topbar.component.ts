@@ -8,12 +8,11 @@ import { NotificationStateService } from './notification-panel/services/notifica
 import { NotificationFacade } from './notification-panel/facade/notification.facade';
 import { TaskReminderFacade } from './task-reminder-panel/facades/task-reminder.facade';
 import { TaskReminderDrawerService } from './task-reminder-panel/services/task-reminder-drawer.service';
-import { resolveAvatarUrl } from '../../shared/utils/avatar.utils';
-import { UserFacade } from '../../features/account/facades/user.facade';
-import { UserDto } from '../../features/account/models/user.model';
-import { AuthService } from '../../core/services/auth/auth.service';
+import { AuthService } from '../../core/auth/auth.service';
 import { Router } from '@angular/router';
 import { AvatarUrlPipe } from "../../shared/pipes/avatar-url.pipe";
+import { UserFacade } from '../../modules/account/facades/user.facade';
+import { UserDto } from '../../modules/account/models/user.model';
 
 @Component({
       selector: 'app-topbar',

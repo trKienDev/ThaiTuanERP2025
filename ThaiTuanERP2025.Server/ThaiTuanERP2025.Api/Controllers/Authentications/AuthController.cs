@@ -33,7 +33,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Authentications
 		}
 
 		// POST api/auth/refresh
-		[HttpPost("refresh")]
+		[HttpPost("refresh-token")]
 		[AllowAnonymous]
 		public async Task<IActionResult> Refresh([FromBody] RefreshRequest request, CancellationToken ct)
 		{

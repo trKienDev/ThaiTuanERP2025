@@ -1,9 +1,9 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { PermissionRequestDialogComponent } from "../../../dialogs/permission-request-dialog/permission-request-dialog.component";
 import { PermissionFacade } from "../../../facades/permission.facade";
 import { PermissionDto } from "../../../models/permission.model";
+import { PermissionRequestDialogComponent } from "../../../components/permission-request-dialog/permission-request-dialog.component";
 
 @Component({
       selector: "account-permission-panel",

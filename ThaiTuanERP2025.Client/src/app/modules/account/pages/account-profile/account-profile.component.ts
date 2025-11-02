@@ -1,13 +1,12 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnInit } from "@angular/core";
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { environment } from "../../../../../environments/environment";
 import { UserDto } from "../../models/user.model";
 import { UserFacade } from "../../facades/user.facade";
 import { firstValueFrom } from "rxjs";
 import { ToastService } from "../../../../shared/components/toast/toast.service";
 import { UserService } from "../../services/user.service";
-import { resolveAvatarUrl } from "../../../../shared/utils/avatar.utils";
 import { AvatarUrlPipe } from "../../../../shared/pipes/avatar-url.pipe";
 
 @Component({
@@ -57,7 +56,6 @@ export class AccountProfileComponent implements OnInit {
 
             this.selectedAvatarFile = file;
 
-            // ✅ Preview ảnh base64 tạm thời
             const reader = new FileReader();
             reader.onload = () => {
                   this.previewAvatarSrc = reader.result as string;

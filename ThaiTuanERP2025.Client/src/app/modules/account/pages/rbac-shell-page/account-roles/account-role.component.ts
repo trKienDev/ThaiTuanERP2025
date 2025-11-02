@@ -1,16 +1,16 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject } from "@angular/core";
-import { MatDialog, MatDialogRef } from "@angular/material/dialog";
-import { RoleRequestDialogComponent } from "../../../dialogs/role-request-dialog/role-request-dialog.component";
+import { MatDialog  } from "@angular/material/dialog";
 import { RoleFacade } from "../../../facades/role.facade";
 import { RoleDto } from "../../../models/role.model";
 import { ActionMenuOption } from "../../../../../shared/components/kit-action-menu/kit-action-menu.model";
-import { AssignPermissionToRoleDialogComponent } from "../../../dialogs/assign-permission-to-role-dialog/assign-permission-to-role-dialog.component";
 import { KitActionMenuComponent } from "../../../../../shared/components/kit-action-menu/kit-action-menu.component";
 import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
 import { ToastService } from "../../../../../shared/components/toast/toast.service";
 import { firstValueFrom } from "rxjs";
 import { ConfirmService } from "../../../../../shared/components/confirm-dialog/confirm.service";
+import { AssignPermissionToRoleDialogComponent } from "../../../components/assign-permission-to-role-dialog/assign-permission-to-role-dialog.component";
+import { RoleRequestDialogComponent } from "../../../components/role-request-dialog/role-request-dialog.component";
 
 @Component({
       selector: "account-role-panel",

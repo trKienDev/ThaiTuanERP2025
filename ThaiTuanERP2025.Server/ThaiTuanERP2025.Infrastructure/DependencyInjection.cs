@@ -10,6 +10,7 @@ using ThaiTuanERP2025.Application.Common.Options;
 using ThaiTuanERP2025.Application.Common.Security;
 using ThaiTuanERP2025.Application.Common.Services;
 using ThaiTuanERP2025.Application.Expense.Invoices;
+using ThaiTuanERP2025.Application.Files;
 using ThaiTuanERP2025.Application.Finance.LedgerAccounts;
 using ThaiTuanERP2025.Domain.Account.Repositories;
 using ThaiTuanERP2025.Domain.Common.Enums;
@@ -57,6 +58,7 @@ namespace ThaiTuanERP2025.Infrastructure
 
 			// Files
 			services.AddScoped<IStoredFilesRepository, StoredFilesRepository>();
+			services.AddScoped<IStoredFileReadRepository, StoredFileReadRepository>();
 
 			// Account
 			services.AddScoped<IUserRepository, UserRepository>();

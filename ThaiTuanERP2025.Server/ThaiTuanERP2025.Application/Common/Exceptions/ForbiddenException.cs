@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace ThaiTuanERP2025.Domain.Exceptions
+namespace ThaiTuanERP2025.Application.Exceptions
 {
 	public class ForbiddenException : AppException
 	{

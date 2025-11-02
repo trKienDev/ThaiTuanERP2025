@@ -29,7 +29,7 @@ import { BankAccountService } from "../../../services/bank-account.service";
 import { ExpensePaymentService } from "../../../services/expense-payment.service";
 import { MiniInvoiceRequestDialogComponent } from "../../invoices/invoice-request/mini-invoice-request-dialog/mini-invoice-request-dialog.component";
 import { MyInvoicesDialogComponent } from "../../invoices/my-invoices-dialog/my-invoices-dialog.component";
-import { ExpenseBudgetCodeDialogComponent } from "../../../../finance/pages/budgets-shell-page/budget-codes/expense-budget-code/expense-budget-code.component";
+import { ExpenseBudgetCodeDialogComponent } from "../../../../finance/pages/budget-shell-page/budget-codes/expense-budget-code/expense-budget-code.component";
 import { SupplierRequestDialogComponent } from "../../suppliers/supplier-request-dialog/supplier-request-dialog.component";
 import { KitFileUploaderComponent } from "../../../../../shared/components/kit-file-uploader/kit-file-uploader.component";
 import { TextareaNoSpellcheckDirective } from "../../../../../shared/directives/money/textarea/textarea-no-spellcheck.directive";

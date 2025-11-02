@@ -1,4 +1,4 @@
-﻿using ThaiTuanERP2025.Domain.Account.Events.Users;
+﻿using ThaiTuanERP2025.Domain.Account.Events;
 using ThaiTuanERP2025.Domain.Account.ValueObjects;
 using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Common.Entities;

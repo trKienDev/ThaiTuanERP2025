@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { AuthService } from '../../core/services/auth/auth.service';
+import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
       selector: 'app-account',

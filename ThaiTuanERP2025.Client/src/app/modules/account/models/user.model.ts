@@ -1,4 +1,5 @@
 import { DepartmentDto } from "./department.model";
+import { PermissionDto } from "./permission.model";
 import { RoleDto } from "./role.model";
 
 export interface UserDto {
@@ -13,6 +14,7 @@ export interface UserDto {
       avatarFileObjectKey?: string;
 
       roles: RoleDto[];
+      permissions: PermissionDto[];
       phone?: number | null;
       departmentId?: string;  
       department?: DepartmentDto;

@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using ThaiTuanERP2025.Application.Common.Interfaces;
+using ThaiTuanERP2025.Application.Exceptions;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Files.Entities;
 
@@ -17,7 +18,7 @@ namespace ThaiTuanERP2025.Application.Files.Commands.UploadFile
 
 		public async Task<UploadFileResult> Handle(UploadFileCommand request, CancellationToken cancellationToken) {
 			if (request.File is null || request.File.Length <= 0)
-				throw new ValidationException("File", "Không tìm thấy file upload");
+				throw new ValidationException("Không tìm thấy file upload");
 
 			await _storage.EnsureReadyAsync(cancellationToken);
 

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../core/services/auth/auth.service.js';
+import { AuthService } from '../../core/auth/auth.service.js';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { catchError, finalize, tap } from 'rxjs';
 import { handleApiResponse$ } from '../../shared/operators/handle-api-response.operator.js';
@@ -87,8 +87,7 @@ export class LoginComponent implements OnInit{
             this.message = null;
 
             this.authService.login(employeeCode, password).pipe(
-                  handleApiResponse$<LoginResponseDto>(),
-                  tap(response => this.authService.loginSuccess(response)),
+                  handleApiResponse$<LoginResponseDto>(), // xử lý unwrap res.data nếu cần
                   catchError(err => {
                         this.toast.errorRich('Sai tài khoản hoặc mật khẩu');
                         console.error('error: ', err);

@@ -4,74 +4,62 @@ using ThaiTuanERP2025.Domain.Finance.Enums;
 
 namespace ThaiTuanERP2025.Domain.Finance.Events
 {
-	public sealed class BudgetPlanCreatedEvent : IDomainEvent
+	public abstract class BudgetPlanEventBase : IDomainEvent
+	{
+		public Guid BudgetPlanId { get; }
+		public DateTime OccurredOn { get; }
+
+		protected BudgetPlanEventBase(Guid planId)
+		{
+			BudgetPlanId = planId;
+			OccurredOn = DateTime.UtcNow;
+		}
+	}
+
+	public sealed class BudgetPlanCreatedEvent : BudgetPlanEventBase
 	{
 		public BudgetPlan BudgetPlan { get; }
-		public DateTime OccurredOn { get; }
-
-		public BudgetPlanCreatedEvent(BudgetPlan plan)
+		public BudgetPlanCreatedEvent(BudgetPlan plan) : base(plan.Id)
 		{
 			BudgetPlan = plan;
-			OccurredOn = DateTime.UtcNow;
 		}
 	}
 
-	public sealed class BudgetPlanReviewedEvent : IDomainEvent
+	public abstract class BudgetPlanUserActionEvent : BudgetPlanEventBase
 	{
-		public Guid BudgetPlanId { get; }
-		public Guid ReviewedByUserId { get; }
-		public DateTime OccurredOn { get; }
-		public BudgetPlanReviewedEvent(Guid planId, Guid userId)
+		public Guid UserId { get; }
+		protected BudgetPlanUserActionEvent(Guid planId, Guid userId) : base(planId)
 		{
-			BudgetPlanId = planId;
-			ReviewedByUserId = userId;
-			OccurredOn = DateTime.UtcNow;
+			UserId = userId;
 		}
 	}
 
-	public sealed class BudgetPlanApprovedEvent : IDomainEvent
+	public sealed class BudgetPlanReviewedEvent : BudgetPlanUserActionEvent
 	{
-		public Guid BudgetPlanId { get; }
-		public Guid ApprovedByUserId { get; }
-		public DateTime OccurredOn { get; }
-
-		public BudgetPlanApprovedEvent(Guid planId, Guid userId)
-		{
-			BudgetPlanId = planId;
-			ApprovedByUserId = userId;
-			OccurredOn = DateTime.UtcNow;
-		}
+		public BudgetPlanReviewedEvent(Guid planId, Guid userId) : base(planId, userId) { }
 	}
 
-	public sealed class BudgetPlanRejectedEvent : IDomainEvent
+	public sealed class BudgetPlanApprovedEvent : BudgetPlanUserActionEvent
 	{
-		public Guid BudgetPlanId { get; }
-		public Guid RejectedByUserId { get; }
-		public DateTime OccurredOn { get; }
-
-		public BudgetPlanRejectedEvent(Guid planId, Guid userId)
-		{
-			BudgetPlanId = planId;
-			RejectedByUserId = userId;
-			OccurredOn = DateTime.UtcNow;
-		}
+		public BudgetPlanApprovedEvent(Guid planId, Guid userId) : base(planId, userId) { }
 	}
 
-	public sealed class BudgetPlanTransactionRecordedEvent : IDomainEvent
+	public sealed class BudgetPlanRejectedEvent : BudgetPlanUserActionEvent
 	{
-		public Guid BudgetPlanId { get; }
+		public BudgetPlanRejectedEvent(Guid planId, Guid userId) : base(planId, userId) { }
+	}
+
+	public sealed class BudgetPlanTransactionRecordedEvent : BudgetPlanEventBase
+	{
 		public Guid TransactionId { get; }
 		public decimal Amount { get; }
 		public BudgetTransactionType Type { get; }
-		public DateTime OccurredOn { get; }
 
-	public BudgetPlanTransactionRecordedEvent(Guid planId, Guid transactionId, decimal amount, BudgetTransactionType type)
+		public BudgetPlanTransactionRecordedEvent(Guid planId, Guid transactionId, decimal amount, BudgetTransactionType type) : base(planId)
 		{
-			BudgetPlanId = planId;
 			TransactionId = transactionId;
 			Amount = amount;
 			Type = type;
-			OccurredOn = DateTime.UtcNow;
 		}
 	}
 }

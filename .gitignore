@@ -28,6 +28,9 @@ TestResults/
 # Entity Framework
 Migrations/
 
+#Logs
+Logs/
+
 # Rider IDE
 .idea/
 
@@ -43,6 +46,8 @@ appsettings.Development.json
 appsettings.Local.json
 appsettings.json
 appsettings.*.json
+
+
 
 ####################################################
 # Node / Angular

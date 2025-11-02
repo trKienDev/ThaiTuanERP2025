@@ -32,7 +32,7 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 				query = query.Where(u => u.DepartmentId == departmentId);
 
 			if (!string.IsNullOrWhiteSpace(role))
-				query = query.Where(u => u.UserRoles.Any(r => r.Role.Name.Value == role));
+				query = query.Where(u => u.UserRoles.Any(r => r.Role.Name == role));
 
 			var result = await query
 				.Select(u => new UserDto
@@ -61,7 +61,7 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
 					Roles = u.UserRoles.Select(ur => new RoleDto
 					{
 						Id = ur.Role.Id,
-						Name = ur.Role.Name.Value,
+						Name = ur.Role.Name,
 						Description = ur.Role.Description
 					}).ToList(),
 

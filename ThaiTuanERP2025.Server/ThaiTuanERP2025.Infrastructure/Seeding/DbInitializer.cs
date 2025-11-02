@@ -23,7 +23,7 @@ namespace ThaiTuanERP2025.Infrastructure.Seeding
 
 			await _db.Database.MigrateAsync();
 
-			// 1️⃣ Tạo user Admin trước để có CreatedByUserId
+			// 1️ ) Tạo user Admin trước để có CreatedByUserId
 			var adminUser = await _db.Users.FirstOrDefaultAsync(u => u.Username == "admin");
 			if (adminUser == null)
 			{
@@ -49,7 +49,7 @@ namespace ThaiTuanERP2025.Infrastructure.Seeding
 				Console.WriteLine(">>> [DbInitializer] Admin User already exists.");
 			}
 
-			// 2️⃣ Sau khi có adminUser.Id → tạo Role với CreatedByUserId = adminUser.Id
+			// 2️ ) Sau khi có adminUser.Id → tạo Role với CreatedByUserId = adminUser.Id
 			if (!await _db.Roles.AnyAsync())
 			{
 				Console.WriteLine(">>> [DbInitializer] Creating default Roles...");
@@ -69,7 +69,8 @@ namespace ThaiTuanERP2025.Infrastructure.Seeding
 				Console.WriteLine(">>> [DbInitializer] Roles already exist, skipping creation.");
 			}
 
-			// 3️⃣ Gán quyền SuperAdmin cho user admin
+
+			// 3️ ) Gán quyền SuperAdmin cho user admin
 			if (!await _db.UserRoles.AnyAsync(ur => ur.UserId == adminUser.Id))
 			{
 				Console.WriteLine(">>> [DbInitializer] Assigning SuperAdmin role to admin user...");

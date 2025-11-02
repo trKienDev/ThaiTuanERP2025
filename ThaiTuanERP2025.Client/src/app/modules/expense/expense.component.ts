@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
-import { AuthService } from "../../core/services/auth/auth.service";
+import { AuthService } from "../../core/auth/auth.service";
 import { Router, RouterModule } from "@angular/router";
 import { loadDomAnimations } from "../../shared/animations/load-dom/load-dom.animation";
 

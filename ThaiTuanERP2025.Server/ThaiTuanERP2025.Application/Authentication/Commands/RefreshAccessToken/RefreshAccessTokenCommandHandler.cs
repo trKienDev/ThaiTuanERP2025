@@ -42,7 +42,7 @@ namespace ThaiTuanERP2025.Application.Authentication.Commands.RefreshAccessToken
 				?? throw new UnauthorizedAccessException("User không tồn tại.");
 
 			// 4) Build claims
-			var roles = user.UserRoles.Select(ur => ur.Role.Name.Value).Distinct().ToList();
+			var roles = user.UserRoles.Select(ur => ur.Role.Name).Distinct().ToList();
 			var permissions = user.UserRoles
 				.SelectMany(ur => ur.Role.RolePermissions.Select(rp => rp.Permission.Code)).Distinct().ToList();
 

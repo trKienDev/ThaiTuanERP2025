@@ -1,34 +1,37 @@
 ﻿using ThaiTuanERP2025.Domain.Account.Events.Roles;
 using ThaiTuanERP2025.Domain.Account.Specifications;
-using ThaiTuanERP2025.Domain.Account.ValueObjects;
 using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Common.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 
 namespace ThaiTuanERP2025.Domain.Account.Entities
 {
-	public class Role : AuditableEntity
+	public class Role : BaseEntity
 	{
 		private readonly List<RolePermission> _rolePermissions = new();
 		private readonly List<UserRole> _userRoles = new();
 
-		private Role() { } // EF
+		#region EF Constructor
+		private Role() { } 
 		public Role(string name, string description = "")
 		{
 			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
-			Name = RoleName.Create(name);
+			Name = name;
 			Description = description;
 			IsActive = true;
 
 			AddDomainEvent(new RoleCreatedEvent(this));
 		}
+		#endregion
 
-		public RoleName Name { get; private set; } = default!;
+		#region Properties
+		public string Name { get; private set; } = default!;
 		public string Description { get; private set; } = string.Empty;
 		public bool IsActive { get; private set; } = true;
 
 		public IReadOnlyCollection<RolePermission> RolePermissions => _rolePermissions.AsReadOnly();
 		public IReadOnlyCollection<UserRole> UserRoles => _userRoles.AsReadOnly();
+		#endregion
 
 		#region Domain Behaviors
 		public void Activate()
@@ -44,7 +47,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			AddDomainEvent(new RoleDeactivatedEvent(this));
 		}
 
-		public void Update(RoleName name, string description)
+		public void Update(string name, string description)
 		{
 			Name = name ?? throw new ArgumentNullException(nameof(name));
 			Description = description;

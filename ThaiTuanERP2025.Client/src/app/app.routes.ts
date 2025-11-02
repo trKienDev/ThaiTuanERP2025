@@ -1,14 +1,14 @@
 import { Routes } from '@angular/router';
 import { LayoutShellComponent } from './layouts/layout-shell/layout-shell.component';
-import { authGuard } from './core/guards/auth.guard';
 import { HomeComponent } from './layouts/home/home.page';
 import { LoginComponent } from './layouts/login/login.page';
+import { AuthGuard } from './core/auth/auth.guard';
 
 export const routes: Routes = [
       {
             path: '',
             component: LayoutShellComponent,
-            canActivate: [authGuard],
+            canActivate: [AuthGuard],
             children:  [
                   { path: '', redirectTo: 'home', pathMatch: 'full' },
                   { path: 'account',  data: { animation: 'AccountPage' }, loadChildren: () => import('./modules/account/account.routes').then((m) => m.accountRoutes) },

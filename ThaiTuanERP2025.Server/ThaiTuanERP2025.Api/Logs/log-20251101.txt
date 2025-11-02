@@ -193,3 +193,485 @@ Error Number:547,State:0,Class:16
    at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
    at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
    at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+[2025-11-01 19:47:00 INF] [App=ThaiTuanERP2025] [User=] [Corr=] TaskReminderExpiryHostedService started. Interval="00:01:00", BatchSize=500
+[2025-11-01 19:47:30 ERR] [App=ThaiTuanERP2025] [User=] [Corr=] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Unable to resolve service for type 'Swashbuckle.AspNetCore.Swagger.ISwaggerProvider' while attempting to Invoke middleware 'Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware'.
+   at lambda_method59(Closure, Object, HttpContext, IServiceProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+[2025-11-01 19:58:37 INF] [App=ThaiTuanERP2025] [User=] [Corr=] TaskReminderExpiryHostedService started. Interval="00:01:00", BatchSize=500
+[2025-11-01 19:58:48 ERR] [App=ThaiTuanERP2025] [User=] [Corr=] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Unable to resolve service for type 'Swashbuckle.AspNetCore.Swagger.ISwaggerProvider' while attempting to Invoke middleware 'Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware'.
+   at lambda_method59(Closure, Object, HttpContext, IServiceProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+[2025-11-01 19:58:48 ERR] [App=ThaiTuanERP2025] [User=] [Corr=] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Unable to resolve service for type 'Swashbuckle.AspNetCore.Swagger.ISwaggerProvider' while attempting to Invoke middleware 'Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware'.
+   at lambda_method59(Closure, Object, HttpContext, IServiceProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+[2025-11-01 20:02:48 INF] [App=ThaiTuanERP2025] [User=] [Corr=] TaskReminderExpiryHostedService started. Interval="00:01:00", BatchSize=500
+[2025-11-01 20:03:03 ERR] [App=ThaiTuanERP2025] [User=] [Corr=] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Unable to resolve service for type 'Swashbuckle.AspNetCore.Swagger.ISwaggerProvider' while attempting to Invoke middleware 'Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware'.
+   at lambda_method59(Closure, Object, HttpContext, IServiceProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+[2025-11-01 20:05:22 INF] [App=ThaiTuanERP2025] [User=] [Corr=] TaskReminderExpiryHostedService started. Interval="00:01:00", BatchSize=500
+[2025-11-01 20:05:55 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/user/me by Anonymous
+[2025-11-01 20:05:55 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/notification by Anonymous
+[2025-11-01 20:05:55 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/notification/unread-count by Anonymous
+[2025-11-01 20:05:55 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP GET /api/user/me by Anonymous
+[2025-11-01 20:05:55 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP GET /api/notification/unread-count by Anonymous
+[2025-11-01 20:05:55 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP GET /api/notification by Anonymous
+[2025-11-01 20:44:56 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/account/login by Anonymous
+[2025-11-01 20:44:56 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP POST /api/account/login by Anonymous
+[2025-11-01 20:45:58 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/auth/login by Anonymous
+[2025-11-01 20:45:58 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP POST /api/auth/login by Anonymous
+[2025-11-01 20:45:59 INF] [App=ThaiTuanERP2025] [User=] [Corr=036acfa5567147ca9c908ae27ebbafea] ➡ Handling LoginCommand (CorrelationId: 036acfa5567147ca9c908ae27ebbafea)
+[2025-11-01 20:46:01 ERR] [App=ThaiTuanERP2025] [User=] [Corr=] ❌ Unhandled Exception for Request LoginCommand {"EmployeeCode":"ADMIN","Password":"Th@iTu@n2025","$type":"LoginCommand"}
+ThaiTuanERP2025.Domain.Exceptions.NotFoundException: User không hợp lệ
+   at ThaiTuanERP2025.Application.Behaviors.UserLoggingContextBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in D:\project\ThaiTuanERP2025\ThaiTuanERP2025.Server\ThaiTuanERP2025.Application\Behaviors\UserLoggingContextBehavior.cs:line 27
+   at ThaiTuanERP2025.Application.Behaviors.RequestCorrelationBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in D:\project\ThaiTuanERP2025\ThaiTuanERP2025.Server\ThaiTuanERP2025.Application\Behaviors\RequestCorrelationBehavior.cs:line 32
+   at ThaiTuanERP2025.Application.Behaviors.UnhandledExceptionBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in D:\project\ThaiTuanERP2025\ThaiTuanERP2025.Server\ThaiTuanERP2025.Application\Behaviors\UnhandledExceptionBehavior.cs:line 22
+[2025-11-01 20:48:41 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/auth/login by Anonymous
+[2025-11-01 20:48:41 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP POST /api/auth/login by Anonymous
+[2025-11-01 20:48:43 INF] [App=ThaiTuanERP2025] [User=] [Corr=783d59c4526045b58f08facb7e362fcd] ➡ Handling LoginCommand (CorrelationId: 783d59c4526045b58f08facb7e362fcd)
+[2025-11-01 20:48:44 ERR] [App=ThaiTuanERP2025] [User=] [Corr=] ❌ Unhandled Exception for Request LoginCommand {"EmployeeCode":"ADMIN","Password":"Th@iTu@n2025","$type":"LoginCommand"}
+ThaiTuanERP2025.Domain.Exceptions.NotFoundException: User không hợp lệ
+   at ThaiTuanERP2025.Application.Behaviors.UserLoggingContextBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at ThaiTuanERP2025.Application.Behaviors.RequestCorrelationBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at ThaiTuanERP2025.Application.Behaviors.UnhandledExceptionBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+[2025-11-01 20:51:21 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/auth/login by Anonymous
+[2025-11-01 20:51:21 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP POST /api/auth/login by Anonymous
+[2025-11-01 20:52:17 INF] [App=ThaiTuanERP2025] [User=] [Corr=c92ab8636823404c9a3b7f3854cb7f94] ➡ Handling LoginCommand (CorrelationId: c92ab8636823404c9a3b7f3854cb7f94)
+[2025-11-01 20:52:18 ERR] [App=ThaiTuanERP2025] [User=] [Corr=] ❌ Unhandled Exception for Request LoginCommand {"EmployeeCode":"ADMIN","Password":"Th@iTu@n2025","$type":"LoginCommand"}
+ThaiTuanERP2025.Domain.Exceptions.NotFoundException: User không hợp lệ
+   at ThaiTuanERP2025.Application.Behaviors.UserLoggingContextBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at ThaiTuanERP2025.Application.Behaviors.RequestCorrelationBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at ThaiTuanERP2025.Application.Behaviors.UnhandledExceptionBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+[2025-11-01 20:56:58 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/auth/login by Anonymous
+[2025-11-01 20:56:58 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP POST /api/auth/login by Anonymous
+[2025-11-01 20:57:01 INF] [App=ThaiTuanERP2025] [User=] [Corr=7b8ed1994ca941d2a9c3b2fbd0afded3] ➡ Handling LoginCommand (CorrelationId: 7b8ed1994ca941d2a9c3b2fbd0afded3)
+[2025-11-01 20:57:01 ERR] [App=ThaiTuanERP2025] [User=] [Corr=] ❌ Unhandled Exception for Request LoginCommand {"EmployeeCode":"ADMIN","Password":"Th@iTu@n2025","$type":"LoginCommand"}
+ThaiTuanERP2025.Domain.Exceptions.NotFoundException: User không hợp lệ
+   at ThaiTuanERP2025.Application.Behaviors.UserLoggingContextBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at ThaiTuanERP2025.Application.Behaviors.RequestCorrelationBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at ThaiTuanERP2025.Application.Behaviors.UnhandledExceptionBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+[2025-11-01 20:57:09 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/auth/login by Anonymous
+[2025-11-01 20:57:09 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP POST /api/auth/login by Anonymous
+[2025-11-01 20:57:11 INF] [App=ThaiTuanERP2025] [User=] [Corr=1074fe63ddd344e1a4d0fac4050f8141] ➡ Handling LoginCommand (CorrelationId: 1074fe63ddd344e1a4d0fac4050f8141)
+[2025-11-01 21:02:53 INF] [App=ThaiTuanERP2025] [User=] [Corr=] TaskReminderExpiryHostedService started. Interval="00:01:00", BatchSize=500
+[2025-11-01 21:03:01 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/auth/login by Anonymous
+[2025-11-01 21:03:01 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP POST /api/auth/login by Anonymous
+[2025-11-01 21:03:07 INF] [App=ThaiTuanERP2025] [User=] [Corr=819949155d704de3941d103a56a32900] ➡ Handling LoginCommand (CorrelationId: 819949155d704de3941d103a56a32900)
+[2025-11-01 21:03:07 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ▶️ Handling LoginCommand with data: {"EmployeeCode":"ADMIN","Password":"Th@iTu@n2025","$type":"LoginCommand"}
+[2025-11-01 21:03:07 WRN] [App=ThaiTuanERP2025] [User=] [Corr=] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+[2025-11-01 21:03:09 INF] [App=ThaiTuanERP2025] [User=] [Corr=] User ADMIN logged in. Issued Access Token and Refresh Token.
+[2025-11-01 21:03:09 WRN] [App=ThaiTuanERP2025] [User=] [Corr=] 🐢 Long Running Request: LoginCommand (2131 ms) {"EmployeeCode":"ADMIN","Password":"Th@iTu@n2025","$type":"LoginCommand"}
+[2025-11-01 21:03:09 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ✅ Handled LoginCommand
+[2025-11-01 21:03:09 INF] [App=ThaiTuanERP2025] [User=] [Corr=819949155d704de3941d103a56a32900] ✅ Completed LoginCommand (CorrelationId: 819949155d704de3941d103a56a32900)
+[2025-11-01 21:03:11 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/notification by Anonymous
+[2025-11-01 21:03:11 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/notification/unread-count by Anonymous
+[2025-11-01 21:03:11 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/user/me by Anonymous
+[2025-11-01 21:03:11 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP GET /api/notification by Anonymous
+[2025-11-01 21:03:11 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP GET /api/notification/unread-count by Anonymous
+[2025-11-01 21:03:11 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP GET /api/user/me by Anonymous
+[2025-11-01 21:03:11 INF] [App=ThaiTuanERP2025] [User=] [Corr=51967c1701b24e3ba804fc6b94cbfbff] ➡ Handling GetAllNotificationsQuery (CorrelationId: 51967c1701b24e3ba804fc6b94cbfbff)
+[2025-11-01 21:03:11 INF] [App=ThaiTuanERP2025] [User=85d36542-c578-43cd-8240-369a848bcf3d] [Corr=] ➡ Handling GetAllNotificationsQuery by User: "85d36542-c578-43cd-8240-369a848bcf3d"
+[2025-11-01 21:03:11 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ▶️ Handling GetAllNotificationsQuery with data: {"UnreadOnly":false,"Page":1,"PageSize":30,"$type":"GetAllNotificationsQuery"}
+[2025-11-01 21:03:11 INF] [App=ThaiTuanERP2025] [User=] [Corr=ba693ac5cf564e38b646443663a330ab] ➡ Handling GetUnreadCountQuery (CorrelationId: ba693ac5cf564e38b646443663a330ab)
+[2025-11-01 21:03:11 INF] [App=ThaiTuanERP2025] [User=85d36542-c578-43cd-8240-369a848bcf3d] [Corr=] ➡ Handling GetUnreadCountQuery by User: "85d36542-c578-43cd-8240-369a848bcf3d"
+[2025-11-01 21:03:11 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ▶️ Handling GetUnreadCountQuery with data: {"$type":"GetUnreadCountQuery"}
+[2025-11-01 21:03:12 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ✅ Handled GetUnreadCountQuery
+[2025-11-01 21:03:12 INF] [App=ThaiTuanERP2025] [User=85d36542-c578-43cd-8240-369a848bcf3d] [Corr=] ✅ Completed GetUnreadCountQuery by User: "85d36542-c578-43cd-8240-369a848bcf3d"
+[2025-11-01 21:03:12 INF] [App=ThaiTuanERP2025] [User=] [Corr=ba693ac5cf564e38b646443663a330ab] ✅ Completed GetUnreadCountQuery (CorrelationId: ba693ac5cf564e38b646443663a330ab)
+[2025-11-01 21:03:12 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ✅ Handled GetAllNotificationsQuery
+[2025-11-01 21:03:12 INF] [App=ThaiTuanERP2025] [User=85d36542-c578-43cd-8240-369a848bcf3d] [Corr=] ✅ Completed GetAllNotificationsQuery by User: "85d36542-c578-43cd-8240-369a848bcf3d"
+[2025-11-01 21:03:12 INF] [App=ThaiTuanERP2025] [User=] [Corr=51967c1701b24e3ba804fc6b94cbfbff] ✅ Completed GetAllNotificationsQuery (CorrelationId: 51967c1701b24e3ba804fc6b94cbfbff)
+[2025-11-01 21:03:12 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /hubs/notifications/negotiate by Anonymous
+[2025-11-01 21:03:12 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP POST /hubs/notifications/negotiate by Anonymous
+[2025-11-01 21:03:12 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP CONNECT /hubs/notifications by Anonymous
+[2025-11-01 21:03:12 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/task-reminder by Anonymous
+[2025-11-01 21:03:12 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP GET /api/task-reminder by Anonymous
+[2025-11-01 21:03:12 INF] [App=ThaiTuanERP2025] [User=] [Corr=1e5a75c044614022af41a08a92c0f21b] ➡ Handling GetMyRemindersQuery (CorrelationId: 1e5a75c044614022af41a08a92c0f21b)
+[2025-11-01 21:03:12 INF] [App=ThaiTuanERP2025] [User=85d36542-c578-43cd-8240-369a848bcf3d] [Corr=] ➡ Handling GetMyRemindersQuery by User: "85d36542-c578-43cd-8240-369a848bcf3d"
+[2025-11-01 21:03:12 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ▶️ Handling GetMyRemindersQuery with data: {"$type":"GetMyRemindersQuery"}
+[2025-11-01 21:03:12 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ✅ Handled GetMyRemindersQuery
+[2025-11-01 21:03:12 INF] [App=ThaiTuanERP2025] [User=85d36542-c578-43cd-8240-369a848bcf3d] [Corr=] ✅ Completed GetMyRemindersQuery by User: "85d36542-c578-43cd-8240-369a848bcf3d"
+[2025-11-01 21:03:12 INF] [App=ThaiTuanERP2025] [User=] [Corr=1e5a75c044614022af41a08a92c0f21b] ✅ Completed GetMyRemindersQuery (CorrelationId: 1e5a75c044614022af41a08a92c0f21b)
+[2025-11-01 21:03:12 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /hubs/notifications/negotiate by Anonymous
+[2025-11-01 21:03:12 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP POST /hubs/notifications/negotiate by Anonymous
+[2025-11-01 21:03:12 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP CONNECT /hubs/notifications by Anonymous
+[2025-11-01 21:03:14 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP GET /api/user/me by Anonymous
+[2025-11-01 21:03:22 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/expense-payments/following by Anonymous
+[2025-11-01 21:03:22 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP GET /api/expense-payments/following by Anonymous
+[2025-11-01 21:03:23 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/user/me by Anonymous
+[2025-11-01 21:03:23 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP GET /api/user/me by Anonymous
+[2025-11-01 21:07:22 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /hubs/notifications/negotiate by Anonymous
+[2025-11-01 21:07:22 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /hubs/notifications/negotiate by Anonymous
+[2025-11-01 21:07:22 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP POST /hubs/notifications/negotiate by Anonymous
+[2025-11-01 21:07:22 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP POST /hubs/notifications/negotiate by Anonymous
+[2025-11-01 21:07:22 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP CONNECT /hubs/notifications by Anonymous
+[2025-11-01 21:07:22 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP CONNECT /hubs/notifications by Anonymous
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/notification by Anonymous
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/notification/unread-count by Anonymous
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/user/me by Anonymous
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP GET /api/notification by Anonymous
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=] [Corr=301d26a704ba4742ab96039a95de8f01] ➡ Handling GetAllNotificationsQuery (CorrelationId: 301d26a704ba4742ab96039a95de8f01)
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=85d36542-c578-43cd-8240-369a848bcf3d] [Corr=] ➡ Handling GetAllNotificationsQuery by User: "85d36542-c578-43cd-8240-369a848bcf3d"
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ▶️ Handling GetAllNotificationsQuery with data: {"UnreadOnly":false,"Page":1,"PageSize":30,"$type":"GetAllNotificationsQuery"}
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP GET /api/notification/unread-count by Anonymous
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP GET /api/user/me by Anonymous
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=] [Corr=55ac87fd14f847f289cad206f587449c] ➡ Handling GetUnreadCountQuery (CorrelationId: 55ac87fd14f847f289cad206f587449c)
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=85d36542-c578-43cd-8240-369a848bcf3d] [Corr=] ➡ Handling GetUnreadCountQuery by User: "85d36542-c578-43cd-8240-369a848bcf3d"
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ▶️ Handling GetUnreadCountQuery with data: {"$type":"GetUnreadCountQuery"}
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ✅ Handled GetUnreadCountQuery
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=85d36542-c578-43cd-8240-369a848bcf3d] [Corr=] ✅ Completed GetUnreadCountQuery by User: "85d36542-c578-43cd-8240-369a848bcf3d"
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=] [Corr=55ac87fd14f847f289cad206f587449c] ✅ Completed GetUnreadCountQuery (CorrelationId: 55ac87fd14f847f289cad206f587449c)
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ✅ Handled GetAllNotificationsQuery
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=85d36542-c578-43cd-8240-369a848bcf3d] [Corr=] ✅ Completed GetAllNotificationsQuery by User: "85d36542-c578-43cd-8240-369a848bcf3d"
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=] [Corr=301d26a704ba4742ab96039a95de8f01] ✅ Completed GetAllNotificationsQuery (CorrelationId: 301d26a704ba4742ab96039a95de8f01)
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /hubs/notifications/negotiate by Anonymous
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP POST /hubs/notifications/negotiate by Anonymous
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP CONNECT /hubs/notifications by Anonymous
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/task-reminder by Anonymous
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP GET /api/task-reminder by Anonymous
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=] [Corr=459566cf75104f31a7c8b472306fa339] ➡ Handling GetMyRemindersQuery (CorrelationId: 459566cf75104f31a7c8b472306fa339)
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=85d36542-c578-43cd-8240-369a848bcf3d] [Corr=] ➡ Handling GetMyRemindersQuery by User: "85d36542-c578-43cd-8240-369a848bcf3d"
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ▶️ Handling GetMyRemindersQuery with data: {"$type":"GetMyRemindersQuery"}
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ✅ Handled GetMyRemindersQuery
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=85d36542-c578-43cd-8240-369a848bcf3d] [Corr=] ✅ Completed GetMyRemindersQuery by User: "85d36542-c578-43cd-8240-369a848bcf3d"
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=] [Corr=459566cf75104f31a7c8b472306fa339] ✅ Completed GetMyRemindersQuery (CorrelationId: 459566cf75104f31a7c8b472306fa339)
+[2025-11-01 21:07:23 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /hubs/notifications/negotiate by Anonymous
+[2025-11-01 21:07:24 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP POST /hubs/notifications/negotiate by Anonymous
+[2025-11-01 21:07:24 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP CONNECT /hubs/notifications by Anonymous
+[2025-11-01 21:14:29 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/auth/login by Anonymous
+[2025-11-01 21:14:29 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP POST /api/auth/login by Anonymous
+[2025-11-01 21:14:46 INF] [App=ThaiTuanERP2025] [User=] [Corr=482afdff23ee48909168abed86f64d17] ➡ Handling LoginCommand (CorrelationId: 482afdff23ee48909168abed86f64d17)
+[2025-11-01 21:14:46 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ▶️ Handling LoginCommand with data: {"EmployeeCode":"ADMIN","Password":"Th@iTu@n2025","$type":"LoginCommand"}
+[2025-11-01 21:14:49 INF] [App=ThaiTuanERP2025] [User=] [Corr=] User ADMIN logged in. Issued Access Token and Refresh Token.
+[2025-11-01 21:14:49 WRN] [App=ThaiTuanERP2025] [User=] [Corr=] 🐢 Long Running Request: LoginCommand (2217 ms) {"EmployeeCode":"ADMIN","Password":"Th@iTu@n2025","$type":"LoginCommand"}
+[2025-11-01 21:14:49 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ✅ Handled LoginCommand
+[2025-11-01 21:14:50 INF] [App=ThaiTuanERP2025] [User=] [Corr=482afdff23ee48909168abed86f64d17] ✅ Completed LoginCommand (CorrelationId: 482afdff23ee48909168abed86f64d17)
+[2025-11-01 21:14:52 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/notification by Anonymous
+[2025-11-01 21:14:52 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/notification/unread-count by Anonymous
+[2025-11-01 21:14:52 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/user/me by Anonymous
+[2025-11-01 21:14:52 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP GET /api/notification by Anonymous
+[2025-11-01 21:14:52 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP GET /api/user/me by Anonymous
+[2025-11-01 21:14:52 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP GET /api/notification/unread-count by Anonymous
+[2025-11-01 21:14:59 INF] [App=ThaiTuanERP2025] [User=] [Corr=80b336e7550947e39ccf9bb8d45c3b17] ➡ Handling GetUnreadCountQuery (CorrelationId: 80b336e7550947e39ccf9bb8d45c3b17)
+[2025-11-01 21:14:59 INF] [App=ThaiTuanERP2025] [User=] [Corr=52b7b7842cfe43dfb20c3f9a17b93082] ➡ Handling GetAllNotificationsQuery (CorrelationId: 52b7b7842cfe43dfb20c3f9a17b93082)
+[2025-11-01 21:15:00 INF] [App=ThaiTuanERP2025] [User=85d36542-c578-43cd-8240-369a848bcf3d] [Corr=] ➡ Handling GetAllNotificationsQuery by User: "85d36542-c578-43cd-8240-369a848bcf3d"
+[2025-11-01 21:15:01 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ▶️ Handling GetAllNotificationsQuery with data: {"UnreadOnly":false,"Page":1,"PageSize":30,"$type":"GetAllNotificationsQuery"}
+[2025-11-01 21:15:01 INF] [App=ThaiTuanERP2025] [User=85d36542-c578-43cd-8240-369a848bcf3d] [Corr=] ➡ Handling GetUnreadCountQuery by User: "85d36542-c578-43cd-8240-369a848bcf3d"
+[2025-11-01 21:15:01 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ▶️ Handling GetUnreadCountQuery with data: {"$type":"GetUnreadCountQuery"}
+[2025-11-01 21:15:01 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ✅ Handled GetUnreadCountQuery
+[2025-11-01 21:15:02 INF] [App=ThaiTuanERP2025] [User=85d36542-c578-43cd-8240-369a848bcf3d] [Corr=] ✅ Completed GetUnreadCountQuery by User: "85d36542-c578-43cd-8240-369a848bcf3d"
+[2025-11-01 21:15:02 INF] [App=ThaiTuanERP2025] [User=] [Corr=80b336e7550947e39ccf9bb8d45c3b17] ✅ Completed GetUnreadCountQuery (CorrelationId: 80b336e7550947e39ccf9bb8d45c3b17)
+[2025-11-01 21:15:02 WRN] [App=ThaiTuanERP2025] [User=] [Corr=] 🐢 Long Running Request: GetAllNotificationsQuery (1177 ms) {"UnreadOnly":false,"Page":1,"PageSize":30,"$type":"GetAllNotificationsQuery"}
+[2025-11-01 21:15:02 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ✅ Handled GetAllNotificationsQuery
+[2025-11-01 21:15:03 INF] [App=ThaiTuanERP2025] [User=85d36542-c578-43cd-8240-369a848bcf3d] [Corr=] ✅ Completed GetAllNotificationsQuery by User: "85d36542-c578-43cd-8240-369a848bcf3d"
+[2025-11-01 21:35:17 ERR] [App=ThaiTuanERP2025] [User=] [Corr=] An exception occurred in the database while saving changes for context type 'ThaiTuanERP2025.Infrastructure.Persistence.ThaiTuanERP2025DbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted with the FOREIGN KEY constraint "FK_Roles_Users_CreatedByUserId". The conflict occurred in database "ThaiTuanERP2025", table "Account.Users", column 'Id'.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:e8cd0373-5447-44aa-b13b-61cf24794458
+Error Number:547,State:0,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted with the FOREIGN KEY constraint "FK_Roles_Users_CreatedByUserId". The conflict occurred in database "ThaiTuanERP2025", table "Account.Users", column 'Id'.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:e8cd0373-5447-44aa-b13b-61cf24794458
+Error Number:547,State:0,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+[2025-11-01 22:05:50 ERR] [App=ThaiTuanERP2025] [User=] [Corr=] An exception occurred in the database while saving changes for context type 'ThaiTuanERP2025.Infrastructure.Persistence.ThaiTuanERP2025DbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted with the FOREIGN KEY constraint "FK_Roles_Users_CreatedByUserId". The conflict occurred in database "ThaiTuanERP2025", table "Account.Users", column 'Id'.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:0be79d4b-08ba-45f2-890f-bc24a330ed52
+Error Number:547,State:0,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted with the FOREIGN KEY constraint "FK_Roles_Users_CreatedByUserId". The conflict occurred in database "ThaiTuanERP2025", table "Account.Users", column 'Id'.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:0be79d4b-08ba-45f2-890f-bc24a330ed52
+Error Number:547,State:0,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+[2025-11-01 22:17:30 ERR] [App=ThaiTuanERP2025] [User=] [Corr=] An exception occurred in the database while saving changes for context type 'ThaiTuanERP2025.Infrastructure.Persistence.ThaiTuanERP2025DbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted with the FOREIGN KEY constraint "FK_Roles_Users_CreatedByUserId". The conflict occurred in database "ThaiTuanERP2025", table "Account.Users", column 'Id'.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:483697fa-d7c0-460c-8ce2-7c7db74b8c1f
+Error Number:547,State:0,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted with the FOREIGN KEY constraint "FK_Roles_Users_CreatedByUserId". The conflict occurred in database "ThaiTuanERP2025", table "Account.Users", column 'Id'.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:483697fa-d7c0-460c-8ce2-7c7db74b8c1f
+Error Number:547,State:0,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+[2025-11-01 22:25:36 ERR] [App=ThaiTuanERP2025] [User=] [Corr=] An exception occurred in the database while saving changes for context type 'ThaiTuanERP2025.Infrastructure.Persistence.ThaiTuanERP2025DbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted with the FOREIGN KEY constraint "FK_Roles_Users_CreatedByUserId". The conflict occurred in database "ThaiTuanERP2025", table "Account.Users", column 'Id'.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:2f001e2d-a6aa-42e9-a7a7-d9060820e171
+Error Number:547,State:0,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted with the FOREIGN KEY constraint "FK_Roles_Users_CreatedByUserId". The conflict occurred in database "ThaiTuanERP2025", table "Account.Users", column 'Id'.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:2f001e2d-a6aa-42e9-a7a7-d9060820e171
+Error Number:547,State:0,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+[2025-11-01 22:33:19 INF] [App=ThaiTuanERP2025] [User=] [Corr=] TaskReminderExpiryHostedService started. Interval="00:01:00", BatchSize=500
+[2025-11-01 22:33:38 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/auth/login by Anonymous
+[2025-11-01 22:33:38 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP POST /api/auth/login by Anonymous
+[2025-11-01 22:35:29 INF] [App=ThaiTuanERP2025] [User=] [Corr=db66dc71398f4a9e9dcb23f1a253fd96] ➡ Handling LoginCommand (CorrelationId: db66dc71398f4a9e9dcb23f1a253fd96)
+[2025-11-01 22:35:29 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ▶️ Handling LoginCommand with data: {"EmployeeCode":"ADMIN","Password":"Th@iTu@n2025","$type":"LoginCommand"}
+[2025-11-01 22:35:30 WRN] [App=ThaiTuanERP2025] [User=] [Corr=] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+[2025-11-01 22:35:33 INF] [App=ThaiTuanERP2025] [User=] [Corr=] User ADMIN logged in. Issued Access Token and Refresh Token.
+[2025-11-01 22:35:33 WRN] [App=ThaiTuanERP2025] [User=] [Corr=] 🐢 Long Running Request: LoginCommand (3980 ms) {"EmployeeCode":"ADMIN","Password":"Th@iTu@n2025","$type":"LoginCommand"}
+[2025-11-01 22:35:33 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ✅ Handled LoginCommand
+[2025-11-01 22:35:33 INF] [App=ThaiTuanERP2025] [User=] [Corr=db66dc71398f4a9e9dcb23f1a253fd96] ✅ Completed LoginCommand (CorrelationId: db66dc71398f4a9e9dcb23f1a253fd96)
+[2025-11-01 22:35:37 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/auth/login by Anonymous
+[2025-11-01 22:35:37 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP POST /api/auth/login by Anonymous
+[2025-11-01 22:35:37 INF] [App=ThaiTuanERP2025] [User=] [Corr=2b21774e6f4546199343435b60e812bc] ➡ Handling LoginCommand (CorrelationId: 2b21774e6f4546199343435b60e812bc)
+[2025-11-01 22:35:37 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ▶️ Handling LoginCommand with data: {"EmployeeCode":"ADMIN","Password":"Th@iTu@n2025","$type":"LoginCommand"}
+[2025-11-01 22:35:38 INF] [App=ThaiTuanERP2025] [User=] [Corr=] User ADMIN logged in. Issued Access Token and Refresh Token.
+[2025-11-01 22:35:38 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ✅ Handled LoginCommand
+[2025-11-01 22:35:38 INF] [App=ThaiTuanERP2025] [User=] [Corr=2b21774e6f4546199343435b60e812bc] ✅ Completed LoginCommand (CorrelationId: 2b21774e6f4546199343435b60e812bc)
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/notification by Anonymous
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/notification/unread-count by Anonymous
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/user/me by Anonymous
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP GET /api/notification by Anonymous
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP GET /api/notification/unread-count by Anonymous
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP GET /api/user/me by Anonymous
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=] [Corr=0d7ad463b86b4c3083d8d564f989f5e3] ➡ Handling GetAllNotificationsQuery (CorrelationId: 0d7ad463b86b4c3083d8d564f989f5e3)
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=6f705fc9-4d07-44cd-a3dc-ee1578190f31] [Corr=] ➡ Handling GetAllNotificationsQuery by User: "6f705fc9-4d07-44cd-a3dc-ee1578190f31"
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ▶️ Handling GetAllNotificationsQuery with data: {"UnreadOnly":false,"Page":1,"PageSize":30,"$type":"GetAllNotificationsQuery"}
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=] [Corr=9baca587791b47578892284e22c9a140] ➡ Handling GetUnreadCountQuery (CorrelationId: 9baca587791b47578892284e22c9a140)
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=6f705fc9-4d07-44cd-a3dc-ee1578190f31] [Corr=] ➡ Handling GetUnreadCountQuery by User: "6f705fc9-4d07-44cd-a3dc-ee1578190f31"
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ▶️ Handling GetUnreadCountQuery with data: {"$type":"GetUnreadCountQuery"}
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ✅ Handled GetUnreadCountQuery
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=6f705fc9-4d07-44cd-a3dc-ee1578190f31] [Corr=] ✅ Completed GetUnreadCountQuery by User: "6f705fc9-4d07-44cd-a3dc-ee1578190f31"
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=] [Corr=9baca587791b47578892284e22c9a140] ✅ Completed GetUnreadCountQuery (CorrelationId: 9baca587791b47578892284e22c9a140)
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ✅ Handled GetAllNotificationsQuery
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=6f705fc9-4d07-44cd-a3dc-ee1578190f31] [Corr=] ✅ Completed GetAllNotificationsQuery by User: "6f705fc9-4d07-44cd-a3dc-ee1578190f31"
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=] [Corr=0d7ad463b86b4c3083d8d564f989f5e3] ✅ Completed GetAllNotificationsQuery (CorrelationId: 0d7ad463b86b4c3083d8d564f989f5e3)
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /hubs/notifications/negotiate by Anonymous
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP POST /hubs/notifications/negotiate by Anonymous
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP CONNECT /hubs/notifications by Anonymous
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP OPTIONS /api/task-reminder by Anonymous
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP GET /api/task-reminder by Anonymous
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=] [Corr=37dbfbcb41164523b4148b1e66dfd244] ➡ Handling GetMyRemindersQuery (CorrelationId: 37dbfbcb41164523b4148b1e66dfd244)
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=6f705fc9-4d07-44cd-a3dc-ee1578190f31] [Corr=] ➡ Handling GetMyRemindersQuery by User: "6f705fc9-4d07-44cd-a3dc-ee1578190f31"
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ▶️ Handling GetMyRemindersQuery with data: {"$type":"GetMyRemindersQuery"}
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=] [Corr=] ✅ Handled GetMyRemindersQuery
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=6f705fc9-4d07-44cd-a3dc-ee1578190f31] [Corr=] ✅ Completed GetMyRemindersQuery by User: "6f705fc9-4d07-44cd-a3dc-ee1578190f31"
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=] [Corr=37dbfbcb41164523b4148b1e66dfd244] ✅ Completed GetMyRemindersQuery (CorrelationId: 37dbfbcb41164523b4148b1e66dfd244)
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP POST /hubs/notifications/negotiate by Anonymous
+[2025-11-01 22:35:40 INF] [App=ThaiTuanERP2025] [User=] [Corr=] 🌐 HTTP CONNECT /hubs/notifications by Anonymous
