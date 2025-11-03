@@ -7,7 +7,6 @@ namespace ThaiTuanERP2025.Application.Account.Users.Commands.Create
 		string Username,
 		string EmployeeCode,
 		string Password,
-		string AvatarUrl,
 		Guid RoleId,
 		string Position,
 		Guid DepartmentId,

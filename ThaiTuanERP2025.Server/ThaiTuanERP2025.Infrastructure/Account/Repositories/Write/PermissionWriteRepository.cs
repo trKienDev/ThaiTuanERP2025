@@ -4,12 +4,12 @@ using ThaiTuanERP2025.Domain.Account.Repositories;
 using ThaiTuanERP2025.Infrastructure.Common.Repositories;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
-namespace ThaiTuanERP2025.Infrastructure.Account.Repositories
+namespace ThaiTuanERP2025.Infrastructure.Account.Repositories.Write
 {
-	public class PermissionRepository : BaseWriteRepository<Permission>, IPermissionRepository
+	public class PermissionWriteRepository : BaseWriteRepository<Permission>, IPermissionWriteRepository
 	{
 		private readonly ThaiTuanERP2025DbContext _dbContext;
-		public PermissionRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider)
+		public PermissionWriteRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider)
 		{
 			_dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
 		}

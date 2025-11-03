@@ -8,12 +8,6 @@
 		public string Description { get; set; } = string.Empty;
 	}
 
-	public sealed record PermissionRequest {
-		public string Name { get; set; } = default!;
-		public string Code { get; set; } = default!;
-		public string Description { get; set; } = string.Empty;
-	}
-
 	public sealed record AssignPermissionToRoleRequest
 	{
 		public List<Guid> PermissionIds { get; set; } = new();

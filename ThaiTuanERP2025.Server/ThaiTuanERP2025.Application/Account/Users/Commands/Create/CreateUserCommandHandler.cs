@@ -4,7 +4,6 @@ using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Common.Security;
 using ThaiTuanERP2025.Application.Exceptions;
 using ThaiTuanERP2025.Domain.Account.Entities;
-using ThaiTuanERP2025.Domain.Account.ValueObjects;
 using ThaiTuanERP2025.Domain.Common;
 
 namespace ThaiTuanERP2025.Application.Account.Users.Commands.Create
@@ -12,13 +11,11 @@ namespace ThaiTuanERP2025.Application.Account.Users.Commands.Create
 	public sealed class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Unit>
 	{
 		private readonly IUnitOfWork _unitOfWork;
-		private readonly IMapper _mapper;
 		private readonly IPasswordHasher _passwordHasher;
 
-		public CreateUserCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IPasswordHasher passwordHasher)
+		public CreateUserCommandHandler(IUnitOfWork unitOfWork, IPasswordHasher passwordHasher)
 		{
 			_unitOfWork = unitOfWork;
-			_mapper = mapper;
 			_passwordHasher = passwordHasher;
 		}
 
@@ -27,13 +24,10 @@ namespace ThaiTuanERP2025.Application.Account.Users.Commands.Create
 			var department = await _unitOfWork.Departments.GetByIdAsync(command.DepartmentId, cancellationToken)
 				?? throw new NotFoundException("Phòng ban không tồn tại");
 
-			Guard.AgainstNullOrWhiteSpace(command.Email, nameof(command.Email));
-			Guard.AgainstNullOrWhiteSpace(command.Phone, nameof(command.Phone));
-
 			var role = await _unitOfWork.Roles.ExistAsync(q => q.Id == command.RoleId, cancellationToken);
 			if(role is false) throw new NotFoundException("Vai trò không tồn tại");
 
-			var user = new User(
+			var user = new User (
 				command.Fullname,
 				command.Username,
 				command.EmployeeCode,

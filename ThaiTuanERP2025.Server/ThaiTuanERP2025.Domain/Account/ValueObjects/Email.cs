@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Common.ValueObjects;
 
 namespace ThaiTuanERP2025.Domain.Account.ValueObjects
@@ -20,6 +21,8 @@ namespace ThaiTuanERP2025.Domain.Account.ValueObjects
 				throw new ArgumentException("Email không được để trống.", nameof(value));
 			if (!EmailRegex.IsMatch(value))
 				throw new ArgumentException("Email không đúng định dạng.", nameof(value));
+
+			Guard.AgainstInvalidEmail(value, nameof(value));
 
 			Value = value;
 		}

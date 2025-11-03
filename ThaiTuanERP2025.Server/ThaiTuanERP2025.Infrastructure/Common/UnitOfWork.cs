@@ -64,7 +64,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 
 			// RBAC
 			IRoleWriteRepository roles,
-			IPermissionRepository permissions,
+			IPermissionWriteRepository permissions,
 			IRolePermissionRepository rolePermissions,
 			IUserRoleRepository userRoles
 		)
@@ -165,7 +165,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		// RBAC
 		public IUserRoleRepository UserRoles { get; }
 		public IRoleWriteRepository Roles { get; }
-		public IPermissionRepository Permissions { get; }
+		public IPermissionWriteRepository Permissions { get; }
 		public IRolePermissionRepository RolePermissions { get; }
 
 		public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

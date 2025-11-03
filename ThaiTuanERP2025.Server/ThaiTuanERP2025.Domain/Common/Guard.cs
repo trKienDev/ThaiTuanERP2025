@@ -9,7 +9,6 @@ namespace ThaiTuanERP2025.Domain.Common
 	public static class Guard
 	{
 		// === Null, Empty, and Whitespace Checks ===
-
 		public static void AgainstNull(object? value, string paramName)
 		{
 			if (value is null)
@@ -97,6 +96,19 @@ namespace ThaiTuanERP2025.Domain.Common
 		{
 			if (value <= 0)
 				throw new DomainException($"{paramName} phải lớn hơn 0");
+		}
+
+		public static void AgainstInvalidPhone(string phone, string paramName)
+		{
+			if (string.IsNullOrWhiteSpace(phone))
+				throw new DomainException($"{paramName} không được để trống");
+
+			// Loại bỏ dấu cách, ký tự + hoặc -
+			var cleaned = phone.Replace(" ", "").Replace("-", "");
+
+			// Cho phép +84 hoặc 0 đầu tiên, và chỉ chứa số
+			if (!System.Text.RegularExpressions.Regex.IsMatch(cleaned, @"^(\+?84|0)\d{9}$"))
+				throw new DomainException($"{paramName} không hợp lệ, định dạng phải là +84xxxxxxxxx hoặc 0xxxxxxxxx");
 		}
 	}
 }

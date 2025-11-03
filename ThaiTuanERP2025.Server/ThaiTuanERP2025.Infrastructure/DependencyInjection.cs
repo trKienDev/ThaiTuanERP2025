@@ -77,7 +77,7 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IUserGroupRepository, UserGroupRepository>();
 			services.AddScoped<IRoleReadRepository, RoleReadRepository>();
 			services.AddScoped<IRoleWriteRepository, RoleWriteRepository>();
-			services.AddScoped<IPermissionRepository, PermissionRepository>();
+			services.AddScoped<IPermissionWriteRepository, PermissionWriteRepository>();
 			services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
 			services.AddScoped<IUserRoleRepository, UserRoleRepository>();
 

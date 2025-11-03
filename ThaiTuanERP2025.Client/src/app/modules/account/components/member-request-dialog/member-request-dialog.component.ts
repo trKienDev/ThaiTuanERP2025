@@ -11,11 +11,12 @@ import { UserRequest } from "../../models/user.model";
 import { DepartmentOptionStore } from "../../options/department-dropdown-options.option";
 import { UserOptionStore } from "../../options/user-dropdown-options.store";
 import { RoleDropdownOptionsStore } from "../../options/role-dropdown-options.store";
+import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 
 @Component({
       selector: 'member-request-dialog',
       standalone: true,
-      imports: [CommonModule, ReactiveFormsModule, KitDropdownComponent],
+      imports: [CommonModule, ReactiveFormsModule, KitDropdownComponent, KitSpinnerButtonComponent],
       templateUrl: './member-request-dialog.component.html',
 })
 export class MemberRequestDialog implements OnInit {

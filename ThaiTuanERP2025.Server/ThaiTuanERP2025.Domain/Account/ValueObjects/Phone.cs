@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Common.ValueObjects;
 
 
@@ -22,6 +23,7 @@ namespace ThaiTuanERP2025.Domain.Account.ValueObjects
 			if (!PhoneRegex.IsMatch(value))
 				throw new ArgumentException("Số điện thoại không đúng định dạng.", nameof(value));
 
+			Guard.AgainstInvalidPhone(value, nameof(value));
 			Value = value;
 		}
 
