@@ -17,24 +17,15 @@ namespace ThaiTuanERP2025.Infrastructure.Common.Repositories
 		protected readonly DbSet<TEntity> _dbSet;
 		protected readonly IConfigurationProvider _mapperConfig;
 
-		protected BaseReadRepository(DbContext dbContext, IConfigurationProvider mapperConfig)
+		protected BaseReadRepository(DbContext dbContext, IMapper mapper)
 		{
 			_dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
 			_dbSet = _dbContext.Set<TEntity>();
-			_mapperConfig = mapperConfig ?? throw new ArgumentNullException(nameof(mapperConfig));
+			if (mapper is null) throw new ArgumentNullException(nameof(mapper));
+			_mapperConfig = mapper.ConfigurationProvider;
 		}
 
 		protected virtual IQueryable<TEntity> BaseQuery => _dbSet.AsNoTracking();
-
-		/// <summary>
-		/// Lấy một bản ghi (projected sang DTO) theo Id.
-		/// </summary>
-		public virtual async Task<TDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
-		{
-			return await BaseQuery.Where(e => EF.Property<Guid>(e, "Id") == id)
-				.ProjectTo<TDto>(_mapperConfig)
-				.SingleOrDefaultAsync(cancellationToken);
-		}
 
 		/// <summary>
 		/// Lấy danh sách DTO có thể có filter, keyword, sắp xếp, và phân trang.
@@ -86,6 +77,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common.Repositories
 			var query = asNoTracking ? _dbSet.AsNoTracking() : _dbSet.AsQueryable();
 			return builder(query).ToListAsync(cancellationToken); // materialize trong repo
 		}
+
 		public IQueryable<TEntity> Query(bool asNoTracking = true)
 		{
 			return asNoTracking ? _dbSet.AsNoTracking() : _dbSet.AsQueryable();

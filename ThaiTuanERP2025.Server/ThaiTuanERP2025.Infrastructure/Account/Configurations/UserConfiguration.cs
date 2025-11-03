@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ThaiTuanERP2025.Domain.Account.Entities;
-using ThaiTuanERP2025.Domain.Files.Entities;
 
 namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 {
@@ -65,16 +64,22 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 
 			// ManagerAssignments
 			builder.HasMany(u => u.ManagerAssignments)
-				.WithOne(ma => ma.Manager)
-				.HasForeignKey(ma => ma.ManagerId)
-				.OnDelete(DeleteBehavior.Cascade);
-			builder.Navigation(u => u.ManagerAssignments)
-				.UsePropertyAccessMode(PropertyAccessMode.Field);
+				.WithOne(a => a.User)
+				.HasForeignKey(a => a.UserId)
+				.OnDelete(DeleteBehavior.Restrict);
+			builder.Navigation(u => u.ManagerAssignments).UsePropertyAccessMode(PropertyAccessMode.Field);
+
+			builder.HasMany(u => u.DirectReportsAssignments)
+				.WithOne(a => a.Manager)
+				.HasForeignKey(a => a.ManagerId)
+				.OnDelete(DeleteBehavior.Restrict);
+			builder.Navigation(u => u.DirectReportsAssignments).UsePropertyAccessMode(PropertyAccessMode.Field);
 
 			builder.HasMany(u => u.BankAccounts)
 				.WithOne(b => b.User)
 				.HasForeignKey(b => b.UserId)
 				.OnDelete(DeleteBehavior.Cascade);
+
 			builder.Navigation(u => u.BankAccounts)
 				.UsePropertyAccessMode(PropertyAccessMode.Field);
 

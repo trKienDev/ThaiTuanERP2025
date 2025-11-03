@@ -8,7 +8,7 @@ namespace ThaiTuanERP2025.Domain.Common.Entities
 		public Guid CreatedByUserId { get; set; } // Foreign Key
 		public User CreatedByUser { get; set; } = default!;
 
-		public DateTime? DateModified { get; set; }
+		public DateTime? ModifiedDate { get; set; }
 		public Guid? ModifiedByUserId { get; set; } // Foreign Key
 		public User? ModifiedByUser { get; set; } 
 

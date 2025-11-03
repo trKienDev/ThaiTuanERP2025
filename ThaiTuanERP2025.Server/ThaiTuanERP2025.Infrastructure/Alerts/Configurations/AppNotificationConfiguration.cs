@@ -7,7 +7,7 @@ namespace ThaiTuanERP2025.Infrastructure.Alerts.Configurations
 	public class AppNotificationConfiguration : IEntityTypeConfiguration<AppNotification>
 	{
 		public void Configure(EntityTypeBuilder<AppNotification> builder) {
-			builder.ToTable("AppNotifications", "Core");
+			builder.ToTable("AppNotifications", "Alerts");
 			builder.HasKey(x => x.Id);
 
 			builder.Property(x => x.Title).HasMaxLength(256);

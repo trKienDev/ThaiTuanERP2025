@@ -1,0 +1,36 @@
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using ThaiTuanERP2025.Api.Common;
+using ThaiTuanERP2025.Application.Account.Roles;
+using ThaiTuanERP2025.Application.Account.Roles.Commands.CreateRole;
+using ThaiTuanERP2025.Application.Account.Roles.Queries.GetAllRoles;
+using ThaiTuanERP2025.Application.Account.Roles.Request;
+
+namespace ThaiTuanERP2025.Api.Controllers.Account
+{
+	[ApiController]
+	[Route("api/role")]
+	[Authorize]
+	public class RoleController : ControllerBase
+	{
+		private readonly IMediator _mediator;
+		public RoleController(IMediator mediator) {
+			_mediator = mediator;
+		}
+
+		[HttpGet("all")]
+		public async Task<IActionResult> GetAllRolesAsync(CancellationToken cancellationToken)
+		{
+			var roles = await _mediator.Send(new GetAllRolesQuery(), cancellationToken);
+			return Ok(ApiResponse<IEnumerable<RoleDto>>.Success(roles));
+		}
+
+		[HttpPost("new")]
+		public async Task<IActionResult> CreateRole([FromBody] RoleRequest request, CancellationToken cancellationToken)
+		{
+			var result = await _mediator.Send(new CreateRoleCommand(request), cancellationToken);
+			return Ok(ApiResponse<Unit>.Success(result));
+		}
+	}
+}

@@ -19,8 +19,8 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public DateTime AssignedAt { get; private set; } = DateTime.UtcNow;
 		public DateTime? RevokedAt { get; private set; }
 
-		private UserManagerAssignment() { } // EF only
-
+		#region EF Core Constructor
+		private UserManagerAssignment() { } 
 		public UserManagerAssignment(Guid userId, Guid managerId, bool isPrimary)
 		{
 			Guard.AgainstDefault(userId, nameof(userId));
@@ -38,6 +38,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 
 			AddDomainEvent(new ManagerAssignedToUserEvent(this));
 		}
+		#endregion
 
 		#region Domain Behaviors
 		public void PromoteToPrimary()

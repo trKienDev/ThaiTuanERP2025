@@ -5,7 +5,7 @@ export interface DepartmentDto {
       code: string;
       name: string;
       managerUserId?: string | null;
-      manager: UserDto;
+      manager?: UserDto;
       parentId?: string | null;
       region: number;
 }
@@ -15,14 +15,6 @@ export interface DepartmentRequest {
       name: string;
       managerId?: string | null;
       parentId?: string | null;
-      region: number;
-}
-
-export enum DepartmentRegion {
-      none = 0,
-      north = 1,
-      middle = 2,
-      south = 3,
 }
 
 export interface SetDepartmentManagerRequest {

@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using ThaiTuanERP2025.Domain.Account.Events.Roles;
+using ThaiTuanERP2025.Domain.Account.Events;
 
 namespace ThaiTuanERP2025.Application.Account.Roles.Events
 {

@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using ThaiTuanERP2025.Application.Account.Roles;
+using ThaiTuanERP2025.Application.Account.Roles.Request;
 
 namespace ThaiTuanERP2025.Application.Account.Roles.Commands.CreateRole
 {

@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ThaiTuanERP2025.Application.Account.Departments;
+using ThaiTuanERP2025.Application.Account.Roles;
 using ThaiTuanERP2025.Application.Account.Users;
 using ThaiTuanERP2025.Application.Alerts.Notifications;
 using ThaiTuanERP2025.Application.Alerts.TaskReminders;
@@ -70,9 +72,10 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IUserReadRepostiory, UserReadRepository>();
 			services.AddScoped<IUserManagerAssignmentRepository, UserManagerAssignmentRepository>();
 			services.AddScoped<IDepartmentWriteRepository, DepartmentWriteRepository>();
-			services.AddScoped<DepartmentReadRepository>();
+			services.AddScoped<IDepartmentReadRepository, DepartmentReadRepository>();
 			services.AddScoped<IGroupRepository, GroupRepository>();
 			services.AddScoped<IUserGroupRepository, UserGroupRepository>();
+			services.AddScoped<IRoleReadRepository, RoleReadRepository>();
 			services.AddScoped<IRoleWriteRepository, RoleWriteRepository>();
 			services.AddScoped<IPermissionRepository, PermissionRepository>();
 			services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();

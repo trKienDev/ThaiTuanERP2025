@@ -7,7 +7,7 @@ namespace ThaiTuanERP2025.Application.Common.Repositories
 		where TDto : class
 	{
 		IQueryable<TEntity> Query(bool asNoTracking = true);
-		Task<TDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+		//Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 		Task<List<TDto>> GetAllAsync(
 			Expression<Func<TEntity, bool>>? filter = null, string? keyword = null,
 			Expression<Func<TEntity, object>>? orderBy = null,

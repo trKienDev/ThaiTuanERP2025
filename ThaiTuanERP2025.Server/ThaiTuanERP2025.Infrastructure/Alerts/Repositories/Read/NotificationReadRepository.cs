@@ -9,7 +9,7 @@ namespace ThaiTuanERP2025.Infrastructure.Alerts.Repositories.Read
 	public sealed class NotificationReadRepository : BaseReadRepository<AppNotification, AppNotificationDto>, INotificationReadRepository
 	{
 		private ThaiTuanERP2025DbContext DbContext => (ThaiTuanERP2025DbContext)_dbContext;
-		public NotificationReadRepository(ThaiTuanERP2025DbContext context, IConfigurationProvider mapperConfig)
-			: base(context, mapperConfig) { }
+		public NotificationReadRepository(ThaiTuanERP2025DbContext context, IMapper mapper)
+			: base(context, mapper) { }
 	}
 }

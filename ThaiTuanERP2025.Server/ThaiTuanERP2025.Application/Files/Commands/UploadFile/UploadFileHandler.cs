@@ -18,7 +18,7 @@ namespace ThaiTuanERP2025.Application.Files.Commands.UploadFile
 
 		public async Task<UploadFileResult> Handle(UploadFileCommand request, CancellationToken cancellationToken) {
 			if (request.File is null || request.File.Length <= 0)
-				throw new ValidationException("Không tìm thấy file upload");
+				throw new NotFoundException("Không tìm thấy file upload");
 
 			await _storage.EnsureReadyAsync(cancellationToken);
 

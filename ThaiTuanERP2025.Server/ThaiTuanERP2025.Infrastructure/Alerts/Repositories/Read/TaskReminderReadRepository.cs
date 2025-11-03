@@ -8,8 +8,8 @@ namespace ThaiTuanERP2025.Infrastructure.Alerts.Repositories.Read
 {
 	public sealed class TaskReminderReadRepository : BaseReadRepository<TaskReminder, TaskReminderDto>, ITaskReminderReadRepository
 	{
-		public TaskReminderReadRepository(ThaiTuanERP2025DbContext context, IConfigurationProvider mapperConfig)
-				: base(context, mapperConfig)
+		public TaskReminderReadRepository(ThaiTuanERP2025DbContext context, IMapper mapper)
+				: base(context, mapper)
 		{
 		}
 	}

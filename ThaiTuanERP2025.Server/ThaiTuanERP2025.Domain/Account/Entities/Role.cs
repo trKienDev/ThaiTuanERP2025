@@ -1,4 +1,4 @@
-﻿using ThaiTuanERP2025.Domain.Account.Events.Roles;
+﻿using ThaiTuanERP2025.Domain.Account.Events;
 using ThaiTuanERP2025.Domain.Account.Specifications;
 using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Common.Entities;

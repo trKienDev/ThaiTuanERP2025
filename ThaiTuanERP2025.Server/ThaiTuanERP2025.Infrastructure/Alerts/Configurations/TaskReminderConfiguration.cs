@@ -7,7 +7,7 @@ namespace ThaiTuanERP2025.Infrastructure.Alerts.Configurations
 	public sealed class TaskReminderConfiguration : IEntityTypeConfiguration<TaskReminder>
 	{	
 		public void Configure(EntityTypeBuilder<TaskReminder> builder) {
-			builder.ToTable("TaskReminder", "Core");
+			builder.ToTable("TaskReminder", "Alerts");
 			builder.HasKey(x => x.Id);
 			builder.Property(x => x.Title).HasMaxLength(256);
 			builder.Property(x => x.Message).HasMaxLength(1024);

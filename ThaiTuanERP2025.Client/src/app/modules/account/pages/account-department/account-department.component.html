@@ -7,6 +7,7 @@
                   <th>Mã phòng ban</th>
                   <th>Tên phòng ban</th>
                   <th>Trường bộ phận</th>
+                  <th>Hành động</th>
             </tr>
       </thead>
       <tbody>
@@ -14,9 +15,13 @@
                   <td>{{ i + 1 }}</td>
                   <td>{{ dept.code }}</td>
                   <td>{{ dept.name }}</td>
-                  <td>
+                  <td>{{ dept.manager?.fullName || '- - - -' }}</td>
+                  <td class="display-flex justify-content-center">
                         <kit-action-menu [actions]="buildDepartmentActions(dept)"></kit-action-menu>
                   </td>
+            </tr>
+            <tr *ngIf="(departments$ | async)?.length === 0">
+                  <td colspan="4" class="text-center">Không có dữ liệu.</td>
             </tr>
       </tbody>
 </table>

@@ -17,4 +17,14 @@ export class DepartmentService extends BaseCrudService<DepartmentDto, Department
             return this.http.put<ApiResponse<string>>(`${this.endpoint}/${id}/manager`, request)
                   .pipe(handleApiResponse$<string>());
       }
+
+      setParent(id: string, parentId: string): Observable<void> {
+            return this.http.put<ApiResponse<void>>(`${this.endpoint}/${id}/parent/${parentId}`, {})
+                  .pipe(handleApiResponse$<void>());
+      }
+
+      getParentDepartment(id: string): Observable<DepartmentDto | null> {
+            return this.http.get<ApiResponse<DepartmentDto | null>>(`${this.endpoint}/${id}/parent`)
+                  .pipe(handleApiResponse$<DepartmentDto | null>());
+      }
 }

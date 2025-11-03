@@ -15,7 +15,7 @@ namespace ThaiTuanERP2025.Application.Account.Users
 		public string? Phone { get; set; }
 
 		public Guid? AvatarFileId { get; set; }
-		public string? AvatarFileObjectKey { get; set; }
+		public object? AvatarFileObjectKey { get; set; }
 
 		public IReadOnlyCollection<RoleDto> Roles { get; set; } = Array.Empty<RoleDto>();
 		public IReadOnlyCollection<UserDto> Managers { get; set; } = Array.Empty<UserDto>();

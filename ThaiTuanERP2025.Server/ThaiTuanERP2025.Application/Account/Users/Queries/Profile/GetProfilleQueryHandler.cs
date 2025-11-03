@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using System.Security.Claims;
 using ThaiTuanERP2025.Application.Exceptions;
 using ThaiTuanERP2025.Application.Files;
@@ -9,15 +8,10 @@ namespace ThaiTuanERP2025.Application.Account.Users.Queries.Profile
 	public sealed class GetProfilleQueryHandler : IRequestHandler<GetProfilleQuery, UserDto>
 	{
 		private readonly IUserReadRepostiory _userReadRepostiory;
-		private readonly IMapper _mapper;
-		private readonly IStoredFileReadRepository _storedFileReadRepository;
-		public GetProfilleQueryHandler(
-			IMapper mapper, IUserReadRepostiory userReadRepostiory, IStoredFileReadRepository storedFileReadRepository
-		)
-		{
+		private readonly IStoredFileReadRepository _fileRepo;
+		public GetProfilleQueryHandler(IUserReadRepostiory userReadRepostiory, IStoredFileReadRepository fileRepo) {
 			_userReadRepostiory = userReadRepostiory;
-			_mapper = mapper;
-			_storedFileReadRepository = storedFileReadRepository;
+			_fileRepo = fileRepo;
 		}
 
 		public async Task<UserDto> Handle(GetProfilleQuery query, CancellationToken cancellationToken) {
@@ -27,19 +21,15 @@ namespace ThaiTuanERP2025.Application.Account.Users.Queries.Profile
 			if (!Guid.TryParse(userIdClaim.Value, out Guid userId))
 				throw new ValidationException("Id người dùng không hợp lệ");
 
-			var user = await _userReadRepostiory.GetByIdAsync(userId, cancellationToken)
+			var userDto = await _userReadRepostiory.GetByIdProjectedAsync(userId, cancellationToken)
 				?? throw new NotFoundException("Không tìm thấy người dùng");
 
-			var dto = _mapper.Map<UserDto>(user);
-			if (user.AvatarFileId.HasValue)
-			{
-				var storedFile = await _storedFileReadRepository.GetByIdAsync(user.AvatarFileId.Value);
-				if (storedFile != null)
-				{
-					dto.AvatarFileObjectKey = storedFile.ObjectKey;
-				}
+			if(userDto.AvatarFileId.HasValue) {
+				var storedAvatar = await _fileRepo.GetByIdAsync(userDto.AvatarFileId.Value, cancellationToken);
+				if (storedAvatar is not null)
+					userDto.AvatarFileObjectKey = storedAvatar.ObjectKey;
 			}
-			return dto;
+			return userDto; 
 		}
 	}
 }

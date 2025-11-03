@@ -20,7 +20,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		private User() { } 
 		public User(
 			string fullName, string username, string employeeCode, string passwordHash, string position,
-			Guid? departmentId, Email? email = null, Phone? phone = null, Guid? avatarFileId = null
+			Guid? departmentId, string? email = null, string? phone = null, Guid? avatarFileId = null
 		){
 			Guard.AgainstNullOrWhiteSpace(fullName, nameof(fullName));
 			Guard.AgainstNullOrWhiteSpace(username, nameof(username));
@@ -33,8 +33,8 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			PasswordHash = passwordHash;
 			Position = position.Trim();
 			DepartmentId = departmentId;
-			Email = email;
-			Phone = phone;
+			Email = string.IsNullOrWhiteSpace(email) ? null : new Email(email);
+			Phone = string.IsNullOrWhiteSpace(phone) ? null : new Phone(phone);
 			AvatarFileId = avatarFileId;
 			IsActive = true;
 			IsSuperAdmin = false;
@@ -51,6 +51,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 
 		public Guid? AvatarFileId { get; private set; }
 		public StoredFile? AvatarFile { get; private set; }
+		public object? AvatarFileObjectKey;
 
 		public string Position { get; private set; } = string.Empty;
 
@@ -65,8 +66,6 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 
 		public bool IsSuperAdmin { get; private set; }
 		public bool IsActive { get; private set; }
-
-		public object? AvatarFileObjectKey;
 
 		public IReadOnlyCollection<UserRole> UserRoles => _userRoles.AsReadOnly();
 		public IReadOnlyCollection<UserGroup> UserGroups => _userGroups.AsReadOnly();
@@ -85,6 +84,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			ManagerId = managerId;
 			AddDomainEvent(new UserManagerAssignedEvent(this, managerId));
 		}
+
 
 		public void Activate()
 		{

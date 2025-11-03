@@ -8,11 +8,12 @@ import { firstValueFrom } from "rxjs";
 import { ToastService } from "../../../../shared/components/toast/toast.service";
 import { UserService } from "../../services/user.service";
 import { AvatarUrlPipe } from "../../../../shared/pipes/avatar-url.pipe";
+import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 
 @Component({
       selector: 'account-profile',
       standalone: true,
-      imports: [CommonModule, MatSnackBarModule, AvatarUrlPipe],
+      imports: [CommonModule, MatSnackBarModule, AvatarUrlPipe, KitSpinnerButtonComponent],
       templateUrl: './account-profile.component.html',
       styleUrl: './account-profile.component.scss',
 })

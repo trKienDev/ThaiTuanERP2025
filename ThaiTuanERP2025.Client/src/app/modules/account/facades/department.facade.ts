@@ -17,4 +17,10 @@ export class DepartmentFacade extends BaseCrudFacade<DepartmentDto, DepartmentRe
                   tap(() => this.refresh())
             )
       }
+
+      setParent(id: string, parentId: string): Observable<void> {
+            return this.departmentService.setParent(id, parentId).pipe(
+                  tap(() => this.refresh())
+            )
+      }
 }

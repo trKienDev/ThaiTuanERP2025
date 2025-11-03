@@ -106,7 +106,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 						entry.Entity.CreatedDate = DateTime.UtcNow;
 						break;
 					case EntityState.Modified:
-						entry.Entity.DateModified = DateTime.UtcNow;
+						entry.Entity.ModifiedDate = DateTime.UtcNow;
 						entry.Entity.ModifiedByUserId = currentUserId;
 						break;
 				}

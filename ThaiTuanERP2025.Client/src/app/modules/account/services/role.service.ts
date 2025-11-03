@@ -7,6 +7,6 @@ import { Injectable } from "@angular/core";
 @Injectable({ providedIn: 'root'})
 export class RoleService extends BaseCrudService<RoleDto, RoleRequest> {
       constructor(http: HttpClient) {
-            super(http, `${environment.apiUrl}/roles`);
+            super(http, `${environment.apiUrl}/role`);
       }
 }

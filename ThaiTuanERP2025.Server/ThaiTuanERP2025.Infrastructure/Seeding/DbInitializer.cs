@@ -36,7 +36,7 @@ namespace ThaiTuanERP2025.Infrastructure.Seeding
 					passwordHash: _passwordHasher.Hash("Th@iTu@n2025"),
 					position: "System Admin",
 					departmentId: null,
-					email: new Email("itcenter@thaituan.com.vn")
+					email: "itcenter@thaituan.com.vn"
 				);
 
 				await _db.Users.AddAsync(adminUser);

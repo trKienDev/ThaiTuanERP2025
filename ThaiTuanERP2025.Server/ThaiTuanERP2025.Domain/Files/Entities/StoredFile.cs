@@ -25,7 +25,6 @@ namespace ThaiTuanERP2025.Domain.Files.Entities
 			string bucket, string objectKey, string fileName, string contentType, long size, string module,
 			string entity, string? entityId = null, string? hash = null, bool isPublic = true
 		) {
-			Guard.AgainstNullOrWhiteSpace(bucket, nameof(bucket));
 			Guard.AgainstNullOrWhiteSpace(objectKey, nameof(objectKey));
 			Guard.AgainstNullOrWhiteSpace(fileName, nameof(fileName));
 			Guard.AgainstNullOrWhiteSpace(contentType, nameof(contentType));

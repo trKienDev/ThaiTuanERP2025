@@ -17,18 +17,11 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 			builder.Property(x => x.IsActive).HasDefaultValue(true);
 			builder.Property(x => x.AssignedAt).IsRequired();
 
-			// Relations
-			builder.HasOne(x => x.Manager)
-				.WithMany(u => u.ManagerAssignments)
-				.HasForeignKey(x => x.ManagerId)
-				.OnDelete(DeleteBehavior.Restrict);
-
-			builder.HasOne(x => x.User)
-				.WithMany(u => u.DirectReportsAssignments)
-				.HasForeignKey(x => x.UserId)
-				.OnDelete(DeleteBehavior.Restrict);
-
-			builder.HasIndex(x => new { x.UserId, x.ManagerId }).IsUnique();
+			builder.HasIndex(x => new { x.UserId, x.ManagerId })
+				.IsUnique().HasFilter("[IsActive] = 1 AND [IsDeleted] = 0"); ;
+			
+			builder.HasIndex(x => x.UserId)
+				.IsUnique().HasFilter("[IsActive] = 1 AND [IsPrimary] = 1");
 
 			ConfigureAuditUsers(builder);
 		}
