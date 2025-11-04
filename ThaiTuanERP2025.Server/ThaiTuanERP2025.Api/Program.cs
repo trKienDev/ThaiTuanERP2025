@@ -53,6 +53,7 @@ app.MapHub<NotificationsHub>("/hubs/notifications");
 app.MapControllers();
 
 await app.EnsureFileStorageReadyAsync();
+await app.LoadDynamicPoliciesAsync();
 app.Run();
 
 

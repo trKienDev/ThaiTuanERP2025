@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using ThaiTuanERP2025.Api.Notifications;
@@ -84,6 +85,8 @@ namespace ThaiTuanERP2025.Api
 
 			// Behavior
 			services.AddScoped<ICorrelationIdProvider, CorrelationIdProvider>();
+
+			services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
 
 			return services;
 		}

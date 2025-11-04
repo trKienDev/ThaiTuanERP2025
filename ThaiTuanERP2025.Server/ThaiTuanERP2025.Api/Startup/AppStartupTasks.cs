@@ -21,13 +21,5 @@ namespace ThaiTuanERP2025.Api.Startup
 			Console.WriteLine("✅ Database seeding completed. Exiting...");
 			Environment.Exit(0);
 		}
-
-		public static async Task LoadDynamicPoliciesAsync(this WebApplication app)
-		{
-			using var scope = app.Services.CreateScope();
-			var sp = scope.ServiceProvider;
-			var authorizationOptions = sp.GetRequiredService<IOptions<AuthorizationOptions>>().Value;
-			await authorizationOptions.AddPermissionPoliciesFromDatabaseAsync(sp);
-		}
 	}
-}
+}	

@@ -22,7 +22,7 @@ export class BudgetPeriodService extends BaseCrudService<BudgetPeriodDto, Budget
       }
 
       createForYear(year: number) {
-            return this.http.post<ApiResponse<string>>(`${this.endpoint}/for-year`, year)
+            return this.http.post<ApiResponse<string>>(`${this.endpoint}/year/${year}`, null)
                   .pipe(
                         handleApiResponse$<string>(),
                         catchError(err => throwError(() => err))

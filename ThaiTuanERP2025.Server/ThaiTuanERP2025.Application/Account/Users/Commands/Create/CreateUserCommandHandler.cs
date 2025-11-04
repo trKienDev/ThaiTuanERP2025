@@ -4,7 +4,6 @@ using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Common.Security;
 using ThaiTuanERP2025.Application.Exceptions;
 using ThaiTuanERP2025.Domain.Account.Entities;
-using ThaiTuanERP2025.Domain.Common;
 
 namespace ThaiTuanERP2025.Application.Account.Users.Commands.Create
 {

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
+using ThaiTuanERP2025.Api.Security;
 using ThaiTuanERP2025.Application.Finance.BudgetPeriods.Commands.CreateForYear;
 using ThaiTuanERP2025.Application.Finance.BudgetPeriods.Queries.GetForYear;
 using ThaiTuanERP2025.Application.Finance.Budgets.DTOs;
@@ -27,8 +28,9 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 			return Ok(ApiResponse<IReadOnlyList<BudgetPeriodDto>>.Success(result));
 		}
 
-		[HttpPost("for-year")]
-		public async Task<IActionResult> CreateForYear([FromBody] int year, CancellationToken cancellationToken)
+		[HasPermission("budget-periods.create-for-year")]
+		[HttpPost("year/{year:int}")]
+		public async Task<IActionResult> CreateForYear([FromRoute] int year, CancellationToken cancellationToken)
 		{
 			var result = await _mediator.Send(new CreateBudgetPeriodsForYearCommand(year), cancellationToken);
 			return Ok(ApiResponse<Unit>.Success(result));
