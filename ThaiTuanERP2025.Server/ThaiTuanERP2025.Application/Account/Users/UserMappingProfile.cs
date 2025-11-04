@@ -15,6 +15,8 @@ namespace ThaiTuanERP2025.Application.Account.Users
 				.ForMember(d => d.Roles, o => o.Ignore())
 				.ForMember(d => d.Managers, o => o.Ignore())
 				.AfterMap<UserAvatarObjectKeyResolver>();
+
+			CreateMap<User, UserBriefDto>();
 		}
 
 		/// <summary>

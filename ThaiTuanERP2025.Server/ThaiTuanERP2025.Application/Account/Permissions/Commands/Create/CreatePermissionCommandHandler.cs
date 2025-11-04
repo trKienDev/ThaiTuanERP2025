@@ -30,7 +30,7 @@ namespace ThaiTuanERP2025.Application.Account.Permissions.Commands.Create
 				p => p.Name == name || p.Code == code, 
 				cancellationToken
 			);
-			if (existed is false) throw new NotFoundException("Quyền này đã tồn tại");
+			if (existed is true) throw new NotFoundException("Quyền này đã tồn tại");
 
 			var newPermission = new Permission(name, code, description);
 			await _uow.Permissions.AddAsync(newPermission, cancellationToken);

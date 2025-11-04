@@ -3,7 +3,7 @@ using ThaiTuanERP2025.Domain.Finance.Entities;
 
 namespace ThaiTuanERP2025.Domain.Finance.Repositories
 {
-	public interface IBudgetPeriodRepository : IBaseWriteRepository<BudgetPeriod>
+	public interface IBudgetPeriodWriteRepository : IBaseWriteRepository<BudgetPeriod>
 	{
 	}
 }

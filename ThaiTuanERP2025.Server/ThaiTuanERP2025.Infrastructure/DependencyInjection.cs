@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ThaiTuanERP2025.Application.Account.Departments;
+using ThaiTuanERP2025.Application.Account.Permissions;
 using ThaiTuanERP2025.Application.Account.Roles;
 using ThaiTuanERP2025.Application.Account.Users;
 using ThaiTuanERP2025.Application.Alerts.Notifications;
@@ -15,6 +16,7 @@ using ThaiTuanERP2025.Application.Common.Security;
 using ThaiTuanERP2025.Application.Common.Services;
 using ThaiTuanERP2025.Application.Expense.Invoices;
 using ThaiTuanERP2025.Application.Files;
+using ThaiTuanERP2025.Application.Finance.BudgetPeriods;
 using ThaiTuanERP2025.Application.Finance.LedgerAccounts;
 using ThaiTuanERP2025.Domain.Account.Repositories;
 using ThaiTuanERP2025.Domain.Alerts.Repositories;
@@ -35,6 +37,8 @@ using ThaiTuanERP2025.Infrastructure.Common.Security;
 using ThaiTuanERP2025.Infrastructure.Common.Services;
 using ThaiTuanERP2025.Infrastructure.Expense.Repositories;
 using ThaiTuanERP2025.Infrastructure.Finance.Repositories;
+using ThaiTuanERP2025.Infrastructure.Finance.Repositories.Read;
+using ThaiTuanERP2025.Infrastructure.Finance.Repositories.Write;
 using ThaiTuanERP2025.Infrastructure.Followers.Repositories;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 using ThaiTuanERP2025.Infrastructure.StoredFiles.Configurations;
@@ -78,13 +82,15 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IRoleReadRepository, RoleReadRepository>();
 			services.AddScoped<IRoleWriteRepository, RoleWriteRepository>();
 			services.AddScoped<IPermissionWriteRepository, PermissionWriteRepository>();
+			services.AddScoped<IPermissionReadRepository, PermissionReadRepository>();
 			services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
 			services.AddScoped<IUserRoleRepository, UserRoleRepository>();
 
 			// Finance
 			services.AddScoped<IBudgetCodeRepository, BudgetCodeRepository>();
 			services.AddScoped<IBudgetGroupRepository, BudgetGroupRepository>();
-			services.AddScoped<IBudgetPeriodRepository, BudgetPeriodRepository>();
+			services.AddScoped<IBudgetPeriodWriteRepository, BudgetPeriodWriteRepository>();
+			services.AddScoped<IBudgetPeriodReadRepository, BudgetPeriodReadRepository>();
 			services.AddScoped<IBudgetPlanRepository, BudgetPlanRepository>();
 			services.AddScoped<ILedgerAccountTypeRepository, LedgerAccountTypeRepository>();
 			services.AddScoped<ILedgerAccountRepository, LedgerAccountRepository>();

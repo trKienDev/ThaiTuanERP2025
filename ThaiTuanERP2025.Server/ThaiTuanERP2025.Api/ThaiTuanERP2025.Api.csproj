@@ -34,7 +34,6 @@
 
   <ItemGroup>
     <Folder Include="Controllers\Expense\" />
-    <Folder Include="Controllers\Finance\" />
   </ItemGroup>
 
 </Project>

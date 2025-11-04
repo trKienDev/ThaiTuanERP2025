@@ -26,5 +26,11 @@ namespace ThaiTuanERP2025.Application.Account.Users
 		public DepartmentDto? Department { get; set; } = default!;
 	}
 
-	
+	public sealed record UserBriefDto
+	{
+		public Guid Id { get; set; }
+		public string FullName { get; set; } = default!;
+		public string Username { get; set; } = default!;
+		public string EmployeeCode { get; set; } = default!;
+	}
 }

@@ -21,8 +21,8 @@ export class BudgetPeriodService extends BaseCrudService<BudgetPeriodDto, Budget
                   )
       }
 
-      autoGenerateForYear(year: number) {
-            return this.http.post<ApiResponse<string>>(`${this.endpoint}/auto-generate`, { year })
+      createForYear(year: number) {
+            return this.http.post<ApiResponse<string>>(`${this.endpoint}/for-year`, year)
                   .pipe(
                         handleApiResponse$<string>(),
                         catchError(err => throwError(() => err))

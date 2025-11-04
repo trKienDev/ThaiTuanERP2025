@@ -27,6 +27,12 @@ namespace ThaiTuanERP2025.Infrastructure.Common.Repositories
 
 		protected virtual IQueryable<TEntity> BaseQuery => _dbSet.AsNoTracking();
 
+		public async Task<bool> ExistAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+		{
+			if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+			return await _dbSet.AnyAsync(predicate, cancellationToken);
+		}
+
 		/// <summary>
 		/// Lấy danh sách DTO có thể có filter, keyword, sắp xếp, và phân trang.
 		/// </summary>

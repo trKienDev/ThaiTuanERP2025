@@ -1,4 +1,4 @@
-﻿using ThaiTuanERP2025.Domain.Account.Events.UserManagerAssignments;
+﻿using ThaiTuanERP2025.Domain.Account.Events;
 using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Common.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;

@@ -7,6 +7,7 @@ using ThaiTuanERP2025.Application.Account.Users.Commands.Create;
 using ThaiTuanERP2025.Application.Account.Users.Commands.SetAvatar;
 using ThaiTuanERP2025.Application.Account.Users.Commands.SetManager;
 using ThaiTuanERP2025.Application.Account.Users.Queries.All;
+using ThaiTuanERP2025.Application.Account.Users.Queries.ManagerIds;
 using ThaiTuanERP2025.Application.Account.Users.Queries.Profile;
 using ThaiTuanERP2025.Application.Account.Users.Requests;
 
@@ -44,13 +45,19 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			return Ok(ApiResponse<IReadOnlyList<UserDto>>.Success(users));
 		}
 
+		[HttpGet("{id:guid}/managers/ids")]
+		public async Task<IActionResult> GetMangerIds(Guid Id, CancellationToken cancellationToken)
+		{
+			var result = await _mediator.Send(new GetUserManagerIdsQuery(Id), cancellationToken);
+			return Ok(ApiResponse<IReadOnlyList<Guid>>.Success(result));
+		}
+
 		[HttpPost("new")]
 		public async Task<IActionResult> Create([FromBody] CreateUserCommand command, CancellationToken cancellationToken)
 		{
 			var result = await _mediator.Send(command, cancellationToken);
 			return Ok(ApiResponse<Unit>.Success(result));
 		}
-
 
 		[HttpPut("{id:guid}/managers")]
 		public async Task<IActionResult> SetManagers(Guid id, [FromBody] SetUserManagersRequest request, CancellationToken cancellationToken)

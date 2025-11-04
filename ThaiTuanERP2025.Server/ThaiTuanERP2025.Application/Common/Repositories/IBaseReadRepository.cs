@@ -14,6 +14,7 @@ namespace ThaiTuanERP2025.Application.Common.Repositories
 			bool ascending = true, int? page = null, int? pageSize = null,
 			CancellationToken cancellationToken = default
 		);
+		Task<bool> ExistAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
 		Task<List<TDto>> ListAsync(Func<IQueryable<TEntity>, IQueryable<TEntity>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default);
 		Task<TDto?> GetByIdProjectedAsync(Guid id, CancellationToken cancellationToken = default);
 		Task<List<TDto>> ListProjectedAsync(Func<IQueryable<TEntity>, IQueryable<TDto>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default);

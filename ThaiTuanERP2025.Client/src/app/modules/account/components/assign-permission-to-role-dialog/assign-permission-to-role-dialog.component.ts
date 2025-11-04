@@ -8,6 +8,7 @@ import { PermissionService } from "../../services/permission.service";
 import { AssignPermissionToRoleRequest, PermissionDto } from "../../models/permission.model";
 import { firstValueFrom } from "rxjs";
 import { trigger, transition, style, animate } from "@angular/animations";
+import { RoleService } from "../../services/role.service";
 
 @Component({
       selector: 'assign-permission-to-role-dialog',
@@ -34,6 +35,7 @@ export class AssignPermissionToRoleDialogComponent implements OnInit {
       public role!: RoleDto;
       public submitting = false;
       private readonly permissionService = inject(PermissionService);
+      private readonly roleService = inject(RoleService);
       public permissionsByRole: PermissionDto[] = [];
 
       availablePermissions: PermissionDto[] = [];
@@ -100,8 +102,9 @@ export class AssignPermissionToRoleDialogComponent implements OnInit {
             this.submitting = true;
             try {
                   const ids = this.selectedPermissions.map(p => p.id);
-                  await firstValueFrom(this.permissionService.assignPermissionsToRole(this.role.id, ids));
+                  await firstValueFrom(this.roleService.assignPermissions(this.role.id, ids));
                   this.toastService.successRich('Phân quyền thành công');
+                  this.matDialogRef.close(true);
                   return;
             } catch(error) {
                   this.toastService.errorRich('Lỗi khi phân quyền');

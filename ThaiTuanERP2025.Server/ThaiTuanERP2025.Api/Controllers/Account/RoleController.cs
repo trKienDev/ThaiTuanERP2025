@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
+using ThaiTuanERP2025.Application.Account.Permissions.Commands.AssignRole;
 using ThaiTuanERP2025.Application.Account.Roles;
 using ThaiTuanERP2025.Application.Account.Roles.Commands.CreateRole;
 using ThaiTuanERP2025.Application.Account.Roles.Queries.GetAllRoles;
@@ -30,6 +31,13 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 		public async Task<IActionResult> CreateRole([FromBody] RoleRequest request, CancellationToken cancellationToken)
 		{
 			var result = await _mediator.Send(new CreateRoleCommand(request), cancellationToken);
+			return Ok(ApiResponse<Unit>.Success(result));
+		}
+
+		[HttpPost("{roleId:guid}/permissions")]
+		public async Task<IActionResult> AssignPermissions([FromRoute] Guid roleId, [FromBody] List<Guid> permissionIds, CancellationToken cancellationToken)
+		{
+			var result = await _mediator.Send(new AssignPermissionToRoleCommand(roleId, permissionIds), cancellationToken);
 			return Ok(ApiResponse<Unit>.Success(result));
 		}
 	}

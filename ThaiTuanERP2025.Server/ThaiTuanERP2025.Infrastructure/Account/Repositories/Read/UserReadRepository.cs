@@ -123,5 +123,28 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories.Read
 
 			return ids;
 		}
+
+		public async Task<List<User>> GetManagersAsync(Guid userId, CancellationToken cancellationToken = default)
+		{
+			var managers = await DbContext.UserManagerAssignments.AsNoTracking()
+				.Where(x => x.UserId == userId && x.RevokedAt == null)
+				.OrderByDescending(x => x.IsPrimary)
+				.ThenBy(x => x.AssignedAt)
+				.Select(x => x.Manager)   // navigation tới User (manager)
+				.ToListAsync(cancellationToken);
+
+			// (tuỳ chọn) fallback
+			if (managers.Count == 0)
+			{
+				var fallback = await DbContext.Users.AsNoTracking()
+					.Where(u => u.Id == userId && u.ManagerId != null)
+					.Select(u => u.Manager!)
+					.FirstOrDefaultAsync(cancellationToken);
+
+				if (fallback is not null) managers.Add(fallback);
+			}
+
+			return managers;
+		}
 	}
 }

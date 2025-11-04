@@ -54,7 +54,7 @@ export class BudgetPeriodPanelComponent implements OnInit {
             this.submitting = true;
             try {
                   const result = await firstValueFrom(
-                        this.budgetPeriodService.autoGenerateForYear(year).pipe(
+                        this.budgetPeriodService.createForYear(year).pipe(
                               catchError(err => {
                                     this.toastService?.errorRich('Tạo kỳ ngân sách thất bại');
                                     console.error(err);

@@ -14,12 +14,7 @@ export class PermissionService extends BaseCrudService<PermissionDto, Permission
       }
 
       getByRoleId(roleId: string): Observable<PermissionDto[]> {
-            return this.http.get<ApiResponse<PermissionDto[]>>(`${this.endpoint}/by-role-id/${roleId}`)
+            return this.http.get<ApiResponse<PermissionDto[]>>(`${this.endpoint}/role/${roleId}`)
                   .pipe(handleApiResponse$<PermissionDto[]>());
-      }
-
-      assignPermissionsToRole(roleId: string, payload: string[]): Observable<void> {
-            return this.http.post<ApiResponse<void>>(`${this.endpoint}/${roleId}/assign-permissions`, payload)
-                  .pipe(handleApiResponse$<void>());
       }
 }

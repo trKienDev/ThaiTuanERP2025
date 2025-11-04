@@ -1,5 +1,5 @@
 ﻿using System.Text.RegularExpressions;
-using ThaiTuanERP2025.Domain.Account.Events.Permissions;
+using ThaiTuanERP2025.Domain.Account.Events;
 using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Common.Entities;
 
@@ -16,8 +16,6 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		{
 			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
 			Guard.AgainstNullOrWhiteSpace(code, nameof(code));
-			if (!CodePattern.IsMatch(code))
-				throw new ArgumentException("Mã quyền phải có dạng 'module.action', ví dụ 'expense.create'");
 
 			Id = Guid.NewGuid();
 			Name = name.Trim();
