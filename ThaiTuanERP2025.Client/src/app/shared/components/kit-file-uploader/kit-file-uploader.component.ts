@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FileService } from '../../services/file.service';
-import { ToastService } from '../toast/toast.service';
+import { ToastService } from '../kit-toast-alert/kit-toast-alert.service';
 import { UploadMeta, UploadItem, UploadFileResult } from './upload-item.model';
 
 type UploadEvent = | { type: 'progress'; percent: number } | { type: 'done'; data?: UploadFileResult };

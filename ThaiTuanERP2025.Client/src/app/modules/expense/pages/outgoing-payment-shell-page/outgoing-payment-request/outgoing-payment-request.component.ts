@@ -5,7 +5,7 @@ import { usePaymentDetail } from "../../../composables/use-payment-detail";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { OutgoingBankAccountOptionStore } from "../../../options/outgoing-bank-account-option.store";
 import { KitDropdownComponent, KitDropdownOption } from "../../../../../shared/components/kit-dropdown/kit-dropdown.component";
-import { ToastService } from "../../../../../shared/components/toast/toast.service";
+import { ToastService } from "../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { KitFileUploaderComponent } from "../../../../../shared/components/kit-file-uploader/kit-file-uploader.component";
 import { UploadItem } from "../../../../../shared/components/kit-file-uploader/upload-item.model";
 import { MoneyFormatDirective } from "../../../../../shared/directives/money/money-format.directive";

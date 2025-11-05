@@ -5,7 +5,7 @@ import { CashoutCodeRequestDialogComponent } from "./cashout-code-request-dialog
 import { CashoutCodeDto } from "../../../models/cashout-code.model";
 import { CashoutCodeService } from "../../../services/cashout-code.service";
 import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
-import { ToastService } from "../../../../../shared/components/toast/toast.service";
+import { ToastService } from "../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 
 @Component({
       selector: 'cashout-code-panel',

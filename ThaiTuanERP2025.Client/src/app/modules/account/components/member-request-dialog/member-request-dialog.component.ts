@@ -4,7 +4,7 @@ import { ReactiveFormsModule, FormBuilder, Validators } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { firstValueFrom } from "rxjs";
 import { KitDropdownComponent, KitDropdownOption } from "../../../../shared/components/kit-dropdown/kit-dropdown.component";
-import { ToastService } from "../../../../shared/components/toast/toast.service";
+import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { handleHttpError } from "../../../../shared/utils/handle-http-errors.util";
 import { UserFacade } from "../../facades/user.facade";
 import { UserRequest } from "../../models/user.model";

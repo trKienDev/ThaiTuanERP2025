@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component, Inject, inject, OnInit } from "@angular/core";
-import { ToastService } from "../../../../shared/components/toast/toast.service";
+import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { FormBuilder, FormsModule } from "@angular/forms";
 import { RoleDto } from "../../models/role.model";

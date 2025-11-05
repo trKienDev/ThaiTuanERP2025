@@ -12,7 +12,7 @@ import { handleHttpError } from "../../../../../../shared/utils/handle-http-erro
 import { MatSelectModule } from "@angular/material/select";
 import { CashoutGroupService } from "../../../../services/cashout-group.service";
 import { KitDropdownOption, KitDropdownComponent } from "../../../../../../shared/components/kit-dropdown/kit-dropdown.component";
-import { ToastService } from "../../../../../../shared/components/toast/toast.service";
+import { ToastService } from "../../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 
 @Component({
       selector: 'cashout-group-request-dialog',

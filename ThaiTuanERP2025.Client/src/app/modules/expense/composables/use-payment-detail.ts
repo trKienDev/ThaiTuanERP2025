@@ -2,7 +2,7 @@ import { inject, signal } from "@angular/core";
 import { firstValueFrom } from "rxjs";
 import { ExpensePaymentDetailDto } from "../models/expense-payment.model";
 import { ExpensePaymentService } from "../services/expense-payment.service";
-import { ToastService } from "../../../shared/components/toast/toast.service";
+import { ToastService } from "../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 
 export function usePaymentDetail() {
 	const expensePaymentService = inject(ExpensePaymentService);

@@ -8,7 +8,7 @@ import { Kit404PageComponent } from "../../../../shared/components/kit-404-page/
 import { KitFlipCountdownComponent } from "../../../../shared/components/kit-flip-countdown/kit-flip-countdown.component";
 import { KitLoadingSpinnerComponent } from "../../../../shared/components/kit-loading-spinner/kit-loading-spinner.component";
 import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
-import { ToastService } from "../../../../shared/components/toast/toast.service";
+import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { AvatarUrlPipe } from "../../../../shared/pipes/avatar-url.pipe";
 import { UserFacade } from "../../../account/facades/user.facade";
 import { UserDto } from "../../../account/models/user.model";

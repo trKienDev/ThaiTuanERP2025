@@ -6,7 +6,7 @@ import { OutgoingBankAccountFacade } from "../../../../facades/outgoing-bank-acc
 import { OutgoingBankAccountRequest } from "../../../../models/outgoing-bank-account.model";
 import { catchError, of } from "rxjs";
 import { handleHttpError } from "../../../../../../shared/utils/handle-http-errors.util";
-import { ToastService } from "../../../../../../shared/components/toast/toast.service";
+import { ToastService } from "../../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 
 @Component({
       selector: 'new-outgoing-bank-account-dialog',

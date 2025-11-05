@@ -4,7 +4,7 @@ import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { ToastService } from "../../../../shared/components/toast/toast.service";
+import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { RouterLink } from "@angular/router";
 import { ApprovalWorkflowTemplateService } from "../../services/approval-workflow-template.service";
 import { ApprovalWorkflowTemplateDto } from "../../models/approval-workflow-template.model";

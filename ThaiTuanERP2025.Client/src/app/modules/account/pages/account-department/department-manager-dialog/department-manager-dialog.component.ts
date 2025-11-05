@@ -2,7 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component, Inject, inject, OnInit } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule } from "@angular/forms";
 import { KitDropdownComponent, KitDropdownOption } from "../../../../../shared/components/kit-dropdown/kit-dropdown.component";
-import { ToastService } from "../../../../../shared/components/toast/toast.service";
+import { ToastService } from "../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { UserOptionStore } from "../../../options/user-dropdown-options.store";
 import { DepartmentDto, SetDepartmentManagerRequest } from "../../../models/department.model";

@@ -3,10 +3,11 @@ import { Component, inject, OnInit } from "@angular/core";
 import { provideMondayFirstDateAdapter } from "../../../../../shared/date/provide-monday-first-date-adapter";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { BudgetPeriodService } from "../../../services/budget-period.service";
-import { ToastService } from "../../../../../shared/components/toast/toast.service";
+import { ToastService } from "../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { catchError, firstValueFrom, of } from "rxjs";
 import { BudgetPeriodDto } from "../../../models/budget-period.model";
 import { KitSpinnerButtonComponent } from "../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
+import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
       selector: 'budget-period-panel',
@@ -53,21 +54,22 @@ export class BudgetPeriodPanelComponent implements OnInit {
 
             this.submitting = true;
             try {
-                  const result = await firstValueFrom(
-                        this.budgetPeriodService.createForYear(year).pipe(
-                              catchError(err => {
-                                    this.toastService?.errorRich('Tạo kỳ ngân sách thất bại');
-                                    console.error(err);
-                                    return of(null);
-                              })
-                        )
-                  );
-
-                  if (result) {
-                        this.toastService?.successRich('Tạo kỳ ngân sách thành công');
-                        await this.loadBudgetPeriodsForYear();
+                  const result = await firstValueFrom(this.budgetPeriodService.createForYear(year));
+                  this.toastService?.successRich('Tạo kỳ ngân sách thành công');
+                  await this.loadBudgetPeriodsForYear();
+            } catch (err: any) {
+                  if (err instanceof HttpErrorResponse && [401,403,500,0].includes(err.status ?? 0)) {
+                        return;
                   }
-            } finally {
+                  if (err instanceof HttpErrorResponse && err.status === 404) {
+                        this.toastService?.warningRich('Không tìm thấy dữ liệu để tạo kỳ ngân sách.');
+                  } else if (err instanceof HttpErrorResponse && err.status === 400) {
+                        this.toastService?.errorRich(err.error?.message || 'Dữ liệu không hợp lệ.');
+                  } else {
+                        this.toastService?.errorRich('Tạo kỳ ngân sách thất bại.');
+                  }
+                  console.error('[autoGenerateForYear] Lỗi:', err);
+                  } finally {
                   this.submitting = false;
             }
       }

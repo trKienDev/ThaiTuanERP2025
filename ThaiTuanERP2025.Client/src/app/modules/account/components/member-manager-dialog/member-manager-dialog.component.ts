@@ -7,7 +7,7 @@ import { UserFacade } from "../../facades/user.facade";
 import { UserOptionStore } from "../../options/user-dropdown-options.store";
 import { SetUserManagerRequest, UserDto } from "../../models/user.model";
 import { UserService } from "../../services/user.service";
-import { ToastService } from "../../../../shared/components/toast/toast.service";
+import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { handleHttpError } from "../../../../shared/utils/handle-http-errors.util";
 import { firstValueFrom } from "rxjs";
 

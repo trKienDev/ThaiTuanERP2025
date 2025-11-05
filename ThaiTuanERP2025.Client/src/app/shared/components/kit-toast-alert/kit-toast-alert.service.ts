@@ -1,6 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { MatSnackBar, MatSnackBarConfig } from "@angular/material/snack-bar";
-import { ToastComponent } from "./toast.component";
+import { ToastComponent } from "./kit-toast-alert.component";
 
 export type ToastType = 'success' | 'error' | 'warning' | 'info';
 export interface ToastRichOptions extends MatSnackBarConfig {

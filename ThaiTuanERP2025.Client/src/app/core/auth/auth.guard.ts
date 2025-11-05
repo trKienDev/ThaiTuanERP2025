@@ -18,6 +18,7 @@ export class AuthGuard implements CanActivate {
                   return this.authService.refreshToken().pipe(
                         switchMap(res => {
                               if (res) return of(true);
+                              alert('AuthGuard: [Token expired] Your session has expired. Please log in again.');
                               this.authService.logout();
                               return of(this.router.createUrlTree(['/login']));
                         })
@@ -29,6 +30,7 @@ export class AuthGuard implements CanActivate {
                   return this.authService.getCurrentUserFromServer().pipe(
                         map(user => {
                               if (user) return true;
+                              alert('authguard: Your session has expired. Please log in again.');
                               this.authService.logout();
                               return this.router.createUrlTree(['/login']);
                         })

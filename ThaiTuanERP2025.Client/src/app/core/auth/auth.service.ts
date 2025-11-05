@@ -138,6 +138,7 @@ export class AuthService {
                   }),
                   catchError((err) => {
                         console.error('[AuthService] getCurrentUserFromServer failed', err);
+                        alert('[auth service] GetCurrentUser: Your session has expired. Please log in again.');
                         this.logout();
                         return of(null);
                   })
@@ -173,6 +174,7 @@ export class AuthService {
       checkTokenValidity() {
             if (this.isTokenExpired()) {
                   console.warn('[AuthService] Token expired → auto logout');
+                  alert('[AuthService] - checkTokenValidity: Your session has expired. Please log in again.');
                   this.logout();
             }
       }  

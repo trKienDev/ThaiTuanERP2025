@@ -3,38 +3,42 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpInterce
 import { AuthService } from './auth.service';
 import { Observable, catchError, switchMap, throwError } from 'rxjs';
 
-@Injectable()
-export class AuthInterceptor implements HttpInterceptor {
-      constructor(private authService: AuthService) {}
+export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
+      const authService = inject(AuthService);
 
-      intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-            const token = this.authService.getToken();
-            let authReq = req;
+      const token = authService.getToken();
+      let authReq: HttpRequest<any> = req;
 
-            if (token) {
-                  authReq = req.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
-            }
-
-            return next.handle(authReq).pipe(
-                  catchError((error: HttpErrorResponse) => {
-                        if (error.status === 401 && !req.url.includes('/auth/login')) {
-                              // Thử refresh token
-                              return this.authService.refreshToken().pipe(
-                                    switchMap(newToken => {
-                                          if (!newToken) throw error;
-                                          const retryReq = req.clone({
-                                                setHeaders: { Authorization: `Bearer ${this.authService.getToken()}` }
-                                          });
-                                          return next.handle(retryReq);
-                                    }),
-                                    catchError(() => {
-                                          this.authService.logout();
-                                          return throwError(() => error);
-                                    })
-                              );
-                        }
-                        return throwError(() => error);
-                  })
-            );
+      // Nếu có token => thêm header Authorization
+      if (token) {
+            authReq = req.clone({
+                  setHeaders: { Authorization: `Bearer ${token}` }
+            });
       }
-}
+
+      return next(authReq).pipe(
+            catchError((error: HttpErrorResponse) => {
+                  // Nếu bị 401 và không phải login endpoint => thử refresh token
+                  if (error.status === 401 && !req.url.includes('/auth/login')) {
+                        return authService.refreshToken().pipe(
+                              switchMap(newToken => {
+                                    if (!newToken) throw error;
+
+                                    // Sau khi refresh thành công → gắn token mới vào request
+                                    const retryReq = req.clone({
+                                          setHeaders: { Authorization: `Bearer ${authService.getToken()}` }
+                                    });
+                                    return next(retryReq);
+                              }),
+                              catchError(() => {
+                                    alert('[auth.interceptor]: Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
+                                    authService.logout();
+                                    return throwError(() => error);
+                              })
+                        );
+                  }
+
+                  return throwError(() => error);
+            })
+      );
+};

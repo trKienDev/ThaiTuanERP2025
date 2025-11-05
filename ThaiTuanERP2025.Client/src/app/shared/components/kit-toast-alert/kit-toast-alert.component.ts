@@ -10,7 +10,7 @@ export interface ToastData { type: ToastType; title?: string; message: string; d
       standalone: true,
       selector: 'kit-toast',
       imports: [ CommonModule, MatIconModule ],
-      templateUrl: './toast.component.html',
+      templateUrl: './kit-toast-alert.component.html',
 })
 export class ToastComponent {
       constructor(

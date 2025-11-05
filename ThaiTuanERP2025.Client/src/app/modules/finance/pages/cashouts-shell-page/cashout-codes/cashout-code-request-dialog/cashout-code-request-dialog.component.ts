@@ -13,7 +13,7 @@ import { handleHttpError } from "../../../../../../shared/utils/handle-http-erro
 import { CashoutCodeRequest } from "../../../../models/cashout-code.model";
 import { firstValueFrom } from "rxjs";
 import { CashoutCodeService } from "../../../../services/cashout-code.service";
-import { ToastService } from "../../../../../../shared/components/toast/toast.service";
+import { ToastService } from "../../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { KitDropdownOption, KitDropdownComponent } from "../../../../../../shared/components/kit-dropdown/kit-dropdown.component";
 
 

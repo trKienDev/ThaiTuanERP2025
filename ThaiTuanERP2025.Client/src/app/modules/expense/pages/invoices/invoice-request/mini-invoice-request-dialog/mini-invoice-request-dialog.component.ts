@@ -11,7 +11,7 @@ import { InvoiceService } from "../../../../services/invoice.service";
 import { firstValueFrom } from "rxjs";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { handleHttpError } from "../../../../../../shared/utils/handle-http-errors.util";
-import { ToastService } from "../../../../../../shared/components/toast/toast.service";
+import { ToastService } from "../../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { FileService } from "../../../../../../shared/services/file.service";
 
 @Component({

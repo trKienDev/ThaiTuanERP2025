@@ -5,7 +5,7 @@ import { CashoutGroupRequestDialogComponent } from "./cashout-group-request-dial
 import { CashoutGroupDto } from "../../../models/cashout-group.model";
 import { CashoutGroupService } from "../../../services/cashout-group.service";
 import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
-import { ToastService } from "../../../../../shared/components/toast/toast.service";
+import { ToastService } from "../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 
 @Component({
       selector: 'cashout-group-panel',

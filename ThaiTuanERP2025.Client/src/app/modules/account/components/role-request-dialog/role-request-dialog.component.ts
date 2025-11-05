@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject } from "@angular/core";
 import { MatDialogRef } from "@angular/material/dialog";
-import { ToastService } from "../../../../shared/components/toast/toast.service";
+import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { RoleRequest } from "../../models/role.model";
 import { firstValueFrom } from "rxjs";

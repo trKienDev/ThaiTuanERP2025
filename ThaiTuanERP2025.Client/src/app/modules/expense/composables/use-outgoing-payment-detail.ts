@@ -1,7 +1,7 @@
 import { inject, signal } from "@angular/core";
 import { OutgoingPaymentService } from "../services/outgoing-payment.service";
 import { OutgoingPaymentDetailDto } from "../models/outgoing-payment.model";
-import { ToastService } from "../../../shared/components/toast/toast.service";
+import { ToastService } from "../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { firstValueFrom } from "rxjs";
 
 export function useOutgoingPaymentDetail() {

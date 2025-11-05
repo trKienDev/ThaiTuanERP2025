@@ -13,9 +13,9 @@ namespace ThaiTuanERP2025.Api.Security
 			var dbContext = scope.ServiceProvider.GetRequiredService<ThaiTuanERP2025DbContext>();
 
 			var permissions = await dbContext.Set<Permission>()
-			    .AsNoTracking()
-			    .Select(p => p.Code)
-			    .ToListAsync();
+				.AsNoTracking()
+				.Select(p => p.Code)
+				.ToListAsync();
 
 			foreach (var permissionCode in permissions)
 			{

@@ -5,7 +5,7 @@ import { environment } from "../../../../../environments/environment";
 import { UserDto } from "../../models/user.model";
 import { UserFacade } from "../../facades/user.facade";
 import { firstValueFrom } from "rxjs";
-import { ToastService } from "../../../../shared/components/toast/toast.service";
+import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { UserService } from "../../services/user.service";
 import { AvatarUrlPipe } from "../../../../shared/pipes/avatar-url.pipe";
 import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";

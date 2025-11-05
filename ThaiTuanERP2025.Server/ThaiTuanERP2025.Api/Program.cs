@@ -3,7 +3,6 @@ using ThaiTuanERP2025.Api.Middleware;
 using ThaiTuanERP2025.Infrastructure;
 using ThaiTuanERP2025.Api.Hubs;
 using DotNetEnv;
-using ThaiTuanERP2025.Api.Security;
 using ThaiTuanERP2025.Api;
 using ThaiTuanERP2025.Api.Logging;
 using ThaiTuanERP2025.Api.Swagger;
@@ -18,8 +17,7 @@ SerilogConfiguration.ConfigureSerilog(builder);
 builder.Services
 	.AddApplication()
 	.AddInfrastructure(builder.Configuration)
-	.AddPresentation(builder.Configuration)
-	.AddAuthorizationPolicies();
+	.AddPresentation(builder.Configuration);
 
 
 // ========= Swagger =========

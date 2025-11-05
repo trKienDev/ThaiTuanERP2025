@@ -8,7 +8,7 @@ import { firstValueFrom } from "rxjs";
 import { BudgetCodeService } from "../../services/budget-code.service";
 import { BudgetGroupService } from "../../services/budget-group.service";
 import { CashoutCodeService } from "../../services/cashout-code.service";
-import { ToastService } from "../../../../shared/components/toast/toast.service";
+import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { KitDropdownComponent, KitDropdownOption } from "../../../../shared/components/kit-dropdown/kit-dropdown.component";
 import { handleHttpError } from "../../../../shared/utils/handle-http-errors.util";
 import { BudgetCodeRequest } from "../../models/budget-code.model";

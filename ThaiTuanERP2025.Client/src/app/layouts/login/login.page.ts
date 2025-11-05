@@ -6,7 +6,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { catchError, finalize, tap } from 'rxjs';
 import { handleApiResponse$ } from '../../shared/operators/handle-api-response.operator.js';
 import { LoginResponseDto } from './login-response.model.js';
-import { ToastService } from '../../shared/components/toast/toast.service.js';
+import { ToastService } from '../../shared/components/kit-toast-alert/kit-toast-alert.service.js';
 import { KitSpinnerButtonComponent } from "../../shared/components/kit-spinner-button/kit-spinner-button.component";
 
 @Component({

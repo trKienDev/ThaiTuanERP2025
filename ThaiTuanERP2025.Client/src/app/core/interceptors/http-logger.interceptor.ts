@@ -1,5 +1,8 @@
 import { HttpInterceptorFn, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
+
+const LOG_HTTP = !environment.production;
 
 /**
  * 🎨 Hiển thị log màu theo HTTP method
@@ -18,6 +21,8 @@ function getColorByMethod(method: string): string {
  * 🧩 Interceptor hiển thị log HTTP request/response ra console
  */
 export const httpLoggerInterceptor: HttpInterceptorFn = (req, next) => {
+      if (!LOG_HTTP) return next(req); // PROD: bỏ qua
+      
       const correlationId = req.headers.get('X-Correlation-ID') ?? '(none)';
       const started = performance.now(); // <-- vẫn hoạt động trong browser hiện đại
 

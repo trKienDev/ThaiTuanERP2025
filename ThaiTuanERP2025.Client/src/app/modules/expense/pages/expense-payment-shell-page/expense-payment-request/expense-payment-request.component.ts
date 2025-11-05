@@ -11,7 +11,7 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { HttpClientModule } from "@angular/common/http";
 import { ConfirmService } from "../../../../../shared/components/confirm-dialog/confirm.service";
 import { KitDropdownComponent, KitDropdownOption } from "../../../../../shared/components/kit-dropdown/kit-dropdown.component";
-import { ToastService } from "../../../../../shared/components/toast/toast.service";
+import { ToastService } from "../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { provideMondayFirstDateAdapter } from "../../../../../shared/date/provide-monday-first-date-adapter";
 import { MoneyFormatDirective } from "../../../../../shared/directives/money/money-format.directive";
 import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";

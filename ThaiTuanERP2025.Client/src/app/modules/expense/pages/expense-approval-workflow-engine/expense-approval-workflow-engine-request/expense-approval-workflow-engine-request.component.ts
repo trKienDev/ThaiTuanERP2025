@@ -7,7 +7,7 @@ import { ActionMenuOption } from "../../../../../shared/components/kit-action-me
 import { KitActionMenuComponent } from "../../../../../shared/components/kit-action-menu/kit-action-menu.component";
 import {  ApprovalStepTemplateRequest } from "../../../models/approval-step-template.model";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
-import { ToastService } from "../../../../../shared/components/toast/toast.service";
+import { ToastService } from "../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { ApprovalWorkflowTemplateService } from "../../../services/approval-workflow-template.service";
 import { SaveApprovalWorkflowTemplateComponent } from "./save-approval-workflow-template/save-approval-workflow-template.component";
 

@@ -3,7 +3,7 @@ import { Component, Inject, inject, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { ApprovalStepTemplateRequest } from "../../../../models/approval-step-template.model";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
-import { ToastService } from "../../../../../../shared/components/toast/toast.service";
+import { ToastService } from "../../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { ApprovalWorkflowTemplateRequest } from "../../../../models/approval-workflow-template.model";
 import { firstValueFrom } from "rxjs";
 import { ApprovalWorkflowTemplateService } from "../../../../services/approval-workflow-template.service";
