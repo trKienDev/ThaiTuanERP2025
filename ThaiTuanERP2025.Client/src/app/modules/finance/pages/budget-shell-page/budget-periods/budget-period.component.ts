@@ -4,15 +4,16 @@ import { provideMondayFirstDateAdapter } from "../../../../../shared/date/provid
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { BudgetPeriodService } from "../../../services/budget-period.service";
 import { ToastService } from "../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
-import { catchError, firstValueFrom, of } from "rxjs";
+import { firstValueFrom, of } from "rxjs";
 import { BudgetPeriodDto } from "../../../models/budget-period.model";
 import { KitSpinnerButtonComponent } from "../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 import { HttpErrorResponse } from "@angular/common/http";
+import { HasPermissionDirective } from "../../../../../core/auth/auth.directive";
 
 @Component({
       selector: 'budget-period-panel',
       standalone: true,
-      imports: [CommonModule, ReactiveFormsModule, KitSpinnerButtonComponent],
+      imports: [CommonModule, ReactiveFormsModule, KitSpinnerButtonComponent, HasPermissionDirective],
       templateUrl: './budget-period.component.html',
       styleUrls: ['./budget-period.component.scss'],
       providers: [...provideMondayFirstDateAdapter() ]

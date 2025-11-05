@@ -28,7 +28,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 			return Ok(ApiResponse<IReadOnlyList<BudgetPeriodDto>>.Success(result));
 		}
 
-		[HasPermission("budget-periods.create-for-year")]
+		[HasPermission("budget-period.create-for-year")]
 		[HttpPost("year/{year:int}")]
 		public async Task<IActionResult> CreateForYear([FromRoute] int year, CancellationToken cancellationToken)
 		{

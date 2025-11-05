@@ -5,7 +5,7 @@
                   <h3 class="title">Thời gian lập ngân sách</h3>
             </div>
             <div class="">
-                  <form [formGroup]="autoGenerateForm" class="display-flex gap-5px justify-content-end" (ngSubmit)="autoGenerateForYear()">
+                  <form *appHasPermission="'budget-periods.create-for-year'" [formGroup]="autoGenerateForm" class="display-flex gap-5px justify-content-end" (ngSubmit)="autoGenerateForYear()">
                         <kit-spinner-button type="submit" cssClass="button save-button height-100pt border-transparent" [loading]="submitting" [disabled]="submitting" text="Thêm kỳ ngân sách tự động" loadingText="Đang xử lý…"></kit-spinner-button>
                         <div class="form-input" style="width: 20%;">
                               <input class="" type="text" formControlName="year" autocomplete="on" required/>

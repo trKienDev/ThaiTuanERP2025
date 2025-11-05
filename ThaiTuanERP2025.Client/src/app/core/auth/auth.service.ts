@@ -63,6 +63,7 @@ export class AuthService {
             localStorage.setItem(this.TOKEN_KEY, access);
             localStorage.setItem(this.REFRESH_KEY, refresh);
       }
+
       getToken(): string | null {
             return localStorage.getItem(this.TOKEN_KEY);
       }
@@ -105,14 +106,20 @@ export class AuthService {
       // === Check token expired ===
       isTokenExpired(): boolean {
             const token = this.getToken();
-            if (!token) return true;
+
+            if (!token) {
+                  return true;
+            }
 
             try {
-                  const payload = JSON.parse(atob(token.split('.')[1]));
+                  const base64Payload = token.split('.')[1];
+                  const payloadString = this.decodeBase64Url(base64Payload);
+                  const payload = JSON.parse(payloadString);
+
                   const exp = payload.exp;
                   const now = Math.floor(Date.now() / 1000);
                   return exp < now;
-            } catch {
+            } catch(error) {
                   return true;
             }
       }
@@ -145,16 +152,13 @@ export class AuthService {
             );
       }
 
-      
-
       getUser() {
             const user = localStorage.getItem(this.USER_KEY);
             return user ? JSON.parse(user) : null;
       }
 
       getUserRoles(): string[] {
-            var roles = JSON.parse(localStorage.getItem(this.ROLES_KEY) || '[]');
-            return roles;
+            return JSON.parse(localStorage.getItem(this.ROLES_KEY) || '[]');
       }
 
       getUserPermissions(): string[] {
@@ -186,5 +190,14 @@ export class AuthService {
             }
       }
 
-      
+      decodeBase64Url(input: string): string {
+            let output = input.replace(/-/g, '+').replace(/_/g, '/');
+
+            const pad = output.length % 4;
+            if (pad === 2) output += '==';
+            else if (pad === 3) output += '=';
+            else if (pad !== 0) throw new Error('Invalid base64url string');
+
+            return atob(output);
+      }
 }
