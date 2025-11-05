@@ -3,20 +3,21 @@ import { Component,  inject,  OnInit } from "@angular/core";
 import { BudgetGroupDto, BudgetGroupRequest } from "../../../models/budget-group.model";
 import { BudgetGroupService } from "../../../services/budget-group.service";
 import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
-import { HasPermissionDirective } from "../../../../../shared/directives/has-permission.directive";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ToastService } from "../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { firstValueFrom } from "rxjs";
 import { HttpErrorResponse } from "@angular/common/http";
 import { KitSpinnerButtonComponent } from "../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
+import { HasPermissionDirective } from "../../../../../core/auth/auth.directive";
 
 @Component({
       selector: 'budget-groups-panel',
       standalone: true,
-      imports: [CommonModule, ReactiveFormsModule, HasPermissionDirective, KitSpinnerButtonComponent ],
+      imports: [CommonModule, ReactiveFormsModule, KitSpinnerButtonComponent, HasPermissionDirective],
       templateUrl: './budget-group.component.html'
 })
 export class BudgetGroupPanelComponent implements OnInit {
+      
       formBuilder = inject(FormBuilder);
       toast = inject(ToastService);
       budgetGroups: BudgetGroupDto[] = [];
@@ -24,6 +25,7 @@ export class BudgetGroupPanelComponent implements OnInit {
            
       constructor(private readonly budgetGroupService: BudgetGroupService) {
             console.log('%c[BudgetGroupPanelComponent constructed]', 'color: green');
+            console.log('[DBG][group] HasPermissionDirective symbol (top-level):', HasPermissionDirective);
       }
 
       form = this.formBuilder.group({

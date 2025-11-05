@@ -6,13 +6,13 @@
             </div>
       </div>
       <div class="page-body">
-            <div *appHasPermission="'budget-group.create'" [formGroup]="form" class="primary-card" style="width: 35%;">
+            <div *appHasPermission="'budget-group.create'" class="primary-card" style="width: 35%;">
                   <div class="card-wrapper">
                         <div class="card-header">
                               <div class="card-title">Thêm nhóm ngân sách</div>
                         </div>
                         <div class="card-body">
-                              <form class="display-flex gap-10px" (ngSubmit)="createBudgetGroup()">
+                              <form class="display-flex gap-10px" [formGroup]="form" (ngSubmit)="createBudgetGroup()">
                                     <div class="form-input" style="width: 30%;">
                                           <input class="" type="text" formControlName="code" autocomplete="on" required/>
                                           <label for="name">Mã <span style="color: red;">  *</span></label>

@@ -1,8 +1,8 @@
 import { Routes } from "@angular/router";
 import { FinanceComponent } from "./finance.component";
 import { BudgetCodePanelComponent } from "./pages/budget-shell-page/budget-codes/budget-code.component";
-import { BudgetGroupPanelComponent } from "./pages/budget-shell-page/budget-groups/budget-group.component";
 import { BudgetPeriodPanelComponent } from "./pages/budget-shell-page/budget-periods/budget-period.component";
+import { BudgetGroupPanelComponent } from "./pages/budget-shell-page/budget-groups/budget-group.component";
 
 export const financeRoutes: Routes = [
       {
