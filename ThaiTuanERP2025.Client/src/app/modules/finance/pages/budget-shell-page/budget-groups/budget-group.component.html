@@ -6,16 +6,22 @@
             </div>
       </div>
       <div class="page-body">
-            <div class="primary-card" style="width: 35%;">
+            <div *appHasPermission="'budget-group.create'" [formGroup]="form" class="primary-card" style="width: 35%;">
                   <div class="card-wrapper">
                         <div class="card-header">
                               <div class="card-title">Thêm nhóm ngân sách</div>
                         </div>
                         <div class="card-body">
-                              <form class="display-flex gap-10px" (ngSubmit)="createBudgetGroup()" #budgetGroupForm="ngForm">
-                                    <input style="width: 45%;" type="text" name="code" [(ngModel)]="newBudgetGroup.code" placeholder="Mã nhóm ngân sách" required/>
-                                    <input class="" type="text" name="name" [(ngModel)]="newBudgetGroup.name" placeholder="Tên nhóm ngân sách" required/>
-                                    <button class="save-button" type="submit" [disabled]="!budgetGroupForm.valid">Thêm</button>
+                              <form class="display-flex gap-10px" (ngSubmit)="createBudgetGroup()">
+                                    <div class="form-input" style="width: 30%;">
+                                          <input class="" type="text" formControlName="code" autocomplete="on" required/>
+                                          <label for="name">Mã <span style="color: red;">  *</span></label>
+                                    </div>
+                                    <div class="form-input" style="width: 60%;">
+                                          <input class="" type="text" formControlName="name" autocomplete="on" required/>
+                                          <label for="name">Tên <span style="color: red;">  *</span></label>
+                                    </div>
+                                    <kit-spinner-button type="submit" cssClass="button save-button height-100pt border-transparent" [loading]="submitting" [disabled]="submitting" text="Lưu" loadingText="Đang xử lý" style="width: 10%;"></kit-spinner-button>
                               </form>
                         </div>
                   </div>

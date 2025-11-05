@@ -9,7 +9,7 @@ export const financeRoutes: Routes = [
             path: '',
             component: FinanceComponent,
             children: [
-                  { path: '', redirectTo: 'budget-group', pathMatch: 'full' },
+                  { path: '', redirectTo: 'budgets-shell', pathMatch: 'full' },
                   { path: 'tax', loadComponent: () => import('./pages/finance-tax/finance-tax.component').then((m) => m.FinanceTaxComponent )},
                   { 
                         path: 'budgets-shell', 

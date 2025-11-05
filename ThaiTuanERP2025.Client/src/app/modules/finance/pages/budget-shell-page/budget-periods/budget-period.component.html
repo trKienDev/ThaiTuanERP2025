@@ -5,7 +5,7 @@
                   <h3 class="title">Thời gian lập ngân sách</h3>
             </div>
             <div class="">
-                  <form *appHasPermission="'budget-periods.create-for-year'" [formGroup]="autoGenerateForm" class="display-flex gap-5px justify-content-end" (ngSubmit)="autoGenerateForYear()">
+                  <form *appHasPermission="'budget-period.create-for-year'" [formGroup]="autoGenerateForm" class="display-flex gap-5px justify-content-end" (ngSubmit)="autoGenerateForYear()">
                         <kit-spinner-button type="submit" cssClass="button save-button height-100pt border-transparent" [loading]="submitting" [disabled]="submitting" text="Thêm kỳ ngân sách tự động" loadingText="Đang xử lý…"></kit-spinner-button>
                         <div class="form-input" style="width: 20%;">
                               <input class="" type="text" formControlName="year" autocomplete="on" required/>
@@ -27,14 +27,14 @@
                         </tr>
                   </thead>
                   <tbody>
-                        <tr *ngFor="let period of budgetPeriods">
+                        <tr *ngFor="let period of budgetPeriods; let i = index">
                               <td>{{ period.year }}</td>
                               <td>{{ period.month }}</td>
                               <td>{{ period.startDate | date: 'dd/MM/yyyy' }}</td>
                               <td>{{ period.endDate | date: 'dd/MM/yyyy' }}</td>
                               <td>
-                                    <label class="switch-1">
-                                          <input type="checkbox" [checked]="period.isActive">
+                                    <label class="switch-1" for="period-active-{{ period.id || i }}">
+                                          <input id="period-active-{{ period.id || i }}" type="checkbox" [checked]="period.isActive">
                                           <span class="slider"></span>
                                     </label>
                               </td>

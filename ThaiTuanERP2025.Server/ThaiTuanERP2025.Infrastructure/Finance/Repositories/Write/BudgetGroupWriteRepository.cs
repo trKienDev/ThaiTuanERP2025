@@ -4,11 +4,11 @@ using ThaiTuanERP2025.Domain.Finance.Repositories;
 using ThaiTuanERP2025.Infrastructure.Common.Repositories;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
-namespace ThaiTuanERP2025.Infrastructure.Finance.Repositories
+namespace ThaiTuanERP2025.Infrastructure.Finance.Repositories.Write
 {
-	public class BudgetGroupRepository : BaseWriteRepository<BudgetGroup>, IBudgetGroupRepository 
+	public class BudgetGroupWriteRepository : BaseWriteRepository<BudgetGroup>, IBudgetGroupWriteRepository 
 	{
-		public BudgetGroupRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider)
+		public BudgetGroupWriteRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider)
 		{
 			// Constructor logic if needed
 		}

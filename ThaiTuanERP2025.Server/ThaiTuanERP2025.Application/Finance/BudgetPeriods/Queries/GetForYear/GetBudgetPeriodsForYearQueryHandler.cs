@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
-using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Finance.Budgets.DTOs;
 
 namespace ThaiTuanERP2025.Application.Finance.BudgetPeriods.Queries.GetForYear

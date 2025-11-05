@@ -1,20 +1,21 @@
 import { CommonModule } from "@angular/common";
-import { Component, ElementRef, inject, ViewChild } from "@angular/core";
+import { Component, ElementRef, inject, OnInit, ViewChild } from "@angular/core";
 import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
 import { BudgetCodeDto } from "../../../models/budget-code.model";
 import { BudgetCodeService } from "../../../services/budget-code.service";
 import { MatDialog } from "@angular/material/dialog";
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NewBudgetCodeDialogComponent } from "../../../components/new-budget-code-dialog/new-budget-code-dialog.component";
+import { HasPermissionDirective } from "../../../../../core/auth/auth.directive";
 
 @Component({
       selector: 'budget-code-panel',
       standalone: true,
-      imports: [ CommonModule, MatTooltipModule ],
+      imports: [CommonModule, MatTooltipModule, HasPermissionDirective],
       templateUrl: './budget-code.component.html'
 })
-export class BudgetCodePanelComponent {
-      private dialog = inject(MatDialog);
+export class BudgetCodePanelComponent implements OnInit {
+      private readonly dialog = inject(MatDialog);
 
       showModal = false;
       newBudgetCode = { code: '', name: '' };
@@ -25,7 +26,7 @@ export class BudgetCodePanelComponent {
 
       @ViewChild('masterCheckbox', { static: false}) masterCheckbox!: ElementRef<HTMLInputElement>;
 
-      constructor( private budgetCodeService: BudgetCodeService ) {}
+      constructor( private readonly budgetCodeService: BudgetCodeService ) {}
 
       ngOnInit(): void {
             this.loadBudgetCodes();

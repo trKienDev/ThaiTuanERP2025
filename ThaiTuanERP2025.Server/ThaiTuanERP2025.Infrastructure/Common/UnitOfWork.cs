@@ -26,7 +26,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			IUserGroupRepository userGroups,
 
 			// Finance
-			IBudgetGroupRepository budgetGroups,
+			IBudgetGroupWriteRepository budgetGroups,
 			IBudgetPeriodWriteRepository budgetPeriods,
 			IBudgetPlanRepository budgetPlans,
 			IBudgetCodeRepository budgetCodes,
@@ -126,7 +126,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		public IUserGroupRepository UserGroups { get; }
 
 		// Finance
-		public IBudgetGroupRepository BudgetGroups { get; }
+		public IBudgetGroupWriteRepository BudgetGroups { get; }
 		public IBudgetPeriodWriteRepository BudgetPeriods { get; }
 		public IBudgetPlanRepository BudgetPlans { get; }
 		public IBudgetCodeRepository BudgetCodes { get; }

@@ -26,15 +26,19 @@ export class HasPermissionDirective implements OnInit {
       @Input() mode: 'hide' | 'disable' = 'hide';
 
       constructor(
-            private templateRef: TemplateRef<any>,
-            private viewContainerRef: ViewContainerRef,
-            private authService: AuthService,
-            private renderer2: Renderer2,
-            private elementRef: ElementRef
-      ) {}
+            private readonly templateRef: TemplateRef<any>,
+            private readonly viewContainerRef: ViewContainerRef,
+            private readonly authService: AuthService,
+            private readonly renderer2: Renderer2,
+            private readonly elementRef: ElementRef
+      ) {
+            console.log('%c[HasPermissionDirective constructed]', 'color: blue');
+      }
 
       ngOnInit(): void {
+            console.log('run HasPermissionDirective');
             const can = this.evaluatePermission();
+            console.log('can: ', can);
 
             if (this.mode === 'hide') {
                   // === Ẩn hoặc hiển thị element ===
@@ -59,6 +63,10 @@ export class HasPermissionDirective implements OnInit {
 
 
       private evaluatePermission(): boolean {
+            if (this.authService.hasRole('SuperAdmin')) {
+                  return true;
+            }
+
             if (this.singlePermission)
                   return this.authService.hasPermission(this.singlePermission);
 

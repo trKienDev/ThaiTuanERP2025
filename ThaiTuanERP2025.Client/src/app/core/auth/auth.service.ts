@@ -19,10 +19,10 @@ export class AuthService {
       private isRefreshing = false;
 
       // ===== Reactive State =====
-      private currentUserSubject = new BehaviorSubject<Partial<UserDto> | null>(this.loadUserFromStorage());
+      private readonly currentUserSubject = new BehaviorSubject<Partial<UserDto> | null>(this.loadUserFromStorage());
       currentUser$ = this.currentUserSubject.asObservable();
 
-      constructor(private http: HttpClient, private router: Router) {}
+      constructor(private readonly http: HttpClient, private readonly router: Router) {}
 
       // === Login ===
       login(employeeCode: string, password: string) {
@@ -120,6 +120,7 @@ export class AuthService {
                   const now = Math.floor(Date.now() / 1000);
                   return exp < now;
             } catch(error) {
+                  console.error(error);
                   return true;
             }
       }
@@ -191,7 +192,7 @@ export class AuthService {
       }
 
       decodeBase64Url(input: string): string {
-            let output = input.replace(/-/g, '+').replace(/_/g, '/');
+            let output = input.replaceAll('-', '+').replaceAll('_', '/');
 
             const pad = output.length % 4;
             if (pad === 2) output += '==';

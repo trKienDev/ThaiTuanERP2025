@@ -21,7 +21,7 @@ export const appConfig: ApplicationConfig = {
             provideHttpClient(
                   withInterceptors([
                         CorrelationIdInterceptor,
-                        httpLoggerInterceptor,
+                        // httpLoggerInterceptor,
                         AuthInterceptor,
                         HttpErrorInterceptor,
                   ])

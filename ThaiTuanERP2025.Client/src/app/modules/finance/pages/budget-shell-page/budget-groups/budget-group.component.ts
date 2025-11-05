@@ -1,26 +1,35 @@
 import { CommonModule } from "@angular/common";
-import { Component, ElementRef, ViewChild } from "@angular/core";
-import { BudgetGroupModel } from "../../../models/budget-group.model";
+import { Component,  inject,  OnInit } from "@angular/core";
+import { BudgetGroupDto, BudgetGroupRequest } from "../../../models/budget-group.model";
 import { BudgetGroupService } from "../../../services/budget-group.service";
 import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
-import { FormsModule } from "@angular/forms";
+import { HasPermissionDirective } from "../../../../../shared/directives/has-permission.directive";
+import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
+import { ToastService } from "../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
+import { firstValueFrom } from "rxjs";
+import { HttpErrorResponse } from "@angular/common/http";
+import { KitSpinnerButtonComponent } from "../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 
 @Component({
       selector: 'budget-groups-panel',
       standalone: true,
-      imports: [ CommonModule, FormsModule ],
+      imports: [CommonModule, ReactiveFormsModule, HasPermissionDirective, KitSpinnerButtonComponent ],
       templateUrl: './budget-group.component.html'
 })
-export class BudgetGroupPanelComponent {
-      newBudgetGroup = { code: '', name: '' };
-      successMessage: string | null = null;
-      errorMessages: string[] = [];
-      budgetGroups: (BudgetGroupModel & { selected: boolean})[] = [];
+export class BudgetGroupPanelComponent implements OnInit {
+      formBuilder = inject(FormBuilder);
+      toast = inject(ToastService);
+      budgetGroups: BudgetGroupDto[] = [];
       public submitting = false;
-      
-      @ViewChild('masterCheckbox', { static: false }) masterCheckbox!: ElementRef<HTMLInputElement>;
-     
-      constructor(private budgetGroupService: BudgetGroupService) {}
+           
+      constructor(private readonly budgetGroupService: BudgetGroupService) {
+            console.log('%c[BudgetGroupPanelComponent constructed]', 'color: green');
+      }
+
+      form = this.formBuilder.group({
+            name: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
+            code: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}), 
+      });
 
       ngOnInit(): void {
             this.loadBudgetGroups();
@@ -30,44 +39,37 @@ export class BudgetGroupPanelComponent {
             this.budgetGroupService.getAll().subscribe({
                   next: (data) => {
                         this.budgetGroups = data.map(bg => ({ ...bg, selected: false }));
-                        this.updateMasterCheckboxState?.();
                   },
                   error: err => {
-                        this.errorMessages = handleHttpError(err);
+                        const error = handleHttpError(err);
+                        console.error('Error loading budget groups: ', error);
                   }
             });
       }
 
-      createBudgetGroup(): void {
-            this.newBudgetGroup.code = this.newBudgetGroup.code.toUpperCase();
-            this.budgetGroupService.create(this.newBudgetGroup).subscribe({
-                  next: (data) => {
-                        this.newBudgetGroup = { code: '', name: '' };
-                        this.successMessage = 'Đã thêm nhóm ngân sách thành công';
-                        this.loadBudgetGroups();
-                        setTimeout(() => this.successMessage = null, 3000);
-                  },
-                  error: err => {
-                        this.errorMessages = handleHttpError(err);
-                  }
-            });
-      }
-
-      toggleAll(event: Event): void {
-            const checked = (event.target as HTMLInputElement).checked;
-            this.budgetGroups.forEach(bg => bg.selected = checked);
-            this.updateMasterCheckboxState();
-      }
-      updateMasterCheckboxState(): void {
-            const allSelected = this.budgetGroups.every(bg => bg.selected);
-            const noneSelected = this.budgetGroups.every(bg => !bg.selected);
-            const checkbox = this.masterCheckbox?.nativeElement;
-            if(checkbox) {
-                  checkbox.indeterminate = !allSelected && !noneSelected;
-                  checkbox.checked = allSelected;
+      async createBudgetGroup() {
+            if(this.form.invalid) {
+                  this.toast.warningRich('Vui lòng điền đẩy đủ thông tin');
+                  return;     
             }
-      }
-      isdAllSelected(): boolean {
-            return this.budgetGroups.length > 0 && this.budgetGroups.every(d => d.selected);
+
+            this.submitting = true;
+            try {
+                  const payload = this.form.getRawValue() as BudgetGroupRequest;
+                  await firstValueFrom(this.budgetGroupService.create(payload));
+                  this.toast.successRich('Tạo nhóm ngân sách thành công');
+            } catch(err) {   
+                  if (err instanceof HttpErrorResponse && [401,403,500,0].includes(err.status ?? 0)) {
+                        return;
+                  }
+                  if (err instanceof HttpErrorResponse && err.status === 404) {
+                        this.toast?.warningRich('Không tìm thấy dữ liệu để tạo nhóm ngân sách.');
+                  } else if (err instanceof HttpErrorResponse && err.status === 400) {
+                        this.toast?.errorRich(err.error?.message || 'Dữ liệu không hợp lệ.');
+                  } else {
+                        this.toast?.errorRich('Tạo nhóm ngân sách thất bại.');
+                  }
+                  console.error('[createBudgetGroup]:', err);
+            }
       }
 }

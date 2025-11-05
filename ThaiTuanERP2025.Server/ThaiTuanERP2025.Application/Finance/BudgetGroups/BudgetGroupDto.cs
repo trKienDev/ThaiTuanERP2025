@@ -1,4 +1,4 @@
-﻿namespace ThaiTuanERP2025.Application.Finance.Budgets.DTOs
+﻿namespace ThaiTuanERP2025.Application.Finance.BudgetGroups
 {
 	public sealed record BudgetGroupDto
 	{
