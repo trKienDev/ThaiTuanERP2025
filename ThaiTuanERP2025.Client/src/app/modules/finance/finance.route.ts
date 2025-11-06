@@ -3,6 +3,7 @@ import { FinanceComponent } from "./finance.component";
 import { BudgetCodePanelComponent } from "./pages/budget-shell-page/budget-codes/budget-code.component";
 import { BudgetPeriodPanelComponent } from "./pages/budget-shell-page/budget-periods/budget-period.component";
 import { BudgetGroupPanelComponent } from "./pages/budget-shell-page/budget-groups/budget-group.component";
+import { BudgetPlanPanelComponent } from "./pages/budget-shell-page/budget-plans/budget-plan.component";
 
 export const financeRoutes: Routes = [
       {
@@ -19,6 +20,7 @@ export const financeRoutes: Routes = [
                               { path: 'budget-codes', component: BudgetCodePanelComponent },
                               { path: 'budget-groups', component: BudgetGroupPanelComponent },
                               { path: 'budget-periods', component: BudgetPeriodPanelComponent },
+                              { path: 'budget-plans', component: BudgetPlanPanelComponent },
                         ]
                   },
                   { path: 'ledger-account', loadComponent: () => import('./pages/ledger-account-shell-page/ledger-account-shell-page.component').then((m) => m.LedgerAccountShellPageComponent)},                  

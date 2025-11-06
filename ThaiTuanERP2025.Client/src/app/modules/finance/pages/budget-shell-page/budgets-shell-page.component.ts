@@ -1,11 +1,10 @@
 import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
 import { BudgetCodePanelComponent } from "./budget-codes/budget-code.component";
-// import { BudgetGroupPanelComponent } from "./budget-groups/budget-group.component";
 import { KitShellTab, KitShellTabsComponent } from "../../../../shared/components/kit-shell-tabs/kit-shell-tabs.component";
 import { BudgetPeriodPanelComponent } from "./budget-periods/budget-period.component";
-import { ActivatedRoute } from "@angular/router";
 import { BudgetGroupPanelComponent } from "./budget-groups/budget-group.component";
+import { BudgetPlanPanelComponent } from "./budget-plans/budget-plan.component";
 
 @Component({
       selector: 'budgets-shell-page',
@@ -18,5 +17,6 @@ export class BudgetShellPageComponent {
             { id: 'budget-codes', label: 'Mã ngân sách', component: BudgetCodePanelComponent },
             { id: 'budget-groups', label: 'Nhóm ngân sách', component: BudgetGroupPanelComponent },
             { id: 'budget-periods', label: 'Kỳ ngân sách', component: BudgetPeriodPanelComponent },
+            { id: 'budget-plans', label: 'Kế hoạch ngân sách', component: BudgetPlanPanelComponent },
       ]
 }

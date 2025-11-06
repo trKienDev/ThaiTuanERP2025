@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ThaiTuanERP2025.Domain.Account.Entities;
-using ThaiTuanERP2025.Infrastructure.Persistence.Configurations;
 
 namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 {
@@ -23,8 +22,6 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 
 			// RolePermissions
 			builder.Metadata.FindNavigation(nameof(Role.RolePermissions))!.SetPropertyAccessMode(PropertyAccessMode.Field);
-
-			//ConfigureAuditUsers(builder);
 		}
 	}
 }

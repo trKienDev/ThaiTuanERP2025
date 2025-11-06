@@ -1,6 +1,7 @@
 ﻿using ThaiTuanERP2025.Domain.Account.Events;
 using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Common.Entities;
+using ThaiTuanERP2025.Domain.Exceptions;
 
 namespace ThaiTuanERP2025.Domain.Account.Entities
 {
@@ -8,6 +9,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 	{
 		private readonly List<User> _users = new();
 		private readonly List<Department> _children = new();
+		private readonly List<DepartmentManager> _managers = new();
 
 		#region Properties
 		public string Name { get; private set; } = string.Empty;
@@ -15,8 +17,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public bool IsActive { get; private set; }
 		public int Level { get; private set; }
 
-		public Guid? ManagerUserId { get; private set; }
-		public User? ManagerUser { get; private set; }
+		public IReadOnlyCollection<DepartmentManager> Managers => _managers.AsReadOnly();
 
 		public Guid? ParentId { get; private set; }
 		public Department? Parent { get; private set; }
@@ -25,7 +26,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 
 		#region Constructor
 		private Department() { }
-		public Department(string name, string code, Guid? managerUserId = null)
+		public Department(string name, string code)
 		{
 			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
 			Guard.AgainstNullOrWhiteSpace(code, nameof(code));
@@ -33,7 +34,6 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			Id = Guid.NewGuid();
 			Name = name.Trim();
 			Code = code.ToUpperInvariant();
-			ManagerUserId = managerUserId;
 			IsActive = true;
 
 			AddDomainEvent(new DepartmentCreatedEvent(this));
@@ -51,12 +51,40 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			AddDomainEvent(new DepartmentRenamedEvent(this));
 		}
 
-		public void AssignManager(Guid? userId)
+		public void AssignManager(User user)
 		{
-			if (userId.HasValue)
-				Guard.AgainstDefault(userId.Value, nameof(userId));
-			ManagerUserId = userId;
-			AddDomainEvent(new DepartmentManagerChangedEvent(this, userId));
+			if (user is null) throw new ArgumentNullException(nameof(user));
+			if (user.DepartmentId != Id)
+				throw new DomainException("User phải thuộc chính Department này mới được gán làm manager.");
+
+			if (_managers.Any(m => m.UserId == user.Id)) return;
+			_managers.Add(new DepartmentManager(Id, user.Id, isPrimary: false));
+			AddDomainEvent(new DepartmentManagerAddedEvent(this, user.Id));
+		}
+
+		public void RemoveManager(Guid userId)
+		{
+			var link = _managers.FirstOrDefault(m => m.UserId == userId);
+			if (link == null) return;
+			_managers.Remove(link);
+			AddDomainEvent(new DepartmentManagerRemovedEvent(this, userId));
+		}
+
+		public void SetPrimaryManager(Guid userId)
+		{
+			if (_managers.All(m => m.UserId != userId))
+				throw new DomainException("User chưa là manager của phòng ban.");
+
+			// Nếu đã là primary rồi thì không làm gì (tránh bắn event thừa)
+			var currentPrimary = _managers.FirstOrDefault(m => m.IsPrimary)?.UserId;
+			if (currentPrimary.HasValue && currentPrimary.Value == userId) return;
+
+			var oldPrimaryUserId = currentPrimary;
+
+			foreach (var m in _managers) m.UnsetPrimary();
+			_managers.First(m => m.UserId == userId).SetPrimary();
+
+			AddDomainEvent(new DepartmentPrimaryManagerChangedEvent(this, oldPrimaryUserId, userId));
 		}
 
 		public void Activate()
@@ -108,7 +136,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			if (this.Parent != null)
 			{
 				// Bỏ this khỏi danh sách Children của parent cũ
-				var removed = this.Parent._children.RemoveAll(c => c.Id == this.Id);
+				this.Parent._children.RemoveAll(c => c.Id == this.Id);
 				// (RemoveAll là extension của List<T> .NET 8; nếu .NET thấp hơn, dùng Remove bằng cách tìm đối tượng)
 			}
 

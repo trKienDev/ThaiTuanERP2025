@@ -50,7 +50,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public string PasswordHash { get; private set; } = string.Empty;
 
 		public Guid? AvatarFileId { get; private set; }
-		public StoredFile? AvatarFile { get; private set; }
+		public StoredFile? AvatarFile { get; init; }
 		public object? AvatarFileObjectKey;
 
 		public string Position { get; private set; } = string.Empty;
@@ -59,10 +59,10 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public Phone? Phone { get; private set; }
 
 		public Guid? DepartmentId { get; private set; }
-		public Department? Department { get; private set; }
+		public Department? Department { get; init; }
 
 		public Guid? ManagerId { get; private set; }
-		public User? Manager { get; private set; }
+		public User? Manager { get; init; }
 
 		public bool IsSuperAdmin { get; private set; }
 		public bool IsActive { get; private set; }

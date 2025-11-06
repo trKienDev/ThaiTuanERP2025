@@ -1,0 +1,27 @@
+<div class="dialog">
+      <div class="dialog-container">
+            <form action="">
+                  <div class="dialog-heading">
+                        <div class="dialog-title">
+                              <h1>Thêm kế hoạch ngân sách mới</h1>
+                        </div>
+                        <div class="dialog-close">
+                              <button type="button" class="close-button" (click)="close()">
+                                    <span class="text material-icons-outlined">close</span>
+                              </button>
+                        </div>            
+                  </div>
+                  <div class="dialog-body">
+                        <div class="dialog-row">
+                              <div class="form-input">
+                                    <input class="" type="text" formControlName="amount" inputmode="decimal" appMoney [appMoneyDecimals]="0" required>
+                                    <label for="amount">Số tiền <span style="color: red;">  *</span></label>
+                              </div>
+                        </div>
+                  </div>
+                  <div class="dialog-footer">
+
+                  </div>
+            </form>
+      </div>
+</div>

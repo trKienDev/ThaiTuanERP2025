@@ -24,14 +24,12 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 				.HasForeignKey(d => d.ParentId)
 				.OnDelete(DeleteBehavior.Restrict);
 
-			// Manager (User)
-			builder.HasOne(d => d.ManagerUser)
-				.WithMany()
-				.HasForeignKey(d => d.ManagerUserId)
-				.OnDelete(DeleteBehavior.SetNull);
-
 			// Indexes
 			builder.HasIndex(d => d.Code).IsUnique();
+
+			builder.Navigation(d => d.Users).UsePropertyAccessMode(PropertyAccessMode.Field);
+			builder.Navigation(d => d.Children).UsePropertyAccessMode(PropertyAccessMode.Field);
+			builder.Navigation(d => d.Managers).UsePropertyAccessMode(PropertyAccessMode.Field);
 
 			ConfigureAuditUsers(builder);
 		}

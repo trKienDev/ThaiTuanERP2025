@@ -22,20 +22,20 @@ import { UserDto } from '../../modules/account/models/user.model';
       styleUrl: './topbar.component.scss'
 })
 export class TopbarComponent implements OnInit {
-      private userFacade = inject(UserFacade);
-      private authService = inject(AuthService); // Giả sử UserFacade có phương thức logout()
+      private readonly userFacade = inject(UserFacade);
+      private readonly authService = inject(AuthService); // Giả sử UserFacade có phương thức logout()
       showUserMenu = false;
-      private elRef = inject(ElementRef);
-      private router = inject(Router);
+      private readonly elRef = inject(ElementRef);
+      private readonly router = inject(Router);
       
       // Notification
-      private notificationFacade = inject(NotificationFacade);
-      private notificationPanel = inject(NotificationPanelService);
-      private notificationState = inject(NotificationStateService);
+      private readonly notificationFacade = inject(NotificationFacade);
+      private readonly notificationPanel = inject(NotificationPanelService);
+      private readonly notificationState = inject(NotificationStateService);
 
       // Task Reminder
-      private reminderFacade = inject(TaskReminderFacade);
-      private reminderDrawer = inject(TaskReminderDrawerService);
+      private readonly reminderFacade = inject(TaskReminderFacade);
+      private  readonly reminderDrawer = inject(TaskReminderDrawerService);
 
       baseUrl: string = environment.baseUrl;
       currentUser$ = this.userFacade.currentUser$;

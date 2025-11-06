@@ -66,16 +66,6 @@ namespace ThaiTuanERP2025.Domain.Account.Events
 		public Department Department { get; }
 	}
 
-	public sealed class DepartmentManagerChangedEvent : DepartmentEvents
-	{
-		public DepartmentManagerChangedEvent(Department department, Guid? managerUserId) : base(department.Id)
-		{
-			Department = department;
-			ManagerUserId = managerUserId;
-		}
-		public Department Department { get; }
-		public Guid? ManagerUserId { get; }
-	}
 
 	public sealed class DepartmentRenamedEvent : DepartmentEvents
 	{
@@ -99,4 +89,51 @@ namespace ThaiTuanERP2025.Domain.Account.Events
 		}
 	}
 
+	public sealed class DepartmentManagerAddedEvent : DepartmentEvents
+	{
+		public DepartmentManagerAddedEvent(Department department, Guid userId, bool isPrimary = false)
+			: base(department.Id)
+		{
+			Department = department;
+			UserId = userId;
+			IsPrimary = isPrimary;
+		}
+
+		public Department Department { get; }
+		public Guid UserId { get; }
+		// Trạng thái tại thời điểm thêm (thường là false, trừ khi bạn cho phép thêm với vai trò primary ngay lập tức).
+		public bool IsPrimary { get; }
+	}
+
+	public sealed class DepartmentManagerRemovedEvent : DepartmentEvents
+	{
+		public DepartmentManagerRemovedEvent(Department department, Guid userId)
+			: base(department.Id)
+		{
+			Department = department;
+			UserId = userId;
+		}
+
+		public Department Department { get; }
+		public Guid UserId { get; }
+	}
+
+	public sealed class DepartmentPrimaryManagerChangedEvent : DepartmentEvents
+	{
+		public DepartmentPrimaryManagerChangedEvent(
+			Department department,
+			Guid? oldPrimaryUserId,
+			Guid newPrimaryUserId)
+			: base(department.Id)
+		{
+			Department = department;
+			OldPrimaryUserId = oldPrimaryUserId;
+			NewPrimaryUserId = newPrimaryUserId;
+		}
+
+		public Department Department { get; }
+		// Có thể null nếu trước đó chưa có primary.
+		public Guid? OldPrimaryUserId { get; }
+		public Guid NewPrimaryUserId { get; }
+	}
 }

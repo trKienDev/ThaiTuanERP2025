@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Transactions;
 using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Common.Entities;
 using ThaiTuanERP2025.Domain.Finance.Enums;
@@ -38,11 +37,11 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public IReadOnlyCollection<BudgetTransaction> Transactions => _transactions.AsReadOnly();
 
 		public Guid? ReviewedByUserId { get; private set; } 
-		public User? ReviewedByUser { get; private set; }
+		public User? ReviewedByUser { get; init; }
 		public DateTime? ReviewedAt { get; private set; }
 
 		public Guid? ApprovedByUserId { get; private set; } 
-		public User? ApprovedByUser { get; private set; }
+		public User? ApprovedByUser { get; init; }
 		public DateTime? ApprovedAt { get; private set; }
 
 		public BudgetCode BudgetCode { get; private set; } = null!;
@@ -140,7 +139,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			AddDomainEvent(new BudgetPlanTransactionRecordedEvent(Id, transaction.Id, amount, BudgetTransactionType.ExpensePayment));
 		}
 
-		/// Hoàn lại (cộng lại) ngân sách khi có điều chỉnh hoặc hoàn tiền.
+		// Hoàn lại (cộng lại) ngân sách khi có điều chỉnh hoặc hoàn tiền.
 		public void RefundPayment(decimal amount, Guid refundId)
 		{
 			if (amount <= 0)
@@ -156,7 +155,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			));
 		}
 
-		/// Kiểm tra còn ngân sách khả dụng hay không.
+		// Kiểm tra còn ngân sách khả dụng hay không.
 		public bool HasRemainingBudget() => Amount > 0;
 		#endregion
 
