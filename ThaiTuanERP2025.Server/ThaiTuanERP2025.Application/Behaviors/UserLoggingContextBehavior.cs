@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using ThaiTuanERP2025.Application.Authentication.Commands.Login;
+using ThaiTuanERP2025.Application.Authentication.Commands;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Common.Services;
 using ThaiTuanERP2025.Application.Exceptions;

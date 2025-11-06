@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using ThaiTuanERP2025.Application.Finance.BudgetCodes;
+using ThaiTuanERP2025.Application.Finance.CashoutCodes;
 using ThaiTuanERP2025.Application.Finance.Dtos;
 using ThaiTuanERP2025.Application.Finance.DTOs;
 using ThaiTuanERP2025.Domain.Finance.Entities;
@@ -8,10 +10,6 @@ namespace ThaiTuanERP2025.Application.Finance.Mappings
 	public class FinanceMappingProfile : Profile
 	{
 		public FinanceMappingProfile() { 
-
-			CreateMap<BudgetCode, BudgetCodeDto>()
-				.ForMember(d => d.BudgetGroupName, o => o.MapFrom(s => s.BudgetGroup.Name)); ;
-
 			CreateMap<BudgetPlan, BudgetPlanDto>()
 				.ForMember(dest => dest.DepartmentName, opt => opt.MapFrom(src => src.Department.Name))
 				.ForMember(dest => dest.BudgetCodeName, opt => opt.MapFrom(src => src.BudgetCode.Name))

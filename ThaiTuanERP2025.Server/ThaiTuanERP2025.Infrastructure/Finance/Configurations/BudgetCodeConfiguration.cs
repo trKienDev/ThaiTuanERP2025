@@ -15,6 +15,7 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 			builder.Property(x => x.Code).HasMaxLength(50).IsRequired();
 			builder.Property(x => x.Name).HasMaxLength(200).IsRequired();
 			builder.Property(x => x.IsActive).IsRequired();
+			builder.Property(x => x.CashoutCodeId).IsRequired(false);
 
 			// ===== Relationships =====
 
@@ -28,7 +29,7 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 			builder.HasOne(x => x.CashoutCode)
 				.WithMany()
 				.HasForeignKey(x => x.CashoutCodeId)
-				.OnDelete(DeleteBehavior.Restrict);
+				.OnDelete(DeleteBehavior.SetNull);
 
 			// BudgetPlans (1 - n)
 			builder.HasMany(x => x.BudgetPlans)

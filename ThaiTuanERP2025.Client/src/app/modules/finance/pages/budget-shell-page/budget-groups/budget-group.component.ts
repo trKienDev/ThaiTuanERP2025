@@ -55,7 +55,6 @@ export class BudgetGroupPanelComponent implements OnInit, OnDestroy {
                   return;     
             }
             
-
             try {
                   this.submitting = true;
                   const payload = this.form.getRawValue() as BudgetGroupRequest;

@@ -3,12 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Account.Users;
-using ThaiTuanERP2025.Application.Account.Users.Commands.Create;
-using ThaiTuanERP2025.Application.Account.Users.Commands.SetAvatar;
-using ThaiTuanERP2025.Application.Account.Users.Commands.SetManager;
-using ThaiTuanERP2025.Application.Account.Users.Queries.All;
-using ThaiTuanERP2025.Application.Account.Users.Queries.ManagerIds;
-using ThaiTuanERP2025.Application.Account.Users.Queries.Profile;
+using ThaiTuanERP2025.Application.Account.Users.Commands;
+using ThaiTuanERP2025.Application.Account.Users.Queries;
 using ThaiTuanERP2025.Application.Account.Users.Requests;
 
 namespace ThaiTuanERP2025.Api.Controllers.Account
@@ -23,7 +19,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			_mediator = mediator;
 		}
 
-		/// Lấy thông tin user hiện tại (yêu cầu đăng nhập)
+		// Lấy thông tin user hiện tại (yêu cầu đăng nhập)
 		[HttpGet("me")]
 		[Produces("application/json")]
 		[ProducesResponseType(typeof(ApiResponse<UserDto>), StatusCodes.Status200OK)]

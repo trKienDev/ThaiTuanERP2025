@@ -1,0 +1,52 @@
+<div class="dialog">
+      <div class="dialog-container">
+            <form [formGroup]="form" (ngSubmit)="save()">
+                  <div class="dialog-heading">
+                        <div class="dialog-title">
+                              <h1>Thêm ngân sách mới</h1>
+                        </div>
+                        <div class="dialog-close">
+                              <button type="button" class="close-button" (click)="close()">
+                                    <span class="text material-icons-outlined">close</span>
+                              </button>
+                        </div>            
+                  </div>
+                  <div class="dialog-body">
+                        <div class="dialog-row">
+                              <div class="form-input">
+                                    <input class="" type="text" formControlName="name" autocomplete="on" required
+                                    [class.is-invalid]="showErrors && form.get('name')?.invalid"
+                                    [attr.aria-invalid]="showErrors && form.get('name')?.invalid ? 'true' : null"/>
+                                    <label for="name">Tên ngân sách <span style="color: red;">  *</span></label>
+                                    <div class="form-input-error" *ngIf="showErrors && form.get('name')?.invalid">
+                                          <small>Vui lòng nhập tên ngân sách</small>
+                                    </div>
+                              </div>
+                        </div>
+                        <div class="dialog-row">
+                              <div class="form-input">
+                                    <input class="" type="text" formControlName="code" autocomplete="on" required
+                                    [class.is-invalid]="showErrors && form.get('code')?.invalid"
+                                    [attr.aria-invalid]="showErrors && form.get('code')?.invalid ? 'true' : null"/>
+                                    <label for="name">Mã ngân sách <span style="color: red;">  *</span></label>
+                                    <div class="form-input-error" *ngIf="showErrors && form.get('code')?.invalid">
+                                          <small>Vui lòng nhập mã ngân sách</small>
+                                    </div>
+                              </div>
+                        </div>
+                        <div class="dialog-row">
+                              <kit-dropdown [options]="budgetGroupOptions" (selectionChange)="onBudgetGroupSelected($event)" [placeholder]="'Chọn nhóm ngân sách'" [width]="'100%'" [required]="true"></kit-dropdown>
+                        </div>
+                        <div class="dialog-row">
+                              <kit-dropdown [options]="cashoutCodeOptions" (selectionChange)="onCashoutCodeSelected($event)" [placeholder]="'Chọn dòng tiền ra'" [width]="'100%'"></kit-dropdown>
+                        </div>
+                  </div>
+                  <div class="dialog-footer display-flex gap-10px">
+                        <button type="button" class="width-50pt button cancel-button" (click)="close()">Hủy</button>
+                        <div class="width-50pt">
+                             <kit-spinner-button type="submit" cssClass="save-button" [loading]="submitting" [disabled]="submitting" text="Lưu" [loadingText]="''" style="width: 10%;"></kit-spinner-button>
+                        </div>
+                  </div>
+            </form>
+      </div>
+</div>

@@ -2,12 +2,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
-using ThaiTuanERP2025.Application.Files.Commands.HardDelete;
-using ThaiTuanERP2025.Application.Files.Commands.SoftDeleteFile;
-using ThaiTuanERP2025.Application.Files.Commands.UploadFile;
-using ThaiTuanERP2025.Application.Files.Commands.UploadMultipleFiles;
+using ThaiTuanERP2025.Application.Files.Commands;
 using ThaiTuanERP2025.Application.Files.Common;
-using ThaiTuanERP2025.Application.Files.Queries.GetFileDownloadUrl;
+using ThaiTuanERP2025.Application.Files.Queries;
 
 namespace ThaiTuanERP2025.Api.Controllers.Files
 {
@@ -23,9 +20,9 @@ namespace ThaiTuanERP2025.Api.Controllers.Files
 		}
 
 		[HttpPost("upload-single")]
-		public async Task<ActionResult<ApiResponse<UploadFileResult>>> UploadSingle(IFormFile file, [FromForm] string module, [FromForm] string entity, [FromForm] string? entityId = null,[FromForm] bool isPublic = false, CancellationToken cancellationToken = default) {
+		public async Task<ActionResult<ApiResponse<UploadSingleFileResult>>> UploadSingle(IFormFile file, [FromForm] string module, [FromForm] string entity, [FromForm] string? entityId = null,[FromForm] bool isPublic = false, CancellationToken cancellationToken = default) {
 			if(file is null || file.Length == 0) 
-				return BadRequest(ApiResponse<UploadFileResult>.Fail("Không tìm thấy file tải lên"));
+				return BadRequest(ApiResponse<UploadSingleFileResult>.Fail("Không tìm thấy file tải lên"));
 
 			var raw = new RawFile(
 				file.FileName,
@@ -35,15 +32,15 @@ namespace ThaiTuanERP2025.Api.Controllers.Files
 			);
 
 			// dùng UploadFileHandler xử lý, build objectKey & lưu DB (StoredFile). :contentReference[oaicite:5]{index=5}
-			var response = await _mediator.Send(new UploadFileCommand(raw, module, entity, entityId, isPublic), cancellationToken); 
+			var response = await _mediator.Send(new UploadSingleFileCommand(raw, module, entity, entityId, isPublic), cancellationToken); 
 
-			return Ok(ApiResponse<UploadFileResult>.Success(response, "Upload file thành công"));
+			return Ok(ApiResponse<UploadSingleFileResult>.Success(response, "Upload file thành công"));
 		}
 
 		[HttpPost("upload-multiple")]
-		public async Task<ActionResult<ApiResponse<List<UploadFileResult>>>> UploadMultiple(List<IFormFile> files, [FromForm] string module, [FromForm] string entity, [FromForm] string? entityId = null, [FromForm] bool isPublic = false, CancellationToken cancellationToken = default) {
+		public async Task<ActionResult<ApiResponse<List<UploadSingleFileResult>>>> UploadMultiple(List<IFormFile> files, [FromForm] string module, [FromForm] string entity, [FromForm] string? entityId = null, [FromForm] bool isPublic = false, CancellationToken cancellationToken = default) {
 			if (files is null || files.Count == 0)
-				return BadRequest(ApiResponse<List<UploadFileResult>>.Fail("Danh sách file tải lên trống"));
+				return BadRequest(ApiResponse<List<UploadSingleFileResult>>.Fail("Danh sách file tải lên trống"));
 
 			var raws = files.Where(file => file != null && file.Length > 0)
 				.Select(file => new RawFile(file.FileName, file.ContentType, file.Length, _ => Task.FromResult<Stream>(file.OpenReadStream())))
@@ -52,7 +49,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Files
 			// loop upload & lưu DB. :contentReference[oaicite:6]{index=6}
 			var response = await _mediator.Send(new UploadMultipleFilesCommand(raws, module, entity, entityId, isPublic), cancellationToken);
 
-			return Ok(ApiResponse<List<UploadFileResult>>.Success(response, "Tải lên các files thành công"));
+			return Ok(ApiResponse<List<UploadSingleFileResult>>.Success(response, "Tải lên các files thành công"));
 		}
 
 		[HttpGet("{id:guid}/download-url")]

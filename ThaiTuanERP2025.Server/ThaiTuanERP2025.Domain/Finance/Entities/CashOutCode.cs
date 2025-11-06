@@ -1,6 +1,6 @@
 ﻿using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Common.Entities;
-using ThaiTuanERP2025.Domain.Finance.Events.CashoutCodes;
+using ThaiTuanERP2025.Domain.Finance.Events;
 
 namespace ThaiTuanERP2025.Domain.Finance.Entities
 {

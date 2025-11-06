@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Finance.BudgetGroups;
-using ThaiTuanERP2025.Application.Finance.BudgetGroups.Commands.Create;
-using ThaiTuanERP2025.Application.Finance.BudgetGroups.Query.All;
+using ThaiTuanERP2025.Application.Finance.BudgetGroups.Commands;
+using ThaiTuanERP2025.Application.Finance.BudgetGroups.Query;
 
 namespace ThaiTuanERP2025.Api.Controllers.Finance
 {

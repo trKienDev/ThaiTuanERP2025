@@ -8,18 +8,16 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 	{
 		#region Constructors
 		private BudgetCode() { }
-		public BudgetCode(string code, string name, Guid budgetGroupId, Guid cashoutCodeId)
+		public BudgetCode(string code, string name, Guid budgetGroupId)
 		{
 			Guard.AgainstNullOrWhiteSpace(code, nameof(code));
 			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
 			Guard.AgainstDefault(budgetGroupId, nameof(budgetGroupId));
-			Guard.AgainstDefault(cashoutCodeId, nameof(cashoutCodeId));
 
 			Id = Guid.NewGuid();
 			Code = code.Trim().ToUpperInvariant();
 			Name = name.Trim();
 			BudgetGroupId = budgetGroupId;
-			CashoutCodeId = cashoutCodeId;
 			IsActive = true;
 
 			AddDomainEvent(new BudgetCodeCreatedEvent(this));
@@ -30,11 +28,11 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public string Code { get; private set; } = null!;
 		public string Name { get; private set; } = null!;
 		public Guid BudgetGroupId { get; private set; }
-		public Guid CashoutCodeId { get; private set; }
+		public Guid? CashoutCodeId { get; private set; }
 		public bool IsActive { get; private set; } = true;
 
 		public BudgetGroup BudgetGroup { get; private set; } = null!;
-		public CashoutCode CashoutCode { get; private set; } = null!;
+		public CashoutCode? CashoutCode { get; private set; } = null!;
 		public ICollection<BudgetPlan> BudgetPlans { get; private set; } = new List<BudgetPlan>();
 		#endregion
 
@@ -73,6 +71,24 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			if (!IsActive) return;
 			IsActive = false;
 			AddDomainEvent(new BudgetCodeDeactivatedEvent(this));
+		}
+
+		public void SetCashoutCode(Guid cashoutCodeId)
+		{
+			Guard.AgainstDefault(cashoutCodeId, nameof(cashoutCodeId));
+			if (CashoutCodeId.HasValue && CashoutCodeId.Value == cashoutCodeId) return;
+
+			var old = CashoutCodeId;
+			CashoutCodeId = cashoutCodeId;
+			AddDomainEvent(new BudgetCodeCashoutChangedEvent(this, old, CashoutCodeId));
+		}
+
+		public void ClearCashoutCode()
+		{
+			if (CashoutCodeId is null) return;
+			var old = CashoutCodeId;
+			CashoutCodeId = null;
+			AddDomainEvent(new BudgetCodeCashoutChangedEvent(this, old, CashoutCodeId));
 		}
 		#endregion
 	}

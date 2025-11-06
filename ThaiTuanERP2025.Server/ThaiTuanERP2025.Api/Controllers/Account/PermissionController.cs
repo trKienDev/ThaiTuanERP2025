@@ -4,10 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
 using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Application.Account.Permissions;
-using ThaiTuanERP2025.Application.Account.Permissions.Commands.AssignRole;
-using ThaiTuanERP2025.Application.Account.Permissions.Commands.Create;
-using ThaiTuanERP2025.Application.Account.Permissions.Queries.All;
-using ThaiTuanERP2025.Application.Account.Permissions.Queries.ByRole;
+using ThaiTuanERP2025.Application.Account.Permissions.Commands;
+using ThaiTuanERP2025.Application.Account.Permissions.Queries;
 
 namespace ThaiTuanERP2025.Api.Controllers.Account
 {

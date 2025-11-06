@@ -16,8 +16,10 @@ using ThaiTuanERP2025.Application.Common.Security;
 using ThaiTuanERP2025.Application.Common.Services;
 using ThaiTuanERP2025.Application.Expense.Invoices;
 using ThaiTuanERP2025.Application.Files;
+using ThaiTuanERP2025.Application.Finance.BudgetCodes;
 using ThaiTuanERP2025.Application.Finance.BudgetGroups;
 using ThaiTuanERP2025.Application.Finance.BudgetPeriods;
+using ThaiTuanERP2025.Application.Finance.CashoutCodes;
 using ThaiTuanERP2025.Application.Finance.LedgerAccounts;
 using ThaiTuanERP2025.Domain.Account.Repositories;
 using ThaiTuanERP2025.Domain.Alerts.Repositories;
@@ -88,7 +90,8 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IUserRoleRepository, UserRoleRepository>();
 
 			// Finance
-			services.AddScoped<IBudgetCodeRepository, BudgetCodeRepository>();
+			services.AddScoped<IBudgetCodeReadRepository, BudgetCodeReadRepository>();
+			services.AddScoped<IBudgetCodeWriteRepository, BudgetCodeWriteRepository>();
 			services.AddScoped<IBudgetGroupReadRepository,  BudgetGroupReadRepository>();
 			services.AddScoped<IBudgetGroupWriteRepository, BudgetGroupWriteRepository>();
 			services.AddScoped<IBudgetPeriodWriteRepository, BudgetPeriodWriteRepository>();
@@ -97,7 +100,8 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<ILedgerAccountTypeRepository, LedgerAccountTypeRepository>();
 			services.AddScoped<ILedgerAccountRepository, LedgerAccountRepository>();
 			services.AddScoped<ILedgerAccountReadRepository, LedgerAccountReadRepository>();
-			services.AddScoped<ICashoutCodeRepository, CashoutCodeRepository>();
+			services.AddScoped<ICashoutCodeWriteRepository, CashoutCodeWriteRepository>();
+			services.AddScoped<ICashoutCodeReadRepository, CashoutCodeReadRepository>();
 			services.AddScoped<ICashoutGroupRepository, CashoutGroupRepository>();
 
 			// Expense

@@ -10,7 +10,7 @@ import { handleApiResponse$ } from "../../../shared/operators/handle-api-respons
 @Injectable({ providedIn: 'root' })
 export class CashoutCodeService extends BaseCrudService<CashoutCodeDto, CashoutCodeRequest> {
       constructor(http: HttpClient) {
-            super(http, `${environment.apiUrl}/cashout-codes`);
+            super(http, `${environment.apiUrl}/cashout-code`);
       }
 
       getByGroup(groupId: string): Observable<CashoutCodeDto[]> {

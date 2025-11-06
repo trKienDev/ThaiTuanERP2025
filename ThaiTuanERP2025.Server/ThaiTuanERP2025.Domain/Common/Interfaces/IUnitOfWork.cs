@@ -19,14 +19,14 @@ namespace ThaiTuanERP2025.Application.Common.Interfaces
 		IUserGroupRepository UserGroups { get; }
 
 		// Finance
-		IBudgetCodeRepository BudgetCodes { get; }
+		IBudgetCodeWriteRepository BudgetCodes { get; }
 		IBudgetGroupWriteRepository BudgetGroups { get; }
 		IBudgetPeriodWriteRepository BudgetPeriods { get; }
 		IBudgetPlanRepository BudgetPlans { get; }
 
 		ILedgerAccountRepository LedgerAccounts { get; }
 		ILedgerAccountTypeRepository LedgerAccountTypes { get; }
-		ICashoutCodeRepository CashoutCodes { get; }
+		ICashoutCodeWriteRepository CashoutCodes { get; }
 		ICashoutGroupRepository CashoutGroups { get; }
 
 		// Files

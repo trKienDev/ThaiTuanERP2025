@@ -16,8 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Finance\BudgetCodes\" />
-    <Folder Include="Finance\Budgets\Repositories\" />
     <Folder Include="Finance\Requests\" />
     <Folder Include="Finance\Validators\" />
   </ItemGroup>

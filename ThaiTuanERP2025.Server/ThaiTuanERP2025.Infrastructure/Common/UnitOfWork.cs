@@ -29,10 +29,10 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			IBudgetGroupWriteRepository budgetGroups,
 			IBudgetPeriodWriteRepository budgetPeriods,
 			IBudgetPlanRepository budgetPlans,
-			IBudgetCodeRepository budgetCodes,
+			IBudgetCodeWriteRepository budgetCodes,
 			ILedgerAccountRepository ledgerAccounts,
 			ILedgerAccountTypeRepository ledgerAccountTypes,
-			ICashoutCodeRepository cashoutCodes,
+			ICashoutCodeWriteRepository cashoutCodes,
 			ICashoutGroupRepository cashoutGroups,
 
 			// Expense
@@ -129,10 +129,10 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		public IBudgetGroupWriteRepository BudgetGroups { get; }
 		public IBudgetPeriodWriteRepository BudgetPeriods { get; }
 		public IBudgetPlanRepository BudgetPlans { get; }
-		public IBudgetCodeRepository BudgetCodes { get; }
+		public IBudgetCodeWriteRepository BudgetCodes { get; }
 		public ILedgerAccountRepository LedgerAccounts { get; }
 		public ILedgerAccountTypeRepository LedgerAccountTypes { get; }
-		public ICashoutCodeRepository CashoutCodes { get; }
+		public ICashoutCodeWriteRepository CashoutCodes { get; }
 		public ICashoutGroupRepository CashoutGroups { get; }
 
 		// Expense

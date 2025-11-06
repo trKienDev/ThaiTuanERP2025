@@ -23,7 +23,9 @@
                                           </div>
                                     </div>
                                     <div class="form-input" style="width: 60%;">
-                                          <input class="" type="text" formControlName="name" autocomplete="on" required/>
+                                          <input class="" type="text" formControlName="name" autocomplete="on" required
+                                          [class.is-invalid]="showErrors && form.get('name')?.invalid"
+                                           [attr.aria-invalid]="showErrors && form.get('name')?.invalid ? 'true' : null" />
                                           <label for="name">Tên <span style="color: red;">  *</span></label>
                                           <div class="form-input-error" *ngIf="showErrors && form.get('name')?.invalid" >
                                                 <small>Vui lòng nhập tên</small>

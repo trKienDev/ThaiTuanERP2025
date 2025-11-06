@@ -5,8 +5,8 @@ import { BudgetCodeDto } from "../../../models/budget-code.model";
 import { BudgetCodeService } from "../../../services/budget-code.service";
 import { MatDialog } from "@angular/material/dialog";
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { NewBudgetCodeDialogComponent } from "../../../components/new-budget-code-dialog/new-budget-code-dialog.component";
 import { HasPermissionDirective } from "../../../../../core/auth/auth.directive";
+import { BudgetCodeRequestDialogComponent } from "../../../components/budget-code-request-dialog/budget-code-request-dialog.component";
 
 @Component({
       selector: 'budget-code-panel',
@@ -74,7 +74,7 @@ export class BudgetCodePanelComponent implements OnInit {
       }
 
       openNewBudgetCodeDialog() {
-            const ref = this.dialog.open(NewBudgetCodeDialogComponent, {
+            const ref = this.dialog.open(BudgetCodeRequestDialogComponent, {
                   width: 'fit-content',
             });
 

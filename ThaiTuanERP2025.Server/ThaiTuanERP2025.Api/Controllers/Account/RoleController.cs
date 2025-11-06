@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
-using ThaiTuanERP2025.Application.Account.Permissions.Commands.AssignRole;
+using ThaiTuanERP2025.Application.Account.Permissions.Commands;
 using ThaiTuanERP2025.Application.Account.Roles;
-using ThaiTuanERP2025.Application.Account.Roles.Commands.CreateRole;
-using ThaiTuanERP2025.Application.Account.Roles.Queries.GetAllRoles;
+using ThaiTuanERP2025.Application.Account.Roles.Commands;
+using ThaiTuanERP2025.Application.Account.Roles.Queries;
 using ThaiTuanERP2025.Application.Account.Roles.Request;
 
 namespace ThaiTuanERP2025.Api.Controllers.Account

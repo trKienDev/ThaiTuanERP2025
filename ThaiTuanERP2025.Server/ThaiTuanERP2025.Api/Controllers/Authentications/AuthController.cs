@@ -2,9 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
-using ThaiTuanERP2025.Application.Authentication.Commands.Login;
-using ThaiTuanERP2025.Application.Authentication.Commands.RefreshAccessToken;
-using ThaiTuanERP2025.Application.Authentication.Commands.RevokeRefreshToken;
+using ThaiTuanERP2025.Application.Authentication.Commands;
 using ThaiTuanERP2025.Application.Authentication.DTOs;
 
 namespace ThaiTuanERP2025.Api.Controllers.Authentications

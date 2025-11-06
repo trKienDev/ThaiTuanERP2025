@@ -7,7 +7,6 @@ namespace ThaiTuanERP2025.Domain.Finance.Events
 	{
 		public Guid BudgetCodeId { get; }
 		public DateTime OccurredOn { get; }
-
 		protected BudgetCodeEventBase(Guid codeId)
 		{
 			BudgetCodeId = codeId;
@@ -68,8 +67,17 @@ namespace ThaiTuanERP2025.Domain.Finance.Events
 		{
 			BudgetCode = budgetCode;
 		}
-
 		public BudgetCode BudgetCode { get; }
 	}
 
+	public sealed class BudgetCodeCashoutChangedEvent : BudgetCodeEventBase {
+		public BudgetCodeCashoutChangedEvent(BudgetCode budgetCode, Guid? oldCashoutCodeId, Guid? newCashoutCodeId) : base(budgetCode.Id) {
+			BudgetCode = budgetCode;
+			OldCashoutCodeId = oldCashoutCodeId;
+			NewCashoutCodeId = newCashoutCodeId;
+		}
+		public BudgetCode BudgetCode { get; }
+		public Guid? OldCashoutCodeId { get; }
+		public Guid? NewCashoutCodeId { get; }
+	}
 }
