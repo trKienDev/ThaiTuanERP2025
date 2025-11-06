@@ -7,7 +7,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 	{
 		#region EF Constructor
 		private DepartmentManager() { }
-		public DepartmentManger (Guid departmentId, Guid userId, bool isPrimary = false) {
+		public DepartmentManager (Guid departmentId, Guid userId, bool isPrimary = false) {
 			Guard.AgainstDefault(departmentId, nameof(departmentId));
 			Guard.AgainstDefault(userId, nameof(userId));
 			DepartmentId = departmentId;

@@ -27,7 +27,7 @@ namespace ThaiTuanERP2025.Application.Account.Departments.Commands
 				parentDept = await _uow.Departments.GetByIdAsync(command.ParentId.Value)
 					?? throw new NotFoundException("Không tìm thấy phòng ban cha");
 
-			var entity = new Department(command.Name, command.Code, command.ManagerId);
+			var entity = new Department(command.Name, command.Code);
 			if (parentDept is not null)
 				entity.SetParent(parentDept);
 
