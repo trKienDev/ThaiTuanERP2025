@@ -35,8 +35,6 @@ export class KitDropdownComponent implements ControlValueAccessor, OnChanges {
       @Input() caseSensitive = false;       /** Có phân biệt hoa/thường không */
       @Input() autoFocusFilter = true;       /** Khi mở menu, tự động focus vào ô filter */     
       @Input() required = false;
-      
-      private _invalid = false;
 
       @Input({ transform: booleanAttribute }) invalid = false;
       @HostBinding('class.invalid')
