@@ -35,7 +35,14 @@
                               </div>
                         </div>
                         <div class="dialog-row">
-                              <kit-dropdown [options]="budgetGroupOptions" (selectionChange)="onBudgetGroupSelected($event)" [placeholder]="'Chọn nhóm ngân sách'" [width]="'100%'" [required]="true"></kit-dropdown>
+                              <div class="form-field" [class.is-invalid]="showErrors && form.get('budgetGroupId')?.invalid">
+                                    <kit-dropdown [options]="budgetGroupOptions" (selectionChange)="onBudgetGroupSelected($event)" 
+                                    [placeholder]="'Chọn nhóm ngân sách'" [width]="'100%'" [required]="true" 
+                                    [invalid]="showErrors && (form.get('budgetGroupId')?.invalid ?? false)"></kit-dropdown>
+                                    <div class="form-input-error" *ngIf="showErrors && form.get('budgetGroupId')?.invalid">
+                                          <small>Vui lòng chọn nhóm ngân sách</small>
+                                    </div>
+                              </div>
                         </div>
                         <div class="dialog-row">
                               <kit-dropdown [options]="cashoutCodeOptions" (selectionChange)="onCashoutCodeSelected($event)" [placeholder]="'Chọn dòng tiền ra'" [width]="'100%'"></kit-dropdown>

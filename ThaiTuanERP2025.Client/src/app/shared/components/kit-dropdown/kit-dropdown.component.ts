@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { booleanAttribute, Component, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnChanges, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { booleanAttribute, Component, ElementRef, EventEmitter, forwardRef, HostBinding, HostListener, Input, OnChanges, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 
 export type KitDropdownOption = { id: string; label: string, imgUrl?: string };
 
@@ -34,6 +35,12 @@ export class KitDropdownComponent implements ControlValueAccessor, OnChanges {
       @Input() caseSensitive = false;       /** Có phân biệt hoa/thường không */
       @Input() autoFocusFilter = true;       /** Khi mở menu, tự động focus vào ô filter */     
       @Input() required = false;
+      
+      private _invalid = false;
+
+      @Input({ transform: booleanAttribute }) invalid = false;
+      @HostBinding('class.invalid')
+      get hostInvalidClass() { return this.invalid; }
 
       @Output() selectionChange = new EventEmitter<KitDropdownOption>();
       @Output() selectionChangeMany = new EventEmitter<KitDropdownOption[]>();    // Output cho multi-select 
@@ -50,7 +57,7 @@ export class KitDropdownComponent implements ControlValueAccessor, OnChanges {
       selectedImgUrl: string | null = null;
 
       // *** multiple ***
-      private _values = new Set<string>();
+      private readonly _values = new Set<string>();
 
       // ===== CVA =====
       private onChange: (val: any) => void = () => {};
@@ -195,12 +202,12 @@ export class KitDropdownComponent implements ControlValueAccessor, OnChanges {
       }
 
       // Nhấn ESC thì đóng (dùng document để vẫn bắt được nếu focus trôi)
-      @HostListener('document:keydown.escape', ['$event'])
-      onEsc(event: KeyboardEvent) {
-            if (this.isOpen) {
+      @HostListener('document:keydown', ['$event'])
+      onDocumentKeydown(e: KeyboardEvent) {
+            if (e.key === 'Escape' && this.isOpen) {
                   this.isOpen = false;
                   this.clearFilter();
-                  event.stopPropagation();
+                  e.stopPropagation();
             }
       }
 
@@ -254,7 +261,7 @@ export class KitDropdownComponent implements ControlValueAccessor, OnChanges {
       @ViewChildren('optRef') optionItems!: QueryList<ElementRef<HTMLLIElement>>;
       @ViewChild('filterInput') filterInput?: ElementRef<HTMLInputElement>;
 
-      constructor(private eRef: ElementRef<HTMLElement>) {}
+      constructor(private readonly eRef: ElementRef<HTMLElement>) {}
 
       private ensureItemVisible() {
             const items = this.optionItems?.toArray();

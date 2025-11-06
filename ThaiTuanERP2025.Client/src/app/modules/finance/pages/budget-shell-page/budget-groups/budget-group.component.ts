@@ -57,6 +57,8 @@ export class BudgetGroupPanelComponent implements OnInit, OnDestroy {
             
             try {
                   this.submitting = true;
+                  this.form.disable({ emitEvent: false });
+
                   const payload = this.form.getRawValue() as BudgetGroupRequest;
                   await firstValueFrom(this.budgetGroupFacade.create(payload));
                   this.toast.successRich('Tạo nhóm ngân sách thành công');
@@ -76,6 +78,7 @@ export class BudgetGroupPanelComponent implements OnInit, OnDestroy {
                         this.toast?.errorRich('Tạo nhóm ngân sách thất bại.');
                   }
             } finally {
+                  this.form.disable({ emitEvent: false });
                   this.submitting = false;
             }
       }

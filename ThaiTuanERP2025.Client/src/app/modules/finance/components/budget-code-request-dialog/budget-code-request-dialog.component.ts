@@ -62,6 +62,10 @@ export class BudgetCodeRequestDialogComponent implements OnInit {
       }
       onBudgetGroupSelected(opt: KitDropdownOption) {
             this.form.patchValue({ budgetGroupId: opt.id });
+            const c = this.form.get('budgetGroupId');
+            c?.markAsDirty();
+            c?.markAsTouched();
+            c?.updateValueAndValidity({ onlySelf: true });
       }
 
       loadCashoutCodes(): void {
@@ -84,22 +88,13 @@ export class BudgetCodeRequestDialogComponent implements OnInit {
             if(this.form.invalid) {
                   this.form.markAllAsTouched();
                   this.toast.warningRich('Vui lòng điền đầy đủ thông tin');
-
-                  const invalidControls = Object.entries(this.form.controls)
-                        .filter(([_, control]) => control.invalid)
-                        .map(([name, control]) => ({
-                              field: name,
-                              errors: control.errors
-                        }));
-
-                  console.group('⚠️ Form invalid');
-                  console.table(invalidControls);
-                  console.groupEnd();
                   return;
             }
 
             try {
                   this.submitting = true;
+                  this.form.disable({ emitEvent: false });
+                  
                   const payload: BudgetCodeRequest = this.form.getRawValue() as BudgetCodeRequest;
                   await firstValueFrom(this.budgetCodeService.create(payload));
                   this.toast.successRich('Thêm ngân sách thành công');
@@ -119,8 +114,8 @@ export class BudgetCodeRequestDialogComponent implements OnInit {
                         this.confirmService.error$(messages);
                         this.toast?.errorRich('Tạo mã ngân sách thất bại.');
                   }
-                  this.toast.errorRich('Tạo mã ngân sách thất bại');
             } finally {
+                  this.form.enable({ emitEvent: false });
                   this.submitting = false;
             }
       }

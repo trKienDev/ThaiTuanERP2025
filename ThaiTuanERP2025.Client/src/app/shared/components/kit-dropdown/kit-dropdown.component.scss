@@ -1,6 +1,11 @@
 :host {
-  display: block;
-  line-height: normal;
+      display: block;
+      line-height: normal;
+}
+:host(.invalid) .kit-dropdown-select {
+      box-shadow: rgba(244, 1, 1, 0.52) 0 0 5px 0, rgba(213, 0, 0, 0.24) 0 0 1px 0;
+      border: 1px solid rgba(213, 0, 0, 0.24);
+      border-radius: 4px;
 }
 
 .kit-dropdown {

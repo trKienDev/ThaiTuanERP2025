@@ -12,17 +12,16 @@
 
             <!-- MULTIPLE -->
             <ng-template #multiSelected>
-                  <!-- <ng-container *ngIf="selectedOptions.length; else placeholderTpl"> -->
                   <ng-container *ngIf="selectedOptions.length; else placeholderTpl">
                         <div class="multi-selection">
-                              <span class="multi-selected" *ngFor="let opt of selectedOptions" 
-                              role="button" tabindex="0"
+                              <button class="multi-selected" *ngFor="let opt of selectedOptions" 
+                              tabindex="0"
                               (click)="remove(opt.id); $event.stopPropagation()" 
                               (keydown.enter)="remove(opt.id); $event.stopPropagation()"
                               (keydown.space)="remove(opt.id); $event.preventDefault(); $event.stopPropagation()">
-                                    <img *ngIf="opt.imgUrl" [src]="opt.imgUrl" class="option-img" />
+                                    <img *ngIf="opt.imgUrl" [src]="opt.imgUrl" class="option-img" alt="" />
                                     <span class="">{{ opt.label }}</span>
-                              </span>
+                              </button>
                         </div>
                   </ng-container>
 
@@ -50,7 +49,7 @@
             [class.selected] = "isSelected(opt.id)"
             (click)="selectOption(opt)">
                   <span class="check" *ngIf="multiple" [class.d-none]="!isSelected(opt.id)">{{ isSelected(opt.id) ? '✔' : '' }}</span>
-                  <img *ngIf="opt.imgUrl" [src]="opt.imgUrl" class="option-img" />
+                  <img *ngIf="opt.imgUrl" [src]="opt.imgUrl" class="option-img" alt="" />
                   <span>{{ opt.label }}</span>
             </li>
       </ul>
