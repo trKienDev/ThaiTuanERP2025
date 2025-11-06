@@ -49,19 +49,19 @@ namespace ThaiTuanERP2025.Application.Account.Users.Commands
 			);
 			user.AssignRole(command.RoleId);
 
-			if (department.ManagerUserId is Guid mgrId)
+			var primaryManagerId = department.Managers.FirstOrDefault(m => m.IsPrimary)?.UserId;
+			if (primaryManagerId.HasValue)
 			{
-				var manager = await _unitOfWork.Users.GetByIdAsync(mgrId);
-				if (manager is not null)
-				{
-					// assignment nguồn chính
-					var assignment = new UserManagerAssignment(
-						user.Id,
-						manager.Id,
-						true
-					);
-					await _unitOfWork.UserManagerAssignments.AddAsync(assignment, cancellationToken);
-				}
+				// Gán manager trực tiếp lên User (domain event: UserManagerAssignedEvent)
+				user.AssignManager(primaryManagerId.Value);
+
+				// (Tuỳ kiến trúc) Nếu bạn vẫn duy trì bảng quan hệ để report/lịch sử:
+				var assignment = new UserManagerAssignment(
+				    userId: user.Id,
+				    managerId: primaryManagerId.Value,
+				    isPrimary: true
+				);
+				await _unitOfWork.UserManagerAssignments.AddAsync(assignment, cancellationToken);
 			}
 
 			await _unitOfWork.Users.AddAsync(user, cancellationToken);

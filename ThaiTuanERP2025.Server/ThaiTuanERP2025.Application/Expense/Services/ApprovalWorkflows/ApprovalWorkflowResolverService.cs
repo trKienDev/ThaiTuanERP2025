@@ -80,15 +80,25 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 			if (creator == null)
 				return Array.Empty<Guid>();
 
-			Guid? deptId = creator.DepartmentId;
-			if (deptId == null)
+			if (creator?.DepartmentId is not Guid deptId)
 				return Array.Empty<Guid>();
 
-			var dept = await _unitOfWork.Departments.SingleOrDefaultIncludingAsync(d => d.Id == deptId.Value);
-			if (dept?.ManagerUserId is Guid m && m != Guid.Empty)
-				return new[] { m };
+			var dept = await _unitOfWork.Departments.SingleOrDefaultIncludingAsync(
+				d => d.Id == deptId,
+				asNoTracking: true,
+				cancellationToken: cancellationToken,
+				d => d.Managers
+			);
+			if (dept is null || !dept.Managers.Any())
+				return Array.Empty<Guid>();
 
-			return Array.Empty<Guid>();
+			// 3) Ưu tiên primary manager
+			var primary = dept.Managers.FirstOrDefault(m => m.IsPrimary)?.UserId;
+			if (primary.HasValue && primary.Value != Guid.Empty)
+				return new[] { primary.Value };
+
+			// 4) Nếu không có primary, trả về tất cả manager của phòng ban
+			return dept.Managers.Select(m => m.UserId).Distinct().ToArray();
 		}
 
 		private sealed class RoleParams { public string? Role { get; set; } }
