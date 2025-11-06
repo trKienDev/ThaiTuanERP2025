@@ -72,10 +72,6 @@ button, .button {
 .cancel-button:hover { cursor: pointer; opacity: 0.8; }
 
 /* save */   
-// .save-button { align-items: center; appearance: button; background-color: #0276FF; box-shadow: rgba(255, 255, 255, 0.26) 0 1px 2px inset; box-sizing: border-box; color: #fff; cursor: pointer; display: flex; flex-direction: row; flex-shrink: 0; margin: 0; text-align: center; text-transform: none; transition: color .13s ease-in-out,background .13s ease-in-out,opacity .13s ease-in-out,box-shadow .13s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: manipulation; border: none !important;}
-// .save-button:active { background-color: #006AE8; }
-// .save-button:hover { background-color: #1C84FF; }
-
 .save-button { background-color: var(--bright-blue-color); cursor: pointer; transition: all ease-in-out 0.2s; color: white !important; border: none !important; box-shadow: 0px 4px 6px -1px #0276FF31, 0px 2px 4px -1px #0276FF17; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
 .save-button:hover { background-color: #0071e2; }
 /* submit */

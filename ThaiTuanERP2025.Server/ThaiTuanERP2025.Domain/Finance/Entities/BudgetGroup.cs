@@ -43,19 +43,21 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 
 		public void AddBudgetCodes(IEnumerable<Guid> budgetCodeIds, IEnumerable<BudgetCode> allBudgetCodes)
 		{
-			if (budgetCodeIds == null || !budgetCodeIds.Any()) return;
+			if (budgetCodeIds is null) return;
+
+			var ids = budgetCodeIds as ISet<Guid> ?? budgetCodeIds.ToHashSet();
+			if (ids.Count == 0) return;
+
+			var existingIds = BudgetCodes.Select(b => b.Id).ToHashSet();
 
 			var toAdd = allBudgetCodes
-				.Where(b => budgetCodeIds.Contains(b.Id) && b.BudgetGroupId == Id)
+				.Where(b => b.BudgetGroupId == Id && ids.Contains(b.Id) && !existingIds.Contains(b.Id))
 				.ToList();
 
 			foreach (var code in toAdd)
 			{
-				if (!BudgetCodes.Any(b => b.Id == code.Id))
-				{
-					BudgetCodes.Add(code);
-					AddDomainEvent(new BudgetCodeAddedToGroupEvent(this, code));
-				}
+				BudgetCodes.Add(code);
+				AddDomainEvent(new BudgetCodeAddedToGroupEvent(this, code));
 			}
 		}
 

@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, effect, inject } from "@angular/core";
+import { Component, effect, inject, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { usePaymentDetail } from "../../../composables/use-payment-detail";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
@@ -14,7 +14,7 @@ import { KitLoadingSpinnerComponent } from "../../../../../shared/components/kit
 import { provideMondayFirstDateAdapter } from "../../../../../shared/date/provide-monday-first-date-adapter";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { OutgoingPaymentService } from "../../../services/outgoing-payment.service";
-import { first, firstValueFrom } from "rxjs";
+import { firstValueFrom } from "rxjs";
 import { OutgoingPaymentRequest } from "../../../models/outgoing-payment.model";
 import { KitSpinnerButtonComponent } from "../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 import { KitOverlaySpinnerComponent } from "../../../../../shared/components/kit-overlay-spinner/kit-overlay-spinner.component";
@@ -27,14 +27,14 @@ import { KitOverlaySpinnerComponent } from "../../../../../shared/components/kit
       styleUrls: ['./outgoing-payment-request.component.scss'],
       providers: [...provideMondayFirstDateAdapter()]
 })
-export class OutgoingPaymentRequestComponent {
-      private route = inject(ActivatedRoute);
-      private formBuilder = inject(FormBuilder);
-      private OBAccountOptionsStore = inject(OutgoingBankAccountOptionStore);
+export class OutgoingPaymentRequestComponent implements OnInit {
+      private readonly route = inject(ActivatedRoute);
+      private readonly formBuilder = inject(FormBuilder);
+      private readonly OBAccountOptionsStore = inject(OutgoingBankAccountOptionStore);
       OBAccountOptions = this.OBAccountOptionsStore.options$;
-      private outgoingPaymentService = inject(OutgoingPaymentService);
+      private readonly outgoingPaymentService = inject(OutgoingPaymentService);
 
-      private paymentLogic = usePaymentDetail();
+      private readonly paymentLogic = usePaymentDetail();
       loading = this.paymentLogic.isLoading;
       err = this.paymentLogic.error;
       paymentDetail = this.paymentLogic.paymentDetail;
@@ -43,7 +43,7 @@ export class OutgoingPaymentRequestComponent {
       public submitted = false;
       public errorMessages: string[] = [];
 
-      private toast = inject(ToastService);
+      private readonly toast = inject(ToastService);
 
       public readonly uploadMeta = {
             module: 'expense',
@@ -68,7 +68,7 @@ export class OutgoingPaymentRequestComponent {
             employeeId: this.formBuilder.control<string | null>(null),
       });
       
-      private autoPatchEffect = effect(() => {
+      private readonly autoPatchEffect = effect(() => {
             const isLoading = this.loading();
             const detail = this.paymentDetail();
 
@@ -137,7 +137,7 @@ export class OutgoingPaymentRequestComponent {
             try {
                   const payload = this.form.getRawValue() as OutgoingPaymentRequest;
                   console.log('Submitting payload:', payload);
-                  const result = await firstValueFrom(this.outgoingPaymentService.create(payload));
+                  await firstValueFrom(this.outgoingPaymentService.create(payload));
                   this.toast.successRich("Tạo yêu cầu khoản tiền ra thành công");
                   return;
             } catch(error) {

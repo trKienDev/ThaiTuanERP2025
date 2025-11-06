@@ -14,7 +14,6 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 
 			// ===== Basic properties =====
 			builder.Property(x => x.Code).HasMaxLength(50).IsRequired();
-
 			builder.Property(x => x.Name).HasMaxLength(200).IsRequired();
 
 			// ===== Navigation BudgetCodes (private field) =====

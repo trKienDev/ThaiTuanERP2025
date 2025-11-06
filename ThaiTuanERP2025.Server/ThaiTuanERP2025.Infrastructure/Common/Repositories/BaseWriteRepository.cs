@@ -12,12 +12,10 @@ namespace ThaiTuanERP2025.Infrastructure.Common.Repositories
 	{
 		protected readonly DbContext _context;
 		protected readonly DbSet<TEntity> _dbSet;
-		private readonly IConfigurationProvider _configurationProvider;
 		public BaseWriteRepository(ThaiTuanERP2025DbContext context, IConfigurationProvider configurationProvider)
 		{
 			_context = context ?? throw new ArgumentNullException(nameof(context));
 			_dbSet = _context.Set<TEntity>();
-			_configurationProvider = configurationProvider ?? throw new ArgumentNullException(nameof(configurationProvider));
 		}
 
 		public virtual Task<List<TResult>> ListAsync<TResult>(Func<IQueryable<TEntity>, IQueryable<TResult>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default)
@@ -80,12 +78,17 @@ namespace ThaiTuanERP2025.Infrastructure.Common.Repositories
 			}
 			return query;
 		}
+		public IQueryable<TEntity> FindQueryable(Expression<Func<TEntity, bool>> predicate, bool asNoTracking = true)
+		{
+			if (predicate is null) throw new ArgumentNullException(nameof(predicate));
+			return Query(asNoTracking).Where(predicate);
+		}
 
 		public virtual async Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
 		{
 			return await _dbSet.FindAsync(new object?[] { id }, cancellationToken);
 		}
-		public virtual async Task<List<TEntity>> GetAllAsync(CancellationToken cancellationToken)
+		public virtual async Task<List<TEntity>> GetAllAsync(CancellationToken cancellationToken = default)
 		{
 			return await _dbSet.AsNoTracking().ToListAsync(cancellationToken);
 		}
@@ -121,12 +124,6 @@ namespace ThaiTuanERP2025.Infrastructure.Common.Repositories
 			if (orderBy != null) query = orderBy(query);
 
 			return await query.Where(predicate).ToListAsync(cancellationToken);
-		}
-		public IQueryable<TEntity> FindQueryable(Expression<Func<TEntity, bool>> predicate, bool asNoTracking = true)
-		{
-			if (predicate == null) throw new ArgumentNullException(nameof(predicate));
-			var query = asNoTracking ? _dbSet.AsNoTracking() : _dbSet.AsQueryable();
-			return query.Where(predicate);
 		}
 
 		public async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default)

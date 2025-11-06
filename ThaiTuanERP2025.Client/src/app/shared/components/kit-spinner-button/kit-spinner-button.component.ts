@@ -11,14 +11,19 @@ import { CommonModule } from '@angular/common';
 export class KitSpinnerButtonComponent {
       /** Kiểu nút: submit | button | reset */
       @Input() type: 'button' | 'submit' | 'reset' = 'button';
+
       /** Văn bản mặc định */
       @Input() text = 'Lưu';
+
       /** Văn bản khi đang loading */
       @Input() loadingText = 'Đang xử lý…';
+      
       /** Đang loading hay không */
       @Input() loading = false;
+
       /** Vô hiệu hóa nút */
       @Input() disabled = false;
+      
       /** Style tùy chọn (primary, secondary, danger...) */
       @Input() cssClass: string = 'save-button';
 }

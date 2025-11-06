@@ -15,20 +15,22 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetGroups.Commands.Create
 		}
 
 		public async Task<Unit> Handle(CreateBudgetGroupCommand command, CancellationToken cancellationToken) {
-			var name = command.Name.Trim();
-			Guard.AgainstNullOrWhiteSpace(name, nameof(name));	
+			var nameRaw = command.Name?.Trim() ?? string.Empty;
+			Guard.AgainstNullOrWhiteSpace(nameRaw, nameof(command.Name));
 
-			var code = command.Code.Trim();
-			Guard.AgainstNullOrWhiteSpace(code, nameof(code));
+			var codeRaw = command.Code?.Trim() ?? string.Empty;
+			Guard.AgainstNullOrWhiteSpace(codeRaw, nameof(command.Code));
+
+			var codeNorm = codeRaw.ToUpperInvariant();
+			var nameNorm = nameRaw;
 
 			var existed = await _unitOfWork.BudgetGroups.ExistAsync(
-				q => string.Equals(q.Code, code, StringComparison.OrdinalIgnoreCase)
-					|| string.Equals(q.Name, name, StringComparison.OrdinalIgnoreCase),
+				q => q.Code == codeNorm || q.Name.ToLower() == nameNorm.ToLower()!,           
 				cancellationToken
 			);
 			if (existed) throw new ConflictException("Nhóm ngân sách đã tồn tại");
 
-			var newGroup = new BudgetGroup(code, name);
+			var newGroup = new BudgetGroup(codeNorm, nameNorm);
 
 			await _unitOfWork.BudgetGroups.AddAsync(newGroup, cancellationToken);
 			await _unitOfWork.SaveChangesAsync(cancellationToken);

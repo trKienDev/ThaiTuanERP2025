@@ -12,16 +12,24 @@
                               <div class="card-title">Thêm nhóm ngân sách</div>
                         </div>
                         <div class="card-body">
-                              <form class="display-flex gap-10px" [formGroup]="form" (ngSubmit)="createBudgetGroup()">
+                              <form class="display-flex gap-10px align-flex-start" [formGroup]="form" (ngSubmit)="createBudgetGroup()">
                                     <div class="form-input" style="width: 30%;">
-                                          <input class="" type="text" formControlName="code" autocomplete="on" required/>
+                                          <input type="text" formControlName="code" autocomplete="on" required
+                                          [class.is-invalid]="showErrors && form.get('code')?.invalid"
+                                          [attr.aria-invalid]="showErrors && form.get('code')?.invalid ? 'true' : null" />
                                           <label for="name">Mã <span style="color: red;">  *</span></label>
+                                          <div class="form-input-error" *ngIf="showErrors && form.get('code')?.invalid">
+                                                <small>Vui lòng nhập mã</small>
+                                          </div>
                                     </div>
                                     <div class="form-input" style="width: 60%;">
                                           <input class="" type="text" formControlName="name" autocomplete="on" required/>
                                           <label for="name">Tên <span style="color: red;">  *</span></label>
+                                          <div class="form-input-error" *ngIf="showErrors && form.get('name')?.invalid" >
+                                                <small>Vui lòng nhập tên</small>
+                                          </div>
                                     </div>
-                                    <kit-spinner-button type="submit" cssClass="button save-button height-100pt border-transparent" [loading]="submitting" [disabled]="submitting" text="Lưu" loadingText="Đang xử lý" style="width: 10%;"></kit-spinner-button>
+                                    <kit-spinner-button type="submit" cssClass="save-button height-100pt border-transparent" [loading]="submitting" [disabled]="submitting" text="Lưu" [loadingText]="''" style="width: 10%;"></kit-spinner-button>
                               </form>
                         </div>
                   </div>
@@ -30,16 +38,18 @@
             <table class="table margin-top-20px">
                   <thead>
                         <tr>
+                              <th>#</th>
                               <th>Mã nhóm ngân sách</th>
                               <th>Tên nhóm ngân sách</th>
                         </tr>
                   </thead>
                   <tbody>
-                        <tr *ngFor="let bg of budgetGroups">
+                        <tr *ngFor="let bg of (budgetGroups$ | async) ?? []; trackBy: trackById; let i = index">
+                              <td>{{ i + 1}}</td>
                               <td>{{ bg.code }}</td>
                               <td>{{ bg.name }}</td>
                         </tr>
-                        <tr *ngIf="budgetGroups && budgetGroups.length === 0">
+                        <tr *ngIf="(budgetGroups$ | async)?.length === 0">
                               <td colspan="2" class="text-center">Không có dữ liệu.</td>
                         </tr>
                   </tbody>

@@ -2,23 +2,34 @@
 
 /* form-input */ 
 .form-input { position: relative; }
-.form-input input { padding: 10px; outline: none; border: 1px solid var(--default-border-color); background-color: transparent; }
+.form-input input { padding: 10px; outline: none; border: 1px solid var(--default-border-color); background-color: transparent; box-sizing: border-box; }
 .form-input label { font-size: 100%; position: absolute; left: 0; padding: 0.8em; margin-left: 0.5em; pointer-events: none; transition: all 0.3s ease; color: rgb(100, 100, 100); }
 .form-input :is(input:focus, input:valid)~label { transform: translateY(-50%) scale(.9); margin: 0em; margin-left: 0.5em; padding: 0.4em; background-color: white; color: #aaa;}
 .form-input :is(input:focus, input:valid) { border: 1px solid var(--default-border-color) !important; box-shadow: 0 0 4px rgba(168, 192, 196, 0.46) !important; }
-.form-input input:disabled {
-  background-color: #f8f8f8; /* nền xám nhẹ */
-  color: #666;              /* màu chữ nhạt hơn */
-  cursor: not-allowed;      /* con trỏ hiển thị khóa */
+.form-input input:disabled { background-color: #f8f8f8; color: #666; cursor: not-allowed;   box-shadow: none !important; opacity: .7; }
+.form-input input.is-invalid {   box-shadow: rgba(244, 1, 1, 0.52) 0px 0px 5px 0px, rgba(213, 0, 0, 0.24) 0px 0px 1px 0px; }
+.form-input input.is-invalid:focus { box-shadow: 0 0 0 4px rgba(224, 49, 49, .22); }
+.form-input-error { display: block; width: 100%; margin-top: 4px; }
+.form-input-error small {
+      color: #e53935;
+      font-size: 12px;
+      margin-top: 4px;
+      display: block;
+      user-select: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
 }
+
+
 
 /* Khi input bị disable mà vẫn có giá trị (ví dụ year=2025) thì label vẫn nằm trên */
 .form-input input:disabled ~ label {
-  transform: translateY(-50%) scale(.9);
-  margin: 0em;
-  padding: 0.4em;
-  background-color: #f8f8f8;
-  color: #999;
+      transform: translateY(-50%) scale(.9);
+      margin: 0em;
+      padding: 0.4em;
+      background-color: #f8f8f8;
+      color: #9c9c9c;
 }
 
 
@@ -40,13 +51,4 @@
 
 /* disable-input */ 
 .disable-input { background-color: var(--platinum); padding: 10px; border-radius: 5px;}
-
-.form-input-error small {
-      color: #e53935;
-      font-size: 12px;
-      margin-top: 4px;
-      display: block;
-      user-select: none;
-}
-
 

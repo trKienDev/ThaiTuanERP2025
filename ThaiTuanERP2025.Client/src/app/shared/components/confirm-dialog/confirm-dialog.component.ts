@@ -8,7 +8,7 @@ export type ConfirmDialogData = {
       message?: string;
       confirmText?: string;
       cancelText?: string;
-      tone?: 'danger' | 'warning' | 'primary';
+      tone?: 'danger' | 'warning' | 'primary' |  'error';
 }
 
 @Component({
@@ -20,13 +20,15 @@ export type ConfirmDialogData = {
 })
 export class KitConfirmDialogComponent {
       constructor(
-            private ref: MatDialogRef<KitConfirmDialogComponent, boolean>,
+            private readonly ref: MatDialogRef<KitConfirmDialogComponent, boolean>,
             @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogData
       ) {}
 
-      get buttonColor(): 'primary' | 'warn' | 'danger'  | undefined {
+      get buttonColor(): 'primary' | 'warn' | 'danger' | 'error' | undefined {
             if(this.data?.tone === 'danger') return 'danger';
             if(this.data?.tone === 'warning') return 'warn';
+            if(this.data.tone === 'error') return 'error';
+
             return 'primary';
       }
 

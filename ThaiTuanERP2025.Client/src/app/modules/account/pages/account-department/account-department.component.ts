@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, inject, OnInit } from "@angular/core";
+import { Component, inject  } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { DepartmentRequestDialog } from "../../components/department-request-dialog/department-request-dialog.component";
 import { DepartmentFacade } from "../../facades/department.facade";
@@ -15,19 +15,12 @@ import { SetParentDepartmentDialogComponent } from "../../components/set-parent-
       imports: [CommonModule, KitActionMenuComponent],
       templateUrl: './account-department.component.html',
 })
-export class AccountDepartmentComponent implements OnInit {      
-      private dialog = inject(MatDialog);
-      private departmentFacade = inject(DepartmentFacade);
+export class AccountDepartmentComponent {      
+      private readonly dialog = inject(MatDialog);
+      private readonly departmentFacade = inject(DepartmentFacade);
 
       departments$ = this.departmentFacade.departments$;
       
-      ngOnInit(): void {
-            this.departments$.subscribe({
-                  next: (departments) =>{
-                  }
-            })
-      }
-
       trackById(index: number, item: DepartmentDto) { return item.id; }
 
       openDeparmentRequestDialog(): void {
@@ -36,19 +29,19 @@ export class AccountDepartmentComponent implements OnInit {
       }
 
       addDepartmentManager(dept: DepartmentDto): void {
-            const dialogRef = this.dialog.open(DepartmentManagerDialogComponent, {
+            this.dialog.open(DepartmentManagerDialogComponent, {
                   data: dept
             })
       }
 
       editDepartment(department: DepartmentDto): void {
-            const dialogRef = this.dialog.open(DepartmentRequestDialog, {
+            this.dialog.open(DepartmentRequestDialog, {
                   data: department
             });            
       }
 
       setParentDepartment(department: DepartmentDto): void {
-            const dialogRef = this.dialog.open(SetParentDepartmentDialogComponent, {
+            this.dialog.open(SetParentDepartmentDialogComponent, {
                   data: department.id
             });
       }

@@ -18,12 +18,12 @@ import { DepartmentFacade } from "../../facades/department.facade";
       templateUrl: './department-request-dialog.component.html',
 })
 export class DepartmentRequestDialog {
-      private dialogRef = inject(MatDialogRef<DepartmentRequestDialog>);
-      private toastService = inject(ToastService);
-      private formBuilder = inject(FormBuilder);
-      private userOptionStore = inject(UserOptionStore);
-      private departmentOptionStore = inject(DepartmentOptionStore);
-      private departmentFacade = inject(DepartmentFacade);
+      private readonly dialogRef = inject(MatDialogRef<DepartmentRequestDialog>);
+      private readonly toastService = inject(ToastService);
+      private readonly formBuilder = inject(FormBuilder);
+      private readonly userOptionStore = inject(UserOptionStore);
+      private readonly departmentOptionStore = inject(DepartmentOptionStore);
+      private  readonly departmentFacade = inject(DepartmentFacade);
 
       dialogTitle = 'Thêm phòng ban mới';
       submitting = false;

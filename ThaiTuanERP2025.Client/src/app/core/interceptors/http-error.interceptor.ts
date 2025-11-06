@@ -1,7 +1,7 @@
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpInterceptorFn, HttpRequest } from "@angular/common/http";
-import { Inject, inject, Injectable } from "@angular/core";
+import { HttpErrorResponse, HttpInterceptorFn } from "@angular/common/http";
+import { inject} from "@angular/core";
 import { Router } from "@angular/router";
-import { catchError, Observable, throwError } from "rxjs";
+import { catchError, throwError } from "rxjs";
 import { ToastService } from "../../shared/components/kit-toast-alert/kit-toast-alert.service";
 
 export const HttpErrorInterceptor: HttpInterceptorFn = (req, next) => {
