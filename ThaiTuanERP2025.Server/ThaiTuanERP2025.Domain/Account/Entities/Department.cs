@@ -17,7 +17,9 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public bool IsActive { get; private set; }
 		public int Level { get; private set; }
 
-		public IReadOnlyCollection<DepartmentManager> Managers => _managers.AsReadOnly();
+		public ICollection<User> Users => _users;
+		public ICollection<Department> Children => _children;
+		public ICollection<DepartmentManager> Managers => _managers;
 
 		public Guid? ParentId { get; private set; }
 		public Department? Parent { get; private set; }
@@ -39,9 +41,6 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			AddDomainEvent(new DepartmentCreatedEvent(this));
 		}
 		#endregion
-
-		public ICollection<User> Users => _users;
-		public ICollection<Department> Children => _children;
 
 		#region Domain Behaviors
 		public void Rename(string newName)

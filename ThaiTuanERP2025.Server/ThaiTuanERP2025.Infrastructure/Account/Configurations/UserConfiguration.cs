@@ -29,12 +29,6 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 				phone.Property(p => p.Value).HasColumnName("Phone").HasMaxLength(30);
 			});
 
-			// Department (many-to-one)
-			builder.HasOne(u => u.Department)
-				.WithMany(d => d.Users)
-				.HasForeignKey(u => u.DepartmentId)
-				.OnDelete(DeleteBehavior.Restrict);
-
 			// Manager (self-reference)
 			builder.HasOne(u => u.Manager)
 				.WithMany()

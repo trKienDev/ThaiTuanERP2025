@@ -18,6 +18,11 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 			builder.Property(d => d.Level).HasDefaultValue(0);
 			builder.Property(d => d.IsActive).HasDefaultValue(true);
 
+			builder.HasMany(d => d.Users)
+			       .WithOne(u => u.Department)
+			       .HasForeignKey(u => u.DepartmentId)
+			       .OnDelete(DeleteBehavior.Restrict);
+
 			// Self reference (Parent)
 			builder.HasOne(d => d.Parent)
 				.WithMany(p => p.Children)
