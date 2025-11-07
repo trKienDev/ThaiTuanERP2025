@@ -57,13 +57,7 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories.Read
 					Email = u.Email != null ? u.Email.Value : null,
 					Phone = u.Phone != null ? u.Phone.Value : null,
 					DepartmentId = u.DepartmentId,
-					Department = u.Department == null 
-						? null : new DepartmentDto {
-							Id = u.Department.Id,
-							Name = u.Department.Name,
-							Code = u.Department.Code
-						},
-
+					Department = u.Department == null ? null : new DepartmentBriefDto(u.Department.Id, u.Department.Name, u.Department.Code),
 					AvatarFileId = u.AvatarFileId.HasValue ? u.AvatarFileId.Value : null,
 					AvatarFileObjectKey = u.AvatarFile != null ? u.AvatarFile.ObjectKey : null,
 
@@ -76,13 +70,13 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories.Read
 
 					Managers = u.DirectReportsAssignments.Where(m => m.RevokedAt == null)
 						.Select(m => new UserDto {
-								Id = m.Manager.Id,
-								FullName = m.Manager.FullName,
-								Username = m.Manager.Username,
-								Position = m.Manager.Position,
-								AvatarFileId = m.Manager.AvatarFileId.HasValue ? m.Manager.AvatarFileId.Value : null,
-								AvatarFileObjectKey = m.Manager.AvatarFile != null ? m.Manager.AvatarFile.ObjectKey : null
-							}
+							Id = m.Manager.Id,
+							FullName = m.Manager.FullName,
+							Username = m.Manager.Username,
+							Position = m.Manager.Position,
+							AvatarFileId = m.Manager.AvatarFileId.HasValue ? m.Manager.AvatarFileId.Value : null,
+							AvatarFileObjectKey = m.Manager.AvatarFile != null ? m.Manager.AvatarFile.ObjectKey : null
+						}
 						).ToList()
 				}
 			).ToListAsync(cancellationToken);

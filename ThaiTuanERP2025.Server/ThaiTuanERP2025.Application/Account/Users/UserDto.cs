@@ -23,7 +23,7 @@ namespace ThaiTuanERP2025.Application.Account.Users
 		public List<PermissionDto> Permissions { get; set; } = new();
 
 		public Guid? DepartmentId { get; set; }
-		public DepartmentDto? Department { get; set; } = default!;
+		public DepartmentBriefDto? Department { get; set; } = default!;
 	}
 
 	public sealed record UserBriefDto

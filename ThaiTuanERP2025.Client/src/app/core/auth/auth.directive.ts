@@ -36,9 +36,7 @@ export class HasPermissionDirective implements OnInit {
       }
 
       ngOnInit(): void {
-            console.log('run HasPermissionDirective');
             const can = this.evaluatePermission();
-            console.log('can: ', can);
 
             if (this.mode === 'hide') {
                   // === Ẩn hoặc hiển thị element ===

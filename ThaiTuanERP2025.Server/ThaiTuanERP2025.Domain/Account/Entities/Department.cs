@@ -23,7 +23,6 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 
 		public Guid? ParentId { get; private set; }
 		public Department? Parent { get; private set; }
-
 		#endregion
 
 		#region Constructor

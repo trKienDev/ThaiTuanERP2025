@@ -1,17 +1,16 @@
-<div class="user-profile">
+<div class="user-profile" *ngIf="currentUser$ | async as user">
       <div class="user-profile-container display-flex">
             <div class="col-left">
                   <div class="username-wrapper">
-                        <div class="username">&#64;{{ currentUser?.username || '---' }}</div>
+                        <div class="username">&#64; {{ user?.username || '---' }}</div>
                   </div>
                   <div class="avatar-img-wrapper">
-                        <img class="avatar-img" [src]="previewAvatarSrc || (currentUser | avatarUrlPipe)" alt="avatar user" (click)="triggerAvatarUpload()" style="cursor: pointer;"/>
-                        <input type="file" id="avatar-input" hidden accept="image/png, image/jpeg, image/jpg" (change)="onAvatarSelected($event)">
+                        <img class="avatar-img" [src]="previewAvatarSrc || (user | avatarUrlPipe)" [alt]="user?.fullName || user?.username || 'avatar user'" (click)="triggerAvatarUpload()" role="button" tabindex="0" (keydown.enter)="triggerAvatarUpload()" (keydown.space)="triggerAvatarUpload()" style="cursor: pointer;"/>
+                        <input type="file" id="avatar-input" hidden accept="image/png, image/jpeg, image/jpg" (change)="onAvatarSelected($event)"/>
                   </div>
                   <div class="save-avatar-wrapper display-flex justify-content-center">
-                        <kit-spinner-button type="button" [loading]="isUploading" [cssClass]="'button-1'" [disabled]="isUploading" 
-                        text="Cập nhật avatar" loadingText="Vui lòng chờ…" (click)="uploadAvatar()"></kit-spinner-button>
-                  </div> 
+                        <kit-spinner-button type="button" [loading]="isUploading" [cssClass]="'button-1'" [disabled]="isUploading" text="Cập nhật avatar" loadingText="Vui lòng chờ…" (click)="uploadAvatar(user?.id)"></kit-spinner-button>
+                  </div>
             </div>
             <div class="col-right">
                   <div class="primary-card">
@@ -20,34 +19,33 @@
                               <div class="card-body">
                                     <div class="display-flex fl-wrap">
                                           <div class="row fullname-wrapper width-50pt">
-                                                <label for="user-fullname">Họ tên</label>
-                                                <div class="card-box user-fullname">{{ currentUser?.fullName || '---' }}</div>
+                                                <div class="label">Họ tên</div>
+                                                <div class="card-box user-fullname">{{ user?.fullName || '---' }}</div>
                                           </div>
                                           <div class="row employee-code-wrapper width-50pt">
-                                                <label for="employee-code">Mã nhân viên</label>
-                                                <div class="card-box employee-code">{{ currentUser?.employeeCode || '---' }}</div>
+                                                <div class="label">Mã nhân viên</div>
+                                                <div class="card-box employee-code">{{ user?.employeeCode || '---' }}</div>
                                           </div>
                                           <div class="row user-email-wrapper width-50pt">
-                                                <label for="user-email">Email</label>
-                                                <div class="card-box user-email">{{ currentUser?.email || '---' }}</div>
+                                                <div class="label">Email</div>
+                                                <div class="card-box user-email">{{ user?.email || '---' }}</div>
                                           </div>
                                           <div class="row user-phone-wrapper width-50pt">
-                                                <label for="user-phone">Số điện thoại</label>
-                                                <div class="card-box user-phone">{{ currentUser?.phone || '---' }}</div>
+                                                <div class="label">Số điện thoại</div>
+                                                <div class="card-box user-phone">{{ user?.phone || '---' }}</div>
                                           </div>
                                           <div class="row user-department-wrapper width-50pt">
-                                                <label for="user-department">Phòng ban</label>
-                                                <div class="card-box user-department">{{ currentUser?.department?.name || '---' }}</div>
+                                                <div class="label">Phòng ban</div>
+                                                <div class="card-box user-department">{{ user?.department?.name || '---' }}</div>
                                           </div>
                                           <div class="row user-position-wrapper width-50pt">
-                                                <label for="user-position">Chức vụ</label>
-                                                <div class="card-box user-position">{{ currentUser?.position || '---' }}</div>
+                                                <div class="label">Chức vụ</div>
+                                                <div class="card-box user-position">{{ user?.position || '---' }}</div>
                                           </div>
                                     </div>
                               </div>
                         </div>
                   </div>
-
             </div>
       </div>
 </div>

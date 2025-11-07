@@ -1,4 +1,4 @@
-import { DepartmentDto } from "./department.model";
+import { DepartmentBriefDto, DepartmentDto } from "./department.model";
 import { PermissionDto } from "./permission.model";
 import { RoleDto } from "./role.model";
 
@@ -9,7 +9,6 @@ export interface UserDto {
       employeeCode: string;
       email?: string;
       password: string;
-
       avatarFileId?: string;
       avatarFileObjectKey?: string;
 
@@ -17,7 +16,7 @@ export interface UserDto {
       permissions: PermissionDto[];
       phone?: number | null;
       departmentId?: string;  
-      department?: DepartmentDto;
+      department?: DepartmentBriefDto;
       position: string;
 
       managerId?: string;

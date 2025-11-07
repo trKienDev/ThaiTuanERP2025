@@ -8,9 +8,6 @@ namespace ThaiTuanERP2025.Application.Account.Mappings
 	public class AccountMappingProfile : Profile
 	{
 		public AccountMappingProfile() {
-			// Nested mapping (nếu cần)
-			CreateMap<Department, DepartmentDto>();
-
 			CreateMap<Group, GroupDto>()
 				.ForMember(dest => dest.Members, opt => opt.MapFrom(
 					src => src.UserGroups.Select(ug => ug.User)

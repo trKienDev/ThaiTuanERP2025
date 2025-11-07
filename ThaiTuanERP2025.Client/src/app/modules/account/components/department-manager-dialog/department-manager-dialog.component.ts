@@ -33,7 +33,9 @@ export class DepartmentManagerDialogComponent implements OnInit {
 
       constructor(
             @Inject(MAT_DIALOG_DATA) public data: DepartmentDto 
-      ) {}
+      ) {
+            console.log('DepartmentDto: ', data);
+      }
 
       form = this.formBuilder.group({
             primaryManagerId: this.formBuilder.control<string>('', { nonNullable: true }),
@@ -58,8 +60,8 @@ export class DepartmentManagerDialogComponent implements OnInit {
       ngOnInit(): void {
             if(this.data) {
                   this.depatment = this.data;
-                  if(this.depatment.managerUserId) {
-                        this.form.patchValue({ primaryManagerId: this.depatment.managerUserId });
+                  if(this.depatment.primaryManager) {
+                        this.form.patchValue({ primaryManagerId: this.depatment.primaryManager.id });
                   }
             }
       }

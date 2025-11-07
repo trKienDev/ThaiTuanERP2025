@@ -15,7 +15,7 @@
                   <td>{{ i + 1 }}</td>
                   <td>{{ dept.code }}</td>
                   <td>{{ dept.name }}</td>
-                  <td>{{ dept.manager?.fullName || '- - - -' }}</td>
+                  <td>{{ dept?.primaryManager?.fullName }}</td>
                   <td *appHasPermission="'department.actions'" class="display-flex justify-content-center">
                         <kit-action-menu [actions]="buildDepartmentActions(dept)"></kit-action-menu>
                   </td>

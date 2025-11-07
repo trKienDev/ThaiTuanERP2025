@@ -4,10 +4,15 @@ export interface DepartmentDto {
       id: string;
       code: string;
       name: string;
-      managerUserId?: string | null;
-      manager?: UserDto;
       parentId?: string | null;
-      region: number;
+      primaryManager?: UserDto | null;
+      viceManagers: UserDto[];
+}
+
+export interface DepartmentBriefDto {
+      id: string;
+      code: string;
+      name: string;
 }
 
 export interface DepartmentRequest {
