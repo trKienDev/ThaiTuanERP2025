@@ -19,10 +19,16 @@
                               </div>
                         </div>
                         <div class="dialog-row">
-                              <kit-dropdown [options]="budgetPeriodOptions" [placeholder]="'Chọn kỳ ngân sách'" [required]="true" [enableFilter]="false"></kit-dropdown>
+                              <kit-dropdown formControlName="budgetPeriodId" [options]="budgetPeriodOptions" [placeholder]="'Chọn kỳ ngân sách'" [required]="true" [enableFilter]="false"></kit-dropdown>
                         </div>
                         <div class="dialog-row">
-                              <button type="button" class="button default-button" (click)="openBudgetPeriodsTableDialog()">Chọn kỳ ngân sách</button>
+                              <div class="form-input">
+                                    <input class="" type="text" [value]="(currentUser$ | async)?.department?.name || '---'" autocomplete="on" disabled>
+                                    <label for="department">Phòng ban <span style="color: red;">  *</span></label>
+                              </div>
+                        </div>
+                        <div class="dialog-row">
+                              <kit-dropdown  [placeholder]="'Người phê duyệt'" [required]="true" [enableFilter]="false"></kit-dropdown>
                         </div>
                   </div>
                   <div class="dialog-footer">

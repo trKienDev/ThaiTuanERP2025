@@ -16,9 +16,9 @@ import { logFormErrors } from "../../../../../../shared/utils/form.utils";
 })
 export class ApprovalStepRequestDialog implements OnInit {
       private readonly toastService = inject(ToastService);
-      private formBuilder = inject(FormBuilder);
-      private dialog = inject(MatDialogRef<ApprovalStepRequestDialog>);
-      private userOptionsStore = inject(UserOptionStore);
+      private readonly formBuilder = inject(FormBuilder);
+      private readonly dialog = inject(MatDialogRef<ApprovalStepRequestDialog>);
+      private readonly userOptionsStore = inject(UserOptionStore);
 
       @Input() approverMode: 'standard' | 'condition' = 'standard';
 
