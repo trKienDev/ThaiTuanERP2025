@@ -34,6 +34,7 @@ export class KitDropdownComponent implements ControlValueAccessor, OnChanges {
       @Input() caseSensitive = false;       /** Có phân biệt hoa/thường không */
       @Input() autoFocusFilter = true;       /** Khi mở menu, tự động focus vào ô filter */     
       @Input() required = false;
+      @Input() visibleItemCount: number = 6; 
 
       @Input({ transform: booleanAttribute }) invalid = false;
       @HostBinding('class.invalid')
@@ -41,6 +42,8 @@ export class KitDropdownComponent implements ControlValueAccessor, OnChanges {
 
       @Output() selectionChange = new EventEmitter<KitDropdownOption>();
       @Output() selectionChangeMany = new EventEmitter<KitDropdownOption[]>();    // Output cho multi-select 
+
+      
 
       isOpen = false;
       disabled = false;
@@ -77,6 +80,11 @@ export class KitDropdownComponent implements ControlValueAccessor, OnChanges {
             if (changes['options']) {
                   if (!this.multiple) this.syncLabelFromValue();
             }
+      }
+
+      get maxMenuHeight(): string {
+            const itemHeight = 36; 
+            return `${this.visibleItemCount * itemHeight}px`;
       }
 
       get hasValue(): boolean {

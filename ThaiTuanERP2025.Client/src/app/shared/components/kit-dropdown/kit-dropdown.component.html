@@ -32,7 +32,7 @@
             </ng-template>
       </div>
 
-      <ul class="kit-dropdown-menu" role="listbox" [@slide]="isOpen ? 'open' : 'closed'">
+      <ul class="kit-dropdown-menu" role="listbox" [@slide]="isOpen ? 'open' : 'closed'"  [style.max-height]="maxMenuHeight">
             <!-- Filter bar -->
             <li *ngIf="enableFilter" class="kit-dropdown-filter" (keydown)="onFilterKeydown($event)" #optRef>
                   <input #filterInput type="text" [placeholder]="filterPlaceholder"

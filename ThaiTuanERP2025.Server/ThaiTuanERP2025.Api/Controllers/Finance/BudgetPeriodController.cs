@@ -20,11 +20,17 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 			_mediator = mediator;
 		}
 
-		[HttpGet("for-year/{year:int}")]
+		[HttpGet("year/{year:int}")]
 		public async Task<IActionResult> GetForYear([FromRoute] int year, CancellationToken cancellationToken)
 		{
 			var result = await _mediator.Send(new GetBudgetPeriodsForYearQuery(year), cancellationToken);
 			return Ok(ApiResponse<IReadOnlyList<BudgetPeriodDto>>.Success(result));
+		}
+
+		[HttpGet("available")]
+		public async Task<IActionResult> GetAvailable(CancellationToken cancellationToken) {
+			var result = await _mediator.Send(new GetAvailableBudgetPeriodQuery(), cancellationToken);
+			return Ok(ApiResponse<IReadOnlyList<BudgetPeriodDto>>.Success(result));	
 		}
 
 		[HasPermission("budget-period.create-for-year")]

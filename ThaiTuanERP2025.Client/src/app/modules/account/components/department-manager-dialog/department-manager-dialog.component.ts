@@ -17,7 +17,7 @@ import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spi
       imports: [CommonModule, ReactiveFormsModule, KitDropdownComponent, KitSpinnerButtonComponent],
       templateUrl: './department-manager-dialog.component.html'
 })
-export class DepartmentManagerDialogComponent implements OnInit {
+export class DepartmentManagerDialogComponent {
       private readonly toast = inject(ToastService);
       private readonly dialogRef = inject(MatDialogRef<DepartmentManagerDialogComponent>);
       private readonly formBuilder = inject(FormBuilder);
@@ -34,7 +34,16 @@ export class DepartmentManagerDialogComponent implements OnInit {
       constructor(
             @Inject(MAT_DIALOG_DATA) public data: DepartmentDto 
       ) {
-            console.log('DepartmentDto: ', data);
+            if(this.data) {
+                  this.depatment = this.data;
+                  if(this.depatment.primaryManager) {
+                        this.form.patchValue({ primaryManagerId: this.depatment.primaryManager.id });
+                  }
+                  if (this.depatment.viceManagers?.length) {
+                        const viceIds = this.depatment.viceManagers.map(vm => vm.id);
+                        this.form.patchValue({ viceManagerIds: viceIds });
+                  }
+            }
       }
 
       form = this.formBuilder.group({
@@ -56,15 +65,6 @@ export class DepartmentManagerDialogComponent implements OnInit {
       ]).pipe(
             map(([opts, primary]) => (opts ?? []).filter(o => o.id !== primary))
       );
-
-      ngOnInit(): void {
-            if(this.data) {
-                  this.depatment = this.data;
-                  if(this.depatment.primaryManager) {
-                        this.form.patchValue({ primaryManagerId: this.depatment.primaryManager.id });
-                  }
-            }
-      }
 
       onPrimaryManagerSelected(opt: KitDropdownOption) {
             const id = typeof opt === 'string' ? opt : opt?.id;

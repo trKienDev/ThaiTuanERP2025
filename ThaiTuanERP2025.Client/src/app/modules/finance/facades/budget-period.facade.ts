@@ -6,11 +6,10 @@ import { Observable } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
 export class BudgetPeriodFacade extends BaseCrudFacade<BudgetPeriodDto, BudgetPeriodRequest> {
+      private readonly budgetPeriodService = inject(BudgetPeriodService);
       constructor() {
             super(inject(BudgetPeriodService));
       }
       
       readonly budgetPeriods$: Observable<BudgetPeriodDto[]> = this.list$;
-
-      
 }

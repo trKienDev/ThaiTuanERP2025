@@ -13,8 +13,17 @@ export class BudgetPeriodService extends BaseCrudService<BudgetPeriodDto, Budget
             super(http, `${environment.apiUrl}/budget-period`);
       }
 
+      getAvailable() {
+            return this.http.get<ApiResponse<BudgetPeriodDto[]>>(`${this.endpoint}/available`)
+                  .pipe(
+                        handleApiResponse$<BudgetPeriodDto[]>(),
+                        catchError(err => throwError(() => err))
+                  );
+      }
+
+
       getForYear(year: number) {
-            return this.http.get<ApiResponse<BudgetPeriodDto[]>>(`${this.endpoint}/for-year/${year}`)
+            return this.http.get<ApiResponse<BudgetPeriodDto[]>>(`${this.endpoint}/year/${year}`)
                   .pipe(
                         handleApiResponse$<BudgetPeriodDto[]>(),
                         catchError(err => throwError(() => err))

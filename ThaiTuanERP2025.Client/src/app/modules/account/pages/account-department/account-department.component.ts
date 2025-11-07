@@ -9,11 +9,12 @@ import { KitActionMenuComponent } from "../../../../shared/components/kit-action
 import { SetParentDepartmentDialogComponent } from "../../components/set-parent-department-dialog/set-parent-department-dialog.component";
 import { DepartmentManagerDialogComponent } from "../../components/department-manager-dialog/department-manager-dialog.component";
 import { HasPermissionDirective } from "../../../../core/auth/auth.directive";
+import { AvatarUrlPipe } from "../../../../shared/pipes/avatar-url.pipe";
 
 @Component({
       selector: 'account-department',
       standalone: true,
-      imports: [CommonModule, KitActionMenuComponent, HasPermissionDirective],
+      imports: [CommonModule, KitActionMenuComponent, HasPermissionDirective, AvatarUrlPipe],
       templateUrl: './account-department.component.html',
 })
 export class AccountDepartmentComponent {      

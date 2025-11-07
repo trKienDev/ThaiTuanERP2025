@@ -15,7 +15,12 @@
                   <td>{{ i + 1 }}</td>
                   <td>{{ dept.code }}</td>
                   <td>{{ dept.name }}</td>
-                  <td>{{ dept?.primaryManager?.fullName }}</td>
+                  <td>
+                        <div class="display-flex justify-content-center align-items-center gap-5px">
+                              <img class="avatar-user" [src]="(dept.primaryManager | avatarUrlPipe)" alt="">
+                              <span>{{ dept?.primaryManager?.fullName }}</span>
+                        </div>
+                  </td>
                   <td *appHasPermission="'department.actions'" class="display-flex justify-content-center">
                         <kit-action-menu [actions]="buildDepartmentActions(dept)"></kit-action-menu>
                   </td>

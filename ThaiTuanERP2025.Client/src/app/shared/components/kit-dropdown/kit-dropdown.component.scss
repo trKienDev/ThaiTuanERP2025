@@ -99,8 +99,10 @@
       margin-top: 1px;
       box-shadow: 0 1px 2px rgb(204, 204, 204);
       border-radius: 0 0px 3px 3px;
-      overflow-y: auto;
       z-index: 9;
+      overflow-y: auto !important; 
+      scrollbar-width: thin; 
+      scrollbar-color: #ccc transparent;
 
       .selected { background: var(--bright-blue-color) !important; color: white;  }
       .check { width: 14px; display: inline-block; color: white; }

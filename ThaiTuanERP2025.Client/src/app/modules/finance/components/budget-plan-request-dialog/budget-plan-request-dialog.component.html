@@ -18,6 +18,12 @@
                                     <label for="amount">Số tiền <span style="color: red;">  *</span></label>
                               </div>
                         </div>
+                        <div class="dialog-row">
+                              <kit-dropdown [options]="budgetPeriodOptions" [placeholder]="'Chọn kỳ ngân sách'" [required]="true" [enableFilter]="false"></kit-dropdown>
+                        </div>
+                        <div class="dialog-row">
+                              <button type="button" class="button default-button" (click)="openBudgetPeriodsTableDialog()">Chọn kỳ ngân sách</button>
+                        </div>
                   </div>
                   <div class="dialog-footer">
 
