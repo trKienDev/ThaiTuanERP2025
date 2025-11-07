@@ -13,12 +13,10 @@ export const accountRoutes: Routes = [
                   { path: 'group', loadComponent: () => import('./pages/account-group/account-group.component').then((m) => m.AccountGroupComponent)},
                   { 
                         path: 'members', 
-                        canActivate: [adminGuard], 
                         loadComponent: () => import('./pages/account-member/account-member.component').then((m) => m.AccountMemberComponent)
                   },
                   {
                         path: 'departments', 
-                        canActivate: [adminGuard], 
                         loadComponent: () => import('./pages/account-department/account-department.component').then((m) => m.AccountDepartmentComponent )
                   }, 
                   { 

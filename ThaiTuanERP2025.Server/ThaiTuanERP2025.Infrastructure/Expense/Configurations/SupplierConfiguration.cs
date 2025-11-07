@@ -16,13 +16,6 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 			builder.Property(x => x.TaxCode).HasMaxLength(50);
 			builder.Property(x => x.IsActive).IsRequired();
 
-			// ========== Navigation tới BankAccounts ==========
-			builder.HasMany(s => s.BankAccounts)
-				.WithOne(b => b.Supplier)
-				.HasForeignKey(b => b.SupplierId)
-				.OnDelete(DeleteBehavior.Cascade);
-			// Khi xóa Supplier thì xóa luôn BankAccounts (trong Aggregate)
-
 			// ========== Index ==========
 			builder.HasIndex(x => x.Name);
 			builder.HasIndex(x => x.TaxCode);

@@ -3,7 +3,6 @@ using ThaiTuanERP2025.Domain.Account.ValueObjects;
 using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Common.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
-using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Files.Entities;
 
 namespace ThaiTuanERP2025.Domain.Account.Entities
@@ -14,7 +13,6 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		private readonly List<UserGroup> _userGroups = new();
 		private readonly List<UserManagerAssignment> _managerAssignments = new();
 		private readonly List<UserManagerAssignment> _directReportsAssignments = new();
-		private readonly List<BankAccount> _bankAccounts = new();
 
 		#region EF Constructor
 		private User() { } 
@@ -71,7 +69,6 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public IReadOnlyCollection<UserGroup> UserGroups => _userGroups.AsReadOnly();
 		public IReadOnlyCollection<UserManagerAssignment> ManagerAssignments => _managerAssignments.AsReadOnly();
 		public IReadOnlyCollection<UserManagerAssignment> DirectReportsAssignments => _directReportsAssignments.AsReadOnly();
-		public IReadOnlyCollection<BankAccount> BankAccounts => _bankAccounts.AsReadOnly();
 		#endregion
 
 		#region Domain Behaviors
@@ -84,7 +81,6 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			ManagerId = managerId;
 			AddDomainEvent(new UserManagerAssignedEvent(this, managerId));
 		}
-
 
 		public void Activate()
 		{
@@ -151,6 +147,31 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			Guard.AgainstDefault(departmentId, nameof(departmentId));
 			DepartmentId = departmentId;
 			AddDomainEvent(new UserDepartmentChangedEvent(this, departmentId));
+		}
+
+		public void DeletePermanently()
+		{
+			// 1) Chặn các trường hợp không hợp lệ
+			if (IsSuperAdmin)
+				throw new DomainException("Không thể xóa vĩnh viễn tài khoản Super Admin.");
+
+			// Nếu còn người báo cáo trực tiếp → buộc chuyển/huỷ quản lý trước khi xóa
+			if (_directReportsAssignments.Any())
+				throw new DomainException("Không thể xóa vì user còn có nhân viên đang báo cáo trực tiếp.");
+
+			// 2) Dọn các quan hệ con thuộc aggregate User
+			_userRoles.Clear();
+			_userGroups.Clear();
+			_managerAssignments.Clear();
+			_directReportsAssignments.Clear();
+
+			// Dọn các reference tùy chọn để tránh FK còn tham chiếu
+			ManagerId = null;
+			DepartmentId = null;
+			AvatarFileId = null;
+
+			// 3) Phát event báo “xóa vĩnh viễn”
+			AddDomainEvent(new UserPermanentDeleteRequestedEvent(this));
 		}
 		#endregion
 	}

@@ -14,7 +14,7 @@ export class UserService extends BaseCrudService<UserDto, UserRequest> {
             super(http, `${environment.apiUrl}/user`);
       }
 
-      private fileService = inject(FileService);
+      private readonly fileService = inject(FileService);
 
       getCurrentuser(): Observable <UserDto> {
             return this.http.get<ApiResponse<UserDto>>(`${this.endpoint}/me`)

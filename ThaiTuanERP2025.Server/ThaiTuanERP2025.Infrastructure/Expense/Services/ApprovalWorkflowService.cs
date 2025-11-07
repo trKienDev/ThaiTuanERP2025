@@ -60,13 +60,16 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 			if (tpl.Steps == null || !tpl.Steps.Any())
 				throw new ConflictException("Workflow template has no steps");
 
+			var creatorId = expensePayment.CreatedByUserId
+				?? throw new ConflictException("ExpensePayment thiếu CreatedByUserId.");
+
 			// 2 ) Tạo instance (Draft)
 			var awi = new ExpenseWorkflowInstance(
 				templateId: tpl.Id,
 				templateVersion: tpl.Version,
 				documentType: "ExpensePayment",
 				documentId: expensePayment.Id,
-				createdByUserId: expensePayment.CreatedByUserId,
+				 createdByUserId: creatorId,
 				amount: expensePayment.TotalWithTax,
 				currency: null,
 				budgetCode: null,
@@ -126,9 +129,13 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 			}
 
 			// 5 ) Add Folllowers
-			var followerIds = new HashSet<Guid>() { expensePayment.CreatedByUserId };
+			var followerIds = new HashSet<Guid>();
+			if (expensePayment.CreatedByUserId is Guid creator && creator != Guid.Empty)
+				followerIds.Add(creator);
+
 			followerIds.UnionWith(
-				awi.Steps.SelectMany(s => JsonUtils.ParseGuidArray(s.ResolvedApproverCandidatesJson)).Where(id => id != Guid.Empty)
+				awi.Steps.SelectMany(s => JsonUtils.ParseGuidArray(s.ResolvedApproverCandidatesJson))
+					.Where(id => id != Guid.Empty)
 			);
 
 			await _followerService.FollowManyAsync(SubjectType.ExpensePayment, expensePayment.Id, followerIds, cancellationToken);

@@ -40,7 +40,6 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<CashoutGroup> CashOutGroups => Set<CashoutGroup>();
 		public DbSet<CashoutCode> CashOutCodes => Set<CashoutCode>();
 		public DbSet<StoredFile> StoredFiles => Set<StoredFile>();
-		public DbSet<BankAccount> BankAccounts => Set<BankAccount>();
 		public DbSet<OutgoingBankAccount> OutgoingBankAccounts => Set<OutgoingBankAccount>();
 		public DbSet<Supplier> Suppliers => Set<Supplier>();
 		public DbSet<Invoice> Invoices => Set<Invoice>();
@@ -76,6 +75,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 			try
 			{
 				modelBuilder.ApplyConfigurationsFromAssembly(typeof(ThaiTuanERP2025DbContext).Assembly);
+				ApplySoftDeleteFilters(modelBuilder);
 			}
 			catch (Exception ex)
 			{
@@ -94,68 +94,86 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 			    w.Ignore(RelationalEventId.PendingModelChangesWarning));
 		}
 
-		public async override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+		public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{
-			var entries = ChangeTracker.Entries<AuditableEntity>();
-			var currentUserId = _currentUserService?.UserId ?? Guid.Empty;
-			foreach (var entry in entries) {
+			var now = DateTime.UtcNow;
+
+			Guid? userId = null;
+			if (_currentUserService?.UserId is Guid uid && uid != Guid.Empty)
+				userId = uid; // chỉ khi có user hợp lệ
+
+			foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
+			{
 				switch (entry.State)
 				{
 					case EntityState.Added:
-						entry.Entity.CreatedByUserId = currentUserId;
-						entry.Entity.CreatedDate = DateTime.UtcNow;
+						entry.Entity.CreatedDate = now;
+						entry.Entity.CreatedByUserId = userId; // null nếu không có user
 						break;
+
 					case EntityState.Modified:
-						entry.Entity.ModifiedDate = DateTime.UtcNow;
-						entry.Entity.ModifiedByUserId = currentUserId;
+						entry.Entity.ModifiedDate = now;
+						entry.Entity.ModifiedByUserId = userId; // null nếu không có user
 						break;
+
+						// nếu bạn có soft-delete chuyển state -> Modified, có thể set Deleted* ở nơi khác
 				}
 			}
-			
-			var result = await base.SaveChangesAsync(cancellationToken);
 
-			if (_dispatcher is not null)
+			try
 			{
-				var entitiesWithEvents = ChangeTracker.Entries<AuditableEntity>()
-					.Select(e => e.Entity)
-					.Where(e => e.DomainEvents.Any())
-					.ToArray();
+				var result = await base.SaveChangesAsync(cancellationToken);
 
-				// Flatten tất cả domain events
-				var allEvents = entitiesWithEvents
-					.SelectMany(e => e.DomainEvents)
-					.ToArray();
+				// ✅ Chỉ dispatch domain events khi SaveChanges thành công
+				if (_dispatcher is not null)
+				{
+					var entitiesWithEvents = ChangeTracker.Entries<AuditableEntity>()
+					    .Select(e => e.Entity)
+					    .Where(e => e.DomainEvents.Any())
+					    .ToArray();
 
-				await _dispatcher.DispatchAsync(allEvents, cancellationToken);
+					var allEvents = entitiesWithEvents.SelectMany(e => e.DomainEvents).ToArray();
+					await _dispatcher.DispatchAsync(allEvents, cancellationToken);
+					foreach (var entity in entitiesWithEvents) entity.ClearDomainEvents();
+				}
 
-				// Optionally: clear domain events sau khi publish
-				foreach (var entity in entitiesWithEvents)
-					entity.ClearDomainEvents();
+				return result;
 			}
+			catch (DbUpdateConcurrencyException ex)
+			{
+				var details = ex.Entries.Select(e =>
+				{
+					var concProps = e.Properties
+					    .Where(p => p.Metadata.IsConcurrencyToken)
+					    .Select(p => $"{p.Metadata.Name}: orig={p.OriginalValue} / curr={p.CurrentValue}");
+					var pk = string.Join(",", e.Properties.Where(p => p.Metadata.IsPrimaryKey()).Select(p => $"{p.Metadata.Name}={p.CurrentValue}"));
+					return $"{e.Entity.GetType().Name} PK[{pk}] | Concurrency[{string.Join("; ", concProps)}]";
+				});
 
-			return result;
+				throw new DbUpdateConcurrencyException("Concurrency conflict: " + string.Join(" || ", details), ex);
+			}
 		}
 
 		private static void ApplySoftDeleteFilters(ModelBuilder modelBuilder)
 		{
-			foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+			var entityClrTypes = modelBuilder.Model
+			    .GetEntityTypes()
+			    .Select(et => et.ClrType)
+			    .Where(t => t != null && typeof(AuditableEntity).IsAssignableFrom(t))
+			    .Distinct()!; // phòng trùng nếu có shared types
+
+			foreach (var clrType in entityClrTypes)
 			{
-				var clrType = entityType.ClrType;
-				if (clrType == null || !typeof(AuditableEntity).IsAssignableFrom(clrType))
-					continue;
+				var param = Expression.Parameter(clrType, "e");
+				var prop = Expression.Property(param, nameof(AuditableEntity.IsDeleted));
+				var body = Expression.Equal(prop, Expression.Constant(false));
 
-				// Kiểm tra có property IsDeleted hay không
-				var propInfo = clrType.GetProperty(nameof(AuditableEntity.IsDeleted));
-				if (propInfo == null)
-					continue;
-
-				var parameter = Expression.Parameter(clrType, "e");
-				var prop = Expression.Property(parameter, propInfo);
-				var body = Expression.Not(prop);
-				var lambda = Expression.Lambda(body, parameter);
+				var lambdaType = typeof(Func<,>).MakeGenericType(clrType, typeof(bool));
+				var lambda = Expression.Lambda(lambdaType, body, param);
 
 				modelBuilder.Entity(clrType).HasQueryFilter(lambda);
 			}
 		}
+
 	}
 }

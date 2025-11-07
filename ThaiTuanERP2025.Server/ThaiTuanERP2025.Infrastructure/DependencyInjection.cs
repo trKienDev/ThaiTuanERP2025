@@ -109,7 +109,6 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IInvoiceReadRepository, InvoiceReadRepository>();
 			services.AddScoped<IInvoiceFileRepository, InvoiceFileRepository>();
 			services.AddScoped<ISupplierRepository, SupplierRepository>();
-			services.AddScoped<IBankAccountRepository, BankAccountRepository>();
 			services.AddScoped<IOutgoingBankAccountRepository, OutgoingBankAccountRepository>();
 			services.AddScoped<IOutgoingPaymentRepository, OutgoingPaymentRepository>();
 			services.AddScoped<IExpenseWorkflowTemplateRepository, ExpenseWorkflowTemplateRepository>();

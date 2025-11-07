@@ -1,15 +1,11 @@
-﻿using ThaiTuanERP2025.Domain.Account.Entities;
-using ThaiTuanERP2025.Domain.Common;
+﻿using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Common.Entities;
-using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Events.Suppliers;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
 	public class Supplier : AuditableEntity
 	{
-		private readonly List<BankAccount> _bankAccounts = new();
-
 		#region Constructors
 		private Supplier() { }
 		public Supplier(string name, string? taxCode)
@@ -28,8 +24,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public string Name { get; private set; } = null!;
 		public string? TaxCode { get; private set; }
 		public bool IsActive { get; private set; } = true;
-
-		public IReadOnlyCollection<BankAccount> BankAccounts => _bankAccounts.AsReadOnly();
 		#endregion
 
 		// ===== Domain behaviors =====
@@ -64,24 +58,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 				IsActive = false;
 				AddDomainEvent(new SupplierDeactivatedEvent(this));
 			}
-		}
-
-		public void AddBankAccount(BankAccount account)
-		{
-			if (account == null)
-				throw new DomainException("Tài khoản ngân hàng không hợp lệ.");
-
-			if (_bankAccounts.Any(b => b.AccountNumber == account.AccountNumber))
-				throw new DomainException("Tài khoản ngân hàng đã tồn tại.");
-
-			_bankAccounts.Add(account);
-		}
-
-		public void RemoveBankAccount(Guid bankAccountId)
-		{
-			var existing = _bankAccounts.FirstOrDefault(b => b.Id == bankAccountId);
-			if (existing != null)
-				_bankAccounts.Remove(existing);
 		}
 	}
 }

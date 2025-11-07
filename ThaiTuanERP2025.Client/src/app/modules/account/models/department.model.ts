@@ -18,6 +18,6 @@ export interface DepartmentRequest {
 }
 
 export interface SetDepartmentManagerRequest {
-      departmentId: string;
-      managerId: string;
+      primaryManagerId: string;
+      viceManagerIds: string[] | null;
 }

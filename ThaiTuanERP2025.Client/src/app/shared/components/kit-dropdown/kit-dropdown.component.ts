@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { booleanAttribute, Component, ElementRef, EventEmitter, forwardRef, HostBinding, HostListener, Input, OnChanges, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
 
 export type KitDropdownOption = { id: string; label: string, imgUrl?: string };
 

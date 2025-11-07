@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, inject } from "@angular/core";
+import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ConnectedPosition, OverlayModule } from "@angular/cdk/overlay";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
@@ -71,19 +71,19 @@ type PaymentItem = {
       standalone: true,
       providers: [...provideMondayFirstDateAdapter() ]
 })
-export class ExpensePaymentRequestPanelComponent {
-      private destroy$ = new Subject<void>();
-      private formBuilder = inject(FormBuilder);
-      private dialog = inject(MatDialog);
-      private toast = inject(ToastService);
-      private userOptionsStore = inject(UserOptionStore);
-      private supplierOptionStore = inject(SupplierOptionStore);
-      private managerOptionStore = inject(ManagerOptionStore);
-      private userFacade = inject(UserFacade);
-      private supplierFacade = inject(SupplierFacade);
+export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
+      private readonly destroy$ = new Subject<void>();
+      private readonly formBuilder = inject(FormBuilder);
+      private readonly dialog = inject(MatDialog);
+      private readonly toast = inject(ToastService);
+      private readonly userOptionsStore = inject(UserOptionStore);
+      private readonly supplierOptionStore = inject(SupplierOptionStore);
+      private readonly managerOptionStore = inject(ManagerOptionStore);
+      private readonly userFacade = inject(UserFacade);
+      private readonly supplierFacade = inject(SupplierFacade);
       public submitting = false;
       private readonly expensePaymentService = inject(ExpensePaymentService);
-      private router = inject(Router);
+      private readonly router = inject(Router);
 
       public readonly uploadMeta = {
             module: 'expense',
@@ -108,10 +108,10 @@ export class ExpensePaymentRequestPanelComponent {
       selectedBankAccount: BankAccountDto | null = null;     
 
       constructor(
-            private bankAccountService: BankAccountService,
-            private budegetCodeService: BudgetCodeService,
-            private cashoutCodeService: CashoutCodeService,
-            private confirmService: ConfirmService,
+            private readonly bankAccountService: BankAccountService,
+            private readonly budegetCodeService: BudgetCodeService,
+            private readonly cashoutCodeService: CashoutCodeService,
+            private readonly confirmService: ConfirmService,
       ) { }
 
       // reactive form

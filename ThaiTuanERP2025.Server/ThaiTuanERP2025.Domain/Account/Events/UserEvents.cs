@@ -122,7 +122,16 @@ namespace ThaiTuanERP2025.Domain.Account.Events
 			User = user;
 			IsSuperAdmin = isSuperAdmin;
 		}
+		public User User { get; }
+		public bool IsSuperAdmin { get; }
+	}
 
+	public sealed class UserPermanentDeleteRequestedEvent : UserEventBase
+	{
+		public UserPermanentDeleteRequestedEvent(User user) : base(user.Id)
+		{
+			User = user;
+		}
 		public User User { get; }
 		public bool IsSuperAdmin { get; }
 	}

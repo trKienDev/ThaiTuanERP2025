@@ -4,15 +4,16 @@ import { MatDialog } from "@angular/material/dialog";
 import { DepartmentRequestDialog } from "../../components/department-request-dialog/department-request-dialog.component";
 import { DepartmentFacade } from "../../facades/department.facade";
 import { DepartmentDto } from "../../models/department.model";
-import { DepartmentManagerDialogComponent } from "./department-manager-dialog/department-manager-dialog.component";
 import { ActionMenuOption } from "../../../../shared/components/kit-action-menu/kit-action-menu.model";
 import { KitActionMenuComponent } from "../../../../shared/components/kit-action-menu/kit-action-menu.component";
 import { SetParentDepartmentDialogComponent } from "../../components/set-parent-department-dialog/set-parent-department-dialog.component";
+import { DepartmentManagerDialogComponent } from "../../components/department-manager-dialog/department-manager-dialog.component";
+import { HasPermissionDirective } from "../../../../core/auth/auth.directive";
 
 @Component({
       selector: 'account-department',
       standalone: true,
-      imports: [CommonModule, KitActionMenuComponent],
+      imports: [CommonModule, KitActionMenuComponent, HasPermissionDirective],
       templateUrl: './account-department.component.html',
 })
 export class AccountDepartmentComponent {      
@@ -54,5 +55,4 @@ export class AccountDepartmentComponent {
                   { label: '⛔ Xóa', color: 'red' },
             ]
       }
-
 }

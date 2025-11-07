@@ -62,7 +62,8 @@
                   border-radius: 3px;
                   
                   &:hover {
-                        background-color: rgb(255, 226, 226);
+                        box-shadow: rgba(245, 152, 152, 0.459) 0px 0px 5px 0px, rgba(255, 140, 140, 0.685) 0px 0px 1px 0px;
+                        background-color: transparent;
                         border-left: 1px solid red;
                         color: red;
                         cursor: pointer;

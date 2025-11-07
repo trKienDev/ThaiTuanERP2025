@@ -9,9 +9,7 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 		{
 			builder.ToTable("DepartmentManagers", "Account");
 
-			builder.HasKey(x => x.Id);
-
-			builder.HasIndex(x => new { x.DepartmentId, x.UserId }).IsUnique();
+			builder.HasKey(x => new { x.DepartmentId, x.UserId });
 
 			// Mỗi Department chỉ có tối đa 1 primary manager (tùy nhu cầu)
 			builder.HasIndex(x => new { x.DepartmentId, x.IsPrimary })

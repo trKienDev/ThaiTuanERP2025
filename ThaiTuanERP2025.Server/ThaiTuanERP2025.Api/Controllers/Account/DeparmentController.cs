@@ -40,10 +40,16 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			return Ok(ApiResponse<object>.Success(result));
 		}
 
-		[HttpPut("{id:guid}/set-parent")]
+		[HttpPut("{id:guid}/parent")]
 		public async Task<IActionResult> SetParent([FromRoute] Guid id , [FromRoute] Guid parentDept, CancellationToken cancellation)
 		{
 			var result = await _mediator.Send(new SetParentDepartmentCommand(id, parentDept), cancellation);
+			return Ok(ApiResponse<Unit>.Success(result));
+		}
+
+		[HttpPut("{id:guid}/managers")]
+		public async Task<IActionResult> AssignManagers([FromRoute] Guid id, [FromBody] SetDepartmentManagersRequest request, CancellationToken cancellation) {
+			var result = await _mediator.Send(new SetDepartmentManagerCommand(id, request), cancellation);
 			return Ok(ApiResponse<Unit>.Success(result));
 		}
 	}

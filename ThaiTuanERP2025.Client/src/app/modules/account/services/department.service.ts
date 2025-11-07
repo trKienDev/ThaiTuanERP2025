@@ -14,7 +14,7 @@ export class DepartmentService extends BaseCrudService<DepartmentDto, Department
       }
 
       setManager(id: string, request: SetDepartmentManagerRequest): Observable<string> {
-            return this.http.put<ApiResponse<string>>(`${this.endpoint}/${id}/manager`, request)
+            return this.http.put<ApiResponse<string>>(`${this.endpoint}/${id}/managers`, request)
                   .pipe(handleApiResponse$<string>());
       }
 

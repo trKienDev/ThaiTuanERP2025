@@ -1,4 +1,4 @@
-<button type="button" class="button default-button" (click)="openDeparmentRequestDialog()">Tạo phòng ban mới</button>
+<button *appHasPermission="'department.create'" type="button" class="button default-button" (click)="openDeparmentRequestDialog()">Tạo phòng ban mới</button>
 
 <table class="table margin-top-20px">
       <thead>
@@ -7,7 +7,7 @@
                   <th>Mã phòng ban</th>
                   <th>Tên phòng ban</th>
                   <th>Trường bộ phận</th>
-                  <th>Hành động</th>
+                  <th *appHasPermission="'department.actions'">Hành động</th>
             </tr>
       </thead>
       <tbody>
@@ -16,12 +16,12 @@
                   <td>{{ dept.code }}</td>
                   <td>{{ dept.name }}</td>
                   <td>{{ dept.manager?.fullName || '- - - -' }}</td>
-                  <td class="display-flex justify-content-center">
+                  <td *appHasPermission="'department.actions'" class="display-flex justify-content-center">
                         <kit-action-menu [actions]="buildDepartmentActions(dept)"></kit-action-menu>
                   </td>
             </tr>
             <tr *ngIf="(departments$ | async)?.length === 0">
-                  <td colspan="4" class="text-center">Không có dữ liệu.</td>
+                  <td colspan="5" class="text-center">Không có dữ liệu.</td>
             </tr>
       </tbody>
 </table>

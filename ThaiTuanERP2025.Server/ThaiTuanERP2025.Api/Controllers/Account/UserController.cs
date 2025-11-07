@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Common;
+using ThaiTuanERP2025.Api.Security;
 using ThaiTuanERP2025.Application.Account.Users;
 using ThaiTuanERP2025.Application.Account.Users.Commands;
 using ThaiTuanERP2025.Application.Account.Users.Queries;
@@ -67,6 +68,13 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 		public async Task<IActionResult> SetAvatar(Guid id, [FromBody] SetUserAvatarRequest request, CancellationToken cancellationToken)
 		{
 			var result = await _mediator.Send(new SetUserAvatarCommand(id, request), cancellationToken);
+			return Ok(ApiResponse<Unit>.Success(result));
+		}
+
+		[HasPermission("user.delete")]
+		[HttpDelete("{id:guid}")]
+		public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken) {
+			var result = await _mediator.Send(new DeleteUserCommand(id), cancellationToken);
 			return Ok(ApiResponse<Unit>.Success(result));
 		}
 	}

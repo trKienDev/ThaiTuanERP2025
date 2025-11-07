@@ -39,7 +39,6 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			IInvoiceRepository invoices,
 			IInvoiceFileRepository invoiceFiles,
 			ISupplierRepository suppliers,
-			IBankAccountRepository bankAccounts,
 			IOutgoingBankAccountRepository outgoingBankAccounts,
 			IOutgoingPaymentRepository outgoingPayments,
 
@@ -92,7 +91,6 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			Invoices = invoices;
 			InvoiceFiles = invoiceFiles;
 			Suppliers = suppliers;
-			BankAccounts = bankAccounts;
 			OutgoingBankAccounts = outgoingBankAccounts;
 			OutgoingPayments = outgoingPayments;
 
@@ -139,7 +137,6 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		public IInvoiceRepository Invoices { get; }
 		public IInvoiceFileRepository InvoiceFiles { get; }
 		public ISupplierRepository Suppliers { get; }
-		public IBankAccountRepository BankAccounts { get; }
 		public IOutgoingBankAccountRepository OutgoingBankAccounts { get; }
 		public IOutgoingPaymentRepository OutgoingPayments { get; }
 

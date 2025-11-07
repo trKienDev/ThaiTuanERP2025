@@ -26,7 +26,7 @@ export class UserFacade extends BaseCrudFacade<UserDto, UserRequest>{
       }
 
       // ========= MANAGER IDS CACHE =========
-      private managerIdsCache = new Map<string, Observable<string[]>>();
+      private readonly managerIdsCache = new Map<string, Observable<string[]>>();
       getManagerIds$(userId: string): Observable<string[]> {
             let req$ = this.managerIdsCache.get(userId);
 

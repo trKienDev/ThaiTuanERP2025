@@ -2,7 +2,6 @@
 using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Application.Common.Security;
 using ThaiTuanERP2025.Infrastructure.Persistence;
-using ThaiTuanERP2025.Domain.Account.ValueObjects;
 
 namespace ThaiTuanERP2025.Infrastructure.Seeding
 {
@@ -20,70 +19,97 @@ namespace ThaiTuanERP2025.Infrastructure.Seeding
 		public async Task Seed()
 		{
 			Console.WriteLine(">>> [DbInitializer] Starting database initialization...");
+			await MigrateAsync();
 
-			await _db.Database.MigrateAsync();
+			var adminUser = await EnsureAdminUserAsync();
+			var superAdminRole = await EnsureDefaultRolesAsync();
 
-			// 1️ ) Tạo user Admin trước để có CreatedByUserId
-			var adminUser = await _db.Users.FirstOrDefaultAsync(u => u.Username == "admin");
-			if (adminUser == null)
-			{
-				Console.WriteLine(">>> [DbInitializer] Creating Admin User...");
-
-				adminUser = new User(
-					fullName: "Admin",
-					username: "admin",
-					employeeCode: "ADMIN",
-					passwordHash: _passwordHasher.Hash("Th@iTu@n2025"),
-					position: "System Admin",
-					departmentId: null,
-					email: "itcenter@thaituan.com.vn"
-				);
-
-				await _db.Users.AddAsync(adminUser);
-				await _db.SaveChangesAsync();
-
-				Console.WriteLine(">>> [DbInitializer] Admin User created successfully.");
-			}
-			else
-			{
-				Console.WriteLine(">>> [DbInitializer] Admin User already exists.");
-			}
-
-			// 2️ ) Sau khi có adminUser.Id → tạo Role với CreatedByUserId = adminUser.Id
-			if (!await _db.Roles.AnyAsync())
-			{
-				Console.WriteLine(">>> [DbInitializer] Creating default Roles...");
-
-				var roles = new List<Role>
-				{
-					new Role("SuperAdmin", "Toàn quyền hệ thống")
-				};
-
-				await _db.Roles.AddRangeAsync(roles);
-				await _db.SaveChangesAsync();
-
-				Console.WriteLine(">>> [DbInitializer] Default roles created successfully.");
-			}
-			else
-			{
-				Console.WriteLine(">>> [DbInitializer] Roles already exist, skipping creation.");
-			}
-
-
-			// 3️ ) Gán quyền SuperAdmin cho user admin
-			if (!await _db.UserRoles.AnyAsync(ur => ur.UserId == adminUser.Id))
-			{
-				Console.WriteLine(">>> [DbInitializer] Assigning SuperAdmin role to admin user...");
-
-				var superAdminRole = await _db.Roles.FirstAsync(r => r.Name == "SuperAdmin");
-				adminUser.AssignRole(superAdminRole.Id);
-
-				await _db.SaveChangesAsync();
-
-				Console.WriteLine(">>> [DbInitializer] SuperAdmin role assigned to admin user successfully.");
-			}
+			await AssignSuperAdminToAdminAsync(adminUser, superAdminRole);
+			await SeedPermissionsAsync();
+			// await GrantAllPermissionsToSuperAdminAsync(); // nếu muốn
 
 			Console.WriteLine(">>> [DbInitializer] ✅ Seeding completed successfully!");
+		}
+
+		private async Task MigrateAsync() => await _db.Database.MigrateAsync();
+
+		private async Task<User> EnsureAdminUserAsync()
+		{
+			var admin = await _db.Users.FirstOrDefaultAsync(u => u.Username == "admin");
+			if (admin != null) return admin;
+
+			admin = new User(
+			    fullName: "Admin",
+			    username: "admin",
+			    employeeCode: "ADMIN",
+			    passwordHash: _passwordHasher.Hash("Th@iTu@n2025"),
+			    position: "System Admin",
+			    departmentId: null,
+			    email: "itcenter@thaituan.com.vn"
+			);
+			await _db.Users.AddAsync(admin);
+			await _db.SaveChangesAsync();
+			return admin;
+		}
+
+		private async Task<Role> EnsureDefaultRolesAsync()
+		{
+			var role = await _db.Roles.FirstOrDefaultAsync(r => r.Name == "SuperAdmin");
+			if (role != null) return role;
+
+			role = new Role("SuperAdmin", "Toàn quyền hệ thống");
+			await _db.Roles.AddAsync(role);
+			await _db.SaveChangesAsync();
+			return role;
+		}
+
+		private async Task AssignSuperAdminToAdminAsync(User admin, Role superAdmin)
+		{
+			if (!await _db.UserRoles.AnyAsync(ur => ur.UserId == admin.Id && ur.RoleId == superAdmin.Id))
+			{
+				admin.AssignRole(superAdmin.Id);
+				await _db.SaveChangesAsync();
+			}
+		}
+
+		private async Task SeedPermissionsAsync()
+		{
+			var desired = new (string Name, string Code, string? Description)[]
+			{
+				("Xóa user", "user.delete", null),
+				("Tạo kỳ ngân sách", "budget-period.create-for-year", null),
+				("Tạo phòng ban", "department.create", null),
+				("Thao tác phòng ban", "department.actions", null),
+				("Tạo người dùng", "user.create", null),
+				("Thao tác user", "user.actions", null),
+				("Tạo nhóm ngân sách", "budget-group.create", null),
+				("Tạo kỳ ngân sách", "budget-period.create-for-year", null),
+			};
+
+			foreach (var (name, code, desc) in desired)
+			{
+				var codeNorm = code.Trim().ToLowerInvariant();
+				var existing = await _db.Permissions.FirstOrDefaultAsync(p => p.Code == codeNorm);
+				if (existing == null)
+				{
+					await _db.Permissions.AddAsync(new Permission(name, codeNorm, desc ?? string.Empty));
+				}
+				else
+				{
+					var nameTrim = name.Trim();
+					var newDesc = (desc ?? string.Empty).Trim();
+
+					if (!string.Equals(existing.Name, nameTrim, StringComparison.Ordinal))
+						existing.Rename(nameTrim);
+
+					if (!string.Equals(existing.Description, newDesc, StringComparison.Ordinal))
+						existing.UpdateDescription(newDesc);
+
+					if (!existing.IsActive)
+						existing.Activate();
+				}
+			}
+			await _db.SaveChangesAsync();
 		}
 	}
 }

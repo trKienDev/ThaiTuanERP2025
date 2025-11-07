@@ -3,7 +3,7 @@
             <h3 class="icon">👨🏻‍💻</h3>
             <h3 class="title" >Quản lý thành viên</h3>
       </div>
-      <div>
+      <div *appHasPermission="'user.create'">
             <button type="button" class="button default-button" (click)="openUserRequestDialog()">Thêm người dùng mới</button>
       </div>
 </div>
@@ -18,7 +18,7 @@
                         <th>Phòng ban</th>
                         <th>Vai trò</th>
                         <th>Quản lý</th>
-                        <th>Hành động</th>
+                        <th *appHasPermission="'user.actions'">Hành động</th>
                   </tr>
             </thead>
             <tbody>
@@ -42,7 +42,7 @@
                                     <li><img class="avatar-user" [src]="manager | avatarUrlPipe" alt="avatar-user"></li>
                               </ul>
                         </td>
-                        <td>
+                        <td *appHasPermission="'user.actions'">
                               <div  class="display-flex justify-content-center">
                                     <kit-action-menu [actions]="buildUserActions(user)"></kit-action-menu>
                               </div>

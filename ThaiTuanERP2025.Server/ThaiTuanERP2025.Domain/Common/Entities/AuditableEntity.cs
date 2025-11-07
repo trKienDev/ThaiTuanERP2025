@@ -5,8 +5,8 @@ namespace ThaiTuanERP2025.Domain.Common.Entities
 	public class AuditableEntity : BaseEntity
 	{
 		public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
-		public Guid CreatedByUserId { get; set; } // Foreign Key
-		public User CreatedByUser { get; set; } = default!;
+		public Guid? CreatedByUserId { get; set; } // Foreign Key
+		public User? CreatedByUser { get; set; } = default!;
 
 		public DateTime? ModifiedDate { get; set; }
 		public Guid? ModifiedByUserId { get; set; } // Foreign Key

@@ -36,7 +36,6 @@ namespace ThaiTuanERP2025.Application.Common.Interfaces
 		IInvoiceRepository Invoices { get; }
 		IInvoiceFileRepository InvoiceFiles { get; }
 		ISupplierRepository Suppliers { get; }
-		IBankAccountRepository BankAccounts { get; }
 		IOutgoingBankAccountRepository OutgoingBankAccounts { get; }
 		IOutgoingPaymentRepository OutgoingPayments { get; }
 

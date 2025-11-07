@@ -3,7 +3,7 @@ using ThaiTuanERP2025.Domain.Common.Entities;
 
 namespace ThaiTuanERP2025.Domain.Account.Entities
 {
-	public class DepartmentManager : BaseEntity
+	public class DepartmentManager
 	{
 		#region EF Constructor
 		private DepartmentManager() { }

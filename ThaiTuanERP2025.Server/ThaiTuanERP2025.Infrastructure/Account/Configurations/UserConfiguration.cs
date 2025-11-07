@@ -69,14 +69,6 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 				.OnDelete(DeleteBehavior.Restrict);
 			builder.Navigation(u => u.DirectReportsAssignments).UsePropertyAccessMode(PropertyAccessMode.Field);
 
-			builder.HasMany(u => u.BankAccounts)
-				.WithOne(b => b.User)
-				.HasForeignKey(b => b.UserId)
-				.OnDelete(DeleteBehavior.Cascade);
-
-			builder.Navigation(u => u.BankAccounts)
-				.UsePropertyAccessMode(PropertyAccessMode.Field);
-
 			// Indexes
 			builder.HasIndex(u => u.Username).IsUnique();
 			builder.HasIndex(u => u.EmployeeCode).IsUnique();

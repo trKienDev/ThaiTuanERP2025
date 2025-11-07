@@ -26,7 +26,12 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 			switch (key)
 			{
 				case "creator":
-					return new[] { payment.CreatedByUserId };
+				{
+					var id = payment.CreatedByUserId;
+					return (id.HasValue && id.Value != Guid.Empty)
+						? new[] { id.Value }
+						: Array.Empty<Guid>();
+				}
 				case "creator-manager":
 					return await ResolveCreatorManagerAsync(payment, ct);
 				case "manager-department":
