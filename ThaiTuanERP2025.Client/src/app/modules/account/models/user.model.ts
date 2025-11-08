@@ -18,7 +18,7 @@ export interface UserDto {
       departmentId?: string;  
       department?: DepartmentBriefDto;
       position: string;
-
+      
       managerId?: string;
       managers?: UserDto[];
 }

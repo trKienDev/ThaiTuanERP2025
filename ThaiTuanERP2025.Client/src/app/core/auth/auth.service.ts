@@ -179,7 +179,6 @@ export class AuthService {
       checkTokenValidity() {
             if (this.isTokenExpired()) {
                   console.warn('[AuthService] Token expired → auto logout');
-                  alert('[AuthService] - checkTokenValidity: Your session has expired. Please log in again.');
                   this.logout();
             }
       }  

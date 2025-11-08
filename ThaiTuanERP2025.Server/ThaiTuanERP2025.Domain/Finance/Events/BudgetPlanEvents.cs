@@ -44,6 +44,19 @@ namespace ThaiTuanERP2025.Domain.Finance.Events
 		public BudgetPlanApprovedEvent(Guid planId, Guid userId) : base(planId, userId) { }
 	}
 
+	public class BudgetPlanAssignedForApprovalEvent : BudgetPlanEventBase {
+		public BudgetPlanAssignedForApprovalEvent(Guid planId, Guid approverByUserId, DateTime approvalDeadline) : base(planId) {
+			BudgetPlanId = planId;
+			ApproverByUserId = approverByUserId;
+			ApprovalDeadline = approvalDeadline;
+		}
+
+		public Guid BudgetPlanId { get; }
+		public Guid ApproverByUserId { get; }	
+		public DateTime ApprovalDeadline { get; }
+
+	}
+
 	public sealed class BudgetPlanRejectedEvent : BudgetPlanUserActionEvent
 	{
 		public BudgetPlanRejectedEvent(Guid planId, Guid userId) : base(planId, userId) { }
@@ -62,4 +75,5 @@ namespace ThaiTuanERP2025.Domain.Finance.Events
 			Type = type;
 		}
 	}
+
 }

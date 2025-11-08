@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Common.Entities;
 using ThaiTuanERP2025.Domain.Finance.Enums;
 using ThaiTuanERP2025.Domain.Finance.Events;
@@ -40,6 +41,11 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public User? ReviewedByUser { get; init; }
 		public DateTime? ReviewedAt { get; private set; }
 
+
+		public Guid? SelectedBudgetApproverId { get; private set; } = default!;
+		public BudgetApprover BudgetApprover { get; init; }
+		public DateTime? ApprovalDeadline { get; private set; } = default;
+
 		public Guid? ApprovedByUserId { get; private set; } 
 		public User? ApprovedByUser { get; init; }
 		public DateTime? ApprovedAt { get; private set; }
@@ -62,15 +68,18 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			AddDomainEvent(new BudgetPlanReviewedEvent(Id, userId));
 		}
 
-		public void Approve(Guid userId)
+		public void Approve(Guid approverId)
 		{
-			if (Status != BudgetPlanStatus.Reviewed)
-				throw new InvalidOperationException("Chỉ có thể phê duyệt kế hoạch đã được xem xét.");
+			Guard.AgainstDefault(approverId, nameof(approverId));
 
-			Status = BudgetPlanStatus.Approved;
-			ApprovedByUserId = userId;
+			if (Status != BudgetPlanStatus.Reviewed)
+				throw new InvalidOperationException("Kế hoạch ngân sách chưa được xem xét.");
+
+			ApprovedByUserId = approverId;
 			ApprovedAt = DateTime.UtcNow;
-			AddDomainEvent(new BudgetPlanApprovedEvent(Id, userId));
+			Status = BudgetPlanStatus.Approved;
+
+			AddDomainEvent(new BudgetPlanApprovedEvent(Id, approverId));
 		}
 
 		public void Reject(Guid userId)
@@ -157,6 +166,18 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 
 		// Kiểm tra còn ngân sách khả dụng hay không.
 		public bool HasRemainingBudget() => Amount > 0;
+
+		public void MoveToApproval(BudgetApprover budgetApprover)
+		{
+			Guard.AgainstNull(budgetApprover, nameof(budgetApprover));
+
+			ApprovedByUserId = budgetApprover.ApproverUserId;
+			SelectedBudgetApproverId = budgetApprover.Id;
+			ApprovalDeadline = DateTime.UtcNow.AddHours(budgetApprover.SlaHours);
+			Status = BudgetPlanStatus.Reviewed;
+
+			AddDomainEvent(new BudgetPlanAssignedForApprovalEvent(Id, ApprovedByUserId.Value, ApprovalDeadline.Value));
+		}
 		#endregion
 
 	}

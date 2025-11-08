@@ -20,18 +20,18 @@ import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spi
       templateUrl: './member-request-dialog.component.html',
 })
 export class MemberRequestDialog implements OnInit {
-      private dialogRef = inject(MatDialogRef<MemberRequestDialog>);
-      private formBuilder = inject(FormBuilder);
-      private toastService = inject(ToastService);
+      private readonly dialogRef = inject(MatDialogRef<MemberRequestDialog>);
+      private readonly formBuilder = inject(FormBuilder);
+      private readonly toastService = inject(ToastService);
 
-      private userFacade = inject(UserFacade);
-      private userOptionStore = inject(UserOptionStore);
+      private readonly userFacade = inject(UserFacade);
+      private readonly userOptionStore = inject(UserOptionStore);
       managerOptions$ = this.userOptionStore.option$;
 
-      private departmentOptionStore = inject(DepartmentOptionStore);
+      private readonly departmentOptionStore = inject(DepartmentOptionStore);
       departmentOptions$ = this.departmentOptionStore.option$;
 
-      private roleOptionsStore = inject(RoleDropdownOptionsStore);
+      private readonly roleOptionsStore = inject(RoleDropdownOptionsStore);
       roleOptions$ = this.roleOptionsStore.option$;
 
       constructor(
