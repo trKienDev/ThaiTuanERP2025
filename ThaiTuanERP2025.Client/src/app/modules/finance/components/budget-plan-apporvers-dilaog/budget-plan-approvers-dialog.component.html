@@ -17,10 +17,10 @@
                                     Thêm user phê duyệt ngân sách
                               </div>
                               <div class="card-body">
-                                    <form action="" class="display-flex flex-column gap-10px">
+                                    <form [formGroup]="form" class="display-flex flex-column gap-10px">
                                           <div class="display-flex gap-10px">
                                                 <div class="width-50pt">
-                                                      <kit-dropdown [options]="(userOptions$ | async) ?? []" [placeholder]="'Chọn user phê duyệt'" [required]="true"></kit-dropdown>
+                                                      <kit-dropdown formControlName="approverId" [options]="(userOptions$ | async) ?? []"  [placeholder]="'Chọn user phê duyệt'" [required]="true"></kit-dropdown>
                                                 </div>
                                                 <div class="width-50pt form-input">
                                                       <input class="" type="text" formControlName="slaHours" autocomplete="on" required/>
@@ -28,7 +28,7 @@
                                                 </div>
                                           </div>
                                           <div>
-                                                <kit-dropdown [options]="(departmentOptions$ | async) ?? []" [placeholder]="'Chọn phòng ban dưới quyền'" [required]="true" [multiple]="true"></kit-dropdown>
+                                                <kit-dropdown formControlName="deparmentIds" [options]="(departmentOptions$ | async) ?? []" [placeholder]="'Chọn phòng ban dưới quyền'" [required]="true" [multiple]="true"></kit-dropdown>
                                           </div>  
                                           <div>
                                                 <kit-spinner-button type="submit" [cssClass]="'button save-button'" [loading]="submitting" [disabled]="submitting" text="Lưu" [loadingText]="''"></kit-spinner-button>
