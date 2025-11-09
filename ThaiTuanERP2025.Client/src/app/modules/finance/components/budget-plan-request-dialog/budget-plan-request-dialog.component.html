@@ -28,11 +28,14 @@
                               </div>
                         </div>
                         <div class="dialog-row">
-                              <kit-dropdown  [placeholder]="'Người phê duyệt'" [required]="true" [enableFilter]="false"></kit-dropdown>
+                              <kit-dropdown  [options]="budgetApproverOptions" [placeholder]="'Người phê duyệt'" [required]="true" [enableFilter]="false"></kit-dropdown>
                         </div>
                   </div>
-                  <div class="dialog-footer">
-
+                  <div class="dialog-footer display-flex gap-10px">
+                        <button type="button" class="flex-1 button cancel-button" (click)="close()" [disabled]="submitting">Hủy</button>
+                        <button type="submit" class="flex-1 button save-button display-flex justify-content-center" [disabled]="submitting">
+                              {{ submitting ? 'Đang lưu...' : 'Lưu' }}
+                        </button>
                   </div>
             </form>
       </div>

@@ -32,7 +32,6 @@ export class HasPermissionDirective implements OnInit {
             private readonly renderer2: Renderer2,
             private readonly elementRef: ElementRef
       ) {
-            console.log('%c[HasPermissionDirective constructed]', 'color: blue');
       }
 
       ngOnInit(): void {

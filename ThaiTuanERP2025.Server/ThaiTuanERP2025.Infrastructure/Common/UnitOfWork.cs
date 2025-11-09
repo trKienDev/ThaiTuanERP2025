@@ -28,8 +28,9 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			// Finance
 			IBudgetGroupWriteRepository budgetGroups,
 			IBudgetPeriodWriteRepository budgetPeriods,
-			IBudgetPlanRepository budgetPlans,
+			IBudgetPlanWriteRepository budgetPlans,
 			IBudgetCodeWriteRepository budgetCodes,
+			IBudgetApproverWriteRepository budgetApprovers,
 			ILedgerAccountRepository ledgerAccounts,
 			ILedgerAccountTypeRepository ledgerAccountTypes,
 			ICashoutCodeWriteRepository cashoutCodes,
@@ -82,6 +83,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			BudgetPeriods = budgetPeriods;
 			BudgetPlans = budgetPlans;
 			BudgetCodes = budgetCodes;
+			BudgetApprovers = budgetApprovers;
 
 			LedgerAccountTypes = ledgerAccountTypes;
 			LedgerAccounts = ledgerAccounts;
@@ -126,8 +128,9 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		// Finance
 		public IBudgetGroupWriteRepository BudgetGroups { get; }
 		public IBudgetPeriodWriteRepository BudgetPeriods { get; }
-		public IBudgetPlanRepository BudgetPlans { get; }
+		public IBudgetPlanWriteRepository BudgetPlans { get; }
 		public IBudgetCodeWriteRepository BudgetCodes { get; }
+		public IBudgetApproverWriteRepository BudgetApprovers { get; }
 		public ILedgerAccountRepository LedgerAccounts { get; }
 		public ILedgerAccountTypeRepository LedgerAccountTypes { get; }
 		public ICashoutCodeWriteRepository CashoutCodes { get; }

@@ -50,9 +50,7 @@
                   </div>
                   <div class="dialog-footer display-flex gap-10px">
                         <button type="button" class="width-50pt button cancel-button" (click)="close()">Hủy</button>
-                        <div class="width-50pt">
-                             <kit-spinner-button type="submit" cssClass="save-button" [loading]="submitting" [disabled]="submitting" text="Lưu" [loadingText]="''" style="width: 10%;"></kit-spinner-button>
-                        </div>
+                        <kit-spinner-button type="submit" class="width-50pt" cssClass="save-button" [loading]="submitting" [disabled]="submitting" text="Lưu" [loadingText]="''" style="width: 10%;"></kit-spinner-button>
                   </div>
             </form>
       </div>

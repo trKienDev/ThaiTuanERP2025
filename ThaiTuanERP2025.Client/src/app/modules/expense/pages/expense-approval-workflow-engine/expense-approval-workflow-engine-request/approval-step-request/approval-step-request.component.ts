@@ -7,6 +7,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { UserOptionStore } from "../../../../../account/options/user-dropdown-options.store";
 import { ApproverMode, ApprovalStepTemplateRequest, FlowType } from "../../../../models/approval-step-template.model";
 import { logFormErrors } from "../../../../../../shared/utils/form.utils";
+import { BudgetApproverDto } from "../../../../../finance/models/budget-approvers.model";
 
 @Component({
       selector: 'approval-step-request-dialog',

@@ -57,7 +57,11 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories.Read
 					Email = u.Email != null ? u.Email.Value : null,
 					Phone = u.Phone != null ? u.Phone.Value : null,
 					DepartmentId = u.DepartmentId,
-					Department = u.Department == null ? null : new DepartmentBriefDto(u.Department.Id, u.Department.Name, u.Department.Code),
+					Department = u.Department == null ? null : new DepartmentBriefDto {
+						Id = 	 u.Department.Id, 
+						Name = u.Department.Name, 
+						Code = u.Department.Code
+					},
 					AvatarFileId = u.AvatarFileId.HasValue ? u.AvatarFileId.Value : null,
 					AvatarFileObjectKey = u.AvatarFile != null ? u.AvatarFile.ObjectKey : null,
 

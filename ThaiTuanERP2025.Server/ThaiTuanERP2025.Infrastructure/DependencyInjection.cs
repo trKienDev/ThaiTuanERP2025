@@ -16,6 +16,7 @@ using ThaiTuanERP2025.Application.Common.Security;
 using ThaiTuanERP2025.Application.Common.Services;
 using ThaiTuanERP2025.Application.Expense.Invoices;
 using ThaiTuanERP2025.Application.Files;
+using ThaiTuanERP2025.Application.Finance.BudgetApprovers;
 using ThaiTuanERP2025.Application.Finance.BudgetCodes;
 using ThaiTuanERP2025.Application.Finance.BudgetGroups;
 using ThaiTuanERP2025.Application.Finance.BudgetPeriods;
@@ -96,7 +97,9 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IBudgetGroupWriteRepository, BudgetGroupWriteRepository>();
 			services.AddScoped<IBudgetPeriodWriteRepository, BudgetPeriodWriteRepository>();
 			services.AddScoped<IBudgetPeriodReadRepository, BudgetPeriodReadRepository>();
-			services.AddScoped<IBudgetPlanRepository, BudgetPlanRepository>();
+			services.AddScoped<IBudgetPlanWriteRepository, BudgetPlanWriteRepository>();
+			services.AddScoped<IBudgetApproverReadRepository, BudgetApproverReadRepository>();
+			services.AddScoped<IBudgetApproverWriteRepository, BudgetApproverWriteRepository>();
 			services.AddScoped<ILedgerAccountTypeRepository, LedgerAccountTypeRepository>();
 			services.AddScoped<ILedgerAccountRepository, LedgerAccountRepository>();
 			services.AddScoped<ILedgerAccountReadRepository, LedgerAccountReadRepository>();

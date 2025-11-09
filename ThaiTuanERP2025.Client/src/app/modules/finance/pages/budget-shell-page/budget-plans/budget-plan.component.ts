@@ -3,7 +3,8 @@ import { Component, inject } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { ToastService } from "../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { BudgetPlanRequestDialogComponent } from "../../../components/budget-plan-request-dialog/budget-plan-request-dialog.component";
-import { BudgetPlanApproversDialogComponent } from "../../../components/budget-plan-apporvers-dilaog/budget-plan-approvers-dialog.component";
+import { BudgetPlanApproversDialogComponent } from "../../../components/budget-apporver-request-dilaog/budget-approver-request-dialog.component";
+import { ListBudgetApproversDialogComponent } from "../../../components/list-budget-approvers-dialog/list-budget-approvers-dialog.component";
 
 @Component({
       selector: 'budget-plan-panel',
@@ -17,6 +18,11 @@ export class BudgetPlanPanelComponent {
 
       openBudgetPlanRequestDialog() {
             const dialogRef = this.dialog.open(BudgetPlanRequestDialogComponent, {});
+            dialogRef.afterClosed().subscribe();
+      }
+
+      openListBudgetApproverDialog() {
+            const dialogRef = this.dialog.open(ListBudgetApproversDialogComponent, {})
             dialogRef.afterClosed().subscribe();
       }
 

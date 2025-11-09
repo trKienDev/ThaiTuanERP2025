@@ -1,0 +1,57 @@
+<div class="dialog" style="min-width: 600px;">
+      <div class="dialog-container">
+            <div class="dialog-heading">
+                  <div class="dialog-title">
+                        <h1>User phê duyệt kế hoạch  ngân sách</h1>
+                  </div>
+                  <div class="dialog-close">
+                        <button type="button" class="close-button" (click)="close()">
+                              <span class="text material-icons-outlined">close</span>
+                        </button>
+                  </div>
+            </div>
+            <div class="dialog-body">
+                  <div class="primary-card">
+                        <div class="card-wrapper">
+                              <div class="card-header">
+                                    Thêm user phê duyệt ngân sách
+                              </div>
+                              <div class="card-body">
+                                    <form [formGroup]="form" class="display-flex flex-column gap-10px" (ngSubmit)="onSubmit()">
+                                          <div class="display-flex gap-10px">
+                                                <div class="width-50pt">
+                                                      <kit-dropdown formControlName="approverId" [options]="(userOptions$ | async) ?? []"  [placeholder]="'Chọn user phê duyệt'" [required]="true"
+                                                      [invalid]="showErrors && (form.get('approverId')?.invalid ?? false)" (selectionChange)="onApproverSelected($event)"></kit-dropdown>
+                                                      <div class="form-input-error" *ngIf="showErrors && form.get('approverId')?.invalid">
+                                                            <small>Vui lòng chọn user phê duyệt</small>
+                                                      </div>
+                                                </div>
+                                                <div class="width-50pt form-input">
+                                                      <input class="" type="text" formControlName="slaHours" autocomplete="on" required
+                                                      [class.is-invalid]="showErrors && form.get('slaHours')?.invalid"  [attr.aria-invalid]="showErrors && form.get('slaHours')?.invalid ? 'true' : null"/>
+                                                      <label for="name">Thời hạn - giờ<span style="color: red;">  *</span></label>
+                                                      <div class="form-input-error" *ngIf="showErrors && form.get('slaHours')?.invalid">
+                                                            <small>Vui lòng nhập thời hạn</small>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                          <div>
+                                                <kit-dropdown formControlName="deparmentIds" [options]="(departmentOptions$ | async) ?? []" [placeholder]="'Chọn phòng ban dưới quyền'"  [required]="true" [multiple]="true" 
+                                                (selectionChange)="onDepartmentsSelected($event)"  [invalid]="showErrors && (form.get('departmentIds')?.invalid ?? false)"></kit-dropdown>
+                                                <div class="form-input-error" *ngIf="showErrors && form.get('departmentIds')?.invalid">
+                                                      <small>Vui lòng chọn phòng ban dưới quyền</small>
+                                                </div>
+                                          </div>  
+                                          <div class="display-flex gap-10px">
+                                                <button type="button" class="width-50pt button cancel-button" (click)="close()">Hủy</button>
+                                                <kit-spinner-button type="submit" class="width-50pt" [cssClass]="'button save-button'" [loading]="submitting" [disabled]="submitting" text="Lưu" [loadingText]="''"></kit-spinner-button>
+                                          </div>
+                                    </form>
+                              </div>
+                        </div>
+                  </div>
+            </div>
+            <div class="dialog-footer display-flex gap-10px">
+            </div>
+      </div>
+</div>

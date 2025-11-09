@@ -10,7 +10,7 @@ export class DepartmentOptionStore {
       readonly option$ = this.facade.departments$.pipe(
             toDropdownOptions({
                   id: 'id',
-                  label: 'name',
+                  label: (d) => `${d.code} - ${d.name}`,
             }),
             shareReplay({ bufferSize: 1, refCount: false })
       )

@@ -22,8 +22,8 @@ namespace ThaiTuanERP2025.Application.Common.Interfaces
 		IBudgetCodeWriteRepository BudgetCodes { get; }
 		IBudgetGroupWriteRepository BudgetGroups { get; }
 		IBudgetPeriodWriteRepository BudgetPeriods { get; }
-		IBudgetPlanRepository BudgetPlans { get; }
-
+		IBudgetPlanWriteRepository BudgetPlans { get; }
+		IBudgetApproverWriteRepository BudgetApprovers { get; }
 		ILedgerAccountRepository LedgerAccounts { get; }
 		ILedgerAccountTypeRepository LedgerAccountTypes { get; }
 		ICashoutCodeWriteRepository CashoutCodes { get; }

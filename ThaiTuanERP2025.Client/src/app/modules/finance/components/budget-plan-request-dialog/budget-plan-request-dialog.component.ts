@@ -10,8 +10,9 @@ import { KitDropdownOption, KitDropdownComponent } from "../../../../shared/comp
 import { BudgetPeriodService } from "../../services/budget-period.service";
 import { BudgetPeriodDto } from "../../models/budget-period.model";
 import { handleHttpError } from "../../../../shared/utils/handle-http-errors.util";
+import { BudgetApproverOptionStore } from "../../options/budget-approvers-options.store";
 import { take } from "rxjs";
-
+import { BudgetApproverService } from "../../services/budget-approver.service";
 
 @Component({
       selector: 'budget-plan-request-dialog',
@@ -27,12 +28,18 @@ export class BudgetPlanRequestDialogComponent implements OnInit {
       private readonly userFacade = inject(UserFacade);
       currentUser$ = this.userFacade.currentUser$;
 
-      private readonly budgetPlanSer = inject(BudgetPlanService);
+      private readonly budgetApproverOptionsStore = inject(BudgetApproverOptionStore);
+      budgetApprovers$ = this.budgetApproverOptionsStore.options$;
+      private readonly budgetApproverService = inject(BudgetApproverService);
+      budgetApproverOptions: KitDropdownOption[] = [];
       
       private readonly budgetPeriodService = inject(BudgetPeriodService);
       availableBudgetPeriods: BudgetPeriodDto[] = [];
 
       budgetPeriodOptions: KitDropdownOption[] = [];
+
+      submitting: boolean = false;
+      showErrors: boolean = false;
 
       form = this.formBuilder.group({
             departmentId: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
@@ -42,6 +49,7 @@ export class BudgetPlanRequestDialogComponent implements OnInit {
       });
 
       ngOnInit(): void {
+            this.loadBudgetApproversByUserDepartment();
             this.loadAvailableBudgetPeriods();
             // Lấy departmentId của user hiện tại và patch vào form
             this.userFacade.currentUser$
@@ -51,6 +59,18 @@ export class BudgetPlanRequestDialogComponent implements OnInit {
                               this.form.patchValue({ departmentId: user.departmentId });
                         }
                   });
+      }
+
+      loadBudgetApproversByUserDepartment(): void {
+            this.budgetApproverService.getByUserDepartment().subscribe({
+                  next: (budgetApprovers) => {
+                        this.budgetApproverOptions = budgetApprovers.map(ba => ({
+                              id: ba.id,
+                              label: ba.approverUser.fullName
+                        }))
+                  },
+                  error: (err => handleHttpError(err))
+            })
       }
 
       loadAvailableBudgetPeriods(): void {
@@ -68,7 +88,6 @@ export class BudgetPlanRequestDialogComponent implements OnInit {
       openBudgetPeriodsTableDialog(): void {
             this.matDialog.open(BudgetPeriodsTableDialogComponent);
       }
-
 
       close(result: boolean = false): void {
             this.matdialogRef.close(result);
