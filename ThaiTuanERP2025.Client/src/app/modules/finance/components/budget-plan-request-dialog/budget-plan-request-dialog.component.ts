@@ -15,17 +15,24 @@ import { BudgetApproverService } from "../../services/budget-approver.service";
 import { resolveAvatarUrl } from "../../../../shared/utils/avatar.utils";
 import { environment } from "../../../../../environments/environment";
 import { UserService } from "../../../account/services/user.service";
+import { AmountToWordsPipe } from "../../../../shared/pipes/amount-to-words.pipe";
+import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
+import { HttpErrorResponse } from "@angular/common/http";
+import { ConfirmService } from "../../../../shared/components/confirm-dialog/confirm.service";
+import { BudgetPlanRequest } from "../../models/budget-plan.model";
 
 @Component({
       selector: 'budget-plan-request-dialog',
       standalone: true,
-      imports: [CommonModule, ReactiveFormsModule, MoneyFormatDirective, KitDropdownComponent],
+      imports: [CommonModule, ReactiveFormsModule, MoneyFormatDirective, KitDropdownComponent, AmountToWordsPipe],
       templateUrl: './budget-plan-request-dialog.component.html',
 })
 export class BudgetPlanRequestDialogComponent implements OnInit {
       private readonly matdialogRef = inject(MatDialogRef<BudgetPlanRequestDialogComponent>);
       private readonly matDialog = inject(MatDialog);
       private readonly formBuilder = inject(FormBuilder);
+      private readonly toast = inject(ToastService);
+      private readonly confirm = inject(ConfirmService);
       
       private readonly userFacade = inject(UserFacade);
       currentUser$ = this.userFacade.currentUser$;
@@ -110,6 +117,39 @@ export class BudgetPlanRequestDialogComponent implements OnInit {
 
       openBudgetPeriodsTableDialog(): void {
             this.matDialog.open(BudgetPeriodsTableDialogComponent);
+      }
+
+      async submit(): Promise<void> {
+            this.showErrors = true;
+            if(this.form.invalid) {
+                  this.form.markAllAsTouched();
+                  this.toast.warningRich("Vui lòng điền đầy đủ thông tin");
+                  return;
+            }
+
+            try {
+                  this.submitting = true;
+                  this.form.disable({ emitEvent: false });
+
+                  const payload: BudgetPlanRequest = this.form.getRawValue();
+                  
+            } catch(error) {
+                  if (error instanceof HttpErrorResponse && [401,403,500,0].includes(error.status ?? 0)) {
+                        return;
+                  }
+                  if (error instanceof HttpErrorResponse && error.status === 404) {
+                        this.toast?.warningRich('Không tìm thấy dữ liệu để tạo mã ngân sách.');
+                  } else if (error instanceof HttpErrorResponse && error.status === 400) {
+                        this.toast?.errorRich(error.error?.message || 'Dữ liệu không hợp lệ.');
+                  } else {
+                        const messages = handleHttpError(error).join('\n');
+                        this.confirm.error$(messages);
+                        this.toast?.errorRich('Tạo mã ngân sách thất bại.');
+                  }
+            } finally {
+                  this.showErrors = false;
+                  this.submitting = false;
+            }
       }
 
       close(result: boolean = false): void {

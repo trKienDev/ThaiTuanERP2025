@@ -16,6 +16,9 @@
                               <div class="form-input">
                                     <input class="" type="text" formControlName="amount" inputmode="decimal" appMoney [appMoneyDecimals]="0" required>
                                     <label for="amount">Số tiền <span style="color: red;">  *</span></label>
+                                    <small style="font-style: italic; color: var(--text-muted);">
+                                          {{ form.get('amount')?.value | amountToWords }}
+                                    </small>
                               </div>
                         </div>
                         <div class="dialog-row">

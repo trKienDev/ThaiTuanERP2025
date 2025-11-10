@@ -32,7 +32,7 @@ import { MyInvoicesDialogComponent } from "../../invoices/my-invoices-dialog/my-
 import { ExpenseBudgetCodeDialogComponent } from "../../../../finance/pages/budget-shell-page/budget-codes/expense-budget-code/expense-budget-code.component";
 import { SupplierRequestDialogComponent } from "../../suppliers/supplier-request-dialog/supplier-request-dialog.component";
 import { KitFileUploaderComponent } from "../../../../../shared/components/kit-file-uploader/kit-file-uploader.component";
-import { TextareaNoSpellcheckDirective } from "../../../../../shared/directives/money/textarea/textarea-no-spellcheck.directive";
+import { TextareaNoSpellcheckDirective } from "../../../../../shared/directives/textarea/textarea-no-spellcheck.directive";
 import { KitSpinnerButtonComponent } from "../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 import { KitOverlaySpinnerComponent } from "../../../../../shared/components/kit-overlay-spinner/kit-overlay-spinner.component";
 import { Router } from "@angular/router";
