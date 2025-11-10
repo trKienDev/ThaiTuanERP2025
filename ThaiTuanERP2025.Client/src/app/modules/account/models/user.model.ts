@@ -1,4 +1,4 @@
-import { DepartmentBriefDto, DepartmentDto } from "./department.model";
+import { DepartmentBriefDto } from "./department.model";
 import { PermissionDto } from "./permission.model";
 import { RoleDto } from "./role.model";
 
@@ -33,6 +33,15 @@ export interface UserRequest {
       phone?: number | null;
       departmentId?: string | null;
       position: string;
+}
+
+export interface UserBriefAvatarDto {
+      id: string;
+      fullName: string;
+      username: string;
+      employeeCode: string;
+      avatarFileId?: string;
+      avatarFileObjectKey?: string;
 }
 
 export interface SetUserManagerRequest {

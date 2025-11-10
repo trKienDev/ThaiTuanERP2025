@@ -49,6 +49,12 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			return Ok(ApiResponse<IReadOnlyList<Guid>>.Success(result));
 		}
 
+		[HttpGet("me/department/managers")]
+		public async Task<IActionResult> GetDepartmentManagersByUser(CancellationToken cancellationToken) {
+			var result = await _mediator.Send(new GetDepartmentManagersByUserQuery(), cancellationToken);
+			return Ok(ApiResponse<IReadOnlyList<UserBriefAvatarDto>>.Success(result));
+		}
+
 		[HttpPost("new")]
 		public async Task<IActionResult> Create([FromBody] CreateUserCommand command, CancellationToken cancellationToken)
 		{

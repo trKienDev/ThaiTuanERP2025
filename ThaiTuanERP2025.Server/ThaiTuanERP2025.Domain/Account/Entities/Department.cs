@@ -52,8 +52,8 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public void AssignManager(User user)
 		{
 			if (user is null) throw new ArgumentNullException(nameof(user));
-			if (user.DepartmentId != Id)
-				throw new DomainException("User phải thuộc chính Department này mới được gán làm manager.");
+			//if (user.DepartmentId != Id)
+			//	throw new DomainException("User phải thuộc chính Department này mới được gán làm manager.");
 
 			if (_managers.Any(m => m.UserId == user.Id)) return;
 			_managers.Add(new DepartmentManager(Id, user.Id, isPrimary: false));

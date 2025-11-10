@@ -4,7 +4,13 @@ using ThaiTuanERP2025.Application.Account.Roles;
 
 namespace ThaiTuanERP2025.Application.Account.Users
 {
-	public class UserDto
+	public interface IHasAvatarFile
+	{
+		Guid? AvatarFileId { get; set; }
+		object? AvatarFileObjectKey { get; set; }
+	}
+
+	public sealed record UserDto : IHasAvatarFile
 	{
 		public Guid Id { get; set; }
 		public string FullName { get; set; } = default!;
@@ -32,5 +38,14 @@ namespace ThaiTuanERP2025.Application.Account.Users
 		public string FullName { get; set; } = default!;
 		public string Username { get; set; } = default!;
 		public string EmployeeCode { get; set; } = default!;
+	}
+
+	public sealed record UserBriefAvatarDto : IHasAvatarFile {
+		public Guid Id { get; set; }
+		public string FullName { get; set; } = default!;
+		public string Username { get; set; } = default!;
+		public string EmployeeCode { get; set; } = default!;
+		public Guid? AvatarFileId { get; set; }
+		public object? AvatarFileObjectKey { get; set; }
 	}
 }

@@ -3,7 +3,7 @@ import { environment } from "../../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { Observable, switchMap } from "rxjs";
 import { ApiResponse } from "../../../shared/models/api-response.model";
-import { SetUserManagerRequest, UserDto, UserRequest } from "../models/user.model";
+import { SetUserManagerRequest, UserBriefAvatarDto, UserDto, UserRequest } from "../models/user.model";
 import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
 import { FileService } from "../../../shared/services/file.service";
 import { BaseCrudService } from "../../../shared/services/base-crud.service";
@@ -44,5 +44,10 @@ export class UserService extends BaseCrudService<UserDto, UserRequest> {
       setManagers(id: string, request: SetUserManagerRequest): Observable<string> {
             return this.http.put<ApiResponse<string>>(`${this.endpoint}/${id}/managers`, request)
                   .pipe(handleApiResponse$<string>());
+      }
+
+      getDepartmentManagersByUser(): Observable<UserBriefAvatarDto[]> {
+            return this.http.get<ApiResponse<UserBriefAvatarDto[]>>(`${this.endpoint}/me/department/managers`)
+                  .pipe(handleApiResponse$<UserBriefAvatarDto[]>());
       }
 }

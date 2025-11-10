@@ -38,8 +38,9 @@ namespace ThaiTuanERP2025.Application.Account.Departments.Commands
 				d => d.Managers
 			) ?? throw new NotFoundException("Không tìm thấy phòng ban yêu cầu");
 
-			if (primaryManager.DepartmentId != department.Id)
-				throw new DomainException("Quản lý chính phải thuộc phòng ban này.");
+			//if (primaryManager.DepartmentId != department.Id)
+			//	throw new DomainException("Quản lý chính phải thuộc phòng ban này.");
+
 			var invalidVice = viceManagers.Where(u => u.DepartmentId != department.Id).Select(u => u.Id).ToList();
 			if (invalidVice.Any())
 				throw new DomainException($"Các user không thuộc phòng ban: {string.Join(", ", invalidVice)}");

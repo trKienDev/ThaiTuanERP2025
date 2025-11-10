@@ -12,7 +12,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public Department Department { get; private set; } = null!;
 		#endregion
 
-		#region 
+		#region  EF Constructor
 		private BudgetApproverDepartment() { }
 		public BudgetApproverDepartment(Guid budgetApproverId, Guid departmentId)
 		{
