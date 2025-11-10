@@ -36,7 +36,7 @@
                                                 </div>
                                           </div>
                                           <div>
-                                                <kit-dropdown formControlName="deparmentIds" [options]="(departmentOptions$ | async) ?? []" [placeholder]="'Chọn phòng ban dưới quyền'"  [required]="true" [multiple]="true" 
+                                                <kit-dropdown formControlName="departmentIds" [options]="(departmentOptions$ | async) ?? []" [placeholder]="'Chọn phòng ban dưới quyền'"  [required]="true" [multiple]="true" 
                                                 (selectionChange)="onDepartmentsSelected($event)"  [invalid]="showErrors && (form.get('departmentIds')?.invalid ?? false)"></kit-dropdown>
                                                 <div class="form-input-error" *ngIf="showErrors && form.get('departmentIds')?.invalid">
                                                       <small>Vui lòng chọn phòng ban dưới quyền</small>

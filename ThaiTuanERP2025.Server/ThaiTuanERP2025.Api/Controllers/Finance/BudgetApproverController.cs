@@ -37,9 +37,9 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 			return Ok(ApiResponse<Unit>.Success(result));	
 		}
 
-		[HttpPut("{id:guid}/departments")]
-		public async Task<IActionResult> UpdateDepartments(Guid id, [FromBody] UpdateBudgetApproverDepartmentRequest request, CancellationToken cancellationToken) {
-			var result = await _mediator.Send(new UpdateBudgetApproverDepartmentCommand(id, request), cancellationToken);
+		[HttpPut("{id:guid}")]
+		public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateBudgetApproverRequest request, CancellationToken cancellationToken) {
+			var result = await _mediator.Send(new UpdateBudgetApproverCommand(id, request), cancellationToken);
 			return Ok(ApiResponse<Unit>.Success(result));
 		}
 	}

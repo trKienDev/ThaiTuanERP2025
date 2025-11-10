@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, Inject, inject } from "@angular/core";
+import { Component, Inject, inject, OnInit } from "@angular/core";
 import { ReactiveFormsModule, FormBuilder, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { KitDropdownComponent, KitDropdownOption } from "../../../../shared/components/kit-dropdown/kit-dropdown.component";
@@ -13,7 +13,6 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { BudgetApproverDto, BudgetApproversRequest } from "../../models/budget-approvers.model";
 import { firstValueFrom } from "rxjs";
 import { BudgetApproverFacade } from "../../facades/budget-approver.facade";
-
 
 @Component({
       selector: 'budget-plan-approvers-dialog',
@@ -29,7 +28,6 @@ export class BudgetPlanApproversDialogComponent implements OnInit {
       private readonly budgetApproverFacade = inject(BudgetApproverFacade);
 
       title: string = 'User phê duyệt ngân sách';
-      private editBudgetApprover: BudgetApproverDto | undefined;
 
       private readonly departmentOptionStore = inject(DepartmentOptionStore);
       departmentOptions$ = this.departmentOptionStore.option$;
@@ -47,15 +45,17 @@ export class BudgetPlanApproversDialogComponent implements OnInit {
       })
 
       constructor(
-            @Inject(MAT_DIALOG_DATA) public data?: {
-
-            }
+            @Inject(MAT_DIALOG_DATA) public data?: BudgetApproverDto
       ) {}
 
       ngOnInit(): void {
             if(this.data) {
-                  this.form.patchValue({ approverId: this.data.approverId})
-                  
+                  console.log('data: ', this.data);
+                  this.form.patchValue({ 
+                        approverId: this.data.approverUser.id,
+                        slaHours: this.data.slaHours,
+                        departmentIds: this.data.departments.map(d => d.id),
+                  })
             }
       }
 
@@ -85,8 +85,17 @@ export class BudgetPlanApproversDialogComponent implements OnInit {
                   this.form.disable({ emitEvent: false });
                   
                   const payload: BudgetApproversRequest = this.form.getRawValue();
-                  await firstValueFrom(this.budgetApproverFacade.create(payload));
-                  this.toast.successRich("Thêm người duyệt ngân sách thành công");
+
+                  if(this.data?.id) {
+                        console.log('update');
+                        await firstValueFrom(this.budgetApproverFacade.update(this.data.id, payload));
+                        this.toast.successRich("Cập nhật user duyệt ngân sách thành công");
+                  } else {
+                        console.log('create');
+                        await firstValueFrom(this.budgetApproverFacade.create(payload));
+                        this.toast.successRich("Thêm người duyệt ngân sách thành công");
+                  }
+                  
                   this.showErrors = false;
                   this.form.reset();
                   this.dialog.close(true);

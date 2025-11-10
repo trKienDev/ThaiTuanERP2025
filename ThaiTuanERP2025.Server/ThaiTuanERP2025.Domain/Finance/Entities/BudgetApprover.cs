@@ -65,5 +65,6 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		}
 
 		#endregion
+
 	}
 }

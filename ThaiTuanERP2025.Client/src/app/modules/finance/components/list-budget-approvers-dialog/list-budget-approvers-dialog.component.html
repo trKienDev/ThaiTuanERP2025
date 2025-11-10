@@ -32,9 +32,9 @@
                                     </td>
                                     <td>{{ approver.slaHours }}</td>
                                     <td>
-                                          <ng-container *ngFor="let dept of approver.departments">
-                                                <span>{{ dept.name }}</span>
-                                          </ng-container>
+                                          <select class="select">
+                                                <option class="option" *ngFor="let dept of approver.departments">{{ dept.code }} - {{ dept.name }}</option>
+                                          </select>
                                     </td>
                                     <td>
                                           <div  class="display-flex justify-content-center">

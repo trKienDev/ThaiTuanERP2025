@@ -33,13 +33,15 @@
       }
       .card-body {
             padding: unset !important;
-            height: 200px;
-            max-height: 300px;
+            height: 300px;
       }
 }
 
 .available-permissions, .selected-permissions {
       list-style: none;
+      overflow-y: auto;
+      overflow-x: hidden;
+      height: 300px;
 
       .available-permission, .selected-permission {
             transition: background 0.2s ease;

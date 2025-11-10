@@ -20,10 +20,12 @@
                                                       <label for="selected-permisions">Quyền đã chọn</label>
                                                 </div>
                                                 <div class="card-body">
-                                                      <ul class="selected-permissions" *ngFor="let permission of selectedPermissions">
-                                                            <li [@slideList] class="selected-permission" [class.active]="selectedAssigned.includes(permission)" (click)="toggleAssigned(permission)">
-                                                                  {{ permission.name }}
-                                                            </li>
+                                                      <ul class="selected-permissions" >
+                                                            <ng-container  *ngFor="let permission of selectedPermissions">
+                                                                  <li [@slideList] class="selected-permission" [class.active]="selectedAssigned.includes(permission)" (click)="toggleAssigned(permission)">
+                                                                        {{ permission.name }}
+                                                                  </li>
+                                                            </ng-container>
                                                       </ul>
                                                 </div>
                                           </div>
@@ -40,8 +42,9 @@
                                                       <label for="available-permisions">Quyền khả dụng</label>
                                                 </div>
                                                 <div class="card-body">
-                                                      <ul class="available-permissions" *ngFor="let permission of availablePermissions">
-                                                            <li [@slideList] class="available-permission" [class.active]="selectedAvailable.includes(permission)" (click)="toggleAvailable(permission)">
+                                                      <ul class="available-permissions">
+                                                            <li *ngFor="let permission of availablePermissions" [@slideList] class="available-permission" 
+                                                            [class.active]="selectedAvailable.includes(permission)" (click)="toggleAvailable(permission)">
                                                                   {{ permission.name }}
                                                             </li>
                                                       </ul>

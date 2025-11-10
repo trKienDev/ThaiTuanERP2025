@@ -5,7 +5,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { FormBuilder, FormsModule } from "@angular/forms";
 import { RoleDto } from "../../models/role.model";
 import { PermissionService } from "../../services/permission.service";
-import { AssignPermissionToRoleRequest, PermissionDto } from "../../models/permission.model";
+import { PermissionDto } from "../../models/permission.model";
 import { firstValueFrom } from "rxjs";
 import { trigger, transition, style, animate } from "@angular/animations";
 import { RoleService } from "../../services/role.service";
@@ -88,6 +88,7 @@ export class AssignPermissionToRoleDialogComponent implements OnInit {
                   p => !this.selectedAvailable.includes(p)
             );
             this.selectedAvailable = [];
+            this.selectedAssigned = []; 
       }
 
       moveToAvailable() {
@@ -96,6 +97,7 @@ export class AssignPermissionToRoleDialogComponent implements OnInit {
                   p => !this.selectedAssigned.includes(p)
             );
             this.selectedAssigned = [];
+            this.selectedAvailable = [];
       }
 
       async submit(): Promise<void> {

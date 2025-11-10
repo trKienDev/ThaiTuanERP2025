@@ -17,14 +17,14 @@ import { firstValueFrom } from "rxjs";
       templateUrl: './set-parent-department-dialog.component.html',
 })
 export class SetParentDepartmentDialogComponent {
-      private dialogRef = inject(MatDialogRef<SetParentDepartmentDialogComponent>);
-      private toastService = inject(ToastService);
-      private departmentService = inject(DepartmentService);
-      private departmentFacade = inject(DepartmentFacade);
+      private readonly dialogRef = inject(MatDialogRef<SetParentDepartmentDialogComponent>);
+      private readonly toastService = inject(ToastService);
+      private readonly departmentService = inject(DepartmentService);
+      private readonly departmentFacade = inject(DepartmentFacade);
       departments$ = this.departmentFacade.departments$;
-      private departmentOptionStore = inject(DepartmentOptionStore);
+      private readonly departmentOptionStore = inject(DepartmentOptionStore);
       departmentOptions$ = this.departmentOptionStore.option$;
-      private formBuilder = inject(FormBuilder);
+      private readonly formBuilder = inject(FormBuilder);
       departmentId: string = '';
       isSubmitting = false;
 
@@ -38,8 +38,7 @@ export class SetParentDepartmentDialogComponent {
       }
 
       async loadParentDepartment(departmentId: string) {
-            var parentDept = await firstValueFrom(this.departmentService.getParentDepartment(departmentId));
-            console.log('Parent Dept:', parentDept);
+            const parentDept = await firstValueFrom(this.departmentService.getParentDepartment(departmentId));
             if (parentDept) {
                   this.form.patchValue({ parentId: parentDept.id });
             }

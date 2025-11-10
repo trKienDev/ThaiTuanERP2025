@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using ThaiTuanERP2025.Application.Account.Departments;
 using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Infrastructure.Common.Repositories;
@@ -8,7 +10,17 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories.Read
 {
 	public class DepartmentReadRepository : BaseReadRepository<Department, DepartmentDto>, IDepartmentReadRepository
 	{
-		public DepartmentReadRepository(ThaiTuanERP2025DbContext dbContext, IMapper mapper) 
-			: base(dbContext, mapper) { }
+		public DepartmentReadRepository(ThaiTuanERP2025DbContext dbContext, IMapper mapper)  : base(dbContext, mapper) { }
+
+		public async Task<List<Department>> ListWithManagersAsync(CancellationToken cancellationToken)
+		{
+			return await _dbSet.AsNoTracking()
+				.Where(d => d.IsActive)
+				.Include(d => d.Managers).ThenInclude(m => m.User)
+				.OrderByDescending(d => d.Level)
+				.ToListAsync(cancellationToken);
+		}
 	}
+
+
 }

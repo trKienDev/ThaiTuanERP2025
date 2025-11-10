@@ -14,6 +14,5 @@ export interface BudgetApproverDto {
       departments: DepartmentDto[];
 }
 
-export interface UpdateBudgetApproverDepartmentRequest {
-      departmentIds: string[];
-}
+
+

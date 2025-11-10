@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, inject  } from "@angular/core";
+import { Component, inject, OnInit  } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { DepartmentRequestDialog } from "../../components/department-request-dialog/department-request-dialog.component";
 import { DepartmentFacade } from "../../facades/department.facade";
@@ -10,6 +10,7 @@ import { SetParentDepartmentDialogComponent } from "../../components/set-parent-
 import { DepartmentManagerDialogComponent } from "../../components/department-manager-dialog/department-manager-dialog.component";
 import { HasPermissionDirective } from "../../../../core/auth/auth.directive";
 import { AvatarUrlPipe } from "../../../../shared/pipes/avatar-url.pipe";
+import { firstValueFrom } from "rxjs";
 
 @Component({
       selector: 'account-department',
@@ -17,11 +18,16 @@ import { AvatarUrlPipe } from "../../../../shared/pipes/avatar-url.pipe";
       imports: [CommonModule, KitActionMenuComponent, HasPermissionDirective, AvatarUrlPipe],
       templateUrl: './account-department.component.html',
 })
-export class AccountDepartmentComponent {      
+export class AccountDepartmentComponent implements OnInit {      
       private readonly dialog = inject(MatDialog);
       private readonly departmentFacade = inject(DepartmentFacade);
 
       departments$ = this.departmentFacade.departments$;
+
+      async ngOnInit(): Promise<void> {
+            const departments = await firstValueFrom(this.departments$);
+            console.log('departments: ', departments);
+      }
       
       trackById(index: number, item: DepartmentDto) { return item.id; }
 

@@ -10,6 +10,8 @@ import { DepartmentFacade } from "../../facades/department.facade";
 import { DepartmentDto, SetDepartmentManagerRequest } from "../../models/department.model";
 import { UserOptionStore } from "../../options/user-dropdown-options.store";
 import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
+import { ConfirmService } from "../../../../shared/components/confirm-dialog/confirm.service";
+import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
       selector: 'department-manager-dialog',
@@ -19,6 +21,7 @@ import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spi
 })
 export class DepartmentManagerDialogComponent {
       private readonly toast = inject(ToastService);
+      private readonly confirm = inject(ConfirmService);
       private readonly dialogRef = inject(MatDialogRef<DepartmentManagerDialogComponent>);
       private readonly formBuilder = inject(FormBuilder);
       private readonly departmentFacade = inject(DepartmentFacade);
@@ -40,15 +43,14 @@ export class DepartmentManagerDialogComponent {
                         this.form.patchValue({ primaryManagerId: this.depatment.primaryManager.id });
                   }
                   if (this.depatment.viceManagers?.length) {
-                        const viceIds = this.depatment.viceManagers.map(vm => vm.id);
-                        this.form.patchValue({ viceManagerIds: viceIds });
+                        this.form.patchValue({ viceManagerIds: this.depatment.viceManagers.map(vm => vm.id) });
                   }
             }
       }
 
       form = this.formBuilder.group({
             primaryManagerId: this.formBuilder.control<string>('', { nonNullable: true }),
-            viceManagerIds: this.formBuilder.control<string[] | null>(null, { nonNullable: false })
+            viceManagerIds: this.formBuilder.control<string[]>([], { nonNullable: false })
       }, {
             validators: [(fg) => {
                   const primary = fg.get('primaryManagerId')?.value;
@@ -127,8 +129,18 @@ export class DepartmentManagerDialogComponent {
                   this.toast.successRich("Thiết lập quản lý thành công");
                   this.dialogRef.close({ isSuccess: true, response: result });
             } catch(error) {
-                  const messages = handleHttpError(error).join('\n');
-                  this.toast.errorRich(messages || 'Lỗi khi thiết lập quản lý');
+                  if (error instanceof HttpErrorResponse && [401,403,500,0].includes(error.status ?? 0)) {
+                        return;
+                  }
+                  if (error instanceof HttpErrorResponse && error.status === 404) {
+                        this.toast?.warningRich('Không tìm thấy dữ liệu để tạo mã ngân sách.');
+                  } else if (error instanceof HttpErrorResponse && error.status === 400) {
+                        this.toast?.errorRich(error.error?.message || 'Dữ liệu không hợp lệ.');
+                  } else {
+                        const messages = handleHttpError(error).join('\n');
+                        this.confirm.error$(messages);
+                        this.toast?.errorRich('Tạo mã ngân sách thất bại.');
+                  }
             } finally {
                   this.submitting = false;
             }

@@ -10,6 +10,8 @@ import { UserService } from "../../services/user.service";
 import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { handleHttpError } from "../../../../shared/utils/handle-http-errors.util";
 import { firstValueFrom } from "rxjs";
+import { HttpErrorResponse } from "@angular/common/http";
+import { ConfirmService } from "../../../../shared/components/confirm-dialog/confirm.service";
 
 @Component({
       selector: 'member-manager-dialog',
@@ -18,15 +20,16 @@ import { firstValueFrom } from "rxjs";
       templateUrl: './member-manager-dialog.component.html'
 })
 export class MemberManagerDialog implements OnInit {
-      private toastService = inject(ToastService);
-      private dialogRef = inject(MatDialogRef<MemberManagerDialog>);
-      private formBuilder = inject(FormBuilder);
+      private readonly toast = inject(ToastService);
+      private readonly dialogRef = inject(MatDialogRef<MemberManagerDialog>);
+      private readonly formBuilder = inject(FormBuilder);
+      private readonly confirm = inject(ConfirmService);
       user!: UserDto;
       
-      private userFacade = inject(UserFacade);
-      private userOptionsStore = inject(UserOptionStore);
+      private readonly userFacade = inject(UserFacade);
+      private readonly userOptionsStore = inject(UserOptionStore);
       managerOptions$ = this.userOptionsStore.option$;
-      private userService = inject(UserService);
+      private readonly userService = inject(UserService);
 
       constructor(
             @Inject(MAT_DIALOG_DATA) public data: UserDto 
@@ -48,7 +51,7 @@ export class MemberManagerDialog implements OnInit {
                         },
                         error: (err) => {
                               const messages = handleHttpError(err).join('\n');
-                              this.toastService.errorRich(messages || 'Không thể tải danh sách quản lý');
+                              this.toast.errorRich(messages || 'Không thể tải danh sách quản lý');
                         }
                   })
             }
@@ -79,12 +82,21 @@ export class MemberManagerDialog implements OnInit {
                         primaryManagerId: raw.primaryManagerId ?? undefined
                   };
                   const created = await firstValueFrom(this.userService.setManagers(this.user.id, payload));
-                  this.toastService.successRich('Thêm quản lý thành công');
+                  this.toast.successRich('Thêm quản lý thành công');
                   this.dialogRef.close({ isSuccess: true, response: created });
             } catch(error) {
-                  const messages = handleHttpError(error).join('\n');
-                  console.error('Lỗi khi thêm quản lý', error);
-                  this.toastService.errorRich(messages || 'Lỗi khi thêm quản lý');
+                  if (error instanceof HttpErrorResponse && [401,403,500,0].includes(error.status ?? 0)) {
+                        return;
+                  }
+                  if (error instanceof HttpErrorResponse && error.status === 404) {
+                        this.toast?.warningRich('Không tìm thấy dữ liệu để tạo mã ngân sách.');
+                  } else if (error instanceof HttpErrorResponse && error.status === 400) {
+                        this.toast?.errorRich(error.error?.message || 'Dữ liệu không hợp lệ.');
+                  } else {
+                        const messages = handleHttpError(error).join('\n');
+                        this.confirm.error$(messages);
+                        this.toast?.errorRich('Tạo mã ngân sách thất bại.');
+                  }
             } finally {
                   this.submitting = false;
             }
