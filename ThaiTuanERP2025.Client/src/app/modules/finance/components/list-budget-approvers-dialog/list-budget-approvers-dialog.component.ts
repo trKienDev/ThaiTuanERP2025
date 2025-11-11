@@ -9,11 +9,12 @@ import { ActionMenuOption } from "../../../../shared/components/kit-action-menu/
 import { KitActionMenuComponent } from "../../../../shared/components/kit-action-menu/kit-action-menu.component";
 import { BudgetPlanApproversDialogComponent } from "../budget-apporver-request-dilaog/budget-approver-request-dialog.component";
 import { KitDropdownOption } from "../../../../shared/components/kit-dropdown/kit-dropdown.component";
+import { HasPermissionDirective } from "../../../../core/auth/auth.directive";
 
 @Component({
       selector: 'list-budget-approves-dialog',
       standalone: true,
-      imports: [CommonModule, AvatarUrlPipe, KitActionMenuComponent],
+      imports: [CommonModule, AvatarUrlPipe, KitActionMenuComponent, HasPermissionDirective],
       templateUrl: './list-budget-approvers-dialog.component.html'
 })
 export class ListBudgetApproversDialogComponent {

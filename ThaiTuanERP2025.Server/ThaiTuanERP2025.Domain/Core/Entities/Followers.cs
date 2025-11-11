@@ -1,10 +1,9 @@
 ﻿using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Common.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
-using ThaiTuanERP2025.Domain.Followers.Events;
 using ThaiTuanERP2025.Domain.Followers.ValueObjects;
 
-namespace ThaiTuanERP2025.Domain.Followers.Entities
+namespace ThaiTuanERP2025.Domain.Core.Entities
 {
 	public class Follower : AuditableEntity
 	{
@@ -23,7 +22,7 @@ namespace ThaiTuanERP2025.Domain.Followers.Entities
 			UserId = userId;
 			IsActive = true;
 
-			AddDomainEvent(new FollowerCreatedEvent(this));
+			// AddDomainEvent(new FollowerCreatedEvent(this));
 		}
 		#endregion
 
@@ -34,7 +33,7 @@ namespace ThaiTuanERP2025.Domain.Followers.Entities
 				throw new DomainException("Follower đã bị huỷ trước đó.");
 
 			IsActive = false;
-			AddDomainEvent(new FollowerRemovedEvent(this));
+			// AddDomainEvent(new FollowerRemovedEvent(this));
 		}
 
 		public void Reactivate()
@@ -43,7 +42,7 @@ namespace ThaiTuanERP2025.Domain.Followers.Entities
 				return;
 
 			IsActive = true;
-			AddDomainEvent(new FollowerReactivatedEvent(this));
+			// AddDomainEvent(new FollowerReactivatedEvent(this));
 		}
 		#endregion
 	}

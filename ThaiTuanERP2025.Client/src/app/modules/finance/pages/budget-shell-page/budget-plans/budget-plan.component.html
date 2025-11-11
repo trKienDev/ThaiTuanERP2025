@@ -5,7 +5,9 @@
                   <h3 class="title">Kế hoạch ngân sách</h3>
             </div>
             <div class="display-flex gap-10px">
-                  <button type="button" class="button default-button" (click)="openBudgetPlanApproversDialog();">Thêm người duyệt ngân sách</button>
+                  <ng-container *appHasPermission="'budget-approver.create'">
+                        <button type="button" class="button default-button" (click)="openBudgetPlanApproversDialog();">Thêm người duyệt ngân sách</button>
+                  </ng-container>
                   <button type="button" class="button default-button" (click)="openListBudgetApproverDialog();">Danh sách user duyệt ngân sách</button>
                   <button type="button" class="button default-button" (click)="openBudgetPlanRequestDialog();">Thêm kế hoạch ngân sách</button>
             </div>

@@ -161,6 +161,7 @@ export class BudgetPlanRequestDialogComponent implements OnInit {
                   await firstValueFrom(this.budgetPlanService.create(payload));
                   this.toast.successRich("Tạo kế hoạch ngân sách thành công")
                   this.form.reset();
+                  this.matdialogRef.close();
             } catch(error) {
                   this.httpErrorHandler.handle(error, 'Tạo kế hoạch ngân sách thất bại');
             } finally {

@@ -23,10 +23,10 @@ using ThaiTuanERP2025.Application.Finance.CashoutCodes;
 using ThaiTuanERP2025.Application.Finance.LedgerAccounts;
 using ThaiTuanERP2025.Domain.Account.Repositories;
 using ThaiTuanERP2025.Domain.Common.Enums;
+using ThaiTuanERP2025.Domain.Core.Repositories;
 using ThaiTuanERP2025.Domain.Expense.Repositories;
 using ThaiTuanERP2025.Domain.Files.Repositories;
 using ThaiTuanERP2025.Domain.Finance.Repositories;
-using ThaiTuanERP2025.Domain.Followers.Repositories;
 using ThaiTuanERP2025.Infrastructure.Account.Repositories;
 using ThaiTuanERP2025.Infrastructure.Account.Repositories.Read;
 using ThaiTuanERP2025.Infrastructure.Account.Repositories.Write;
@@ -34,11 +34,12 @@ using ThaiTuanERP2025.Infrastructure.Authentication.Repositories;
 using ThaiTuanERP2025.Infrastructure.Common;
 using ThaiTuanERP2025.Infrastructure.Common.Security;
 using ThaiTuanERP2025.Infrastructure.Common.Services;
+using ThaiTuanERP2025.Infrastructure.Core.Repositories;
+using ThaiTuanERP2025.Infrastructure.Core.Repositories.Write;
 using ThaiTuanERP2025.Infrastructure.Expense.Repositories;
 using ThaiTuanERP2025.Infrastructure.Finance.Repositories;
 using ThaiTuanERP2025.Infrastructure.Finance.Repositories.Read;
 using ThaiTuanERP2025.Infrastructure.Finance.Repositories.Write;
-using ThaiTuanERP2025.Infrastructure.Followers.Repositories;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 using ThaiTuanERP2025.Infrastructure.StoredFiles.Configurations;
 using ThaiTuanERP2025.Infrastructure.StoredFiles.FileStorage;
@@ -119,8 +120,10 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IExpensePaymentCommentTagRepository, ExpensePaymentCommentTagRepository>();
 			services.AddScoped<IExpensePaymentCommentAttachmentRepository, ExpensePaymentCommentAttachmentRepository>();
 			
-			// Followers
+			// Core
 			services.AddScoped<IFollowerRepository, FollowerRepository>();
+			services.AddScoped<IUserNotificationWriteRepository, UserNotificationWriteRepository>();
+			services.AddScoped<IUserReminderWriteRepository, UserReminderWriteRepository>();	
 
 			// Authentication
 			services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();

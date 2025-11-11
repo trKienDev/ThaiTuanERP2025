@@ -4,6 +4,7 @@ using MediatR;
 using FluentValidation;
 using ThaiTuanERP2025.Application.Behaviors;
 using ThaiTuanERP2025.Domain.Common.Events;
+using ThaiTuanERP2025.Application.Core.Services;
 
 namespace ThaiTuanERP2025.Application
 {
@@ -37,6 +38,10 @@ namespace ThaiTuanERP2025.Application
 				typeof(AssemblyMarker).Assembly,         // Application Layer
 				Assembly.GetExecutingAssembly()          // API Layer
 			);
+
+			// Service
+			services.AddScoped<INotificationService, NotificationService>();
+			services.AddScoped<IReminderService, ReminderService>();
 
 			return services;
 		}

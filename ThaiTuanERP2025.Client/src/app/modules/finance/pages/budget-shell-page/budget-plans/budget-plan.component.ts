@@ -5,11 +5,12 @@ import { ToastService } from "../../../../../shared/components/kit-toast-alert/k
 import { BudgetPlanRequestDialogComponent } from "../../../components/budget-plan-request-dialog/budget-plan-request-dialog.component";
 import { BudgetPlanApproversDialogComponent } from "../../../components/budget-apporver-request-dilaog/budget-approver-request-dialog.component";
 import { ListBudgetApproversDialogComponent } from "../../../components/list-budget-approvers-dialog/list-budget-approvers-dialog.component";
+import { HasPermissionDirective } from "../../../../../core/auth/auth.directive";
 
 @Component({
       selector: 'budget-plan-panel',
       standalone: true,
-      imports: [ CommonModule ],
+      imports: [CommonModule, HasPermissionDirective],
       templateUrl: './budget-plan.component.html',
 })
 export class BudgetPlanPanelComponent {

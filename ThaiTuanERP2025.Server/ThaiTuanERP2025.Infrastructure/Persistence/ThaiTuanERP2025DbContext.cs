@@ -1,14 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Identity.Client;
 using System.Linq.Expressions;
+using ThaiTuanERP2025.Application.Common.Events;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Authentication.Entities;
 using ThaiTuanERP2025.Domain.Common.Entities;
+using ThaiTuanERP2025.Domain.Core.Entities;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Files.Entities;
 using ThaiTuanERP2025.Domain.Finance.Entities;
-using ThaiTuanERP2025.Domain.Followers.Entities;
 using ThaiTuanERP2025.Infrastructure.Common;
 
 namespace ThaiTuanERP2025.Infrastructure.Persistence
@@ -16,12 +18,12 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 	public class ThaiTuanERP2025DbContext : DbContext
 	{
 		private readonly ICurrentUserService _currentUserService;
-		private readonly DomainEventDispatcher? _dispatcher;
+		private readonly IDomainEventDispatcher? _dispatcher;
 
 		public ThaiTuanERP2025DbContext(
 			DbContextOptions<ThaiTuanERP2025DbContext> options,
 			ICurrentUserService currentUserService,
-			DomainEventDispatcher? dispatcher = null
+			IDomainEventDispatcher? dispatcher = null
 		) : base(options) {
 			_currentUserService = currentUserService;
 			_dispatcher = dispatcher;
@@ -63,6 +65,8 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<Permission> Permissions => Set<Permission>();
 		public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
 		public DbSet<UserRole> UserRoles => Set<UserRole>();
+		public DbSet<UserNotification> UserNotifications => Set<UserNotification>();
+		public DbSet<UserReminder> UserReminders => Set<UserReminder>();
 
 		// Authentication
 		public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
@@ -124,7 +128,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 				// ✅ Chỉ dispatch domain events khi SaveChanges thành công
 				if (_dispatcher is not null)
 				{
-					var entitiesWithEvents = ChangeTracker.Entries<AuditableEntity>()
+					var entitiesWithEvents = ChangeTracker.Entries<BaseEntity>()
 					    .Select(e => e.Entity)
 					    .Where(e => e.DomainEvents.Any())
 					    .ToArray();

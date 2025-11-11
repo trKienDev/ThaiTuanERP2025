@@ -1,6 +1,6 @@
-﻿using ThaiTuanERP2025.Domain.Followers.Enums;
+﻿using ThaiTuanERP2025.Domain.Core.Enums;
 
-namespace ThaiTuanERP2025.Application.Followers.Services
+namespace ThaiTuanERP2025.Application.Core.Services.Interfaces
 {
 	public interface IFollowerService
 	{

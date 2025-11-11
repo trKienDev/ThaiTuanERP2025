@@ -1,7 +1,7 @@
 ﻿using ThaiTuanERP2025.Domain.Common.Repositories;
-using ThaiTuanERP2025.Domain.Followers.Entities;
+using ThaiTuanERP2025.Domain.Core.Entities;
 
-namespace ThaiTuanERP2025.Domain.Followers.Repositories
+namespace ThaiTuanERP2025.Domain.Core.Repositories
 {
 	public interface IFollowerRepository : IBaseWriteRepository<Follower>
 	{

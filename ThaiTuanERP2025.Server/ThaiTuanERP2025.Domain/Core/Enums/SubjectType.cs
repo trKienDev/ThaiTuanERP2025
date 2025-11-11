@@ -1,4 +1,4 @@
-﻿namespace ThaiTuanERP2025.Domain.Followers.Enums
+﻿namespace ThaiTuanERP2025.Domain.Core.Enums
 {
 	public enum SubjectType
 	{

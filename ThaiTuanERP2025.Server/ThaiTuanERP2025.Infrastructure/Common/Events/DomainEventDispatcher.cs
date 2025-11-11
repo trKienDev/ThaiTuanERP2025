@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using ThaiTuanERP2025.Application.Common.Events;
 using ThaiTuanERP2025.Domain.Common.Events;
+
 namespace ThaiTuanERP2025.Infrastructure.Common
 {
 	/// <summary>

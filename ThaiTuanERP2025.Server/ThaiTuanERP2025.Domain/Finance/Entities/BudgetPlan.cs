@@ -9,6 +9,28 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 {
 	public class BudgetPlan : AuditableEntity
 	{
+		#region Constructors
+		private BudgetPlan() { }
+		public BudgetPlan(Guid departmentId, Guid budgetCodeId, Guid budgetPeriodId, decimal amount, Guid reviewerId, Guid approverId)
+		{
+			if (amount <= 0)
+				throw new ArgumentException("Amount must be greater than zero", nameof(amount));
+
+			this.DepartmentId = departmentId;
+			this.BudgetCodeId = budgetCodeId;
+			this.BudgetPeriodId = budgetPeriodId;
+			this.Amount = amount;
+			SelectedReviewerUserId = reviewerId;
+			SelectedBudgetApproverId = approverId;
+
+			Status = BudgetPlanStatus.Draft;
+			this.IsActive = true;
+
+			DueAt = DateTime.UtcNow.AddHours(24);
+			AddDomainEvent(new BudgetPlanCreatedEvent(this, reviewerId, DueAt.Value));
+		}
+		#endregion
+
 		#region Properties
 		public Guid DepartmentId { get; private set; }
 		public Guid BudgetCodeId { get; private set; }
@@ -41,27 +63,6 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public BudgetCode BudgetCode { get; private set; } = null!;
 		public BudgetPeriod BudgetPeriod { get; private set; } = null!;
 		public Department Department { get; private set; } = null!;
-		#endregion
-
-		#region Constructors
-		private BudgetPlan() { }
-		public BudgetPlan (Guid departmentId, Guid budgetCodeId, Guid budgetPeriodId, decimal amount, Guid reviewerId, Guid approverId ) {
-			if (amount <= 0)
-				throw new ArgumentException("Amount must be greater than zero", nameof(amount));
-
-			this.DepartmentId = departmentId;	
-			this.BudgetCodeId = budgetCodeId;
-			this.BudgetPeriodId = budgetPeriodId;
-			this.Amount = amount;
-			SelectedReviewerUserId = reviewerId;
-			SelectedBudgetApproverId = approverId;
-
-			Status = BudgetPlanStatus.Draft;
-			this.IsActive = true;
-
-			DueAt = DateTime.UtcNow.AddHours(24);
-			AddDomainEvent(new BudgetPlanCreatedEvent(this, reviewerId, DueAt.Value));
-		}
 		#endregion
 
 		#region Domain Behaviors

@@ -1,12 +1,11 @@
 ﻿using ThaiTuanERP2025.Application.Common.Interfaces;
+using ThaiTuanERP2025.Application.Core.Services.Interfaces;
 using ThaiTuanERP2025.Application.Exceptions;
-using ThaiTuanERP2025.Application.Followers.Services;
-using ThaiTuanERP2025.Domain.Exceptions;
-using ThaiTuanERP2025.Domain.Followers.Entities;
-using ThaiTuanERP2025.Domain.Followers.Enums;
+using ThaiTuanERP2025.Domain.Core.Entities;
+using ThaiTuanERP2025.Domain.Core.Enums;
 using ThaiTuanERP2025.Domain.Followers.ValueObjects;
 
-namespace ThaiTuanERP2025.Infrastructure.Followers.Services
+namespace ThaiTuanERP2025.Infrastructure.Core.Services
 {
 	public sealed class FollowerService : IFollowerService
 	{

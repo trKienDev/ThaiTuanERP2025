@@ -1,7 +1,7 @@
 ﻿using ThaiTuanERP2025.Domain.Common.Events;
-using ThaiTuanERP2025.Domain.Followers.Entities;
+using ThaiTuanERP2025.Domain.Core.Entities;
 
-namespace ThaiTuanERP2025.Domain.Followers.Events
+namespace ThaiTuanERP2025.Domain.Core.Events
 {
 
 	public sealed class FollowerRemovedEvent : IDomainEvent

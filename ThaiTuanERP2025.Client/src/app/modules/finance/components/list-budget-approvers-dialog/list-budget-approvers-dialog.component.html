@@ -18,7 +18,9 @@
                                     <th>User</th>
                                     <th>Sla</th>
                                     <th>Phòng ban</th>
-                                    <th>Thao tác</th>
+                                    <ng-container *appHasPermission="'budget-approver.actions'">
+                                          <th>Thao tác</th>
+                                    </ng-container>
                               </tr>
                         </thead>
                         <tbody>
@@ -36,11 +38,13 @@
                                                 <option class="option" *ngFor="let dept of approver.departments">{{ dept.code }} - {{ dept.name }}</option>
                                           </select>
                                     </td>
-                                    <td>
-                                          <div  class="display-flex justify-content-center">
-                                                <kit-action-menu [actions]="buildApproverActions(approver)"></kit-action-menu>
-                                          </div>
-                                    </td>
+                                    <ng-container *appHasPermission="'budget-approver.actions'">
+                                          <td>
+                                                <div  class="display-flex justify-content-center">
+                                                      <kit-action-menu [actions]="buildApproverActions(approver)"></kit-action-menu>
+                                                </div>
+                                          </td>
+                                    </ng-container>
                               </tr>
                         </tbody>
                   </table>

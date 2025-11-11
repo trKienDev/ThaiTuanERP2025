@@ -9,14 +9,14 @@ using ThaiTuanERP2025.Application.Common.Events;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Common.Security;
 using ThaiTuanERP2025.Application.Common.Services;
+using ThaiTuanERP2025.Application.Core.Services.Interfaces;
 using ThaiTuanERP2025.Application.Expense.Contracts.Resolvers;
 using ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows;
-using ThaiTuanERP2025.Application.Followers.Services;
 using ThaiTuanERP2025.Infrastructure.Authentication.Services;
 using ThaiTuanERP2025.Infrastructure.Common.Events;
 using ThaiTuanERP2025.Infrastructure.Common.Services;
+using ThaiTuanERP2025.Infrastructure.Core.Services;
 using ThaiTuanERP2025.Infrastructure.Expense.Contracts.Resolvers;
-using ThaiTuanERP2025.Infrastructure.Followers.Services;
 
 namespace ThaiTuanERP2025.Api
 {
@@ -29,10 +29,10 @@ namespace ThaiTuanERP2025.Api
 			services.AddScoped<IPasswordHasher, PasswordHasher>();
 
 			// Approval workflow
-			services.AddScoped<IApproverResolver, CreatorManagerResolver>();
-			services.AddScoped<IApproverResolverRegistry, ApproverResolverRegistry>();
-			services.AddScoped<IApprovalWorkflowService, ApprovalWorkflowService>();
-			services.AddScoped<ApprovalWorkflowResolverService>();
+			//services.AddScoped<IApproverResolver, CreatorManagerResolver>();
+			//services.AddScoped<IApproverResolverRegistry, ApproverResolverRegistry>();
+			////services.AddScoped<IApprovalWorkflowService, ApprovalWorkflowService>();
+			//services.AddScoped<ApprovalWorkflowResolverService>();
 
 			services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 
