@@ -20,14 +20,14 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			_mediator = mediator;
 		}
 
-		[HttpGet("all")]
+		[HttpGet]
 		public async Task<IActionResult> GetAllRolesAsync(CancellationToken cancellationToken)
 		{
 			var roles = await _mediator.Send(new GetAllRolesQuery(), cancellationToken);
 			return Ok(ApiResponse<IEnumerable<RoleDto>>.Success(roles));
 		}
 
-		[HttpPost("new")]
+		[HttpPost]
 		public async Task<IActionResult> CreateRole([FromBody] RoleRequest request, CancellationToken cancellationToken)
 		{
 			var result = await _mediator.Send(new CreateRoleCommand(request), cancellationToken);

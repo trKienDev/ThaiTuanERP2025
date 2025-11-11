@@ -1,6 +1,6 @@
 <div class="dialog">
       <div class="dialog-container">
-            <form [formGroup]="form">
+            <form [formGroup]="form" (ngSubmit)="submit()">
                   <div class="dialog-heading">
                         <div class="dialog-title">
                               <h1>Thêm kế hoạch ngân sách mới</h1>
@@ -14,15 +14,31 @@
                   <div class="dialog-body">
                         <div class="dialog-row">
                               <div class="form-input">
-                                    <input class="" type="text" formControlName="amount" inputmode="decimal" appMoney [appMoneyDecimals]="0" required>
+                                    <input class="" type="text" formControlName="amount" inputmode="decimal" appMoney [appMoneyDecimals]="0" required
+                                    [class.is-invalid]="showErrors && form.get('amount')?.invalid"
+                                    [attr.aria-invalid]="showErrors && form.get('amount')?.invalid ? 'true' : null"/>
                                     <label for="amount">Số tiền <span style="color: red;">  *</span></label>
                                     <small style="font-style: italic; color: var(--text-muted);">
                                           {{ form.get('amount')?.value | amountToWords }}
                                     </small>
+                                    <div class="form-input-error" *ngIf="showErrors && form.get('amount')?.invalid">
+                                          <small>Vui lòng nhập số tiền</small>
+                                    </div>
                               </div>
                         </div>
                         <div class="dialog-row">
-                              <kit-dropdown formControlName="budgetPeriodId" [options]="budgetPeriodOptions" [placeholder]="'Chọn kỳ ngân sách'" [required]="true" [enableFilter]="false"></kit-dropdown>
+                              <kit-dropdown formControlName="budgetPeriodId" [options]="budgetPeriodOptions" [placeholder]="'Chọn kỳ ngân sách'" [required]="true" [enableFilter]="false"
+                              [invalid]="showErrors && (form.get('budgetPeriodId')?.invalid ?? false)" (selectionChange)="onBudgetPeriodSelected($event)"></kit-dropdown>
+                              <div class="form-input-error" *ngIf="showErrors && form.get('budgetPeriodId')?.invalid">
+                                    <small>Vui lòng chọn kỳ ngân sách</small>
+                              </div>
+                        </div>
+                        <div class="dialog-row">
+                              <kit-dropdown formControlName="budgetCodeId" [options]="(budgetCodeOptions$ | async) ?? []" [placeholder]="'Chọn mã ngân sách'" [required]="true" [enableFilter]="false"
+                              [invalid]="showErrors && (form.get('budgetCodeId')?.invalid ?? false)" (selectionChange)="onBudgetCodeSelected($event)"></kit-dropdown>
+                              <div class="form-input-error" *ngIf="showErrors && form.get('budgetCodeId')?.invalid">
+                                    <small>Vui lòng chọn mã ngân sách</small>
+                              </div>
                         </div>
                         <div class="dialog-row">
                               <div class="form-input">
@@ -31,17 +47,27 @@
                               </div>
                         </div>
                         <div class="dialog-row">
-                              <kit-dropdown  [options]="budgetApproverOptions" [placeholder]="'User phê duyệt'" [required]="true" [enableFilter]="false"></kit-dropdown>
+                              <kit-dropdown  [options]="budgetApproverOptions" [placeholder]="'User phê duyệt'" [required]="true" [enableFilter]="false"
+                              [invalid]="showErrors && (form.get('approverId')?.invalid ?? false)" (selectionChange)="onApproverSelected($event)"
+                              formControlName="approverId"></kit-dropdown>
+                              <div class="form-input-error" *ngIf="showErrors && form.get('approverId')?.invalid">
+                                    <small>Vui lòng chọn user phê duyệt</small>
+                              </div>
                         </div>
                         <div class="dialog-row">
-                              <kit-dropdown  [options]="budgetReviewerOptions" [placeholder]="'User xem xét'" [required]="true" [enableFilter]="false"></kit-dropdown>
+                              <kit-dropdown  [options]="budgetReviewerOptions" [placeholder]="'User xem xét'" [required]="true" [enableFilter]="false"
+                              [invalid]="showErrors && (form.get('reviewerId')?.invalid ?? false)" (selectionChange)="onReviewerSelected($event)"
+                              formControlName="reviewerId"></kit-dropdown>
+                              <div class="form-input-error" *ngIf="showErrors && form.get('reviewerId')?.invalid">
+                                    <small>Vui lòng chọn user xem xét</small>
+                              </div>
                         </div>
                   </div>
                   <div class="dialog-footer display-flex gap-10px">
                         <button type="button" class="flex-1 button cancel-button" (click)="close()" [disabled]="submitting">Hủy</button>
-                        <button type="submit" class="flex-1 button save-button display-flex justify-content-center" [disabled]="submitting">
-                              {{ submitting ? 'Đang lưu...' : 'Lưu' }}
-                        </button>
+                        <div class="width-50pt">
+                              <kit-spinner-button type="submit" cssClass="save-button" [loading]="submitting" [disabled]="submitting" text="Lưu" [loadingText]="''"></kit-spinner-button>
+                        </div>
                   </div>
             </form>
       </div>

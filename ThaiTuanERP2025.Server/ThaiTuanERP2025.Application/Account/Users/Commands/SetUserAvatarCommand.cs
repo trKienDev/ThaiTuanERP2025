@@ -26,7 +26,7 @@ namespace ThaiTuanERP2025.Application.Account.Users.Commands
 			var user = await _unitOfWork.Users.GetByIdAsync(command.UserId)
 				?? throw new NotFoundException($"Không tìm thấy thông tin user'");
 
-			user.UpdateAvatar(request.FileId);
+			user.UpdateAvatar(request.FileId, file.ObjectKey);
 			_unitOfWork.Users.Update(user);
 			await _unitOfWork.SaveChangesAsync();
 			return Unit.Value;

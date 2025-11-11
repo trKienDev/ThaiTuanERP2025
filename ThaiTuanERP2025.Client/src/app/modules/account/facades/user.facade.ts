@@ -1,5 +1,5 @@
 import { inject, Injectable } from "@angular/core";
-import { UserDto, UserRequest } from "../models/user.model";
+import { UserDto,  UserRequest } from "../models/user.model";
 import { BaseCrudFacade } from "../../../shared/facades/base-crud.facade";
 import { UserService } from "../services/user.service";
 import { Observable, shareReplay, startWith, Subject, switchMap, tap } from "rxjs";

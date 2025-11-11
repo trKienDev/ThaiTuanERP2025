@@ -25,11 +25,9 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetApprovers.Queries
 			var userDto = await _userRepo.GetByIdProjectedAsync(userId, cancellationToken)
 				?? throw new NotFoundException("Không tìm thấy user yêu cầu");
 
-			var budgetApprovers =  await _budgetApproverRepo.ListAsync(
+			return await _budgetApproverRepo.ListAsync(
 				q => q.Where(x => x.Departments.Any(d => d.DepartmentId == userDto.DepartmentId))
 			);
-
-			return budgetApprovers;
 		}
 	}
 }

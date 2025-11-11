@@ -13,3 +13,8 @@ export interface BudgetPeriodRequest {
       startDate: Date;
       endDate: Date;
 }
+
+export interface UpdateBudgetPeriodPayload {
+      startDate: string;
+      endDate: string;
+}

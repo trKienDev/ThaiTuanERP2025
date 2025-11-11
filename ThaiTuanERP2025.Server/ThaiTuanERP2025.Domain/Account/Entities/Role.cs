@@ -11,6 +11,15 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		private readonly List<RolePermission> _rolePermissions = new();
 		private readonly List<UserRole> _userRoles = new();
 
+		#region Properties
+		public string Name { get; private set; } = default!;
+		public string Description { get; private set; } = string.Empty;
+		public bool IsActive { get; private set; } = true;
+
+		public IReadOnlyCollection<RolePermission> RolePermissions => _rolePermissions.AsReadOnly();
+		public IReadOnlyCollection<UserRole> UserRoles => _userRoles.AsReadOnly();
+		#endregion
+
 		#region EF Constructor
 		private Role() { } 
 		public Role(string name, string description = "")
@@ -22,15 +31,6 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 
 			AddDomainEvent(new RoleCreatedEvent(this));
 		}
-		#endregion
-
-		#region Properties
-		public string Name { get; private set; } = default!;
-		public string Description { get; private set; } = string.Empty;
-		public bool IsActive { get; private set; } = true;
-
-		public IReadOnlyCollection<RolePermission> RolePermissions => _rolePermissions.AsReadOnly();
-		public IReadOnlyCollection<UserRole> UserRoles => _userRoles.AsReadOnly();
 		#endregion
 
 		#region Domain Behaviors

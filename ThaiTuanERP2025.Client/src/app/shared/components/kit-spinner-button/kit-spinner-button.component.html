@@ -1,6 +1,8 @@
 <button class="width-100pt" [type]="type" [disabled]="disabled || loading" [ngClass]="['button', cssClass]" >
       <div class="display-flex align-items-center justify-content-center gap-10px">
             <span class="btn-spinner" *ngIf="loading" aria-hidden="true"></span>
-            <span>{{ loading ? loadingText : text }}</span>
+            <ng-container *ngIf="!loading">
+                  <span>{{ text }}</span>
+            </ng-container>
       </div>
 </button>

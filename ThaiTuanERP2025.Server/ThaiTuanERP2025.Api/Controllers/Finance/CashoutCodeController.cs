@@ -15,7 +15,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 		private readonly IMediator _mediator;
 		public CashoutCodeController(IMediator mediator) => _mediator = mediator;
 
-		[HttpGet("all")]
+		[HttpGet]
 		public async Task<IActionResult> GetAll(CancellationToken cancellationToken) {
 			var dtos = await _mediator.Send(new GetAllCashoutCodesQuery(), cancellationToken);
 			return Ok(ApiResponse<IReadOnlyList<CashoutCodeDto>>.Success(dtos));	

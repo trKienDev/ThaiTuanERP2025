@@ -7,7 +7,8 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPeriods
 	{
 		public BudgetPeriodMappingProfile()
 		{
-			CreateMap<BudgetPeriod, BudgetPeriodDto>();
+			CreateMap<BudgetPeriod, BudgetPeriodDto>()
+				 .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive)); 
 		}
 	}
 }

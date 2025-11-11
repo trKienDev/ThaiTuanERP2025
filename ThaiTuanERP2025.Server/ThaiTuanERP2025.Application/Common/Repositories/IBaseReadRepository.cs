@@ -17,6 +17,6 @@ namespace ThaiTuanERP2025.Application.Common.Repositories
 		Task<bool> ExistAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
 		Task<List<TDto>> ListAsync(Func<IQueryable<TEntity>, IQueryable<TEntity>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default);
 		Task<TDto?> GetByIdProjectedAsync(Guid id, CancellationToken cancellationToken = default);
-		Task<List<TDto>> ListProjectedAsync(Func<IQueryable<TEntity>, IQueryable<TDto>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default);
+		Task<List<TProjection>> ListProjectedAsync<TProjection>(Func<IQueryable<TEntity>, IQueryable<TProjection>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default);
 	}
 }

@@ -12,7 +12,7 @@ export class BudgetApproverOptionStore {
 
       readonly options$ = this.facade.budgetApprovers$.pipe(
             toDropdownOptions({
-                  id: 'id',
+                  id: (b) => b.approverUser.id,
                   label: (b) => b.approverUser.fullName,
                   imgUrl: (b) => resolveAvatarUrl(this.baseUrl, b.approverUser)
             }),

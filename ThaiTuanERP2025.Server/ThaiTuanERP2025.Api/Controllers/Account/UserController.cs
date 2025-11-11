@@ -30,8 +30,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			return Ok(ApiResponse<UserDto>.Success(result));
 		}
 
-		[HttpGet("all")]
-		[ProducesResponseType(typeof(IReadOnlyList<UserDto>), StatusCodes.Status200OK)]
+		[HttpGet]
 		public async Task<IActionResult> GetAllAsync(
 			[FromQuery] string? keyword,
 			[FromQuery] string? role,
@@ -39,7 +38,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			CancellationToken cancellationToken
 		) {
 			var users = await _mediator.Send(new GetAllUsersQuery(keyword, role, departmentId), cancellationToken);
-			return Ok(ApiResponse<IReadOnlyList<UserDto>>.Success(users));
+			return Ok(ApiResponse<IReadOnlyList<UserInforDto>>.Success(users));
 		}
 
 		[HttpGet("{id:guid}/managers/ids")]
@@ -55,7 +54,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			return Ok(ApiResponse<IReadOnlyList<UserBriefAvatarDto>>.Success(result));
 		}
 
-		[HttpPost("new")]
+		[HttpPost]
 		public async Task<IActionResult> Create([FromBody] CreateUserCommand command, CancellationToken cancellationToken)
 		{
 			var result = await _mediator.Send(command, cancellationToken);

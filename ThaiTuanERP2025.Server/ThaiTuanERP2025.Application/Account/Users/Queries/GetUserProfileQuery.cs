@@ -35,12 +35,6 @@ namespace ThaiTuanERP2025.Application.Account.Users.Queries
 			var userDto = await _userReadRepostiory.GetByIdProjectedAsync(userId, cancellationToken)
 				?? throw new NotFoundException("Không tìm thấy người dùng");
 
-			if (userDto.AvatarFileId.HasValue)
-			{
-				var storedAvatar = await _fileRepo.GetByIdAsync(userDto.AvatarFileId.Value, cancellationToken);
-				if (storedAvatar is not null)
-					userDto.AvatarFileObjectKey = storedAvatar.ObjectKey;
-			}
 			return userDto;
 		}
 	}

@@ -18,7 +18,6 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 			builder.Property(x => x.Month).IsRequired();
 			builder.Property(x => x.StartDate).IsRequired();
 			builder.Property(x => x.EndDate).IsRequired();
-			builder.Property(x => x.IsActive).IsRequired();
 
 			// ===== Navigation BudgetPlans =====
 			builder.Navigation(nameof(BudgetPeriod.BudgetPlans))
@@ -31,7 +30,6 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 
 			// ===== Indexes =====
 			builder.HasIndex(x => new { x.Year, x.Month }).IsUnique();
-			builder.HasIndex(x => x.IsActive);
 
 			// auditable configuration
 			ConfigureAuditUsers(builder);

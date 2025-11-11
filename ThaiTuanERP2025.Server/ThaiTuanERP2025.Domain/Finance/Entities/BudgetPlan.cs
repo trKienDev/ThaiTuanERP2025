@@ -16,6 +16,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public decimal Amount { get; private set; }
 		public bool IsActive { get; private set; } = true;
 		public BudgetPlanStatus Status { get; private set; } = BudgetPlanStatus.Draft;
+		public DateTime? DueAt { get; private set; }
 
 		[Timestamp]
 		public byte[] RowVersion { get; private set; } = Array.Empty<byte>();
@@ -57,6 +58,9 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 
 			Status = BudgetPlanStatus.Draft;
 			this.IsActive = true;
+
+			DueAt = DateTime.UtcNow.AddHours(24);
+			AddDomainEvent(new BudgetPlanCreatedEvent(this, reviewerId, DueAt.Value));
 		}
 		#endregion
 

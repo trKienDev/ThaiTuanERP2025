@@ -17,7 +17,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 		private readonly IMediator _mediator;
 		public PermissionController(IMediator mediator) => _mediator = mediator;
 
-		[HttpGet("all")]	
+		[HttpGet]	
 		public async Task<IActionResult> GetAllPermissions(CancellationToken cancellationToken)
 		{
 			var dtos =  await _mediator.Send(new GetAllPermissionsQuery(), cancellationToken);
@@ -31,7 +31,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			return Ok(ApiResponse<IReadOnlyList<PermissionDto>>.Success(result));
 		}
 
-		[HttpPost("new")]
+		[HttpPost]
 		public async Task<IActionResult> CreatePermission([FromBody] PermissionRequest request, CancellationToken cancellationToken)
 		{
 			var result = await _mediator.Send(new CreatePermissionCommand(request), cancellationToken);

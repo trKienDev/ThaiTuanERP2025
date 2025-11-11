@@ -1,4 +1,5 @@
-﻿using ThaiTuanERP2025.Domain.Common;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using ThaiTuanERP2025.Domain.Common;
 using ThaiTuanERP2025.Domain.Common.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Finance.Events;
@@ -20,7 +21,6 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			Month = month;
 			StartDate = startDate;
 			EndDate = endDate;
-			IsActive = true;
 
 			AddDomainEvent(new BudgetPeriodCreatedEvent(this));
 		}
@@ -31,7 +31,9 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public int Month { get; private set; }
 		public DateTime StartDate { get; private set; }
 		public DateTime EndDate { get; private set; }
-		public bool IsActive { get; private set; }
+
+		[NotMapped]
+		public bool IsActive => DateTime.UtcNow.Date >= StartDate.Date && DateTime.UtcNow.Date <= EndDate.Date;
 
 		public ICollection<BudgetPlan> BudgetPlans { get; private set; } = new List<BudgetPlan>();
 		#endregion
@@ -78,20 +80,6 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 				throw new DomainException("Ngày kết thúc không thể trước ngày bắt đầu.");
 			EndDate = endDate;
 			AddDomainEvent(new BudgetPeriodUpdatedEvent(this));
-		}
-
-		public void Activate()
-		{
-			if (IsActive) return;
-			IsActive = true;
-			AddDomainEvent(new BudgetPeriodActivatedEvent(this));
-		}
-
-		public void Deactivate()
-		{
-			if (!IsActive) return;
-			IsActive = false;
-			AddDomainEvent(new BudgetPeriodDeactivatedEvent(this));
 		}
 		#endregion
 	}

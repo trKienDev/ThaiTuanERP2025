@@ -1,3 +1,5 @@
+import { BudgetPlanService } from './../../services/budget-plan.service';
+import { HttpErrorHandlerService } from './../../../../core/services/http-errror-handler.service';
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnInit } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
@@ -10,21 +12,21 @@ import { BudgetPeriodService } from "../../services/budget-period.service";
 import { BudgetPeriodDto } from "../../models/budget-period.model";
 import { handleHttpError } from "../../../../shared/utils/handle-http-errors.util";
 import { BudgetApproverOptionStore } from "../../options/budget-approvers-options.store";
-import { take } from "rxjs";
+import { firstValueFrom, take } from "rxjs";
 import { BudgetApproverService } from "../../services/budget-approver.service";
 import { resolveAvatarUrl } from "../../../../shared/utils/avatar.utils";
 import { environment } from "../../../../../environments/environment";
 import { UserService } from "../../../account/services/user.service";
 import { AmountToWordsPipe } from "../../../../shared/pipes/amount-to-words.pipe";
 import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
-import { HttpErrorResponse } from "@angular/common/http";
-import { ConfirmService } from "../../../../shared/components/confirm-dialog/confirm.service";
 import { BudgetPlanRequest } from "../../models/budget-plan.model";
+import { BudgetCodeOptionStore } from '../../options/budget-code-options.store';
+import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 
 @Component({
       selector: 'budget-plan-request-dialog',
       standalone: true,
-      imports: [CommonModule, ReactiveFormsModule, MoneyFormatDirective, KitDropdownComponent, AmountToWordsPipe],
+      imports: [CommonModule, ReactiveFormsModule, MoneyFormatDirective, KitDropdownComponent, AmountToWordsPipe, KitSpinnerButtonComponent],
       templateUrl: './budget-plan-request-dialog.component.html',
 })
 export class BudgetPlanRequestDialogComponent implements OnInit {
@@ -32,7 +34,6 @@ export class BudgetPlanRequestDialogComponent implements OnInit {
       private readonly matDialog = inject(MatDialog);
       private readonly formBuilder = inject(FormBuilder);
       private readonly toast = inject(ToastService);
-      private readonly confirm = inject(ConfirmService);
       
       private readonly userFacade = inject(UserFacade);
       currentUser$ = this.userFacade.currentUser$;
@@ -50,7 +51,12 @@ export class BudgetPlanRequestDialogComponent implements OnInit {
 
       budgetPeriodOptions: KitDropdownOption[] = [];
 
+     private readonly budgetCodeOptions = inject(BudgetCodeOptionStore);
+     budgetCodeOptions$ = this.budgetCodeOptions.options$;
+
       private readonly userService = inject(UserService);
+      private readonly httpErrorHandler = inject(HttpErrorHandlerService);
+      private readonly budgetPlanService = inject(BudgetPlanService);
 
       submitting: boolean = false;
       showErrors: boolean = false;
@@ -60,6 +66,8 @@ export class BudgetPlanRequestDialogComponent implements OnInit {
             budgetPeriodId: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
             budgetCodeId: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
             amount: this.formBuilder.control<number>(0, { nonNullable: true, validators: [ Validators.required ]}),
+            approverId: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
+            reviewerId: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
       });
 
       ngOnInit(): void {
@@ -94,7 +102,7 @@ export class BudgetPlanRequestDialogComponent implements OnInit {
             this.budgetApproverService.getByUserDepartment().subscribe({
                   next: (budgetApprovers) => {
                         this.budgetApproverOptions = budgetApprovers.map(ba => ({
-                              id: ba.id,
+                              id: ba.approverUser.id,
                               label: ba.approverUser.fullName,
                               imgUrl: resolveAvatarUrl(this.baseUrl, ba.approverUser)
                         }))
@@ -115,12 +123,29 @@ export class BudgetPlanRequestDialogComponent implements OnInit {
             })
       }
 
+      onBudgetPeriodSelected(opt: KitDropdownOption) {
+            this.form.patchValue({ budgetPeriodId: opt.id });
+      }
+
+      onBudgetCodeSelected(opt: KitDropdownOption) {
+            this.form.patchValue({ budgetCodeId: opt.id });
+      }
+
+      onApproverSelected(opt: KitDropdownOption) {
+            this.form.patchValue({ approverId: opt.id });
+      }
+
+      onReviewerSelected(opt: KitDropdownOption) {
+            this.form.patchValue({ reviewerId: opt.id });
+      }
+
       openBudgetPeriodsTableDialog(): void {
             this.matDialog.open(BudgetPeriodsTableDialogComponent);
       }
 
       async submit(): Promise<void> {
             this.showErrors = true;
+
             if(this.form.invalid) {
                   this.form.markAllAsTouched();
                   this.toast.warningRich("Vui lòng điền đầy đủ thông tin");
@@ -132,21 +157,14 @@ export class BudgetPlanRequestDialogComponent implements OnInit {
                   this.form.disable({ emitEvent: false });
 
                   const payload: BudgetPlanRequest = this.form.getRawValue();
-                  
+                  console.log('payload: ', payload);
+                  await firstValueFrom(this.budgetPlanService.create(payload));
+                  this.toast.successRich("Tạo kế hoạch ngân sách thành công")
+                  this.form.reset();
             } catch(error) {
-                  if (error instanceof HttpErrorResponse && [401,403,500,0].includes(error.status ?? 0)) {
-                        return;
-                  }
-                  if (error instanceof HttpErrorResponse && error.status === 404) {
-                        this.toast?.warningRich('Không tìm thấy dữ liệu để tạo mã ngân sách.');
-                  } else if (error instanceof HttpErrorResponse && error.status === 400) {
-                        this.toast?.errorRich(error.error?.message || 'Dữ liệu không hợp lệ.');
-                  } else {
-                        const messages = handleHttpError(error).join('\n');
-                        this.confirm.error$(messages);
-                        this.toast?.errorRich('Tạo mã ngân sách thất bại.');
-                  }
+                  this.httpErrorHandler.handle(error, 'Tạo kế hoạch ngân sách thất bại');
             } finally {
+                  this.form.enable({ emitEvent: false })
                   this.showErrors = false;
                   this.submitting = false;
             }

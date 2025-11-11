@@ -14,6 +14,36 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		private readonly List<UserManagerAssignment> _managerAssignments = new();
 		private readonly List<UserManagerAssignment> _directReportsAssignments = new();
 
+		#region Properties
+		public string FullName { get; private set; } = string.Empty;
+		public string Username { get; private set; } = string.Empty;
+		public string EmployeeCode { get; private set; } = string.Empty;
+		public string PasswordHash { get; private set; } = string.Empty;
+
+		public Guid? AvatarFileId { get; private set; }
+		public string? AvatarFileObjectKey { get; private set; }
+		public StoredFile? AvatarFile { get; init; }
+
+		public string Position { get; private set; } = string.Empty;
+
+		public Email? Email { get; private set; }
+		public Phone? Phone { get; private set; }
+
+		public Guid? DepartmentId { get; private set; }
+		public Department? Department { get; init; }
+
+		public Guid? ManagerId { get; private set; }
+		public User? Manager { get; init; }
+
+		public bool IsSuperAdmin { get; private set; }
+		public bool IsActive { get; private set; }
+
+		public IReadOnlyCollection<UserRole> UserRoles => _userRoles.AsReadOnly();
+		public IReadOnlyCollection<UserGroup> UserGroups => _userGroups.AsReadOnly();
+		public IReadOnlyCollection<UserManagerAssignment> ManagerAssignments => _managerAssignments.AsReadOnly();
+		public IReadOnlyCollection<UserManagerAssignment> DirectReportsAssignments => _directReportsAssignments.AsReadOnly();
+		#endregion
+
 		#region EF Constructor
 		private User() { } 
 		public User(
@@ -39,37 +69,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 
 			AddDomainEvent(new UserCreatedEvent(this));
 		}
-		#endregion
-
-		#region Properties
-		public string FullName { get; private set; } = string.Empty;
-		public string Username { get; private set; } = string.Empty;
-		public string EmployeeCode { get; private set; } = string.Empty;
-		public string PasswordHash { get; private set; } = string.Empty;
-
-		public Guid? AvatarFileId { get; private set; }
-		public StoredFile? AvatarFile { get; init; }
-		public object? AvatarFileObjectKey;
-
-		public string Position { get; private set; } = string.Empty;
-
-		public Email? Email { get; private set; }
-		public Phone? Phone { get; private set; }
-
-		public Guid? DepartmentId { get; private set; }
-		public Department? Department { get; init; }
-
-		public Guid? ManagerId { get; private set; }
-		public User? Manager { get; init; }
-
-		public bool IsSuperAdmin { get; private set; }
-		public bool IsActive { get; private set; }
-
-		public IReadOnlyCollection<UserRole> UserRoles => _userRoles.AsReadOnly();
-		public IReadOnlyCollection<UserGroup> UserGroups => _userGroups.AsReadOnly();
-		public IReadOnlyCollection<UserManagerAssignment> ManagerAssignments => _managerAssignments.AsReadOnly();
-		public IReadOnlyCollection<UserManagerAssignment> DirectReportsAssignments => _directReportsAssignments.AsReadOnly();
-		#endregion
+		#endregion		
 
 		#region Domain Behaviors
 		public void AssignManager(Guid managerId)
@@ -120,9 +120,11 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			AddDomainEvent(new UserProfileUpdatedEvent(this));
 		}
 
-		public void UpdateAvatar(Guid? fileId)
+		public void UpdateAvatar (Guid fileId, string objectKey)
 		{
 			AvatarFileId = fileId;
+			AvatarFileObjectKey = objectKey;
+
 			AddDomainEvent(new UserAvatarUpdatedEvent(this));
 		}
 

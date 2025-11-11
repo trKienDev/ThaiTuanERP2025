@@ -1,5 +1,4 @@
 ﻿using ThaiTuanERP2025.Domain.Account.Repositories;
-using ThaiTuanERP2025.Domain.Alerts.Repositories;
 using ThaiTuanERP2025.Domain.Expense.Repositories;
 using ThaiTuanERP2025.Domain.Files.Repositories;
 using ThaiTuanERP2025.Domain.Finance.Repositories;
@@ -51,9 +50,7 @@ namespace ThaiTuanERP2025.Application.Common.Interfaces
 		IExpensePaymentCommentAttachmentRepository ExpensePaymentCommentAttachments { get; }
 		IExpensePaymentCommentTagRepository ExpensePaymentCommentTags { get; }
 
-		// Notification
-		INotificationWriteRepository Notifications { get; }
-		ITaskReminderWriteRepository TaskReminders { get; }
+		// Events
 
 		// Follow
 		IFollowerRepository Followers { get; }

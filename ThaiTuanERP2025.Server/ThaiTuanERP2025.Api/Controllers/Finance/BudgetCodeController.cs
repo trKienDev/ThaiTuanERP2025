@@ -16,13 +16,13 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 		private readonly IMediator _mediator;
 		public BudgetCodeController(IMediator mediator) => _mediator = mediator;
 
-		[HttpGet("all")]
+		[HttpGet]
 		public async Task<IActionResult> GetAll(CancellationToken cancellationToken) {
 			var dtos = await _mediator.Send(new GetAllBudgetCodesQuery(), cancellationToken);
 			return Ok(ApiResponse<IReadOnlyList<BudgetCodeDto>>.Success(dtos));	
 		}
 
-		[HttpPost("new")]
+		[HttpPost]
 		public async Task<IActionResult> Create([FromBody] CreateBudgetCodeCommand command, CancellationToken cancellationToken) {
 			var result = await _mediator.Send(command, cancellationToken);
 			return Ok(ApiResponse<Unit>.Success(result));

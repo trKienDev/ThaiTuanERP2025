@@ -19,7 +19,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 			_mediator = mediator;
 		}
 
-		[HttpGet("all")]
+		[HttpGet]
 		public async Task<IActionResult> GetAll(CancellationToken cancellationToken) {
 			var dtos = await _mediator.Send(new GetAllBudgetApproversQuery(), cancellationToken);
 			return Ok(ApiResponse<IReadOnlyList<BudgetApproverDto>>.Success(dtos));
@@ -31,7 +31,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 			return Ok(ApiResponse<IReadOnlyList<BudgetApproverDto>>.Success(dtos));
 		}
 
-		[HttpPost("new")]
+		[HttpPost]
 		public async Task<IActionResult> Create([FromBody] CreateBudgetApproverCommand command, CancellationToken cancellationToken) {
 			var result = await _mediator.Send(command, cancellationToken);
 			return Ok(ApiResponse<Unit>.Success(result));	

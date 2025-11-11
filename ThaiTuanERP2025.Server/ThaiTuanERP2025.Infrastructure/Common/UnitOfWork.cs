@@ -1,6 +1,5 @@
 ﻿using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Domain.Account.Repositories;
-using ThaiTuanERP2025.Domain.Alerts.Repositories;
 using ThaiTuanERP2025.Domain.Expense.Repositories;
 using ThaiTuanERP2025.Domain.Files.Repositories;
 using ThaiTuanERP2025.Domain.Finance.Repositories;
@@ -55,10 +54,6 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			IExpensePaymentCommentTagRepository expensePaymentCommentTags,
 			IExpensePaymentCommentAttachmentRepository expensePaymentCommentAttachments,
 
-			// Notification
-			INotificationWriteRepository notifications,
-			ITaskReminderWriteRepository taskReminders,
-
 			// Follow
 			IFollowerRepository followers,
 
@@ -106,9 +101,6 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			ExpensePaymentCommentAttachments = expensePaymentCommentAttachments;
 			ExpensePaymentCommentTags = expensePaymentCommentTags;
 
-			Notifications = notifications;
-			TaskReminders = taskReminders;
-
 			Followers = followers;
 
 			Roles = roles;
@@ -154,10 +146,6 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		public IExpensePaymentCommentRepository ExpensePaymentComments { get; }
 		public IExpensePaymentCommentAttachmentRepository ExpensePaymentCommentAttachments { get; }
 		public IExpensePaymentCommentTagRepository ExpensePaymentCommentTags { get; }
-
-		// Notification
-		public INotificationWriteRepository Notifications { get; }
-		public ITaskReminderWriteRepository TaskReminders { get; }
 
 		// Followers
 		public IFollowerRepository Followers { get; }

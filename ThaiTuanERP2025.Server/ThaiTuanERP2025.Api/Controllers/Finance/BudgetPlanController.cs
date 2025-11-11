@@ -17,7 +17,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 			_mediator = mediator;
 		}
 
-		[HttpPost("new")]
+		[HttpPost]
 		public async Task<IActionResult> Create([FromBody] CreateBudgetPlanCommand command, CancellationToken cancellationToken) {
 			var result = await _mediator.Send(command, cancellationToken);
 			return Ok(ApiResponse<Unit>.Success(result));

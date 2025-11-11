@@ -13,10 +13,15 @@ export interface UserDto {
       avatarFileObjectKey?: string;
 
       roles: RoleDto[];
+      roleNames: string[];
+
       permissions: PermissionDto[];
       phone?: number | null;
+
       departmentId?: string;  
       department?: DepartmentBriefDto;
+      departmentName?: string;
+
       position: string;
       
       managerId?: string;
@@ -42,6 +47,22 @@ export interface UserBriefAvatarDto {
       employeeCode: string;
       avatarFileId?: string;
       avatarFileObjectKey?: string;
+}
+
+export interface UserInforDto {
+      id: string;
+      fullName: string;
+      username: string;
+      employeeCode: string;
+      avatarFileId?: string;
+      avatarFileObjectKey?: string;
+
+      roles: string[];
+      departmentName?: string;  
+      position: string;
+      
+      managerId?: string;
+      managers?: UserBriefAvatarDto[];
 }
 
 export interface SetUserManagerRequest {

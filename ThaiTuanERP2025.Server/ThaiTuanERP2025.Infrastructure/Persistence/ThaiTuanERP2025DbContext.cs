@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using System.Linq.Expressions;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Domain.Account.Entities;
-using ThaiTuanERP2025.Domain.Alerts.Entities;
 using ThaiTuanERP2025.Domain.Authentication.Entities;
 using ThaiTuanERP2025.Domain.Common.Entities;
 using ThaiTuanERP2025.Domain.Expense.Entities;
@@ -59,8 +58,6 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<ExpensePaymentCommentAttachment> ExpensePaymentCommentAttachments => Set<ExpensePaymentCommentAttachment>();
 		public DbSet<ExpensePaymentCommentTag> expensePaymentCommentTags => Set<ExpensePaymentCommentTag>();
 		public DbSet<OutgoingPayment> outgoingPayments => Set<OutgoingPayment>();
-		public DbSet<AppNotification> AppNotification => Set<AppNotification>();
-		public DbSet<TaskReminder> TaskReminders => Set<TaskReminder>();
 		public DbSet<Follower> Followers => Set<Follower>();
 		public DbSet<Role> Roles => Set<Role>();
 		public DbSet<Permission> Permissions => Set<Permission>();

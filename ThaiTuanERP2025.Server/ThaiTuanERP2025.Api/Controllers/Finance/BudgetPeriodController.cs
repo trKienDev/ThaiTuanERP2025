@@ -40,5 +40,11 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 			var result = await _mediator.Send(new CreateBudgetPeriodsForYearCommand(year), cancellationToken);
 			return Ok(ApiResponse<Unit>.Success(result));
 		}
+
+		[HttpPut("{id:guid}")]
+		public async Task<IActionResult> UpdateDate([FromRoute] Guid Id, [FromBody] UpdateBudgetPeriodRequest request, CancellationToken cancellationToken) {
+			var result = await _mediator.Send(new UpdateBudgetPeriodCommand(Id, request), cancellationToken);
+			return Ok(ApiResponse<Unit>.Success(result));
+		}
 	}
 }

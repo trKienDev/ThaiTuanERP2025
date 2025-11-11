@@ -23,22 +23,24 @@
                               <th>Ngày bắt đầu</th>
                               <th>Ngày kết thúc</th>
                               <th>Hiệu lực</th>
-                              <th>Hành dộng</th>
+                              <th *appHasPermission="'budget-period.edit'">Hành dộng</th>
                         </tr>
                   </thead>
                   <tbody>
-                        <tr *ngFor="let period of budgetPeriods; let i = index">
+                        <tr *ngFor="let period of budgetPeriods; let i = index; trackBy: trackById">
                               <td>{{ period.year }}</td>
                               <td>{{ period.month }}</td>
                               <td>{{ period.startDate | date: 'dd/MM/yyyy' }}</td>
                               <td>{{ period.endDate | date: 'dd/MM/yyyy' }}</td>
                               <td>
-                                    <label class="switch-1" for="period-active-{{ period.id || i }}">
-                                          <input id="period-active-{{ period.id || i }}" type="checkbox" [checked]="period.isActive">
+                                    <label class="switch-1">
+                                          <input type="checkbox" [checked]="period.isActive" disabled>
                                           <span class="slider"></span>
                                     </label>
                               </td>
-                              <td></td>
+                              <td *appHasPermission="'budget-period.edit'" class="display-flex justify-content-center">
+                                    <kit-action-menu [actions]="buildBudgetPeriodActions(period)"></kit-action-menu>
+                              </td>
                         </tr>
                         <tr *ngIf="budgetPeriods.length === 0">
                               <td colspan="6" class="text-center text-muted">Không có dữ liệu</td>

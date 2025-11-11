@@ -19,9 +19,14 @@ namespace ThaiTuanERP2025.Domain.Finance.Events
 	public sealed class BudgetPlanCreatedEvent : BudgetPlanEventBase
 	{
 		public BudgetPlan BudgetPlan { get; }
-		public BudgetPlanCreatedEvent(BudgetPlan plan) : base(plan.Id)
+		public Guid ReviewerUserId { get; }
+		public DateTime DueAt { get; }
+
+		public BudgetPlanCreatedEvent(BudgetPlan plan, Guid reviewerUserId, DateTime dueAt) : base(plan.Id)
 		{
 			BudgetPlan = plan;
+			ReviewerUserId = reviewerUserId;
+			DueAt = dueAt;
 		}
 	}
 

@@ -7,12 +7,11 @@ import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spi
 import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { DepartmentOptionStore } from "../../../account/options/department-dropdown-options.option";
 import { UserOptionStore } from "../../../account/options/user-dropdown-options.store";
-import { handleHttpError } from "../../../../shared/utils/handle-http-errors.util";
 import { ConfirmService } from "../../../../shared/components/confirm-dialog/confirm.service";
-import { HttpErrorResponse } from "@angular/common/http";
 import { BudgetApproverDto, BudgetApproversRequest } from "../../models/budget-approvers.model";
 import { firstValueFrom } from "rxjs";
 import { BudgetApproverFacade } from "../../facades/budget-approver.facade";
+import { HttpErrorHandlerService } from "../../../../core/services/http-errror-handler.service";
 
 @Component({
       selector: 'budget-plan-approvers-dialog',
@@ -35,6 +34,8 @@ export class BudgetPlanApproversDialogComponent implements OnInit {
       private readonly userOptionStore = inject(UserOptionStore);
       userOptions$ = this.userOptionStore.option$;
 
+      private readonly httpErrorHandler = inject(HttpErrorHandlerService);
+
       submitting: boolean = false;
       showErrors: boolean = false;
 
@@ -50,7 +51,6 @@ export class BudgetPlanApproversDialogComponent implements OnInit {
 
       ngOnInit(): void {
             if(this.data) {
-                  console.log('data: ', this.data);
                   this.form.patchValue({ 
                         approverId: this.data.approverUser.id,
                         slaHours: this.data.slaHours,
@@ -99,19 +99,8 @@ export class BudgetPlanApproversDialogComponent implements OnInit {
                   this.showErrors = false;
                   this.form.reset();
                   this.dialog.close(true);
-            } catch(err) {   
-                  if (err instanceof HttpErrorResponse && [401,403,500,0].includes(err.status ?? 0)) {
-                        return;
-                  }
-                  if (err instanceof HttpErrorResponse && err.status === 404) {
-                        this.toast?.warningRich('Không tìm thấy dữ liệu để tạo nhóm ngân sách.');
-                  } else if (err instanceof HttpErrorResponse && err.status === 400) {
-                        this.toast?.errorRich(err.error?.message || 'Dữ liệu không hợp lệ.');
-                  } else {
-                        const messages = handleHttpError(err).join('\n');
-                        this.confirm.error$(messages);
-                        this.toast?.errorRich('Tạo nhóm ngân sách thất bại.');
-                  }
+            } catch(error) {   
+                  this.httpErrorHandler.handle(error, this.data?.id ? 'cập nhật user duyệt ngân sách' : 'thêm user duyệt ngân sách');
             } finally {
                   this.form.disable({ emitEvent: false });
                   this.submitting = false;

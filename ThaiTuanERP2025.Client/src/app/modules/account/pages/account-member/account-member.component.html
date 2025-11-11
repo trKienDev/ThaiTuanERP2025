@@ -31,10 +31,10 @@
                               </div>
                         </td>
                         <td>{{ user.employeeCode }}</td>
-                        <td>{{ user.department?.name }}</td>
+                        <td>{{ user.departmentName }}</td>
                         <td>
-                              <ul *ngFor="let role of user.roles">
-                                    <li>{{ role.name }}</li>
+                              <ul *ngFor="let role of user.roleNames">
+                                    <li>{{ role }}</li>
                               </ul>
                         </td>
                         <td>

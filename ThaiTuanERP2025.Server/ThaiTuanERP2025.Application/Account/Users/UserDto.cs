@@ -4,13 +4,7 @@ using ThaiTuanERP2025.Application.Account.Roles;
 
 namespace ThaiTuanERP2025.Application.Account.Users
 {
-	public interface IHasAvatarFile
-	{
-		Guid? AvatarFileId { get; set; }
-		object? AvatarFileObjectKey { get; set; }
-	}
-
-	public sealed record UserDto : IHasAvatarFile
+	public sealed record UserDto 
 	{
 		public Guid Id { get; set; }
 		public string FullName { get; set; } = default!;
@@ -21,7 +15,7 @@ namespace ThaiTuanERP2025.Application.Account.Users
 		public string? Phone { get; set; }
 
 		public Guid? AvatarFileId { get; set; }
-		public object? AvatarFileObjectKey { get; set; }
+		public string? AvatarFileObjectKey { get; set; }
 
 		public IReadOnlyCollection<RoleDto> Roles { get; set; } = Array.Empty<RoleDto>();
 		public IReadOnlyCollection<UserDto> Managers { get; set; } = Array.Empty<UserDto>();
@@ -40,12 +34,24 @@ namespace ThaiTuanERP2025.Application.Account.Users
 		public string EmployeeCode { get; set; } = default!;
 	}
 
-	public sealed record UserBriefAvatarDto : IHasAvatarFile {
+	public sealed record UserBriefAvatarDto {
 		public Guid Id { get; set; }
 		public string FullName { get; set; } = default!;
 		public string Username { get; set; } = default!;
 		public string EmployeeCode { get; set; } = default!;
 		public Guid? AvatarFileId { get; set; }
-		public object? AvatarFileObjectKey { get; set; }
+		public string? AvatarFileObjectKey { get; set; }
+	}
+
+	public sealed record UserInforDto {
+		public Guid Id { get; set; }
+		public string FullName { get; set; } = default!;
+		public string Username { get; set; } = default!;
+		public string EmployeeCode { get; set; } = default!;
+		public string? DepartmentName { get; set; }
+		public IReadOnlyCollection<string> RoleNames { get; set; } = Array.Empty<string>();	
+		public IReadOnlyCollection<UserBriefAvatarDto> Managers { get; set; } = Array.Empty<UserBriefAvatarDto>();
+		public Guid? AvatarFileId { get; set; }
+		public string? AvatarFileObjectKey { get; set; }
 	}
 }

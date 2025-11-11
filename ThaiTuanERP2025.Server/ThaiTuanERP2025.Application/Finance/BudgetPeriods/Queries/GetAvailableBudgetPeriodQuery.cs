@@ -15,10 +15,10 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPeriods.Queries
 		}
 
 		public async Task<IReadOnlyList<BudgetPeriodDto>> Handle(GetAvailableBudgetPeriodQuery query, CancellationToken cancellationToken) {
-			// var now = DateTime.Now;
+			var now = DateTime.UtcNow;
 			return await _budgetPeriodRepo.ListProjectedAsync(
-				q => q.Where(bp => bp.IsActive && !bp.IsDeleted
-				// && bp.StartDate <= now && bp.EndDate >= now
+				q => q.Where(bp => !bp.IsDeleted
+					&& bp.StartDate <= now && bp.EndDate >= now
 				).OrderBy(bp => bp.Month)
 				.ProjectTo<BudgetPeriodDto>(_mapper.ConfigurationProvider),
 				cancellationToken: cancellationToken

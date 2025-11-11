@@ -3,6 +3,8 @@ import { inject} from "@angular/core";
 import { Router } from "@angular/router";
 import { catchError, throwError } from "rxjs";
 import { ToastService } from "../../shared/components/kit-toast-alert/kit-toast-alert.service";
+import { environment } from "../../../environments/environment";
+
 
 export const HttpErrorInterceptor: HttpInterceptorFn = (req, next) => {
       const toast = inject(ToastService);
@@ -10,26 +12,29 @@ export const HttpErrorInterceptor: HttpInterceptorFn = (req, next) => {
 
       return next(req).pipe(
             catchError((error: HttpErrorResponse) => {
-                  // === Kiểm tra mã lỗi HTTP ===
-                  if (error.status === 403) {
-                        console.error('http-error.interceptor.ts - Access Denied 403'); 
-                        toast.errorRich('Bạn không có quyền thực hiện hành động này.');
-                  }
-                  else if (error.status === 401) {
-                        toast.warningRich('Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại.');
-                        router.navigate(['/login']);
-                  }
-                  else if (error.status === 500) {
-                        toast.errorRich('Lỗi hệ thống, vui lòng thử lại sau.');
-                  }
-                  else if (error.status === 0) {
-                        toast.errorRich('Không thể kết nối đến máy chủ.');
+                  // === Lỗi kỹ thuật, toàn hệ thống ===
+                  switch (error.status) {
+                        case 0:
+                              toast.errorRich('Không thể kết nối đến máy chủ.');
+                              break;
+                        case 401:
+                              toast.warningRich('Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại.');
+                              router.navigate(['/login']);
+                              break;
+                        case 403:
+                              toast.errorRich('Bạn không có quyền thực hiện hành động này.');
+                              break;
+                        case 500:
+                              toast.errorRich('Lỗi hệ thống, vui lòng thử lại sau.');
+                              break;
                   }
 
-                  // Log lỗi ra console (phục vụ dev)
-                  console.error('HTTP Error:', error);
+                  // In ra console trong môi trường dev
+                  if (!environment.production) {
+                        console.error('HTTP Error:', error);
+                  }
 
-                  // Ném lại lỗi để observable chain phía sau vẫn biết
+                  // Ném lại lỗi để component có thể xử lý nghiệp vụ cụ thể
                   return throwError(() => error);
             })
       );

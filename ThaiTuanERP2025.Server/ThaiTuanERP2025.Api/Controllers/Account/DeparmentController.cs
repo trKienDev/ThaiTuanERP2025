@@ -16,7 +16,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 		private readonly IMediator _mediator;
 		public DeparmentController(IMediator mediator) => _mediator = mediator;
 
-		[HttpGet("all")]
+		[HttpGet]
 		public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
 		{
 			var deptDtos = await _mediator.Send(new GetAllDepartmentsQuery(), cancellationToken);
@@ -30,7 +30,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			return Ok(ApiResponse<DepartmentDto?>.Success(parentDeptDto));
 		}
 
-		[HttpPost("new")]
+		[HttpPost]
 		public async Task<IActionResult> Create([FromBody] CreateDepartmentCommand command, CancellationToken cancellation)
 		{
 			if (command == null)

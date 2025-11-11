@@ -5,14 +5,14 @@ import { PagedRequest } from "../models/paged-request.model";
 import { PagedResult } from "../models/paged-result.model";
 import { handleApiResponse$ } from "../operators/handle-api-response.operator";
 
-export abstract class BaseCrudService<TDto, TRequest> {
+export abstract class BaseCrudService<TDto, TRequest, TUpdate = TRequest, TUpdateResponse = TDto> {
       protected constructor(
             protected http: HttpClient,
             protected readonly endpoint: string// e.g. `${environment.apiUrl}/api/taxes`
       ) {}
 
       getAll(): Observable<TDto[]> {
-            return this.http.get<ApiResponse<TDto[]>>(`${this.endpoint}/all`)
+            return this.http.get<ApiResponse<TDto[]>>(this.endpoint)
                   .pipe(
                         handleApiResponse$<TDto[]>(),
                         catchError(err => throwError(() => err))
@@ -49,20 +49,20 @@ export abstract class BaseCrudService<TDto, TRequest> {
                   );
       }
 
-      create(payload: TRequest): Observable<TDto> {
+      create(payload: TRequest): Observable<void> {
             return this.http
-                  .post<ApiResponse<TDto>>(`${this.endpoint}/new`, payload)
+                  .post<ApiResponse<void>>(this.endpoint, payload)
                   .pipe(
-                        handleApiResponse$<TDto>(), 
+                        handleApiResponse$<void>(), 
                         catchError(err => throwError(() => err))
                   );
       }
 
-      update(id: string, payload: TRequest): Observable<TDto> {
+      update(id: string, payload: TUpdate): Observable<TUpdateResponse> {
             return this.http
-                  .put<ApiResponse<TDto>>(`${this.endpoint}/${id}`, payload)
+                  .put<ApiResponse<TUpdateResponse>>(`${this.endpoint}/${id}`, payload)
                   .pipe(
-                        handleApiResponse$<TDto>(),
+                        handleApiResponse$<TUpdateResponse>(),
                         catchError(err => throwError(() => err))
                   );
       }

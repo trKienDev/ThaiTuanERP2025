@@ -4,21 +4,26 @@ import { provideMondayFirstDateAdapter } from "../../../../../shared/date/provid
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { BudgetPeriodService } from "../../../services/budget-period.service";
 import { ToastService } from "../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
-import { firstValueFrom } from "rxjs";
+import { filter, firstValueFrom } from "rxjs";
 import { BudgetPeriodDto } from "../../../models/budget-period.model";
 import { KitSpinnerButtonComponent } from "../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 import { HttpErrorResponse } from "@angular/common/http";
 import { HasPermissionDirective } from "../../../../../core/auth/auth.directive";
+import { ActionMenuOption } from "../../../../../shared/components/kit-action-menu/kit-action-menu.model";
+import { MatDialog } from "@angular/material/dialog";
+import { EditBudgetPeriodDialogComponent } from "../../../components/edit-budget-period-dialog/edit-budget-period-dialog.component";
+import { KitActionMenuComponent } from "../../../../../shared/components/kit-action-menu/kit-action-menu.component";
 
 @Component({
       selector: 'budget-period-panel',
       standalone: true,
-      imports: [CommonModule, ReactiveFormsModule, KitSpinnerButtonComponent, HasPermissionDirective],
+      imports: [CommonModule, ReactiveFormsModule, KitSpinnerButtonComponent, HasPermissionDirective, KitActionMenuComponent],
       templateUrl: './budget-period.component.html',
       styleUrls: ['./budget-period.component.scss'],
       providers: [...provideMondayFirstDateAdapter() ]
 })
 export class BudgetPeriodPanelComponent implements OnInit {
+      private readonly dialog = inject(MatDialog);
       private readonly formBuilder = inject(FormBuilder);
       private readonly now = new Date();
       private readonly budgetPeriodService = inject(BudgetPeriodService);
@@ -35,12 +40,15 @@ export class BudgetPeriodPanelComponent implements OnInit {
             year: this.formBuilder.control<number>(this.now.getFullYear(), { nonNullable: true, validators: [ Validators.required ] }),
       });
 
+      trackById(index: number, item: BudgetPeriodDto) { return item.id; }
+
       ngOnInit(): void {
             this.autoGenerateForm.get('year')?.disable();
             this.loadBudgetPeriodsForYear();
       }
 
       async loadBudgetPeriodsForYear() {
+            console.log('load');
             this.isLoading = true;
             try {
                   const year = this.autoGenerateForm.getRawValue().year;
@@ -77,5 +85,18 @@ export class BudgetPeriodPanelComponent implements OnInit {
             } finally {
                   this.submitting = false;
             }
+      }
+
+      buildBudgetPeriodActions(period: BudgetPeriodDto): ActionMenuOption[] {
+            return [
+                  { label: 'Chỉnh sửa kỳ ngân sách', action: () => this.openEditBudgetPeriodDialog(period ) },
+            ]
+      }
+
+      openEditBudgetPeriodDialog(period: BudgetPeriodDto) {
+            this.dialog.open(EditBudgetPeriodDialogComponent, { data: period })
+                  .afterClosed()
+                  .pipe(filter(isSuccess => !!isSuccess))
+                  .subscribe(() => this.loadBudgetPeriodsForYear());
       }
 }

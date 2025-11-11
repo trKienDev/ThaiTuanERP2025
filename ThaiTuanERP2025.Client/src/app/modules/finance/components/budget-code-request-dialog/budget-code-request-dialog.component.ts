@@ -98,7 +98,6 @@ export class BudgetCodeRequestDialogComponent implements OnInit {
                   const payload: BudgetCodeRequest = this.form.getRawValue() as BudgetCodeRequest;
                   await firstValueFrom(this.budgetCodeService.create(payload));
                   this.toast.successRich('Thêm ngân sách thành công');
-                  this.showErrors = false;
                   this.form.reset();
                   this.ref.close(true);
             } catch(error) {
@@ -117,6 +116,7 @@ export class BudgetCodeRequestDialogComponent implements OnInit {
             } finally {
                   this.form.enable({ emitEvent: false });
                   this.submitting = false;
+                  this.showErrors = false;
             }
       }
 

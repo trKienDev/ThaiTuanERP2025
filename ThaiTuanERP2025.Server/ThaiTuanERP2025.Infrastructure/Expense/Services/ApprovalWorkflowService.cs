@@ -1,10 +1,7 @@
-﻿using ThaiTuanERP2025.Application.Alerts.Notifications;
-using ThaiTuanERP2025.Application.Alerts.TaskReminders;
-using ThaiTuanERP2025.Application.Common.Interfaces;
+﻿using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Common.Utils;
 using ThaiTuanERP2025.Application.Exceptions;
 using ThaiTuanERP2025.Application.Followers.Services;
-using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Expense.Enums;
 using ThaiTuanERP2025.Domain.Followers.Enums;
@@ -23,24 +20,18 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly ApprovalWorkflowResolverService _resolverService;
-		private readonly INotificationService _notificationService;
-		private readonly ITaskReminderService _taskReminderService;
 		private readonly IApprovalStepService _approvalStepService;
 		private readonly IFollowerService _followerService;
 
 		public ApprovalWorkflowService(
 			IUnitOfWork unitOfWork,
 			ApprovalWorkflowResolverService resolverService,
-			INotificationService notificationService,
-			ITaskReminderService taskReminderService,
 			IApprovalStepService approvalStepService, 
 			IFollowerService followerService
 		)
 		{
 			_unitOfWork = unitOfWork;
 			_resolverService = resolverService;
-			_notificationService = notificationService;
-			_taskReminderService = taskReminderService;
 			_approvalStepService = approvalStepService;
 			_followerService = followerService;
 		}

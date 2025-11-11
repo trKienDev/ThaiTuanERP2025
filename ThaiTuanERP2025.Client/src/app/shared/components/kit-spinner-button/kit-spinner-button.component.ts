@@ -17,6 +17,8 @@ export class KitSpinnerButtonComponent {
 
       /** Văn bản khi đang loading */
       @Input() loadingText = 'Đang xử lý…';
+
+      @Input() displayLoadingText: boolean = true;
       
       /** Đang loading hay không */
       @Input() loading = false;

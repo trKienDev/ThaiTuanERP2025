@@ -1,12 +1,12 @@
 import { BehaviorSubject, Observable, shareReplay, switchMap, tap } from "rxjs"
 
-export abstract class BaseCrudFacade<Dto, Request> {
+export abstract class BaseCrudFacade<Dto, Request, Update = Request, UpdateResponse = Dto> {
       protected readonly reload$ = new BehaviorSubject<void>(undefined);
 
       protected constructor(protected service: {
             getAll: () => Observable<Dto[]>;
-            create: (req: Request) => Observable<Dto>;
-            update: (id: string, req: Request) => Observable<Dto>;
+            create: (req: Request) => Observable<void>;
+            update: (id: string, req: Update) => Observable<UpdateResponse>;
             delete: (id: string) => Observable<boolean>;
             toggleActive: (id: string) => Observable<boolean>;
       }) {}
@@ -22,7 +22,7 @@ export abstract class BaseCrudFacade<Dto, Request> {
       create(req: Request) {
             return this.service.create(req).pipe(tap(() => this.refresh()));
       }
-      update(id: string, req: Request) {
+      update(id: string, req: Update) {
             return this.service.update(id, req).pipe(tap(() => this.refresh()));
       }
       delete(id: string) {

@@ -4,12 +4,11 @@ import { BudgetGroupDto, BudgetGroupRequest } from "../../../models/budget-group
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ToastService } from "../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { firstValueFrom, Subject, takeUntil } from "rxjs";
-import { HttpErrorResponse } from "@angular/common/http";
 import { KitSpinnerButtonComponent } from "../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 import { HasPermissionDirective } from "../../../../../core/auth/auth.directive";
 import { BudgetGroupFacade } from "../../../facades/budget-group.facade";
-import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
 import { ConfirmService } from "../../../../../shared/components/confirm-dialog/confirm.service";
+import { HttpErrorHandlerService } from "../../../../../core/services/http-errror-handler.service";
 
 @Component({
       selector: 'budget-groups-panel',
@@ -23,6 +22,8 @@ export class BudgetGroupPanelComponent implements OnInit, OnDestroy {
       confirmService = inject(ConfirmService);
       private readonly budgetGroupFacade = inject(BudgetGroupFacade);
       budgetGroups$ = this.budgetGroupFacade.budgetGroups$;
+
+      private readonly httpErrorHandler = inject(HttpErrorHandlerService);
 
       public submitting = false;
       showErrors = false; 
@@ -63,23 +64,12 @@ export class BudgetGroupPanelComponent implements OnInit, OnDestroy {
                   await firstValueFrom(this.budgetGroupFacade.create(payload));
                   this.toast.successRich('Tạo nhóm ngân sách thành công');
                   this.form.reset();  
-                  this.showErrors = false;  
-            } catch(err) {   
-                  if (err instanceof HttpErrorResponse && [401,403,500,0].includes(err.status ?? 0)) {
-                        return;
-                  }
-                  if (err instanceof HttpErrorResponse && err.status === 404) {
-                        this.toast?.warningRich('Không tìm thấy dữ liệu để tạo nhóm ngân sách.');
-                  } else if (err instanceof HttpErrorResponse && err.status === 400) {
-                        this.toast?.errorRich(err.error?.message || 'Dữ liệu không hợp lệ.');
-                  } else {
-                        const messages = handleHttpError(err).join('\n');
-                        this.confirmService.error$(messages);
-                        this.toast?.errorRich('Tạo nhóm ngân sách thất bại.');
-                  }
+            } catch(error) {   
+                  this.httpErrorHandler.handle(error, 'cập nhật kỳ ngân sách');
             } finally {
-                  this.form.disable({ emitEvent: false });
+                  this.form.enable({ emitEvent: false });
                   this.submitting = false;
+                  this.showErrors = false;  
             }
       }
 }

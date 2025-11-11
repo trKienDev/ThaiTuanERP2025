@@ -78,10 +78,11 @@ namespace ThaiTuanERP2025.Infrastructure.Common.Repositories
 				.SingleOrDefaultAsync(cancellationToken);
 		}
 
-		public Task<List<TDto>> ListProjectedAsync(Func<IQueryable<TEntity>, IQueryable<TDto>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default)
-		{
+		public Task<List<TProjection>> ListProjectedAsync<TProjection>(
+			Func<IQueryable<TEntity>, IQueryable<TProjection>> builder, bool asNoTracking = true, CancellationToken cancellationToken = default
+		) {
 			var query = asNoTracking ? _dbSet.AsNoTracking() : _dbSet.AsQueryable();
-			return builder(query).ToListAsync(cancellationToken); // materialize trong repo
+			return builder(query).ToListAsync(cancellationToken);
 		}
 
 		public IQueryable<TEntity> Query(bool asNoTracking = true)

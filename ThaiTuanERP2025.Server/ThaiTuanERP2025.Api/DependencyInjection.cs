@@ -2,12 +2,9 @@
 using Microsoft.AspNetCore.SignalR;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using ThaiTuanERP2025.Api.Notifications;
 using ThaiTuanERP2025.Api.Security;
 using ThaiTuanERP2025.Api.Services;
 using ThaiTuanERP2025.Api.SignalR;
-using ThaiTuanERP2025.Application.Alerts.Notifications;
-using ThaiTuanERP2025.Application.Alerts.TaskReminders;
 using ThaiTuanERP2025.Application.Common.Events;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Common.Security;
@@ -15,13 +12,10 @@ using ThaiTuanERP2025.Application.Common.Services;
 using ThaiTuanERP2025.Application.Expense.Contracts.Resolvers;
 using ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows;
 using ThaiTuanERP2025.Application.Followers.Services;
-using ThaiTuanERP2025.Application.Notifications.Services;
-using ThaiTuanERP2025.Infrastructure.Alerts.Services;
 using ThaiTuanERP2025.Infrastructure.Authentication.Services;
 using ThaiTuanERP2025.Infrastructure.Common.Events;
 using ThaiTuanERP2025.Infrastructure.Common.Services;
 using ThaiTuanERP2025.Infrastructure.Expense.Contracts.Resolvers;
-using ThaiTuanERP2025.Infrastructure.Expense.Services;
 using ThaiTuanERP2025.Infrastructure.Followers.Services;
 
 namespace ThaiTuanERP2025.Api
@@ -39,15 +33,10 @@ namespace ThaiTuanERP2025.Api
 			services.AddScoped<IApproverResolverRegistry, ApproverResolverRegistry>();
 			services.AddScoped<IApprovalWorkflowService, ApprovalWorkflowService>();
 			services.AddScoped<ApprovalWorkflowResolverService>();
-			services.AddScoped<IApprovalStepService, ApprovalStepService>();
 
-			// Notifications & realtime
-			services.AddScoped<IRealtimeNotifier, SignalRealtimeNotifier>();
-			services.AddScoped<INotificationService, NotificationService>();
 			services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 
 			// Reminders & Background jobs
-			services.AddScoped<ITaskReminderService, TaskReminderService>();
 			services.AddScoped<IDocumentSubIdGeneratorService, DocumentSubIdGeneratorService>();
 
 			// Followers

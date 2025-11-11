@@ -1,9 +1,0 @@
-﻿using ThaiTuanERP2025.Application.Common.Repositories;
-using ThaiTuanERP2025.Domain.Alerts.Entities;
-
-namespace ThaiTuanERP2025.Application.Alerts.TaskReminders
-{
-	public interface ITaskReminderReadRepository : IBaseReadRepository<TaskReminder, TaskReminderDto>
-	{
-	}
-}
