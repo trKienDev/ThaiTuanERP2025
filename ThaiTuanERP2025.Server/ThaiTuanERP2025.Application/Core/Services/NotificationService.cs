@@ -20,7 +20,7 @@ namespace ThaiTuanERP2025.Application.Core.Services
 		{
 			var entity = new UserNotification(userId, title, message, linkUrl, type);
 			await _uow.UserNotifications.AddAsync(entity, cancellationToken);
-			await _uow.SaveChangesAsync(cancellationToken);
+			await _uow.SaveChangesWithoutDispatchAsync(cancellationToken);
 		}
 	}
 }

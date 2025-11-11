@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Identity.Client;
 using System.Linq.Expressions;
 using ThaiTuanERP2025.Application.Common.Events;
 using ThaiTuanERP2025.Application.Common.Interfaces;
@@ -11,7 +10,6 @@ using ThaiTuanERP2025.Domain.Core.Entities;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Files.Entities;
 using ThaiTuanERP2025.Domain.Finance.Entities;
-using ThaiTuanERP2025.Infrastructure.Common;
 
 namespace ThaiTuanERP2025.Infrastructure.Persistence
 {
@@ -19,6 +17,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 	{
 		private readonly ICurrentUserService _currentUserService;
 		private readonly IDomainEventDispatcher? _dispatcher;
+		private bool _suppressDomainEvents = false;
 
 		public ThaiTuanERP2025DbContext(
 			DbContextOptions<ThaiTuanERP2025DbContext> options,
@@ -29,7 +28,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 			_dispatcher = dispatcher;
 		}
 
-		// DbSet
+		#region DbSet
 		public DbSet<User> Users => Set<User>();
 		public DbSet<UserManagerAssignment> UserManagerAssignments => Set<UserManagerAssignment>();
 		public DbSet<Department> Departments => Set<Department>();
@@ -70,7 +69,9 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 
 		// Authentication
 		public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+		#endregion
 
+		#region Model Config
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			try
@@ -94,7 +95,9 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 			optionsBuilder.ConfigureWarnings(w =>
 			    w.Ignore(RelationalEventId.PendingModelChangesWarning));
 		}
+		#endregion
 
+		#region SaveChanges Overrides
 		public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{
 			var now = DateTime.UtcNow;
@@ -126,7 +129,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 				var result = await base.SaveChangesAsync(cancellationToken);
 
 				// ✅ Chỉ dispatch domain events khi SaveChanges thành công
-				if (_dispatcher is not null)
+				if (!_suppressDomainEvents && _dispatcher is not null)
 				{
 					var entitiesWithEvents = ChangeTracker.Entries<BaseEntity>()
 					    .Select(e => e.Entity)
@@ -134,8 +137,12 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 					    .ToArray();
 
 					var allEvents = entitiesWithEvents.SelectMany(e => e.DomainEvents).ToArray();
-					await _dispatcher.DispatchAsync(allEvents, cancellationToken);
-					foreach (var entity in entitiesWithEvents) entity.ClearDomainEvents();
+
+					if (allEvents.Length > 0)
+						await _dispatcher.DispatchAsync(allEvents, cancellationToken);
+
+					foreach (var entity in entitiesWithEvents)
+						entity.ClearDomainEvents();
 				}
 
 				return result;
@@ -144,9 +151,9 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 			{
 				var details = ex.Entries.Select(e =>
 				{
-					var concProps = e.Properties
-					    .Where(p => p.Metadata.IsConcurrencyToken)
-					    .Select(p => $"{p.Metadata.Name}: orig={p.OriginalValue} / curr={p.CurrentValue}");
+					var concProps = e.Properties.Where(p => p.Metadata.IsConcurrencyToken)
+						.Select(p => $"{p.Metadata.Name}: orig={p.OriginalValue} / curr={p.CurrentValue}");
+
 					var pk = string.Join(",", e.Properties.Where(p => p.Metadata.IsPrimaryKey()).Select(p => $"{p.Metadata.Name}={p.CurrentValue}"));
 					return $"{e.Entity.GetType().Name} PK[{pk}] | Concurrency[{string.Join("; ", concProps)}]";
 				});
@@ -155,6 +162,30 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 			}
 		}
 
+		/// Lưu mà không phát domain events (dùng trong handler hoặc service hạ tầng để tránh loop).
+		public async Task<int> SaveChangesWithoutDispatchAsync(CancellationToken cancellationToken = default)
+		{
+			var prev = _suppressDomainEvents;
+			_suppressDomainEvents = true;
+
+			try
+			{
+				return await SaveChangesAsync(cancellationToken);
+			}
+			finally
+			{
+				_suppressDomainEvents = prev; // khôi phục trạng thái cũ
+			}
+		}
+
+		/// Cho phép tạm thời bật/tắt domain events bằng code.
+		public void SuppressDomainEvents(bool suppress = true)
+		{
+			_suppressDomainEvents = suppress;
+		}
+		#endregion
+
+		#region Soft Delete Filter
 		private static void ApplySoftDeleteFilters(ModelBuilder modelBuilder)
 		{
 			var entityClrTypes = modelBuilder.Model
@@ -175,6 +206,6 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 				modelBuilder.Entity(clrType).HasQueryFilter(lambda);
 			}
 		}
-
+		#endregion
 	}
 }

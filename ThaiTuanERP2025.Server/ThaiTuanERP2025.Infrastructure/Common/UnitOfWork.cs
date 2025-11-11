@@ -104,6 +104,8 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 			ExpensePaymentCommentTags = expensePaymentCommentTags;
 
 			Followers = followers;
+			UserNotifications = userNotifications;
+			UserReminders = userReminders;	
 
 			Roles = roles;
 			Permissions = permissions;
@@ -164,5 +166,8 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 		{
 			return _dbContext.SaveChangesAsync(cancellationToken);
 		}
+
+		public Task<int> SaveChangesWithoutDispatchAsync(CancellationToken cancellationToken = default)
+			=> _dbContext.SaveChangesWithoutDispatchAsync(cancellationToken);
 	}
 }

@@ -19,7 +19,7 @@ namespace ThaiTuanERP2025.Application.Core.Services
 		{
 			var reminder = new UserReminder(userId, subject, message, triggerAt, linkUrl);
 			await _uow.UserReminders.AddAsync(reminder, cancellationToken);
-			await _uow.SaveChangesAsync(cancellationToken);
+			await _uow.SaveChangesWithoutDispatchAsync(cancellationToken);
 		}
 	}
 }

@@ -16,6 +16,7 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.EventHandlers
 
 		public async Task Handle(BudgetPlanCreatedEvent notification, CancellationToken cancellationToken)
 		{
+			Console.WriteLine($"[Handler] Handling BudgetPlanCreatedEvent for plan {notification.BudgetPlanId}");
 			var message = $"Bạn được giao xem xét kế hoạch ngân sách mới (ID: {notification.BudgetPlanId}). Hạn xử lý: {notification.DueAt:HH:mm dd/MM/yyyy}.";
 
 			// Gửi thông báo đến Reviewer

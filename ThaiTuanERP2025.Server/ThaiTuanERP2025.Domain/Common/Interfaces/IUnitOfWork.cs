@@ -62,5 +62,6 @@ namespace ThaiTuanERP2025.Application.Common.Interfaces
 		IUserRoleRepository UserRoles { get; }
 
 		Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+		Task<int> SaveChangesWithoutDispatchAsync(CancellationToken cancellationToken = default);
 	}
 }

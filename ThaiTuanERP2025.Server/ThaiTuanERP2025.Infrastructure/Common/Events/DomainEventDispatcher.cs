@@ -18,6 +18,7 @@ namespace ThaiTuanERP2025.Infrastructure.Common
 
 		public async Task DispatchAsync(IEnumerable<IDomainEvent> domainEvents, CancellationToken cancellationToken = default)
 		{
+			Console.WriteLine($"[Dispatcher] Publishing event: {domainEvents.GetType().Name}");
 			foreach (var domainEvent in domainEvents)
 			{
 				await _mediator.Publish(domainEvent, cancellationToken);
