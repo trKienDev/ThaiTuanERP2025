@@ -1,10 +1,8 @@
-export interface NotificationPayload {
+export interface NotificationDto {
       id: string;
       title: string;
       message: string;
-      link?: string;   
-      createdAt: string | Date;     
-      isRead: boolean;
+      link?: string;
+      createdAt: Date;
+      isRead: boolean
 }
-
-export interface NotificationDto extends NotificationPayload {}

@@ -4,7 +4,7 @@ import { KitDropdownOption, KitDropdownComponent } from "../../../../../../share
 import { ToastService } from "../../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { FormBuilder, FormsModule, Validators, ReactiveFormsModule } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { UserOptionStore } from "../../../../../account/options/user-dropdown-options.store";
+import { UserOptionStore } from "../../../../../account/options/user-dropdown.option";
 import { ApproverMode, ApprovalStepTemplateRequest, FlowType } from "../../../../models/approval-step-template.model";
 import { logFormErrors } from "../../../../../../shared/utils/form.utils";
 import { BudgetApproverDto } from "../../../../../finance/models/budget-approvers.model";

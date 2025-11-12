@@ -17,11 +17,13 @@ namespace ThaiTuanERP2025.Infrastructure.Core.Configurations
 
 			builder.Property(r => r.LinkUrl).HasMaxLength(500);
 
-			builder.Property(r => r.TriggerAt).IsRequired().HasColumnType("datetime2");
+			builder.Property(r => r.SlaHours).IsRequired();
 
-			builder.Property(r => r.IsTriggered).IsRequired();
+			builder.Property(r => r.DueAt).IsRequired().HasColumnType("datetime2");
 
-			builder.Property(r => r.TriggeredAt).HasColumnType("datetime2");
+			builder.Property(r => r.ResolvedAt).IsRequired(false).HasColumnType("datetime2");
+
+			builder.Property(r => r.IsResolved).IsRequired();
 
 			builder.HasOne(r => r.User)
 				.WithMany()

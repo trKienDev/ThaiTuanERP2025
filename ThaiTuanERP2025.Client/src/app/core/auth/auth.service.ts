@@ -26,17 +26,17 @@ export class AuthService {
 
       // === Login ===
       login(employeeCode: string, password: string) {
-      return this.http
-            .post<ApiResponse<LoginResponseDto>>(`${this.apiUrl}/login`, { employeeCode, password })
-            .pipe(
-                  tap((response) => {
-                        if (response.isSuccess && response.data) {
-                              this.loginSuccess(response.data);
-                        } else {
-                              console.error('[AuthService] Login API failed', response.message);      
-                        }
-                  })
-            );
+            return this.http
+                  .post<ApiResponse<LoginResponseDto>>(`${this.apiUrl}/login`, { employeeCode, password })
+                  .pipe(
+                        tap((response) => {
+                              if (response.isSuccess && response.data) {
+                                    this.loginSuccess(response.data);
+                              } else {
+                                    console.error('[AuthService] Login API failed', response.message);      
+                              }
+                        })
+                  );
       }
 
       private loginSuccess(response: LoginResponseDto) {

@@ -21,6 +21,7 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
 			LinkUrl = linkUrl;
 			Type = type;
 			IsRead = false;
+			CreatedAt = DateTime.UtcNow;
 		}
 		#endregion
 
@@ -45,6 +46,9 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
 
 		/// <summary>Loại thông báo: Info / Warning / Task / Approval / System...</summary>
 		public NotificationType Type { get; private set; } = NotificationType.Info;
+
+		/// <summary>Ngày tạo</summary>
+		public DateTime CreatedAt { get; private set; }	 
 		#endregion
 
 		#region Domain Behaviors

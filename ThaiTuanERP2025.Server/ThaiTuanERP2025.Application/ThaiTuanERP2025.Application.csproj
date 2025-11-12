@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Core\Services\" />
     <Folder Include="Finance\Requests\" />
     <Folder Include="Finance\Validators\" />
   </ItemGroup>

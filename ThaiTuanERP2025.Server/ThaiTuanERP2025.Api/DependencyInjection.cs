@@ -9,14 +9,11 @@ using ThaiTuanERP2025.Application.Common.Events;
 using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Common.Security;
 using ThaiTuanERP2025.Application.Common.Services;
-using ThaiTuanERP2025.Application.Core.Services.Interfaces;
-using ThaiTuanERP2025.Application.Expense.Contracts.Resolvers;
-using ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows;
+using ThaiTuanERP2025.Application.Core.Followers;
 using ThaiTuanERP2025.Infrastructure.Authentication.Services;
 using ThaiTuanERP2025.Infrastructure.Common.Events;
 using ThaiTuanERP2025.Infrastructure.Common.Services;
 using ThaiTuanERP2025.Infrastructure.Core.Services;
-using ThaiTuanERP2025.Infrastructure.Expense.Contracts.Resolvers;
 
 namespace ThaiTuanERP2025.Api
 {

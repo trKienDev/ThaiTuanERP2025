@@ -6,7 +6,7 @@ import { NotificationDto } from '../models/notification.model';
 
 @Injectable({ providedIn: 'root' })
 export class NotificationFacade {
-      private state = inject(NotificationStateService);
+      private readonly state = inject(NotificationStateService);
 
       /** Streams public cho component */
       readonly notifications$: Observable<NotificationDto[]> = this.state.notifications$;

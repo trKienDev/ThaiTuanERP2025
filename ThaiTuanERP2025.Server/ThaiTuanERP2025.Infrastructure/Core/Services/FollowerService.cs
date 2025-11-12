@@ -1,5 +1,5 @@
 ﻿using ThaiTuanERP2025.Application.Common.Interfaces;
-using ThaiTuanERP2025.Application.Core.Services.Interfaces;
+using ThaiTuanERP2025.Application.Core.Followers;
 using ThaiTuanERP2025.Application.Exceptions;
 using ThaiTuanERP2025.Domain.Core.Entities;
 using ThaiTuanERP2025.Domain.Core.Enums;

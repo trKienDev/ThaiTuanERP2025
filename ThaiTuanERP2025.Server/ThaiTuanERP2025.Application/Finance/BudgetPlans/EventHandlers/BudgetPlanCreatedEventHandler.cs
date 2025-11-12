@@ -1,5 +1,7 @@
 ﻿using MediatR;
-using ThaiTuanERP2025.Application.Core.Services;
+using ThaiTuanERP2025.Application.Core.Notifications;
+using ThaiTuanERP2025.Application.Core.Reminders;
+using ThaiTuanERP2025.Application.Finance.BudgetPeriods;
 using ThaiTuanERP2025.Domain.Core.Enums;
 using ThaiTuanERP2025.Domain.Finance.Events;
 
@@ -9,15 +11,22 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.EventHandlers
 	{
 		private readonly INotificationService _notification;
 		private readonly IReminderService _reminder;
-		public BudgetPlanCreatedEventHandler(INotificationService notification, IReminderService reminder) {
+		private readonly IBudgetPeriodReadRepository _budgetPeriodRepo;
+		public BudgetPlanCreatedEventHandler(INotificationService notification, IReminderService reminder, IBudgetPeriodReadRepository budgetPeriodRepo) {
 			  _notification = notification;	
 			  _reminder = reminder;
+			_budgetPeriodRepo = budgetPeriodRepo;
 		}
 
 		public async Task Handle(BudgetPlanCreatedEvent notification, CancellationToken cancellationToken)
 		{
+			var budgetPeriod = await _budgetPeriodRepo.GetByIdProjectedAsync(notification.BudgetPlan.BudgetPeriodId, cancellationToken);
+			if (budgetPeriod is null)
+				throw new KeyNotFoundException($"Không tìm thấy kỳ ngân sách ID");
+
+			var budgetPlanName = $"{budgetPeriod.Month}/{budgetPeriod.Year}";
 			Console.WriteLine($"[Handler] Handling BudgetPlanCreatedEvent for plan {notification.BudgetPlanId}");
-			var message = $"Bạn được giao xem xét kế hoạch ngân sách mới (ID: {notification.BudgetPlanId}). Hạn xử lý: {notification.DueAt:HH:mm dd/MM/yyyy}.";
+			var message = $"Bạn được giao xem xét kế hoạch ngân sách {budgetPlanName}";
 
 			// Gửi thông báo đến Reviewer
 			await _notification.SendAsync(
@@ -33,8 +42,9 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.EventHandlers
 			await _reminder.ScheduleReminderAsync(
 				userId: notification.ReviewerUserId,
 				subject: "Xem xét kế hoạch ngân sách",
-				message: $"Kế hoạch {notification.BudgetPlanId} sắp đến hạn xử lý.",
-				triggerAt: notification.DueAt.AddHours(-1),
+				message: $"Kế hoạch ngân sách {budgetPlanName} cần bạn xem xét.",
+				slaHours: 8,
+				dueAt: notification.DateCreated,
 				null,
 				cancellationToken
 			);

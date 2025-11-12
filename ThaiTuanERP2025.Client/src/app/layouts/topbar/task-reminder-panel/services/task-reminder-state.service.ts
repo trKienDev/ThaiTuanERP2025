@@ -1,16 +1,16 @@
 // src/app/shared/services/alarm-state.service.ts
 import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject, firstValueFrom, interval, map } from 'rxjs';
+import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { TaskReminderApiService } from './task-reminder-api.service';
 import { TaskReminderSignalRService } from './task-reminder.service';
 import { TaskReminderDto } from '../models/task-reminder.model';
 
 @Injectable({ providedIn: 'root' })
 export class TaskReminderStateService {
-      private api = inject(TaskReminderApiService);
-      private realtime = inject(TaskReminderSignalRService);
+      private readonly api = inject(TaskReminderApiService);
+      private readonly realtime = inject(TaskReminderSignalRService);
 
-      private _reminders$ = new BehaviorSubject<TaskReminderDto[]>([]);
+      private readonly _reminders$ = new BehaviorSubject<TaskReminderDto[]>([]);
       readonly reminders$ = this._reminders$.asObservable();
 
       async init() {

@@ -20,13 +20,12 @@ namespace ThaiTuanERP2025.Domain.Finance.Events
 	{
 		public BudgetPlan BudgetPlan { get; }
 		public Guid ReviewerUserId { get; }
-		public DateTime DueAt { get; }
-
-		public BudgetPlanCreatedEvent(BudgetPlan plan, Guid reviewerUserId, DateTime dueAt) : base(plan.Id)
+		public DateTime DateCreated { get; }
+		public BudgetPlanCreatedEvent(BudgetPlan plan, Guid reviewerUserId, DateTime dateCreated) : base(plan.Id)
 		{
 			BudgetPlan = plan;
 			ReviewerUserId = reviewerUserId;
-			DueAt = dueAt;
+			DateCreated = dateCreated;
 		}
 	}
 

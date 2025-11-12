@@ -13,7 +13,7 @@ import { AuthService } from '../../core/auth/auth.service';
 export class AccountComponent implements OnInit {
       isSuperAdmin = false;
 
-      constructor(private auth: AuthService) {}
+      constructor(private readonly auth: AuthService) {}
 
       ngOnInit(): void {
             this.isSuperAdmin = this.auth.getUserRoles().some(r => r.toLowerCase() === 'superadmin');

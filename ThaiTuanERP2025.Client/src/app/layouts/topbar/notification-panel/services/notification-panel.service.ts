@@ -7,8 +7,8 @@ import { NotificationPanelComponent } from '../notification-panel.component';
 import { NotificationDto } from '../models/notification.model';
 
 export interface NotificationPanelHandlers {
-  markAllRead?: () => void;
-  markOneRead?: (id: string) => void;
+      markAllRead?: () => void;
+      markOneRead?: (id: string) => void;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -17,7 +17,7 @@ export class NotificationPanelService {
       private compRef?: ComponentRef<NotificationPanelComponent>;
       private subs = new Subscription();
 
-      constructor(private overlay: Overlay, private injector: Injector) {}
+      constructor(private readonly overlay: Overlay, private readonly injector: Injector) {}
 
       isOpen(): boolean {
             return !!this.overlayRef && this.overlayRef.hasAttached();

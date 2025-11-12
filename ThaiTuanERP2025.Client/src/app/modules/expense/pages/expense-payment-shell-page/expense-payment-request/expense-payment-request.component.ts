@@ -17,8 +17,8 @@ import { MoneyFormatDirective } from "../../../../../shared/directives/money/mon
 import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
 import { UserFacade } from "../../../../account/facades/user.facade";
 import { UserDto } from "../../../../account/models/user.model";
-import { UserOptionStore } from "../../../../account/options/user-dropdown-options.store";
-import { ManagerOptionStore } from "../../../../account/options/user-manager-option.store";
+import { UserOptionStore } from "../../../../account/options/user-dropdown.option";
+import { ManagerOptionStore } from "../../../../account/options/user-manager.option";
 import { BudgetCodeService } from "../../../../finance/services/budget-code.service";
 import { CashoutCodeService } from "../../../../finance/services/cashout-code.service";
 import { SupplierFacade } from "../../../facades/supplier.facade";

@@ -40,10 +40,26 @@ namespace ThaiTuanERP2025.Api.Security
 					    {
 						    var accessToken = context.Request.Query["access_token"];
 						    var path = context.HttpContext.Request.Path;
-						    if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+
+						    // ✅ Cho phép đọc token cho cả negotiate và websocket
+						    if (!string.IsNullOrEmpty(accessToken) &&
+							(path.StartsWithSegments("/hubs/notifications")
+							 || path.StartsWithSegments("/hubs/notifications/negotiate")))
 						    {
 							    context.Token = accessToken;
+							    Console.WriteLine($"[SignalR] Token accepted for {path}");
 						    }
+						    else if (path.StartsWithSegments("/hubs/notifications"))
+						    {
+							    Console.WriteLine($"[SignalR] No token for {path}");
+						    }
+
+						    return Task.CompletedTask;
+					    },
+
+					    OnAuthenticationFailed = context =>
+					    {
+						    Console.WriteLine($"[SignalR] Authentication failed: {context.Exception.Message}");
 						    return Task.CompletedTask;
 					    }
 				    };

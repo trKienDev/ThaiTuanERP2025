@@ -12,6 +12,9 @@ using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Application.Common.Options;
 using ThaiTuanERP2025.Application.Common.Security;
 using ThaiTuanERP2025.Application.Common.Services;
+using ThaiTuanERP2025.Application.Core.Notifications;
+using ThaiTuanERP2025.Application.Core.Reminders;
+using ThaiTuanERP2025.Application.Core.Services;
 using ThaiTuanERP2025.Application.Expense.Invoices;
 using ThaiTuanERP2025.Application.Files;
 using ThaiTuanERP2025.Application.Finance.BudgetApprovers;
@@ -35,12 +38,14 @@ using ThaiTuanERP2025.Infrastructure.Common;
 using ThaiTuanERP2025.Infrastructure.Common.Security;
 using ThaiTuanERP2025.Infrastructure.Common.Services;
 using ThaiTuanERP2025.Infrastructure.Core.Repositories;
+using ThaiTuanERP2025.Infrastructure.Core.Repositories.Read;
 using ThaiTuanERP2025.Infrastructure.Core.Repositories.Write;
 using ThaiTuanERP2025.Infrastructure.Expense.Repositories;
 using ThaiTuanERP2025.Infrastructure.Finance.Repositories;
 using ThaiTuanERP2025.Infrastructure.Finance.Repositories.Read;
 using ThaiTuanERP2025.Infrastructure.Finance.Repositories.Write;
 using ThaiTuanERP2025.Infrastructure.Persistence;
+using ThaiTuanERP2025.Infrastructure.Realtime;
 using ThaiTuanERP2025.Infrastructure.StoredFiles.Configurations;
 using ThaiTuanERP2025.Infrastructure.StoredFiles.FileStorage;
 using ThaiTuanERP2025.Infrastructure.StoredFiles.Repositories;
@@ -122,7 +127,9 @@ namespace ThaiTuanERP2025.Infrastructure
 			
 			// Core
 			services.AddScoped<IFollowerRepository, FollowerRepository>();
+			services.AddScoped<IUserNotificationReadRepository, UserNotificationReadRepository>();
 			services.AddScoped<IUserNotificationWriteRepository, UserNotificationWriteRepository>();
+			services.AddScoped<IUserReminderReadRepository, UserReminderReadRepository>();
 			services.AddScoped<IUserReminderWriteRepository, UserReminderWriteRepository>();	
 
 			// Authentication
@@ -141,13 +148,10 @@ namespace ThaiTuanERP2025.Infrastructure
 					o.BasePath = Path.GetFullPath(o.BasePath);
 				});
 
-			//// Host Service
-			//services.AddHostedService<TaskReminderExpiryHostedService>();
-			
-			//// Task Reminder
-			//services.Configure<TaskReminderExpiryOptions>(
-			//	cfg.GetSection("TaskReminderExpiry")
-			//);
+			//// Realtime
+			services.AddScoped<IRealtimeNotifier, SignalRealtimeNotifier>();
+			services.AddScoped<INotificationService, NotificationService>();
+			services.AddScoped<IReminderService, ReminderService>();
 
 			// DocumentSubIdOptions
 			services.Configure<DocumentSubIdOptions>(opt => {

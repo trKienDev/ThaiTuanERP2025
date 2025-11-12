@@ -52,6 +52,6 @@ app.MapControllers();
 
 await app.EnsureFileStorageReadyAsync();
 await app.LoadDynamicPoliciesAsync();
-app.Run();
+await app.RunAsync();
 
 

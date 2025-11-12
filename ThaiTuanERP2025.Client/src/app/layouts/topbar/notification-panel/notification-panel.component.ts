@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { NotificationDto, NotificationPayload } from "./models/notification.model";
+import { NotificationDto } from "./models/notification.model";
 import { Observable } from "rxjs";
 
 @Component({

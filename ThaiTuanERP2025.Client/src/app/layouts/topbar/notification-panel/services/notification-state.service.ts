@@ -8,17 +8,17 @@ import { ToastNotificationService } from '../../../../shared/components/toast-no
 
 @Injectable({ providedIn: 'root' })
 export class NotificationStateService {
-      private api = inject(NotificationsApiService);
-      private realtime = inject(NotificationSignalRService);
+      private readonly api = inject(NotificationsApiService);
+      private readonly realtime = inject(NotificationSignalRService);
 
-      private _notifications$ = new BehaviorSubject<NotificationDto[]>([]);
-      private _unreadCount$ = new BehaviorSubject<number>(0);
+      private readonly _notifications$ = new BehaviorSubject<NotificationDto[]>([]);
+      private readonly _unreadCount$ = new BehaviorSubject<number>(0);
 
       /** Stream public cho component subscribe */
       readonly notifications$ = this._notifications$.asObservable();
       readonly unreadCount$ = this._unreadCount$.asObservable();
 
-      private notificationToast = inject(ToastNotificationService);
+      private readonly notificationToast = inject(ToastNotificationService);
 
       /** Khởi tạo: load từ REST + start SignalR */
       async init(): Promise<void> {
@@ -30,9 +30,9 @@ export class NotificationStateService {
 
             this._notifications$.next(list);
             this._unreadCount$.next(unread);
-
+            
             // 2. start SignalR
-            const getToken = () => localStorage.getItem('access_token');
+            const getToken = () => localStorage.getItem('token');
             await this.realtime.start(getToken);
 
             // 3. lắng nghe realtime
@@ -44,14 +44,14 @@ export class NotificationStateService {
                   this._unreadCount$.next(this._unreadCount$.value + (newItems?.length ?? 0));
 
                   for (const n of mapped) {
-        this.notificationToast.show({
-          id: n.id,                // de-dupe
-          title: n.title || 'Thông báo',
-          message: n.message,
-          link: n.link,
-          duration: 5000
-        });
-      }
+                        this.notificationToast.show({
+                              id: n.id,                // de-dupe
+                              title: n.title || 'Thông báo',
+                              message: n.message,
+                              link: n.link,
+                              duration: 5000
+                        });
+                  }
             });
       }
 

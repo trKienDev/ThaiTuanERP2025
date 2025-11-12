@@ -8,8 +8,8 @@ import { environment } from "../../../../../environments/environment";
 export class TaskReminderSignalRService {
       private hub?: signalR.HubConnection;
 
-      private _incoming$ = new Subject<TaskReminderDto[]>(); // ReceiveAlarm
-      private _resolved$ = new Subject<string[]>();           // ResolveAlarm (list id)
+      private readonly _incoming$ = new Subject<TaskReminderDto[]>(); // ReceiveAlarm
+      private  readonly _resolved$ = new Subject<string[]>();           // ResolveAlarm (list id)
       readonly incoming$: Observable<TaskReminderDto[]> = this._incoming$.asObservable();
       readonly resolved$: Observable<string[]> = this._resolved$.asObservable();
 

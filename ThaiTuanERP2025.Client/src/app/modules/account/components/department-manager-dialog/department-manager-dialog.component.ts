@@ -8,7 +8,7 @@ import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-
 import { handleHttpError } from "../../../../shared/utils/handle-http-errors.util";
 import { DepartmentFacade } from "../../facades/department.facade";
 import { DepartmentDto, SetDepartmentManagerRequest } from "../../models/department.model";
-import { UserOptionStore } from "../../options/user-dropdown-options.store";
+import { UserOptionStore } from "../../options/user-dropdown.option";
 import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 import { ConfirmService } from "../../../../shared/components/confirm-dialog/confirm.service";
 import { HttpErrorResponse } from "@angular/common/http";

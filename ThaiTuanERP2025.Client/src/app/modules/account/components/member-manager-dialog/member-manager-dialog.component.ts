@@ -4,7 +4,7 @@ import { KitDropdownComponent, KitDropdownOption } from "../../../../shared/comp
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { FormBuilder, ReactiveFormsModule } from "@angular/forms";
 import { UserFacade } from "../../facades/user.facade";
-import { UserOptionStore } from "../../options/user-dropdown-options.store";
+import { UserOptionStore } from "../../options/user-dropdown.option";
 import { SetUserManagerRequest, UserDto } from "../../models/user.model";
 import { UserService } from "../../services/user.service";
 import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";

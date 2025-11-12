@@ -89,5 +89,11 @@ namespace ThaiTuanERP2025.Infrastructure.Common.Repositories
 		{
 			return asNoTracking ? _dbSet.AsNoTracking() : _dbSet.AsQueryable();
 		}
+
+		public virtual Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+		{
+			if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+			return _dbSet.AsNoTracking().CountAsync(predicate, cancellationToken);
+		}
 	}
 }

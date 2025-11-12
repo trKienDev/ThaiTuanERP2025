@@ -6,7 +6,7 @@ import { KitDropdownComponent, KitDropdownOption } from "../../../../shared/comp
 import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { DepartmentOptionStore } from "../../../account/options/department-dropdown-options.option";
-import { UserOptionStore } from "../../../account/options/user-dropdown-options.store";
+import { UserOptionStore } from "../../../account/options/user-dropdown.option";
 import { ConfirmService } from "../../../../shared/components/confirm-dialog/confirm.service";
 import { BudgetApproverDto, BudgetApproversRequest } from "../../models/budget-approvers.model";
 import { firstValueFrom } from "rxjs";

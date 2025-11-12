@@ -9,8 +9,8 @@ import { handleHttpError } from "../../../../shared/utils/handle-http-errors.uti
 import { UserFacade } from "../../facades/user.facade";
 import { UserRequest } from "../../models/user.model";
 import { DepartmentOptionStore } from "../../options/department-dropdown-options.option";
-import { UserOptionStore } from "../../options/user-dropdown-options.store";
-import { RoleDropdownOptionsStore } from "../../options/role-dropdown-options.store";
+import { UserOptionStore } from "../../options/user-dropdown.option";
+import { RoleDropdownOptionsStore } from "../../options/role-dropdown.options";
 import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 
 @Component({
