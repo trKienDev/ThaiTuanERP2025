@@ -26,12 +26,12 @@ export class NotificationSignalRService {
             }
 
             this.hubConnection = new signalR.HubConnectionBuilder()
-            .withUrl(`${environment.baseUrl}${environment.hubs.notification}`, {
-                  accessTokenFactory: () => token
-            })
-            .configureLogging(signalR.LogLevel.Information)
-            .withAutomaticReconnect()
-            .build();
+                  .withUrl(`${environment.baseUrl}${environment.hubs.notification}`, {
+                        accessTokenFactory: () => token
+                  })
+                  .configureLogging(signalR.LogLevel.Information)
+                  .withAutomaticReconnect()
+                  .build();
 
             this.hubConnection.on('ReceiveNotification', (payloads: NotificationDto[]) => {
                   this._incoming$.next(payloads);

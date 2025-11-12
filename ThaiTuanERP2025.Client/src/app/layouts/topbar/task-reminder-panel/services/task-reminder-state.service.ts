@@ -19,7 +19,7 @@ export class TaskReminderStateService {
             this._reminders$.next(list);
 
             // start SignalR
-            const getToken = () => localStorage.getItem('access_token');
+            const getToken = () => localStorage.getItem('token');
             await this.realtime.start(getToken);
 
             // incoming new reminders
