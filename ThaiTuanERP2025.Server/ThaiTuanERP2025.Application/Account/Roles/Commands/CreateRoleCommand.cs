@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 using MediatR;
 using ThaiTuanERP2025.Application.Account.Roles.Request;
-using ThaiTuanERP2025.Application.Common.Interfaces;
 using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Domain.Shared.Repositories;
 
 namespace ThaiTuanERP2025.Application.Account.Roles.Commands
 {

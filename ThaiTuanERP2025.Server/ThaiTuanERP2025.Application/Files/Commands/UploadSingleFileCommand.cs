@@ -1,8 +1,9 @@
 ﻿using MediatR;
-using ThaiTuanERP2025.Application.Common.Interfaces;
-using ThaiTuanERP2025.Application.Exceptions;
-using ThaiTuanERP2025.Application.Files.Common;
+using ThaiTuanERP2025.Application.Shared.Interfaces;
+using ThaiTuanERP2025.Application.Files.Shared;
 using ThaiTuanERP2025.Domain.Files.Entities;
+using ThaiTuanERP2025.Domain.Shared.Repositories;
+using ThaiTuanERP2025.Application.Shared.Exceptions;
 
 namespace ThaiTuanERP2025.Application.Files.Commands
 {

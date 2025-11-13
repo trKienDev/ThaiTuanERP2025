@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using System.Linq.Expressions;
-using ThaiTuanERP2025.Application.Common.Events;
-using ThaiTuanERP2025.Application.Common.Interfaces;
+using ThaiTuanERP2025.Application.Shared.Events;
+using ThaiTuanERP2025.Application.Shared.Interfaces;
 using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Authentication.Entities;
-using ThaiTuanERP2025.Domain.Common.Entities;
+using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Core.Entities;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Files.Entities;

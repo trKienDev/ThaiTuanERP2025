@@ -1,5 +1,5 @@
 ﻿using ThaiTuanERP2025.Domain.Account.Entities;
-using ThaiTuanERP2025.Domain.Common.Specifications;
+using ThaiTuanERP2025.Domain.Shared.Specifications;
 
 namespace ThaiTuanERP2025.Domain.Account.Specifications
 {

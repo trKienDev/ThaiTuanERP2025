@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
-using ThaiTuanERP2025.Application.Common.Interfaces;
+using ThaiTuanERP2025.Application.Shared.Interfaces;
 
 namespace ThaiTuanERP2025.Infrastructure.Authentication.Services
 {

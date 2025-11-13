@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using ThaiTuanERP2025.Application.Common.Interfaces;
+using ThaiTuanERP2025.Domain.Shared.Repositories;
 
 namespace ThaiTuanERP2025.Application.Files.Commands
 {

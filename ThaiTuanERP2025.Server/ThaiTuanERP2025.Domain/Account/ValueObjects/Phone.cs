@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
-using ThaiTuanERP2025.Domain.Common;
-using ThaiTuanERP2025.Domain.Common.ValueObjects;
+using ThaiTuanERP2025.Domain.Shared;
+using ThaiTuanERP2025.Domain.Shared.ValueObjects;
 
 
 namespace ThaiTuanERP2025.Domain.Account.ValueObjects

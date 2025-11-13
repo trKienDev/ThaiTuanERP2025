@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <Folder Include="Partner\" />
+    <Folder Include="Shared\Interfaces\" />
   </ItemGroup>
 
   <ItemGroup>

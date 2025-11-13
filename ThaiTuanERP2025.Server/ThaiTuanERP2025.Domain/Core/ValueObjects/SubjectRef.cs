@@ -1,4 +1,4 @@
-﻿using ThaiTuanERP2025.Domain.Common;
+﻿using ThaiTuanERP2025.Domain.Shared;
 using ThaiTuanERP2025.Domain.Core.Enums;
 
 namespace ThaiTuanERP2025.Domain.Followers.ValueObjects

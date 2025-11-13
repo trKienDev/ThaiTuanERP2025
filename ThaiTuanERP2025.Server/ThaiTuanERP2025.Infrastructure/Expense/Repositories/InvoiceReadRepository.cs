@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
-using ThaiTuanERP2025.Application.Common.Models;
+using ThaiTuanERP2025.Application.Shared.Models;
 using ThaiTuanERP2025.Application.Expense.Dtos;
 using ThaiTuanERP2025.Application.Expense.Invoices;
 using ThaiTuanERP2025.Domain.Expense.Entities;
-using ThaiTuanERP2025.Infrastructure.Common.Repositories;
+using ThaiTuanERP2025.Infrastructure.Shared.Repositories;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories

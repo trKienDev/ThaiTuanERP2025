@@ -1,4 +1,4 @@
-﻿using ThaiTuanERP2025.Domain.Common.Events;
+﻿using ThaiTuanERP2025.Domain.Shared.Events;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 
 namespace ThaiTuanERP2025.Domain.Expense.Events.Suppliers

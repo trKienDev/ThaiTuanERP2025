@@ -5,14 +5,14 @@ using System.Text.Json.Serialization;
 using ThaiTuanERP2025.Api.Security;
 using ThaiTuanERP2025.Api.Services;
 using ThaiTuanERP2025.Api.SignalR;
-using ThaiTuanERP2025.Application.Common.Events;
-using ThaiTuanERP2025.Application.Common.Interfaces;
-using ThaiTuanERP2025.Application.Common.Security;
-using ThaiTuanERP2025.Application.Common.Services;
+using ThaiTuanERP2025.Application.Shared.Events;
+using ThaiTuanERP2025.Application.Shared.Interfaces;
+using ThaiTuanERP2025.Application.Shared.Security;
+using ThaiTuanERP2025.Application.Shared.Services;
 using ThaiTuanERP2025.Application.Core.Followers;
 using ThaiTuanERP2025.Infrastructure.Authentication.Services;
-using ThaiTuanERP2025.Infrastructure.Common.Events;
-using ThaiTuanERP2025.Infrastructure.Common.Services;
+using ThaiTuanERP2025.Infrastructure.Shared.Events;
+using ThaiTuanERP2025.Infrastructure.Shared.Services;
 using ThaiTuanERP2025.Infrastructure.Core.Services;
 
 namespace ThaiTuanERP2025.Api

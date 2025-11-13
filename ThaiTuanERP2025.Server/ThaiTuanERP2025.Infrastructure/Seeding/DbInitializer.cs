@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ThaiTuanERP2025.Domain.Account.Entities;
-using ThaiTuanERP2025.Application.Common.Security;
+using ThaiTuanERP2025.Application.Shared.Security;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Seeding

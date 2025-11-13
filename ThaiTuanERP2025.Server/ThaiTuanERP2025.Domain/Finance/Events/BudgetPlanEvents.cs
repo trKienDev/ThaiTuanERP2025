@@ -1,4 +1,4 @@
-﻿using ThaiTuanERP2025.Domain.Common.Events;
+﻿using ThaiTuanERP2025.Domain.Shared.Events;
 using ThaiTuanERP2025.Domain.Finance.Entities;
 using ThaiTuanERP2025.Domain.Finance.Enums;
 
@@ -20,12 +20,12 @@ namespace ThaiTuanERP2025.Domain.Finance.Events
 	{
 		public BudgetPlan BudgetPlan { get; }
 		public Guid ReviewerUserId { get; }
-		public DateTime DateCreated { get; }
-		public BudgetPlanCreatedEvent(BudgetPlan plan, Guid reviewerUserId, DateTime dateCreated) : base(plan.Id)
+		public DateTime DueAt { get; }
+		public BudgetPlanCreatedEvent(BudgetPlan plan, Guid reviewerUserId, DateTime dueAt) : base(plan.Id)
 		{
 			BudgetPlan = plan;
 			ReviewerUserId = reviewerUserId;
-			DateCreated = dateCreated;
+			DueAt = dueAt;
 		}
 	}
 

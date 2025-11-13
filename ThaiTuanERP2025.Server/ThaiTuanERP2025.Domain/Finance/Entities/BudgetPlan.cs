@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using ThaiTuanERP2025.Domain.Account.Entities;
-using ThaiTuanERP2025.Domain.Common;
-using ThaiTuanERP2025.Domain.Common.Entities;
+using ThaiTuanERP2025.Domain.Shared;
+using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Finance.Enums;
 using ThaiTuanERP2025.Domain.Finance.Events;
 
@@ -26,7 +26,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			Status = BudgetPlanStatus.Draft;
 			this.IsActive = true;
 
-			DueAt = DateTime.UtcNow.AddHours(24);
+			DueAt = DateTime.UtcNow.AddHours(8);
 			AddDomainEvent(new BudgetPlanCreatedEvent(this, reviewerId, DueAt.Value));
 		}
 		#endregion

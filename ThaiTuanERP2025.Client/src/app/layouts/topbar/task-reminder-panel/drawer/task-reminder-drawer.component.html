@@ -11,7 +11,7 @@
                         tabindex="0" role="button">
                               <div class="title-wrapper display-flex gap-10px align-items-center">
                                     <div class="sla-warning" *ngIf="!isExpired(item)" class="sla-warning"></div>
-                                    <div class="title">{{ item.title }}</div>
+                                    <div class="title">{{ item.subject }}</div>
                               </div>
                               <div class="message">{{ item.message }}</div>
                               <div class="due" [ngClass]="{ 'expired': isExpired(item), 'active': !isExpired(item) }">

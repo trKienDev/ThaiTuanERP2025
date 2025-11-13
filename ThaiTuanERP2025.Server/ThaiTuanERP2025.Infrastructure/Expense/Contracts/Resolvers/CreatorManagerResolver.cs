@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ThaiTuanERP2025.Application.Account.Users;
-using ThaiTuanERP2025.Application.Common.Interfaces;
+using ThaiTuanERP2025.Application.Shared.Interfaces;
 using ThaiTuanERP2025.Application.Expense.Contracts.Resolvers;
+using ThaiTuanERP2025.Domain.Shared.Repositories;
 
 namespace ThaiTuanERP2025.Infrastructure.Expense.Contracts.Resolvers
 {

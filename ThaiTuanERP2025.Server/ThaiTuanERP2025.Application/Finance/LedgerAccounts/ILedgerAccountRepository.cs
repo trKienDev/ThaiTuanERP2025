@@ -1,5 +1,5 @@
 ﻿using ThaiTuanERP2025.Application.Finance.DTOs;
-using ThaiTuanERP2025.Domain.Common.Repositories;
+using ThaiTuanERP2025.Domain.Shared.Repositories;
 using ThaiTuanERP2025.Domain.Finance.Entities;
 
 namespace ThaiTuanERP2025.Application.Finance.LedgerAccounts

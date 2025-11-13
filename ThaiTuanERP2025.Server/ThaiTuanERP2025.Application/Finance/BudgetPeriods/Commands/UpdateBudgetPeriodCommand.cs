@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
-using ThaiTuanERP2025.Application.Common.Interfaces;
-using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Shared;
+using ThaiTuanERP2025.Domain.Shared.Repositories;
 
 namespace ThaiTuanERP2025.Application.Finance.BudgetPeriods.Commands
 {

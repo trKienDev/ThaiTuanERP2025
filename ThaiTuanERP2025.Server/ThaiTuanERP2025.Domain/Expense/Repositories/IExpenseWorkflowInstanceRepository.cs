@@ -1,4 +1,4 @@
-﻿using ThaiTuanERP2025.Domain.Common.Repositories;
+﻿using ThaiTuanERP2025.Domain.Shared.Repositories;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Expense.Enums;
 

@@ -3,7 +3,7 @@ using System.Reflection;
 using MediatR;
 using FluentValidation;
 using ThaiTuanERP2025.Application.Behaviors;
-using ThaiTuanERP2025.Domain.Common.Events;
+using ThaiTuanERP2025.Domain.Shared.Events;
 
 namespace ThaiTuanERP2025.Application
 {

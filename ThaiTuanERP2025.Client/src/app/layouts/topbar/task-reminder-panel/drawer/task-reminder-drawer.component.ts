@@ -19,12 +19,12 @@ export class TaskReminderDrawerComponent implements OnInit {
       @Output() dismiss = new EventEmitter<string>();
       @Output() closed = new EventEmitter<void>();
 
-      private dialog = inject(MatDialog);
-      private facade = inject(FollowingExpensePaymentFacade);
+      private readonly dialog = inject(MatDialog);
+      private readonly facade = inject(FollowingExpensePaymentFacade);
 
       sortedReminders$!: Observable<TaskReminderDto[]>;   // <-- khai báo, chưa khởi tạo
 
-      constructor(private router: Router) {}
+      constructor(private readonly router: Router) {}
 
       async ngOnInit(): Promise<void> {
             const timer$ = interval(1000).pipe(startWith(0));
@@ -44,22 +44,22 @@ export class TaskReminderDrawerComponent implements OnInit {
       }
 
       async goTo(item: TaskReminderDto) {
-            const { commands, extras } = this.resolveRoute(item);
+            // const { commands, extras } = this.resolveRoute(item);
             sessionStorage.setItem('allowPaymentDetailOnce', '1');
-            await this.router.navigate(commands, extras);
+            // await this.router.navigate(commands, extras);
             this.dismiss.emit('CLOSE_DRAWER');
       }
-      private resolveRoute(tr: TaskReminderDto): { commands: (string | number)[], extras: NavigationExtras } {
-            const commands: (string | number)[] = ['/expense', 'expense-payment-shell', 'payment-detail'];
+      // private resolveRoute(tr: TaskReminderDto): { commands: (string | number)[], extras: NavigationExtras } {
+      //       const commands: (string | number)[] = ['/expense', 'expense-payment-shell', 'payment-detail'];
 
-            const extras: NavigationExtras = {
-                  queryParamsHandling: 'merge',
-                  queryParams: (tr.documentType === 'ExpensePayment' && tr.documentId)
-                        ? { paymentId: tr.documentId } : {}
-            };
+      //       const extras: NavigationExtras = {
+      //             queryParamsHandling: 'merge',
+      //             queryParams: (tr.documentType === 'ExpensePayment' && tr.documentId)
+      //                   ? { paymentId: tr.documentId } : {}
+      //       };
 
-            return { commands, extras };
-      }
+      //       return { commands, extras };
+      // }
 
 
       trackById(index: number, item: TaskReminderDto) { return item.id; }
@@ -88,14 +88,14 @@ export class TaskReminderDrawerComponent implements OnInit {
       }
 
       openExpensePaymentDetailDialog(item: TaskReminderDto) {
-            const dialogRef = this.dialog.open(ExpensePaymentDetailDialogComponent, {
-                  data: item.documentId,
-            });
+            // const dialogRef = this.dialog.open(ExpensePaymentDetailDialogComponent, {
+            //       data: item.documentId,
+            // });
 
-            dialogRef.afterClosed().subscribe((result: any) => {
-                  if (result?.success) {
-                        this.facade.refreshIncremental();
-                  }
-            });
+            // dialogRef.afterClosed().subscribe((result: any) => {
+            //       if (result?.success) {
+            //             this.facade.refreshIncremental();
+            //       }
+            // });
       }
 }

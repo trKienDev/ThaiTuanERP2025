@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using ThaiTuanERP2025.Domain.Common;
-using ThaiTuanERP2025.Domain.Common.Entities;
+using ThaiTuanERP2025.Domain.Shared;
+using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Events.ApprovalWorkflowTemplates;
 using ThaiTuanERP2025.Domain.Expense.Events.ExpenseWorkflowTemplates;

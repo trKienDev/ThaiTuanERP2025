@@ -1,7 +1,7 @@
 ﻿using ThaiTuanERP2025.Domain.Account.Events;
-using ThaiTuanERP2025.Domain.Common;
-using ThaiTuanERP2025.Domain.Common.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
+using ThaiTuanERP2025.Domain.Shared;
+using ThaiTuanERP2025.Domain.Shared.Entities;
 
 namespace ThaiTuanERP2025.Domain.Account.Entities
 {
@@ -37,7 +37,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			Code = code.ToUpperInvariant();
 			IsActive = true;
 
-			AddDomainEvent(new DepartmentCreatedEvent(this));
+			// AddDomainEvent(new DepartmentCreatedEvent(this));
 		}
 		#endregion
 

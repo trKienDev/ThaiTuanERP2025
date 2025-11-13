@@ -25,7 +25,7 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.EventHandlers
 				throw new KeyNotFoundException($"Không tìm thấy kỳ ngân sách ID");
 
 			var budgetPlanName = $"{budgetPeriod.Month}/{budgetPeriod.Year}";
-			Console.WriteLine($"[Handler] Handling BudgetPlanCreatedEvent for plan {notification.BudgetPlanId}");
+
 			var message = $"Bạn được giao xem xét kế hoạch ngân sách {budgetPlanName}";
 
 			// Gửi thông báo đến Reviewer
@@ -44,7 +44,7 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.EventHandlers
 				subject: "Xem xét kế hoạch ngân sách",
 				message: $"Kế hoạch ngân sách {budgetPlanName} cần bạn xem xét.",
 				slaHours: 8,
-				dueAt: notification.DateCreated,
+				dueAt: notification.DueAt,
 				null,
 				cancellationToken
 			);

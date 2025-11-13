@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Api.Common;
+using ThaiTuanERP2025.Api.Shared;
 using ThaiTuanERP2025.Application.Files.Commands;
-using ThaiTuanERP2025.Application.Files.Common;
+using ThaiTuanERP2025.Application.Files.Shared;
 using ThaiTuanERP2025.Application.Files.Queries;
 
 namespace ThaiTuanERP2025.Api.Controllers.Files

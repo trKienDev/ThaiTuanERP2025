@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using MediatR;
 using ThaiTuanERP2025.Application.Account.Departments;
-using ThaiTuanERP2025.Application.Common.Interfaces;
-using ThaiTuanERP2025.Application.Exceptions;
+using ThaiTuanERP2025.Application.Shared.Interfaces;
 using ThaiTuanERP2025.Application.Files;
+using ThaiTuanERP2025.Application.Shared.Exceptions;
 
 namespace ThaiTuanERP2025.Application.Account.Users.Queries
 {

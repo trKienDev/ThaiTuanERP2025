@@ -1,4 +1,4 @@
-﻿using ThaiTuanERP2025.Application.Common.Interfaces;
+﻿using ThaiTuanERP2025.Application.Shared.Interfaces;
 
 namespace ThaiTuanERP2025.Api.Services
 {

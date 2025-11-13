@@ -1,7 +1,7 @@
 ﻿using ThaiTuanERP2025.Domain.Account.Events;
 using ThaiTuanERP2025.Domain.Account.ValueObjects;
-using ThaiTuanERP2025.Domain.Common;
-using ThaiTuanERP2025.Domain.Common.Entities;
+using ThaiTuanERP2025.Domain.Shared;
+using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Files.Entities;
 

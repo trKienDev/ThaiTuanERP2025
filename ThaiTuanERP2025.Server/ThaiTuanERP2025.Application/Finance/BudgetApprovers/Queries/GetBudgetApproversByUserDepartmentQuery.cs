@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using ThaiTuanERP2025.Application.Account.Users;
-using ThaiTuanERP2025.Application.Common.Interfaces;
-using ThaiTuanERP2025.Application.Exceptions;
+using ThaiTuanERP2025.Application.Shared.Exceptions;
+using ThaiTuanERP2025.Application.Shared.Interfaces;
 
 namespace ThaiTuanERP2025.Application.Finance.BudgetApprovers.Queries
 {

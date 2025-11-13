@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
-using ThaiTuanERP2025.Application.Common.Interfaces;
+using ThaiTuanERP2025.Application.Shared.Interfaces;
 using ThaiTuanERP2025.Infrastructure.StoredFiles.Configurations;
 
 namespace ThaiTuanERP2025.Infrastructure.StoredFiles.FileStorage

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using System.Security.Claims;
-using ThaiTuanERP2025.Application.Common.Interfaces;
+using ThaiTuanERP2025.Application.Shared.Interfaces;
 
 namespace ThaiTuanERP2025.Infrastructure.Persistence
 {

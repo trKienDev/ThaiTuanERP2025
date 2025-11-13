@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using ThaiTuanERP2025.Infrastructure.Persistence;
-using ThaiTuanERP2025.Infrastructure.Common.Repositories;
+using ThaiTuanERP2025.Infrastructure.Shared.Repositories;
 using ThaiTuanERP2025.Domain.Core.Entities;
 using ThaiTuanERP2025.Domain.Core.Repositories;
 

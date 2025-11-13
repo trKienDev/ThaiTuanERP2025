@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using ThaiTuanERP2025.Api.Security;
-using ThaiTuanERP2025.Application.Common.Security;
+using ThaiTuanERP2025.Application.Shared.Security;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 using ThaiTuanERP2025.Infrastructure.Seeding;
 

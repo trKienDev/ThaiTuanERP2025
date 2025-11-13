@@ -1,6 +1,6 @@
-﻿using ThaiTuanERP2025.Application.Common.Models;
+﻿using ThaiTuanERP2025.Application.Shared.Models;
 using ThaiTuanERP2025.Application.Expense.Dtos;
-using ThaiTuanERP2025.Domain.Common.Repositories;
+using ThaiTuanERP2025.Domain.Shared.Repositories;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 
 namespace ThaiTuanERP2025.Application.Expense.Invoices

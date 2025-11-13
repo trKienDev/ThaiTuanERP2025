@@ -1,0 +1,173 @@
+﻿using ThaiTuanERP2025.Domain.Account.Repositories;
+using ThaiTuanERP2025.Domain.Core.Repositories;
+using ThaiTuanERP2025.Domain.Expense.Repositories;
+using ThaiTuanERP2025.Domain.Files.Repositories;
+using ThaiTuanERP2025.Domain.Finance.Repositories;
+using ThaiTuanERP2025.Domain.Shared.Repositories;
+using ThaiTuanERP2025.Infrastructure.Persistence;
+
+namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
+{
+	public class UnitOfWork : IUnitOfWork
+	{
+		private readonly ThaiTuanERP2025DbContext _dbContext;
+
+		public UnitOfWork(
+			ThaiTuanERP2025DbContext dbContext,
+
+			IStoredFilesRepository storedFiles, 
+
+			// Account
+			IUserWriteRepository users,
+			IUserManagerAssignmentRepository userManagerAssignments,
+			IDepartmentWriteRepository departments,
+			IGroupRepository groups,
+			IUserGroupRepository userGroups,
+
+			// Finance
+			IBudgetGroupWriteRepository budgetGroups,
+			IBudgetPeriodWriteRepository budgetPeriods,
+			IBudgetPlanWriteRepository budgetPlans,
+			IBudgetCodeWriteRepository budgetCodes,
+			IBudgetApproverWriteRepository budgetApprovers,
+			ILedgerAccountRepository ledgerAccounts,
+			ILedgerAccountTypeRepository ledgerAccountTypes,
+			ICashoutCodeWriteRepository cashoutCodes,
+			ICashoutGroupRepository cashoutGroups,
+
+			// Expense
+			IInvoiceRepository invoices,
+			IInvoiceFileRepository invoiceFiles,
+			ISupplierRepository suppliers,
+			IOutgoingBankAccountRepository outgoingBankAccounts,
+			IOutgoingPaymentRepository outgoingPayments,
+
+			// Workflow	
+			IExpenseStepTemplateRepository approvalStepTemplates,
+			IExpenseWorkflowTemplateRepository approvalWorkflowTemplates,
+			IExpenseStepInstanceRepository approvalStepInstances,
+			IExpenseWorkflowInstanceRepository approvalWorkflowInstances,
+
+			// Expense Payment
+			IExpensePaymentRepository expensePayments,
+			IExpensePaymentCommentRepository expensePaymentComments,
+			IExpensePaymentCommentTagRepository expensePaymentCommentTags,
+			IExpensePaymentCommentAttachmentRepository expensePaymentCommentAttachments,
+
+			// Core
+			IFollowerRepository followers,
+			IUserNotificationWriteRepository userNotifications,
+			IUserReminderWriteRepository userReminders,
+
+			// RBAC
+			IRoleWriteRepository roles,
+			IPermissionWriteRepository permissions,
+			IRolePermissionRepository rolePermissions,
+			IUserRoleRepository userRoles
+		)
+		{
+			_dbContext = dbContext;
+
+			StoredFiles = storedFiles;
+
+			Users = users;
+			UserManagerAssignments = userManagerAssignments;
+			Departments = departments;
+			Groups = groups;
+			UserGroups = userGroups;
+
+			BudgetGroups = budgetGroups;
+			BudgetPeriods = budgetPeriods;
+			BudgetPlans = budgetPlans;
+			BudgetCodes = budgetCodes;
+			BudgetApprovers = budgetApprovers;
+
+			LedgerAccountTypes = ledgerAccountTypes;
+			LedgerAccounts = ledgerAccounts;
+			CashoutCodes = cashoutCodes;
+			CashoutGroups = cashoutGroups;
+
+			Invoices = invoices;
+			InvoiceFiles = invoiceFiles;
+			Suppliers = suppliers;
+			OutgoingBankAccounts = outgoingBankAccounts;
+			OutgoingPayments = outgoingPayments;
+
+			ApprovalStepTemplates = approvalStepTemplates;
+			ApprovalWorkflowTemplates = approvalWorkflowTemplates;
+			ApprovalStepInstances = approvalStepInstances;
+			ApprovalWorkflowInstances = approvalWorkflowInstances;
+
+			ExpensePayments = expensePayments;
+			ExpensePaymentComments = expensePaymentComments;
+			ExpensePaymentCommentAttachments = expensePaymentCommentAttachments;
+			ExpensePaymentCommentTags = expensePaymentCommentTags;
+
+			Followers = followers;
+			UserNotifications = userNotifications;
+			UserReminders = userReminders;	
+
+			Roles = roles;
+			Permissions = permissions;
+			RolePermissions = rolePermissions;
+			UserRoles = userRoles;
+		}
+
+		public IStoredFilesRepository StoredFiles { get; }
+		// Account
+		public IUserWriteRepository Users { get; }
+		public IUserManagerAssignmentRepository UserManagerAssignments { get; }
+		public IDepartmentWriteRepository Departments { get; }
+		public IGroupRepository Groups { get; }
+		public IUserGroupRepository UserGroups { get; }
+
+		// Finance
+		public IBudgetGroupWriteRepository BudgetGroups { get; }
+		public IBudgetPeriodWriteRepository BudgetPeriods { get; }
+		public IBudgetPlanWriteRepository BudgetPlans { get; }
+		public IBudgetCodeWriteRepository BudgetCodes { get; }
+		public IBudgetApproverWriteRepository BudgetApprovers { get; }
+		public ILedgerAccountRepository LedgerAccounts { get; }
+		public ILedgerAccountTypeRepository LedgerAccountTypes { get; }
+		public ICashoutCodeWriteRepository CashoutCodes { get; }
+		public ICashoutGroupRepository CashoutGroups { get; }
+
+		// Expense
+		public IInvoiceRepository Invoices { get; }
+		public IInvoiceFileRepository InvoiceFiles { get; }
+		public ISupplierRepository Suppliers { get; }
+		public IOutgoingBankAccountRepository OutgoingBankAccounts { get; }
+		public IOutgoingPaymentRepository OutgoingPayments { get; }
+
+		// Workflow
+		public IExpenseWorkflowTemplateRepository ApprovalWorkflowTemplates { get; }
+		public IExpenseStepTemplateRepository ApprovalStepTemplates { get; }
+		public IExpenseWorkflowInstanceRepository ApprovalWorkflowInstances { get; }
+		public IExpenseStepInstanceRepository ApprovalStepInstances { get; }
+
+		// Expense Payment
+		public IExpensePaymentRepository ExpensePayments { get; }
+		public IExpensePaymentCommentRepository ExpensePaymentComments { get; }
+		public IExpensePaymentCommentAttachmentRepository ExpensePaymentCommentAttachments { get; }
+		public IExpensePaymentCommentTagRepository ExpensePaymentCommentTags { get; }
+
+		// Core
+		public IFollowerRepository Followers { get; }
+		public IUserNotificationWriteRepository UserNotifications { get; }
+		public IUserReminderWriteRepository UserReminders { get; }
+
+		// RBAC
+		public IUserRoleRepository UserRoles { get; }
+		public IRoleWriteRepository Roles { get; }
+		public IPermissionWriteRepository Permissions { get; }
+		public IRolePermissionRepository RolePermissions { get; }
+
+		public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+		{
+			return _dbContext.SaveChangesAsync(cancellationToken);
+		}
+
+		public Task<int> SaveChangesWithoutDispatchAsync(CancellationToken cancellationToken = default)
+			=> _dbContext.SaveChangesWithoutDispatchAsync(cancellationToken);
+	}
+}

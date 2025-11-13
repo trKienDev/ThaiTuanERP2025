@@ -3,7 +3,7 @@ using AutoMapper.QueryableExtensions;
 using MediatR;
 using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Application.Account.Roles;
-using ThaiTuanERP2025.Application.Exceptions;
+using ThaiTuanERP2025.Application.Shared.Exceptions;
 
 namespace ThaiTuanERP2025.Application.Account.Permissions.Queries
 {
@@ -25,7 +25,7 @@ namespace ThaiTuanERP2025.Application.Account.Permissions.Queries
 		public async Task<IReadOnlyList<PermissionDto>> Handle(GetPermissionsByRoleIdQuery query, CancellationToken cancellationToken)
 		{
 			var roleExist = await _roleReadRepo.ExistAsync(q => q.Id == query.RoleId, cancellationToken);
-			if (!roleExist) throw new ConflictException("Role không tồn tại");
+			if (!roleExist) throw new NotFoundException("Role không tồn tại");
 
 			return await _permissionReadRepo.ListProjectedAsync(
 				q => q.Where(p => p.RolePermissions.Any(rp => rp.RoleId == query.RoleId))

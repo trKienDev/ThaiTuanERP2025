@@ -1,5 +1,5 @@
-﻿using ThaiTuanERP2025.Domain.Common;
-using ThaiTuanERP2025.Domain.Common.Entities;
+﻿using ThaiTuanERP2025.Domain.Shared;
+using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Files.Events.StoredFiles;
 
 namespace ThaiTuanERP2025.Domain.Files.Entities

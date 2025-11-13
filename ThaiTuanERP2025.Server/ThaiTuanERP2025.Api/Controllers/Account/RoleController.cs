@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Api.Common;
+using ThaiTuanERP2025.Api.Shared;
 using ThaiTuanERP2025.Application.Account.Permissions.Commands;
 using ThaiTuanERP2025.Application.Account.Roles;
 using ThaiTuanERP2025.Application.Account.Roles.Commands;

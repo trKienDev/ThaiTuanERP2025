@@ -1,8 +1,9 @@
 ﻿using MediatR;
-using ThaiTuanERP2025.Application.Common.Interfaces;
-using ThaiTuanERP2025.Application.Exceptions;
-using ThaiTuanERP2025.Application.Files.Common;
+using ThaiTuanERP2025.Application.Shared.Interfaces;
+using ThaiTuanERP2025.Application.Files.Shared;
 using ThaiTuanERP2025.Domain.Files.Entities;
+using ThaiTuanERP2025.Domain.Shared.Repositories;
+using ThaiTuanERP2025.Application.Shared.Exceptions;
 
 namespace ThaiTuanERP2025.Application.Files.Commands
 {
@@ -20,7 +21,7 @@ namespace ThaiTuanERP2025.Application.Files.Commands
 		public async Task<List<UploadSingleFileResult>> Handle(UploadMultipleFilesCommand request, CancellationToken cancellationToken)
 		{
 			if (request.Files is null || request.Files.Count == 0)
-				throw new ValidationException("Không tìm thấy file upload");
+				throw new NotFoundException("Không tìm thấy file upload");
 
 			await _storage.EnsureReadyAsync(cancellationToken);
 			var result = new List<UploadSingleFileResult>(request.Files.Count);

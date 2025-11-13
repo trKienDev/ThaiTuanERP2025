@@ -6,12 +6,12 @@ using ThaiTuanERP2025.Application.Account.Users;
 using ThaiTuanERP2025.Application.Authentication.DTOs;
 using ThaiTuanERP2025.Application.Authentication.Repositories;
 using ThaiTuanERP2025.Application.Authentication.Services;
-using ThaiTuanERP2025.Application.Common.Authentication;
-using ThaiTuanERP2025.Application.Common.Security;
-using ThaiTuanERP2025.Application.Common.Services;
+using ThaiTuanERP2025.Application.Shared.Authentication;
+using ThaiTuanERP2025.Application.Shared.Security;
+using ThaiTuanERP2025.Application.Shared.Services;
 using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Authentication.Entities;
-using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Shared;
 
 namespace ThaiTuanERP2025.Application.Authentication.Commands
 {

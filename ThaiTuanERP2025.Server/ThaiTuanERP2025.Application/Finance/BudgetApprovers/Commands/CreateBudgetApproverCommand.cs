@@ -1,8 +1,8 @@
 ﻿using MediatR;
-using ThaiTuanERP2025.Application.Common.Interfaces;
-using ThaiTuanERP2025.Application.Exceptions;
-using ThaiTuanERP2025.Domain.Common;
+using ThaiTuanERP2025.Domain.Shared;
 using ThaiTuanERP2025.Domain.Finance.Entities;
+using ThaiTuanERP2025.Domain.Shared.Repositories;
+using ThaiTuanERP2025.Application.Shared.Exceptions;
 
 namespace ThaiTuanERP2025.Application.Finance.BudgetApprovers.Commands
 {
@@ -24,7 +24,7 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetApprovers.Commands
 				Guard.AgainstNullOrEmptyGuid(deptId, nameof(deptId) );
 
 			var approver = await _unitOfWork.Users.ExistAsync(q => q.Id == command.ApproverId, cancellationToken);
-			if (approver is false) throw new NotFoundException("Không tìm thấy user phê duyệt");
+			if (!approver) throw new NotFoundException("Không tìm thấy user phê duyệt");
 
 			var validDeptCount = await _unitOfWork.Departments.CountAsync(
 				d => command.DepartmentIds.Contains(d.Id),

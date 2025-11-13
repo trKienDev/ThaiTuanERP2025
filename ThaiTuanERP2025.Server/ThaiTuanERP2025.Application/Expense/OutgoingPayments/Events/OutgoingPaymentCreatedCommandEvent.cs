@@ -1,4 +1,4 @@
-﻿using ThaiTuanERP2025.Application.Common.Events;
+﻿using ThaiTuanERP2025.Application.Shared.Events;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 
 namespace ThaiTuanERP2025.Application.Expense.OutgoingPayments.Events

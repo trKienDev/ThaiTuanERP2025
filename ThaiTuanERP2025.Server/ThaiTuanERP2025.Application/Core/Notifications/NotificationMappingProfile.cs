@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ThaiTuanERP2025.Domain.Core.Entities;
+using ThaiTuanERP2025.Domain.Shared.Utils;
 
 namespace ThaiTuanERP2025.Application.Core.Notifications
 {
@@ -8,14 +9,7 @@ namespace ThaiTuanERP2025.Application.Core.Notifications
 		public NotificationMappingProfile() {
 			CreateMap<UserNotification, UserNotificationDto>()
 				.ForMember(dest => dest.Link, opt => opt.MapFrom(src => src.LinkUrl))
-				.ForMember(
-					dest => dest.CreatedAt,
-					opt => opt.MapFrom(src => TimeZoneInfo.ConvertTimeFromUtc(
-						src.CreatedAt,
-						TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time")
-					)
-				)
-			); 
+				.ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => TimeZoneConverter.ToVietnamTime(src.CreatedAt))); 
 		}
 	}
 }

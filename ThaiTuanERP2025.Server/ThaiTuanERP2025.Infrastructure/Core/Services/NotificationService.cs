@@ -1,7 +1,8 @@
-﻿using ThaiTuanERP2025.Application.Common.Interfaces;
+﻿using ThaiTuanERP2025.Application.Shared.Interfaces;
 using ThaiTuanERP2025.Application.Core.Notifications;
 using ThaiTuanERP2025.Domain.Core.Entities;
 using ThaiTuanERP2025.Domain.Core.Enums;
+using ThaiTuanERP2025.Domain.Shared.Repositories;
 
 namespace ThaiTuanERP2025.Application.Core.Services
 {

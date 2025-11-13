@@ -2,9 +2,8 @@
 using Microsoft.Extensions.Options;
 using System.Net;
 using System.Text.Json;
-using ThaiTuanERP2025.Api.Common;
-using ThaiTuanERP2025.Application.Exceptions;
-using ThaiTuanERP2025.Domain.Exceptions;
+using ThaiTuanERP2025.Api.Shared;
+using ThaiTuanERP2025.Application.Shared.Exceptions;
 using FVValidationException = FluentValidation.ValidationException;
 
 namespace ThaiTuanERP2025.Api.Middleware

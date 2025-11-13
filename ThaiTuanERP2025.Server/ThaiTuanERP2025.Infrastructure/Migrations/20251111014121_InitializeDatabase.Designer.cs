@@ -698,7 +698,7 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                     b.ToTable("RefreshTokens", "Auth");
                 });
 
-            modelBuilder.Entity("ThaiTuanERP2025.Domain.Common.Entities.DocumentSequence", b =>
+            modelBuilder.Entity("ThaiTuanERP2025.Domain.Shared.Entities.DocumentSequence", b =>
                 {
                     b.Property<string>("Key")
                         .HasMaxLength(100)
@@ -742,7 +742,7 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                     b.ToTable("DocumentSequences", (string)null);
                 });
 
-            modelBuilder.Entity("ThaiTuanERP2025.Domain.Common.Entities.NumberSeries", b =>
+            modelBuilder.Entity("ThaiTuanERP2025.Domain.Shared.Entities.NumberSeries", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -3067,7 +3067,7 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                     b.Navigation("ModifiedByUser");
                 });
 
-            modelBuilder.Entity("ThaiTuanERP2025.Domain.Common.Entities.DocumentSequence", b =>
+            modelBuilder.Entity("ThaiTuanERP2025.Domain.Shared.Entities.DocumentSequence", b =>
                 {
                     b.HasOne("ThaiTuanERP2025.Domain.Account.Entities.User", "CreatedByUser")
                         .WithMany()

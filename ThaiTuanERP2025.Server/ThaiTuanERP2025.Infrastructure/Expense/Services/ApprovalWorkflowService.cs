@@ -1,10 +1,10 @@
-﻿using ThaiTuanERP2025.Application.Common.Interfaces;
-using ThaiTuanERP2025.Application.Common.Utils;
+﻿using ThaiTuanERP2025.Application.Shared.Utils;
 using ThaiTuanERP2025.Application.Core.Followers;
-using ThaiTuanERP2025.Application.Exceptions;
 using ThaiTuanERP2025.Domain.Core.Enums;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Expense.Enums;
+using ThaiTuanERP2025.Domain.Shared.Repositories;
+using ThaiTuanERP2025.Application.Shared.Exceptions;
 
 namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 {
