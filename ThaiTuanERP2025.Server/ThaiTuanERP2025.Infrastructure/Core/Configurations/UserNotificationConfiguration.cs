@@ -25,9 +25,14 @@ namespace ThaiTuanERP2025.Infrastructure.Core.Configurations
 
 			builder.Property(n => n.ReadAt).HasColumnType("datetime2");
 
-			builder.HasOne(n => n.User)
+			builder.HasOne(n => n.Sender)
+			       .WithMany()
+			       .HasForeignKey(n => n.SenderId)
+			       .OnDelete(DeleteBehavior.NoAction);
+
+			builder.HasOne(n => n.Receiver)
 				.WithMany()
-				.HasForeignKey(n => n.UserId)
+				.HasForeignKey(n => n.ReceiverId)
 				.OnDelete(DeleteBehavior.Cascade);
 		}
 	}

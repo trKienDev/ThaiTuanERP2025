@@ -6,7 +6,10 @@
       <ng-container *ngIf="(notifications$ | async) as items; else loadingTpl">
             <ng-container *ngIf="items.length > 0; else emptyState">
                   <ul class="notification-list">
-                        <li class="notification-item" *ngFor="let n of items; trackBy: trackById" [class.unread]="!n.isRead" (click)="onClickItem(n)">
+                        <li class="notification-item display-flex align-items-center gap-10px" *ngFor="let n of items; trackBy: trackById" [class.unread]="!n.isRead" (click)="onClickItem(n)">
+                              <div class="sender">
+                                    <img class="avatar-user" [src]="n.sender | avatarUrlPipe" alt="avatar-user">
+                              </div>
                               <div class="content">
                                     <div class="title-wrapper display-flex gap-10px align-items-center">
                                           <div class="unread-dot" *ngIf="!n.isRead"></div>

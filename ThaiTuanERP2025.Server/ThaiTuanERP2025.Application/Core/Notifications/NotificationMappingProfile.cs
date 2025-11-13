@@ -9,6 +9,7 @@ namespace ThaiTuanERP2025.Application.Core.Notifications
 		public NotificationMappingProfile() {
 			CreateMap<UserNotification, UserNotificationDto>()
 				.ForMember(dest => dest.Link, opt => opt.MapFrom(src => src.LinkUrl))
+				.ForMember(dest => dest.Sender, opt => opt.MapFrom(src => src.Sender))
 				.ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => TimeZoneConverter.ToVietnamTime(src.CreatedAt))); 
 		}
 	}

@@ -18,9 +18,9 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.EventHandlers
 			_budgetPeriodRepo = budgetPeriodRepo;
 		}
 
-		public async Task Handle(BudgetPlanCreatedEvent notification, CancellationToken cancellationToken)
+		public async Task Handle(BudgetPlanCreatedEvent domainEvent, CancellationToken cancellationToken)
 		{
-			var budgetPeriod = await _budgetPeriodRepo.GetByIdProjectedAsync(notification.BudgetPlan.BudgetPeriodId, cancellationToken);
+			var budgetPeriod = await _budgetPeriodRepo.GetByIdProjectedAsync(domainEvent.BudgetPlan.BudgetPeriodId, cancellationToken);
 			if (budgetPeriod is null)
 				throw new KeyNotFoundException($"Không tìm thấy kỳ ngân sách ID");
 
@@ -30,21 +30,23 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.EventHandlers
 
 			// Gửi thông báo đến Reviewer
 			await _notification.SendAsync(
-				userId: notification.ReviewerUserId,
+				senderId: domainEvent.BudgetPlan.CreatedByUserId!.Value,
+				receiverId: domainEvent.ReviewerUserId,
 				title: "Kế hoạch ngân sách mới chờ xem xét",
 				message: message,
-				null,
-				NotificationType.Task,
-				cancellationToken
+				linkType: NotificationLinkType.BudgetPlanReview,   
+				targetId: domainEvent.BudgetPlanId,          
+				type: NotificationType.Task,
+				cancellationToken: cancellationToken
 			);
 
 			// Đặt nhắc việc (trước hạn 1 tiếng)
 			await _reminder.ScheduleReminderAsync(
-				userId: notification.ReviewerUserId,
+				userId: domainEvent.ReviewerUserId,
 				subject: "Xem xét kế hoạch ngân sách",
 				message: $"Kế hoạch ngân sách {budgetPlanName} cần bạn xem xét.",
 				slaHours: 8,
-				dueAt: notification.DueAt,
+				dueAt: domainEvent.DueAt,
 				null,
 				cancellationToken
 			);

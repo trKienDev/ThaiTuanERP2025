@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 namespace ThaiTuanERP2025.Infrastructure.Migrations
 {
     [DbContext(typeof(ThaiTuanERP2025DbContext))]
-    partial class ThaiTuanERP2025DbContextModelSnapshot : ModelSnapshot
+    [Migration("20251113045746_AddLinkToNotification")]
+    partial class AddLinkToNotification
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -609,12 +612,6 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                     b.Property<DateTime?>("ReadAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("ReceiverId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("SenderId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("TargetId")
                         .HasColumnType("uniqueidentifier");
 
@@ -626,11 +623,12 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ReceiverId");
-
-                    b.HasIndex("SenderId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserNotifications", "Core");
                 });
@@ -3010,21 +3008,13 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
 
             modelBuilder.Entity("ThaiTuanERP2025.Domain.Core.Entities.UserNotification", b =>
                 {
-                    b.HasOne("ThaiTuanERP2025.Domain.Account.Entities.User", "Receiver")
+                    b.HasOne("ThaiTuanERP2025.Domain.Account.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("ReceiverId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ThaiTuanERP2025.Domain.Account.Entities.User", "Sender")
-                        .WithMany()
-                        .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Receiver");
-
-                    b.Navigation("Sender");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ThaiTuanERP2025.Domain.Core.Entities.UserReminder", b =>

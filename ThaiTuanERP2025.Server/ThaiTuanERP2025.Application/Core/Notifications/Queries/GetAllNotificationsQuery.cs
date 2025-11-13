@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
+using ThaiTuanERP2025.Application.Account.Users;
 using ThaiTuanERP2025.Application.Shared.Interfaces;
+using ThaiTuanERP2025.Domain.Shared.Utils;
 
 namespace ThaiTuanERP2025.Application.Core.Notifications.Queries
 {
@@ -30,14 +32,32 @@ namespace ThaiTuanERP2025.Application.Core.Notifications.Queries
 			var pageSize = query.PageSize <= 0 || query.PageSize > 200 ? 30 : query.PageSize;
 
 			return await _notificationRepo.ListProjectedAsync(
-				q => q.Where(n => n.UserId == uid && !query.UnreadOnly || !n.IsRead)
+				q => q.Where(n => n.ReceiverId == uid && (!query.UnreadOnly || !n.IsRead))
 					.OrderByDescending(n => n.CreatedAt)
 					.Skip((page - 1) * pageSize)
 					.Take(pageSize)
-					.ProjectTo<UserNotificationDto>(_mapper.ConfigurationProvider),
+					.Select(n => new UserNotificationDto
+					{
+						Id = n.Id,
+						SenderId = n.SenderId,
+						Sender = new UserBriefAvatarDto
+						{
+							Id = n.Sender.Id,
+							FullName = n.Sender.FullName,
+							AvatarFileId = n.Sender.AvatarFileId,
+							AvatarFileObjectKey = n.Sender.AvatarFileObjectKey
+						},
+						Title = n.Title,
+						Message = n.Message,
+						Link = n.LinkUrl,
+						LinkType = n.LinkType,
+						TargetId = n.TargetId,
+						Type = n.Type,
+						CreatedAt = TimeZoneConverter.ToVietnamTime(n.CreatedAt),
+						IsRead = n.IsRead
+					}),
 				cancellationToken: cancellationToken
 			);
-
 		}
 	}
 }

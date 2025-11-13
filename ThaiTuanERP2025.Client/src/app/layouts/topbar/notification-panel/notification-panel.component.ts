@@ -3,12 +3,13 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { RouterModule } from "@angular/router";
 import { NotificationDto } from "./models/notification.model";
 import { Observable } from "rxjs";
+import { AvatarUrlPipe } from "../../../shared/pipes/avatar-url.pipe";
 
 @Component({
       selector: 'app-notification-panel',
       standalone: true,
       templateUrl: './notification-panel.component.html',
-      imports: [ CommonModule, RouterModule ],
+      imports: [CommonModule, RouterModule, AvatarUrlPipe],
       styleUrls: ['./notification-panel.component.scss'],
       changeDetection: ChangeDetectionStrategy.OnPush
 })

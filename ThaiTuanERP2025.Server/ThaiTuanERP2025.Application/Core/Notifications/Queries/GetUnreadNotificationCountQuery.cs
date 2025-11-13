@@ -18,7 +18,7 @@ namespace ThaiTuanERP2025.Application.Core.Notifications.Queries
 			var uid = _currentUser.UserId;
 
 			return await _notificationRepo.CountAsync(
-				n => n.UserId == uid && !n.IsRead,
+				n => n.ReceiverId == uid && !n.IsRead,
 				cancellationToken: cancellationToken
 			);
 			
