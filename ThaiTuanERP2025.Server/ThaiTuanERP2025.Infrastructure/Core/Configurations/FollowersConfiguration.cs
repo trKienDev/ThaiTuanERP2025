@@ -13,15 +13,9 @@ namespace ThaiTuanERP2025.Infrastructure.Core.Configurations
 
 			builder.HasKey(f => f.Id);
 
-			// ===== Value Object: SubjectRef =====
-			builder.OwnsOne(x => x.Subject, subject =>
-			{
-				subject.Property(s => s.Type).HasConversion<int>().HasColumnName("Subject_Type").IsRequired();
-				subject.Property(s => s.Id).HasColumnName("Subject_Id").IsRequired();
-				subject.WithOwner();
-			});
-
 			// ===== Properties =====
+			builder.Property(x => x.SubjectId).IsRequired();
+			builder.Property(x => x.SubjectType).IsRequired().HasConversion<int>();
 			builder.Property(x => x.UserId).IsRequired();
 			builder.Property(x => x.IsActive).IsRequired();
 

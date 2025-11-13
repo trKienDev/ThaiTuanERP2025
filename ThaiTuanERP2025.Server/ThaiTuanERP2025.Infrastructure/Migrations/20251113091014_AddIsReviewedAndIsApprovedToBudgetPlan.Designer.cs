@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 namespace ThaiTuanERP2025.Infrastructure.Migrations
 {
     [DbContext(typeof(ThaiTuanERP2025DbContext))]
-    partial class ThaiTuanERP2025DbContextModelSnapshot : ModelSnapshot
+    [Migration("20251113091014_AddIsReviewedAndIsApprovedToBudgetPlan")]
+    partial class AddIsReviewedAndIsApprovedToBudgetPlan
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -568,12 +571,6 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
 
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid>("SubjectId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("SubjectType")
-                        .HasColumnType("int");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -2230,10 +2227,10 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
-                    b.Property<Guid>("SelectedApproverId")
+                    b.Property<Guid?>("SelectedBudgetApproverId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("SelectedReviewerId")
+                    b.Property<Guid?>("SelectedReviewerUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Status")
@@ -2993,11 +2990,35 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                         .HasForeignKey("ModifiedByUserId")
                         .OnDelete(DeleteBehavior.NoAction);
 
+                    b.OwnsOne("ThaiTuanERP2025.Domain.Followers.ValueObjects.SubjectRef", "Subject", b1 =>
+                        {
+                            b1.Property<Guid>("FollowerId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<Guid>("Id")
+                                .HasColumnType("uniqueidentifier")
+                                .HasColumnName("Subject_Id");
+
+                            b1.Property<int>("Type")
+                                .HasColumnType("int")
+                                .HasColumnName("Subject_Type");
+
+                            b1.HasKey("FollowerId");
+
+                            b1.ToTable("Followers", "Core");
+
+                            b1.WithOwner()
+                                .HasForeignKey("FollowerId");
+                        });
+
                     b.Navigation("CreatedByUser");
 
                     b.Navigation("DeletedByUser");
 
                     b.Navigation("ModifiedByUser");
+
+                    b.Navigation("Subject")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ThaiTuanERP2025.Domain.Core.Entities.UserNotification", b =>

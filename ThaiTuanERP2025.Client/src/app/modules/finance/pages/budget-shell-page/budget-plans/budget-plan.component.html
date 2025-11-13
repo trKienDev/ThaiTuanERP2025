@@ -13,6 +13,37 @@
             </div>
       </div>
       <div class="page-body">
-            
+            <table class="table">
+                  <thead>
+                        <tr>
+                              <th>#</th>
+                              <th>Mã ngân sách</th>
+                              <th>Phòng ban</th>
+                              <th>Kỳ ngân sách</th>
+                              <th>Tổng tiền</th>
+                              <th>Ngày lập</th>
+                              <th>Xem xét</th>
+                              <th>Phê duyệt</th>
+                              <th></th>
+                        </tr>
+                  </thead>
+                  <tbody *ngIf="myBudgetPlans.length > 0">
+                        <tr *ngFor="let plan of myBudgetPlans; trackBy: trackById; let i = index;">
+                              <td>{{ i + 1 }}</td>
+                              <td>{{ plan.budgetCode.name }}</td>
+                              <td>{{ plan.department.name }}</td>
+                              <td>T{{ plan.budgetPeriod.month }} - {{ plan.budgetPeriod.year }}</td>
+                              <td>{{ plan.amount  | number: '1.0-0' }}</td>
+                              <td>{{ plan.createdDate | date:'dd/MM/yyyy HH:mm' }}</td>
+                              <td>
+                                    <input type="checkbox" [checked]="plan.isReviewed" disabled />
+                              </td>
+                              <td>
+                                    <input type="checkbox" [checked]="plan.isApproved" disabled />
+                              </td>
+                              <td></td>
+                        </tr>
+                  </tbody>
+            </table>
       </div>
 </div>

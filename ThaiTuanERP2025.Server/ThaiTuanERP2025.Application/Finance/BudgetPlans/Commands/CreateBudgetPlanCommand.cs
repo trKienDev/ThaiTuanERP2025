@@ -1,8 +1,11 @@
 ﻿using MediatR;
-using ThaiTuanERP2025.Domain.Shared;
-using ThaiTuanERP2025.Domain.Finance.Entities;
-using ThaiTuanERP2025.Domain.Shared.Repositories;
 using ThaiTuanERP2025.Application.Shared.Exceptions;
+using ThaiTuanERP2025.Application.Shared.Interfaces;
+using ThaiTuanERP2025.Domain.Core.Entities;
+using ThaiTuanERP2025.Domain.Core.Enums;
+using ThaiTuanERP2025.Domain.Finance.Entities;
+using ThaiTuanERP2025.Domain.Shared;
+using ThaiTuanERP2025.Domain.Shared.Repositories;
 
 namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Commands
 {
@@ -17,9 +20,11 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Commands
 
 	public sealed class CreateBudgetPlanCommandHandler : IRequestHandler<CreateBudgetPlanCommand, Unit> {
 		private readonly IUnitOfWork _uow;
-		public CreateBudgetPlanCommandHandler(IUnitOfWork uow)
+		private readonly ICurrentUserService _currentUser;
+		public CreateBudgetPlanCommandHandler(IUnitOfWork uow, ICurrentUserService currentUser)
 		{
 			_uow = uow;
+			_currentUser = currentUser;
 		}
 
 		public async Task<Unit> Handle(CreateBudgetPlanCommand command, CancellationToken cancellationToken) {
@@ -47,6 +52,18 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Commands
 
 			var entity = new BudgetPlan(command.DepartmentId, command.BudgetCodeId, command.BudgetPeriodId, command.Amount, command.ReviewerId, command.ApproverId);
 			await _uow.BudgetPlans.AddAsync(entity, cancellationToken);
+
+			var creatorId = _currentUser.UserId ?? throw new InvalidOperationException("CreatedByUserId is null, không thể auto-follow BudgetPlan.");
+			var reviewerId = entity.SelectedReviewerId;
+			var approverId = entity.SelectedApproverId;
+			var followers = new List<Follower>
+			{
+				new Follower(entity.Id, SubjectType.BudgetPlan, creatorId),
+				new Follower(entity.Id, SubjectType.BudgetPlan, reviewerId),
+				new Follower(entity.Id, SubjectType.BudgetPlan, approverId)
+			};
+			await _uow.Followers.AddRangeAsync(followers, cancellationToken);
+
 			await _uow.SaveChangesAsync(cancellationToken);
 
 			return Unit.Value;

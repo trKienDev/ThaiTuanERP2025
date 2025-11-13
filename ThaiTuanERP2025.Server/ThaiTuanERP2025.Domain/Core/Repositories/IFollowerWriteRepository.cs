@@ -3,7 +3,7 @@ using ThaiTuanERP2025.Domain.Core.Entities;
 
 namespace ThaiTuanERP2025.Domain.Core.Repositories
 {
-	public interface IFollowerRepository : IBaseWriteRepository<Follower>
+	public interface IFollowerWriteRepository : IBaseWriteRepository<Follower>
 	{
 	}
 }

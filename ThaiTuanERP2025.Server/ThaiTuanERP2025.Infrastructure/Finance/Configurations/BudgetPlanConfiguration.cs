@@ -18,6 +18,8 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 			builder.Property(x => x.IsActive).IsRequired();
 			builder.Property(x => x.Status).HasConversion<int>().IsRequired();
 			builder.Property(x => x.RowVersion).IsRowVersion(); // concurrency token
+			builder.Property(x => x.IsReviewed).HasDefaultValue(false);
+			builder.Property(x => x.IsApproved).HasDefaultValue(false);
 
 			// ===== Relationships =====
 			builder.HasOne(x => x.BudgetCode)

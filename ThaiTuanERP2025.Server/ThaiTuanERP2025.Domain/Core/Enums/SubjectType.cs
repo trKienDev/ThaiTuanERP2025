@@ -2,8 +2,12 @@
 {
 	public enum SubjectType
 	{
-		ExpensePayment = 1,
-		OutgoingPayment = 2,
-		Invoice = 3,
+		// Finance
+		BudgetPlan = 11,
+
+		// Expense
+		ExpensePayment = 21,
+		OutgoingPayment = 22,
+		Invoice = 23,
 	}
 }

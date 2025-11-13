@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using MediatR;
 using ThaiTuanERP2025.Application.Account.Users;
 using ThaiTuanERP2025.Application.Shared.Interfaces;
@@ -16,12 +15,10 @@ namespace ThaiTuanERP2025.Application.Core.Notifications.Queries
 
 	public sealed class GetAllNotificationsQueryHandler : IRequestHandler<GetAllNotificationsQuery, IReadOnlyCollection<UserNotificationDto>> {
 		private readonly IUserNotificationReadRepository _notificationRepo;
-		private readonly IMapper _mapper;
 		private readonly ICurrentUserService _currentUser;
-		public GetAllNotificationsQueryHandler(IUserNotificationReadRepository notificationRepo, IMapper mapper, ICurrentUserService currentUser)
+		public GetAllNotificationsQueryHandler(IUserNotificationReadRepository notificationRepo, ICurrentUserService currentUser)
 		{
 			_notificationRepo = notificationRepo;
-			_mapper = mapper;
 			_currentUser = currentUser;
 		}
 

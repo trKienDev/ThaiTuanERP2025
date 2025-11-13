@@ -20,8 +20,8 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			this.BudgetCodeId = budgetCodeId;
 			this.BudgetPeriodId = budgetPeriodId;
 			this.Amount = amount;
-			SelectedReviewerUserId = reviewerId;
-			SelectedBudgetApproverId = approverId;
+			SelectedReviewerId = reviewerId;
+			SelectedApproverId = approverId;
 
 			Status = BudgetPlanStatus.Draft;
 			this.IsActive = true;
@@ -46,13 +46,14 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		private readonly List<BudgetTransaction> _transactions = new();
 		public IReadOnlyCollection<BudgetTransaction> Transactions => _transactions.AsReadOnly();
 
-		public Guid? SelectedReviewerUserId { get; private set; }
+		public bool IsReviewed { get; private set; } = false;
+		public Guid SelectedReviewerId { get; private set; }
 		public Guid? ReviewedByUserId { get; private set; }
 		public User? ReviewedByUser { get; init; }
 		public DateTime? ReviewedAt { get; private set; }
 
-
-		public Guid? SelectedBudgetApproverId { get; private set; } = default!;
+		public bool IsApproved { get; private set; } = false;
+		public Guid SelectedApproverId { get; private set; }
 		public BudgetApprover? BudgetApprover { get; init; }
 		public DateTime? ApprovalDeadline { get; private set; } = default;
 
@@ -181,7 +182,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			Guard.AgainstNull(budgetApprover, nameof(budgetApprover));
 
 			ApprovedByUserId = budgetApprover.ApproverUserId;
-			SelectedBudgetApproverId = budgetApprover.Id;
+			SelectedApproverId = budgetApprover.Id;
 			ApprovalDeadline = DateTime.UtcNow.AddHours(budgetApprover.SlaHours);
 			Status = BudgetPlanStatus.Reviewed;
 

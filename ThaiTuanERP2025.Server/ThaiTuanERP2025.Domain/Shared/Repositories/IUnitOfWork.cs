@@ -51,7 +51,7 @@ namespace ThaiTuanERP2025.Domain.Shared.Repositories
 		IExpensePaymentCommentTagRepository ExpensePaymentCommentTags { get; }
 
 		// Core
-		IFollowerRepository Followers { get; }
+		IFollowerWriteRepository Followers { get; }
 		IUserNotificationWriteRepository UserNotifications { get; }
 		IUserReminderWriteRepository UserReminders { get; }
 

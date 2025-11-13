@@ -55,7 +55,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 			IExpensePaymentCommentAttachmentRepository expensePaymentCommentAttachments,
 
 			// Core
-			IFollowerRepository followers,
+			IFollowerWriteRepository followers,
 			IUserNotificationWriteRepository userNotifications,
 			IUserReminderWriteRepository userReminders,
 
@@ -152,7 +152,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 		public IExpensePaymentCommentTagRepository ExpensePaymentCommentTags { get; }
 
 		// Core
-		public IFollowerRepository Followers { get; }
+		public IFollowerWriteRepository Followers { get; }
 		public IUserNotificationWriteRepository UserNotifications { get; }
 		public IUserReminderWriteRepository UserReminders { get; }
 

@@ -51,6 +51,7 @@ using ThaiTuanERP2025.Infrastructure.StoredFiles.FileStorage;
 using ThaiTuanERP2025.Infrastructure.StoredFiles.Repositories;
 using ThaiTuanERP2025.Infrastructure.Shared.Repositories;
 using ThaiTuanERP2025.Domain.Shared.Repositories;
+using ThaiTuanERP2025.Application.Core.Followers;
 
 namespace ThaiTuanERP2025.Infrastructure
 {
@@ -126,9 +127,10 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IExpensePaymentCommentRepository, ExpensePaymentCommentRepository>();
 			services.AddScoped<IExpensePaymentCommentTagRepository, ExpensePaymentCommentTagRepository>();
 			services.AddScoped<IExpensePaymentCommentAttachmentRepository, ExpensePaymentCommentAttachmentRepository>();
-			
+
 			// Core
-			services.AddScoped<IFollowerRepository, FollowerRepository>();
+			services.AddScoped<IFollowerReadRepository, FollowerReadRepository>();
+			services.AddScoped<IFollowerWriteRepository, FollowerWriteRepository>();
 			services.AddScoped<IUserNotificationReadRepository, UserNotificationReadRepository>();
 			services.AddScoped<IUserNotificationWriteRepository, UserNotificationWriteRepository>();
 			services.AddScoped<IUserReminderReadRepository, UserReminderReadRepository>();

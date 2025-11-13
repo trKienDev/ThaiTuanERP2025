@@ -1,6 +1,6 @@
 ﻿namespace ThaiTuanERP2025.Application.Finance.BudgetPeriods
 {
-	public record BudgetPeriodDto
+	public sealed record BudgetPeriodDto
 	{
 		public Guid Id { get; init; }
 		public int Year { get; init; }

@@ -1,24 +1,26 @@
 ﻿using ThaiTuanERP2025.Domain.Shared;
 using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
-using ThaiTuanERP2025.Domain.Followers.ValueObjects;
+using ThaiTuanERP2025.Domain.Core.Enums;
 
 namespace ThaiTuanERP2025.Domain.Core.Entities
 {
 	public class Follower : AuditableEntity
 	{
-		public SubjectRef Subject { get; private set; } = default!;
+		public Guid SubjectId { get; private set; }
+		public SubjectType SubjectType { get; private set; }
 		public Guid UserId { get; private set; }
 		public bool IsActive { get; private set; } = true;
 
 		#region Constructors
 		private Follower() { } 
-		public Follower(SubjectRef subject, Guid userId)
+		public Follower(Guid subjectId, SubjectType subjectType, Guid userId)
 		{
 			Guard.AgainstDefault(userId, nameof(userId));
 
 			Id = Guid.NewGuid();
-			Subject = subject;
+			SubjectId = subjectId;
+			SubjectType = subjectType;
 			UserId = userId;
 			IsActive = true;
 

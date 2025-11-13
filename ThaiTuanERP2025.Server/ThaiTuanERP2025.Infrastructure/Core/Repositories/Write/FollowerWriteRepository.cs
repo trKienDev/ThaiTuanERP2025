@@ -6,9 +6,9 @@ using ThaiTuanERP2025.Domain.Core.Repositories;
 
 namespace ThaiTuanERP2025.Infrastructure.Core.Repositories
 {
-	public sealed class FollowerRepository : BaseWriteRepository<Follower>, IFollowerRepository
+	public sealed class FollowerWriteRepository : BaseWriteRepository<Follower>, IFollowerWriteRepository
 	{
-		public FollowerRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider)
+		public FollowerWriteRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider)
 			: base(dbContext, configurationProvider) { }
 	}
 }

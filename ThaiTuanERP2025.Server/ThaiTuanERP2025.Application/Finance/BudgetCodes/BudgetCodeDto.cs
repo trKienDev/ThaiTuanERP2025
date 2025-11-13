@@ -1,6 +1,6 @@
 ﻿namespace ThaiTuanERP2025.Application.Finance.BudgetCodes
 {
-	public class BudgetCodeDto
+	public sealed record BudgetCodeDto
 	{
 		public Guid Id { get; set; }
 		public string Code { get; set; } = null!;
