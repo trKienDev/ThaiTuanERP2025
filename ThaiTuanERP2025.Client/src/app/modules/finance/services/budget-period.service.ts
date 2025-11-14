@@ -21,6 +21,13 @@ export class BudgetPeriodService extends BaseCrudService<BudgetPeriodDto, Budget
                   );
       }
 
+      getYears() {
+            return this.http.get<ApiResponse<number[]>>(`${this.endpoint}/years`)
+                  .pipe(
+                        handleApiResponse$<number[]>(),
+                        catchError(err => throwError(() => err))
+                  );
+      }
 
       getForYear(year: number) {
             return this.http.get<ApiResponse<BudgetPeriodDto[]>>(`${this.endpoint}/year/${year}`)

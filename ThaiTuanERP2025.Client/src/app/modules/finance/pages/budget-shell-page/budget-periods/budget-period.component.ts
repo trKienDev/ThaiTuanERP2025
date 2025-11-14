@@ -32,10 +32,6 @@ export class BudgetPeriodPanelComponent implements OnInit {
       public isLoading = false;
       public submitting = false;
 
-      constructor() {
-            console.log('[DBG][group] HasPermissionDirective symbol (top-level):', HasPermissionDirective);
-      }
-
       autoGenerateForm = this.formBuilder.group({
             year: this.formBuilder.control<number>(this.now.getFullYear(), { nonNullable: true, validators: [ Validators.required ] }),
       });
@@ -48,7 +44,6 @@ export class BudgetPeriodPanelComponent implements OnInit {
       }
 
       async loadBudgetPeriodsForYear() {
-            console.log('load');
             this.isLoading = true;
             try {
                   const year = this.autoGenerateForm.getRawValue().year;

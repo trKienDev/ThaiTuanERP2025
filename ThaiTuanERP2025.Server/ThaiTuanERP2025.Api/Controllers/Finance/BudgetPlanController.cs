@@ -19,9 +19,9 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 			_mediator = mediator;
 		}
 
-		[HttpGet("following")]
-		public async Task<IActionResult> GetByMyDepartment(CancellationToken cancellationToken) {
-			var result = await _mediator.Send(new GetFollowingBudgetPlansQuery(), cancellationToken);
+		[HttpGet("following/{periodId:guid}")]
+		public async Task<IActionResult> GetByMyDepartment([FromRoute] Guid periodId, CancellationToken cancellationToken) {
+			var result = await _mediator.Send(new GetFollowingBudgetPlansByPeriodQuery(periodId), cancellationToken);
 			return Ok(ApiResponse<IReadOnlyList<BudgetPlanDto>>.Success(result));
 		}
 

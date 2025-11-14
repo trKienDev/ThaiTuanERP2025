@@ -13,8 +13,8 @@ export class BudgetPlanService extends BaseCrudService<BudgetPlanDto, BudgetPlan
             super(http, `${environment.apiUrl}/budget-plan`);
       }
 
-      getByMyDepartment(): Observable<BudgetPlanDto[]> {
-            return this.http.get<ApiResponse<BudgetPlanDto[]>>(`${this.endpoint}/following`)
+      getFollowing(budgetPeriodId: string): Observable<BudgetPlanDto[]> {
+            return this.http.get<ApiResponse<BudgetPlanDto[]>>(`${this.endpoint}/following/${budgetPeriodId}`)
                   .pipe(handleApiResponse$<BudgetPlanDto[]>());
       }
 }

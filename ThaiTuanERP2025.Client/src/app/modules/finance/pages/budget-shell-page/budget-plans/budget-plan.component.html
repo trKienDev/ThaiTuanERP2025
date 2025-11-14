@@ -5,6 +5,26 @@
                   <h3 class="title">Kế hoạch ngân sách</h3>
             </div>
             <div class="display-flex gap-10px">
+                  <div class="">
+                        <form class="display-flex gap-10px height-100pt" [formGroup]="periodForm">
+                              <div class="display-flex gap-5px align-items-center">
+                                    <label for="period-year">Năm</label>
+                                    <select class="select height-100pt" id="period-year" formControlName="year">
+                                          <option class="option" *ngFor="let y of (years$ | async) ?? []" [ngValue]="y">
+                                                {{ y }}
+                                          </option>
+                                    </select>
+                              </div>
+                              <div class="display-flex gap-5px align-items-center">
+                                    <label for="period-month">Tháng</label>
+                                    <select class="select height-100pt" id="period-month" formControlName="month">
+                                          <option class="option" *ngFor="let m of (months$ | async) ?? []" [ngValue]="m">
+                                                Tháng {{ m }}
+                                          </option>
+                                    </select>
+                              </div>
+                        </form>
+                  </div>
                   <ng-container *appHasPermission="'budget-approver.create'">
                         <button type="button" class="button default-button" (click)="openBudgetPlanApproversDialog();">Thêm người duyệt ngân sách</button>
                   </ng-container>
@@ -27,22 +47,27 @@
                               <th></th>
                         </tr>
                   </thead>
-                  <tbody *ngIf="myBudgetPlans.length > 0">
-                        <tr *ngFor="let plan of myBudgetPlans; trackBy: trackById; let i = index;">
-                              <td>{{ i + 1 }}</td>
-                              <td>{{ plan.budgetCode.name }}</td>
-                              <td>{{ plan.department.name }}</td>
-                              <td>T{{ plan.budgetPeriod.month }} - {{ plan.budgetPeriod.year }}</td>
-                              <td>{{ plan.amount  | number: '1.0-0' }}</td>
-                              <td>{{ plan.createdDate | date:'dd/MM/yyyy HH:mm' }}</td>
-                              <td>
-                                    <input type="checkbox" [checked]="plan.isReviewed" disabled />
-                              </td>
-                              <td>
-                                    <input type="checkbox" [checked]="plan.isApproved" disabled />
-                              </td>
-                              <td></td>
-                        </tr>
+                  <tbody>
+                        <ng-container *ngIf="budgetPlans.length > 0">
+                              <tr *ngFor="let plan of budgetPlans; trackBy: trackById; let i = index;">
+                                    <td>{{ i + 1 }}</td>
+                                    <td>{{ plan.budgetCode.name }}</td>
+                                    <td>{{ plan.department.name }}</td>
+                                    <td>T{{ plan.budgetPeriod.month }} - {{ plan.budgetPeriod.year }}</td>
+                                    <td>{{ plan.amount  | number: '1.0-0' }}</td>
+                                    <td>{{ plan.createdDate | date:'dd/MM/yyyy HH:mm' }}</td>
+                                    <td>
+                                          <input type="checkbox" [checked]="plan.isReviewed" disabled />
+                                    </td>
+                                    <td>
+                                          <input type="checkbox" [checked]="plan.isApproved" disabled />
+                                    </td>
+                                    <td></td>
+                              </tr>
+                        </ng-container> 
+                        <ng-container *ngIf="budgetPlans.length === 0">
+                              <td colspan="10" class="text-center">Không có dữ liệu.</td>
+                        </ng-container>
                   </tbody>
             </table>
       </div>
