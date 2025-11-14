@@ -4,6 +4,17 @@ using ThaiTuanERP2025.Application.Finance.BudgetPeriods;
 
 namespace ThaiTuanERP2025.Application.Finance.BudgetPlans
 {
+	public sealed record BudgetPlansByDepartmentDto
+	{
+		public Guid DepartmentId { get; set; }
+		public string DepartmentName { get; set; } = default!;
+		public int Year { get; set; }
+		public int Month { get; set; }
+		public decimal TotalAmount { get; set; }
+
+		public IReadOnlyList<BudgetPlanDto> BudgetPlans { get; set; } = new List<BudgetPlanDto>();
+	}
+
 	public sealed record BudgetPlanDto
 	{
 		public Guid Id { get; init; }

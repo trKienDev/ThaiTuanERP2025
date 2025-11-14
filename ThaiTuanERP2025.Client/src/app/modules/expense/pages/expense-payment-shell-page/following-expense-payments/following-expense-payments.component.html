@@ -29,7 +29,7 @@
                         <tbody>
                               <tr *ngFor="let payment of paymentsSig(); trackBy: trackById">
                                     <td>
-                                          <span class="payment-name" (click)="openExpensePaymentDetailDialog(payment.id)">
+                                          <span class="link-text" (click)="openExpensePaymentDetailDialog(payment.id)">
                                                 {{ payment.name }}
                                           </span>
                                     </td>

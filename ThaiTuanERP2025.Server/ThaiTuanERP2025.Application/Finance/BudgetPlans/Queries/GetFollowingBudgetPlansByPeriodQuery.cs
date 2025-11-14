@@ -10,9 +10,9 @@ using ThaiTuanERP2025.Domain.Shared;
 
 namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Queries
 {
-	public sealed record GetFollowingBudgetPlansByPeriodQuery(Guid PeriodId) : IRequest<IReadOnlyList<BudgetPlanDto>>;
+	public sealed record GetFollowingBudgetPlansByPeriodQuery(Guid PeriodId) : IRequest<IReadOnlyList<BudgetPlansByDepartmentDto>>;
 
-	public sealed class GetFollowingBudgetPlansByPeriodQueryHandler : IRequestHandler<GetFollowingBudgetPlansByPeriodQuery, IReadOnlyList<BudgetPlanDto>>
+	public sealed class GetFollowingBudgetPlansByPeriodQueryHandler : IRequestHandler<GetFollowingBudgetPlansByPeriodQuery, IReadOnlyList<BudgetPlansByDepartmentDto>>
 	{
 		private readonly IBudgetPlanReadRepository _budgetPlanRepo;
 		private readonly ICurrentUserService _currentUser;
@@ -22,8 +22,7 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Queries
 		public GetFollowingBudgetPlansByPeriodQueryHandler(
 			IMapper mapper, IBudgetPlanReadRepository budgetPlanRepo, ICurrentUserService currentUser, IFollowerReadRepository followerRepo,
 			IBudgetPeriodReadRepository budgetPeriodRepo
-		)
-		{
+		) {
 			_budgetPlanRepo = budgetPlanRepo;
 			_currentUser = currentUser;
 			_followerRepo = followerRepo;	
@@ -31,9 +30,10 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Queries
 			_budgetPeriodRepo = budgetPeriodRepo;
 		}
 
-		public async Task<IReadOnlyList<BudgetPlanDto>> Handle(GetFollowingBudgetPlansByPeriodQuery query, CancellationToken cancellationToken)
+		public async Task<IReadOnlyList<BudgetPlansByDepartmentDto>> Handle(GetFollowingBudgetPlansByPeriodQuery query, CancellationToken cancellationToken)
 		{
 			Guard.AgainstNullOrEmptyGuid(query.PeriodId, nameof(query.PeriodId));
+
 			var budgetPeriod = await _budgetPeriodRepo.ExistAsync(q => q.Id == query.PeriodId, cancellationToken);
 			if (!budgetPeriod) throw new NotFoundException("Kỳ ngân sách không hợp lệ");
 
@@ -46,9 +46,10 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Queries
 
 			var subjectIds = following.Select(f => f.SubjectId).ToList();
 			if (!subjectIds.Any())
-				return Array.Empty<BudgetPlanDto>();
+				return Array.Empty<BudgetPlansByDepartmentDto>();
 
-			return await _budgetPlanRepo.ListProjectedAsync(
+			// 1. Lấy toàn bộ kế hoạch theo kỳ ngân sách
+			var plans = await _budgetPlanRepo.ListProjectedAsync(
 				q => q.Where(p => subjectIds.Contains(p.Id)
 					&& p.IsActive
 					&& !p.IsDeleted
@@ -56,6 +57,27 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Queries
 				).ProjectTo<BudgetPlanDto>(_mapper.ConfigurationProvider),
 				cancellationToken: cancellationToken
 			);
+			if(!plans.Any()) return Array.Empty<BudgetPlansByDepartmentDto>();
+
+			var result = plans
+				.GroupBy(p => new {
+					DepartmentId = p.Department.Id,
+					DepartmentName = p.Department.Name,
+					p.BudgetPeriod.Year,
+					p.BudgetPeriod.Month
+				})
+				.Select(g => new BudgetPlansByDepartmentDto {
+					DepartmentId = g.Key.DepartmentId,
+					DepartmentName = g.Key.DepartmentName,
+					Year = g.Key.Year,
+					Month = g.Key.Month,
+					TotalAmount = g.Sum(x => x.Amount),
+					BudgetPlans = g.ToList()
+				})
+				.ToList();
+
+			return result;
+
 		}
 	}
 }

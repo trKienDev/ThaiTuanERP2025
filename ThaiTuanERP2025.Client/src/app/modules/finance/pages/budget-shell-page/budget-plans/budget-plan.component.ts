@@ -1,4 +1,4 @@
-import { BudgetPlanDto } from './../../../models/budget-plan.model';
+import { BudgetPlanDto, BudgetPlansByDepartmentDto } from './../../../models/budget-plan.model';
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
@@ -11,6 +11,7 @@ import { BudgetPlanService } from "../../../services/budget-plan.service";
 import { combineLatest, distinctUntilChanged, filter, firstValueFrom, map, shareReplay, startWith, Subject, takeUntil } from 'rxjs';
 import { BudgetPeriodFacade } from '../../../facades/budget-period.facade';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { BudgetPlanDetailDialogComponent } from '../../../components/budget-plan-detail-dialog/budget-plan-detail-dialog.component';
 
 @Component({
       selector: 'budget-plan-panel',
@@ -23,7 +24,9 @@ export class BudgetPlanPanelComponent implements OnInit, OnDestroy {
       private readonly toastSer = inject(ToastService);
       private readonly budgetPlanService = inject(BudgetPlanService);
       private readonly formBuilder = inject(FormBuilder);
-      budgetPlans: BudgetPlanDto[] = [];
+      private readonly matDialog = inject(MatDialog);
+
+      budgetPlansByDepartment: BudgetPlansByDepartmentDto[] = [];
 
       private readonly destroy$ = new Subject<void>();
 
@@ -132,13 +135,13 @@ export class BudgetPlanPanelComponent implements OnInit, OnDestroy {
       }
 
       private async loadBudgetPlans(budgetPeriodId: string) {
-            this.budgetPlans = await firstValueFrom(this.budgetPlanService.getFollowing(budgetPeriodId))
-            console.log('plans: ', this.budgetPlans);
+            this.budgetPlansByDepartment = await firstValueFrom(this.budgetPlanService.getFollowing(budgetPeriodId))
+            console.log('plans: ', this.budgetPlansByDepartment);
       }
 
       // =============================
 
-      trackById(index: number, item: BudgetPlanDto) { return item.id; }
+      trackById(index: number, item: BudgetPlansByDepartmentDto) { return item.departmentId; }
 
       openBudgetPlanRequestDialog() {
             const dialogRef = this.dialog.open(BudgetPlanRequestDialogComponent, {});
@@ -155,6 +158,11 @@ export class BudgetPlanPanelComponent implements OnInit, OnDestroy {
             dialogRef.afterClosed().subscribe();
       }
 
+      openBudgetPlanDetailDialog(plan: BudgetPlansByDepartmentDto) {
+            this.matDialog.open(BudgetPlanDetailDialogComponent, { data: plan });
+      }
+
+      // ===== Destroy ====
       ngOnDestroy(): void {
             this.destroy$.next();
             this.destroy$.complete();
