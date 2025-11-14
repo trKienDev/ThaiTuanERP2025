@@ -1,6 +1,11 @@
 <div class="dialog">
       <div class="dialog-container">
             <div class="dialog-heading">
+                  <ng-container *ngIf="canReview">
+                        <div class="display-flex align-items-center">
+                              <kit-spinner-button type="button" cssClass="save-button" [loading]="submitting" text="Gửi phê duyệt"></kit-spinner-button>
+                        </div>
+                  </ng-container>
                   <div class="dialog-title">
                         <h1>Chi tiết ngân sách - 
                               <span style="color: var(--bright-blue-color);">{{ deparmtentName }}</span>
@@ -23,7 +28,7 @@
                                     <th>Xem xét</th>
                                     <th>Phê duyệt</th>
                                     <th>Ngày tạo</th>
-                                    <th *ngIf="canEdit">Chỉnh sửa</th>
+                                    <th *ngIf="canReview">Chỉnh sửa</th>
                               </tr>
                         </thead>
                         <tbody>
@@ -32,7 +37,14 @@
                                           <td>{{ i + 1 }}</td>
                                           <td>{{ plan.budgetCode.name }}</td>
                                           <td>T{{plan.budgetPeriod.month}}/{{plan.budgetPeriod.year}}</td>
-                                          <td>{{ plan.amount | number: '1.0-0' }} VNĐ</td>
+                                          <td>
+                                                <ng-container *ngIf="!plan.isEditing; else editAmount">
+                                                      {{ plan.amount | number: '1.0-0' }} VNĐ
+                                                </ng-container>
+                                                <ng-template #editAmount>
+                                                      <input class="" type="text" [(ngModel)]="plan.editedAmount" inputmode="decimal" appMoney [appMoneyDecimals]="0" required/>
+                                                </ng-template>
+                                          </td>
                                           <td>
                                                 <input type="checkbox" [checked]="plan.isReviewed" disabled />
                                           </td>
@@ -40,8 +52,16 @@
                                                 <input type="checkbox" [checked]="plan.isApproved" disabled />
                                           </td>
                                           <td>{{ plan.createdDate | date:'dd/MM/yyyy'  }}</td>
-                                          <td *ngIf="canEdit">
-                                                <button type="button" class="button default-button">Sửa</button>
+                                          <td *ngIf="canReview">
+                                                <ng-container *ngIf="!plan.isEditing; else editButtons">
+                                                      <button type="button" class="button default-button" (click)="enableEdit(plan)">Sửa</button>
+                                                </ng-container>
+                                                <ng-template #editButtons>
+                                                      <div class="display-flex gap-5px">
+                                                            <kit-spinner-button type="button" cssClass="pintura-button" [loading]="submitting" text="Lưu" (click)="savePlan(plan)"></kit-spinner-button>
+                                                            <button type="button"class="button cancel-button" (click)="cancelEdit(plan)">Hủy</button>
+                                                      </div>
+                                                </ng-template>
                                           </td>
                                     </tr>
                               </ng-container>

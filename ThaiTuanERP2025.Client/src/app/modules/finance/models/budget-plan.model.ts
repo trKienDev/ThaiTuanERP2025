@@ -29,7 +29,12 @@ export interface BudgetPlanDto {
       budgetPeriod: BudgetPeriodDto;
 
       SelectedReviewerId?: string | null;
-      canEdit: boolean;
+      canReview: boolean;
+}
+
+export interface BudgetPlanReview extends BudgetPlanDto {
+      isEditing: boolean;
+      editedAmount: number;
 }
 
 export interface BudgetPlanRequest {

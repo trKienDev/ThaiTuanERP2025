@@ -7,7 +7,6 @@ import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spi
 import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { DepartmentOptionStore } from "../../../account/options/department-dropdown-options.option";
 import { UserOptionStore } from "../../../account/options/user-dropdown.option";
-import { ConfirmService } from "../../../../shared/components/confirm-dialog/confirm.service";
 import { BudgetApproverDto, BudgetApproversRequest } from "../../models/budget-approvers.model";
 import { firstValueFrom } from "rxjs";
 import { BudgetApproverFacade } from "../../facades/budget-approver.facade";
@@ -23,8 +22,8 @@ export class BudgetPlanApproversDialogComponent implements OnInit {
       private readonly dialog = inject(MatDialogRef<BudgetPlanApproversDialogComponent>);
       private readonly formBuild = inject(FormBuilder);
       private readonly toast = inject(ToastService);
-      private readonly confirm = inject(ConfirmService);
       private readonly budgetApproverFacade = inject(BudgetApproverFacade);
+      private readonly httpErrorHandler = inject(HttpErrorHandlerService);
 
       title: string = 'User phê duyệt ngân sách';
 
@@ -34,8 +33,7 @@ export class BudgetPlanApproversDialogComponent implements OnInit {
       private readonly userOptionStore = inject(UserOptionStore);
       userOptions$ = this.userOptionStore.option$;
 
-      private readonly httpErrorHandler = inject(HttpErrorHandlerService);
-
+      
       submitting: boolean = false;
       showErrors: boolean = false;
 

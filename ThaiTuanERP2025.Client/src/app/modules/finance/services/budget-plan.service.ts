@@ -17,4 +17,9 @@ export class BudgetPlanService extends BaseCrudService<BudgetPlanDto, BudgetPlan
             return this.http.get<ApiResponse<BudgetPlansByDepartmentDto[]>>(`${this.endpoint}/following/${budgetPeriodId}`)
                   .pipe(handleApiResponse$<BudgetPlansByDepartmentDto[]>());
       }
+
+      updateAmount(budgetPeriodId: string, amount: number): Observable<void> {
+            return this.http.put<ApiResponse<void>>(`${this.endpoint}/${budgetPeriodId}/amount`, amount)
+                  .pipe(handleApiResponse$<void>());
+      }
 }

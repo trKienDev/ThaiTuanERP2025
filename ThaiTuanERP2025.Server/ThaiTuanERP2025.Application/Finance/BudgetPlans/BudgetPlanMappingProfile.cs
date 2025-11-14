@@ -14,7 +14,7 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans
 				.ForMember(d => d.BudgetPeriod, o => o.MapFrom(s => s.BudgetPeriod))
 				.ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => TimeZoneConverter.ToVietnamTime(src.CreatedDate)))
 				.ForMember(d => d.SelectedReviewerId, opt => opt.MapFrom(s => s.SelectedReviewerId))
-				.ForMember(d => d.CanEdit, opt => opt.Ignore()); ;
+				.ForMember(d => d.CanReview, opt => opt.Ignore()); 
 		}
 	}
 }

@@ -61,7 +61,7 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Queries
 
 			foreach (var plan in plans)
 			{
-				plan.CanEdit = plan.SelectedReviewerId == userId;
+				plan.CanReview = plan.SelectedReviewerId == userId;
 			}
 
 			var result = plans

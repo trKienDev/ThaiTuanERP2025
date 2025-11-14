@@ -34,7 +34,6 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans
 		public DateTime CreatedDate { get; set; }
 
 		public Guid SelectedReviewerId { get; set; }
-		public bool CanEdit { get; set; } // Dùng cho ui
-
+		public bool CanReview { get; set; } // Dùng cho ui
 	}
 }
