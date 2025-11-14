@@ -19,18 +19,22 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans
 	{
 		public Guid Id { get; init; }
 		
-		public Guid DepartmentId { get; init; }
-		public DepartmentBriefDto Department { get; init; } = default!;
+		public Guid DepartmentId { get; set; }
+		public DepartmentBriefDto Department { get; set; } = default!;
 		
-		public Guid BudgetCodeId { get; init; }
-		public BudgetCodeDto BudgetCode { get; init; } = default!;
+		public Guid BudgetCodeId { get; set; }
+		public BudgetCodeDto BudgetCode { get; set; } = default!;
 		
-		public Guid BudgetPeriodId { get; init; }
-		public BudgetPeriodDto BudgetPeriod { get; init; } = default!;
+		public Guid BudgetPeriodId { get; set; }
+		public BudgetPeriodDto BudgetPeriod { get; set; } = default!;
 
-		public decimal Amount { get; init; } = default!;
+		public decimal Amount { get; set; } = default!;
 		public bool IsReviewed { get; init; }
-		public bool IsApproved { get; init; }
-		public DateTime CreatedDate { get; init; }
+		public bool IsApproved { get; set; }
+		public DateTime CreatedDate { get; set; }
+
+		public Guid SelectedReviewerId { get; set; }
+		public bool CanEdit { get; set; } // Dùng cho ui
+
 	}
 }

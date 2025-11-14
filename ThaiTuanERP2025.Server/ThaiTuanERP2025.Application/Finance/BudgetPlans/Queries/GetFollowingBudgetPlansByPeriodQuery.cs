@@ -59,6 +59,11 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Queries
 			);
 			if(!plans.Any()) return Array.Empty<BudgetPlansByDepartmentDto>();
 
+			foreach (var plan in plans)
+			{
+				plan.CanEdit = plan.SelectedReviewerId == userId;
+			}
+
 			var result = plans
 				.GroupBy(p => new {
 					DepartmentId = p.Department.Id,

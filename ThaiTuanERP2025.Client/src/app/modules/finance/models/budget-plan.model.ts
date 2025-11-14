@@ -27,6 +27,9 @@ export interface BudgetPlanDto {
 
       budgetPeriodId: string;
       budgetPeriod: BudgetPeriodDto;
+
+      SelectedReviewerId?: string | null;
+      canEdit: boolean;
 }
 
 export interface BudgetPlanRequest {

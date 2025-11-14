@@ -29,9 +29,9 @@
                         <tbody>
                               <tr *ngFor="let payment of paymentsSig(); trackBy: trackById">
                                     <td>
-                                          <span class="link-text" (click)="openExpensePaymentDetailDialog(payment.id)">
+                                          <a class="link-text" (click)="openExpensePaymentDetailDialog(payment.id)">
                                                 {{ payment.name }}
-                                          </span>
+                                          </a>
                                     </td>
                                     <td>
                                           <span class="payment-status-badge" [ngClass]="(payment.status | expensePaymentStatus).class">

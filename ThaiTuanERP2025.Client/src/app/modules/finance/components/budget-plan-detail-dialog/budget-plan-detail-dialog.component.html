@@ -2,7 +2,9 @@
       <div class="dialog-container">
             <div class="dialog-heading">
                   <div class="dialog-title">
-                        <h1>Chi tiết ngân sách</h1>
+                        <h1>Chi tiết ngân sách - 
+                              <span style="color: var(--bright-blue-color);">{{ deparmtentName }}</span>
+                        </h1>
                   </div>
                   <div class="dialog-close">
                         <button type="button" class="close-button" (click)="close()">
@@ -21,6 +23,7 @@
                                     <th>Xem xét</th>
                                     <th>Phê duyệt</th>
                                     <th>Ngày tạo</th>
+                                    <th *ngIf="canEdit">Chỉnh sửa</th>
                               </tr>
                         </thead>
                         <tbody>
@@ -29,7 +32,7 @@
                                           <td>{{ i + 1 }}</td>
                                           <td>{{ plan.budgetCode.name }}</td>
                                           <td>T{{plan.budgetPeriod.month}}/{{plan.budgetPeriod.year}}</td>
-                                          <td>{{ plan.amount| number: '1-0-0'}} VNĐ</td>
+                                          <td>{{ plan.amount | number: '1.0-0' }} VNĐ</td>
                                           <td>
                                                 <input type="checkbox" [checked]="plan.isReviewed" disabled />
                                           </td>
@@ -37,6 +40,9 @@
                                                 <input type="checkbox" [checked]="plan.isApproved" disabled />
                                           </td>
                                           <td>{{ plan.createdDate | date:'dd/MM/yyyy'  }}</td>
+                                          <td *ngIf="canEdit">
+                                                <button type="button" class="button default-button">Sửa</button>
+                                          </td>
                                     </tr>
                               </ng-container>
                               <ng-container *ngIf="budgetPlans.length === 0">

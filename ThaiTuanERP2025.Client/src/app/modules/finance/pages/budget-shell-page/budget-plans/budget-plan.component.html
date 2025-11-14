@@ -49,9 +49,9 @@
                               <tr *ngFor="let plans of budgetPlansByDepartment; trackBy: trackById; let i = index;">
                                     <td>{{ i + 1 }}</td>
                                     <td>
-                                          <span class="link-text" (click)="openBudgetPlanDetailDialog(plans)">
+                                          <a class="link-text" (click)="openBudgetPlanDetailDialog(plans)">
                                                 {{ plans.departmentName }}
-                                          </span>
+                                          </a>
                                     </td>
                                     <td>T{{ plans.month }} - {{ plans.year }}</td>
                                     <td>
@@ -61,7 +61,7 @@
                                                 </option>
                                           </select>
                                     </td>
-                                    <td>{{ plans.totalAmount| number: '1.0-0' }} VNĐ</td>
+                                    <td>{{ plans.totalAmount | number: '1.0-0' }} VNĐ</td>
                                     <td>
                                           <button type="button" class="button default-button" (click)="openBudgetPlanDetailDialog(plans)">Chi tiết</button>
                                     </td>

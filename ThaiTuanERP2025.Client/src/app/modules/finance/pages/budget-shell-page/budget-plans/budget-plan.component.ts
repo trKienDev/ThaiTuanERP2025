@@ -1,4 +1,4 @@
-import { BudgetPlanDto, BudgetPlansByDepartmentDto } from './../../../models/budget-plan.model';
+import { BudgetPlansByDepartmentDto } from './../../../models/budget-plan.model';
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
