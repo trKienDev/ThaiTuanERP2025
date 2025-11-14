@@ -8,7 +8,7 @@ import { BudgetPlanApproversDialogComponent } from "../../../components/budget-a
 import { ListBudgetApproversDialogComponent } from "../../../components/list-budget-approvers-dialog/list-budget-approvers-dialog.component";
 import { HasPermissionDirective } from "../../../../../core/auth/auth.directive";
 import { BudgetPlanService } from "../../../services/budget-plan.service";
-import { combineLatest, distinctUntilChanged, filter, firstValueFrom, map, OperatorFunction, shareReplay, startWith, Subject, takeUntil, tap } from 'rxjs';
+import { combineLatest, distinctUntilChanged, filter, firstValueFrom, map, shareReplay, startWith, Subject, takeUntil } from 'rxjs';
 import { BudgetPeriodFacade } from '../../../facades/budget-period.facade';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 

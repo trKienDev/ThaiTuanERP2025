@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using System.Net.WebSockets;
 using ThaiTuanERP2025.Application.Shared.Exceptions;
 using ThaiTuanERP2025.Application.Shared.Interfaces;
 using ThaiTuanERP2025.Domain.Core.Entities;
@@ -49,6 +50,15 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Commands
 
 			var approver = await _uow.Users.ExistAsync(q => q.Id == command.ApproverId, cancellationToken);
 			if (!approver) throw new NotFoundException("Không tìm thấy user phê duyệt");
+
+			// check Exist
+			var planExist = await _uow.BudgetPlans.ExistAsync(
+				q => q.BudgetCodeId == command.BudgetCodeId
+					&& q.BudgetPeriodId == command.BudgetPeriodId
+					&& q.DepartmentId == command.DepartmentId,
+				cancellationToken: cancellationToken
+			);
+			if (planExist) throw new ConflictException("Kế hoạch ngân sách này đã tồn tại");
 
 			var entity = new BudgetPlan(command.DepartmentId, command.BudgetCodeId, command.BudgetPeriodId, command.Amount, command.ReviewerId, command.ApproverId);
 			await _uow.BudgetPlans.AddAsync(entity, cancellationToken);

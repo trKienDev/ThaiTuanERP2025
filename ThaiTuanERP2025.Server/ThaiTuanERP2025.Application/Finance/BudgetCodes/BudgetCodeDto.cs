@@ -1,5 +1,11 @@
 ﻿namespace ThaiTuanERP2025.Application.Finance.BudgetCodes
 {
+	public sealed record BudgetCodeLookupDto {
+		public Guid Id { get; init; }
+		public string Code { get; init; } = string.Empty;
+		public string Name { get; init; } = string.Empty;
+	}
+
 	public sealed record BudgetCodeDto
 	{
 		public Guid Id { get; set; }

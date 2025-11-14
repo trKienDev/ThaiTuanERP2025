@@ -22,6 +22,7 @@ import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-
 import { BudgetPlanRequest } from "../../models/budget-plan.model";
 import { BudgetCodeOptionStore } from '../../options/budget-code-options.store';
 import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
+import { BudgetCodeService } from '../../services/budget-code.service';
 
 @Component({
       selector: 'budget-plan-request-dialog',
@@ -34,6 +35,7 @@ export class BudgetPlanRequestDialogComponent implements OnInit {
       private readonly matDialog = inject(MatDialog);
       private readonly formBuilder = inject(FormBuilder);
       private readonly toast = inject(ToastService);
+      private readonly baseUrl = environment.baseUrl;
       
       private readonly userFacade = inject(UserFacade);
       currentUser$ = this.userFacade.currentUser$;
@@ -47,12 +49,10 @@ export class BudgetPlanRequestDialogComponent implements OnInit {
 
       private readonly budgetPeriodService = inject(BudgetPeriodService);
       availableBudgetPeriods: BudgetPeriodDto[] = [];
-      private readonly baseUrl = environment.baseUrl;
-
       budgetPeriodOptions: KitDropdownOption[] = [];
 
-     private readonly budgetCodeOptions = inject(BudgetCodeOptionStore);
-     budgetCodeOptions$ = this.budgetCodeOptions.options$;
+     private readonly budgetCodeService = inject(BudgetCodeService);
+     budgetCodeOptions: KitDropdownOption[] = [];
 
       private readonly userService = inject(UserService);
       private readonly httpErrorHandler = inject(HttpErrorHandlerService);
@@ -75,6 +75,7 @@ export class BudgetPlanRequestDialogComponent implements OnInit {
             this.loadBudgetApproversByUserDepartment();
             this.loadAvailableBudgetPeriods();
             this.loadDepartmentManagers();
+            this.loadAvailableBudgetCodes();
             // Lấy departmentId của user hiện tại và patch vào form
             this.userFacade.currentUser$
                   .pipe(take(1))
@@ -117,6 +118,18 @@ export class BudgetPlanRequestDialogComponent implements OnInit {
                         this.budgetPeriodOptions = budgetPeriods.map(bp => ({
                               id: bp.id,
                               label: `Tháng: ${bp.month} - Năm: ${bp.year}`
+                        }));
+                  },
+                  error: (err => handleHttpError(err))
+            })
+      }
+
+      loadAvailableBudgetCodes() {
+            this.budgetCodeService.getAvailable().subscribe({
+                  next: (budgetCodes) => {
+                        this.budgetCodeOptions = budgetCodes.map(bc => ({
+                              id: bc.id,
+                              label: `${bc.code} - ${bc.name}`
                         }));
                   },
                   error: (err => handleHttpError(err))

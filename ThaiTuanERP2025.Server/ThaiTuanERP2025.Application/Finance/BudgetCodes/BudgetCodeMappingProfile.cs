@@ -7,6 +7,8 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetCodes
 	{
 		public BudgetCodeMappingProfile()
 		{
+			CreateMap<BudgetCode, BudgetCodeLookupDto>();
+
 			CreateMap<BudgetCode, BudgetCodeDto>()
 				.ForMember(d => d.BudgetGroupName, o => o.MapFrom(s => s.BudgetGroup.Name));
 		}

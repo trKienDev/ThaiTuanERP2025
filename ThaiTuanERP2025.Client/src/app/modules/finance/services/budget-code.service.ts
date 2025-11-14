@@ -18,6 +18,11 @@ export class BudgetCodeService extends BaseCrudService<BudgetCodeDto, BudgetCode
                   .pipe(handleApiResponse$<BudgetCodeDto[]>());
       }
 
+      getAvailable(): Observable<BudgetCodeDto[]> {
+            return this.http.get<ApiResponse<BudgetCodeDto[]>>(`${this.endpoint}/available`)
+                  .pipe(handleApiResponse$<BudgetCodeDto[]>());
+      }
+
       getWithAmount(options?: { year?: number; month?: number; }): Observable<BudgetCodeWithAmountDto[]> {
             let params = new HttpParams();
             if (options?.year != null)  params = params.set('year', String(options.year));

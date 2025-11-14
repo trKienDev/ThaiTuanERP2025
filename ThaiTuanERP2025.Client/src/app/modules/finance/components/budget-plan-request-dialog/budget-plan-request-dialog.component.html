@@ -34,7 +34,7 @@
                               </div>
                         </div>
                         <div class="dialog-row">
-                              <kit-dropdown formControlName="budgetCodeId" [options]="(budgetCodeOptions$ | async) ?? []" [placeholder]="'Chọn mã ngân sách'" [required]="true" [enableFilter]="false"
+                              <kit-dropdown formControlName="budgetCodeId" [options]="budgetCodeOptions" [placeholder]="'Chọn mã ngân sách'" [required]="true" [enableFilter]="false"
                               [invalid]="showErrors && (form.get('budgetCodeId')?.invalid ?? false)" (selectionChange)="onBudgetCodeSelected($event)"></kit-dropdown>
                               <div class="form-input-error" *ngIf="showErrors && form.get('budgetCodeId')?.invalid">
                                     <small>Vui lòng chọn mã ngân sách</small>
