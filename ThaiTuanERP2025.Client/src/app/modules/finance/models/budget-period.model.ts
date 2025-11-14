@@ -7,6 +7,13 @@ export interface BudgetPeriodDto {
       isActive: boolean;
 }
 
+export interface BudgetPeriodLookupDto {
+      id: string;
+      year: number;
+      month: number;
+}
+
+
 export interface BudgetPeriodRequest {
       year: number;
       month: number;

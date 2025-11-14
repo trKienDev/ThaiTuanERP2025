@@ -24,7 +24,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 		public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
 		{
 			var result = await _mediator.Send(new GetAllBudgetPeriodsQuery(), cancellationToken);
-			return Ok(ApiResponse<IReadOnlyList<BudgetPeriodDto>>.Success(result));
+			return Ok(ApiResponse<IReadOnlyList<BudgetPeriodLookupDto>>.Success(result));
 		}
 
 		[HttpGet("year/{year:int}")]

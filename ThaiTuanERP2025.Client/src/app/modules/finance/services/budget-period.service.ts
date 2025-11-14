@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { BaseCrudService } from "../../../shared/services/base-crud.service";
-import { BudgetPeriodDto, BudgetPeriodRequest, UpdateBudgetPeriodPayload } from "../models/budget-period.model";
+import { BudgetPeriodDto, BudgetPeriodLookupDto, BudgetPeriodRequest, UpdateBudgetPeriodPayload } from "../models/budget-period.model";
 import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
 import { catchError, Observable, throwError } from "rxjs";
 import { ApiResponse } from "../../../shared/models/api-response.model";
@@ -14,9 +14,9 @@ export class BudgetPeriodService extends BaseCrudService<BudgetPeriodDto, Budget
       }
 
       getAvailable() {
-            return this.http.get<ApiResponse<BudgetPeriodDto[]>>(`${this.endpoint}/available`)
+            return this.http.get<ApiResponse<BudgetPeriodLookupDto[]>>(`${this.endpoint}/available`)
                   .pipe(
-                        handleApiResponse$<BudgetPeriodDto[]>(),
+                        handleApiResponse$<BudgetPeriodLookupDto[]>(),
                         catchError(err => throwError(() => err))
                   );
       }

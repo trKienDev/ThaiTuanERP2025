@@ -106,6 +106,14 @@ export class BudgetPlanPanelComponent implements OnInit, OnDestroy {
                               return;
                         }
 
+                        const currentMonth = new Date().getMonth() + 1;
+                        if (months.includes(currentMonth)) {
+                              if (current !== currentMonth) {
+                                    monthCtrl.setValue(currentMonth);
+                              }
+                              return;
+                        }
+
                         if (!current || !months.includes(current)) {
                               // ❗ KHÔNG dùng emitEvent: false → để form.valueChanges emit và selectedBudgetPeriodId$ chạy
                               monthCtrl.setValue(months[0]);
