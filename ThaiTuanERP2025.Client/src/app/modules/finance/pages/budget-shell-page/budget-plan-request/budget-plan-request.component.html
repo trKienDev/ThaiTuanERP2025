@@ -18,7 +18,7 @@
                               </div>
                               <div class="width-50pt">
                                     <kit-dropdown formControlName="budgetPeriodId" [options]="budgetPeriodOptions"  [placeholder]="'Chọn kỳ ngân sách'"  [required]="true"
-                                    [invalid]="showErrors && (form.get('budgetPeriodId')?.invalid ?? false)"></kit-dropdown>
+                                    [invalid]="showErrors && (form.get('budgetPeriodId')?.invalid ?? false)" [enableFilter]="false"></kit-dropdown>
                                     <div class="form-input-error" *ngIf="showErrors && form.get('budgetPeriodId')?.invalid">
                                           <small>Vui lòng chọn kỳ ngân sách</small>
                                     </div>

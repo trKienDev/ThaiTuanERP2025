@@ -1,144 +1,208 @@
+/* =========================
+   Host & trạng thái invalid
+   ========================= */
 :host {
-      display: block;
-      line-height: normal;
+  display: block;
+  line-height: normal;
 }
+
 :host(.invalid) .kit-dropdown-select {
-      box-shadow: rgba(244, 1, 1, 0.52) 0 0 5px 0, rgba(213, 0, 0, 0.24) 0 0 1px 0;
-      border: 1px solid rgba(213, 0, 0, 0.24);
-      border-radius: 4px;
+  box-shadow: rgba(244, 1, 1, 0.52) 0 0 5px 0, rgba(213, 0, 0, 0.24) 0 0 1px 0;
+  border: 1px solid rgba(213, 0, 0, 0.24);
+  border-radius: 4px;
 }
 
+/* =========================
+   Wrapper chính
+   ========================= */
 .kit-dropdown {
-      width: 100%;
-      display: inline-block;
-      background-color: #fff;
-      border-radius: 5px;
-      border: 1px solid var(--default-border-color);
-      transition: all .5s ease;
-      position: relative;
-      color: #474747;
-      text-align: left;
-      height: fit-content;
+  width: 100%;
+  display: inline-block;
+  position: relative;
+
+  background-color: #fff;
+  border-radius: 5px;
+  border: 1px solid var(--default-border-color);
+  transition: box-shadow .3s ease;
+  color: #474747;
+  text-align: left;
+  height: fit-content;
+
+  &:hover,
+  &.active {
+    box-shadow: 0 0 4px rgb(204, 204, 204);
+  }
 }
 
+/* =========================
+   Floating placeholder
+   ========================= */
 .placeholder-text {
-      position: absolute;
-      pointer-events: none;
-      transition: all 0.3s ease;
-      background: white;
-      top: 50%; 
-      transform: translateY(-50%);
-      left: 10px; 
-}
-.kit-dropdown.active .placeholder-text, .kit-dropdown.has-value .placeholder-text {
-      top: 0;
-      transform: translateY(-60%) scale(0.8);
-      left: 0;    
-      color: #aaa;
-      background-color: white;
-      padding: 0 3px;
+  position: absolute;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  background: white;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 10px;
 }
 
+.kit-dropdown.active .placeholder-text,
+.kit-dropdown.has-value .placeholder-text {
+  top: 0;
+  transform: translateY(-60%) scale(0.8);
+  left: 0;
+  color: #aaa;
+  background-color: white;
+  padding: 0 3px;
+}
+
+/* =========================
+   Ô select (single / multi)
+   ========================= */
 .kit-dropdown-select {
-      cursor: pointer;
-      padding: 10px;
+  cursor: pointer;
+  padding: 10px;
+  display: flex;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  min-height: 16px;
+
+  .multi-selection {
+    display: flex;
+    gap: 10px;
+    flex-wrap: nowrap;
+
+    .multi-selected {
       display: flex;
-      white-space: nowrap;
-      overflow-x: auto;
-      overflow-y: hidden;
-      min-height: 16px; 
+      align-items: center;
+      background-color: var(--main-bg-color);
+      padding: 0 3px;
+      border-left: 1px solid var(--bright-blue-color);
+      border-radius: 3px;
 
-      .multi-selection {
-            display: flex;
-            gap: 10px;
-            flex-wrap: nowrap;
-
-            .multi-selected {
-                  display: flex;
-                  align-items: center;
-                  background-color: var(--main-bg-color);
-                  padding: 0 3px;
-                  border-left: 1px solid var(--bright-blue-color);
-                  border-radius: 3px;
-                  
-                  &:hover {
-                        box-shadow: rgba(245, 152, 152, 0.459) 0px 0px 5px 0px, rgba(255, 140, 140, 0.685) 0px 0px 1px 0px;
-                        background-color: transparent;
-                        border-left: 1px solid red;
-                        color: red;
-                        cursor: pointer;
-                  }
-            }
+      &:hover {
+        box-shadow: rgba(245, 152, 152, 0.459) 0 0 5px 0,
+                    rgba(255, 140, 140, 0.685) 0 0 1px 0;
+        background-color: transparent;
+        border-left: 1px solid red;
+        color: red;
+        cursor: pointer;
       }
-}
+    }
+  }
 
-
-
-.kit-dropdown .kit-dropdown-select > i {
-      color: #888;
-      cursor: pointer;
-      transition: all .3s ease-in-out;
-      float: right;
-      line-height: 20px;
-}
-
-.kit-dropdown:hover, .kit-dropdown.active {
-      box-shadow: 0 0 4px rgb(204, 204, 204);
-      // background-color: var(--main-bg-color);
+  > i {
+    color: #888;
+    cursor: pointer;
+    transition: transform .3s ease-in-out;
+    float: right;
+    line-height: 20px;
+  }
 }
 
 .kit-dropdown.active .kit-dropdown-select > i {
-      transform: rotate(-90deg);
+  transform: rotate(-90deg);
 }
 
+/* =========================
+   MENU DROPDOWN
+   ========================= */
 .kit-dropdown .kit-dropdown-menu {
-      background-color: white;
-      width: 100%;
-      left: 0;
-      margin-top: 1px;
-      box-shadow: 0 1px 2px rgb(204, 204, 204);
-      border-radius: 0 0px 3px 3px;
-      z-index: 9;
-      overflow-y: auto !important; 
-      scrollbar-width: thin; 
-      scrollbar-color: #ccc transparent;
-      position: absolute;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  margin-top: 1px;
 
-      .selected { background: var(--bright-blue-color) !important; color: white;  }
-      .check { width: 14px; display: inline-block; color: white; }
+  background-color: white;
+  box-shadow: 0 1px 2px rgb(204, 204, 204);
+  border-radius: 0 0 3px 3px;
+  z-index: 9;
+
+  display: flex;
+  flex-direction: column;
+
+  /* menu tổng scroll theo max-height + animation */
+  overflow: hidden;
+
+  .selected {
+    background: var(--bright-blue-color) !important;
+    color: white;
+  }
+
+  .check {
+    width: 14px;
+    display: inline-block;
+    color: white;
+  }
 }
 
-.kit-dropdown .kit-dropdown-menu li {
-      padding: 10px;
-      transition: background-color .2s ease-in-out;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-}
-.kit-dropdown .kit-dropdown-menu li:hover { background-color: var(--main-bg-color); }
-.kit-dropdown .kit-dropdown-menu li:active { 
-      outline: none;  
-      background: var(--main-bg-color);
+/* =========================
+   FILTER BAR (cố định trên cùng)
+   ========================= */
+.kit-dropdown .dropdown-filter-bar {
+  flex: 0 0 auto;
+  padding: 0;
+  border-bottom: 1px solid #eee;
+  background: white;
+  z-index: 2;
+
+  input {
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 10px;
+  }
 }
 
+/* =========================
+   DANH SÁCH OPTION (scroll)
+   ========================= */
+.kit-dropdown .dropdown-options-list {
+  flex: 1 1 auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 
-/* hover vẫn hoạt động như cũ, có thể sáng hơn chút */
-.kit-dropdown .kit-dropdown-menu li[aria-selected="true"]:hover {
-      background-color: var(--main-bg-color);
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: inherit;
+  scrollbar-width: thin;
+  scrollbar-color: var(--bg-main-color) transparent;
 }
+
+/* =========================
+   ITEM TRONG MENU
+   ========================= */
+.kit-dropdown .dropdown-options-list li {
+  padding: 10px;
+  transition: background-color .2s ease-in-out;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  &:hover {
+    background-color: var(--main-bg-color);
+  }
+
+  &:active {
+    outline: none;
+    background: var(--main-bg-color);
+  }
+
+  &[aria-selected="true"]:hover {
+    background-color: var(--main-bg-color);
+  }
+}
+
+/* =========================
+   Avatar / icon trong option
+   ========================= */
 .kit-dropdown .option-img {
-      width: 15px;
-      height: 15px;
-      border-radius: 50%;
-      margin-right: 8px;
-}
-.kit-dropdown-filter {
-      padding: unset !important;
-      border-bottom: 1px solid rgb(236, 236, 236);
-}
-.kit-dropdown-filter input[type="text"] {
-      outline: none;
-      border: none;
-      padding: 10px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  margin-right: 8px;
 }
