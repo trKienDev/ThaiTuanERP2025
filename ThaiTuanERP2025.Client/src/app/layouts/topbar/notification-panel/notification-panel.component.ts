@@ -1,8 +1,8 @@
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { NotificationDto } from "./models/notification.model";
-import { Observable } from "rxjs";
+import { firstValueFrom, Observable } from "rxjs";
 import { AvatarUrlPipe } from "../../../shared/pipes/avatar-url.pipe";
 
 @Component({
@@ -13,7 +13,7 @@ import { AvatarUrlPipe } from "../../../shared/pipes/avatar-url.pipe";
       styleUrls: ['./notification-panel.component.scss'],
       changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NotificationPanelComponent {
+export class NotificationPanelComponent implements OnInit {
       /** Streams từ state service */
       @Input() notifications$!: Observable<NotificationDto[]>;
       @Input() unreadCount$!: Observable<number>;
@@ -22,13 +22,17 @@ export class NotificationPanelComponent {
       @Output() markAllRead = new EventEmitter<void>();
       @Output() markOneRead = new EventEmitter<string>();
 
+      async ngOnInit() {
+            const notifications = await firstValueFrom(this.notifications$);
+            console.log('notifications: ', notifications);
+      }
+
       onSettings() {
       // optional: điều hướng trang cài đặt
             console.log('open notification settings');
       }
 
       onClickItem(n: NotificationDto) {
-            // Điều hướng nếu có link
             if (n.link) window.open(n.link, '_blank');
       }
 

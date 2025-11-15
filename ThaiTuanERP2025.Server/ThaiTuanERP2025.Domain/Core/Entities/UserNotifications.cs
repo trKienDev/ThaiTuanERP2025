@@ -73,7 +73,7 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
 			return type switch
 			{
 				NotificationLinkType.BudgetPlanReview when id.HasValue 
-					=> NotificationLinks.BudgetPlanReview(id.Value),
+					=> NotificationLinks.BudgetPlanDetail(id.Value),
 
 				NotificationLinkType.BudgetPlanDetail when id.HasValue
 					=> NotificationLinks.BudgetPlanDetail(id.Value),

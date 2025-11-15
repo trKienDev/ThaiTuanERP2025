@@ -1,8 +1,8 @@
+import { ConfirmService } from './../../../../../shared/components/confirm-dialog/confirm.service';
 import { BudgetPlansByDepartmentDto } from './../../../models/budget-plan.model';
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { ToastService } from "../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { BudgetPlanRequestDialogComponent } from "../../../components/budget-plan-request-dialog/budget-plan-request-dialog.component";
 import { BudgetPlanApproversDialogComponent } from "../../../components/budget-apporver-request-dilaog/budget-approver-request-dialog.component";
 import { ListBudgetApproversDialogComponent } from "../../../components/list-budget-approvers-dialog/list-budget-approvers-dialog.component";
@@ -12,6 +12,8 @@ import { combineLatest, distinctUntilChanged, filter, firstValueFrom, map, share
 import { BudgetPeriodFacade } from '../../../facades/budget-period.facade';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BudgetPlanDetailDialogComponent } from '../../../components/budget-plan-detail-dialog/budget-plan-detail-dialog.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { handleHttpError } from '../../../../../shared/utils/handle-http-errors.util';
 
 @Component({
       selector: 'budget-plan-panel',
@@ -21,10 +23,12 @@ import { BudgetPlanDetailDialogComponent } from '../../../components/budget-plan
 })
 export class BudgetPlanPanelComponent implements OnInit, OnDestroy {
       private readonly dialog = inject(MatDialog);
-      private readonly toastSer = inject(ToastService);
+      private readonly route = inject(ActivatedRoute);
+      private readonly router = inject(Router);
       private readonly budgetPlanService = inject(BudgetPlanService);
       private readonly formBuilder = inject(FormBuilder);
       private readonly matDialog = inject(MatDialog);
+      private readonly confirm = inject(ConfirmService);
 
       budgetPlansByDepartment: BudgetPlansByDepartmentDto[] = [];
 
@@ -79,8 +83,11 @@ export class BudgetPlanPanelComponent implements OnInit, OnDestroy {
       );
 
       ngOnInit(): void {
+            this.initializePeriodSelection();
+            this.listenOpenByQueryParam();
+      }
 
-            // 1. Set default year (năm hiện tại nếu có, không thì lấy phần tử đầu tiên)
+      private initializePeriodSelection(): void {
             this.years$
                   .pipe(takeUntil(this.destroy$))
                   .subscribe(years => {
@@ -132,11 +139,44 @@ export class BudgetPlanPanelComponent implements OnInit, OnDestroy {
                   .subscribe(periodId => {
                         this.loadBudgetPlans(periodId);
                   });
-      }
-
+       }
       private async loadBudgetPlans(budgetPeriodId: string) {
             this.budgetPlansByDepartment = await firstValueFrom(this.budgetPlanService.getFollowing(budgetPeriodId))
-            console.log('plans: ', this.budgetPlansByDepartment);
+      }
+
+      private listenOpenByQueryParam(): void {
+            this.route.queryParamMap.subscribe(params => {
+                  const planId = params.get('openPlanId');
+
+                  if (planId) {
+                        this.activateBudgetPlanDetailDialog(planId);
+                  }
+            });
+      }
+      private async activateBudgetPlanDetailDialog(planId: string): Promise<void> {
+
+            let plan: any;
+            try {
+                  plan = await firstValueFrom(this.budgetPlanService.getById(planId));
+            } catch (e) {
+                  const messages = handleHttpError(e).join('\n');
+                  this.confirm.error$(messages);
+                  console.error('Không load được BudgetPlan', e);
+                  return;
+            }
+
+            const dialogRef = this.matDialog.open(BudgetPlanDetailDialogComponent, {
+                  data: { plan }
+            });
+
+            // Clear query params khi đóng dialog (tránh auto-open khi refresh)
+            dialogRef.afterClosed().subscribe(() => {
+                  this.router.navigate([], {
+                        relativeTo: this.route,
+                        queryParams: { openPlanId: null },
+                        queryParamsHandling: 'merge'
+                  });
+            });
       }
 
       // =============================
@@ -145,7 +185,11 @@ export class BudgetPlanPanelComponent implements OnInit, OnDestroy {
 
       openBudgetPlanRequestDialog() {
             const dialogRef = this.dialog.open(BudgetPlanRequestDialogComponent, {});
-            dialogRef.afterClosed().subscribe();
+            dialogRef.afterClosed().subscribe(isSuccess => {
+                  if (isSuccess) {
+                        this.initializePeriodSelection();
+                  }
+            });
       }
 
       openListBudgetApproverDialog() {

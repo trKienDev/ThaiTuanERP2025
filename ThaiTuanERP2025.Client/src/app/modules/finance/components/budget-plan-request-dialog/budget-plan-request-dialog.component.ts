@@ -173,7 +173,7 @@ export class BudgetPlanRequestDialogComponent implements OnInit {
                   await firstValueFrom(this.budgetPlanService.create(payload));
                   this.toast.successRich("Tạo kế hoạch ngân sách thành công")
                   this.form.reset();
-                  this.matdialogRef.close();
+                  this.matdialogRef.close(true);
             } catch(error) {
                   this.httpErrorHandler.handle(error, 'Tạo kế hoạch ngân sách thất bại');
             } finally {
@@ -183,7 +183,7 @@ export class BudgetPlanRequestDialogComponent implements OnInit {
             }
       }
 
-      close(result: boolean = false): void {
-            this.matdialogRef.close(result);
+      close(isSuccess: boolean = false): void {
+            this.matdialogRef.close(isSuccess);
       }
 }

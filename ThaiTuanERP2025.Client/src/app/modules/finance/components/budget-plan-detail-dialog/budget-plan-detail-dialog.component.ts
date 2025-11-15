@@ -7,9 +7,7 @@ import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spi
 import { MoneyFormatDirective } from '../../../../shared/directives/money/money-format.directive';
 import { firstValueFrom } from 'rxjs';
 import { BudgetPlanService } from '../../services/budget-plan.service';
-import { ConfirmService } from '../../../../shared/components/confirm-dialog/confirm.service';
 import { HttpErrorHandlerService } from '../../../../core/services/http-errror-handler.service';
-import { handleHttpError } from '../../../../shared/utils/handle-http-errors.util';
 import { ToastService } from '../../../../shared/components/kit-toast-alert/kit-toast-alert.service';
 
 @Component({
@@ -33,7 +31,7 @@ export class BudgetPlanDetailDialogComponent {
 
       constructor(
             @Inject(MAT_DIALOG_DATA) public data: BudgetPlansByDepartmentDto
-      ) { 
+      ) {             
             this.budgetPlans = data.budgetPlans.map(p => ({
                   ...p,
                   isEditing: false,

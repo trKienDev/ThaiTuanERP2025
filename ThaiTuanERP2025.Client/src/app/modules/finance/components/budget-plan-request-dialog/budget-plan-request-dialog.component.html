@@ -14,16 +14,8 @@
                   <div class="dialog-body">
                         <div class="dialog-row">
                               <div class="form-input">
-                                    <input class="" type="text" formControlName="amount" inputmode="decimal" appMoney [appMoneyDecimals]="0" required
-                                    [class.is-invalid]="showErrors && form.get('amount')?.invalid"
-                                    [attr.aria-invalid]="showErrors && form.get('amount')?.invalid ? 'true' : null"/>
-                                    <label for="amount">Số tiền <span style="color: red;">  *</span></label>
-                                    <small style="font-style: italic; color: var(--text-muted);">
-                                          {{ form.get('amount')?.value | amountToWords }}
-                                    </small>
-                                    <div class="form-input-error" *ngIf="showErrors && form.get('amount')?.invalid">
-                                          <small>Vui lòng nhập số tiền</small>
-                                    </div>
+                                    <input class="" type="text" [value]="(currentUser$ | async)?.department?.name || '---'" autocomplete="on" disabled>
+                                    <label for="department">Phòng ban <span style="color: red;">  *</span></label>
                               </div>
                         </div>
                         <div class="dialog-row">
@@ -42,8 +34,16 @@
                         </div>
                         <div class="dialog-row">
                               <div class="form-input">
-                                    <input class="" type="text" [value]="(currentUser$ | async)?.department?.name || '---'" autocomplete="on" disabled>
-                                    <label for="department">Phòng ban <span style="color: red;">  *</span></label>
+                                    <input class="" type="text" formControlName="amount" inputmode="decimal" appMoney [appMoneyDecimals]="0" required
+                                    [class.is-invalid]="showErrors && form.get('amount')?.invalid"
+                                    [attr.aria-invalid]="showErrors && form.get('amount')?.invalid ? 'true' : null"/>
+                                    <label for="amount">Số tiền <span style="color: red;">  *</span></label>
+                                    <small style="font-style: italic; color: var(--text-muted);">
+                                          {{ form.get('amount')?.value | amountToWords }}
+                                    </small>
+                                    <div class="form-input-error" *ngIf="showErrors && form.get('amount')?.invalid">
+                                          <small>Vui lòng nhập số tiền</small>
+                                    </div>
                               </div>
                         </div>
                         <div class="dialog-row">

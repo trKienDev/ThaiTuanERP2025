@@ -22,4 +22,9 @@ export class BudgetPlanService extends BaseCrudService<BudgetPlanDto, BudgetPlan
             return this.http.put<ApiResponse<void>>(`${this.endpoint}/${budgetPeriodId}/amount`, amount)
                   .pipe(handleApiResponse$<void>());
       }
+
+      markReview(id: string): Observable<void> {
+            return this.http.post<ApiResponse<void>>(`${this.endpoint}/${id}/review`, null)
+                  .pipe(handleApiResponse$<void>());
+      }
 }
