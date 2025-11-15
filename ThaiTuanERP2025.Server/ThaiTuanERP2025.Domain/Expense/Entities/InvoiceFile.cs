@@ -11,7 +11,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public Guid InvoiceId { get; private set; }
 		public Guid FileId { get; private set; }
 		public bool IsMain { get; private set; }
-		public DateTime CreatedAt { get; private set; }
 
 		public Invoice Invoice { get; private set; } = default!;
 		public StoredFile File { get; private set; } = default!;

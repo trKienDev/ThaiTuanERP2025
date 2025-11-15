@@ -111,12 +111,12 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 				switch (entry.State)
 				{
 					case EntityState.Added:
-						entry.Entity.CreatedDate = now;
+						entry.Entity.CreatedAt = now;
 						entry.Entity.CreatedByUserId = userId; // null nếu không có user
 						break;
 
 					case EntityState.Modified:
-						entry.Entity.ModifiedDate = now;
+						entry.Entity.ModifiedAt = now;
 						entry.Entity.ModifiedByUserId = userId; // null nếu không có user
 						break;
 

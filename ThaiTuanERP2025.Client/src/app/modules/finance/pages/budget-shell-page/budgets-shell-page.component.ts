@@ -5,6 +5,7 @@ import { KitShellTab, KitShellTabsComponent } from "../../../../shared/component
 import { BudgetPeriodPanelComponent } from "./budget-periods/budget-period.component";
 import { BudgetGroupPanelComponent } from "./budget-groups/budget-group.component";
 import { BudgetPlanPanelComponent } from "./budget-plans/budget-plan.component";
+import { BudgetPlanRequestPanelComponent } from "./budget-plan-request/budget-plan-request.component";
 
 @Component({
       selector: 'budgets-shell-page',
@@ -18,5 +19,6 @@ export class BudgetShellPageComponent {
             { id: 'budget-groups', label: 'Nhóm ngân sách', component: BudgetGroupPanelComponent },
             { id: 'budget-periods', label: 'Kỳ ngân sách', component: BudgetPeriodPanelComponent },
             { id: 'budget-plans', label: 'Kế hoạch ngân sách', component: BudgetPlanPanelComponent },
+            { id: 'budget-plan-request', label: 'Tạo kế hoạch ngân sách', component: BudgetPlanRequestPanelComponent }
       ]
 }

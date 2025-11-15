@@ -139,7 +139,7 @@ export class BudgetPlanPanelComponent implements OnInit, OnDestroy {
                   .subscribe(periodId => {
                         this.loadBudgetPlans(periodId);
                   });
-       }
+      }
       private async loadBudgetPlans(budgetPeriodId: string) {
             this.budgetPlansByDepartment = await firstValueFrom(this.budgetPlanService.getFollowing(budgetPeriodId))
       }

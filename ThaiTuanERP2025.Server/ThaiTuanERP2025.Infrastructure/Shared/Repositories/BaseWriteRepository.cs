@@ -156,7 +156,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 			if (entity is AuditableEntity auditable)
 			{
 				auditable.IsDeleted = true;
-				auditable.DeletedDate = DateTime.UtcNow;
+				auditable.DeletedAt = DateTime.UtcNow;
 				// auditable.DeletedByUserId = _currentUserService.UserId; // nếu bạn đã có service người dùng hiện tại
 				_dbSet.Update(entity); // update thay vì remove
 			}

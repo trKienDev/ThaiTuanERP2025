@@ -31,7 +31,6 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 				.OnDelete(DeleteBehavior.Restrict);
 
 			builder.HasIndex(x => x.CommentId);
-			builder.HasIndex(x => x.CreatedDate);
 		}
 	}
 }

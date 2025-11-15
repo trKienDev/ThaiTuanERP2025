@@ -38,7 +38,7 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 			builder.HasIndex(x => x.ExpensePaymentId);
 			builder.HasIndex(x => x.ParentCommentId);
 			builder.HasIndex(x => x.CreatedByUserId);
-			builder.HasIndex(x => x.CreatedDate);
+			builder.HasIndex(x => x.CreatedAt);
 
 			ConfigureAuditUsers(builder);
 		}

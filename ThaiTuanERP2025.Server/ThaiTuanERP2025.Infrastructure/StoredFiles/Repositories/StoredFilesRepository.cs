@@ -18,7 +18,7 @@ namespace ThaiTuanERP2025.Infrastructure.StoredFiles.Repositories
 		public async Task<List<StoredFile>> ListByEntitiesAsync(string module, string entity, string entityId, CancellationToken cancellationToken)
 		{
 			return await _dbContext.StoredFiles.Where(x => x.Module == module && x.Entity == entity && x.EntityId == entityId)
-				.OrderByDescending(x => x.CreatedDate).ToListAsync();
+				.OrderByDescending(x => x.CreatedAt).ToListAsync();
 		}
 
 		public async Task<bool> SoftDeleteAsync(Guid id, CancellationToken cancellationToken) {

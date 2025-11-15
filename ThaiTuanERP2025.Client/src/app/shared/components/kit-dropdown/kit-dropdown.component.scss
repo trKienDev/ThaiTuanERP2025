@@ -102,6 +102,7 @@
       overflow-y: auto !important; 
       scrollbar-width: thin; 
       scrollbar-color: #ccc transparent;
+      position: absolute;
 
       .selected { background: var(--bright-blue-color) !important; color: white;  }
       .check { width: 14px; display: inline-block; color: white; }

@@ -1,40 +1,34 @@
 import { CommonModule } from "@angular/common";
-import { Component, inject, OnDestroy, OnInit } from "@angular/core";
-import { MatDialogRef } from "@angular/material/dialog";
-import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { DepartmentOptionStore } from "../../../account/options/department-dropdown-options.option";
-import { KitDropdownComponent, KitDropdownOption } from "../../../../shared/components/kit-dropdown/kit-dropdown.component";
-import { combineLatest, map, shareReplay, startWith, Subject, takeUntil } from "rxjs";
-import { BudgetPeriodFacade } from "../../facades/budget-period.facade";
-import { BudgetPeriodService } from "../../services/budget-period.service";
-import { handleHttpError } from "../../../../shared/utils/handle-http-errors.util";
-import { UserService } from "../../../account/services/user.service";
-import { environment } from "../../../../../environments/environment";
-import { resolveAvatarUrl } from "../../../../shared/utils/avatar.utils";
-import { BudgetApproverService } from "../../services/budget-approver.service";
+import { Component, inject, OnInit } from "@angular/core";
+import { FormBuilder, Validators } from "@angular/forms";
+import { BudgetPeriodService } from "../../../services/budget-period.service";
+import { KitDropdownOption, KitDropdownComponent } from "../../../../../shared/components/kit-dropdown/kit-dropdown.component";
+import { DepartmentOptionStore } from "../../../../account/options/department-dropdown-options.option";
+import { UserService } from "../../../../account/services/user.service";
+import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
+import { resolveAvatarUrl } from "../../../../../shared/utils/avatar.utils";
+import { BudgetApproverService } from "../../../services/budget-approver.service";
 
 @Component({
-      selector: 'budget-plan-request-dialog',
-      imports: [CommonModule, KitSpinnerButtonComponent, ReactiveFormsModule, KitDropdownComponent],
+      selector: 'budget-plan-request',
       standalone: true,
-      templateUrl: './budget-plan-request-dialog.component.html'
+      imports: [CommonModule, KitDropdownComponent],
+      templateUrl: './budget-plan-request.component.html'
 })
-export class BudgetPlanRequestDialogComponent implements OnInit, OnDestroy {
-      private readonly dialog = inject(MatDialogRef<BudgetPlanRequestDialogComponent>);
+export class BudgetPlanRequestPanelComponent implements OnInit {
       private readonly formBuilder = inject(FormBuilder);
       public submitting: boolean = false;
       public showErrors: boolean = false;
-      private readonly destroy$ = new Subject<void>();
-
-      public budgetPeriodService = inject(BudgetPeriodService);
-      public budgetPeriodOptions: KitDropdownOption[] = [];
       
-      public departmentOptions$ = inject(DepartmentOptionStore).option$;
-
+      public budgetPeriodOptions: KitDropdownOption[] = [];
       private readonly userService = inject(UserService);
 
-
+      ngOnInit(): void {
+            this.loadBudgetApprovers();
+            this.loadBudgetPeriodOptions();
+            this.loadBudgetReviewers();
+      }
+      
       form = this.formBuilder.group({
             departmentId: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
             budgetPeriodId: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
@@ -42,17 +36,8 @@ export class BudgetPlanRequestDialogComponent implements OnInit, OnDestroy {
             reviewerId: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
       });
 
-      periodForm: FormGroup = this.formBuilder.group({
-            year: [null as number | null],
-            month: [null as number | null],
-      });
-
-      ngOnInit() {
-            this.loadBudgetPeriodOptions();
-            this.loadBudgetApprovers();
-            this.loadBudgetReviewers();   
-      }
-
+      // ==== BudgetPeriod ====
+      private readonly budgetPeriodService = inject(BudgetPeriodService);
       loadBudgetPeriodOptions() {
             this.budgetPeriodService.getAvailable().subscribe({
                   next: (budgetPeriods) => {
@@ -65,7 +50,7 @@ export class BudgetPlanRequestDialogComponent implements OnInit, OnDestroy {
             })
       }
 
-      // === Reviewer ===
+      // ==== Budget Reviewers ====
       public budgetReviewerOptions: KitDropdownOption[] = [];
       async loadBudgetReviewers(): Promise<void> {
             this.userService.getDepartmentManagersByUser().subscribe({
@@ -83,7 +68,7 @@ export class BudgetPlanRequestDialogComponent implements OnInit, OnDestroy {
             this.form.patchValue({ reviewerId: opt.id });
       }
 
-      // === Approver ====
+      // ==== Budget Approvers ====
       private readonly budgetApproverService = inject(BudgetApproverService);
       budgetApproverOptions: KitDropdownOption[] = [];
       loadBudgetApprovers(): void {
@@ -102,16 +87,9 @@ export class BudgetPlanRequestDialogComponent implements OnInit, OnDestroy {
             this.form.patchValue({ approverId: opt.id });
       }
 
+      // ==== Departments ====
+      public departmentOptions$ = inject(DepartmentOptionStore).option$;
       onDepartmentSelected(opt: KitDropdownOption) {
             this.form.patchValue({ departmentId: opt.id });
-      }
-
-      close(isSuccess: boolean = false) {
-            this.dialog.close(isSuccess);
-      }
-
-      ngOnDestroy(): void {
-            this.destroy$.next();
-            this.destroy$.complete();
       }
 }

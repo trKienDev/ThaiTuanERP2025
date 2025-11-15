@@ -1,0 +1,48 @@
+<div class="page-container">
+      <div class="page-heading">
+            <div class="page-title">
+                  <h3 class="icon">🧮</h3>
+                  <h3 class="title">Tạo kế hoạch ngân sách</h3>
+            </div>
+      </div>
+      <div class="page-body">
+            <form action="">
+                  <div class="budget-plan-general display-flex flex-column gap-10px">
+                        <div class="row display-flex gap-10px">
+                              <div class="width-50pt">
+                                    <kit-dropdown formControlName="departmentId" [options]="(departmentOptions$ | async) ?? []"  [placeholder]="'Chọn phòng ban'"  [required]="true"
+                                    [invalid]="showErrors && (form.get('departmentId')?.invalid ?? false)"></kit-dropdown>
+                                    <div class="form-input-error" *ngIf="showErrors && form.get('departmentId')?.invalid">
+                                          <small>Vui lòng chọn phòng ban</small>
+                                    </div>
+                              </div>
+                              <div class="width-50pt">
+                                    <kit-dropdown formControlName="budgetPeriodId" [options]="budgetPeriodOptions"  [placeholder]="'Chọn kỳ ngân sách'"  [required]="true"
+                                    [invalid]="showErrors && (form.get('budgetPeriodId')?.invalid ?? false)"></kit-dropdown>
+                                    <div class="form-input-error" *ngIf="showErrors && form.get('budgetPeriodId')?.invalid">
+                                          <small>Vui lòng chọn kỳ ngân sách</small>
+                                    </div>
+                              </div>
+                        </div>
+                        <div class="row display-flex gap-10px">
+                              <div class="width-50pt">
+                                    <kit-dropdown  [options]="budgetReviewerOptions" [placeholder]="'User xem xét'" [required]="true" [enableFilter]="false"
+                                    [invalid]="showErrors && (form.get('reviewerId')?.invalid ?? false)" (selectionChange)="onReviewerSelected($event)"
+                                    formControlName="reviewerId"></kit-dropdown>
+                                    <div class="form-input-error" *ngIf="showErrors && form.get('reviewerId')?.invalid">
+                                          <small>Vui lòng chọn user xem xét</small>
+                                    </div>
+                              </div>
+                              <div class="width-50pt">
+                                    <kit-dropdown  [options]="budgetApproverOptions" [placeholder]="'User phê duyệt'" [required]="true" [enableFilter]="false"
+                                    [invalid]="showErrors && (form.get('approverId')?.invalid ?? false)" (selectionChange)="onApproverSelected($event)"
+                                    formControlName="approverId"></kit-dropdown>
+                                    <div class="form-input-error" *ngIf="showErrors && form.get('approverId')?.invalid">
+                                          <small>Vui lòng chọn user phê duyệt</small>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+            </form>
+      </div>
+</div>
