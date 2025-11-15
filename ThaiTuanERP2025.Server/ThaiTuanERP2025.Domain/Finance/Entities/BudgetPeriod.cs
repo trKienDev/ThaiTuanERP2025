@@ -47,8 +47,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 				plan.AssignToPeriod(Id);
 
 			bool exists = BudgetPlans.Any(
-				x => x.DepartmentId == plan.DepartmentId && x.BudgetCodeId == plan.BudgetCodeId
-			);
+				x => x.DepartmentId == plan.DepartmentId 			);
 
 			if (exists)
 				throw new DomainException("Phòng ban đã có kế hoạch ngân sách cho mã ngân sách trong kỳ này.");

@@ -12,9 +12,6 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "Alerts");
-
-            migrationBuilder.EnsureSchema(
                 name: "Finance");
 
             migrationBuilder.EnsureSchema(
@@ -115,34 +112,6 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AppNotifications",
-                schema: "Alerts",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Link = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: false),
-                    IsRead = table.Column<bool>(type: "bit", nullable: false),
-                    DocumentType = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
-                    DocumentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    WorkflowInstanceId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    WorkflowStepInstanceId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ModifiedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AppNotifications", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "BudgetApprover",
                 schema: "Finance",
                 columns: table => new
@@ -239,7 +208,6 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                     Month = table.Column<int>(type: "int", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -260,20 +228,22 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DepartmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BudgetCodeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     BudgetPeriodId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TotalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
+                    DueAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: false),
-                    SelectedReviewerUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsReviewed = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    SelectedReviewerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ReviewedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ReviewedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    SelectedBudgetApproverId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsApproved = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    SelectedApproverId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     BudgetApproverId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ApprovalDeadline = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ApprovedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ApprovedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    BudgetCodeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -297,7 +267,7 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                         principalSchema: "Finance",
                         principalTable: "BudgetCode",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_BudgetPlan_BudgetPeriod_BudgetPeriodId",
                         column: x => x.BudgetPeriodId,
@@ -324,6 +294,33 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                     table.PrimaryKey("PK_BudgetTransaction", x => x.Id);
                     table.ForeignKey(
                         name: "FK_BudgetTransaction_BudgetPlan_BudgetPlanId",
+                        column: x => x.BudgetPlanId,
+                        principalSchema: "Finance",
+                        principalTable: "BudgetPlan",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BudgetPlanDetails",
+                schema: "Finance",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BudgetPlanId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BudgetCodeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BudgetPlanDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BudgetPlanDetails_BudgetPlan_BudgetPlanId",
                         column: x => x.BudgetPlanId,
                         principalSchema: "Finance",
                         principalTable: "BudgetPlan",
@@ -756,8 +753,8 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Subject_Type = table.Column<int>(type: "int", nullable: false),
-                    Subject_Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SubjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SubjectType = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -1158,54 +1155,6 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TaskReminder",
-                schema: "Alerts",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    WorkflowInstanceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    StepInstanceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    Message = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: false),
-                    DueAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsResolved = table.Column<bool>(type: "bit", nullable: false),
-                    ResolvedReason = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ResolvedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DocumentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DocumentType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ModifiedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TaskReminder", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_TaskReminder_Users_CreatedByUserId",
-                        column: x => x.CreatedByUserId,
-                        principalSchema: "Account",
-                        principalTable: "Users",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_TaskReminder_Users_DeletedByUserId",
-                        column: x => x.DeletedByUserId,
-                        principalSchema: "Account",
-                        principalTable: "Users",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_TaskReminder_Users_ModifiedByUserId",
-                        column: x => x.ModifiedByUserId,
-                        principalSchema: "Account",
-                        principalTable: "Users",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "UserGroups",
                 schema: "Account",
                 columns: table => new
@@ -1319,6 +1268,70 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserNotifications",
+                schema: "Core",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ReceiverId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SenderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LinkUrl = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    LinkType = table.Column<int>(type: "int", nullable: false),
+                    TargetId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsRead = table.Column<bool>(type: "bit", nullable: false),
+                    ReadAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserNotifications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserNotifications_Users_ReceiverId",
+                        column: x => x.ReceiverId,
+                        principalSchema: "Account",
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserNotifications_Users_SenderId",
+                        column: x => x.SenderId,
+                        principalSchema: "Account",
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserReminders",
+                schema: "Core",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Subject = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LinkUrl = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    SlaHours = table.Column<int>(type: "int", nullable: false),
+                    DueAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsResolved = table.Column<bool>(type: "bit", nullable: false),
+                    ResolvedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserReminders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserReminders_Users_UserId",
+                        column: x => x.UserId,
+                        principalSchema: "Account",
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserRoles",
                 schema: "RBAC",
                 columns: table => new
@@ -1344,36 +1357,6 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AppNotifications_CreatedByUserId",
-                schema: "Alerts",
-                table: "AppNotifications",
-                column: "CreatedByUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AppNotifications_DeletedByUserId",
-                schema: "Alerts",
-                table: "AppNotifications",
-                column: "DeletedByUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AppNotifications_ModifiedByUserId",
-                schema: "Alerts",
-                table: "AppNotifications",
-                column: "ModifiedByUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AppNotifications_UserId_DocumentType_DocumentId_WorkflowStepInstanceId",
-                schema: "Alerts",
-                table: "AppNotifications",
-                columns: new[] { "UserId", "DocumentType", "DocumentId", "WorkflowStepInstanceId" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AppNotifications_UserId_IsRead_CreatedDate",
-                schema: "Alerts",
-                table: "AppNotifications",
-                columns: new[] { "UserId", "IsRead", "CreatedDate" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_BudgetApprover_ApproverUserId",
@@ -1504,12 +1487,6 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                 column: "DeletedByUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BudgetPeriod_IsActive",
-                schema: "Finance",
-                table: "BudgetPeriod",
-                column: "IsActive");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_BudgetPeriod_ModifiedByUserId",
                 schema: "Finance",
                 table: "BudgetPeriod",
@@ -1559,10 +1536,10 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                 column: "DeletedByUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BudgetPlan_DepartmentId_BudgetCodeId_BudgetPeriodId",
+                name: "IX_BudgetPlan_DepartmentId_BudgetPeriodId",
                 schema: "Finance",
                 table: "BudgetPlan",
-                columns: new[] { "DepartmentId", "BudgetCodeId", "BudgetPeriodId" },
+                columns: new[] { "DepartmentId", "BudgetPeriodId" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -1588,6 +1565,37 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                 schema: "Finance",
                 table: "BudgetPlan",
                 column: "Status");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BudgetPlanDetails_BudgetCodeId",
+                schema: "Finance",
+                table: "BudgetPlanDetails",
+                column: "BudgetCodeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BudgetPlanDetails_BudgetPlanId",
+                schema: "Finance",
+                table: "BudgetPlanDetails",
+                column: "BudgetPlanId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BudgetPlanDetails_BudgetPlanId_BudgetCodeId_IsActive",
+                schema: "Finance",
+                table: "BudgetPlanDetails",
+                columns: new[] { "BudgetPlanId", "BudgetCodeId", "IsActive" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BudgetPlanDetails_DeletedByUserId",
+                schema: "Finance",
+                table: "BudgetPlanDetails",
+                column: "DeletedByUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BudgetPlanDetails_ModifiedByUserId",
+                schema: "Finance",
+                table: "BudgetPlanDetails",
+                column: "ModifiedByUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BudgetTransaction_BudgetPlanId",
@@ -2498,36 +2506,6 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                 column: "TaxCode");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TaskReminder_CreatedByUserId",
-                schema: "Alerts",
-                table: "TaskReminder",
-                column: "CreatedByUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TaskReminder_DeletedByUserId",
-                schema: "Alerts",
-                table: "TaskReminder",
-                column: "DeletedByUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TaskReminder_ModifiedByUserId",
-                schema: "Alerts",
-                table: "TaskReminder",
-                column: "ModifiedByUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TaskReminder_StepInstanceId_UserId",
-                schema: "Alerts",
-                table: "TaskReminder",
-                columns: new[] { "StepInstanceId", "UserId" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TaskReminder_UserId_ResolvedAt_DueAt",
-                schema: "Alerts",
-                table: "TaskReminder",
-                columns: new[] { "UserId", "ResolvedAt", "DueAt" });
-
-            migrationBuilder.CreateIndex(
                 name: "IX_UserGroups_CreatedByUserId",
                 schema: "Account",
                 table: "UserGroups",
@@ -2599,6 +2577,24 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                 filter: "[IsActive] = 1 AND [IsDeleted] = 0");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserNotifications_ReceiverId",
+                schema: "Core",
+                table: "UserNotifications",
+                column: "ReceiverId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserNotifications_SenderId",
+                schema: "Core",
+                table: "UserNotifications",
+                column: "SenderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserReminders_UserId",
+                schema: "Core",
+                table: "UserReminders",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserRoles_RoleId",
                 schema: "RBAC",
                 table: "UserRoles",
@@ -2641,33 +2637,6 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                 table: "Users",
                 column: "Username",
                 unique: true);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_AppNotifications_Users_CreatedByUserId",
-                schema: "Alerts",
-                table: "AppNotifications",
-                column: "CreatedByUserId",
-                principalSchema: "Account",
-                principalTable: "Users",
-                principalColumn: "Id");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_AppNotifications_Users_DeletedByUserId",
-                schema: "Alerts",
-                table: "AppNotifications",
-                column: "DeletedByUserId",
-                principalSchema: "Account",
-                principalTable: "Users",
-                principalColumn: "Id");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_AppNotifications_Users_ModifiedByUserId",
-                schema: "Alerts",
-                table: "AppNotifications",
-                column: "ModifiedByUserId",
-                principalSchema: "Account",
-                principalTable: "Users",
-                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_BudgetApprover_Users_ApproverUserId",
@@ -2874,6 +2843,26 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                 schema: "Finance",
                 table: "BudgetPlan",
                 column: "ReviewedByUserId",
+                principalSchema: "Account",
+                principalTable: "Users",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_BudgetPlanDetails_Users_DeletedByUserId",
+                schema: "Finance",
+                table: "BudgetPlanDetails",
+                column: "DeletedByUserId",
+                principalSchema: "Account",
+                principalTable: "Users",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_BudgetPlanDetails_Users_ModifiedByUserId",
+                schema: "Finance",
+                table: "BudgetPlanDetails",
+                column: "ModifiedByUserId",
                 principalSchema: "Account",
                 principalTable: "Users",
                 principalColumn: "Id",
@@ -3851,11 +3840,11 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                 table: "Suppliers");
 
             migrationBuilder.DropTable(
-                name: "AppNotifications",
-                schema: "Alerts");
+                name: "BudgetApproverDepartments",
+                schema: "Finance");
 
             migrationBuilder.DropTable(
-                name: "BudgetApproverDepartments",
+                name: "BudgetPlanDetails",
                 schema: "Finance");
 
             migrationBuilder.DropTable(
@@ -3909,16 +3898,20 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                 schema: "RBAC");
 
             migrationBuilder.DropTable(
-                name: "TaskReminder",
-                schema: "Alerts");
-
-            migrationBuilder.DropTable(
                 name: "UserGroups",
                 schema: "Account");
 
             migrationBuilder.DropTable(
                 name: "UserManagerAssignments",
                 schema: "Account");
+
+            migrationBuilder.DropTable(
+                name: "UserNotifications",
+                schema: "Core");
+
+            migrationBuilder.DropTable(
+                name: "UserReminders",
+                schema: "Core");
 
             migrationBuilder.DropTable(
                 name: "UserRoles",

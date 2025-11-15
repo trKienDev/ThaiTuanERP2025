@@ -2157,12 +2157,6 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime?>("ApprovalDeadline")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime?>("ApprovedAt")
                         .HasColumnType("datetime2");
 
@@ -2239,6 +2233,9 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ApprovedByUserId");
@@ -2261,10 +2258,59 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
 
                     b.HasIndex("Status");
 
-                    b.HasIndex("DepartmentId", "BudgetCodeId", "BudgetPeriodId")
+                    b.HasIndex("DepartmentId", "BudgetPeriodId")
                         .IsUnique();
 
                     b.ToTable("BudgetPlan", "Finance");
+                });
+
+            modelBuilder.Entity("ThaiTuanERP2025.Domain.Finance.Entities.BudgetPlanDetail", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("BudgetCodeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BudgetPlanId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ModifiedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BudgetCodeId");
+
+                    b.HasIndex("BudgetPlanId");
+
+                    b.HasIndex("DeletedByUserId");
+
+                    b.HasIndex("ModifiedByUserId");
+
+                    b.HasIndex("BudgetPlanId", "BudgetCodeId", "IsActive")
+                        .IsUnique();
+
+                    b.ToTable("BudgetPlanDetails", "Finance");
                 });
 
             modelBuilder.Entity("ThaiTuanERP2025.Domain.Finance.Entities.BudgetTransaction", b =>
@@ -3699,9 +3745,9 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                         .HasForeignKey("BudgetApproverId");
 
                     b.HasOne("ThaiTuanERP2025.Domain.Finance.Entities.BudgetCode", "BudgetCode")
-                        .WithMany("BudgetPlans")
+                        .WithMany()
                         .HasForeignKey("BudgetCodeId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ThaiTuanERP2025.Domain.Finance.Entities.BudgetPeriod", "BudgetPeriod")
@@ -3755,10 +3801,34 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                     b.Navigation("ReviewedByUser");
                 });
 
+            modelBuilder.Entity("ThaiTuanERP2025.Domain.Finance.Entities.BudgetPlanDetail", b =>
+                {
+                    b.HasOne("ThaiTuanERP2025.Domain.Finance.Entities.BudgetPlan", null)
+                        .WithMany("Details")
+                        .HasForeignKey("BudgetPlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ThaiTuanERP2025.Domain.Account.Entities.User", "DeletedByUser")
+                        .WithMany()
+                        .HasForeignKey("DeletedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("ThaiTuanERP2025.Domain.Account.Entities.User", "ModifiedByUser")
+                        .WithMany()
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("DeletedByUser");
+
+                    b.Navigation("ModifiedByUser");
+                });
+
             modelBuilder.Entity("ThaiTuanERP2025.Domain.Finance.Entities.BudgetTransaction", b =>
                 {
                     b.HasOne("ThaiTuanERP2025.Domain.Finance.Entities.BudgetPlan", "BudgetPlan")
-                        .WithMany("Transactions")
+                        .WithMany()
                         .HasForeignKey("BudgetPlanId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -4004,11 +4074,6 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                     b.Navigation("Departments");
                 });
 
-            modelBuilder.Entity("ThaiTuanERP2025.Domain.Finance.Entities.BudgetCode", b =>
-                {
-                    b.Navigation("BudgetPlans");
-                });
-
             modelBuilder.Entity("ThaiTuanERP2025.Domain.Finance.Entities.BudgetGroup", b =>
                 {
                     b.Navigation("BudgetCodes");
@@ -4021,7 +4086,7 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
 
             modelBuilder.Entity("ThaiTuanERP2025.Domain.Finance.Entities.BudgetPlan", b =>
                 {
-                    b.Navigation("Transactions");
+                    b.Navigation("Details");
                 });
 
             modelBuilder.Entity("ThaiTuanERP2025.Domain.Finance.Entities.CashoutCode", b =>

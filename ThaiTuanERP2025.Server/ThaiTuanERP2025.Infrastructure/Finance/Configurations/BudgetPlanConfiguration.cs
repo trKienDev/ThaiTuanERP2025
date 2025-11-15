@@ -14,7 +14,6 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 			builder.HasKey(e => e.Id);
 
 			// ===== Basic properties =====
-			builder.Property(x => x.Amount).HasColumnType("decimal(18,2)").IsRequired();
 			builder.Property(x => x.IsActive).IsRequired();
 			builder.Property(x => x.Status).HasConversion<int>().IsRequired();
 			builder.Property(x => x.RowVersion).IsRowVersion(); // concurrency token
@@ -22,11 +21,6 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 			builder.Property(x => x.IsApproved).HasDefaultValue(false);
 
 			// ===== Relationships =====
-			builder.HasOne(x => x.BudgetCode)
-				.WithMany(x => x.BudgetPlans)
-				.HasForeignKey(x => x.BudgetCodeId)
-				.OnDelete(DeleteBehavior.Restrict);
-
 			builder.HasOne(x => x.BudgetPeriod)
 				.WithMany(x => x.BudgetPlans)
 				.HasForeignKey(x => x.BudgetPeriodId)
@@ -49,10 +43,10 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 				.OnDelete(DeleteBehavior.Restrict);
 
 			// Transactions (private field)
-			builder.Navigation(e => e.Transactions).UsePropertyAccessMode(PropertyAccessMode.Field);
+			//builder.Navigation(e => e.Transactions).UsePropertyAccessMode(PropertyAccessMode.Field);
 
 			// ===== Indexes =====
-			builder.HasIndex(x => new { x.DepartmentId, x.BudgetCodeId, x.BudgetPeriodId }).IsUnique(); // Không cho phép trùng kế hoạch cùng mã ngân sách / phòng / kỳ
+			builder.HasIndex(x => new { x.DepartmentId, x.BudgetPeriodId }).IsUnique(); // Không cho phép trùng kế hoạch cùng mã ngân sách / phòng / kỳ
 			builder.HasIndex(x => x.Status);
 			builder.HasIndex(x => x.IsActive);
 

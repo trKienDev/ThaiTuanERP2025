@@ -33,7 +33,6 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 
 		public BudgetGroup BudgetGroup { get; private set; } = null!;
 		public CashoutCode? CashoutCode { get; private set; } = null!;
-		public ICollection<BudgetPlan> BudgetPlans { get; private set; } = new List<BudgetPlan>();
 		#endregion
 
 		#region Domain Behaviors

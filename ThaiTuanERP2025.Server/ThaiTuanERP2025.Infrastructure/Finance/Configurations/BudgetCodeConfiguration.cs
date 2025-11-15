@@ -31,12 +31,6 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 				.HasForeignKey(x => x.CashoutCodeId)
 				.OnDelete(DeleteBehavior.SetNull);
 
-			// BudgetPlans (1 - n)
-			builder.HasMany(x => x.BudgetPlans)
-				.WithOne(x => x.BudgetCode)
-				.HasForeignKey(x => x.BudgetCodeId)
-				.OnDelete(DeleteBehavior.Restrict);
-
 			// ===== Indexes & Constraints =====
 			builder.HasIndex(x => new { x.BudgetGroupId, x.Code }).IsUnique(); // Code duy nhất trong mỗi nhóm
 			builder.HasIndex(x => x.IsActive);
