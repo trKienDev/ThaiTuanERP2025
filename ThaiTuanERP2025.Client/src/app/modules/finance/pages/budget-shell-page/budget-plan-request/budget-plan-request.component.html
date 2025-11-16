@@ -1,12 +1,16 @@
 <div class="page-container">
-      <div class="page-heading">
-            <div class="page-title">
-                  <h3 class="icon">🧮</h3>
-                  <h3 class="title">Tạo kế hoạch ngân sách</h3>
+      <form [formGroup]="form" class="display-flex flex-column gap-10px" (ngSubmit)="submit()">
+            <div class="page-heading">
+                  <div class="page-title">
+                        <h3 class="icon">🧮</h3>
+                        <h3 class="title">Tạo kế hoạch ngân sách</h3>
+                  </div>
+                  <div class="actions display-flex gap-10px">
+                        <button type="button" class="button cancel-button">Hủy</button>
+                        <kit-spinner-button type="submit" cssClass="save-button" [loading]="submitting" text="Gửi xem xét" loadingText="Đang gửi…"></kit-spinner-button>
+                  </div>
             </div>
-      </div>
-      <div class="page-body">
-            <form action="">
+            <div class="page-body">
                   <div class="budget-plan-general display-flex flex-column gap-10px">
                         <div class="row display-flex gap-10px">
                               <div class="width-50pt">
@@ -28,7 +32,7 @@
                               <div class="width-50pt">
                                     <kit-dropdown  [options]="budgetReviewerOptions" [placeholder]="'User xem xét'" [required]="true" [enableFilter]="false"
                                     [invalid]="showErrors && (form.get('reviewerId')?.invalid ?? false)" (selectionChange)="onReviewerSelected($event)"
-                                    formControlName="reviewerId"></kit-dropdown>
+                                    formControlName="selectedReviewerId"></kit-dropdown>
                                     <div class="form-input-error" *ngIf="showErrors && form.get('reviewerId')?.invalid">
                                           <small>Vui lòng chọn user xem xét</small>
                                     </div>
@@ -36,13 +40,59 @@
                               <div class="width-50pt">
                                     <kit-dropdown  [options]="budgetApproverOptions" [placeholder]="'User phê duyệt'" [required]="true" [enableFilter]="false"
                                     [invalid]="showErrors && (form.get('approverId')?.invalid ?? false)" (selectionChange)="onApproverSelected($event)"
-                                    formControlName="approverId"></kit-dropdown>
+                                    formControlName="selectedApproverId"></kit-dropdown>
                                     <div class="form-input-error" *ngIf="showErrors && form.get('approverId')?.invalid">
                                           <small>Vui lòng chọn user phê duyệt</small>
                                     </div>
                               </div>
                         </div>
                   </div>
-            </form>
-      </div>
+                  <div class="budget-plan-table-detail margin-top-15px">
+                        <div>
+                              <label class="label">Bảng chi tiết <span style="color: red;">  *</span></label>
+                              <table class="table margin-top-15px">
+                                    <thead>
+                                          <tr>
+                                                <th style="width: 1%;">#</th>
+                                                <th>Mã ngân sách</th>
+                                                <th>Số tiền</th>
+                                                <th>Ghi chú</th>
+                                                <th>Xóa</th>
+                                          </tr>
+                                    </thead>
+                                    <tbody formArrayName="details">
+                                          <tr *ngFor="let row of details.controls; let i = index; trackBy: trackByIndex;" [formGroupName]="i">
+                                                <td>{{ i + 1 }}</td>
+                                                <td>
+                                                      <kit-dropdown formControlName="budgetCodeId" [options]="budgetCodeOptions" [placeholder]="'Chọn mã ngân sách'" [required]="true" [enableFilter]="false"
+                                                      [invalid]="showErrors && (row.get('budgetCodeId')?.invalid ?? false)" (selectionChange)="onBudgetCodeSelected(i, $event)"></kit-dropdown>
+                                                      <div class="form-input-error" *ngIf="showErrors && row.get('budgetCodeId')?.invalid">
+                                                            <small>Vui lòng chọn mã ngân sách</small>
+                                                      </div>
+                                                </td>
+                                                <td>
+                                                      <input type="text" formControlName="amount" inputmode="decimal" appMoney [appMoneyDecimals]="0"  />
+                                                </td>
+                                                <td>
+                                                      <input type="text" formControlName="note">
+                                                </td>
+                                                <td class="display-flex justify-content-center">
+                                                      <div>
+                                                            <button type="button" class="button danger-button" aria-label="Xóa dòng" (click)="removeDetail(i)" style="max-height: 36px;">
+                                                                  <span class="material-icons-outlined">close</span>
+                                                            </button>
+                                                      </div>
+                                                </td>
+                                          </tr>
+                                          <tr class="tr-non-hover">
+                                                <td colspan="12">
+                                                      <button type="button" class="text-button" (click)="addDetail()">Thêm chi tiết</button>
+                                                </td>
+                                          </tr>
+                                    </tbody>
+                              </table>
+                        </div>
+                  </div>
+            </div>
+      </form>
 </div>

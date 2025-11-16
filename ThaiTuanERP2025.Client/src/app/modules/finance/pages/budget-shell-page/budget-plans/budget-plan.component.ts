@@ -3,7 +3,6 @@ import { BudgetPlansByDepartmentDto } from './../../../models/budget-plan.model'
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { BudgetPlanRequestDialogComponent } from "../../../components/budget-plan-request-dialog/budget-plan-request-dialog.component";
 import { BudgetPlanApproversDialogComponent } from "../../../components/budget-apporver-request-dilaog/budget-approver-request-dialog.component";
 import { ListBudgetApproversDialogComponent } from "../../../components/list-budget-approvers-dialog/list-budget-approvers-dialog.component";
 import { HasPermissionDirective } from "../../../../../core/auth/auth.directive";
@@ -182,15 +181,6 @@ export class BudgetPlanPanelComponent implements OnInit, OnDestroy {
       // =============================
 
       trackById(index: number, item: BudgetPlansByDepartmentDto) { return item.departmentId; }
-
-      openBudgetPlanRequestDialog() {
-            const dialogRef = this.dialog.open(BudgetPlanRequestDialogComponent, {});
-            dialogRef.afterClosed().subscribe(isSuccess => {
-                  if (isSuccess) {
-                        this.initializePeriodSelection();
-                  }
-            });
-      }
 
       openListBudgetApproverDialog() {
             const dialogRef = this.dialog.open(ListBudgetApproversDialogComponent, {})

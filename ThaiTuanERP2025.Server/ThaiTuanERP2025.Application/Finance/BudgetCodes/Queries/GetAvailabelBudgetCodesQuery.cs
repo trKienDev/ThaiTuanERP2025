@@ -16,7 +16,8 @@
 //	/// </summary>
 //	public sealed record GetAvailabelBudgetCodesQuery : IRequest<IReadOnlyList<BudgetCodeLookupDto>>;
 
-//	public sealed class GetAvailabelBudgetCodesQueryHandler : IRequestHandler<GetAvailabelBudgetCodesQuery, IReadOnlyList<BudgetCodeLookupDto>> {
+//	public sealed class GetAvailabelBudgetCodesQueryHandler : IRequestHandler<GetAvailabelBudgetCodesQuery, IReadOnlyList<BudgetCodeLookupDto>>
+//	{
 //		private readonly IBudgetCodeReadRepository _budgetCodeRepo;
 //		private readonly IBudgetPeriodReadRepository _budgetPeriodRepo;
 //		private readonly IBudgetPlanReadRepository _budgetPlanRepo;
@@ -27,7 +28,8 @@
 //		public GetAvailabelBudgetCodesQueryHandler(
 //			IBudgetCodeReadRepository budgetCodeRepo, IMapper mapper, ICurrentUserService currentUser, IBudgetPeriodReadRepository budgetPeriodRepo,
 //			IDepartmentReadRepository departmentRepo, IUserReadRepostiory userRepo, IBudgetPlanReadRepository budgetPlanRepo
-//		) {
+//		)
+//		{
 //			_budgetCodeRepo = budgetCodeRepo;
 //			_budgetPeriodRepo = budgetPeriodRepo;
 //			_budgetPlanRepo = budgetPlanRepo;
@@ -38,7 +40,8 @@
 //			_currentUser = currentUser;
 //		}
 
-//		public async Task<IReadOnlyList<BudgetCodeLookupDto>> Handle(GetAvailabelBudgetCodesQuery query, CancellationToken cancellationToken) {
+//		public async Task<IReadOnlyList<BudgetCodeLookupDto>> Handle(GetAvailabelBudgetCodesQuery query, CancellationToken cancellationToken)
+//		{
 //			var userId = _currentUser.UserId ?? throw new NotFoundException("User không hợp lệ");
 //			var currentUser = await _userRepo.GetByIdProjectedAsync(userId, cancellationToken)
 //				?? throw new NotFoundException("User không hợp lệ");

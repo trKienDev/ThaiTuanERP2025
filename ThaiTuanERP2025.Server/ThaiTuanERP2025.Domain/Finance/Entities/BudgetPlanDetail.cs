@@ -7,15 +7,12 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 	{
 		#region Constructors
 		private BudgetPlanDetail() { }
-		internal BudgetPlanDetail(Guid planId, Guid budgetCodeId, decimal amount, Guid userId)
+		internal BudgetPlanDetail(Guid planId, Guid budgetCodeId, decimal amount)
 		{
 			BudgetPlanId = planId;
 			BudgetCodeId = budgetCodeId;
 			Amount = amount;
 			IsActive = true;
-
-			ModifiedAt = DateTime.UtcNow;
-			ModifiedByUserId = userId;
 		}
 		#endregion
 
@@ -25,13 +22,15 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public decimal Amount { get; private set; }
 		public bool IsActive { get; private set; }
 
-		public DateTime ModifiedAt { get; private set; }
-		public Guid ModifiedByUserId { get; private set; }
-		public User ModifiedByUser { get; private set; } = null!;
+		public DateTime? ModifiedAt { get; private set; }
+		public Guid? ModifiedByUserId { get; private set; }
+		public User? ModifiedByUser { get; private set; } = null!;
 
 		public DateTime? DeletedAt { get; private set; }
 		public Guid? DeletedByUserId { get; private set; }
 		public User? DeletedByUser { get; private set; }
+
+		public BudgetCode BudgetCode { get; private set; }
 		#endregion
 
 		#region Behaviors

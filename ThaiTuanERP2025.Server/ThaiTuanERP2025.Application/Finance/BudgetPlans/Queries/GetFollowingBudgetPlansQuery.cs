@@ -1,0 +1,75 @@
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using FluentValidation;
+using MediatR;
+using ThaiTuanERP2025.Application.Core.Followers;
+using ThaiTuanERP2025.Application.Finance.BudgetPeriods;
+using ThaiTuanERP2025.Application.Shared.Exceptions;
+using ThaiTuanERP2025.Application.Shared.Interfaces;
+using ThaiTuanERP2025.Domain.Core.Enums;
+
+namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Queries
+{
+	public sealed record GetFollowingBudgetPlansQuery(Guid PeriodId) : IRequest<IReadOnlyList<BudgetPlanDto>>;
+
+	public sealed class GetFollowingBudgetPlansQueryHandler : IRequestHandler<GetFollowingBudgetPlansQuery, IReadOnlyList<BudgetPlanDto>> {
+		private readonly IBudgetPlanReadRepository _budgetPlanRepo;
+		private readonly ICurrentUserService _currentUser;
+		private readonly IBudgetPeriodReadRepository _budgetPeriodRepo;
+		private readonly IFollowerReadRepository _followerRepo;
+		private readonly IMapper _mapper;
+		public GetFollowingBudgetPlansQueryHandler(
+			IBudgetPlanReadRepository budgetPlanRepo, ICurrentUserService currentUser, IBudgetPeriodReadRepository budgetPeriodRepo,
+			IFollowerReadRepository followerRepo, IMapper mapper
+		) {
+			_budgetPlanRepo = budgetPlanRepo;
+			_currentUser = currentUser;
+			_budgetPeriodRepo = budgetPeriodRepo;
+			_followerRepo = followerRepo;
+			_mapper = mapper;
+		}
+
+		public async Task<IReadOnlyList<BudgetPlanDto>> Handle(GetFollowingBudgetPlansQuery query, CancellationToken cancellationToken) {
+			var budgetPeriod = await _budgetPeriodRepo.ExistAsync(q => q.Id == query.PeriodId, cancellationToken);
+			if (!budgetPeriod) throw new NotFoundException("Không tìm thấy kế hoạch ngân sách");
+
+			var userId = _currentUser.UserId ?? throw new NotFoundException("User không hợp lệ");
+
+			var following = await _followerRepo.GetAllAsync(
+				q => q.UserId == userId && q.SubjectType == SubjectType.BudgetPlan
+					&& q.IsActive && !q.IsDeleted,
+				cancellationToken: cancellationToken
+			);
+			if(!following.Any()) return Array.Empty<BudgetPlanDto>();
+
+			var subjectIds = following.Select(f => f.SubjectId).ToList();
+			if (!subjectIds.Any())
+				return Array.Empty<BudgetPlanDto>();
+
+			var plans = await _budgetPlanRepo.ListProjectedAsync(
+				q => q.Where(p => subjectIds.Contains(p.Id)
+					&& p.IsActive
+					&& !p.IsDeleted
+					&& p.BudgetPeriodId == query.PeriodId
+				).ProjectTo<BudgetPlanDto>(_mapper.ConfigurationProvider),
+				cancellationToken: cancellationToken
+			);
+			if (!plans.Any()) return Array.Empty<BudgetPlanDto>();
+
+			foreach (var plan in plans)
+			{
+				plan.CanReview = plan.SelectedReviewerId == userId;
+			}
+
+			return plans;
+		}
+
+		public sealed class GetFollowingBudgetPlansQueryValidator : AbstractValidator<GetFollowingBudgetPlansQuery>
+		{
+			public GetFollowingBudgetPlansQueryValidator() {
+				RuleFor(x => x.PeriodId)
+					.NotEmpty().WithMessage("Kỳ ngân sách không được để trống");
+			}
+		}
+	}
+}

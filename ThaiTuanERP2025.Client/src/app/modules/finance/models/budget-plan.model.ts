@@ -14,22 +14,31 @@ export interface BudgetPlansByDepartmentDto {
 
 export interface BudgetPlanDto {
       id: string;
-      amount: number;
-      createdDate: Date;
-      isReviewed: boolean;
-      isApproved: boolean;
-      
+
       departmentId: string;
       department: DepartmentBriefDto;
-
-      budgetCodeId: string;
-      budgetCode: BudgetCodeDto;
 
       budgetPeriodId: string;
       budgetPeriod: BudgetPeriodDto;
 
+      totalAmount: number;
+      isReviewed: boolean;
+      isApproved: boolean;
+      createdAt: Date;
+
       SelectedReviewerId?: string | null;
       canReview: boolean;
+
+      dueAt?: string;
+
+      details: BudgetPlanDetailDto[];
+}
+
+export interface BudgetPlanDetailDto {
+      id: string;
+      budgetCodeId: string;
+      budgetCode: BudgetCodeDto;
+      amount: number;
 }
 
 export interface BudgetPlanReview extends BudgetPlanDto {
@@ -37,9 +46,17 @@ export interface BudgetPlanReview extends BudgetPlanDto {
       editedAmount: number;
 }
 
+// ====== REQUEST =====
 export interface BudgetPlanRequest {
       departmentId: string;
-      budgetCodeId: string;
       budgetPeriodId: string;
+      selectedReviewerId: string;
+      selectedApproverId: string;
+      details: BudgetPlanDetailRequest[];
+}
+
+export interface BudgetPlanDetailRequest {
+      budgetCodeId: string;
       amount: number;
+      note: string | null;
 }

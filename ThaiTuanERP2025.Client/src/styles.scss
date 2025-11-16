@@ -222,30 +222,20 @@ input[type=number] { -moz-appearance: textfield; }
 .mat-mdc-dialog-surface { min-width: fit-content !important; }
 .cdk-overlay-pane, .mat-mdc-dialog-container, .mat-mdc-dialog-inner-container { min-width: fit-content !important; }
 
-.white-space {
-      display: block;
-      // height: 300px;
-}
+.white-space { display: block; }
 
-.avatar-user {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      margin: 0px 5px;
-}
-.approver-avatar {
-      box-shadow:  rgba(54, 223, 12, 0.44) 0px 1px 3px, rgba(103, 197, 15, 0.79) 0px 1px 2px;
-}
-.rejecter-avatar {
-      box-shadow:  rgba(244, 31, 31, 0.44) 0px 1px 3px, rgba(240, 24, 24, 0.79) 0px 1px 2px;
-}
-.waiting-avatar {
-      animation: blink 2s infinite;
-}
+.avatar-user { width: 30px; height: 30px; border-radius: 50%; margin: 0px 5px; }
+.approver-avatar { box-shadow:  rgba(54, 223, 12, 0.44) 0px 1px 3px, rgba(103, 197, 15, 0.79) 0px 1px 2px; }
+.rejecter-avatar { box-shadow:  rgba(244, 31, 31, 0.44) 0px 1px 3px, rgba(240, 24, 24, 0.79) 0px 1px 2px; }
+.waiting-avatar {animation: blink 2s infinite; }
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-.link-text:hover {
-      color: var(--bright-blue-color);
-      cursor: pointer;
-      text-decoration: underline;
+.link-text:hover { color: var(--bright-blue-color); cursor: pointer; text-decoration: underline; }
+
+.label {
+      background: #f2f5fa;
+      background: linear-gradient(90deg,rgba(242, 245, 250, 1) 0%, rgba(246, 248, 250, 1) 35%, rgba(255, 255, 255, 1) 100%);
+      padding: 4px;
+      border-radius: 5px;
+      box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }

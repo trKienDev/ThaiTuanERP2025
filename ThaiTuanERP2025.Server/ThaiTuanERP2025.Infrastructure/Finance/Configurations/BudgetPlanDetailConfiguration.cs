@@ -15,9 +15,8 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 			// Decimal precision — quan trọng!
 			builder.Property(d => d.Amount).HasPrecision(18, 2).IsRequired();
 			builder.Property(d => d.IsActive).HasDefaultValue(true);
-			builder.Property(d => d.ModifiedAt).IsRequired();
-			builder.Property(d => d.DeletedAt).IsRequired(false);
-			builder.Property(d => d.ModifiedByUserId).IsRequired();
+			builder.Property(d => d.ModifiedByUserId).IsRequired(false);
+			builder.Property(d => d.ModifiedAt).IsRequired(false);
 			builder.Property(d => d.DeletedByUserId).IsRequired(false);
 
 			// Relationship ModifiedByUser

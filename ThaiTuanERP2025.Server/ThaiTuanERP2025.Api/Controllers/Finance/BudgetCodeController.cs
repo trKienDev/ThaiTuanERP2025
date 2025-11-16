@@ -23,10 +23,10 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 		}
 
 		//[HttpGet("available")]
-		//public async Task<IActionResult> GetAvailable(CancellationToken cancellationToken) {
+		//public async Task<IActionResult> GetAvailable(CancellationToken cancellationToken)
+		//{
 		//	var dtos = await _mediator.Send(new GetAvailabelBudgetCodesQuery(), cancellationToken);
 		//	return Ok(ApiResponse<IReadOnlyList<BudgetCodeLookupDto>>.Success(dtos));
-
 		//}
 
 		[HttpPost]

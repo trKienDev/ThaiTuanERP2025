@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 namespace ThaiTuanERP2025.Infrastructure.Migrations
 {
     [DbContext(typeof(ThaiTuanERP2025DbContext))]
-    partial class ThaiTuanERP2025DbContextModelSnapshot : ModelSnapshot
+    [Migration("20251116145743_RemoveTotalAmountFromBudgetPlan")]
+    partial class RemoveTotalAmountFromBudgetPlan
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnInit } from "@angular/core";
-import { FormBuilder, Validators } from "@angular/forms";
+import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { BudgetPeriodService } from "../../../services/budget-period.service";
 import { KitDropdownOption, KitDropdownComponent } from "../../../../../shared/components/kit-dropdown/kit-dropdown.component";
 import { DepartmentOptionStore } from "../../../../account/options/department-dropdown-options.option";
@@ -8,36 +8,73 @@ import { UserService } from "../../../../account/services/user.service";
 import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
 import { resolveAvatarUrl } from "../../../../../shared/utils/avatar.utils";
 import { BudgetApproverService } from "../../../services/budget-approver.service";
+import { BudgetCodeService } from "../../../services/budget-code.service";
+import { MoneyFormatDirective } from "../../../../../shared/directives/money/money-format.directive";
+import { KitSpinnerButtonComponent } from "../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
+import { ToastService } from "../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
+import { BudgetPlanRequest } from "../../../models/budget-plan.model";
+import { firstValueFrom } from "rxjs";
+import { BudgetPlanService } from "../../../services/budget-plan.service";
+import { HttpErrorHandlerService } from "../../../../../core/services/http-errror-handler.service";
+
+interface BudgetPlanDetailsForm {
+      budgetCodeId: FormControl<string>;
+      amount: FormControl<number>;
+      note: FormControl<string | null>;
+}
 
 @Component({
       selector: 'budget-plan-request',
       standalone: true,
-      imports: [CommonModule, KitDropdownComponent],
+      imports: [CommonModule, KitDropdownComponent, ReactiveFormsModule, MoneyFormatDirective, KitSpinnerButtonComponent],
       templateUrl: './budget-plan-request.component.html'
 })
 export class BudgetPlanRequestPanelComponent implements OnInit {
       private readonly formBuilder = inject(FormBuilder);
       public submitting: boolean = false;
       public showErrors: boolean = false;
-      
-      public budgetPeriodOptions: KitDropdownOption[] = [];
+      private readonly toast = inject(ToastService);
       private readonly userService = inject(UserService);
+      private readonly budgetPlanService = inject(BudgetPlanService);
+      private readonly httpErrorHandler = inject(HttpErrorHandlerService);
 
       ngOnInit(): void {
             this.loadBudgetApprovers();
             this.loadBudgetPeriodOptions();
             this.loadBudgetReviewers();
+            this.loadAvailableBudgetCodes();
       }
-      
+
+      // ===== FORM =====
       form = this.formBuilder.group({
             departmentId: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
             budgetPeriodId: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
-            approverId: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
-            reviewerId: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
+            selectedApproverId: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
+            selectedReviewerId: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
+            details: this.formBuilder.array<FormGroup<BudgetPlanDetailsForm>>([ this.budgetPlanDetails()]),
       });
 
-      // ==== BudgetPeriod ====
+      budgetPlanDetails(): FormGroup<BudgetPlanDetailsForm> {
+            return this.formBuilder.group({
+                  budgetCodeId: this.formBuilder.control<string>('', { nonNullable: true, validators: Validators.required }),
+                  amount: this.formBuilder.control<number>(0, { nonNullable: true, validators: Validators.required }),
+                  note: this.formBuilder.control<string | null>(null)
+            });
+      }
+      get details(): FormArray<FormGroup<BudgetPlanDetailsForm>> {
+            return this.form.controls.details;
+      }
+      trackByIndex = (_: number, __: any) => _;
+      addDetail(): void {
+            this.details.push(this.budgetPlanDetails());
+      }
+      removeDetail(i: number): void {
+            this.details.removeAt(i);
+      }
+
+      // ==== Budget Period ====
       private readonly budgetPeriodService = inject(BudgetPeriodService);
+      public budgetPeriodOptions: KitDropdownOption[] = [];
       loadBudgetPeriodOptions() {
             this.budgetPeriodService.getAvailable().subscribe({
                   next: (budgetPeriods) => {
@@ -48,6 +85,26 @@ export class BudgetPlanRequestPanelComponent implements OnInit {
                   },
                   error: (err => handleHttpError(err))
             })
+      }
+
+      // ==== Bugdet Codes ====
+     private readonly budgetCodeService = inject(BudgetCodeService);
+     public budgetCodeOptions: KitDropdownOption[] = [];
+     loadAvailableBudgetCodes() {
+            this.budgetCodeService.getAll().subscribe({
+                  next: (budgetCodes) => {
+                        this.budgetCodeOptions = budgetCodes.map(bc => ({
+                              id: bc.id,
+                              label: `${bc.code} - ${bc.name}`
+                        }));
+                  },
+                  error: (err => handleHttpError(err))
+            })
+      }
+      onBudgetCodeSelected(index: number, opt: KitDropdownOption) {
+            this.details.at(index).patchValue({
+                  budgetCodeId: opt.id
+            });
       }
 
       // ==== Budget Reviewers ====
@@ -65,7 +122,7 @@ export class BudgetPlanRequestPanelComponent implements OnInit {
             })     
       }
       onReviewerSelected(opt: KitDropdownOption) {
-            this.form.patchValue({ reviewerId: opt.id });
+            this.form.patchValue({ selectedReviewerId: opt.id });
       }
 
       // ==== Budget Approvers ====
@@ -84,12 +141,53 @@ export class BudgetPlanRequestPanelComponent implements OnInit {
             })
       }
       onApproverSelected(opt: KitDropdownOption) {
-            this.form.patchValue({ approverId: opt.id });
+            this.form.patchValue({ selectedApproverId: opt.id });
       }
 
       // ==== Departments ====
       public departmentOptions$ = inject(DepartmentOptionStore).option$;
       onDepartmentSelected(opt: KitDropdownOption) {
             this.form.patchValue({ departmentId: opt.id });
+      }
+
+      // ==== SUBMIT ====
+      async submit(): Promise<void> {
+            this.showErrors = true;
+
+            if(this.form.invalid) {
+                  this.form.markAllAsTouched();
+                  const invalid = this.form.getRawValue();
+                  console.log('form invalid: ', invalid);
+                  this.toast.warningRich("Vui lòng điền đẩy đủ thông tin");
+                  return;
+            }
+
+            try {
+                  this.submitting = true;
+                  this.form.disable({ emitEvent: false });
+
+                  const raw = this.form.getRawValue();
+                  const payload: BudgetPlanRequest = {
+                        departmentId: raw.departmentId!,
+                        budgetPeriodId: raw.budgetPeriodId!,
+                        selectedReviewerId: raw.selectedReviewerId!,
+                        selectedApproverId: raw.selectedApproverId!,
+                        details: raw.details.map(d => ({
+                              budgetCodeId: d.budgetCodeId!,
+                              amount: d.amount!,
+                              note: d.note
+                        }))
+                  };
+
+                  await firstValueFrom(this.budgetPlanService.create(payload));
+                  this.toast.successRich("Tạo kế hoạch ngân sách thành công");
+                  this.form.reset();
+            } catch(error) {
+                  this.httpErrorHandler.handle(error, 'Tạo kế hoạch ngân sách thất bại');
+            } finally {
+                  this.form.enable({ emitEvent: false })
+                  this.showErrors = false;
+                  this.submitting = false;
+            }     
       }
 }

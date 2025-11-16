@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 namespace ThaiTuanERP2025.Infrastructure.Migrations
 {
     [DbContext(typeof(ThaiTuanERP2025DbContext))]
-    partial class ThaiTuanERP2025DbContextModelSnapshot : ModelSnapshot
+    [Migration("20251116100635_UpdateBudgetPlanDetail_AllowNullableModifiedAt")]
+    partial class UpdateBudgetPlanDetail_AllowNullableModifiedAt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2225,6 +2228,9 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ApprovedByUserId");
@@ -3782,12 +3788,6 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
 
             modelBuilder.Entity("ThaiTuanERP2025.Domain.Finance.Entities.BudgetPlanDetail", b =>
                 {
-                    b.HasOne("ThaiTuanERP2025.Domain.Finance.Entities.BudgetCode", "BudgetCode")
-                        .WithMany()
-                        .HasForeignKey("BudgetCodeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("ThaiTuanERP2025.Domain.Finance.Entities.BudgetPlan", null)
                         .WithMany("Details")
                         .HasForeignKey("BudgetPlanId")
@@ -3803,8 +3803,6 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("ModifiedByUserId")
                         .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("BudgetCode");
 
                     b.Navigation("DeletedByUser");
 

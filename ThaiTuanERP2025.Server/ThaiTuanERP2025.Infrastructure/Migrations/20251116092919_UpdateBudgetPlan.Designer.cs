@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 namespace ThaiTuanERP2025.Infrastructure.Migrations
 {
     [DbContext(typeof(ThaiTuanERP2025DbContext))]
-    partial class ThaiTuanERP2025DbContextModelSnapshot : ModelSnapshot
+    [Migration("20251116092919_UpdateBudgetPlan")]
+    partial class UpdateBudgetPlan
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2161,6 +2164,9 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                     b.Property<Guid?>("BudgetApproverId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("BudgetCodeId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("BudgetPeriodId")
                         .HasColumnType("uniqueidentifier");
 
@@ -2225,11 +2231,16 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ApprovedByUserId");
 
                     b.HasIndex("BudgetApproverId");
+
+                    b.HasIndex("BudgetCodeId");
 
                     b.HasIndex("BudgetPeriodId");
 
@@ -2278,10 +2289,10 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
 
-                    b.Property<DateTime?>("ModifiedAt")
+                    b.Property<DateTime>("ModifiedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("ModifiedByUserId")
+                    b.Property<Guid>("ModifiedByUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -3731,6 +3742,12 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("BudgetApproverId");
 
+                    b.HasOne("ThaiTuanERP2025.Domain.Finance.Entities.BudgetCode", "BudgetCode")
+                        .WithMany()
+                        .HasForeignKey("BudgetCodeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ThaiTuanERP2025.Domain.Finance.Entities.BudgetPeriod", "BudgetPeriod")
                         .WithMany("BudgetPlans")
                         .HasForeignKey("BudgetPeriodId")
@@ -3767,6 +3784,8 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
 
                     b.Navigation("BudgetApprover");
 
+                    b.Navigation("BudgetCode");
+
                     b.Navigation("BudgetPeriod");
 
                     b.Navigation("CreatedByUser");
@@ -3782,12 +3801,6 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
 
             modelBuilder.Entity("ThaiTuanERP2025.Domain.Finance.Entities.BudgetPlanDetail", b =>
                 {
-                    b.HasOne("ThaiTuanERP2025.Domain.Finance.Entities.BudgetCode", "BudgetCode")
-                        .WithMany()
-                        .HasForeignKey("BudgetCodeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("ThaiTuanERP2025.Domain.Finance.Entities.BudgetPlan", null)
                         .WithMany("Details")
                         .HasForeignKey("BudgetPlanId")
@@ -3802,9 +3815,8 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                     b.HasOne("ThaiTuanERP2025.Domain.Account.Entities.User", "ModifiedByUser")
                         .WithMany()
                         .HasForeignKey("ModifiedByUserId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("BudgetCode");
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("DeletedByUser");
 

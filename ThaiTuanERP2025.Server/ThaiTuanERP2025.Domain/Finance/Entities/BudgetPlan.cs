@@ -31,7 +31,6 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		#region Properties
 		public Guid DepartmentId { get; private set; }
 		public Guid BudgetPeriodId { get; private set; }
-		public decimal TotalAmount  { get; private set; }
 		public bool IsActive { get; private set; } = true;
 		public BudgetPlanStatus Status { get; private set; } = BudgetPlanStatus.Draft;
 		public DateTime? DueAt { get; private set; }
@@ -54,7 +53,6 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public User? ApprovedByUser { get; init; }
 		public DateTime? ApprovedAt { get; private set; }
 
-		public BudgetCode BudgetCode { get; private set; } = null!;
 		public BudgetPeriod BudgetPeriod { get; private set; } = null!;
 		public Department Department { get; private set; } = null!;
 		public IReadOnlyCollection<BudgetPlanDetail> Details => _details.AsReadOnly();
@@ -117,7 +115,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			AddDomainEvent(new BudgetPlanAssignedForApprovalEvent(Id, ApprovedByUserId.Value, DueAt.Value));
 		}
 
-		public BudgetPlanDetail AddDetail(Guid budgetCodeId, decimal amount, Guid userId)
+		public BudgetPlanDetail AddDetail(Guid budgetCodeId, decimal amount)
 		{
 			if (Status != BudgetPlanStatus.Draft)
 				throw new DomainException("Chỉ được thêm chi tiết khi kế hoạch đang ở trạng thái Draft.");
@@ -125,7 +123,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			if (_details.Any(d => d.BudgetCodeId == budgetCodeId && d.IsActive))
 				throw new DomainException("Mã ngân sách đã tồn tại trong kế hoạch này.");
 
-			var detail = new BudgetPlanDetail(Id, budgetCodeId, amount, userId);
+			var detail = new BudgetPlanDetail(Id, budgetCodeId, amount);
 			_details.Add(detail);
 
 			// AddDomainEvent(new BudgetPlanDetailAddedEvent(Id, budgetCodeId, amount));

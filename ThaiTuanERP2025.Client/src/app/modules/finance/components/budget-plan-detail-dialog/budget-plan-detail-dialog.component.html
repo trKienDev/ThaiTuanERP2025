@@ -22,7 +22,6 @@
                         <thead>
                               <tr>
                                     <th>#</th>
-                                    <th>Mã ngân sách</th>
                                     <th>Kỳ ngân sách</th>
                                     <th>Tiền</th>
                                     <th>Xem xét</th>
@@ -35,7 +34,6 @@
                               <ng-container *ngIf="budgetPlans.length > 0">
                                     <tr *ngFor="let plan of budgetPlans; trackBy: trackById; let i = index;">
                                           <td>{{ i + 1 }}</td>
-                                          <td>{{ plan.budgetCode.name }}</td>
                                           <td>T{{plan.budgetPeriod.month}}/{{plan.budgetPeriod.year}}</td>
                                           <td>
                                                 <ng-container *ngIf="!plan.isEditing; else editAmount">
@@ -51,7 +49,7 @@
                                           <td>
                                                 <input type="checkbox" [checked]="plan.isApproved" disabled />
                                           </td>
-                                          <td>{{ plan.createdDate | date:'dd/MM/yyyy'  }}</td>
+                                          <td>{{ plan.createdAt | date:'dd/MM/yyyy'  }}</td>
                                           <td *ngIf="canReview">
                                                 <ng-container *ngIf="!plan.isEditing; else editButtons">
                                                       <button type="button" class="button default-button" (click)="enableEdit(plan)">Sửa</button>

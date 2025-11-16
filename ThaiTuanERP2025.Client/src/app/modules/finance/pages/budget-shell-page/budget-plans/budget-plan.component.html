@@ -29,7 +29,6 @@
                         <button type="button" class="button default-button" (click)="openBudgetPlanApproversDialog();">Thêm người duyệt ngân sách</button>
                   </ng-container>
                   <button type="button" class="button default-button" (click)="openListBudgetApproverDialog();">Danh sách user duyệt ngân sách</button>
-                  <button type="button" class="button default-button" (click)="openBudgetPlanRequestDialog();">Thêm kế hoạch ngân sách</button>
             </div>
       </div>
       <div class="page-body">
@@ -56,9 +55,9 @@
                                     <td>T{{ plans.month }} - {{ plans.year }}</td>
                                     <td>
                                           <select class="select" name="" id="">
-                                                <option class="option" *ngFor="let plan of plans.budgetPlans">
+                                                <!-- <option class="option" *ngFor="let plan of plans.budgetPlans">
                                                       {{ plan.budgetCode.code }} - {{ plan.budgetCode.name }}
-                                                </option>
+                                                </option> -->
                                           </select>
                                     </td>
                                     <td>{{ plans.totalAmount | number: '1.0-0' }} VNĐ</td>
