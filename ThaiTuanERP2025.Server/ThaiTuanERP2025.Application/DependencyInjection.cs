@@ -4,6 +4,7 @@ using MediatR;
 using FluentValidation;
 using ThaiTuanERP2025.Application.Behaviors;
 using ThaiTuanERP2025.Domain.Shared.Events;
+using ThaiTuanERP2025.Application.Finance.BudgetPlans.Services;
 
 namespace ThaiTuanERP2025.Application
 {
@@ -34,6 +35,10 @@ namespace ThaiTuanERP2025.Application
 				typeof(AssemblyMarker).Assembly,         // Application Layer
 				Assembly.GetExecutingAssembly()          // API Layer
 			);
+
+			// Services
+			services.AddScoped<IBudgetPlanPermissionService, BudgetPlanPermissionService>();
+
 			return services;
 		}
 	}

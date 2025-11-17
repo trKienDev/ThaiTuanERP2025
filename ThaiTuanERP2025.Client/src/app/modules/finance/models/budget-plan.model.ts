@@ -25,8 +25,11 @@ export interface BudgetPlanDto {
       isApproved: boolean;
       createdAt: Date;
 
-      SelectedReviewerId?: string | null;
+      selectedReviewerId: string;
       canReview: boolean;
+
+      selectedApproverId: string;
+      canApprove: boolean;
 
       dueAt: string;
 

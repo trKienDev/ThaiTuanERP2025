@@ -42,7 +42,7 @@ button, .button {
 .button-noor:hover { background-color: #1C84FF; }
 
 /*** danger-button ***/
-.danger-button { align-items: center; background-color: #FFE7E7; background-position: 0 0; border: 2px solid #FEE0E0 !important; border-radius: 5px; box-sizing: border-box; color: #D33A2C; cursor: pointer; display: flex ; font-weight: 700; text-align: left; text-decoration: none; text-shadow: none; text-underline-offset: 1px; transition: border .2s ease-in-out,box-shadow .2s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: manipulation; white-space: nowrap; word-break: break-word; border-color: transparent !important; transition: all ease 0.5s; }
+.danger-button { align-items: center; background-color: #FFE7E7; background-position: 0 0; border-radius: 5px; box-sizing: border-box; color: #D33A2C; cursor: pointer; display: flex ; font-weight: 700; text-align: left; text-decoration: none; text-shadow: none; text-underline-offset: 1px; transition: border .2s ease-in-out,box-shadow .2s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: manipulation; white-space: nowrap; word-break: break-word; border-color: transparent !important; transition: all ease 0.5s; }
 .danger-button:active, .danger-button:hover, .danger-button:focus { outline: 0; }
 .danger-button:active { background-color: #D33A2C; box-shadow: rgba(0, 0, 0, 0.12) 0 1px 3px 0 inset; color: #FFFFFF; }
 .danger-button:hover { background-color: #FFE3E3; border-color: #FAA4A4 !important; }
@@ -63,10 +63,7 @@ button, .button {
 .text-button:hover { text-decoration: underline; cursor: pointer;}
 
 /* cancel */
-.cancel-button { 
-      border: none  !important; background: #6E6D70;
-      box-shadow: 0px 0.5px 1px rgba(0, 0, 0, 0.1), inset 0px 0.5px 0.5px rgba(255, 255, 255, 0.5), 0px 0px 0px 0.5px rgba(0, 0, 0, 0.12); 
-      color: white; user-select: none; -webkit-user-select: none; touch-action: manipulation; 
+.cancel-button {  background: #6E6D70; color: white; user-select: none; -webkit-user-select: none; touch-action: manipulation; 
 }
 .cancel-button:focus { box-shadow: inset 0px 0.8px 0px -0.25px rgba(255, 255, 255, 0.2), 0px 0.5px 1px rgba(0, 0, 0, 0.1), 0px 0px 0px 3.5px rgba(58, 108, 217, 0.5); outline: 0; }
 .cancel-button:hover { cursor: pointer; opacity: 0.8; }
@@ -76,7 +73,7 @@ button, .button {
 .save-button:hover { background-color: #0071e2; }
 /* submit */
 /* CSS */
-.submit-button { appearance: none; backface-visibility: hidden; background-color: #27ae60; border-radius: 8px; border-style: none; box-shadow: rgba(39, 174, 96, .15) 0 4px 9px; box-sizing: border-box; color: #fff; cursor: pointer; display: inline-block; font-weight: 600; letter-spacing: normal; line-height: 1.5; outline: none; overflow: hidden; position: relative; text-align: center; text-decoration: none; transform: translate3d(0, 0, 0); transition: all .3s; user-select: none; -webkit-user-select: none; touch-action: manipulation; vertical-align: top; white-space: nowrap; }
+.submit-button { appearance: none; backface-visibility: hidden; background-color: #27ae60; border-radius: 8px; border-style: none; box-shadow: rgba(39, 174, 96, .15) 0 4px 9px; box-sizing: border-box; color: #fff; cursor: pointer; display: inline-block; font-weight: 600; letter-spacing: normal; outline: none; overflow: hidden; position: relative; text-align: center; text-decoration: none; transform: translate3d(0, 0, 0); transition: all .3s; user-select: none; -webkit-user-select: none; touch-action: manipulation; vertical-align: top; white-space: nowrap; }
 .submit-button:hover { background-color: #1e8449; opacity: 1; transform: translateY(0); transition-duration: .35s; }
 .submit-button:active { transform: translateY(2px); transition-duration: .35s; }
 .submit-button:hover { box-shadow: rgba(39, 174, 96, .2) 0 6px 12px; }

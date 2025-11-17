@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ThaiTuanERP2025.Application.Finance.BudgetPlans.Contracts;
 using ThaiTuanERP2025.Domain.Files.Events.StoredFiles;
 using ThaiTuanERP2025.Domain.Finance.Entities;
 using ThaiTuanERP2025.Domain.Shared.Utils;
@@ -43,8 +44,8 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans
 
 			    // Flags (phải set thủ công trong QueryHandler)
 			    // .ForMember(d => d.CanEdit, opt => opt.Ignore())
-			    .ForMember(d => d.CanReview, opt => opt.Ignore());
-			    // .ForMember(d => d.CanApprove, opt => opt.Ignore());
+			    .ForMember(d => d.CanReview, opt => opt.Ignore())
+			    .ForMember(d => d.CanApprove, opt => opt.Ignore());
 		}
 	}
 }

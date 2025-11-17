@@ -1,4 +1,4 @@
-﻿namespace ThaiTuanERP2025.Application.Finance.BudgetPlans
+﻿namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Contracts
 {
 	public sealed record BudgetPlanDetailRequest(Guid BudgetCodeId, decimal Amount, string? Note);
 	public sealed record BudgetPlanRequest

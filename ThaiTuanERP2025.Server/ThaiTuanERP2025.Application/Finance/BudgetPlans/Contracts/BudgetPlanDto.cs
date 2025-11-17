@@ -4,7 +4,7 @@ using ThaiTuanERP2025.Application.Finance.BudgetCodes;
 using ThaiTuanERP2025.Application.Finance.BudgetPeriods;
 using ThaiTuanERP2025.Domain.Finance.Enums;
 
-namespace ThaiTuanERP2025.Application.Finance.BudgetPlans
+namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Contracts
 {
 	public sealed record BudgetPlanDto
 	{
@@ -23,7 +23,10 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans
 		public DateTime CreatedAt { get; init; }
 
 		public Guid SelectedReviewerId { get; init; }
-		public bool CanReview { get; set; } // Dùng cho ui
+		public bool CanReview { get; set; } 
+
+		public Guid SelectedApproverId { get; init; }
+		public bool CanApprove { get; set; }	
 
 		public BudgetPlanStatus Status { get; init; }
 

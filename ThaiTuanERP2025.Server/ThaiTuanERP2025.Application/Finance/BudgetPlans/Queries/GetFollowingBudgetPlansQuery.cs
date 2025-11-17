@@ -4,7 +4,9 @@ using FluentValidation;
 using MediatR;
 using ThaiTuanERP2025.Application.Core.Followers;
 using ThaiTuanERP2025.Application.Finance.BudgetPeriods;
+using ThaiTuanERP2025.Application.Finance.BudgetPlans.Contracts;
 using ThaiTuanERP2025.Application.Finance.BudgetPlans.Repositories;
+using ThaiTuanERP2025.Application.Finance.BudgetPlans.Services;
 using ThaiTuanERP2025.Application.Shared.Exceptions;
 using ThaiTuanERP2025.Application.Shared.Interfaces;
 using ThaiTuanERP2025.Domain.Core.Enums;
@@ -19,15 +21,17 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Queries
 		private readonly IBudgetPeriodReadRepository _budgetPeriodRepo;
 		private readonly IFollowerReadRepository _followerRepo;
 		private readonly IMapper _mapper;
+		private readonly IBudgetPlanPermissionService _budgetPlanPermission;
 		public GetFollowingBudgetPlansQueryHandler(
 			IBudgetPlanReadRepository budgetPlanRepo, ICurrentUserService currentUser, IBudgetPeriodReadRepository budgetPeriodRepo,
-			IFollowerReadRepository followerRepo, IMapper mapper
+			IFollowerReadRepository followerRepo, IMapper mapper, IBudgetPlanPermissionService budgetPlanPermission
 		) {
 			_budgetPlanRepo = budgetPlanRepo;
 			_currentUser = currentUser;
 			_budgetPeriodRepo = budgetPeriodRepo;
 			_followerRepo = followerRepo;
 			_mapper = mapper;
+			_budgetPlanPermission = budgetPlanPermission;	
 		}
 
 		public async Task<IReadOnlyList<BudgetPlanDto>> Handle(GetFollowingBudgetPlansQuery query, CancellationToken cancellationToken) {
@@ -47,7 +51,7 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Queries
 			if (!subjectIds.Any())
 				return Array.Empty<BudgetPlanDto>();
 
-			var plans = await _budgetPlanRepo.ListProjectedAsync(
+			var planDtos = await _budgetPlanRepo.ListProjectedAsync(
 				q => q.Where(p => subjectIds.Contains(p.Id)
 					&& p.IsActive
 					&& !p.IsDeleted
@@ -55,14 +59,11 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Queries
 				).ProjectTo<BudgetPlanDto>(_mapper.ConfigurationProvider),
 				cancellationToken: cancellationToken
 			);
-			if (!plans.Any()) return Array.Empty<BudgetPlanDto>();
+			if (!planDtos.Any()) return Array.Empty<BudgetPlanDto>();
 
-			foreach (var plan in plans)
-			{
-				plan.CanReview = plan.SelectedReviewerId == userId;
-			}
+			_budgetPlanPermission.ApplyPermissions(planDtos, userId);
 
-			return plans;
+			return planDtos;
 		}
 
 		public sealed class GetFollowingBudgetPlansQueryValidator : AbstractValidator<GetFollowingBudgetPlansQuery>

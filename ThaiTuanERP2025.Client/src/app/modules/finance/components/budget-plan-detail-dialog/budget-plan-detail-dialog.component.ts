@@ -1,4 +1,4 @@
-import { BudgetPlanDetailDto, BudgetPlanDto } from './../../models/budget-plan.model';
+import { BudgetPlanDetailDto, BudgetPlanDto, BudgetPlanStatus } from './../../models/budget-plan.model';
 import { CommonModule } from "@angular/common";
 import { Component, Inject, inject} from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
@@ -20,7 +20,6 @@ import { KitFlipCountdownComponent } from '../../../../shared/components/kit-fli
 })
 export class BudgetPlanDetailDialogComponent {
       private readonly dialogRef = inject(MatDialogRef<BudgetPlanDetailDialogComponent>);
-      public canReview: boolean = false;
       public submitting: boolean = false;
       public budgetPlan: BudgetPlanDto;
       private readonly budgetPlanApi = inject(BudgetPlanApiService);
@@ -35,7 +34,6 @@ export class BudgetPlanDetailDialogComponent {
             @Inject(MAT_DIALOG_DATA) public data: BudgetPlanDto
       ) {             
             this.budgetPlan = data;
-            this.canReview = data.canReview;
       }
 
       close(isSuccess: boolean = false) {
@@ -100,5 +98,12 @@ export class BudgetPlanDetailDialogComponent {
             } catch (err) {
                   this.httpErrorHandler.handle(err, 'tải lại kế hoạch ngân sách');
             }
+      }
+
+      get showReviewButton(): boolean {
+            return this.budgetPlan.canReview && this.budgetPlan.status === BudgetPlanStatus.draft;
+      }
+      get showApproveButton(): boolean {
+            return this.budgetPlan.canApprove && this.budgetPlan.status === BudgetPlanStatus.reviewed;
       }
 }
