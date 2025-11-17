@@ -29,7 +29,7 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
 		#endregion
 
 		#region Domain Behaviors
-		public void Unfollow()
+		internal void Unfollow()
 		{
 			if (!IsActive)
 				throw new DomainException("Follower đã bị huỷ trước đó.");
@@ -38,7 +38,7 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
 			// AddDomainEvent(new FollowerRemovedEvent(this));
 		}
 
-		public void Reactivate()
+		internal void Reactivate()
 		{
 			if (IsActive)
 				return;

@@ -19,18 +19,17 @@ import { UserFacade } from "../../../../account/facades/user.facade";
 import { UserDto } from "../../../../account/models/user.model";
 import { UserOptionStore } from "../../../../account/options/user-dropdown.option";
 import { ManagerOptionStore } from "../../../../account/options/user-manager.option";
-import { BudgetCodeService } from "../../../../finance/services/budget-code.service";
-import { CashoutCodeService } from "../../../../finance/services/cashout-code.service";
+import { BudgetCodeApiService } from "../../../../finance/services/api/budget-code-api.service";
+import { CashoutCodeApiService } from "../../../../finance/services/api/cashout-code-api.service";
 import { SupplierFacade } from "../../../facades/supplier.facade";
 import { BankAccountDto } from "../../../models/bank-account.model";
 import { PayeeType, ExpensePaymentRequest } from "../../../models/expense-payment.model";
 import { SupplierOptionStore } from "../../../options/supplier-dropdown-option.store";
-import { BankAccountService } from "../../../services/bank-account.service";
-import { ExpensePaymentService } from "../../../services/expense-payment.service";
+import { BankAccountApiService } from "../../../services/bank-account.service";
+import { ExpensePaymentApiService } from "../../../services/expense-payment.service";
 import { MiniInvoiceRequestDialogComponent } from "../../invoices/invoice-request/mini-invoice-request-dialog/mini-invoice-request-dialog.component";
 import { MyInvoicesDialogComponent } from "../../invoices/my-invoices-dialog/my-invoices-dialog.component";
 import { ExpenseBudgetCodeDialogComponent } from "../../../../finance/pages/budget-shell-page/budget-codes/expense-budget-code/expense-budget-code.component";
-import { SupplierRequestDialogComponent } from "../../suppliers/supplier-request-dialog/supplier-request-dialog.component";
 import { KitFileUploaderComponent } from "../../../../../shared/components/kit-file-uploader/kit-file-uploader.component";
 import { TextareaNoSpellcheckDirective } from "../../../../../shared/directives/textarea/textarea-no-spellcheck.directive";
 import { KitSpinnerButtonComponent } from "../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
@@ -82,7 +81,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       private readonly userFacade = inject(UserFacade);
       private readonly supplierFacade = inject(SupplierFacade);
       public submitting = false;
-      private readonly expensePaymentService = inject(ExpensePaymentService);
+      private readonly expensePaymentService = inject(ExpensePaymentApiService);
       private readonly router = inject(Router);
 
       public readonly uploadMeta = {
@@ -108,9 +107,9 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       selectedBankAccount: BankAccountDto | null = null;     
 
       constructor(
-            private readonly bankAccountService: BankAccountService,
-            private readonly budegetCodeService: BudgetCodeService,
-            private readonly cashoutCodeService: CashoutCodeService,
+            private readonly bankAccountService: BankAccountApiService,
+            private readonly budegetCodeService: BudgetCodeApiService,
+            private readonly cashoutCodeService: CashoutCodeApiService,
             private readonly confirmService: ConfirmService,
       ) { }
 
@@ -304,16 +303,16 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
             }
       } 
 
-      openCreateSupplierDialog(): void {
-            const dialogRef = this.dialog.open(SupplierRequestDialogComponent);
+      // openCreateSupplierDialog(): void {
+      //       const dialogRef = this.dialog.open(SupplierRequestDialogComponent);
 
-            dialogRef.afterClosed().subscribe((created) => {
-                  if(created?.id) {
-                        this.selectedPayee = PayeeType.supplier;
-                        this.form.patchValue({ supplierId: created.id });
-                  }
-            })
-      }
+      //       dialogRef.afterClosed().subscribe((created) => {
+      //             if(created?.id) {
+      //                   this.selectedPayee = PayeeType.supplier;
+      //                   this.form.patchValue({ supplierId: created.id });
+      //             }
+      //       })
+      // }
 
       openExpenseBudgetCodeDialog(rowIndex: number): void {
             const row = this.items.at(rowIndex);

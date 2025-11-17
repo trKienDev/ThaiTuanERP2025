@@ -36,43 +36,42 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		#endregion
 
 		#region Domain Behaviors
-
-		public void Rename(string newName)
+		internal void Rename(string newName)
 		{
 			Guard.AgainstNullOrWhiteSpace(newName, nameof(newName));
 			Name = newName.Trim();
 			AddDomainEvent(new BudgetCodeRenamedEvent(this));
 		}
 
-		public void ChangeCode(string newCode)
+		internal void ChangeCode(string newCode)
 		{
 			Guard.AgainstNullOrWhiteSpace(newCode, nameof(newCode));
 			Code = newCode.Trim().ToUpperInvariant();
 			AddDomainEvent(new BudgetCodeCodeChangedEvent(this));
 		}
 
-		public void ChangeGroup(Guid newGroupId)
+		internal void ChangeGroup(Guid newGroupId)
 		{
 			Guard.AgainstDefault(newGroupId, nameof(newGroupId));
 			BudgetGroupId = newGroupId;
 			AddDomainEvent(new BudgetCodeGroupChangedEvent(this));
 		}
 
-		public void Activate()
+		internal void Activate()
 		{
 			if (IsActive) return;
 			IsActive = true;
 			AddDomainEvent(new BudgetCodeActivatedEvent(this));
 		}
 
-		public void Deactivate()
+		internal void Deactivate()
 		{
 			if (!IsActive) return;
 			IsActive = false;
 			AddDomainEvent(new BudgetCodeDeactivatedEvent(this));
 		}
 
-		public void SetCashoutCode(Guid cashoutCodeId)
+		internal void SetCashoutCode(Guid cashoutCodeId)
 		{
 			Guard.AgainstDefault(cashoutCodeId, nameof(cashoutCodeId));
 			if (CashoutCodeId.HasValue && CashoutCodeId.Value == cashoutCodeId) return;
@@ -82,7 +81,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			AddDomainEvent(new BudgetCodeCashoutChangedEvent(this, old, CashoutCodeId));
 		}
 
-		public void ClearCashoutCode()
+		internal void ClearCashoutCode()
 		{
 			if (CashoutCodeId is null) return;
 			var old = CashoutCodeId;

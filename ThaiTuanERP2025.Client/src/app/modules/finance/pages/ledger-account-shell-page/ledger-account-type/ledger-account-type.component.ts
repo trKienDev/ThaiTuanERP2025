@@ -3,7 +3,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { LedgerAccountTypeDto, LedgerAccountTypeRequest } from '../../../models/ledger-account-type.dto';
-import { LedgerAccountTypeService } from '../../../services/ledger-account-type.service';
+import { LedgerAccountTypeApiService } from '../../../services/api/ledger-account-type-api.service';
 
 @Component({
       selector: 'finance-ledger-account-type',
@@ -50,7 +50,7 @@ export class LedgerAccountTypeComponent implements OnInit {
             Asset: 1, Liability: 2, Equity: 3, Revenue: 4, Expense: 5,
       };
 
-      constructor(private service: LedgerAccountTypeService) {}
+      constructor(private service: LedgerAccountTypeApiService) {}
 
       ngOnInit(): void {
             this.reload();

@@ -39,7 +39,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		#endregion
 
 		#region Domain Behaviors
-		public void AddBudgetPlan(BudgetPlan plan)
+		internal void AddBudgetPlan(BudgetPlan plan)
 		{
 			Guard.AgainstNull(plan, nameof(plan));
 
@@ -56,7 +56,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			AddDomainEvent(new BudgetPlanAddedToPeriodEvent(this, plan));
 		}
 
-		public void RemoveBudgetPlan(Guid budgetPlanId)
+		internal void RemoveBudgetPlan(Guid budgetPlanId)
 		{
 			var plan = BudgetPlans.FirstOrDefault(x => x.Id == budgetPlanId)
 			    ?? throw new KeyNotFoundException("Không tìm thấy kế hoạch ngân sách.");
@@ -65,7 +65,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			AddDomainEvent(new BudgetPlanRemovedFromPeriodEvent(this, plan));
 		}
 
-		public void SetStartDate(DateTime startDate)
+		internal void SetStartDate(DateTime startDate)
 		{
 			if (startDate > EndDate)
 				throw new DomainException("Ngày bắt đầu không thể lớn hơn ngày kết thúc.");
@@ -73,7 +73,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			AddDomainEvent(new BudgetPeriodUpdatedEvent(this));
 		}
 
-		public void SetEndDate(DateTime endDate)
+		internal void SetEndDate(DateTime endDate)
 		{
 			if (endDate < StartDate)
 				throw new DomainException("Ngày kết thúc không thể trước ngày bắt đầu.");

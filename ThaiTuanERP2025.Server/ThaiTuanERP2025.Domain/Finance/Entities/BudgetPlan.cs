@@ -23,7 +23,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			this.IsActive = true;
 
 			DueAt = DateTime.UtcNow.AddHours(8);
-			AddDomainEvent(new BudgetPlanCreatedEvent(this, reviewerId, DueAt.Value));
+			AddDomainEvent(new BudgetPlanCreatedEvent(this, reviewerId, DueAt));
 		}
 		#endregion
 
@@ -33,7 +33,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public Guid BudgetPeriodId { get; private set; }
 		public bool IsActive { get; private set; } = true;
 		public BudgetPlanStatus Status { get; private set; } = BudgetPlanStatus.Draft;
-		public DateTime? DueAt { get; private set; }
+		public DateTime DueAt { get; private set; }
 		[Timestamp]
 		public byte[] RowVersion { get; private set; } = Array.Empty<byte>();
 
@@ -63,7 +63,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		{
 			BudgetPeriodId = periodId;
 		}
-		public void MarkReviewed(Guid userId)
+		internal void MarkReviewed(Guid userId)
 		{
 			if (Status != BudgetPlanStatus.Draft)
 				throw new InvalidOperationException("Chỉ có thể xem xét kế hoạch ở trạng thái Draft.");
@@ -74,7 +74,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			AddDomainEvent(new BudgetPlanReviewedEvent(Id, userId));
 		}
 
-		public void Approve(Guid approverId)
+		internal void Approve(Guid approverId)
 		{
 			Guard.AgainstDefault(approverId, nameof(approverId));
 
@@ -88,7 +88,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			AddDomainEvent(new BudgetPlanApprovedEvent(Id, approverId));
 		}
 
-		public void Reject(Guid userId)
+		internal void Reject(Guid userId)
 		{
 			if (Status == BudgetPlanStatus.Approved)
 				throw new InvalidOperationException("Không thể từ chối kế hoạch đã được phê duyệt.");
@@ -99,11 +99,10 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			AddDomainEvent(new BudgetPlanRejectedEvent(Id, userId));
 		}
 
-		public void Activate() => IsActive = true;
-		public void Deactivate() => IsActive = false;
+		internal void Activate() => IsActive = true;
+		internal void Deactivate() => IsActive = false;
 
-
-		public void MoveToApproval(BudgetApprover budgetApprover)
+		internal void MoveToApproval(BudgetApprover budgetApprover)
 		{
 			Guard.AgainstNull(budgetApprover, nameof(budgetApprover));
 
@@ -112,10 +111,10 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			DueAt = DateTime.UtcNow.AddHours(budgetApprover.SlaHours);
 			Status = BudgetPlanStatus.Reviewed;
 
-			AddDomainEvent(new BudgetPlanAssignedForApprovalEvent(Id, ApprovedByUserId.Value, DueAt.Value));
+			AddDomainEvent(new BudgetPlanAssignedForApprovalEvent(Id, ApprovedByUserId.Value, DueAt));
 		}
 
-		public BudgetPlanDetail AddDetail(Guid budgetCodeId, decimal amount)
+		internal BudgetPlanDetail AddDetail(Guid budgetCodeId, decimal amount)
 		{
 			if (Status != BudgetPlanStatus.Draft)
 				throw new DomainException("Chỉ được thêm chi tiết khi kế hoạch đang ở trạng thái Draft.");
@@ -131,7 +130,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			return detail;
 		}
 
-		public void UpdateDetail(Guid budgetCodeId, decimal newAmount, Guid userId)
+		internal void UpdateDetail(Guid budgetCodeId, decimal newAmount, Guid userId)
 		{
 			var detail = _details.FirstOrDefault(d => d.BudgetCodeId == budgetCodeId && d.IsActive)
 			    ?? throw new DomainException("Không tìm thấy chi tiết ngân sách.");
@@ -141,7 +140,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			// AddDomainEvent(new BudgetPlanDetailUpdatedEvent(Id, budgetCodeId, newAmount));
 		}
 
-		public void RemoveDetail(Guid budgetCodeId, Guid userId)
+		internal void RemoveDetail(Guid budgetCodeId, Guid userId)
 		{
 			var detail = _details.FirstOrDefault(d => d.BudgetCodeId == budgetCodeId && d.IsActive)
 			    ?? throw new DomainException("Không tìm thấy chi tiết ngân sách.");

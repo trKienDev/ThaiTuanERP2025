@@ -9,7 +9,7 @@ import { AvatarUrlPipe } from "../../../../shared/pipes/avatar-url.pipe";
 import { useOutgoingPaymentDetail } from "../../composables/use-outgoing-payment-detail";
 import { OutgoingPaymentDetailDto } from "../../models/outgoing-payment.model";
 import { OutgoingPaymentStatusPipe } from "../../pipes/outgoing-payment-status.pipe";
-import { OutgoingPaymentService } from "../../services/outgoing-payment.service";
+import { OutgoingPaymentApiService } from "../../services/outgoing-payment.service";
 
 @Component({
       selector: 'outgoing-payment-detail-dialog',
@@ -22,7 +22,7 @@ export class OutgoingPaymentDetailDialogComponent {
       private dialogRef = inject(MatDialogRef<OutgoingPaymentDetailDialogComponent>);
       private outgoingPaymentLogic = useOutgoingPaymentDetail();
       private toastService = inject(ToastService);
-      private outgoingPaymentService = inject(OutgoingPaymentService);
+      private outgoingPaymentService = inject(OutgoingPaymentApiService);
       loading = this.outgoingPaymentLogic.isLoading;
       error = this.outgoingPaymentLogic.error;
       processing = false;

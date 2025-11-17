@@ -1,14 +1,14 @@
 import { Injectable } from "@angular/core";
-import { environment } from "../../../../environments/environment";
+import { environment } from "../../../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
-import { BaseCrudService } from "../../../shared/services/base-crud.service";
-import { BudgetPlanDto, BudgetPlanRequest } from "../models/budget-plan.model";
+import { BudgetPlanDto, BudgetPlanRequest } from "../../models/budget-plan.model";
 import { Observable } from "rxjs";
-import { ApiResponse } from "../../../shared/models/api-response.model";
-import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
+import { ApiResponse } from "../../../../shared/models/api-response.model";
+import { handleApiResponse$ } from "../../../../shared/operators/handle-api-response.operator";
+import { BaseApiService } from "../../../../shared/services/base-api.service";
 
 @Injectable({ providedIn: 'root' })
-export class BudgetPlanService extends BaseCrudService<BudgetPlanDto, BudgetPlanRequest>{
+export class BudgetPlanApiService extends BaseApiService<BudgetPlanDto, BudgetPlanRequest>{
       constructor(http: HttpClient) {
             super(http, `${environment.apiUrl}/budget-plan`);
       }
@@ -18,8 +18,8 @@ export class BudgetPlanService extends BaseCrudService<BudgetPlanDto, BudgetPlan
                   .pipe(handleApiResponse$<BudgetPlanDto[]>());
       }
 
-      updateAmount(budgetPeriodId: string, amount: number): Observable<void> {
-            return this.http.put<ApiResponse<void>>(`${this.endpoint}/${budgetPeriodId}/amount`, amount)
+      updateDetailAmount(planDetailId: string, amount: number): Observable<void> {
+            return this.http.put<ApiResponse<void>>(`${this.endpoint}/detail/${planDetailId}/amount`, amount)
                   .pipe(handleApiResponse$<void>());
       }
 

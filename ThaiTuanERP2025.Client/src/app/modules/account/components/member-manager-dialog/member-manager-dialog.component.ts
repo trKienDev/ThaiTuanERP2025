@@ -6,12 +6,12 @@ import { FormBuilder, ReactiveFormsModule } from "@angular/forms";
 import { UserFacade } from "../../facades/user.facade";
 import { UserOptionStore } from "../../options/user-dropdown.option";
 import { SetUserManagerRequest, UserDto } from "../../models/user.model";
-import { UserService } from "../../services/user.service";
 import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { handleHttpError } from "../../../../shared/utils/handle-http-errors.util";
 import { firstValueFrom } from "rxjs";
 import { HttpErrorResponse } from "@angular/common/http";
 import { ConfirmService } from "../../../../shared/components/confirm-dialog/confirm.service";
+import { UserApiService } from "../../services/api/user-api.service";
 
 @Component({
       selector: 'member-manager-dialog',
@@ -29,7 +29,7 @@ export class MemberManagerDialog implements OnInit {
       private readonly userFacade = inject(UserFacade);
       private readonly userOptionsStore = inject(UserOptionStore);
       managerOptions$ = this.userOptionsStore.option$;
-      private readonly userService = inject(UserService);
+      private readonly userApi = inject(UserApiService);
 
       constructor(
             @Inject(MAT_DIALOG_DATA) public data: UserDto 
@@ -45,7 +45,7 @@ export class MemberManagerDialog implements OnInit {
       ngOnInit(): void {
             if(this.data) {
                   this.user = this.data;
-                  this.userService.getManagerIds(this.user.id).subscribe({
+                  this.userApi.getManagerIds(this.user.id).subscribe({
                         next: (ids) => {
                               this.form.patchValue({ managerIds:  ids });
                         },
@@ -81,7 +81,7 @@ export class MemberManagerDialog implements OnInit {
                         managerIds: raw.managerIds,
                         primaryManagerId: raw.primaryManagerId ?? undefined
                   };
-                  const created = await firstValueFrom(this.userService.setManagers(this.user.id, payload));
+                  const created = await firstValueFrom(this.userApi.setManagers(this.user.id, payload));
                   this.toast.successRich('Thêm quản lý thành công');
                   this.dialogRef.close({ isSuccess: true, response: created });
             } catch(error) {

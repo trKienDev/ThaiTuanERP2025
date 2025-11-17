@@ -1,11 +1,11 @@
 import { computed, inject, Injectable, signal, WritableSignal } from "@angular/core";
-import { ExpensePaymentService } from "../services/expense-payment.service";
 import { ExpensePaymentSummaryDto } from "../models/expense-payment.model";
 import { firstValueFrom } from "rxjs";
+import { ExpensePaymentApiService } from "../services/expense-payment.service";
 
 @Injectable({ providedIn: 'root' })
 export class FollowingExpensePaymentFacade {
-      private service = inject(ExpensePaymentService);
+      private service = inject(ExpensePaymentApiService);
 
       // ===== State =====
       private items: WritableSignal<ExpensePaymentSummaryDto[]> = signal<ExpensePaymentSummaryDto[]>([]);

@@ -4,11 +4,11 @@ import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { FormBuilder, FormsModule } from "@angular/forms";
 import { RoleDto } from "../../models/role.model";
-import { PermissionService } from "../../services/permission.service";
 import { PermissionDto } from "../../models/permission.model";
 import { firstValueFrom } from "rxjs";
 import { trigger, transition, style, animate } from "@angular/animations";
-import { RoleService } from "../../services/role.service";
+import { PermissionApiService } from "../../services/api/permission-api.service";
+import { RoleApiService } from "../../services/api/role-api.service";
 
 @Component({
       selector: 'assign-permission-to-role-dialog',
@@ -29,13 +29,13 @@ import { RoleService } from "../../services/role.service";
       ]
 })
 export class AssignPermissionToRoleDialogComponent implements OnInit {
-      private toastService = inject(ToastService);    
-      private matDialogRef = inject(MatDialogRef<AssignPermissionToRoleDialogComponent>);
-      private formBuilder = inject(FormBuilder);
+      private readonly toastService = inject(ToastService);    
+      private readonly matDialogRef = inject(MatDialogRef<AssignPermissionToRoleDialogComponent>);
+      private readonly formBuilder = inject(FormBuilder);
       public role!: RoleDto;
       public submitting = false;
-      private readonly permissionService = inject(PermissionService);
-      private readonly roleService = inject(RoleService);
+      private readonly permissionApi = inject(PermissionApiService);
+      private readonly roleApi = inject(RoleApiService);
       public permissionsByRole: PermissionDto[] = [];
 
       availablePermissions: PermissionDto[] = [];
@@ -55,8 +55,8 @@ export class AssignPermissionToRoleDialogComponent implements OnInit {
 
       private async loadPermissions() {
             try {
-                  const all = await firstValueFrom(this.permissionService.getAll());
-                  const byRole = await firstValueFrom(this.permissionService.getByRoleId(this.role.id));
+                  const all = await firstValueFrom(this.permissionApi.getAll());
+                  const byRole = await firstValueFrom(this.permissionApi.getByRoleId(this.role.id));
 
                   this.selectedPermissions = byRole;
                   this.availablePermissions = all.filter(p => !byRole.some(br => br.id === p.id));
@@ -104,7 +104,7 @@ export class AssignPermissionToRoleDialogComponent implements OnInit {
             this.submitting = true;
             try {
                   const ids = this.selectedPermissions.map(p => p.id);
-                  await firstValueFrom(this.roleService.assignPermissions(this.role.id, ids));
+                  await firstValueFrom(this.roleApi.assignPermissions(this.role.id, ids));
                   this.toastService.successRich('Phân quyền thành công');
                   this.matDialogRef.close(true);
                   return;

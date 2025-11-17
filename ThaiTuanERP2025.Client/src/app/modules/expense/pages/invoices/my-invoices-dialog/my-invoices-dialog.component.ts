@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnInit } from "@angular/core";
-import { InvoiceService } from "../../../services/invoice.service";
+import { InvoiceApiService } from "../../../services/invoice.service";
 import { InvoiceDto } from "../../../models/invoice.model";
 import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
 import { InvoiceStatusPipe } from "../../../pipes/invoice-status.pipe";
@@ -14,7 +14,7 @@ import { MatDialogRef } from "@angular/material/dialog";
       styleUrl: './my-invoices-dialog.component.scss',
 })
 export class MyInvoicesDialogComponent implements OnInit {
-      private invoiceService = inject(InvoiceService);
+      private invoiceService = inject(InvoiceApiService);
       private ref = inject(MatDialogRef<MyInvoicesDialogComponent>);
 
       myInvoices: InvoiceDto[] = [];

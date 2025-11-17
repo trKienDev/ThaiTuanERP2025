@@ -5,8 +5,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { debounceTime, distinctUntilChanged, startWith, takeUntil } from 'rxjs';
 import { Subject } from 'rxjs';
 import { LedgerAccountRequest, LedgerAccountBalanceTypeEnum, LedgerAccountDto, LedgerAccountRow } from '../../../models/ledger-account.model';
-import { LedgerAccountService } from '../../../services/ledger-account.service';
-import { LedgerAccountTypeService } from '../../../services/ledger-account-type.service';
+import { LedgerAccountApiService } from '../../../services/api/ledger-account-api.service';
+import { LedgerAccountTypeApiService } from '../../../services/api/ledger-account-type-api.service';
 
 @Component({
       selector: 'finance-ledger-account',
@@ -58,12 +58,12 @@ export class LedgerAccountComponent implements OnInit {
       };
 
       // danh sách sau filter (render vào virtual scroll)
-      private _filteredRows = signal<LedgerAccountRow[]>([]);
+      private readonly _filteredRows = signal<LedgerAccountRow[]>([]);
       filteredRows = computed(() => this._filteredRows());
 
       constructor(
-            private service: LedgerAccountService,
-            private typeService: LedgerAccountTypeService
+            private service: LedgerAccountApiService,
+            private typeService: LedgerAccountTypeApiService
       ) {}
 
       ngOnInit(): void {

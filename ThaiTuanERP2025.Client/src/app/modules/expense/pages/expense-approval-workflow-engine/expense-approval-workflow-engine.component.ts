@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { RouterLink } from "@angular/router";
-import { ApprovalWorkflowTemplateService } from "../../services/approval-workflow-template.service";
+import { ApprovalWorkflowTemplateApiService } from "../../services/approval-workflow-template.service";
 import { ApprovalWorkflowTemplateDto } from "../../models/approval-workflow-template.model";
 import { ApprovalWorkflowTemplateFacade } from "../../facades/approval-workflow-template.facade";
 
@@ -18,7 +18,7 @@ import { ApprovalWorkflowTemplateFacade } from "../../facades/approval-workflow-
 })
 export class ExpenseApprovalWorkflowEngineComponent{
       private readonly toastService = inject(ToastService);
-      private readonly WfTemplateSer = inject(ApprovalWorkflowTemplateService);
+      private readonly WfTemplateSer = inject(ApprovalWorkflowTemplateApiService);
       private readonly dialog = inject(MatDialog);
       private readonly approvalWorkflowTemplateFacade = inject(ApprovalWorkflowTemplateFacade);
       wfTemplates$ = this.approvalWorkflowTemplateFacade.approvalWorkflowTemplates$;

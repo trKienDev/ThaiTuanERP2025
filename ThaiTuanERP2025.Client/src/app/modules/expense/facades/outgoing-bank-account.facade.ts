@@ -1,13 +1,13 @@
 import { inject, Injectable } from "@angular/core";
-import { BaseCrudFacade } from "../../../shared/facades/base-crud.facade";
 import { OutgoingBankAccountDto, OutgoingBankAccountRequest } from "../models/outgoing-bank-account.model";
-import { OutgoingBankAccountService } from "../services/outgoing-bank-account.service";
 import { Observable } from "rxjs";
+import { BaseApiFacade } from "../../../shared/facades/base-api.facade";
+import { OutgoingBankAccountApiService } from "../services/outgoing-bank-account.service";
 
 @Injectable({ providedIn: 'root' })
-export class OutgoingBankAccountFacade extends BaseCrudFacade<OutgoingBankAccountDto, OutgoingBankAccountRequest> {
+export class OutgoingBankAccountFacade extends BaseApiFacade<OutgoingBankAccountDto, OutgoingBankAccountRequest> {
       constructor() {
-            super(inject(OutgoingBankAccountService));
+            super(inject(OutgoingBankAccountApiService));
       }
       readonly outgoingBankAccounts$: Observable<OutgoingBankAccountDto[]> = this.list$;
 }

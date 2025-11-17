@@ -5,7 +5,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatInputModule } from "@angular/material/input";
 import { Router } from "@angular/router";
 
-import { InvoiceService } from "../../../services/invoice.service";
+import { InvoiceApiService } from "../../../services/invoice.service";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { firstValueFrom, forkJoin, lastValueFrom } from "rxjs";
 import { AddInvoiceLineRequest } from "../../../models/invoice.model";
@@ -25,7 +25,7 @@ import { FileService } from "../../../../../shared/services/file.service";
 export class InvoiceRequestPageComponent {
       private formBuilder = inject(FormBuilder);
       private fileService = inject(FileService);
-      private invoiceService = inject(InvoiceService);
+      private invoiceService = inject(InvoiceApiService);
       private sanitizer = inject(DomSanitizer);
       private blobUrl?: string; // track blob để revoke
 

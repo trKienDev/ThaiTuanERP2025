@@ -51,21 +51,21 @@ namespace ThaiTuanERP2025.Domain.Files.Entities
 
 		#region Domain Behaviors
 
-		public void MakePublic()
+		internal void MakePublic()
 		{
 			if (IsPublic) return;
 			IsPublic = true;
 			AddDomainEvent(new StoredFileMadePublicEvent(this));
 		}
 
-		public void MakePrivate()
+		internal void MakePrivate()
 		{
 			if (!IsPublic) return;
 			IsPublic = false;
 			AddDomainEvent(new StoredFileMadePrivateEvent(this));
 		}
 
-		public void ChangeEntityReference(string module, string entity, string? entityId)
+		internal void ChangeEntityReference(string module, string entity, string? entityId)
 		{
 			Guard.AgainstNullOrWhiteSpace(module, nameof(module));
 			Guard.AgainstNullOrWhiteSpace(entity, nameof(entity));
@@ -76,7 +76,7 @@ namespace ThaiTuanERP2025.Domain.Files.Entities
 			AddDomainEvent(new StoredFileEntityReferenceChangedEvent(this));
 		}
 
-		public void UpdateMetadata(string newFileName, string newContentType)
+		internal void UpdateMetadata(string newFileName, string newContentType)
 		{
 			Guard.AgainstNullOrWhiteSpace(newFileName, nameof(newFileName));
 			Guard.AgainstNullOrWhiteSpace(newContentType, nameof(newContentType));

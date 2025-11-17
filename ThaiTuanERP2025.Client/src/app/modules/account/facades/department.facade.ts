@@ -1,25 +1,25 @@
 import { inject, Injectable } from "@angular/core";
-import { BaseCrudFacade } from "../../../shared/facades/base-crud.facade";
 import { DepartmentDto, DepartmentRequest, SetDepartmentManagerRequest } from "../models/department.model";
-import { DepartmentService } from "../services/department.service";
 import { Observable, tap } from "rxjs";
+import { BaseApiFacade } from "../../../shared/facades/base-api.facade";
+import { DepartmentApiService } from "../services/api/department-api.service";
 
 @Injectable({ providedIn: 'root' })
-export class DepartmentFacade extends BaseCrudFacade<DepartmentDto, DepartmentRequest> {
-      private readonly departmentService = inject(DepartmentService);
+export class DepartmentFacade extends BaseApiFacade<DepartmentDto, DepartmentRequest> {
+      private readonly departmentApi = inject(DepartmentApiService);
       constructor() {
-            super(inject(DepartmentService));
+            super(inject(DepartmentApiService));
       }
       readonly departments$: Observable<DepartmentDto[]> = this.list$;
 
       setManager(id: string, req: SetDepartmentManagerRequest): Observable<string> {
-            return this.departmentService.setManager(id, req).pipe(
+            return this.departmentApi.setManager(id, req).pipe(
                   tap(() => this.refresh())
             )
       }
 
       setParent(id: string, parentId: string): Observable<void> {
-            return this.departmentService.setParent(id, parentId).pipe(
+            return this.departmentApi.setParent(id, parentId).pipe(
                   tap(() => this.refresh())
             )
       }

@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/cor
 import { MatDialog } from "@angular/material/dialog";
 import { CashoutCodeRequestDialogComponent } from "./cashout-code-request-dialog/cashout-code-request-dialog.component";
 import { CashoutCodeDto } from "../../../models/cashout-code.model";
-import { CashoutCodeService } from "../../../services/cashout-code.service";
+import { CashoutCodeApiService } from "../../../services/api/cashout-code-api.service";
 import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
 import { ToastService } from "../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 
@@ -14,7 +14,7 @@ import { ToastService } from "../../../../../shared/components/kit-toast-alert/k
       templateUrl: './cashout-code.component.html',
 })
 export class CashoutCodePanelComponent implements OnInit {
-      private cashoutCodeService = inject(CashoutCodeService);
+      private cashoutCodeApi = inject(CashoutCodeApiService);
       private toastService = inject(ToastService);
       
       cashoutCodes: CashoutCodeDto[] = [];
@@ -26,7 +26,7 @@ export class CashoutCodePanelComponent implements OnInit {
       }
 
       loadCashoutCodes(): void {
-            this.cashoutCodeService.getAll().subscribe({
+            this.cashoutCodeApi.getAll().subscribe({
                   next: (cashoutCodes) => {
                         this.cashoutCodes = cashoutCodes;
                   },

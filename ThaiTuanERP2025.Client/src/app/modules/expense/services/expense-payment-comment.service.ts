@@ -7,9 +7,9 @@ import { ApiResponse } from "../../../shared/models/api-response.model";
 import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
 
 @Injectable({ providedIn: 'root' })
-export class ExpensePaymentCommentService {
+export class ExpensePaymentCommentApiService {
       private readonly API_URL = `${environment.apiUrl}/expense-payment-comments`;
-      constructor(private http: HttpClient) {}
+      constructor(private readonly http: HttpClient) {}
 
       submitComment(paymentId: string, request: ExpensePaymentCommentRequest): Observable<ExpensePaymentCommentDto> {
             return this.http

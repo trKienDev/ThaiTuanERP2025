@@ -1,13 +1,13 @@
 import { inject, Injectable } from "@angular/core";
-import { BaseCrudFacade } from "../../../shared/facades/base-crud.facade";
+import { BaseApiFacade } from "../../../shared/facades/base-api.facade";
 import { BudgetCodeDto, BudgetCodeRequest } from "../models/budget-code.model";
-import { BudgetCodeService } from "../services/budget-code.service";
+import { BudgetCodeApiService } from "../services/api/budget-code-api.service";
 import { Observable } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
-export class BudgetCodeFacade extends BaseCrudFacade<BudgetCodeDto, BudgetCodeRequest> {
+export class BudgetCodeFacade extends BaseApiFacade<BudgetCodeDto, BudgetCodeRequest> {
       constructor() {
-            super(inject(BudgetCodeService));
+            super(inject(BudgetCodeApiService));
       }
       readonly budgetCodes$: Observable<BudgetCodeDto[]> = this.list$;
 }

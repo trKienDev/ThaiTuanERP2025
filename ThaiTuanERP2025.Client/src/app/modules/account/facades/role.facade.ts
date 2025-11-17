@@ -1,12 +1,12 @@
 import { inject, Injectable } from "@angular/core";
-import { BaseCrudFacade } from "../../../shared/facades/base-crud.facade";
 import { RoleDto, RoleRequest } from "../models/role.model";
-import { RoleService } from "../services/role.service";
+import { BaseApiFacade } from "../../../shared/facades/base-api.facade";
+import { RoleApiService } from "../services/api/role-api.service";
 
 @Injectable({ providedIn: 'root' })
-export class RoleFacade extends BaseCrudFacade<RoleDto, RoleRequest> {
+export class RoleFacade extends BaseApiFacade<RoleDto, RoleRequest> {
       constructor() {
-            super(inject(RoleService));
+            super(inject(RoleApiService));
       }     
 
       readonly roles$ = this.list$;

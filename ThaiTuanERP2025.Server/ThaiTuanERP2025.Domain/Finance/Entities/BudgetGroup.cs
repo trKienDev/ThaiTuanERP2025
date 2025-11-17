@@ -30,7 +30,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		#endregion
 
 		#region Domain Behaviors
-		public void Update(string code, string name)
+		internal void Update(string code, string name)
 		{
 			Guard.AgainstNullOrWhiteSpace(code, nameof(code));
 			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
@@ -41,7 +41,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			AddDomainEvent(new BudgetGroupUpdatedEvent(this));
 		}
 
-		public void AddBudgetCodes(IEnumerable<Guid> budgetCodeIds, IEnumerable<BudgetCode> allBudgetCodes)
+		internal void AddBudgetCodes(IEnumerable<Guid> budgetCodeIds, IEnumerable<BudgetCode> allBudgetCodes)
 		{
 			if (budgetCodeIds is null) return;
 
@@ -61,7 +61,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			}
 		}
 
-		public void RemoveBudgetCodes(IEnumerable<Guid> budgetCodeIds)
+		internal void RemoveBudgetCodes(IEnumerable<Guid> budgetCodeIds)
 		{
 			if (budgetCodeIds == null || !budgetCodeIds.Any()) return;
 

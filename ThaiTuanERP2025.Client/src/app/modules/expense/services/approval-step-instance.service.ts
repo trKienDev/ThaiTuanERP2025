@@ -3,10 +3,10 @@ import { environment } from "../../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 
 @Injectable({ providedIn: 'root' })
-export class ApprovalStepInstanceService {
+export class ApprovalStepInstanceApiService {
       private readonly API_URL = `${environment.apiUrl}/workflow/steps`;
 
-      constructor(private http: HttpClient) {}
+      constructor(private readonly http: HttpClient) {}
 
       
 }

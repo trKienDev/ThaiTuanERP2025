@@ -57,7 +57,7 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
 		#endregion
 
 		#region Domain Behaviors
-		public void MarkAsRead()
+		internal void MarkAsRead()
 		{
 			if (!IsRead)
 			{

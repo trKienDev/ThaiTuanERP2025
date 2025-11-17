@@ -1,13 +1,13 @@
 import { inject, Injectable } from "@angular/core";
-import { SupplierService } from "../services/supplier.service";
 import { SupplierDto, SupplierRequest } from "../models/supplier.model";
-import { BaseCrudFacade } from "../../../shared/facades/base-crud.facade";
 import { Observable } from "rxjs";
+import { BaseApiFacade } from "../../../shared/facades/base-api.facade";
+import { SupplierApiService } from "../services/supplier.service";
 
 @Injectable({ providedIn: 'root' })
-export class SupplierFacade extends BaseCrudFacade<SupplierDto, SupplierRequest> {
+export class SupplierFacade extends BaseApiFacade<SupplierDto, SupplierRequest> {
       constructor() {
-            super(inject(SupplierService));
+            super(inject(SupplierApiService));
       }
       readonly suppliers$: Observable<SupplierDto[]> = this.list$;
 }

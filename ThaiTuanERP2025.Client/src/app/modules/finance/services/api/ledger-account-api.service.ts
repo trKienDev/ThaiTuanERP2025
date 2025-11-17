@@ -1,14 +1,14 @@
 import { Injectable } from "@angular/core";
-import { BaseCrudService } from "../../../shared/services/base-crud.service";
-import { LedgerAccountDto, LedgerAccountLookupDto, LedgerAccountRequest } from "../models/ledger-account.model";
+import { LedgerAccountDto, LedgerAccountLookupDto, LedgerAccountRequest } from "../../models/ledger-account.model";
 import { HttpClient, HttpParams } from "@angular/common/http";
-import { environment } from "../../../../environments/environment";
+import { environment } from "../../../../../environments/environment";
 import { catchError, Observable, throwError } from "rxjs";
-import { ApiResponse } from "../../../shared/models/api-response.model";
-import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
+import { ApiResponse } from "../../../../shared/models/api-response.model";
+import { handleApiResponse$ } from "../../../../shared/operators/handle-api-response.operator";
+import { BaseApiService } from "../../../../shared/services/base-api.service";
 
 @Injectable({ providedIn: 'root' })
-export class LedgerAccountService extends BaseCrudService<LedgerAccountDto, LedgerAccountRequest> {
+export class LedgerAccountApiService extends BaseApiService<LedgerAccountDto, LedgerAccountRequest> {
       constructor(http: HttpClient) {
             super(http, `${environment.apiUrl}/ledger-accounts`);
       }

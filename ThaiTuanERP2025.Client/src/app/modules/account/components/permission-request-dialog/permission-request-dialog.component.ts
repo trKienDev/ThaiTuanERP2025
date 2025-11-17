@@ -4,7 +4,6 @@ import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MatDialogRef } from "@angular/material/dialog";
 import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { PermissionRequest } from "../../models/permission.model";
-import { __await } from "tslib";
 import { firstValueFrom } from "rxjs";
 import { PermissionFacade } from "../../facades/permission.facade";
 
@@ -15,10 +14,10 @@ import { PermissionFacade } from "../../facades/permission.facade";
       imports: [ CommonModule, ReactiveFormsModule],
 })
 export class PermissionRequestDialogComponent {
-      private matDialogRef = inject(MatDialogRef<PermissionRequestDialogComponent>);
-      private toastService = inject(ToastService);    
-      private formBuilder = inject(FormBuilder);
-      private permissionFacade = inject(PermissionFacade);
+      private readonly matDialogRef = inject(MatDialogRef<PermissionRequestDialogComponent>);
+      private readonly toastService = inject(ToastService);    
+      private readonly formBuilder = inject(FormBuilder);
+      private readonly permissionFacade = inject(PermissionFacade);
 
       public submitting = false;
 

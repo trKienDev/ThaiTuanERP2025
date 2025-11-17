@@ -6,7 +6,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { BudgetPlanApproversDialogComponent } from "../../../components/budget-apporver-request-dilaog/budget-approver-request-dialog.component";
 import { ListBudgetApproversDialogComponent } from "../../../components/list-budget-approvers-dialog/list-budget-approvers-dialog.component";
 import { HasPermissionDirective } from "../../../../../core/auth/auth.directive";
-import { BudgetPlanService } from "../../../services/budget-plan.service";
+import { BudgetPlanApiService } from "../../../services/api/budget-plan-api.service";
 import { combineLatest, distinctUntilChanged, filter, firstValueFrom, map, shareReplay, startWith, Subject, takeUntil } from 'rxjs';
 import { BudgetPeriodFacade } from '../../../facades/budget-period.facade';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -14,6 +14,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BudgetPlanDetailDialogComponent } from '../../../components/budget-plan-detail-dialog/budget-plan-detail-dialog.component';
 import { BudgetPlanStatusPipe } from "../../../pipes/budget-plan-status.pipe";
 import { handleHttpError } from '../../../../../shared/utils/handle-http-errors.util';
+import { BudgetPeriodDto } from '../../../models/budget-period.model';
+import { BudgetPlanEventsService } from '../../../services/events/budget-plan-event.service';
 
 @Component({
       selector: 'budget-plan-panel',
@@ -25,7 +27,7 @@ export class BudgetPlanPanelComponent implements OnInit, OnDestroy {
       private readonly dialog = inject(MatDialog);
       private readonly route = inject(ActivatedRoute);
       private readonly router = inject(Router);
-      private readonly budgetPlanService = inject(BudgetPlanService);
+      private readonly budgetPlanApi = inject(BudgetPlanApiService);
       private readonly formBuilder = inject(FormBuilder);
       private readonly matDialog = inject(MatDialog);
       private readonly confirm = inject(ConfirmService);
@@ -33,9 +35,12 @@ export class BudgetPlanPanelComponent implements OnInit, OnDestroy {
       budgetPlans: BudgetPlanDto[] = [];
 
       private readonly destroy$ = new Subject<void>();
+      private budgetPeriodsSnapshot: BudgetPeriodDto[] = [];
 
       private readonly budgetPeriodFacade = inject(BudgetPeriodFacade);
       budgetPeriods$ = this.budgetPeriodFacade.budgetPeriods$;
+
+      private readonly budgetPlanEvents = inject(BudgetPlanEventsService);
 
       periodForm: FormGroup = this.formBuilder.group({
             year: [null as number | null],
@@ -83,8 +88,17 @@ export class BudgetPlanPanelComponent implements OnInit, OnDestroy {
       );
 
       ngOnInit(): void {
+            this.budgetPeriods$.pipe(takeUntil(this.destroy$))
+                  .subscribe(p => this.budgetPeriodsSnapshot = p);
+
             this.initializePeriodSelection();
             this.listenOpenByQueryParam();
+
+            this.budgetPlanEvents.updated$
+                  .pipe(takeUntil(this.destroy$))
+                  .subscribe(() => {
+                        this.reloadCurrentPeriodPlans();   // 🔥 reload khi dialog cập nhật
+                  });
       }
 
       private initializePeriodSelection(): void {
@@ -141,8 +155,7 @@ export class BudgetPlanPanelComponent implements OnInit, OnDestroy {
                   });
       }
       private async loadBudgetPlans(budgetPeriodId: string) {
-            this.budgetPlans= await firstValueFrom(this.budgetPlanService.getFollowing(budgetPeriodId));
-            console.log('budget plans: ', this.budgetPlans);
+            this.budgetPlans= await firstValueFrom(this.budgetPlanApi.getFollowing(budgetPeriodId));
       }
 
       private listenOpenByQueryParam(): void {
@@ -157,7 +170,7 @@ export class BudgetPlanPanelComponent implements OnInit, OnDestroy {
       private async activateBudgetPlanDetailDialog(planId: string): Promise<void> {
             let plan: BudgetPlanDto;
             try {
-                  plan = await firstValueFrom(this.budgetPlanService.getById(planId));
+                  plan = await firstValueFrom(this.budgetPlanApi.getById(planId));
             } catch (e) {
                   const messages = handleHttpError(e).join('\n');
                   this.confirm.error$(messages);
@@ -171,7 +184,7 @@ export class BudgetPlanPanelComponent implements OnInit, OnDestroy {
             });
 
             // Clear query params khi đóng dialog (tránh auto-open khi refresh)
-            dialogRef.afterClosed().subscribe(() => {
+            dialogRef.afterClosed().subscribe(success => {
                   this.router.navigate([], {
                         relativeTo: this.route,
                         queryParams: { openBudgetPlanId: null },
@@ -195,10 +208,19 @@ export class BudgetPlanPanelComponent implements OnInit, OnDestroy {
       }
 
       openBudgetPlanDetailDialog(plan: BudgetPlanDto) {
-            const dialogRef = this.dialog.open(BudgetPlanDetailDialogComponent, { data: plan });
-            dialogRef.afterClosed().subscribe({
-                  
-            })
+            this.dialog.open(BudgetPlanDetailDialogComponent, { data: plan });
+      }
+      private async reloadCurrentPeriodPlans() {
+            const { year, month } = this.periodForm.value;
+
+            if (!year || !month) return;
+
+            // Tìm budget period tương ứng
+            const period = this.budgetPeriodsSnapshot?.find(p => p.year === year && p.month === month);
+
+            if (!period) return;
+
+            await this.loadBudgetPlans(period.id);
       }
 
       // ===== Destroy ====

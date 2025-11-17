@@ -7,7 +7,7 @@ import { provideMondayFirstDateAdapter } from "../../../../../../shared/date/pro
 import { DateAdapter } from "@angular/material/core";
 import { MatButtonModule } from "@angular/material/button";
 import { FormBuilder, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { InvoiceService } from "../../../../services/invoice.service";
+import { InvoiceApiService } from "../../../../services/invoice.service";
 import { firstValueFrom } from "rxjs";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { handleHttpError } from "../../../../../../shared/utils/handle-http-errors.util";
@@ -29,7 +29,7 @@ export class MiniInvoiceRequestDialogComponent {
       private adapter = inject<DateAdapter<Date>>(DateAdapter as any);
       private formBuilder = inject(FormBuilder);
       private fileService = inject(FileService);
-      private invoiceService = inject(InvoiceService);
+      private invoiceService = inject(InvoiceApiService);
       private toast = inject(ToastService);
 
       // ============ UI state ============

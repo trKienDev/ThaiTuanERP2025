@@ -7,12 +7,12 @@ import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
-import { CashoutGroupService } from "../../../../services/cashout-group.service";
-import { LedgerAccountService } from "../../../../services/ledger-account.service";
+import { CashoutGroupApiService } from "../../../../services/api/cashout-group-api.service";
+import { LedgerAccountApiService } from "../../../../services/api/ledger-account-api.service";
 import { handleHttpError } from "../../../../../../shared/utils/handle-http-errors.util";
 import { CashoutCodeRequest } from "../../../../models/cashout-code.model";
 import { firstValueFrom } from "rxjs";
-import { CashoutCodeService } from "../../../../services/cashout-code.service";
+import { CashoutCodeApiService } from "../../../../services/api/cashout-code-api.service";
 import { ToastService } from "../../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { KitDropdownOption, KitDropdownComponent } from "../../../../../../shared/components/kit-dropdown/kit-dropdown.component";
 
@@ -27,9 +27,9 @@ import { KitDropdownOption, KitDropdownComponent } from "../../../../../../share
 export class CashoutCodeRequestDialogComponent implements OnInit {
       private formBuilder = inject(FormBuilder);
       private dialogRef = inject(MatDialogRef<CashoutCodeRequestDialogComponent>);
-      private cashoutCodeService = inject(CashoutCodeService);
-      private cashoutGroupService = inject(CashoutGroupService);
-      private ledgerAccountService = inject(LedgerAccountService);
+      private cashoutCodeApi = inject(CashoutCodeApiService);
+      private cashoutGroupApi = inject(CashoutGroupApiService);
+      private ledgerAccountApi = inject(LedgerAccountApiService);
       private toast = inject(ToastService);
 
       private isSuccess: boolean = false;
@@ -55,7 +55,7 @@ export class CashoutCodeRequestDialogComponent implements OnInit {
       }
 
       loadCashoutGroupOptions(): void {
-            this.cashoutGroupService.getAll().subscribe({
+            this.cashoutGroupApi.getAll().subscribe({
                   next: (cashoutGroups) => {
                         this.cashoutGroupOptions = cashoutGroups.map(cg => ({
                               id: cg.id,
@@ -74,7 +74,7 @@ export class CashoutCodeRequestDialogComponent implements OnInit {
       }
 
       loadLedgerAccountOptions(): void {
-            this.ledgerAccountService.getAll().subscribe({
+            this.ledgerAccountApi.getAll().subscribe({
                   next: (ledgerAccounts) => {
                         this.postingLedgerAccountOptions = ledgerAccounts.map(la => ({
                               id: la.id, 
@@ -99,7 +99,7 @@ export class CashoutCodeRequestDialogComponent implements OnInit {
 
             try {
                   const payload: CashoutCodeRequest = this.form.getRawValue() as CashoutCodeRequest;
-                  const created = await firstValueFrom(this.cashoutCodeService.create(payload));
+                  const created = await firstValueFrom(this.cashoutCodeApi.create(payload));
                   this.toast.successRich('Thêm dòng tiền ra thành công');
                   this.dialogRef.close(this.isSuccess = true);
             } catch(error) {

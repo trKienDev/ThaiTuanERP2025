@@ -1,15 +1,15 @@
 import { inject, Injectable } from "@angular/core";
-import { environment } from "../../../../environments/environment";
+import { environment } from "../../../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { Observable, switchMap } from "rxjs";
-import { ApiResponse } from "../../../shared/models/api-response.model";
-import { SetUserManagerRequest, UserBriefAvatarDto, UserDto, UserRequest } from "../models/user.model";
-import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
-import { FileService } from "../../../shared/services/file.service";
-import { BaseCrudService } from "../../../shared/services/base-crud.service";
+import { ApiResponse } from "../../../../shared/models/api-response.model";
+import { SetUserManagerRequest, UserBriefAvatarDto, UserDto, UserRequest } from "../../models/user.model";
+import { handleApiResponse$ } from "../../../../shared/operators/handle-api-response.operator";
+import { FileService } from "../../../../shared/services/file.service";
+import { BaseApiService } from "../../../../shared/services/base-api.service";
 
 @Injectable({ providedIn: 'root'})
-export class UserService extends BaseCrudService<UserDto, UserRequest> {
+export class UserApiService extends BaseApiService<UserDto, UserRequest> {
       constructor(http: HttpClient) {
             super(http, `${environment.apiUrl}/user`);
       }

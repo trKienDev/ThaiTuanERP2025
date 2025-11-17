@@ -5,7 +5,7 @@ import { environment } from "../../../../../environments/environment";
 import { UserFacade } from "../../facades/user.facade";
 import { firstValueFrom } from "rxjs";
 import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
-import { UserService } from "../../services/user.service";
+import { UserApiService } from "../../services/api/user-api.service";
 import { AvatarUrlPipe } from "../../../../shared/pipes/avatar-url.pipe";
 import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 
@@ -19,7 +19,7 @@ import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spi
 export class AccountProfileComponent {
       private readonly userFacade = inject(UserFacade);
       private readonly toastService = inject(ToastService);
-      private readonly userService = inject(UserService);
+      private readonly userApi = inject(UserApiService);
 
       baseUrl: string = environment.baseUrl;      
       currentUser$ = this.userFacade.currentUser$;
@@ -66,7 +66,7 @@ export class AccountProfileComponent {
 
             this.isUploading = true;
             try {
-                  await firstValueFrom(this.userService.updateAvatar(this.selectedAvatarFile,  userId));
+                  await firstValueFrom(this.userApi.updateAvatar(this.selectedAvatarFile,  userId));
                   this.userFacade.refreshCurrentUser();
                   this.toastService.successRich('Cập nhật avatar thành công');
             } catch (err) {

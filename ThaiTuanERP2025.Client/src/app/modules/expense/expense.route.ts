@@ -12,7 +12,6 @@ export const expenseRoutes: Routes = [
             component: ExpenseComponent,
             children: [
                   { path: '', redirectTo: 'expense-payment-shell', pathMatch: 'full'},
-                  { path: 'supplier', data: { animation: 'SupplierPage' }, loadComponent: () => import('./pages/suppliers/supplier.component').then((m) => m.ExpenseSupplierComponent )},
                   { path: 'invoice', data: { animation: 'InvoicePage' }, loadComponent: () => import('./pages/invoices/invoice.component').then((m) => m.ExpenseInvoiceComponent )},
                   { path: 'invoice/request', data: { animation: 'InvoiceRequestPage' }, loadComponent: () => import('./pages/invoices/invoice-request/invoice-request-page.component').then((m) => m.InvoiceRequestPageComponent )},
                   { 

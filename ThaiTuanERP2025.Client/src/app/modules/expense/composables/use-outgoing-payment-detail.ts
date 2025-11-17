@@ -1,11 +1,11 @@
 import { inject, signal } from "@angular/core";
-import { OutgoingPaymentService } from "../services/outgoing-payment.service";
+import { OutgoingPaymentApiService } from "../services/outgoing-payment.service";
 import { OutgoingPaymentDetailDto } from "../models/outgoing-payment.model";
 import { ToastService } from "../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { firstValueFrom } from "rxjs";
 
 export function useOutgoingPaymentDetail() {
-      const outgoingPaymentService = inject(OutgoingPaymentService);
+      const outgoingPaymentApi = inject(OutgoingPaymentApiService);
 
       const outgoingPaymentDetail = signal<OutgoingPaymentDetailDto | null>(null);
       const isLoading = signal(false);
@@ -17,7 +17,7 @@ export function useOutgoingPaymentDetail() {
                   isLoading.set(true);
                   error.set(null);
             
-                  const detail = await firstValueFrom(outgoingPaymentService.getDetailById(outgoingPaymentId));
+                  const detail = await firstValueFrom(outgoingPaymentApi.getDetailById(outgoingPaymentId));
                   outgoingPaymentDetail.set(detail);
             } catch (err) {
                   console.error('Failed to load payment detail', err);

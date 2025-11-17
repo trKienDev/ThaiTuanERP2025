@@ -8,7 +8,7 @@ import { KitActionMenuComponent } from "../../../../../shared/components/kit-act
 import {  ApprovalStepTemplateRequest } from "../../../models/approval-step-template.model";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ToastService } from "../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
-import { ApprovalWorkflowTemplateService } from "../../../services/approval-workflow-template.service";
+import { ApprovalWorkflowTemplateApiService } from "../../../services/approval-workflow-template.service";
 import { SaveApprovalWorkflowTemplateComponent } from "./save-approval-workflow-template/save-approval-workflow-template.component";
 
 @Component({
@@ -22,7 +22,7 @@ export class ExpenseApprovalWorkflowEngineRequest {
       private readonly dialog = inject(MatDialog);
       private readonly formBuilder = inject(FormBuilder);
       private readonly toastService = inject(ToastService);
-      private readonly approvalWorkflowTemplateService = inject(ApprovalWorkflowTemplateService);
+      private readonly approvalWorkflowTemplateApi = inject(ApprovalWorkflowTemplateApiService);
 
       private static readonly END = -1; // sential cho nút add cuối cùng
 

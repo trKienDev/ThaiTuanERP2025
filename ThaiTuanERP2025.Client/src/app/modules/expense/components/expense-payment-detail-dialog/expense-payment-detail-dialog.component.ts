@@ -17,9 +17,9 @@ import { FollowingExpensePaymentFacade } from "../../facades/following-expense-p
 import { ApproveStepRequest, ApprovalStepInstanceDetailDto, StepStatus } from "../../models/approval-step-instance.model";
 import { ExpensePaymentDetailDto, ExpensePaymentStatus } from "../../models/expense-payment.model";
 import { ExpensePaymentStatusPipe } from "../../pipes/expense-payment-status.pipe";
-import { ApprovalWorkflowInstanceService } from "../../services/approval-workflow-instance.service";
 import { OutgoingPaymentStatusPipe } from "../../pipes/outgoing-payment-status.pipe";
 import { OutgoingPaymentDetailDialogComponent } from "../outgoing-payment-detail-dialog/outgoing-payment-detail-dialog.component";
+import { ApprovalWorkflowInstanceApiService } from "../../services/approval-workflow-instance.service";
 
 @Component({
       selector: 'expense-payment-detail-dialog',
@@ -77,7 +77,7 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
       currentUser$ = this.userFacade.currentUser$;
       currentUser: UserDto | null = null;
       private toastService = inject(ToastService);
-      private readonly workflowInstanceService = inject(ApprovalWorkflowInstanceService);
+      private readonly workflowInstanceApi = inject(ApprovalWorkflowInstanceApiService);
       paymentId: string = '';
       private paymentLogic = usePaymentDetail();
       loading = this.paymentLogic.isLoading;
@@ -146,7 +146,7 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
                         comment: this.commentText || ''
                   };
                   
-                  const result = await firstValueFrom(this.workflowInstanceService.approveStep(
+                  const result = await firstValueFrom(this.workflowInstanceApi.approveStep(
                         workflowInstanceDetail.workflowInstance.id, 
                         currentStep.id,
                         payload
@@ -177,7 +177,7 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
                   comment: this.commentText || ''
             };
             
-            const result = await firstValueFrom(this.workflowInstanceService.rejectStep(
+            const result = await firstValueFrom(this.workflowInstanceApi.rejectStep(
                   workflowInstanceDetail.workflowInstance.id, 
                   currentStep.id,
                   payload

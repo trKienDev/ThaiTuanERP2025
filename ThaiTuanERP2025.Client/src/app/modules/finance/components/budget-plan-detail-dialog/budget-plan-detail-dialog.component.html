@@ -1,18 +1,20 @@
-<div class="dialog">
+<div class="dialog" style="min-width: 600px;">
       <div class="dialog-container">
             <div class="dialog-heading">
-                  <ng-container *ngIf="canReview">
-                        <div class="display-flex align-items-center">
-                              <kit-spinner-button type="button" cssClass="save-button" [loading]="submitting" text="Gửi phê duyệt"></kit-spinner-button>
-                        </div>
-                  </ng-container>
                   <div class="dialog-title">
                         <h1>Chi tiết ngân sách</h1>
                   </div>
                   <div class="dialog-close">
-                        <button type="button" class="close-button" (click)="close(false)">
-                              <span class="text material-icons-outlined">close</span>
-                        </button>
+                       <ng-container *ngIf="isExpired(budgetPlan.dueAt)">
+                              <div class="margin-left-auto">
+                                    <span class="badge danger-badge">Quá hạn duyệt</span>
+                              </div>
+                        </ng-container>
+                        <ng-container *ngIf="!isExpired(budgetPlan.dueAt)">
+                              <div class="payment-due-time margin-left-auto">
+                                    <kit-flip-countdown [timeLeft]="getSecondsRemaining(budgetPlan.dueAt)"></kit-flip-countdown>
+                              </div>
+                        </ng-container>
                   </div>
             </div>
             <div class="dialog-body">
@@ -31,17 +33,44 @@
                               <tr *ngFor="let detail of budgetPlan.details; let i = index;">
                                     <td>{{ i + 1 }}</td>
                                     <td>{{ detail.budgetCode.name }}</td>
-                                    <td>{{ detail.amount | number:'1.0-0' }}</td>
+                                    <td>
+                                          <!-- Nếu đang edit dòng này -->
+                                          <ng-container *ngIf="editingIndex === i; else viewMode">
+                                                <input type="text"[(ngModel)]="editAmountValue" inputmode="decimal" appMoney [appMoneyDecimals]="0"/>
+                                          </ng-container>
+                                          <ng-template #viewMode>
+                                                {{ detail.amount | number:'1.0-0' }}
+                                          </ng-template>
+                                    </td>
                                     <ng-container *ngIf="canReview">
                                           <td>
-                                                <button class="button icon-button" style="max-height: 36px;">
-                                                      <span class="text material-icons-round" style="font-size: 13px;">create</span>
-                                                </button>
+                                                <!-- Nếu đang edit -->
+                                                <ng-container *ngIf="editingIndex === i; else editButton">
+                                                      <div class="display-flex gap-5px">
+                                                            <button class="button pintura-button" (click)="saveEdit(detail)" [disabled]="submitting">Lưu</button>
+                                                            <button class="button cancel-button" (click)="cancelEdit()" [disabled]="submitting">Hủy</button>
+                                                      </div>
+                                                </ng-container>
+
+                                                <!-- Nút Edit -->
+                                                <ng-template #editButton>
+                                                      <button class="button icon-button" (click)="startEdit(i, detail)" style="max-height: 36px;">
+                                                            <span class="text material-icons-round" style="font-size: 13px;">create</span>
+                                                      </button>
+                                                </ng-template>
                                           </td>
                                     </ng-container>
                               </tr>
                         </tbody>
                   </table>
+            </div>
+            <div class="dialog-footer display-flex gap-10px">
+                  <ng-container *ngIf="canReview">
+                        <div class="width-50pt">
+                              <kit-spinner-button type="button" cssClass="width-100pt save-button" [loading]="submitting" text="Gửi phê duyệt"></kit-spinner-button>
+                        </div>
+                  </ng-container>
+                  <button class="width-50pt button cancel-button" (click)="close(false)">Hủy</button>
             </div>
       </div>
 </div>

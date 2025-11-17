@@ -2,7 +2,6 @@ import { CommonModule } from "@angular/common";
 import { Component, inject, OnInit } from "@angular/core";
 import { provideMondayFirstDateAdapter } from "../../../../../shared/date/provide-monday-first-date-adapter";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
-import { BudgetPeriodService } from "../../../services/budget-period.service";
 import { ToastService } from "../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { filter, firstValueFrom } from "rxjs";
 import { BudgetPeriodDto } from "../../../models/budget-period.model";
@@ -13,6 +12,7 @@ import { ActionMenuOption } from "../../../../../shared/components/kit-action-me
 import { MatDialog } from "@angular/material/dialog";
 import { EditBudgetPeriodDialogComponent } from "../../../components/edit-budget-period-dialog/edit-budget-period-dialog.component";
 import { KitActionMenuComponent } from "../../../../../shared/components/kit-action-menu/kit-action-menu.component";
+import { BudgetPeriodApiService } from "../../../services/api/budget-period-api.service";
 
 @Component({
       selector: 'budget-period-panel',
@@ -26,7 +26,7 @@ export class BudgetPeriodPanelComponent implements OnInit {
       private readonly dialog = inject(MatDialog);
       private readonly formBuilder = inject(FormBuilder);
       private readonly now = new Date();
-      private readonly budgetPeriodService = inject(BudgetPeriodService);
+      private readonly budgetPeriodService = inject(BudgetPeriodApiService);
       private readonly toastService = inject(ToastService);    
       public budgetPeriods: BudgetPeriodDto[] = [];   
       public isLoading = false;

@@ -5,7 +5,7 @@ import { PagedRequest } from "../models/paged-request.model";
 import { PagedResult } from "../models/paged-result.model";
 import { handleApiResponse$ } from "../operators/handle-api-response.operator";
 
-export abstract class BaseCrudService<TDto, TRequest, TUpdate = TRequest, TUpdateResponse = TDto> {
+export abstract class BaseApiService<TDto, TRequest, TUpdate = TRequest, TUpdateResponse = TDto> {
       protected constructor(
             protected http: HttpClient,
             protected readonly endpoint: string// e.g. `${environment.apiUrl}/api/taxes`

@@ -6,7 +6,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ToastService } from "../../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { ApprovalWorkflowTemplateRequest } from "../../../../models/approval-workflow-template.model";
 import { firstValueFrom } from "rxjs";
-import { ApprovalWorkflowTemplateService } from "../../../../services/approval-workflow-template.service";
+import { ApprovalWorkflowTemplateApiService } from "../../../../services/approval-workflow-template.service";
 
 @Component({
       selector: 'save-approval-workflow-template',
@@ -18,7 +18,7 @@ export class SaveApprovalWorkflowTemplateComponent implements OnInit {
       private dialogRef = inject(MatDialogRef<SaveApprovalWorkflowTemplateComponent>);
       private formBuilder = inject(FormBuilder);
       private readonly toastService = inject(ToastService);
-      private readonly wftService = inject(ApprovalWorkflowTemplateService);
+      private readonly wftService = inject(ApprovalWorkflowTemplateApiService);
 
       submitting: boolean = false;
       dialogTitle: string = 'Lưu luồng duyệt 2';

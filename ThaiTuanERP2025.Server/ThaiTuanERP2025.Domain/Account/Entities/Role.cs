@@ -34,20 +34,20 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		#endregion
 
 		#region Domain Behaviors
-		public void Activate()
+		internal void Activate()
 		{
 			if (IsActive) return;
 			IsActive = true;
 			AddDomainEvent(new RoleActivatedEvent(this));
 		}
-		public void Deactivate()
+		internal void Deactivate()
 		{
 			if (!IsActive) return;
 			IsActive = false;
 			AddDomainEvent(new RoleDeactivatedEvent(this));
 		}
 
-		public void Update(string name, string description)
+		internal void Update(string name, string description)
 		{
 			Name = name ?? throw new ArgumentNullException(nameof(name));
 			Description = description;
@@ -57,7 +57,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		/// <summary>
 		/// Gán một permission cho Role. Chỉ Role đang active mới được gán.
 		/// </summary>
-		public void AssignPermission(Guid permissionId)
+		internal void AssignPermission(Guid permissionId)
 		{
 			// Sử dụng Specification để kiểm tra điều kiện domain
 			var activeSpec = new ActiveRoleLinqSpec();
@@ -71,7 +71,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			AddDomainEvent(new PermissionAssignedToRoleEvent(this, permissionId));
 		}
 
-		public void RemovePermission(Guid permissionId)
+		internal void RemovePermission(Guid permissionId)
 		{
 			var existing = _rolePermissions.FirstOrDefault(rp => rp.PermissionId == permissionId);
 			if (existing == null) return;
@@ -80,7 +80,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			AddDomainEvent(new PermissionRemovedFromRoleEvent(this, permissionId));
 		}
 
-		public void AssignUser(Guid userId)
+		internal void AssignUser(Guid userId)
 		{
 			if (_userRoles.Any(ur => ur.UserId == userId))
 				return;
@@ -89,7 +89,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			AddDomainEvent(new UserAssignedToRoleEvent(this, userId));
 		}
 
-		public void RemoveUser(Guid userId)
+		internal void RemoveUser(Guid userId)
 		{
 			var existing = _userRoles.FirstOrDefault(ur => ur.UserId == userId);
 			if (existing == null) return;

@@ -1,14 +1,14 @@
 import { Injectable } from "@angular/core";
 import { ExpensePaymentDetailDto, ExpensePaymentDto, ExpensePaymentRequest, ExpensePaymentSummaryDto } from "../models/expense-payment.model";
-import { BaseCrudService } from "../../../shared/services/base-crud.service";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { environment } from "../../../../environments/environment";
 import { catchError, Observable, throwError } from "rxjs";
 import { ApiResponse } from "../../../shared/models/api-response.model";
 import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
+import { BaseApiService } from "../../../shared/services/base-api.service";
 
 @Injectable({ providedIn: 'root' }) 
-export class ExpensePaymentService extends BaseCrudService<ExpensePaymentDto, ExpensePaymentRequest> {
+export class ExpensePaymentApiService extends BaseApiService<ExpensePaymentDto, ExpensePaymentRequest> {
       constructor(http: HttpClient) {
             super(http, `${environment.apiUrl}/expense-payments`);
       }

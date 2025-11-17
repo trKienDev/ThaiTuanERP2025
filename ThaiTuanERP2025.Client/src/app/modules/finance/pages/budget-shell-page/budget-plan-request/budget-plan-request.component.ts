@@ -1,21 +1,21 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnInit } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { BudgetPeriodService } from "../../../services/budget-period.service";
 import { KitDropdownOption, KitDropdownComponent } from "../../../../../shared/components/kit-dropdown/kit-dropdown.component";
 import { DepartmentOptionStore } from "../../../../account/options/department-dropdown-options.option";
-import { UserService } from "../../../../account/services/user.service";
 import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
 import { resolveAvatarUrl } from "../../../../../shared/utils/avatar.utils";
-import { BudgetApproverService } from "../../../services/budget-approver.service";
-import { BudgetCodeService } from "../../../services/budget-code.service";
 import { MoneyFormatDirective } from "../../../../../shared/directives/money/money-format.directive";
 import { KitSpinnerButtonComponent } from "../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 import { ToastService } from "../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { BudgetPlanRequest } from "../../../models/budget-plan.model";
 import { firstValueFrom } from "rxjs";
-import { BudgetPlanService } from "../../../services/budget-plan.service";
 import { HttpErrorHandlerService } from "../../../../../core/services/http-errror-handler.service";
+import { UserApiService } from "../../../../account/services/api/user-api.service";
+import { BudgetPlanApiService } from "../../../services/api/budget-plan-api.service";
+import { BudgetPeriodApiService } from "../../../services/api/budget-period-api.service";
+import { BudgetCodeApiService } from "../../../services/api/budget-code-api.service";
+import { BudgetApproverApiService } from "../../../services/api/budget-approver-api.service";
 
 interface BudgetPlanDetailsForm {
       budgetCodeId: FormControl<string>;
@@ -34,8 +34,8 @@ export class BudgetPlanRequestPanelComponent implements OnInit {
       public submitting: boolean = false;
       public showErrors: boolean = false;
       private readonly toast = inject(ToastService);
-      private readonly userService = inject(UserService);
-      private readonly budgetPlanService = inject(BudgetPlanService);
+      private readonly userApi = inject(UserApiService);
+      private readonly budgetPlanApi = inject(BudgetPlanApiService);
       private readonly httpErrorHandler = inject(HttpErrorHandlerService);
 
       ngOnInit(): void {
@@ -73,10 +73,10 @@ export class BudgetPlanRequestPanelComponent implements OnInit {
       }
 
       // ==== Budget Period ====
-      private readonly budgetPeriodService = inject(BudgetPeriodService);
+      private readonly budgetPeriodApi = inject(BudgetPeriodApiService);
       public budgetPeriodOptions: KitDropdownOption[] = [];
       loadBudgetPeriodOptions() {
-            this.budgetPeriodService.getAvailable().subscribe({
+            this.budgetPeriodApi.getAvailable().subscribe({
                   next: (budgetPeriods) => {
                         this.budgetPeriodOptions = budgetPeriods.map(bp => ({
                               id: bp.id,
@@ -88,10 +88,10 @@ export class BudgetPlanRequestPanelComponent implements OnInit {
       }
 
       // ==== Bugdet Codes ====
-     private readonly budgetCodeService = inject(BudgetCodeService);
+     private readonly budgetCodeApi = inject(BudgetCodeApiService);
      public budgetCodeOptions: KitDropdownOption[] = [];
      loadAvailableBudgetCodes() {
-            this.budgetCodeService.getAll().subscribe({
+            this.budgetCodeApi.getAll().subscribe({
                   next: (budgetCodes) => {
                         this.budgetCodeOptions = budgetCodes.map(bc => ({
                               id: bc.id,
@@ -110,7 +110,7 @@ export class BudgetPlanRequestPanelComponent implements OnInit {
       // ==== Budget Reviewers ====
       public budgetReviewerOptions: KitDropdownOption[] = [];
       async loadBudgetReviewers(): Promise<void> {
-            this.userService.getDepartmentManagersByUser().subscribe({
+            this.userApi.getDepartmentManagersByUser().subscribe({
                   next: (managers) => {
                         this.budgetReviewerOptions = managers.map(m => ({
                               id: m.id,
@@ -126,10 +126,10 @@ export class BudgetPlanRequestPanelComponent implements OnInit {
       }
 
       // ==== Budget Approvers ====
-      private readonly budgetApproverService = inject(BudgetApproverService);
+      private readonly budgetApproverApi = inject(BudgetApproverApiService);
       budgetApproverOptions: KitDropdownOption[] = [];
       loadBudgetApprovers(): void {
-            this.budgetApproverService.getByUserDepartment().subscribe({
+            this.budgetApproverApi.getByUserDepartment().subscribe({
                   next: (budgetApprovers) => {
                         this.budgetApproverOptions = budgetApprovers.map(ba => ({
                               id: ba.approverUser.id,
@@ -179,7 +179,7 @@ export class BudgetPlanRequestPanelComponent implements OnInit {
                         }))
                   };
 
-                  await firstValueFrom(this.budgetPlanService.create(payload));
+                  await firstValueFrom(this.budgetPlanApi.create(payload));
                   this.toast.successRich("Tạo kế hoạch ngân sách thành công");
                   this.form.reset();
             } catch(error) {

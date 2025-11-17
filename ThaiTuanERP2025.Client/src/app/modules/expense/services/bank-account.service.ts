@@ -7,10 +7,10 @@ import { ApiResponse } from "../../../shared/models/api-response.model";
 import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
 
 @Injectable({ providedIn: 'root' })
-export class BankAccountService {
+export class BankAccountApiService {
       private readonly API_URL = `${environment.apiUrl}/bank-accounts`;
 
-      constructor(private http: HttpClient) {}
+      constructor(private readonly http: HttpClient) {}
 
       getById(id: string): Observable<BankAccountDto> {
             return this.http.get<ApiResponse<BankAccountDto>>(`${this.API_URL}/${id}`)

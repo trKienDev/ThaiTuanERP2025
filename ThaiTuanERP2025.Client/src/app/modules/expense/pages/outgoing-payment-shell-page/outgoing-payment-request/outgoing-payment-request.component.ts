@@ -13,7 +13,7 @@ import { Kit404PageComponent } from "../../../../../shared/components/kit-404-pa
 import { KitLoadingSpinnerComponent } from "../../../../../shared/components/kit-loading-spinner/kit-loading-spinner.component";
 import { provideMondayFirstDateAdapter } from "../../../../../shared/date/provide-monday-first-date-adapter";
 import { MatDatepickerModule } from "@angular/material/datepicker";
-import { OutgoingPaymentService } from "../../../services/outgoing-payment.service";
+import { OutgoingPaymentApiService } from "../../../services/outgoing-payment.service";
 import { firstValueFrom } from "rxjs";
 import { OutgoingPaymentRequest } from "../../../models/outgoing-payment.model";
 import { KitSpinnerButtonComponent } from "../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
@@ -32,7 +32,7 @@ export class OutgoingPaymentRequestComponent implements OnInit {
       private readonly formBuilder = inject(FormBuilder);
       private readonly OBAccountOptionsStore = inject(OutgoingBankAccountOptionStore);
       OBAccountOptions = this.OBAccountOptionsStore.options$;
-      private readonly outgoingPaymentService = inject(OutgoingPaymentService);
+      private readonly outgoingPaymentService = inject(OutgoingPaymentApiService);
 
       private readonly paymentLogic = usePaymentDetail();
       loading = this.paymentLogic.isLoading;

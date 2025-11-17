@@ -1,13 +1,13 @@
 import { Injectable } from "@angular/core";
-import { BaseCrudFacade } from "../../../shared/facades/base-crud.facade";
 import { OutgoingPaymentRequest, OutgoingPaymentSummaryDto } from "../models/outgoing-payment.model";
-import { OutgoingPaymentService } from "../services/outgoing-payment.service";
 import { Observable, shareReplay, switchMap, tap, BehaviorSubject } from "rxjs";
+import { BaseApiFacade } from "../../../shared/facades/base-api.facade";
+import { OutgoingPaymentApiService } from "../services/outgoing-payment.service";
 
 @Injectable({ providedIn: 'root'})
-export class OutgoingPaymentFacade extends BaseCrudFacade<OutgoingPaymentSummaryDto, OutgoingPaymentRequest> {
-      constructor(private outgoingPaymentService: OutgoingPaymentService) {
-            super(outgoingPaymentService);
+export class OutgoingPaymentFacade extends BaseApiFacade<OutgoingPaymentSummaryDto, OutgoingPaymentRequest> {
+      constructor(private outgoingPaymentApiService: OutgoingPaymentApiService) {
+            super(outgoingPaymentApiService);
       }  
       
       readonly outgoingPayments$: Observable<OutgoingPaymentSummaryDto[]> = this.list$;
@@ -19,7 +19,7 @@ export class OutgoingPaymentFacade extends BaseCrudFacade<OutgoingPaymentSummary
        * Danh sách outgoing-payment mà user hiện tại đang follow 
        */
       readonly followingPayments$: Observable<OutgoingPaymentSummaryDto[]> = this.followingReload$.pipe(
-            switchMap(() => this.outgoingPaymentService.getFollowing()),
+            switchMap(() => this.outgoingPaymentApiService.getFollowing()),
             shareReplay({ bufferSize: 1, refCount: false })
       );
 

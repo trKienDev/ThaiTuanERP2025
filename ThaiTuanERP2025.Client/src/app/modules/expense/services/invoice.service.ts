@@ -8,10 +8,10 @@ import { PagedResult } from "../../../shared/models/paged-result.model";
 import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
 
 @Injectable({ providedIn: 'root' })
-export class InvoiceService {
+export class InvoiceApiService {
       private readonly API_URL = `${environment.apiUrl}/invoices`;
 
-      constructor(private http: HttpClient) {}
+      constructor(private readonly http: HttpClient) {}
 
       // POST /api/invoices/draft
       createDraft(body: CreateInvoiceDraftRequest): Observable<InvoiceDto> {

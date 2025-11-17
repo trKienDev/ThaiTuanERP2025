@@ -42,14 +42,14 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		#endregion
 
 		#region Domain Behaviors
-		public void Rename(string newName)
+		internal void Rename(string newName)
 		{
 			Guard.AgainstNullOrWhiteSpace(newName, nameof(newName));
 			Name = newName.Trim();
 			AddDomainEvent(new DepartmentRenamedEvent(this));
 		}
 
-		public void AssignManager(User user)
+		internal void AssignManager(User user)
 		{
 			if (user is null) throw new ArgumentNullException(nameof(user));
 			//if (user.DepartmentId != Id)
@@ -60,7 +60,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			AddDomainEvent(new DepartmentManagerAddedEvent(this, user.Id));
 		}
 
-		public void RemoveManager(Guid userId)
+		internal void RemoveManager(Guid userId)
 		{
 			var link = _managers.FirstOrDefault(m => m.UserId == userId);
 			if (link == null) return;
@@ -68,7 +68,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			AddDomainEvent(new DepartmentManagerRemovedEvent(this, userId));
 		}
 
-		public void SetPrimaryManager(Guid userId)
+		internal void SetPrimaryManager(Guid userId)
 		{
 			if (_managers.All(m => m.UserId != userId))
 				throw new DomainException("User chưa là manager của phòng ban.");
@@ -85,21 +85,21 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			AddDomainEvent(new DepartmentPrimaryManagerChangedEvent(this, oldPrimaryUserId, userId));
 		}
 
-		public void Activate()
+		internal void Activate()
 		{
 			if (IsActive) return;
 			IsActive = true;
 			AddDomainEvent(new DepartmentActivatedEvent(this));
 		}
 
-		public void Deactivate()
+		internal void Deactivate()
 		{
 			if (!IsActive) return;
 			IsActive = false;
 			AddDomainEvent(new DepartmentDeactivatedEvent(this));
 		}
 
-		public void AddChild(Department child)
+		internal void AddChild(Department child)
 		{
 			if (child == null) throw new ArgumentNullException(nameof(child));
 			if (_children.Any(c => c.Id == child.Id))
@@ -110,7 +110,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			AddDomainEvent(new DepartmentChildAddedEvent(this, child));
 		}
 
-		public void RemoveChild(Guid childId)
+		internal void RemoveChild(Guid childId)
 		{
 			var child = _children.FirstOrDefault(c => c.Id == childId);
 			if (child == null) return;
@@ -119,7 +119,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			AddDomainEvent(new DepartmentChildRemovedEvent(this, child));
 		}
 
-		public void SetParent(Department? newParent)
+		internal void SetParent(Department? newParent)
 		{
 			// 1) Không cho tự làm cha chính mình
 			if (newParent != null && newParent.Id == this.Id)

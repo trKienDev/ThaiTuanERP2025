@@ -1,16 +1,16 @@
 import { inject, Injectable } from "@angular/core";
 import { UserDto,  UserRequest } from "../models/user.model";
-import { BaseCrudFacade } from "../../../shared/facades/base-crud.facade";
-import { UserService } from "../services/user.service";
 import { Observable, shareReplay, startWith, Subject, switchMap, tap } from "rxjs";
+import { UserApiService } from "../services/api/user-api.service";
+import { BaseApiFacade } from "../../../shared/facades/base-api.facade";
 
 @Injectable({ providedIn: 'root' })
-export class UserFacade extends BaseCrudFacade<UserDto, UserRequest>{
-      private readonly userService = inject(UserService);
+export class UserFacade extends BaseApiFacade<UserDto, UserRequest>{
+      private readonly userService = inject(UserApiService);
       readonly users$: Observable<UserDto[]> = this.list$;
 
       constructor() {
-            super(inject(UserService));
+            super(inject(UserApiService));
       }
       
       // ========= CURRENT USER =========

@@ -2,11 +2,11 @@ import { CommonModule } from "@angular/common";
 import { Component, ElementRef, inject, OnInit, ViewChild } from "@angular/core";
 import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
 import { BudgetCodeDto } from "../../../models/budget-code.model";
-import { BudgetCodeService } from "../../../services/budget-code.service";
 import { MatDialog } from "@angular/material/dialog";
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { HasPermissionDirective } from "../../../../../core/auth/auth.directive";
 import { BudgetCodeRequestDialogComponent } from "../../../components/budget-code-request-dialog/budget-code-request-dialog.component";
+import { BudgetCodeApiService } from "../../../services/api/budget-code-api.service";
 
 @Component({
       selector: 'budget-code-panel',
@@ -26,14 +26,14 @@ export class BudgetCodePanelComponent implements OnInit {
 
       @ViewChild('masterCheckbox', { static: false}) masterCheckbox!: ElementRef<HTMLInputElement>;
 
-      constructor( private readonly budgetCodeService: BudgetCodeService ) {}
+      constructor( private readonly budgetCodeApi: BudgetCodeApiService ) {}
 
       ngOnInit(): void {
             this.loadBudgetCodes();
       }
 
       loadBudgetCodes(): void {
-            this.budgetCodeService.getAll().subscribe({
+            this.budgetCodeApi.getAll().subscribe({
                   next: (data) => {
                         this.budgetCodes = data.map(bc => ({ ...bc, selected: false }));
                         this.updateMasterCheckboxState();
@@ -64,7 +64,7 @@ export class BudgetCodePanelComponent implements OnInit {
             const oldValue = budgetCode.isActive;
             budgetCode.isActive = !oldValue;
 
-            this.budgetCodeService.toggleActive(budgetCode.id).subscribe({
+            this.budgetCodeApi.toggleActive(budgetCode.id).subscribe({
                   next: () => {},
                   error: err => {
                         budgetCode.isActive = !budgetCode.isActive;

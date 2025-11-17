@@ -1,6 +1,6 @@
 import { BehaviorSubject, Observable, shareReplay, switchMap, tap } from "rxjs"
 
-export abstract class BaseCrudFacade<Dto, Request, Update = Request, UpdateResponse = Dto> {
+export abstract class BaseApiFacade<Dto, Request, Update = Request, UpdateResponse = Dto> {
       protected readonly reload$ = new BehaviorSubject<void>(undefined);
 
       protected constructor(protected service: {

@@ -69,10 +69,10 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 
 			AddDomainEvent(new UserCreatedEvent(this));
 		}
-		#endregion		
+		#endregion
 
 		#region Domain Behaviors
-		public void AssignManager(Guid managerId)
+		internal void AssignManager(Guid managerId)
 		{
 			Guard.AgainstDefault(managerId, nameof(managerId));
 			if (managerId == Id)
@@ -82,35 +82,35 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			AddDomainEvent(new UserManagerAssignedEvent(this, managerId));
 		}
 
-		public void Activate()
+		internal void Activate()
 		{
 			if (IsActive) return;
 			IsActive = true;
 			AddDomainEvent(new UserActivatedEvent(this));
 		}
 
-		public void Deactivate()
+		internal void Deactivate()
 		{
 			if (!IsActive) return;
 			IsActive = false;
 			AddDomainEvent(new UserDeactivatedEvent(this));
 		}
 
-		public void SetSuperAdmin(bool isSuper)
+		internal void SetSuperAdmin(bool isSuper)
 		{
 			if (IsSuperAdmin == isSuper) return;
 			IsSuperAdmin = isSuper;
 			AddDomainEvent(new UserSuperAdminChangedEvent(this, isSuper));
 		}
 
-		public void ChangePassword(string newPasswordHash)
+		internal void ChangePassword(string newPasswordHash)
 		{
 			Guard.AgainstNullOrWhiteSpace(newPasswordHash, nameof(newPasswordHash));
 			PasswordHash = newPasswordHash;
 			AddDomainEvent(new UserPasswordChangedEvent(this));
 		}
 
-		public void UpdateProfile(string fullName, string position, Email? email = null, Phone? phone = null)
+		internal void UpdateProfile(string fullName, string position, Email? email = null, Phone? phone = null)
 		{
 			Guard.AgainstNullOrWhiteSpace(fullName, nameof(fullName));
 			FullName = fullName.Trim();
@@ -120,7 +120,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			AddDomainEvent(new UserProfileUpdatedEvent(this));
 		}
 
-		public void UpdateAvatar (Guid fileId, string objectKey)
+		internal void UpdateAvatar (Guid fileId, string objectKey)
 		{
 			AvatarFileId = fileId;
 			AvatarFileObjectKey = objectKey;
@@ -128,14 +128,14 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			AddDomainEvent(new UserAvatarUpdatedEvent(this));
 		}
 
-		public void AssignRole(Guid roleId)
+		internal void AssignRole(Guid roleId)
 		{
 			if (_userRoles.Any(r => r.RoleId == roleId)) return;
 			_userRoles.Add(new UserRole(Id, roleId));
 			AddDomainEvent(new UserAssignedRoleEvent(this, roleId));
 		}
 
-		public void RemoveRole(Guid roleId)
+		internal void RemoveRole(Guid roleId)
 		{
 			var existing = _userRoles.FirstOrDefault(r => r.RoleId == roleId);
 			if (existing == null) return;
@@ -144,14 +144,14 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			AddDomainEvent(new UserRemovedRoleEvent(this, roleId));
 		}
 
-		public void SetDepartment(Guid departmentId)
+		internal void SetDepartment(Guid departmentId)
 		{
 			Guard.AgainstDefault(departmentId, nameof(departmentId));
 			DepartmentId = departmentId;
 			AddDomainEvent(new UserDepartmentChangedEvent(this, departmentId));
 		}
 
-		public void DeletePermanently()
+		internal void DeletePermanently()
 		{
 			// 1) Chặn các trường hợp không hợp lệ
 			if (IsSuperAdmin)

@@ -1,14 +1,14 @@
 import { inject, Injectable } from "@angular/core";
-import { BaseCrudFacade } from "../../../shared/facades/base-crud.facade";
+import { BaseApiFacade } from "../../../shared/facades/base-api.facade";
 import { BudgetPeriodDto, BudgetPeriodRequest, UpdateBudgetPeriodPayload } from "../models/budget-period.model";
-import { BudgetPeriodService } from "../services/budget-period.service";
+import { BudgetPeriodApiService } from "../services/api/budget-period-api.service";
 import { Observable } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
-export class BudgetPeriodFacade extends BaseCrudFacade<BudgetPeriodDto, BudgetPeriodRequest, UpdateBudgetPeriodPayload, void> {
-      private readonly budgetPeriodService = inject(BudgetPeriodService);
+export class BudgetPeriodFacade extends BaseApiFacade<BudgetPeriodDto, BudgetPeriodRequest, UpdateBudgetPeriodPayload, void> {
+      private readonly budgetPeriodApiService = inject(BudgetPeriodApiService);
       constructor() {
-            super(inject(BudgetPeriodService));
+            super(inject(BudgetPeriodApiService));
       }
       
       readonly budgetPeriods$: Observable<BudgetPeriodDto[]> = this.list$;

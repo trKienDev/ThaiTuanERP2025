@@ -5,9 +5,6 @@ import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angu
 import { MatInputModule } from "@angular/material/input";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { firstValueFrom } from "rxjs";
-import { BudgetCodeService } from "../../services/budget-code.service";
-import { BudgetGroupService } from "../../services/budget-group.service";
-import { CashoutCodeService } from "../../services/cashout-code.service";
 import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { KitDropdownComponent, KitDropdownOption } from "../../../../shared/components/kit-dropdown/kit-dropdown.component";
 import { handleHttpError } from "../../../../shared/utils/handle-http-errors.util";
@@ -15,6 +12,9 @@ import { BudgetCodeRequest } from "../../models/budget-code.model";
 import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 import { HttpErrorResponse } from "@angular/common/http";
 import { ConfirmService } from "../../../../shared/components/confirm-dialog/confirm.service";
+import { BudgetCodeApiService } from "../../services/api/budget-code-api.service";
+import { BudgetGroupApiService } from "../../services/api/budget-group-api.service";
+import { CashoutCodeApiService } from "../../services/api/cashout-code-api.service";
 
 @Component({
       selector: 'add-budget-code-request',
@@ -23,9 +23,9 @@ import { ConfirmService } from "../../../../shared/components/confirm-dialog/con
       templateUrl: './budget-code-request-dialog.component.html',
 }) 
 export class BudgetCodeRequestDialogComponent implements OnInit {
-      private readonly budgetCodeService = inject(BudgetCodeService);
-      private readonly budgetGroupService = inject(BudgetGroupService);
-      private readonly cashoutCodeService = inject(CashoutCodeService);
+      private readonly budgetCodeApi = inject(BudgetCodeApiService);
+      private readonly budgetGroupApi = inject(BudgetGroupApiService);
+      private readonly cashoutCodeApi = inject(CashoutCodeApiService);
       private readonly ref = inject(MatDialogRef<BudgetCodeRequestDialogComponent>);
       private readonly formBuilder = inject(FormBuilder);
       private readonly toast = inject(ToastService);
@@ -50,7 +50,7 @@ export class BudgetCodeRequestDialogComponent implements OnInit {
       }
 
       loadBudgetGroups(): void {
-            this.budgetGroupService.getAll().subscribe({
+            this.budgetGroupApi.getAll().subscribe({
                   next: (budgetGroups) => {
                         this.budgetGroupOptions = budgetGroups.map(bg => ({
                               id: bg.id,
@@ -69,7 +69,7 @@ export class BudgetCodeRequestDialogComponent implements OnInit {
       }
 
       loadCashoutCodes(): void {
-            this.cashoutCodeService.getAll().subscribe({
+            this.cashoutCodeApi.getAll().subscribe({
                   next: (cashoutCodes) => {
                         this.cashoutCodeOptions = cashoutCodes.map(co => ({
                               id: co.id,
@@ -96,7 +96,7 @@ export class BudgetCodeRequestDialogComponent implements OnInit {
                   this.form.disable({ emitEvent: false });
                   
                   const payload: BudgetCodeRequest = this.form.getRawValue() as BudgetCodeRequest;
-                  await firstValueFrom(this.budgetCodeService.create(payload));
+                  await firstValueFrom(this.budgetCodeApi.create(payload));
                   this.toast.successRich('Thêm ngân sách thành công');
                   this.form.reset();
                   this.ref.close(true);

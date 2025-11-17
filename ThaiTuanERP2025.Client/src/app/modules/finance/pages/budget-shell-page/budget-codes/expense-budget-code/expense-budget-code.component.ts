@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, inject, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { BudgetCodeService } from "../../../../services/budget-code.service";
+import { BudgetCodeApiService } from "../../../../services/api/budget-code-api.service";
 import { BudgetCodeWithAmountDto } from "../../../../models/budget-code.model";
 import { handleHttpError } from "../../../../../../shared/utils/handle-http-errors.util";
 
@@ -14,7 +14,7 @@ import { handleHttpError } from "../../../../../../shared/utils/handle-http-erro
 })
 export class ExpenseBudgetCodeDialogComponent implements OnInit {
       private ref = inject(MatDialogRef<ExpenseBudgetCodeDialogComponent>);
-      private budgetCodeService = inject(BudgetCodeService);
+      private budgetCodeApi = inject(BudgetCodeApiService);
       private cdr = inject(ChangeDetectorRef);
 
       budgetCodes: BudgetCodeWithAmountDto[] = [];
@@ -33,7 +33,7 @@ export class ExpenseBudgetCodeDialogComponent implements OnInit {
 
       getBudgetCodesForCurrentPeriod(): void {
             this.loading = true;
-            this.budgetCodeService.getWithAmount().subscribe({
+            this.budgetCodeApi.getWithAmount().subscribe({
                   next: (list) => {
                         this.budgetCodes = list ?? [];
                         this.loading = false;

@@ -26,7 +26,7 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans
 				.ForMember(d => d.TotalAmount, opt => opt.MapFrom(s => s.Details.Where(x => x.IsActive).Sum(x => x.Amount)))
 				.ForMember(d => d.Status, opt => opt.MapFrom(s => s.Status))
 				.ForMember(d => d.CreatedAt, opt => opt.MapFrom(s => TimeZoneConverter.ToVietnamTime(s.CreatedAt)))
-				.ForMember(d => d.DueAt, opt => opt.MapFrom(s => s.DueAt))
+				.ForMember(d => d.DueAt, opt => opt.MapFrom(s => TimeZoneConverter.ToVietnamTime(s.DueAt)))
 
 			    // Reviewer
 			    // .ForMember(d => d.ReviewedByUserId, opt => opt.MapFrom(s => s.ReviewedByUserId))

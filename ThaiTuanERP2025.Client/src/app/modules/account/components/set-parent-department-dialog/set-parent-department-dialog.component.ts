@@ -7,8 +7,8 @@ import { DepartmentOptionStore } from "../../options/department-dropdown-options
 import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 import { KitDropdownComponent, KitDropdownOption } from "../../../../shared/components/kit-dropdown/kit-dropdown.component";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
-import { DepartmentService } from "../../services/department.service";
 import { firstValueFrom } from "rxjs";
+import { DepartmentApiService } from "../../services/api/department-api.service";
 
 @Component({
       selector: 'set-parent-department-dialog',
@@ -19,7 +19,7 @@ import { firstValueFrom } from "rxjs";
 export class SetParentDepartmentDialogComponent {
       private readonly dialogRef = inject(MatDialogRef<SetParentDepartmentDialogComponent>);
       private readonly toastService = inject(ToastService);
-      private readonly departmentService = inject(DepartmentService);
+      private readonly departmentApi = inject(DepartmentApiService);
       private readonly departmentFacade = inject(DepartmentFacade);
       departments$ = this.departmentFacade.departments$;
       private readonly departmentOptionStore = inject(DepartmentOptionStore);
@@ -38,7 +38,7 @@ export class SetParentDepartmentDialogComponent {
       }
 
       async loadParentDepartment(departmentId: string) {
-            const parentDept = await firstValueFrom(this.departmentService.getParentDepartment(departmentId));
+            const parentDept = await firstValueFrom(this.departmentApi.getParentDepartment(departmentId));
             if (parentDept) {
                   this.form.patchValue({ parentId: parentDept.id });
             }

@@ -1,12 +1,12 @@
 import { Injectable, inject } from "@angular/core";
-import { BaseCrudFacade } from "../../../shared/facades/base-crud.facade";
 import { PermissionDto, PermissionRequest } from "../models/permission.model";
-import { PermissionService } from "../services/permission.service";
+import { BaseApiFacade } from "../../../shared/facades/base-api.facade";
+import { PermissionApiService } from "../services/api/permission-api.service";
 
 @Injectable({ providedIn: 'root' })
-export class PermissionFacade extends BaseCrudFacade<PermissionDto, PermissionRequest> {
+export class PermissionFacade extends BaseApiFacade<PermissionDto, PermissionRequest> {
       constructor() {
-            super(inject(PermissionService));
+            super(inject(PermissionApiService));
       }     
 
       readonly permissions$ = this.list$;

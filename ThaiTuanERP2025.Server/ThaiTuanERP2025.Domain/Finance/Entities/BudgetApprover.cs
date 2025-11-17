@@ -32,7 +32,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		#endregion
 
 		#region Domain Behaviors
-		public void UpdateApprover(Guid approverId, int slaHours)
+		internal void UpdateApprover(Guid approverId, int slaHours)
 		{
 			Guard.AgainstDefault(approverId, nameof(approverId));
 			Guard.AgainstNullOrEmptyGuid(approverId, nameof(approverId));
@@ -43,10 +43,10 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			AddDomainEvent(new BudgetApproverChangedEvent(Id, approverId, slaHours));
 		}
 
-		public void Activated() => IsActive = true;
-		public void Deactive() => IsActive = false;
+		internal void Activated() => IsActive = true;
+		internal void Deactive() => IsActive = false;
 
-		public void AssignToDepartment(Guid departmentId)
+		internal void AssignToDepartment(Guid departmentId)
 		{
 			Guard.AgainstDefault(departmentId, nameof(departmentId));
 
@@ -56,7 +56,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			// AddDomainEvent(new BudgetApproverDepartmentAssignedEvent(Id, departmentId));
 		}
 
-		public void RemoveFromDepartment(Guid departmentId) {
+		internal void RemoveFromDepartment(Guid departmentId) {
 			var link = _departments.FirstOrDefault(d => d.DepartmentId == departmentId);
 			if (link == null) return;
 

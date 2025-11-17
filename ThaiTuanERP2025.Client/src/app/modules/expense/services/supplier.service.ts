@@ -2,13 +2,13 @@ import { Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { SupplierDto, SupplierRequest } from "../models/supplier.model";
-import { BaseCrudService } from "../../../shared/services/base-crud.service";
 import { catchError, Observable, throwError } from "rxjs";
 import { ApiResponse } from "../../../shared/models/api-response.model";
 import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
+import { BaseApiService } from "../../../shared/services/base-api.service";
 
 @Injectable({ providedIn: 'root' })
-export class SupplierService extends BaseCrudService<SupplierDto, SupplierRequest> {
+export class SupplierApiService extends BaseApiService<SupplierDto, SupplierRequest> {
       constructor(http: HttpClient) {
             super(http, `${environment.apiUrl}/suppliers`)
       }

@@ -1,16 +1,16 @@
 import { Injectable } from "@angular/core";
-import { environment } from "../../../../environments/environment";
+import { environment } from "../../../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { Observable} from "rxjs";
-import { ApiResponse } from "../../../shared/models/api-response.model";
-import { CreateGroupModel, GroupModel } from "../models/group.model";
-import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
+import { ApiResponse } from "../../../../shared/models/api-response.model";
+import { CreateGroupModel, GroupModel } from "../../models/group.model";
+import { handleApiResponse$ } from "../../../../shared/operators/handle-api-response.operator";
 
 @Injectable({ providedIn: 'root' })
-export class GroupService {
+export class GroupApiService {
       private readonly API_URL = `${environment.apiUrl}/group`;
 
-      constructor(private http: HttpClient) {}
+      constructor(private readonly http: HttpClient) {}
 
       create(dto: CreateGroupModel): Observable<GroupModel> {
             return this.http.post<ApiResponse<GroupModel>>(this.API_URL, dto)

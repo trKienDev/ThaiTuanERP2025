@@ -10,7 +10,7 @@ import { CashoutGroupDto, CashoutGroupRequest } from "../../../../models/cashout
 import { catchError, firstValueFrom, of } from "rxjs";
 import { handleHttpError } from "../../../../../../shared/utils/handle-http-errors.util";
 import { MatSelectModule } from "@angular/material/select";
-import { CashoutGroupService } from "../../../../services/cashout-group.service";
+import { CashoutGroupApiService } from "../../../../services/api/cashout-group-api.service";
 import { KitDropdownOption, KitDropdownComponent } from "../../../../../../shared/components/kit-dropdown/kit-dropdown.component";
 import { ToastService } from "../../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 
@@ -24,7 +24,7 @@ import { ToastService } from "../../../../../../shared/components/kit-toast-aler
 export class CashoutGroupRequestDialogComponent implements OnInit {
       private formBuilder = inject(FormBuilder);
       private dialogRef = inject(MatDialogRef<CashoutGroupRequestDialogComponent>);
-      private cashoutGroupService = inject(CashoutGroupService);
+      private cashoutGroupApi = inject(CashoutGroupApiService);
       private toast = inject(ToastService);
 
       saving = false;
@@ -49,7 +49,7 @@ export class CashoutGroupRequestDialogComponent implements OnInit {
       }
 
       loadCashoutGroups(): void {
-            this.cashoutGroupService.getAll().subscribe({
+            this.cashoutGroupApi.getAll().subscribe({
                   next: (parents) => {
                         this.parentOptions = parents.map(p => ({
                               id: p.id,
@@ -82,7 +82,7 @@ export class CashoutGroupRequestDialogComponent implements OnInit {
                         ...raw,
                         parentId: raw.parentId || null, // quan trọng: '' -> null
                   } as CashoutGroupRequest;
-                  const created = await firstValueFrom(this.cashoutGroupService.create(payload));
+                  const created = await firstValueFrom(this.cashoutGroupApi.create(payload));
                   this.toast.successRich('Thêm nhóm dòng tiền ra thành công');
                   this.dialogRef.close(true);
             } catch(error) {  

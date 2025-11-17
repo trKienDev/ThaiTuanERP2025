@@ -34,27 +34,27 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public IReadOnlyCollection<RolePermission> RolePermissions => _rolePermissions.AsReadOnly();
 
 		#region Domain Behaviors
-		public void Rename(string newName)
+		internal void Rename(string newName)
 		{
 			Guard.AgainstNullOrWhiteSpace(newName, nameof(newName));
 			Name = newName.Trim();
 			AddDomainEvent(new PermissionRenamedEvent(this));
 		}
 
-		public void UpdateDescription(string newDescription)
+		internal void UpdateDescription(string newDescription)
 		{
 			Description = newDescription?.Trim() ?? string.Empty;
 			AddDomainEvent(new PermissionDescriptionUpdatedEvent(this));
 		}
 
-		public void Deactivate()
+		internal void Deactivate()
 		{
 			if (!IsActive) return;
 			IsActive = false;
 			AddDomainEvent(new PermissionDeactivatedEvent(this));
 		}
 
-		public void Activate()
+		internal void Activate()
 		{
 			if (IsActive) return;
 			IsActive = true;

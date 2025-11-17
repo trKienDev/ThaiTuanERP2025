@@ -28,7 +28,7 @@ export interface BudgetPlanDto {
       SelectedReviewerId?: string | null;
       canReview: boolean;
 
-      dueAt?: string;
+      dueAt: string;
 
       details: BudgetPlanDetailDto[];
 
