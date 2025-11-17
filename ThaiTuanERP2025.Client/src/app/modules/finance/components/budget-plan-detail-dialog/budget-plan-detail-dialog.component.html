@@ -67,10 +67,14 @@
             <div class="dialog-footer display-flex gap-10px">
                   <ng-container *ngIf="canReview">
                         <div class="width-50pt">
-                              <kit-spinner-button type="button" cssClass="width-100pt save-button" [loading]="submitting" text="Gửi phê duyệt"></kit-spinner-button>
+                              <kit-spinner-button type="button" cssClass="width-100pt save-button" [loading]="submitting" text="Gửi phê duyệt" (click)="markReview()"></kit-spinner-button>
                         </div>
+                        <button class="width-50pt button cancel-button" (click)="close(false)">Hủy</button>
                   </ng-container>
-                  <button class="width-50pt button cancel-button" (click)="close(false)">Hủy</button>
+                  <ng-container *ngIf="!canReview">
+                        <button class="width-100pt button cancel-button" (click)="close(false)">Hủy</button>
+                  </ng-container>
+
             </div>
       </div>
 </div>

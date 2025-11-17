@@ -6,78 +6,73 @@ namespace ThaiTuanERP2025.Domain.Finance.Events
 {
 	public abstract class BudgetPlanEventBase : IDomainEvent
 	{
-		public Guid BudgetPlanId { get; }
+		public BudgetPlan BudgetPlan { get; }
 		public DateTime OccurredOn { get; }
 
-		protected BudgetPlanEventBase(Guid planId)
+		protected BudgetPlanEventBase(BudgetPlan plan)
 		{
-			BudgetPlanId = planId;
+			BudgetPlan = plan;
 			OccurredOn = DateTime.UtcNow;
 		}
 	}
 
 	public sealed class BudgetPlanCreatedEvent : BudgetPlanEventBase
 	{
-		public BudgetPlan BudgetPlan { get; }
 		public Guid ReviewerUserId { get; }
 		public DateTime DueAt { get; }
-		public BudgetPlanCreatedEvent(BudgetPlan plan, Guid reviewerUserId, DateTime dueAt) : base(plan.Id)
+		public BudgetPlanCreatedEvent(BudgetPlan plan, Guid reviewerUserId, DateTime dueAt) : base(plan)
 		{
-			BudgetPlan = plan;
 			ReviewerUserId = reviewerUserId;
 			DueAt = dueAt;
 		}
 	}
 
-	public abstract class BudgetPlanUserActionEvent : BudgetPlanEventBase
+	public sealed class BudgetPlanReviewedEvent : BudgetPlanEventBase
 	{
-		public Guid UserId { get; }
-		protected BudgetPlanUserActionEvent(Guid planId, Guid userId) : base(planId)
+		public Guid ApproverUserId { get; }
+		public DateTime DueAt { get; }
+		public BudgetPlanReviewedEvent(BudgetPlan plan, Guid approverUserId, DateTime dueAt) : base(plan)
 		{
-			UserId = userId;
+			ApproverUserId = approverUserId;
+			DueAt = dueAt;
 		}
 	}
 
-	public sealed class BudgetPlanReviewedEvent : BudgetPlanUserActionEvent
-	{
-		public BudgetPlanReviewedEvent(Guid planId, Guid userId) : base(planId, userId) { }
-	}
+	//public sealed class BudgetPlanApprovedEvent : BudgetPlanUserActionEvent
+	//{
+	//	public BudgetPlanApprovedEvent(Guid planId, Guid userId) : base(planId, userId) { }
+	//}
 
-	public sealed class BudgetPlanApprovedEvent : BudgetPlanUserActionEvent
-	{
-		public BudgetPlanApprovedEvent(Guid planId, Guid userId) : base(planId, userId) { }
-	}
+	//public class BudgetPlanAssignedForApprovalEvent : BudgetPlanEventBase {
+	//	public BudgetPlanAssignedForApprovalEvent(Guid planId, Guid approverByUserId, DateTime approvalDeadline) : base(planId) {
+	//		BudgetPlanId = planId;
+	//		ApproverByUserId = approverByUserId;
+	//		ApprovalDeadline = approvalDeadline;
+	//	}
 
-	public class BudgetPlanAssignedForApprovalEvent : BudgetPlanEventBase {
-		public BudgetPlanAssignedForApprovalEvent(Guid planId, Guid approverByUserId, DateTime approvalDeadline) : base(planId) {
-			BudgetPlanId = planId;
-			ApproverByUserId = approverByUserId;
-			ApprovalDeadline = approvalDeadline;
-		}
+	//	public Guid BudgetPlanId { get; }
+	//	public Guid ApproverByUserId { get; }	
+	//	public DateTime ApprovalDeadline { get; }
 
-		public Guid BudgetPlanId { get; }
-		public Guid ApproverByUserId { get; }	
-		public DateTime ApprovalDeadline { get; }
+	//}
 
-	}
+	//public sealed class BudgetPlanRejectedEvent : BudgetPlanUserActionEvent
+	//{
+	//	public BudgetPlanRejectedEvent(Guid planId, Guid userId) : base(planId, userId) { }
+	//}
 
-	public sealed class BudgetPlanRejectedEvent : BudgetPlanUserActionEvent
-	{
-		public BudgetPlanRejectedEvent(Guid planId, Guid userId) : base(planId, userId) { }
-	}
+	//public sealed class BudgetPlanTransactionRecordedEvent : BudgetPlanEventBase
+	//{
+	//	public Guid TransactionId { get; }
+	//	public decimal Amount { get; }
+	//	public BudgetTransactionType Type { get; }
 
-	public sealed class BudgetPlanTransactionRecordedEvent : BudgetPlanEventBase
-	{
-		public Guid TransactionId { get; }
-		public decimal Amount { get; }
-		public BudgetTransactionType Type { get; }
-
-		public BudgetPlanTransactionRecordedEvent(Guid planId, Guid transactionId, decimal amount, BudgetTransactionType type) : base(planId)
-		{
-			TransactionId = transactionId;
-			Amount = amount;
-			Type = type;
-		}
-	}
+	//	public BudgetPlanTransactionRecordedEvent(Guid planId, Guid transactionId, decimal amount, BudgetTransactionType type) : base(planId)
+	//	{
+	//		TransactionId = transactionId;
+	//		Amount = amount;
+	//		Type = type;
+	//	}
+	//}
 
 }

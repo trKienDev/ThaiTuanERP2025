@@ -7,20 +7,10 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 {
 	public class BudgetApprover : AuditableEntity
 	{
-		private readonly List<BudgetApproverDepartment> _departments = new();
-
-		#region Properties
-		public Guid ApproverUserId { get; private set; }
-		public User ApproverUser { get; init; } = null!;
-		public int SlaHours { get; private set; } = 8; 
-		public bool IsActive { get; private set; } = true;
-
-		public IReadOnlyCollection<BudgetApproverDepartment> Departments => _departments.AsReadOnly();
-		#endregion
-
 		#region EF Constructor
 		private BudgetApprover() { }
-		public BudgetApprover(Guid approverId, int slaHours) {
+		public BudgetApprover(Guid approverId, int slaHours)
+		{
 			Guard.AgainstDefault(approverId, nameof(approverId));
 			Guard.AgainstNullOrEmptyGuid(approverId, nameof(approverId));
 			Guard.AgainstNegativeOrZero(slaHours, nameof(slaHours));
@@ -30,6 +20,18 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			IsActive = true;
 		}
 		#endregion
+
+		#region Properties
+		private readonly List<BudgetApproverDepartment> _departments = new();
+
+		public Guid ApproverUserId { get; private set; }
+		public User ApproverUser { get; init; } = null!;
+		public int SlaHours { get; private set; } = 8; 
+		public bool IsActive { get; private set; } = true;
+
+		public IReadOnlyCollection<BudgetApproverDepartment> Departments => _departments.AsReadOnly();
+		#endregion
+		
 
 		#region Domain Behaviors
 		internal void UpdateApprover(Guid approverId, int slaHours)
