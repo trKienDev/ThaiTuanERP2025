@@ -1,7 +1,7 @@
 ﻿using ThaiTuanERP2025.Application.Account.Users;
 using ThaiTuanERP2025.Domain.Core.Enums;
 
-namespace ThaiTuanERP2025.Application.Core.Notifications
+namespace ThaiTuanERP2025.Application.Core.Notifications.Contracts
 {
 	public sealed record UserNotificationDto
 	{

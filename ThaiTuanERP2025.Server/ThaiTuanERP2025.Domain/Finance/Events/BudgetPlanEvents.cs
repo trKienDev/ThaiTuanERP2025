@@ -1,6 +1,5 @@
 ﻿using ThaiTuanERP2025.Domain.Shared.Events;
 using ThaiTuanERP2025.Domain.Finance.Entities;
-using ThaiTuanERP2025.Domain.Finance.Enums;
 
 namespace ThaiTuanERP2025.Domain.Finance.Events
 {
@@ -38,10 +37,14 @@ namespace ThaiTuanERP2025.Domain.Finance.Events
 		}
 	}
 
-	//public sealed class BudgetPlanApprovedEvent : BudgetPlanUserActionEvent
-	//{
-	//	public BudgetPlanApprovedEvent(Guid planId, Guid userId) : base(planId, userId) { }
-	//}
+	public sealed class BudgetPlanApprovedEvent : BudgetPlanEventBase
+	{
+		public Guid ApproverUserId { get; }
+		public BudgetPlanApprovedEvent(BudgetPlan plan, Guid approverUserId) : base(plan)
+		{
+			ApproverUserId = approverUserId;
+		}
+	}
 
 	//public class BudgetPlanAssignedForApprovalEvent : BudgetPlanEventBase {
 	//	public BudgetPlanAssignedForApprovalEvent(Guid planId, Guid approverByUserId, DateTime approvalDeadline) : base(planId) {

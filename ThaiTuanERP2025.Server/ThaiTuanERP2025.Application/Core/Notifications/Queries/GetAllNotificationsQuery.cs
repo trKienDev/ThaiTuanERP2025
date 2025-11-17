@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using ThaiTuanERP2025.Application.Account.Users;
+using ThaiTuanERP2025.Application.Core.Notifications.Contracts;
 using ThaiTuanERP2025.Application.Shared.Interfaces;
 using ThaiTuanERP2025.Domain.Shared.Utils;
 

@@ -86,7 +86,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			ApprovedAt = DateTime.UtcNow;
 			Status = BudgetPlanStatus.Approved;
 
-			// AddDomainEvent(new BudgetPlanApprovedEvent(Id, approverId));
+			AddDomainEvent(new BudgetPlanApprovedEvent(this, approverId));
 		}
 
 		internal void Reject(Guid userId)

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ThaiTuanERP2025.Application.Core.Notifications.Contracts;
 using ThaiTuanERP2025.Domain.Core.Entities;
 using ThaiTuanERP2025.Domain.Shared.Utils;
 

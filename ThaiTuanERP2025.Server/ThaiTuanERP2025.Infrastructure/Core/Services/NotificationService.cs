@@ -3,6 +3,8 @@ using ThaiTuanERP2025.Application.Core.Notifications;
 using ThaiTuanERP2025.Domain.Core.Entities;
 using ThaiTuanERP2025.Domain.Core.Enums;
 using ThaiTuanERP2025.Domain.Shared.Repositories;
+using ThaiTuanERP2025.Application.Core.Notifications.Contracts;
+using System.Text.Json;
 
 namespace ThaiTuanERP2025.Application.Core.Services
 {
@@ -22,27 +24,28 @@ namespace ThaiTuanERP2025.Application.Core.Services
 			CancellationToken cancellationToken = default
 		) {
 			var entity = new UserNotification(senderId, receiverId, title, message, linkType, targetId, type);
-
 			await _uow.UserNotifications.AddAsync(entity, cancellationToken);
-			await _uow.SaveChangesWithoutDispatchAsync(cancellationToken);
 
-			// push realtime
-			var payload = new UserNotificationDto {
-				Id = entity.Id,
-				SenderId = entity.SenderId,
-				Title = entity.Title,
-				Message = entity.Message,
-				Link = entity.LinkUrl,
-				LinkType = entity.LinkType,
-				TargetId = entity.TargetId,
-				Type = entity.Type,
-				CreatedAt = DateTime.UtcNow,
-				IsRead = entity.IsRead
-			};
-
-			await _realtime.PushNotificationsAsync(
-				new[] { receiverId }, new[] { payload }, cancellationToken
+			var payload = new NotificationCreatedPayload(
+				senderId,
+				receiverId,
+				entity.Id,
+				entity.Title,
+				entity.Message,
+				entity.LinkUrl,
+				entity.LinkType,
+				entity.TargetId,
+				entity.Type,
+				entity.CreatedAt,
+				entity.IsRead
 			);
+
+			var json = JsonSerializer.Serialize(payload);
+
+			var outbox = new OutboxMessage("NotificationCreated", json);
+			await _uow.OutboxMessages.AddAsync(outbox, cancellationToken);
+
+			await _uow.SaveChangesWithoutDispatchAsync(cancellationToken);
 		}
 		#endregion
 
@@ -57,46 +60,38 @@ namespace ThaiTuanERP2025.Application.Core.Services
 			NotificationType type = NotificationType.Info,
 			CancellationToken cancellationToken = default
 		) {
-			var userList = userIds.Distinct().ToList();
-			if (!userList.Any()) return;
+			var receivers = userIds.Distinct().ToList();
+			if (!receivers.Any()) return;
 
-			// Fan-out entity
-			var notifications = userList.Select(
-				uid => new UserNotification (
-					senderId, uid,
-					title, message,
-					linkType,
-					targetId,
-					type
-				)
+			var notifications = receivers.Select(
+				uid => new UserNotification(senderId, uid, title, message, linkType, targetId, type)
 			).ToList();
 
 			await _uow.UserNotifications.AddRangeAsync(notifications, cancellationToken);
+
+			foreach (var entity in notifications)
+			{
+				var payload = new NotificationCreatedPayload(
+					senderId,
+					entity.ReceiverId,
+					entity.Id,
+					entity.Title,
+					entity.Message,
+					entity.LinkUrl,
+					entity.LinkType,
+					entity.TargetId,
+					entity.Type,
+					entity.CreatedAt,
+					entity.IsRead
+				);
+
+				var json = JsonSerializer.Serialize(payload);
+
+				var outbox = new OutboxMessage("NotificationCreated", json);
+				await _uow.OutboxMessages.AddAsync(outbox, cancellationToken);
+			}
+
 			await _uow.SaveChangesWithoutDispatchAsync(cancellationToken);
-
-			// DTO payloads
-			var payloads = notifications.Select(
-				entity => new UserNotificationDto {
-					Id = entity.Id,
-					Title = entity.Title,
-					Message = entity.Message,
-
-					Link = entity.LinkUrl,
-					LinkType = entity.LinkType,
-					TargetId = entity.TargetId,
-
-					Type = entity.Type,
-					CreatedAt = entity.CreatedAt,
-					IsRead = entity.IsRead
-				}
-			).ToList();
-
-			// Push realtime to all users
-			await _realtime.PushNotificationsAsync(
-				userList,
-				payloads,
-				cancellationToken
-			);
 		}
 		#endregion
 	}

@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
+using System.Threading;
+using ThaiTuanERP2025.Application.Core.Notifications.Contracts;
 using ThaiTuanERP2025.Application.Core.OutboxMessages;
 using ThaiTuanERP2025.Application.Core.Reminders.Contracts;
 using ThaiTuanERP2025.Application.Shared.Interfaces;
@@ -57,6 +59,14 @@ namespace ThaiTuanERP2025.Infrastructure.BackgroundJobs
 									await HandleReminderCreatedAsync(msg, realtime, stoppingToken);
 									break;
 
+								case "ReminderResolved":
+									await HandleReminderResolvedAsync(msg, realtime, stoppingToken);
+									break;
+
+								case "NotificationCreated":
+									await HandleNotificationCreatedAsync(msg, realtime, stoppingToken);
+									break;
+
 								default:
 									_logger.LogWarning("Unknown outbox message type: {Type}", msg.Type);
 									msg.MarkProcessed();
@@ -88,7 +98,7 @@ namespace ThaiTuanERP2025.Infrastructure.BackgroundJobs
 			IRealtimeNotifier realtime,
 			CancellationToken cancellationToken)
 		{
-			var payload = JsonSerializer.Deserialize<ReminderPayload>(msg.Payload);
+			var payload = JsonSerializer.Deserialize<ReminderCreatedPayload>(msg.Payload);
 			if (payload is null)
 			{
 				throw new InvalidOperationException($"Cannot deserialize payload for OutboxMessage {msg.Id}");
@@ -110,6 +120,59 @@ namespace ThaiTuanERP2025.Infrastructure.BackgroundJobs
 			await realtime.PushRemindersAsync(
 				new[] { payload.UserId },
 				new[] { dto },
+				cancellationToken
+			);
+
+			msg.MarkProcessed();
+		}
+
+		private static async Task HandleNotificationCreatedAsync(
+			OutboxMessage msg,
+			IRealtimeNotifier realtime,
+			CancellationToken cancellationToken
+		) {
+			var payload = JsonSerializer.Deserialize<NotificationCreatedPayload>(msg.Payload);
+			if (payload is null)
+				throw new InvalidOperationException($"Invalid NotificationCreated payload in OutboxMessage {msg.Id}");
+
+			// Build NotificationDto EXACT format Angular expects
+			var dto = new UserNotificationDto
+			{
+				Id = payload.NotificationId,
+				SenderId = payload.SenderId,
+				Title = payload.Title,
+				Message = payload.Message,
+				Link = payload.LinkUrl,
+				LinkType = payload.LinkType,
+				TargetId = payload.TargetId,
+				Type = payload.Type,
+				CreatedAt = payload.CreatedAt,
+				IsRead = payload.IsRead
+			};
+
+			// Push to correct user
+			await realtime.PushNotificationsAsync(
+				new[] { payload.ReceiverId },
+				new[] { dto },
+				cancellationToken
+			);
+
+			msg.MarkProcessed();
+		}
+
+		private static async Task HandleReminderResolvedAsync(
+			OutboxMessage msg,
+			IRealtimeNotifier realtime,
+			CancellationToken cancellationToken
+		) {
+			var payload = JsonSerializer.Deserialize<ReminderResolvedPayload>(msg.Payload);
+			if (payload is null)
+				throw new InvalidOperationException($"Cannot deserialize payload for OutboxMessage {msg.Id}");
+
+			// Push down exactly what Angular needs: chỉ id để remove khỏi UI
+			await realtime.PushReminderResolvedAsync(
+				payload.UserId,
+				payload.ReminderId,
 				cancellationToken
 			);
 

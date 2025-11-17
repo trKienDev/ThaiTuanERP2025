@@ -5,10 +5,10 @@ using ThaiTuanERP2025.Domain.Shared.Repositories;
 using ThaiTuanERP2025.Domain.Core.Enums;
 using ThaiTuanERP2025.Application.Core.Reminders.Contracts;
 using System.Text.Json;
+using ThaiTuanERP2025.Application.Shared.Exceptions;
 
 namespace ThaiTuanERP2025.Application.Core.Services
 {
-	
 	public class ReminderService : IReminderService
 	{
 		private readonly IUnitOfWork _uow;
@@ -28,7 +28,7 @@ namespace ThaiTuanERP2025.Application.Core.Services
 			await _uow.UserReminders.AddAsync(reminder, cancellationToken);
 
 			// === Outbox ===
-			var outboxMessagePayload = new ReminderPayload (
+			var outboxMessagePayload = new ReminderCreatedPayload (
 				userId,
 				reminder.Id,
 				reminder.Subject,
@@ -42,18 +42,32 @@ namespace ThaiTuanERP2025.Application.Core.Services
 			await _uow.OutboxMessages.AddAsync(outbox, cancellationToken);
 
 			await _uow.SaveChangesWithoutDispatchAsync(cancellationToken);
+		}
 
-			//var payload = new UserReminderDto {
-			//	Id = reminder.Id,
-			//	Subject = reminder.Subject,
-			//	Message = reminder.Message,
-			//	SlaHours = reminder.SlaHours,
-			//	DueAt = reminder.DueAt,
-			//	IsResolved = reminder.IsResolved,
-			//	ResolvedAt = reminder.ResolvedAt,
-			//	LinkUrl = reminder.LinkUrl
-			//};
-			//await _realtime.PushRemindersAsync(new[] { userId }, new[] { payload }, cancellationToken);
+		public async Task MarkResolvedAsync(Guid reminderId, CancellationToken cancellationToken = default)
+		{
+			// 1. Tìm reminder
+			var reminder = await _uow.UserReminders.GetByIdAsync(reminderId, cancellationToken);
+			if (reminder == null)
+				throw new NotFoundException($"Reminder {reminderId} not found");
+
+			// 2. Domain behavior
+			reminder.MarkResolved();
+
+			// 3. Ghi Outbox để push RealTime / Notification
+			var payload = new ReminderResolvedPayload(
+				reminder.Id,
+				reminder.UserId,
+				reminder.Subject,
+				reminder.ResolvedAt!.Value
+			);
+
+			var json = JsonSerializer.Serialize(payload);
+			var outbox = new OutboxMessage("ReminderResolved", json);
+			await _uow.OutboxMessages.AddAsync(outbox, cancellationToken);
+
+			// 4. Lưu
+			await _uow.SaveChangesWithoutDispatchAsync(cancellationToken);
 		}
 	}
 }
