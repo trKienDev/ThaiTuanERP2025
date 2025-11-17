@@ -1,6 +1,6 @@
 ﻿namespace ThaiTuanERP2025.Domain.Core.Entities
 {
-	public static class NotificationLinks
+	public static class SubjectLinks
 	{
 		public static string BudgetPlanDetail(Guid planId) 
 			=> $"/finance/budgets-shell/budget-plans?openBudgetPlanId={planId}";

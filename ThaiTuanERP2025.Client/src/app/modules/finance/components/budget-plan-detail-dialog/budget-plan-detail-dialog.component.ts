@@ -1,6 +1,6 @@
 import { BudgetPlanDto } from './../../models/budget-plan.model';
 import { CommonModule } from "@angular/common";
-import { Component, Inject, inject } from "@angular/core";
+import { Component, Inject, inject, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 
@@ -22,7 +22,6 @@ export class BudgetPlanDetailDialogComponent {
             this.budgetPlan = data;
             this.canReview = data.canReview;
       }
-
 
 
       close(isSuccess: boolean) {

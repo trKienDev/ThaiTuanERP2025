@@ -17,7 +17,7 @@ namespace ThaiTuanERP2025.Application.Core.Notifications
 		public string? Link { get; init; }
 
 		/// <summary>Loại link để UI có thể xử lý tùy theo loại thông báo</summary>
-		public NotificationLinkType LinkType { get; init; }
+		public LinkType LinkType { get; init; }
 
 		/// <summary>ID của đối tượng liên quan (BudgetPlanId, ExpenseId, RequestId)</summary>
 		public Guid? TargetId { get; init; }

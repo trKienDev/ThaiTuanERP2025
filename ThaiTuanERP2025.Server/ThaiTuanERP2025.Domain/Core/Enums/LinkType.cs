@@ -1,18 +1,18 @@
 ﻿namespace ThaiTuanERP2025.Domain.Core.Enums
 {
-	public enum NotificationLinkType
+	public enum LinkType
 	{
 		None = 0,
 
 		// Budget 
-		BudgetPlanReview,
-		BudgetPlanDetail,
+		BudgetPlanReview = 11,
+		BudgetPlanDetail = 12,
 
 		// Expense 
-		ExpensePaymentDetail,
+		ExpensePaymentDetail = 21,
 
 		// User request module
-		RequestDetail,
+		RequestDetail = 31,
 
 		// Others
 		Dashboard

@@ -2,6 +2,7 @@
 using ThaiTuanERP2025.Application.Core.Reminders;
 using ThaiTuanERP2025.Domain.Core.Entities;
 using ThaiTuanERP2025.Domain.Shared.Repositories;
+using ThaiTuanERP2025.Domain.Core.Enums;
 
 namespace ThaiTuanERP2025.Application.Core.Services
 {
@@ -15,9 +16,12 @@ namespace ThaiTuanERP2025.Application.Core.Services
 			_realtime = realtime;
 		}
 
-		public async Task ScheduleReminderAsync(Guid userId, string subject, string message, int slaHours, DateTime dueAt, string? linkUrl = null, CancellationToken cancellationToken = default)
+		public async Task ScheduleReminderAsync(
+			Guid userId, string subject, string message, int slaHours, DateTime dueAt,
+			LinkType linkType, Guid targetId,
+			CancellationToken cancellationToken = default)
 		{
-			var reminder = new UserReminder(userId, subject, message, slaHours, dueAt, linkUrl);
+			var reminder = new UserReminder(userId, subject, message, slaHours, dueAt, linkType, targetId);
 			await _uow.UserReminders.AddAsync(reminder, cancellationToken);
 			await _uow.SaveChangesWithoutDispatchAsync(cancellationToken);
 

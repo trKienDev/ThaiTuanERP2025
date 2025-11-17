@@ -1,4 +1,5 @@
 ﻿using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Domain.Core.Enums;
 using ThaiTuanERP2025.Domain.Shared;
 using ThaiTuanERP2025.Domain.Shared.Entities;
 
@@ -8,7 +9,7 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
 	{
 		#region EF Constructor
 		private UserReminder() { }
-		public UserReminder(Guid userId, string subject, string message, int slaHours, DateTime dueAt, string? linkUrl = null)
+		public UserReminder(Guid userId, string subject, string message, int slaHours, DateTime dueAt, LinkType linkType, Guid targetId)
 		{
 			Guard.AgainstDefault(userId, nameof(userId));
 			Guard.AgainstNullOrWhiteSpace(subject, nameof(subject));
@@ -17,7 +18,7 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
 			UserId = userId;
 			Subject = subject;
 			Message = message;
-			LinkUrl = linkUrl;
+			LinkUrl = ResolveLink(linkType, targetId);
 			SlaHours = slaHours;
 			DueAt = dueAt;
 			IsResolved = false;
@@ -25,7 +26,7 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
 		}
 		#endregion
 
-
+		#region Properties
 		public Guid UserId { get; private set; }
 		public User User { get; private set; } = null!;
 
@@ -33,21 +34,38 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
 		public string Subject { get; private set; } = string.Empty;
 		public string Message { get; private set; } = string.Empty;
 
-		public string? LinkUrl { get; private set; }
+		public string LinkUrl { get; private set; }
+		public LinkType LinkType { get; private set; } = default!;
+		public Guid TargetId { get; private set; } = Guid.Empty;
 
 		public int SlaHours { get; private set; }
 		public DateTime DueAt { get; private set; }
-
 
 		public bool IsResolved { get; private set; }
 		public DateTime? ResolvedAt { get; private set; }
 
 		public DateTime CreatedAt { get; private set; }
+		#endregion
 
+		#region Domain Behaviors
 		public void MarkResolved()
 		{
 			IsResolved = true;
 			ResolvedAt = DateTime.UtcNow;
+		}
+		#endregion
+
+		private static string? ResolveLink(LinkType type, Guid id)
+		{
+			return type switch
+			{
+				LinkType.BudgetPlanReview => SubjectLinks.BudgetPlanDetail(id),
+				LinkType.BudgetPlanDetail => SubjectLinks.BudgetPlanDetail(id),
+				LinkType.ExpensePaymentDetail => SubjectLinks.ExpensePaymentDetail(id),
+				LinkType.RequestDetail => SubjectLinks.RequestDetail(id),
+				LinkType.Dashboard => SubjectLinks.Dashboard(),
+				_ => null
+			};
 		}
 	}
 }

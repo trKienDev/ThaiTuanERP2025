@@ -6,7 +6,7 @@ namespace ThaiTuanERP2025.Application.Core.Notifications
 	{
 		Task SendAsync(
 			Guid senderId, Guid receiverId, string title, string message,
-			NotificationLinkType linkType, Guid? targetId, NotificationType type = NotificationType.Info,
+			LinkType linkType, Guid? targetId, NotificationType type = NotificationType.Info,
 			CancellationToken cancellationToken = default
 		);
 
@@ -15,7 +15,7 @@ namespace ThaiTuanERP2025.Application.Core.Notifications
 			IEnumerable<Guid> userIds,
 			string title,
 			string message,
-			NotificationLinkType linkType,
+			LinkType linkType,
 			Guid? targetId = null,
 			NotificationType type = NotificationType.Info,
 			CancellationToken cancellationToken = default

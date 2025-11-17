@@ -13,6 +13,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BudgetPlanDetailDialogComponent } from '../../../components/budget-plan-detail-dialog/budget-plan-detail-dialog.component';
 import { BudgetPlanStatusPipe } from "../../../pipes/budget-plan-status.pipe";
+import { handleHttpError } from '../../../../../shared/utils/handle-http-errors.util';
 
 @Component({
       selector: 'budget-plan-panel',
@@ -146,7 +147,7 @@ export class BudgetPlanPanelComponent implements OnInit, OnDestroy {
 
       private listenOpenByQueryParam(): void {
             this.route.queryParamMap.subscribe(params => {
-                  const planId = params.get('openPlanId');
+                  const planId = params.get('openBudgetPlanId');
 
                   if (planId) {
                         this.activateBudgetPlanDetailDialog(planId);
@@ -154,7 +155,29 @@ export class BudgetPlanPanelComponent implements OnInit, OnDestroy {
             });
       }
       private async activateBudgetPlanDetailDialog(planId: string): Promise<void> {
+            let plan: BudgetPlanDto;
+            try {
+                  plan = await firstValueFrom(this.budgetPlanService.getById(planId));
+            } catch (e) {
+                  const messages = handleHttpError(e).join('\n');
+                  this.confirm.error$(messages);
+                  console.error('Không load được BudgetPlan', e);
+                  return;
+            }
 
+            console.log('plan: ', plan);
+            const dialogRef = this.matDialog.open(BudgetPlanDetailDialogComponent, {
+                  data: plan 
+            });
+
+            // Clear query params khi đóng dialog (tránh auto-open khi refresh)
+            dialogRef.afterClosed().subscribe(() => {
+                  this.router.navigate([], {
+                        relativeTo: this.route,
+                        queryParams: { openBudgetPlanId: null },
+                        queryParamsHandling: 'merge'
+                  });
+            });
       }
 
       // =============================

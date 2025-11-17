@@ -20,9 +20,15 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 		}
 
 		[HttpGet("following/{periodId:guid}")]
-		public async Task<IActionResult> GetFollowing([FromRoute] Guid PeriodId, CancellationToken cancellationToken) {
-			var dtos = await _mediator.Send(new GetFollowingBudgetPlansQuery(PeriodId), cancellationToken);
+		public async Task<IActionResult> GetFollowing([FromRoute] Guid periodId, CancellationToken cancellationToken) {
+			var dtos = await _mediator.Send(new GetFollowingBudgetPlansQuery(periodId), cancellationToken);
 			return Ok(ApiResponse<IReadOnlyList<BudgetPlanDto>>.Success(dtos));
+		}
+
+		[HttpGet("{id:guid}")]
+		public async Task<IActionResult> GetById([FromRoute] Guid id, CancellationToken cancellationToken) {
+			var dto = await _mediator.Send(new GetBudgetPlanByIdQuery(id), cancellationToken);
+			return Ok(ApiResponse<BudgetPlanDto>.Success(dto));
 		}
 
 		[HttpPost]

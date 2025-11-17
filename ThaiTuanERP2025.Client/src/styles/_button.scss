@@ -49,10 +49,10 @@ button, .button {
 .danger-button:active:hover, .danger-button:focus:hover, .danger-button:focus { background-color: #D33A2C; box-shadow: rgba(0, 0, 0, 0.12) 0 1px 3px 0 inset; color: #FFFFFF; }
 
 /*** icon-button ***/
-.icon-button { background-color: #007ACC; outline: 2px #007ACC solid; outline-offset: -2px; border-radius: 5px; border: none; cursor: pointer; transition: 400ms; }
+.icon-button { background-color: #17a2b8; outline: 2px #17a2b8 solid; outline-offset: -2px; border-radius: 5px; border: none; cursor: pointer; transition: 400ms; }
 .icon-button .text { color: white; font-size: 22px; transition: 400ms; }
 .icon-button:hover { background-color: transparent; }
-.icon-button:hover .text { color: #007ACC; }
+.icon-button:hover .text { color: #138496; border-color: #117a8b; }
 
 /*** link-button ***/
 .link-button { color: var(--ultramarin); background-color: var(--light-blue-color); border-color: none !important; border: none !important; border-bottom: 2px solid var(--ultramarin) !important; border-radius: unset; border-top-left-radius: 5px; border-top-right-radius: 5px; }

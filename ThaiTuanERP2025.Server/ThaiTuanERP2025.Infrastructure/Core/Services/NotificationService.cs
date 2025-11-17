@@ -18,7 +18,7 @@ namespace ThaiTuanERP2025.Application.Core.Services
 		#region Send to single user
 		public async Task SendAsync(
 			Guid senderId, Guid receiverId, string title, string message,
-			NotificationLinkType linkType, Guid? targetId, NotificationType type = NotificationType.Info, 
+			LinkType linkType, Guid? targetId, NotificationType type = NotificationType.Info, 
 			CancellationToken cancellationToken = default
 		) {
 			var entity = new UserNotification(senderId, receiverId, title, message, linkType, targetId, type);
@@ -52,7 +52,7 @@ namespace ThaiTuanERP2025.Application.Core.Services
 			IEnumerable<Guid> userIds,
 			string title,
 			string message,
-			NotificationLinkType linkType,
+			LinkType linkType,
 			Guid? targetId = null,
 			NotificationType type = NotificationType.Info,
 			CancellationToken cancellationToken = default

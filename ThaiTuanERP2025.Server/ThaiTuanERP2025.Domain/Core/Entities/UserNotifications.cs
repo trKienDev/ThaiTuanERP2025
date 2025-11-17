@@ -9,7 +9,7 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
 	{
 		#region EF Constructor
 		private UserNotification() { }
-		public UserNotification(Guid senderId, Guid receiverId, string title, string message, NotificationLinkType linkType, Guid? targetId = null, NotificationType type = NotificationType.Info)
+		public UserNotification(Guid senderId, Guid receiverId, string title, string message, LinkType linkType, Guid? targetId = null, NotificationType type = NotificationType.Info)
 		{
 			Guard.AgainstDefault(receiverId, nameof(receiverId));
 			Guard.AgainstDefault(senderId, nameof(senderId));
@@ -31,7 +31,6 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
 		#endregion
 
 		#region Properties
-
 		public Guid ReceiverId { get; private set; }
 		public User Receiver { get; } = default!;
 
@@ -45,7 +44,7 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
 		public string? LinkUrl { get; private set; }
 
 		/// <summary>Loại link để UI có thể render icon hoặc điều hướng đặc thù</summary>
-		public NotificationLinkType LinkType { get; private set; }
+		public LinkType LinkType { get; private set; }
 
 		/// <summary>ID của đối tượng gốc (BudgetPlanId, ExpenseId, RequestId...)</summary>
 		public Guid? TargetId { get; private set; }
@@ -68,24 +67,24 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
 		}
 		#endregion
 
-		private string? ResolveLink(NotificationLinkType type, Guid? id)
+		private static string? ResolveLink(LinkType type, Guid? id)
 		{
 			return type switch
 			{
-				NotificationLinkType.BudgetPlanReview when id.HasValue 
-					=> NotificationLinks.BudgetPlanDetail(id.Value),
+				LinkType.BudgetPlanReview when id.HasValue 
+					=> SubjectLinks.BudgetPlanDetail(id.Value),
 
-				NotificationLinkType.BudgetPlanDetail when id.HasValue
-					=> NotificationLinks.BudgetPlanDetail(id.Value),
+				LinkType.BudgetPlanDetail when id.HasValue
+					=> SubjectLinks.BudgetPlanDetail(id.Value),
 
-				NotificationLinkType.ExpensePaymentDetail when id.HasValue
-					=> NotificationLinks.ExpensePaymentDetail(id.Value),
+				LinkType.ExpensePaymentDetail when id.HasValue
+					=> SubjectLinks.ExpensePaymentDetail(id.Value),
 
-				NotificationLinkType.RequestDetail when id.HasValue
-					=> NotificationLinks.RequestDetail(id.Value),
+				LinkType.RequestDetail when id.HasValue
+					=> SubjectLinks.RequestDetail(id.Value),
 
-				NotificationLinkType.Dashboard
-					=> NotificationLinks.Dashboard(),
+				LinkType.Dashboard
+					=> SubjectLinks.Dashboard(),
 
 				_ => null
 			};
