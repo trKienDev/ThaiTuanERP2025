@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Shared;
-using ThaiTuanERP2025.Application.Core.Reminders;
+using ThaiTuanERP2025.Application.Core.Reminders.Contracts;
 using ThaiTuanERP2025.Application.Core.Reminders.Queries;
 
 namespace ThaiTuanERP2025.Api.Controllers.Core

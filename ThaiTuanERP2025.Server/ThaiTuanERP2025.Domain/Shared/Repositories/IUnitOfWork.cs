@@ -55,6 +55,7 @@ namespace ThaiTuanERP2025.Domain.Shared.Repositories
 		IFollowerWriteRepository Followers { get; }
 		IUserNotificationWriteRepository UserNotifications { get; }
 		IUserReminderWriteRepository UserReminders { get; }
+		IOutboxMessageWriteRepository OutboxMessages { get; }	
 
 		// RBAC
 		IRoleWriteRepository Roles { get; }

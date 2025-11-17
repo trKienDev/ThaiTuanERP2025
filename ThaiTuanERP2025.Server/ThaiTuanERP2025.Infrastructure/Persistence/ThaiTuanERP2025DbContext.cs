@@ -29,18 +29,27 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		}
 
 		#region DbSet
+		// Account
 		public DbSet<User> Users => Set<User>();
 		public DbSet<UserManagerAssignment> UserManagerAssignments => Set<UserManagerAssignment>();
 		public DbSet<Department> Departments => Set<Department>();
 		public DbSet<Group> Groups => Set<Group>();
 		public DbSet<UserGroup> UserGroups => Set<UserGroup>();
+
+		// Core
 		public DbSet<NumberSeries> NumberSeries => Set<NumberSeries>();
+
+		// Finance
 		public DbSet<LedgerAccountType> LedgerAccountTypes => Set<LedgerAccountType>();
 		public DbSet<LedgerAccount> LedgerAccounts => Set<LedgerAccount>();
 		public DbSet<CashoutGroup> CashOutGroups => Set<CashoutGroup>();
 		public DbSet<CashoutCode> CashOutCodes => Set<CashoutCode>();
-		public DbSet<StoredFile> StoredFiles => Set<StoredFile>();
 		public DbSet<OutgoingBankAccount> OutgoingBankAccounts => Set<OutgoingBankAccount>();
+
+		// Files
+		public DbSet<StoredFile> StoredFiles => Set<StoredFile>();
+		
+		// Expense
 		public DbSet<Supplier> Suppliers => Set<Supplier>();
 		public DbSet<Invoice> Invoices => Set<Invoice>();
 		public DbSet<InvoiceFile> InvoiceFiles => Set<InvoiceFile>();
@@ -59,13 +68,18 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<ExpensePaymentCommentAttachment> ExpensePaymentCommentAttachments => Set<ExpensePaymentCommentAttachment>();
 		public DbSet<ExpensePaymentCommentTag> expensePaymentCommentTags => Set<ExpensePaymentCommentTag>();
 		public DbSet<OutgoingPayment> outgoingPayments => Set<OutgoingPayment>();
-		public DbSet<Follower> Followers => Set<Follower>();
+
+		// RBAC
 		public DbSet<Role> Roles => Set<Role>();
 		public DbSet<Permission> Permissions => Set<Permission>();
 		public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
 		public DbSet<UserRole> UserRoles => Set<UserRole>();
+
+		// Core
+		public DbSet<Follower> Followers => Set<Follower>();
 		public DbSet<UserNotification> UserNotifications => Set<UserNotification>();
 		public DbSet<UserReminder> UserReminders => Set<UserReminder>();
+		public DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();
 
 		// Authentication
 		public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();

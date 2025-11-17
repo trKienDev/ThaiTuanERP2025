@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
+using ThaiTuanERP2025.Application.Core.Reminders.Contracts;
 using ThaiTuanERP2025.Application.Shared.Interfaces;
 
 namespace ThaiTuanERP2025.Application.Core.Reminders.Queries

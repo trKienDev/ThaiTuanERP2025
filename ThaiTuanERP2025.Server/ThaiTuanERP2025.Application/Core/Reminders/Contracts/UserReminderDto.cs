@@ -1,4 +1,4 @@
-﻿namespace ThaiTuanERP2025.Application.Core.Reminders
+﻿namespace ThaiTuanERP2025.Application.Core.Reminders.Contracts
 {
 	public sealed record UserReminderDto {
 		public Guid Id { get; init; }

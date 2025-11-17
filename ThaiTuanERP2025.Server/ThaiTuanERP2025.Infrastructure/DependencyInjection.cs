@@ -52,6 +52,8 @@ using ThaiTuanERP2025.Infrastructure.Shared.Repositories;
 using ThaiTuanERP2025.Domain.Shared.Repositories;
 using ThaiTuanERP2025.Application.Core.Followers;
 using ThaiTuanERP2025.Application.Finance.BudgetPlans.Repositories;
+using ThaiTuanERP2025.Application.Core.OutboxMessages;
+using ThaiTuanERP2025.Infrastructure.BackgroundJobs;
 
 namespace ThaiTuanERP2025.Infrastructure
 {
@@ -136,6 +138,8 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IUserNotificationWriteRepository, UserNotificationWriteRepository>();
 			services.AddScoped<IUserReminderReadRepository, UserReminderReadRepository>();
 			services.AddScoped<IUserReminderWriteRepository, UserReminderWriteRepository>();	
+			services.AddScoped<IOutboxMessageReadRepository, OutboxMessageReadRepository>();
+			services.AddScoped<IOutboxMessageWriteRepository, OutboxMessageWriteRepository>();
 
 			// Authentication
 			services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
@@ -176,6 +180,7 @@ namespace ThaiTuanERP2025.Infrastructure
 
 			// Service
 			services.AddScoped<ICurrentRequestIpProvider, CurrentRequestIpProvider>();
+			services.AddHostedService<OutboxProcessorHostedService>();
 
 			return services;
 		}
