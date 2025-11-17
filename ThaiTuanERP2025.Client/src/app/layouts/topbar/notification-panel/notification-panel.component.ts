@@ -13,7 +13,7 @@ import { AvatarUrlPipe } from "../../../shared/pipes/avatar-url.pipe";
       styleUrls: ['./notification-panel.component.scss'],
       changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NotificationPanelComponent implements OnInit {
+export class NotificationPanelComponent {
       /** Streams từ state service */
       @Input() notifications$!: Observable<NotificationDto[]>;
       @Input() unreadCount$!: Observable<number>;
@@ -22,10 +22,6 @@ export class NotificationPanelComponent implements OnInit {
       @Output() markAllRead = new EventEmitter<void>();
       @Output() markOneRead = new EventEmitter<string>();
 
-      async ngOnInit() {
-            const notifications = await firstValueFrom(this.notifications$);
-            console.log('notifications: ', notifications);
-      }
 
       onSettings() {
       // optional: điều hướng trang cài đặt

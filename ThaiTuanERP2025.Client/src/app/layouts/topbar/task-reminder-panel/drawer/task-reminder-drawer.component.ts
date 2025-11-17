@@ -43,24 +43,9 @@ export class TaskReminderDrawerComponent implements OnInit {
             );
       }
 
-      async goTo(item: TaskReminderDto) {
-            // const { commands, extras } = this.resolveRoute(item);
-            sessionStorage.setItem('allowPaymentDetailOnce', '1');
-            // await this.router.navigate(commands, extras);
-            this.dismiss.emit('CLOSE_DRAWER');
+      onClickItem(reminder: TaskReminderDto) {
+            if (reminder.linkUrl) window.open(reminder.linkUrl, '_blank');
       }
-      // private resolveRoute(tr: TaskReminderDto): { commands: (string | number)[], extras: NavigationExtras } {
-      //       const commands: (string | number)[] = ['/expense', 'expense-payment-shell', 'payment-detail'];
-
-      //       const extras: NavigationExtras = {
-      //             queryParamsHandling: 'merge',
-      //             queryParams: (tr.documentType === 'ExpensePayment' && tr.documentId)
-      //                   ? { paymentId: tr.documentId } : {}
-      //       };
-
-      //       return { commands, extras };
-      // }
-
 
       trackById(index: number, item: TaskReminderDto) { return item.id; }
 

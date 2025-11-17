@@ -7,7 +7,7 @@
             <ng-container *ngIf="items.length > 0; else emptyState">
                   <ul class="reminder-list">
                         <li class="reminder-item clickable" *ngFor="let item of items; trackBy: trackById"
-                        (click)="openExpensePaymentDetailDialog(item)" (keydown.enter)="openExpensePaymentDetailDialog(item)" (keydown.space)="openExpensePaymentDetailDialog(item); $event.preventDefault()"
+                        (click)="onClickItem(item)" (keydown.enter)="onClickItem(item)" (keydown.space)="onClickItem(item); $event.preventDefault()"
                         tabindex="0" role="button">
                               <div class="title-wrapper display-flex gap-10px align-items-center">
                                     <div class="sla-warning" *ngIf="!isExpired(item)" class="sla-warning"></div>
