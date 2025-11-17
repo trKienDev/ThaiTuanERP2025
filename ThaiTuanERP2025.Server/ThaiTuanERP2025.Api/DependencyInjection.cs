@@ -55,13 +55,11 @@ namespace ThaiTuanERP2025.Api
 			services.AddSignalR().AddJsonProtocol(o =>
 				{
 					o.PayloadSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-					o.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 				}
 			);
 
 			// Controllers
 			services.AddControllers().AddJsonOptions(options => {
-				options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 				options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
 			});
 			services.AddRouting(options => options.LowercaseUrls = true);

@@ -1,6 +1,6 @@
 import { trigger, transition, style, animate } from "@angular/animations";
 import { CommonModule } from "@angular/common";
-import { Component, OnInit, inject, Inject, HostListener, ElementRef, ViewChild } from "@angular/core";
+import { Component, OnInit, inject, Inject, ElementRef, ViewChild } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from "@angular/material/dialog";
 import {  Router } from "@angular/router";
 import { firstValueFrom } from "rxjs";

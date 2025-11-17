@@ -18,8 +18,8 @@
                        <ng-container *ngIf="!err(); else errorTpl">
                               <div class="expense-payment-detail-container">
                                     <div class="payment-heading display-flex gap-10px align-items-center" [class.scrolled]="isScrolled">
-                                          <div class="payment-status" [@statusChangeFade]="paymentDetail?.status">
-                                                <span class="payment-status-badge" [ngClass]="(paymentDetail?.status | expensePaymentStatus).class">
+                                          <div class="label-status" [@statusChangeFade]="paymentDetail?.status">
+                                                <span class="label-status-badge" [ngClass]="(paymentDetail?.status | expensePaymentStatus).class">
                                                       {{ (paymentDetail?.status | expensePaymentStatus).text }}
                                                 </span>
                                           </div>

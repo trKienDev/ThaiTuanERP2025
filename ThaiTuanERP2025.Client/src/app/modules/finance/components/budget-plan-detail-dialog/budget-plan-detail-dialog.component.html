@@ -7,12 +7,10 @@
                         </div>
                   </ng-container>
                   <div class="dialog-title">
-                        <h1>Chi tiết ngân sách - 
-                              <span style="color: var(--bright-blue-color);">{{ deparmtentName }}</span>
-                        </h1>
+                        <h1>Chi tiết ngân sách</h1>
                   </div>
                   <div class="dialog-close">
-                        <button type="button" class="close-button" (click)="close()">
+                        <button type="button" class="close-button" (click)="close(false)">
                               <span class="text material-icons-outlined">close</span>
                         </button>
                   </div>
@@ -22,53 +20,28 @@
                         <thead>
                               <tr>
                                     <th>#</th>
-                                    <th>Kỳ ngân sách</th>
-                                    <th>Tiền</th>
-                                    <th>Xem xét</th>
-                                    <th>Phê duyệt</th>
-                                    <th>Ngày tạo</th>
-                                    <th *ngIf="canReview">Chỉnh sửa</th>
+                                    <th>Mã ngân sách</th>
+                                    <th>Kinh phí</th>
+                                    <ng-container *ngIf="canReview">
+                                          <th>Chỉnh sửa</th>
+                                    </ng-container>
                               </tr>
                         </thead>
                         <tbody>
-                              <ng-container *ngIf="budgetPlans.length > 0">
-                                    <tr *ngFor="let plan of budgetPlans; trackBy: trackById; let i = index;">
-                                          <td>{{ i + 1 }}</td>
-                                          <td>T{{plan.budgetPeriod.month}}/{{plan.budgetPeriod.year}}</td>
+                              <tr *ngFor="let detail of budgetPlan.details; let i = index;">
+                                    <td>{{ i + 1 }}</td>
+                                    <td>{{ detail.budgetCode.name }}</td>
+                                    <td>{{ detail.amount | number:'1.0-0' }}</td>
+                                    <ng-container *ngIf="canReview">
                                           <td>
-                                                <ng-container *ngIf="!plan.isEditing; else editAmount">
-                                                      {{ plan.amount | number: '1.0-0' }} VNĐ
-                                                </ng-container>
-                                                <ng-template #editAmount>
-                                                      <input class="" type="text" [(ngModel)]="plan.editedAmount" inputmode="decimal" appMoney [appMoneyDecimals]="0" required/>
-                                                </ng-template>
+                                                <button class="button icon-button" >
+                                                      <span class="material-icons-round">create</span>
+                                                </button>
                                           </td>
-                                          <td>
-                                                <input type="checkbox" [checked]="plan.isReviewed" disabled />
-                                          </td>
-                                          <td>
-                                                <input type="checkbox" [checked]="plan.isApproved" disabled />
-                                          </td>
-                                          <td>{{ plan.createdAt | date:'dd/MM/yyyy'  }}</td>
-                                          <td *ngIf="canReview">
-                                                <ng-container *ngIf="!plan.isEditing; else editButtons">
-                                                      <button type="button" class="button default-button" (click)="enableEdit(plan)">Sửa</button>
-                                                </ng-container>
-                                                <ng-template #editButtons>
-                                                      <div class="display-flex gap-5px">
-                                                            <kit-spinner-button type="button" cssClass="pintura-button" [loading]="submitting" text="Lưu" (click)="savePlan(plan)"></kit-spinner-button>
-                                                            <button type="button"class="button cancel-button" (click)="cancelEdit(plan)">Hủy</button>
-                                                      </div>
-                                                </ng-template>
-                                          </td>
-                                    </tr>
-                              </ng-container>
-                              <ng-container *ngIf="budgetPlans.length === 0">
-                                    <td colspan="8" class="text-center">Không có dữ liệu.</td>
-                              </ng-container>
+                                    </ng-container>
+                              </tr>
                         </tbody>
                   </table>
             </div>
-            <div class="dialog-footer"></div>
       </div>
 </div>

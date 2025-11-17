@@ -40,33 +40,43 @@
                               <th>Kỳ ngân sách</th>
                               <th>Mã ngân sách</th>
                               <th>Tổng tiền</th>
+                              <th>Trạng thái</th>
                               <th>Chi tiết</th>
+                              <th>Ngày tạo</th>
                         </tr>
                   </thead>
                   <tbody>
-                        <ng-container *ngIf="budgetPlansByDepartment.length > 0">
-                              <tr *ngFor="let plans of budgetPlansByDepartment; trackBy: trackById; let i = index;">
+                        <ng-container *ngIf="budgetPlans.length > 0">
+                              <tr *ngFor="let plans of budgetPlans; trackBy: trackById; let i = index;">
                                     <td>{{ i + 1 }}</td>
                                     <td>
                                           <a class="link-text" (click)="openBudgetPlanDetailDialog(plans)">
-                                                {{ plans.departmentName }}
+                                                {{ plans.department.name }}
                                           </a>
                                     </td>
-                                    <td>T{{ plans.month }} - {{ plans.year }}</td>
+                                    <td>T{{ plans.budgetPeriod.month }} - {{ plans.budgetPeriod.year }}</td>
                                     <td>
                                           <select class="select" name="" id="">
-                                                <!-- <option class="option" *ngFor="let plan of plans.budgetPlans">
-                                                      {{ plan.budgetCode.code }} - {{ plan.budgetCode.name }}
-                                                </option> -->
+                                                <option class="option" *ngFor="let detail of plans.details">
+                                                      {{ detail.budgetCode.code }} - {{ detail.budgetCode.name }}
+                                                </option>
                                           </select>
                                     </td>
                                     <td>{{ plans.totalAmount | number: '1.0-0' }} VNĐ</td>
                                     <td>
+                                          <div class="label-status" [@statusChangeFade]="plans.status">
+                                                <span class="label-status-badge" [ngClass]="(plans.status | budgetPlanStatus).class">
+                                                      {{ (plans.status | budgetPlanStatus).text }}
+                                                </span>
+                                          </div>
+                                    </td>
+                                    <td>
                                           <button type="button" class="button default-button" (click)="openBudgetPlanDetailDialog(plans)">Chi tiết</button>
                                     </td>
+                                    <td>{{ plans.createdAt | date:'dd/MM/yyyy' }}</td>
                               </tr>
                         </ng-container> 
-                        <ng-container *ngIf="budgetPlansByDepartment.length === 0">
+                        <ng-container *ngIf="budgetPlans.length === 0">
                               <td colspan="10" class="text-center">Không có dữ liệu.</td>
                         </ng-container>
                   </tbody>

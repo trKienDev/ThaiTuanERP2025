@@ -1,5 +1,5 @@
 import { ConfirmService } from './../../../../../shared/components/confirm-dialog/confirm.service';
-import { BudgetPlansByDepartmentDto } from './../../../models/budget-plan.model';
+import { BudgetPlanDto } from './../../../models/budget-plan.model';
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
@@ -10,14 +10,14 @@ import { BudgetPlanService } from "../../../services/budget-plan.service";
 import { combineLatest, distinctUntilChanged, filter, firstValueFrom, map, shareReplay, startWith, Subject, takeUntil } from 'rxjs';
 import { BudgetPeriodFacade } from '../../../facades/budget-period.facade';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { BudgetPlanDetailDialogComponent } from '../../../components/budget-plan-detail-dialog/budget-plan-detail-dialog.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { handleHttpError } from '../../../../../shared/utils/handle-http-errors.util';
+import { BudgetPlanDetailDialogComponent } from '../../../components/budget-plan-detail-dialog/budget-plan-detail-dialog.component';
+import { BudgetPlanStatusPipe } from "../../../pipes/budget-plan-status.pipe";
 
 @Component({
       selector: 'budget-plan-panel',
       standalone: true,
-      imports: [CommonModule, HasPermissionDirective, ReactiveFormsModule ],
+      imports: [CommonModule, HasPermissionDirective, ReactiveFormsModule, BudgetPlanStatusPipe],
       templateUrl: './budget-plan.component.html',
 })
 export class BudgetPlanPanelComponent implements OnInit, OnDestroy {
@@ -29,7 +29,7 @@ export class BudgetPlanPanelComponent implements OnInit, OnDestroy {
       private readonly matDialog = inject(MatDialog);
       private readonly confirm = inject(ConfirmService);
 
-      budgetPlansByDepartment: BudgetPlansByDepartmentDto[] = [];
+      budgetPlans: BudgetPlanDto[] = [];
 
       private readonly destroy$ = new Subject<void>();
 
@@ -140,7 +140,8 @@ export class BudgetPlanPanelComponent implements OnInit, OnDestroy {
                   });
       }
       private async loadBudgetPlans(budgetPeriodId: string) {
-            this.budgetPlansByDepartment = await firstValueFrom(this.budgetPlanService.getFollowing(budgetPeriodId))
+            this.budgetPlans= await firstValueFrom(this.budgetPlanService.getFollowing(budgetPeriodId));
+            console.log('budget plans: ', this.budgetPlans);
       }
 
       private listenOpenByQueryParam(): void {
@@ -154,33 +155,11 @@ export class BudgetPlanPanelComponent implements OnInit, OnDestroy {
       }
       private async activateBudgetPlanDetailDialog(planId: string): Promise<void> {
 
-            let plan: any;
-            try {
-                  plan = await firstValueFrom(this.budgetPlanService.getById(planId));
-            } catch (e) {
-                  const messages = handleHttpError(e).join('\n');
-                  this.confirm.error$(messages);
-                  console.error('Không load được BudgetPlan', e);
-                  return;
-            }
-
-            const dialogRef = this.matDialog.open(BudgetPlanDetailDialogComponent, {
-                  data: { plan }
-            });
-
-            // Clear query params khi đóng dialog (tránh auto-open khi refresh)
-            dialogRef.afterClosed().subscribe(() => {
-                  this.router.navigate([], {
-                        relativeTo: this.route,
-                        queryParams: { openPlanId: null },
-                        queryParamsHandling: 'merge'
-                  });
-            });
       }
 
       // =============================
 
-      trackById(index: number, item: BudgetPlansByDepartmentDto) { return item.departmentId; }
+      trackById(index: number, item: BudgetPlanDto) { return item.id; }
 
       openListBudgetApproverDialog() {
             const dialogRef = this.dialog.open(ListBudgetApproversDialogComponent, {})
@@ -192,8 +171,11 @@ export class BudgetPlanPanelComponent implements OnInit, OnDestroy {
             dialogRef.afterClosed().subscribe();
       }
 
-      openBudgetPlanDetailDialog(plan: BudgetPlansByDepartmentDto) {
-            this.matDialog.open(BudgetPlanDetailDialogComponent, { data: plan });
+      openBudgetPlanDetailDialog(plan: BudgetPlanDto) {
+            const dialogRef = this.dialog.open(BudgetPlanDetailDialogComponent, { data: plan });
+            dialogRef.afterClosed().subscribe({
+                  
+            })
       }
 
       // ===== Destroy ====
