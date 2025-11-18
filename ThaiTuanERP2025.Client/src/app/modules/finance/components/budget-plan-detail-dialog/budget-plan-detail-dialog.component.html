@@ -2,12 +2,12 @@
       <div class="dialog-container">
             <div class="dialog-heading">
                   <div class="display-flex align-items-center">
-                        <ng-container *ngIf="isExpired(budgetPlan.dueAt)">
+                        <ng-container *ngIf="isExpired(budgetPlan.dueAt) && budgetPlan.status != 2">
                               <div class="margin-left-auto">
                                     <span class="badge danger-badge">Quá hạn duyệt</span>
                               </div>
                         </ng-container>
-                        <ng-container *ngIf="!isExpired(budgetPlan.dueAt)">
+                        <ng-container *ngIf="!isExpired(budgetPlan.dueAt) && budgetPlan.status != 2">
                               <div class="payment-due-time margin-left-auto">
                                     <kit-flip-countdown [timeLeft]="getSecondsRemaining(budgetPlan.dueAt)"></kit-flip-countdown>
                               </div>

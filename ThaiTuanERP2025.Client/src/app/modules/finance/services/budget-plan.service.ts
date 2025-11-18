@@ -5,6 +5,7 @@ import { BudgetPlanDto, BudgetPlanRequest } from "../models/budget-plan.model";
 import { Observable } from "rxjs";
 import { ApiResponse } from "../../../shared/models/api-response.model";
 import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
+import { BaseApiService } from "../../../shared/services/base-api.service";
 
 @Injectable({ providedIn: 'root' })
 export class BudgetPlanApiService extends BaseApiService<BudgetPlanDto, BudgetPlanRequest>{

@@ -26,8 +26,8 @@ namespace ThaiTuanERP2025.Api.Swagger
 						{
 							Reference = new OpenApiReference
 							{
-							Type = ReferenceType.SecurityScheme,
-							Id = "Bearer"
+								Type = ReferenceType.SecurityScheme,
+								Id = "Bearer"
 							}
 						},
 						Array.Empty<string>()
