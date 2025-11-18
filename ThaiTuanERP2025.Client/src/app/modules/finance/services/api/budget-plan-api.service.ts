@@ -27,4 +27,9 @@ export class BudgetPlanApiService extends BaseApiService<BudgetPlanDto, BudgetPl
             return this.http.post<ApiResponse<void>>(`${this.endpoint}/${id}/review`, null)
                   .pipe(handleApiResponse$<void>());
       }
+
+     approve(id: string): Observable<void> {
+            return this.http.post<ApiResponse<void>>(`${this.endpoint}/${id}/approve`, null)
+                  .pipe(handleApiResponse$<void>());
+      }
 }

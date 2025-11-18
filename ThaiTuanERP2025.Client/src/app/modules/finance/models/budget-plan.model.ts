@@ -7,8 +7,8 @@ export enum BudgetPlanStatus {
       draft = 0,
       reviewed = 1,
       approved = 2,
-      rejected = 4,
-      cancelled = 5,
+      rejected = 3,
+      cancelled = 4,
 }
 
 export interface BudgetPlanDto {

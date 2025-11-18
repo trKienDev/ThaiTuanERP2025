@@ -23,6 +23,7 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
 			DueAt = dueAt;
 			IsResolved = false;
 			CreatedAt = DateTime.UtcNow;
+			TargetId = targetId;
 		}
 		#endregion
 

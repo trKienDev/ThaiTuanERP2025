@@ -18,7 +18,7 @@ namespace ThaiTuanERP2025.Application.Core.Services
 			_realtime = realtime;
 		}
 
-		public async Task ScheduleReminderAsync(
+		public async Task ScheduleReminderAsync (
 			Guid userId, string subject, string message, int slaHours, DateTime dueAt,
 			LinkType linkType, Guid targetId,
 			CancellationToken cancellationToken = default

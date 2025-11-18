@@ -34,9 +34,11 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Commands
 			if (budgetPlan.SelectedApproverId != userId)
 				throw new ForbiddenException("Bạn không có quyền phê duyệt kế hoạch ngân sách này");
 
-			var approver = await _uow.BudgetApprovers.GetByIdAsync(budgetPlan.SelectedApproverId, cancellationToken)
-				?? throw new NotFoundException("User phê duyệt không tồn tại");
-
+			var approver = await _uow.BudgetApprovers.SingleOrDefaultAsync(
+				q => q.Where(x => x.ApproverUserId == budgetPlan.SelectedApproverId && x.IsActive && !x.IsDeleted),
+				cancellationToken: cancellationToken
+			) ?? throw new NotFoundException("User phê duyệt không tồn tại");
+			
 			budgetPlan.Approve(budgetPlan.SelectedApproverId, approver.SlaHours);
 
 			await _uow.SaveChangesAsync(cancellationToken);

@@ -10,7 +10,7 @@ button, .button {
       padding: 10px 10px;
       border-radius: 5px;
       height: fit-content;
-      border: 1px solid !important;
+      border: 1px solid transparent !important;
 }
 
 // *** default button ***
@@ -69,7 +69,7 @@ button, .button {
 .cancel-button:hover { cursor: pointer; opacity: 0.8; }
 
 /* save */   
-.save-button { background-color: var(--bright-blue-color); cursor: pointer; transition: all ease-in-out 0.2s; color: white !important; border: none !important; box-shadow: 0px 4px 6px -1px #0276FF31, 0px 2px 4px -1px #0276FF17; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+.save-button { background-color: var(--bright-blue-color); cursor: pointer; transition: all ease-in-out 0.2s; color: white !important; box-shadow: 0px 4px 6px -1px #0276FF31, 0px 2px 4px -1px #0276FF17; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
 .save-button:hover { background-color: #0071e2; }
 /* submit */
 /* CSS */

@@ -30,7 +30,7 @@ export class TaskReminderSignalRService {
                   .build();
 
             this.hub.on('ReceiveReminder', (payloads: TaskReminderDto[]) => this._incoming$.next(payloads));
-            this.hub.on('ResolveReminder', (alarmIds: string[]) => this._resolved$.next(alarmIds));
+            this.hub.on('ResolveReminder', (alarmIds: string[]) => { this._resolved$.next(alarmIds); console.log('resolve reminder: ', alarmIds)});
 
             await this.hub.start()
                   .then(() => console.log('✅ SignalR connected:', this.hub?.connectionId))

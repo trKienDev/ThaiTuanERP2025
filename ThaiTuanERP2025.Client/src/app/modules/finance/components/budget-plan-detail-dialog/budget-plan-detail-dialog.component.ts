@@ -81,9 +81,22 @@ export class BudgetPlanDetailDialogComponent {
             }
       }
 
+      async approve() {
+            try {
+                  this.submitting = true;
+                  await firstValueFrom(this.budgetPlanApi.approve(this.budgetPlan.id));
+                  this.toast.successRich("Phê duyệt thành công");
+                  this.budgetPlanEvents.notifyUpdated();
+                  this.close(true);
+            } catch(error) {
+                  this.httpErrorHandler.handle(error, "Phê duyệt thất bại");
+            } finally { 
+                  this.submitting = false;
+            }
+      }
+
       // === HELPERS ===
       isExpired(dueAt: string): boolean {
-            console.log('dueAt: ', dueAt);
             return new Date(dueAt).getTime() <= Date.now();
       }
       getSecondsRemaining(dueAt: string): number {

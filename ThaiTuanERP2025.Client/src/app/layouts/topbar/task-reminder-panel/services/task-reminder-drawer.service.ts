@@ -12,7 +12,7 @@ export class TaskReminderDrawerService {
       private compRef?: ComponentRef<TaskReminderDrawerComponent>;
       private subs = new Subscription();
 
-      constructor(private overlay: Overlay, private injector: Injector) {}
+      constructor(private readonly overlay: Overlay, private readonly injector: Injector) {}
 
       isOpen(): boolean {
             return !!this.overlayRef && this.overlayRef.hasAttached();
@@ -60,7 +60,6 @@ export class TaskReminderDrawerService {
             if (!this.compRef || !this.overlayRef?.hasAttached()) return;
             this.compRef.instance.reminders$ = reminders$;
             this.compRef.changeDetectorRef.detectChanges();
-
       }
 
       close() {

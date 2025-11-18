@@ -1,11 +1,8 @@
 <div class="dialog" style="min-width: 600px;">
       <div class="dialog-container">
             <div class="dialog-heading">
-                  <div class="dialog-title">
-                        <h1>Chi tiết ngân sách</h1>
-                  </div>
-                  <div class="dialog-close">
-                       <ng-container *ngIf="isExpired(budgetPlan.dueAt)">
+                  <div class="display-flex align-items-center">
+                        <ng-container *ngIf="isExpired(budgetPlan.dueAt)">
                               <div class="margin-left-auto">
                                     <span class="badge danger-badge">Quá hạn duyệt</span>
                               </div>
@@ -15,6 +12,14 @@
                                     <kit-flip-countdown [timeLeft]="getSecondsRemaining(budgetPlan.dueAt)"></kit-flip-countdown>
                               </div>
                         </ng-container>
+                  </div>
+                  <div class="dialog-title">
+                        <h1>Chi tiết ngân sách</h1>
+                  </div>
+                  <div class="dialog-close">
+                        <button type="button" class="close-button" (click)="close()">
+                              <span class="text material-icons-outlined">close</span>
+                        </button>
                   </div>
             </div>
             <div class="dialog-body">
@@ -72,14 +77,9 @@
                         <button class="width-50pt button cancel-button" (click)="close(false)">Hủy</button>
                   </ng-container>
                   <ng-container *ngIf="showApproveButton">
-                        <kit-spinner-button class="flex-1" type="button" cssClass="submit-button" [loading]="submitting" text="Phê duyệt"></kit-spinner-button>
+                        <kit-spinner-button class="flex-1" type="button" cssClass="submit-button" [loading]="submitting" text="Phê duyệt" (click)="approve()"></kit-spinner-button>
                         <kit-spinner-button class="flex-1" type="button" cssClass="danger-button display-flex justify-content-center" [loading]="submitting" text="Từ chối"></kit-spinner-button>
-                        <button class="flex-1 button cancel-button" (click)="close(false)">Hủy</button>
                   </ng-container>
-                  <ng-container *ngIf="!showApproveButton && !showApproveButton">
-                        <button class="width-100pt button cancel-button" (click)="close(false)">Hủy</button>
-                  </ng-container>
-
             </div>
       </div>
 </div>

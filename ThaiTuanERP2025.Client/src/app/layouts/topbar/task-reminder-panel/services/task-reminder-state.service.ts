@@ -31,6 +31,7 @@ export class TaskReminderStateService {
 
             // resolved reminders (approve / expired / dismissed)
             this.realtime.resolved$.subscribe(ids => {
+                  for(let id of ids) console.log('id: ', id );
                   const left = this._reminders$.value.filter(a => !ids.includes(a.id));
                   this._reminders$.next(left);
             });

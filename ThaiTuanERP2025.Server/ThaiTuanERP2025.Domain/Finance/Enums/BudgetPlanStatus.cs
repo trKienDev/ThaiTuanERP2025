@@ -4,8 +4,8 @@
 	{
 		Draft = 0,
 		Reviewed = 1,
-		Approved = 3,
-		Rejected = 4,
-		Cancelled = 5,
+		Approved = 2,
+		Rejected = 3,
+		Cancelled = 4,
 	}
 }

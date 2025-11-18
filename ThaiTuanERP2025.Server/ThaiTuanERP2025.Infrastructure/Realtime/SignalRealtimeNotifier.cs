@@ -28,10 +28,10 @@ namespace ThaiTuanERP2025.Infrastructure.Realtime
 
 			await _hub.Clients.Users(ids).SendAsync("ReceiveReminder", payloads, cancellationToken);
 		}
-		public async Task PushReminderResolvedAsync(Guid userId, Guid reminderId, CancellationToken ct)
+		public async Task PushReminderResolvedAsync(Guid userId, Guid reminderId, CancellationToken cancellationToken)
 		{
 			await _hub.Clients.User(userId.ToString())
-			    .SendAsync("ResolveReminder", new { reminderId }, ct);
+				.SendAsync("ResolveReminder", new[] { reminderId.ToString() }, cancellationToken);
 		}
 
 	}

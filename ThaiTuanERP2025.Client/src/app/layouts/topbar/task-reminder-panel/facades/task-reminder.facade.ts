@@ -5,7 +5,7 @@ import { TaskReminderDto } from '../models/task-reminder.model';
 
 @Injectable({ providedIn: 'root' })
 export class TaskReminderFacade {
-      private state = inject(TaskReminderStateService);
+      private readonly state = inject(TaskReminderStateService);
       readonly reminders$: Observable<TaskReminderDto[]> = this.state.reminders$;
 
       async init() {
