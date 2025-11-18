@@ -1,16 +1,16 @@
-import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Injectable, computed, inject } from '@angular/core';
 import { TaskReminderStateService } from '../services/task-reminder-state.service';
-import { TaskReminderDto } from '../models/task-reminder.model';
 
 @Injectable({ providedIn: 'root' })
 export class TaskReminderFacade {
       private readonly state = inject(TaskReminderStateService);
-      readonly reminders$: Observable<TaskReminderDto[]> = this.state.reminders$;
+      readonly reminders = computed(() => this.state.reminders());
 
-      async init() {
+      async init(): Promise<void> {
             await this.state.init();
       }
 
-      dismiss(id: string) { this.state.dismiss(id); }
+      dismiss(id: string): void {
+            this.state.dismiss(id);
+      }
 }

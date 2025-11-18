@@ -22,6 +22,7 @@ export class TaskReminderSignalRService {
             }
 
             if (this.hub?.state === signalR.HubConnectionState.Connected) return;
+
             this.hub = new signalR.HubConnectionBuilder()
                   .withUrl(`${environment.baseUrl}${environment.hubs.notification}`, {
                         accessTokenFactory: () => getToken?.() ?? ''
@@ -30,7 +31,7 @@ export class TaskReminderSignalRService {
                   .build();
 
             this.hub.on('ReceiveReminder', (payloads: TaskReminderDto[]) => this._incoming$.next(payloads));
-            this.hub.on('ResolveReminder', (alarmIds: string[]) => { this._resolved$.next(alarmIds); console.log('resolve reminder: ', alarmIds)});
+            this.hub.on('ResolveReminder', (alarmIds: string[]) => this._resolved$.next(alarmIds));
 
             await this.hub.start()
                   .then(() => console.log('✅ SignalR connected:', this.hub?.connectionId))

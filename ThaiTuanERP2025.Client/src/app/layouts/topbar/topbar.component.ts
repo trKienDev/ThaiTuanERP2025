@@ -1,7 +1,6 @@
 // topbar.component.ts (đã chỉnh)
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, HostListener, inject, OnInit } from '@angular/core';
-import { firstValueFrom, map } from 'rxjs';
+import { Component, computed, ElementRef, HostListener, inject, OnInit } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { NotificationPanelService } from './notification-panel/services/notification-panel.service';
 import { NotificationStateService } from './notification-panel/services/notification-state.service';
@@ -36,6 +35,7 @@ export class TopbarComponent implements OnInit {
       // Task Reminder
       private readonly reminderFacade = inject(TaskReminderFacade);
       private  readonly reminderDrawer = inject(TaskReminderDrawerService);
+      readonly reminders = this.reminderFacade.reminders;
 
       baseUrl: string = environment.baseUrl;
       currentUser$ = this.userFacade.currentUser$;
@@ -45,16 +45,13 @@ export class TopbarComponent implements OnInit {
       notifications$ = this.notificationFacade.notifications$;
       unreadCount$ = this.notificationFacade.unreadCount$;
 
-      reminders$ = this.reminderFacade.reminders$;
-      activeReminders$ = this.reminders$.pipe(
-            map(list => list.filter(a => new Date(a.dueAt).getTime() > Date.now()))
+      
+      readonly activeReminders = computed(() =>
+            this.reminders().filter(r => new Date(r.dueAt).getTime() > Date.now())
       );
 
       async ngOnInit(): Promise<void> {
-            // Khởi tạo state: REST + SignalR đã được thực hiện bên trong NotificationStateService
             await this.notificationFacade.init();
-
-            // Khởi tạo nhắc việc
             await this.reminderFacade.init();
       }
 
@@ -77,7 +74,7 @@ export class TopbarComponent implements OnInit {
             if (this.reminderDrawer.isOpen()) {
                   this.reminderDrawer.close();
             } else {
-                  this.reminderDrawer.open(this.reminders$, {
+                  this.reminderDrawer.open(this.reminders, {
                         dismiss: (id) => this.reminderFacade.dismiss(id),
                   });
             }

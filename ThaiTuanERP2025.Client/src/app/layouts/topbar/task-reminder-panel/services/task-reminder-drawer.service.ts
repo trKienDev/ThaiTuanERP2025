@@ -1,26 +1,30 @@
 // src/app/shared/task-reminder-drawer.service.ts
-import { Injectable, Injector, ComponentRef } from '@angular/core';
+import { Injectable, ComponentRef, inject, Signal } from '@angular/core';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { Observable, Subscription, tap } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { TaskReminderDrawerComponent } from '../drawer/task-reminder-drawer.component';
 import { TaskReminderDto } from '../models/task-reminder.model';
+import { TaskReminderFacade } from '../facades/task-reminder.facade';
 
 @Injectable({ providedIn: 'root' })
 export class TaskReminderDrawerService {
       private overlayRef?: OverlayRef;
       private compRef?: ComponentRef<TaskReminderDrawerComponent>;
       private subs = new Subscription();
-
-      constructor(private readonly overlay: Overlay, private readonly injector: Injector) {}
+      private readonly overlay = inject(Overlay);
+      private readonly facade = inject(TaskReminderFacade);
 
       isOpen(): boolean {
             return !!this.overlayRef && this.overlayRef.hasAttached();
       }
 
-      open(reminders$: Observable<TaskReminderDto[]>, handlers?: { dismiss?: (id: string) => void }) {
+      open(reminders: Signal<TaskReminderDto[]>, handlers?: { dismiss?: (id: string) => void }) {
             if (this.isOpen()) {
-                  this.updateStreams(reminders$, handlers);
+                  if (this.compRef) {
+                        this.compRef.instance.reminders = this.facade.reminders;
+                        this.compRef.changeDetectorRef.markForCheck();
+                  }
                   return;
             }
 
@@ -33,33 +37,23 @@ export class TaskReminderDrawerService {
 
             this.overlayRef = this.overlay.create(config);
 
-            const debug$ = reminders$.pipe(
-                  tap(list => console.log('[DrawerService] open len =', Array.isArray(list) ? list.length : '(not array)', list))
+            this.compRef = this.overlayRef.attach(
+                  new ComponentPortal(TaskReminderDrawerComponent)
             );
-
-
-            this.compRef = this.overlayRef.attach(new ComponentPortal(TaskReminderDrawerComponent, null, this.injector));
-            this.compRef.instance.reminders$ = debug$;          // <-- dùng debug$
-            this.compRef.changeDetectorRef.detectChanges();
-
-
-            this.compRef.instance.reminders$ = reminders$;
+            this.compRef.instance.reminders = this.facade.reminders;
+            this.compRef.changeDetectorRef.markForCheck();
 
             if (handlers?.dismiss) {
-                  this.subs.add(this.compRef.instance.dismiss.subscribe(id => {
-                        if (id === 'CLOSE_DRAWER') this.close();
-                        else handlers.dismiss!(id);
-                  }));
+                  this.subs.add(
+                        this.compRef.instance.dismiss.subscribe(id => {
+                              if (id === 'CLOSE_DRAWER') this.close();
+                              else handlers.dismiss!(id);
+                        })
+                  );
             }
 
             this.overlayRef.backdropClick().subscribe(() => this.close());
             this.overlayRef.detachments().subscribe(() => this.dispose());
-      }
-
-      updateStreams(reminders$: Observable<TaskReminderDto[]>, handlers?: { dismiss?: (id: string) => void }) {
-            if (!this.compRef || !this.overlayRef?.hasAttached()) return;
-            this.compRef.instance.reminders$ = reminders$;
-            this.compRef.changeDetectorRef.detectChanges();
       }
 
       close() {

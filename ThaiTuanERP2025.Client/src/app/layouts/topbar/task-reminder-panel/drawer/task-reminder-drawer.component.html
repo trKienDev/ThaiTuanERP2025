@@ -3,10 +3,10 @@
       <header class="drawer-header">
             <h3 style="color: var(--main-foreground-hover);">Phê duyệt đang chờ ⏳</h3>
       </header>
-      <div class="drawer-body" *ngIf="(sortedReminders$ | async) as items">
-            <ng-container *ngIf="items.length > 0; else emptyState">
+      <div class="drawer-body">
+            <ng-container *ngIf="sortedReminders().length > 0; else emptyState">
                   <ul class="reminder-list">
-                        <li class="reminder-item clickable" *ngFor="let item of items; trackBy: trackById"
+                        <li class="reminder-item clickable"  *ngFor="let item of sortedReminders(); trackBy: trackById"
                         (click)="onClickItem(item)" (keydown.enter)="onClickItem(item)" (keydown.space)="onClickItem(item); $event.preventDefault()"
                         tabindex="0" role="button">
                               <div class="title-wrapper display-flex gap-10px align-items-center">
@@ -15,7 +15,7 @@
                               </div>
                               <div class="message">{{ item.message }}</div>
                               <div class="due" [ngClass]="{ 'expired': isExpired(item), 'active': !isExpired(item) }">
-                                    Hết hạn sau: <span class="countdown">{{ (leftTime(item) | async) }}</span>
+                                    Hết hạn sau: <span class="countdown">{{ leftTime(item) }}</span>
                               </div>
                         </li>
                   </ul>
@@ -24,7 +24,11 @@
 
       <ng-template #emptyState>
             <div class="empty">
-                  <p>Không có duyệt nào đang chờ</p>
+                  <div class="empty-icon">
+                        <span class="material-icons-round">access_alarm</span>
+                  </div>
+                  <div class="empty-title">Bạn không có nhắc việc nào</div>
+                  <div class="empty-sub">Khi có nhắc việc mới, chúng sẽ xuất hiện tại đây.</div>
             </div>
       </ng-template>
 </div>
