@@ -31,7 +31,7 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.EventHandlers
 
 			var budgetPlanName = $"{budgetPeriod.Month}/{budgetPeriod.Year}";
 
-			var approverId = domainEvent.BudgetPlan.ApprovedByUserId;
+			var approverId = domainEvent.BudgetPlan.ApprovedByUserId!.Value;
 			var creatorId = domainEvent.BudgetPlan.CreatedByUserId;
 			var reviewerId = domainEvent.BudgetPlan.ReviewedByUserId;
 
@@ -45,12 +45,25 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.EventHandlers
 				asNoTracking: false,
 				cancellationToken: cancellationToken
 			) ?? throw new NotFoundException("Không tìm thấy nhắc việc của người duyệt");
-
 			await _reminder.MarkResolvedAsync(reminder.Id, cancellationToken);
+
+			// mark approver's task notification as read
+			var approverTaskNotification = await _uow.UserNotifications.SingleOrDefaultAsync(
+				q => q.Where(
+					x => x.ReceiverId == approverId 
+					&& x.TargetId.Equals(domainEvent.BudgetPlan.Id)
+					&& x.Type == NotificationType.Task
+					&& !x.IsRead
+				),
+				asNoTracking: false,
+				cancellationToken: cancellationToken
+			);
+			if (approverTaskNotification is not null)
+				await _notification.MarkAsReadAsync(approverTaskNotification.Id, approverId, cancellationToken);
 
 			// Send notifications to creator and reviewer
 			await _notification.SendToManyAsync(
-				approverId!.Value,
+				approverId,
 				[creatorId!.Value, reviewerId!.Value],
 				$"Kế hoạch ngân sách {budgetPlanName} đã được phê duyệt",
 				$"Kế hoạch ngân sách {budgetPlanName} đã được phê duyệt",

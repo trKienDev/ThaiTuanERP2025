@@ -10,6 +10,7 @@ import { ToastNotificationService } from '../../../../shared/components/toast-no
 export class NotificationStateService {
       private readonly api = inject(NotificationsApiService);
       private readonly realtime = inject(NotificationSignalRService);
+      private readonly notificationToast = inject(ToastNotificationService);
 
       private readonly _notifications$ = new BehaviorSubject<NotificationDto[]>([]);
       private readonly _unreadCount$ = new BehaviorSubject<number>(0);
@@ -17,8 +18,6 @@ export class NotificationStateService {
       /** Stream public cho component subscribe */
       readonly notifications$ = this._notifications$.asObservable();
       readonly unreadCount$ = this._unreadCount$.asObservable();
-
-      private readonly notificationToast = inject(ToastNotificationService);
 
       /** Khởi tạo: load từ REST + start SignalR */
       async init(): Promise<void> {
@@ -53,6 +52,16 @@ export class NotificationStateService {
                         });
                   }
             });
+
+            this.realtime.incomingRead$.subscribe(({ id, readAt }) => {
+                  const updated = this._notifications$.value.map(n =>
+                        n.id === id ? { ...n, isRead: true, readAt } : n
+                  );
+
+                  this._unreadCount$.next(Math.max(0, this._unreadCount$.value - 1));
+
+                  this._notifications$.next(this.sortNotifications(updated));
+            });
       }
 
       /** Đánh dấu 1 thông báo đã đọc */
@@ -78,6 +87,20 @@ export class NotificationStateService {
                   this._notifications$.next(updated);
                   this._unreadCount$.next(0);
                   this.realtime.markAllAsRead(); // reset client counter
+            });
+      }
+
+      private sortNotifications(list: NotificationDto[]): NotificationDto[] {
+            return [...list].sort((a, b) => {
+                  // Unread được ưu tiên lên đầu
+                  if (a.isRead !== b.isRead) {
+                        return a.isRead ? 1 : -1;
+                  }
+                  // Nếu cùng trạng thái, sort theo thời gian
+                  return (
+                        new Date(b.createdAt).getTime() -
+                        new Date(a.createdAt).getTime()
+                  );
             });
       }
 }

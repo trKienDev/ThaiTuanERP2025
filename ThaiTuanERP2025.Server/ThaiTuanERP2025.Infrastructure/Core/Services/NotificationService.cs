@@ -1,20 +1,19 @@
-﻿using ThaiTuanERP2025.Application.Shared.Interfaces;
+﻿using System.Text.Json;
 using ThaiTuanERP2025.Application.Core.Notifications;
+using ThaiTuanERP2025.Application.Core.Notifications.Contracts;
+using ThaiTuanERP2025.Application.Shared.Exceptions;
+using ThaiTuanERP2025.Application.Shared.Interfaces;
 using ThaiTuanERP2025.Domain.Core.Entities;
 using ThaiTuanERP2025.Domain.Core.Enums;
 using ThaiTuanERP2025.Domain.Shared.Repositories;
-using ThaiTuanERP2025.Application.Core.Notifications.Contracts;
-using System.Text.Json;
 
 namespace ThaiTuanERP2025.Application.Core.Services
 {
 	public class NotificationService : INotificationService
 	{
 		private readonly IUnitOfWork _uow;
-		private readonly IRealtimeNotifier _realtime;
-		public NotificationService(IUnitOfWork uow, IRealtimeNotifier realtime) {
+		public NotificationService(IUnitOfWork uow) {
 			_uow = uow;	
-			_realtime = realtime;
 		}
 
 		#region Send to single user
@@ -90,6 +89,38 @@ namespace ThaiTuanERP2025.Application.Core.Services
 				var outbox = new OutboxMessage("NotificationCreated", json);
 				await _uow.OutboxMessages.AddAsync(outbox, cancellationToken);
 			}
+
+			await _uow.SaveChangesWithoutDispatchAsync(cancellationToken);
+		}
+		#endregion
+
+		#region MarkAsRead
+		public async Task MarkAsReadAsync(Guid notificationId, Guid userId, CancellationToken cancellationToken = default)
+		{
+			// Lấy notification
+			var entity = await _uow.UserNotifications.SingleOrDefaultAsync(
+				q => q.Where(x => x.Id == notificationId && x.ReceiverId == userId),
+				asNoTracking: false,
+				cancellationToken: cancellationToken
+			);
+
+			if (entity == null)
+				throw new NotFoundException("Notification not found");
+
+			// Domain behavior
+			entity.MarkAsRead();
+
+			// (Optionally) gửi Outbox event MarkRead để sync realtime
+			var payload = new NotificationReadPayload(
+				entity.Id,
+				entity.ReceiverId,
+				entity.ReadAt!.Value
+			);
+
+			var json = JsonSerializer.Serialize(payload);
+			var outbox = new OutboxMessage("NotificationRead", json);
+
+			await _uow.OutboxMessages.AddAsync(outbox, cancellationToken);
 
 			await _uow.SaveChangesWithoutDispatchAsync(cancellationToken);
 		}

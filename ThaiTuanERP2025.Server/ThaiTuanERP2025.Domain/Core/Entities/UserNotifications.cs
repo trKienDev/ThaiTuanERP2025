@@ -67,6 +67,7 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
 		}
 		#endregion
 
+		#region helper function
 		private static string? ResolveLink(LinkType type, Guid? id)
 		{
 			return type switch
@@ -89,5 +90,6 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
 				_ => null
 			};
 		}
+		#endregion
 	}
 }

@@ -13,6 +13,7 @@ namespace ThaiTuanERP2025.Infrastructure.Realtime
 			_hub = hub;
 		}
 
+		#region Notification
 		public async Task PushNotificationsAsync(IEnumerable<Guid> userIds, IEnumerable<object> payloads, CancellationToken cancellationToken = default)
 		{
 			var ids = userIds.Select(u => u.ToString()).ToArray();
@@ -21,6 +22,20 @@ namespace ThaiTuanERP2025.Infrastructure.Realtime
 			await _hub.Clients.Users(ids).SendAsync("ReceiveNotification", payloads, cancellationToken);
 		}
 
+		public async Task PushNotificationReadAsync(Guid notificationId, Guid receiverId,DateTime readAt, CancellationToken cancellationToken)
+		{
+			await _hub.Clients.User(receiverId.ToString())
+				.SendAsync("notificationRead", new {
+					id = notificationId,
+					readAt = readAt
+				}, 
+				cancellationToken
+			);
+		}
+
+		#endregion
+
+		#region Reminder
 		public async Task PushRemindersAsync(IEnumerable<Guid> userIds, IEnumerable<object> payloads, CancellationToken cancellationToken = default)
 		{
 			var ids = userIds.Select(u => u.ToString()).ToArray();
@@ -33,6 +48,6 @@ namespace ThaiTuanERP2025.Infrastructure.Realtime
 			await _hub.Clients.User(userId.ToString())
 				.SendAsync("ResolveReminder", new[] { reminderId.ToString() }, cancellationToken);
 		}
-
+		#endregion
 	}
 }

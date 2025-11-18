@@ -20,5 +20,7 @@ namespace ThaiTuanERP2025.Application.Core.Notifications
 			NotificationType type = NotificationType.Info,
 			CancellationToken cancellationToken = default
 		);
+
+		Task MarkAsReadAsync(Guid notificationId, Guid userId, CancellationToken cancellationToken = default);
 	}
 }

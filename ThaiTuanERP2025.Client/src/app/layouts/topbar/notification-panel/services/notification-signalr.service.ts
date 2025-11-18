@@ -10,10 +10,12 @@ export class NotificationSignalRService {
 
       // internal stream 
       private readonly _incoming$ = new Subject<NotificationDto[]>();
+      private readonly _incomingRead$ = new Subject<{ id: string; readAt: string }>();
       private readonly _unreadCount$ = new BehaviorSubject<number>(0);
 
       // public stream
       readonly incoming$ = this._incoming$.asObservable();
+      readonly incomingRead$ = this._incomingRead$.asObservable();
       readonly unreadCount$: Observable<number> = this._unreadCount$.asObservable();
 
       /** Bắt đầu kết nối */
@@ -33,9 +35,15 @@ export class NotificationSignalRService {
                   .withAutomaticReconnect()
                   .build();
 
+            // 1 ) ReceiveNotification 
             this.hubConnection.on('ReceiveNotification', (payloads: NotificationDto[]) => {
                   this._incoming$.next(payloads);
                   this._unreadCount$.next(this._unreadCount$.value + (payloads?.length ?? 0));
+            });
+
+            // 2 ) notificationRead
+            this.hubConnection.on('notificationRead', (data: { id: string; readAt: string }) => {
+                  this._incomingRead$.next(data);
             });
 
             return this.hubConnection.start()

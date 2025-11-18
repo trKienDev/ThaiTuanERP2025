@@ -2,7 +2,6 @@
 using ThaiTuanERP2025.Application.Core.Notifications;
 using ThaiTuanERP2025.Application.Core.Reminders;
 using ThaiTuanERP2025.Application.Finance.BudgetPeriods;
-using ThaiTuanERP2025.Application.Shared.Exceptions;
 using ThaiTuanERP2025.Domain.Core.Enums;
 using ThaiTuanERP2025.Domain.Finance.Events;
 using ThaiTuanERP2025.Domain.Shared.Repositories;
@@ -32,14 +31,30 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.EventHandlers
 			var budgetPlanName = $"{budgetPeriod.Month}/{budgetPeriod.Year}";
 
 			var message = $"kế hoạch ngân sách {budgetPlanName} đang chờ bạn phê duyệt";
+			var reviewerId = domainEvent.BudgetPlan.ReviewedByUserId!.Value;
 
 			// resolve reminder for reviewer
 			var reviewerReminder = await _uow.UserReminders.SingleOrDefaultAsync(
 				q => q.Where(x => x.UserId == domainEvent.BudgetPlan.ReviewedByUserId && !x.IsResolved),
 				asNoTracking: false,
 				cancellationToken: cancellationToken
-			) ?? throw new NotFoundException("Không tìm thấy reminder của reviewer user");
-			await _reminder.MarkResolvedAsync(reviewerReminder.Id, cancellationToken);
+			);
+			if( reviewerReminder is not null )
+				await _reminder.MarkResolvedAsync(reviewerReminder.Id, cancellationToken);
+
+			// mark reviewer's task notification as read
+			var reviewerTaskNotification = await _uow.UserNotifications.SingleOrDefaultAsync(
+				q => q.Where(
+					x => x.ReceiverId == reviewerId
+					&& x.TargetId == domainEvent.BudgetPlan.Id
+					&& x.Type == NotificationType.Task
+					&& !x.IsRead
+				),
+				asNoTracking: false,
+				cancellationToken: cancellationToken
+			);
+			if (reviewerTaskNotification is not null)
+				await _notification.MarkAsReadAsync(reviewerTaskNotification.Id, reviewerId, cancellationToken);
 
 			// Send notification to approver
 			await _notification.SendAsync (

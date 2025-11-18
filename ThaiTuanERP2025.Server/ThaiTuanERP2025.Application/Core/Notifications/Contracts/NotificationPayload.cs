@@ -15,4 +15,10 @@ namespace ThaiTuanERP2025.Application.Core.Notifications.Contracts
 		DateTime CreatedAt,
 		bool IsRead
 	);
+
+	public sealed record NotificationReadPayload(
+		Guid Id, 
+		Guid ReceiverId,
+		DateTime ReadAt
+	);
 }

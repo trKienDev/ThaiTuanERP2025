@@ -67,6 +67,10 @@ namespace ThaiTuanERP2025.Infrastructure.BackgroundJobs
 									await HandleNotificationCreatedAsync(msg, realtime, stoppingToken);
 									break;
 
+								case "NotificationRead":
+									await HandleNotificationReadAsync(msg, realtime, stoppingToken);
+									break;
+
 								default:
 									_logger.LogWarning("Unknown outbox message type: {Type}", msg.Type);
 									msg.MarkProcessed();
@@ -173,6 +177,25 @@ namespace ThaiTuanERP2025.Infrastructure.BackgroundJobs
 			await realtime.PushReminderResolvedAsync(
 				payload.UserId,
 				payload.ReminderId,
+				cancellationToken
+			);
+
+			msg.MarkProcessed();
+		}
+		private static async Task HandleNotificationReadAsync(
+			OutboxMessage msg,
+			IRealtimeNotifier realtime,
+			CancellationToken cancellationToken
+		) {
+			var payload = JsonSerializer.Deserialize<NotificationReadPayload>(msg.Payload);
+			if (payload is null)
+				throw new InvalidOperationException($"Invalid NotificationRead payload in OutboxMessage {msg.Id}");
+
+			// Push realtime về đúng user
+			await realtime.PushNotificationReadAsync(
+				payload.Id,
+				payload.ReceiverId,
+				payload.ReadAt,
 				cancellationToken
 			);
 
