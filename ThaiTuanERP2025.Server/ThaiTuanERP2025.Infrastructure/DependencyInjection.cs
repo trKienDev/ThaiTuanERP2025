@@ -70,13 +70,15 @@ namespace ThaiTuanERP2025.Infrastructure
 					sqlOptions.EnableRetryOnFailure();
 				});
 			});
-			services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 			/// ========= Repositories =========
 			// Common
 			services.AddScoped<IJWTProvider, JwtProvider>();
 			services.AddScoped<IUnitOfWork, UnitOfWork>();
 			services.AddScoped<ICodeGenerator, CodeGenerator>();
+
+			// Group
+			services.AddScoped<AccountRepositoryGroup>();
 
 			// Files
 			services.AddScoped<IStoredFilesRepository, StoredFilesRepository>();
@@ -111,7 +113,7 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IBudgetApproverWriteRepository, BudgetApproverWriteRepository>();
 			services.AddScoped<ILedgerAccountTypeReadRepository, LedgerAccountTypeReadRepository>();
 			services.AddScoped<ILedgerAccountTypeWriteRepository, LedgerAccountTypeWriteRepository>();
-			services.AddScoped<ILedgerAccountRepository, LedgerAccountRepository>();
+			services.AddScoped<ILedgerAccountWriteRepository, LedgerAccountWriteRepository>();
 			services.AddScoped<ILedgerAccountReadRepository, LedgerAccountReadRepository>();
 			services.AddScoped<ICashoutCodeWriteRepository, CashoutCodeWriteRepository>();
 			services.AddScoped<ICashoutCodeReadRepository, CashoutCodeReadRepository>();

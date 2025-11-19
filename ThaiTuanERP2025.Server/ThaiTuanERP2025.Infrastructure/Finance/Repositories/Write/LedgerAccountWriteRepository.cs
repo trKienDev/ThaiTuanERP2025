@@ -7,9 +7,9 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Finance.Repositories
 {
-	public class LedgerAccountRepository : BaseWriteRepository<LedgerAccount>, ILedgerAccountRepository
+	public class LedgerAccountWriteRepository : BaseWriteRepository<LedgerAccount>, ILedgerAccountWriteRepository
 	{
-		public LedgerAccountRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider) { }
+		public LedgerAccountWriteRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider) { }
 
 		public Task<bool> NumberExistsAsync(string number, Guid? excludeId = null, CancellationToken cancellationToken = default)
 		{

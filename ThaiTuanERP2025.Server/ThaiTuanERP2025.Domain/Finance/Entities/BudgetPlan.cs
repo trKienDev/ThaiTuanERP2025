@@ -5,10 +5,11 @@ using ThaiTuanERP2025.Domain.Finance.Enums;
 using ThaiTuanERP2025.Domain.Finance.Events;
 using ThaiTuanERP2025.Domain.Shared;
 using ThaiTuanERP2025.Domain.Shared.Entities;
+using ThaiTuanERP2025.Domain.Shared.Interfaces;
 
 namespace ThaiTuanERP2025.Domain.Finance.Entities
 {
-	public class BudgetPlan : AuditableEntity
+	public class BudgetPlan : AuditableEntity, IActiveEntity
 	{
 		#region Constructors
 		private BudgetPlan() { }

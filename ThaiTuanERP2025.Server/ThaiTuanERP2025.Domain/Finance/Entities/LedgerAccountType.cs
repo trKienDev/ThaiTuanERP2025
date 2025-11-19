@@ -3,10 +3,11 @@ using ThaiTuanERP2025.Domain.Shared;
 using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Finance.Enums;
 using ThaiTuanERP2025.Domain.Finance.Events.LedgerAccountTypes;
+using ThaiTuanERP2025.Domain.Shared.Interfaces;
 
 namespace ThaiTuanERP2025.Domain.Finance.Entities
 {
-	public class LedgerAccountType : AuditableEntity
+	public class LedgerAccountType : AuditableEntity, IActiveEntity
 	{
 		private readonly List<LedgerAccount> _ledgerAccounts = new();
 
@@ -34,7 +35,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public string Name { get; private set; } = null!;
 		public LedgerAccountTypeKind Kind { get; private set; }
 		public string? Description { get; private set; }
-		public bool IsActive { get; private set; }
+		public bool IsActive { get; private set; } = true;
 
 		public IReadOnlyCollection<LedgerAccount> LedgerAccounts => _ledgerAccounts.AsReadOnly();
 		#endregion

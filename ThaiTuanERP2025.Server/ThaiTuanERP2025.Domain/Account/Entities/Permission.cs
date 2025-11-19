@@ -2,10 +2,11 @@
 using ThaiTuanERP2025.Domain.Account.Events;
 using ThaiTuanERP2025.Domain.Shared;
 using ThaiTuanERP2025.Domain.Shared.Entities;
+using ThaiTuanERP2025.Domain.Shared.Interfaces;
 
 namespace ThaiTuanERP2025.Domain.Account.Entities
 {
-	public class Permission : AuditableEntity
+	public class Permission : AuditableEntity, IActiveEntity
 	{
 		private readonly List<RolePermission> _rolePermissions = new();
 		private static readonly Regex CodePattern = new(@"^[a-z0-9]+\.[a-z0-9.]+$", RegexOptions.Compiled);

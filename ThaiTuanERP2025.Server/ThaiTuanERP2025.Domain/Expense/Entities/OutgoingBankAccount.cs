@@ -2,10 +2,11 @@
 using ThaiTuanERP2025.Domain.Shared;
 using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Expense.Events.OutgoingBankAccounts;
+using ThaiTuanERP2025.Domain.Shared.Interfaces;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
-	public class OutgoingBankAccount : AuditableEntity
+	public class OutgoingBankAccount : AuditableEntity, IActiveEntity
 	{
 		#region Constructors
 		private OutgoingBankAccount() { } 

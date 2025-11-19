@@ -2,10 +2,11 @@
 using ThaiTuanERP2025.Domain.Shared;
 using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Finance.Events;
+using ThaiTuanERP2025.Domain.Shared.Interfaces;
 
 namespace ThaiTuanERP2025.Domain.Finance.Entities
 {
-	public class BudgetApprover : AuditableEntity
+	public class BudgetApprover : AuditableEntity, IActiveEntity
 	{
 		#region EF Constructor
 		private BudgetApprover() { }
@@ -32,7 +33,6 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public IReadOnlyCollection<BudgetApproverDepartment> Departments => _departments.AsReadOnly();
 		#endregion
 		
-
 		#region Domain Behaviors
 		internal void UpdateApprover(Guid approverId, int slaHours)
 		{
@@ -67,6 +67,5 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		}
 
 		#endregion
-
 	}
 }

@@ -4,11 +4,40 @@ using ThaiTuanERP2025.Domain.Shared;
 using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Files.Entities;
+using ThaiTuanERP2025.Domain.Shared.Interfaces;
 
 namespace ThaiTuanERP2025.Domain.Account.Entities
 {
-	public class User : BaseEntity
+	public class User : BaseEntity, IActiveEntity
 	{
+		#region EF Constructor
+		private User() { }
+		public User(
+			string fullName, string username, string employeeCode, string passwordHash, string position,
+			Guid? departmentId, string? email = null, string? phone = null, Guid? avatarFileId = null
+		)
+		{
+			Guard.AgainstNullOrWhiteSpace(fullName, nameof(fullName));
+			Guard.AgainstNullOrWhiteSpace(username, nameof(username));
+			Guard.AgainstNullOrWhiteSpace(passwordHash, nameof(passwordHash));
+
+			Id = Guid.NewGuid();
+			FullName = fullName.Trim();
+			Username = username.Trim();
+			EmployeeCode = employeeCode.Trim();
+			PasswordHash = passwordHash;
+			Position = position.Trim();
+			DepartmentId = departmentId;
+			Email = string.IsNullOrWhiteSpace(email) ? null : new Email(email);
+			Phone = string.IsNullOrWhiteSpace(phone) ? null : new Phone(phone);
+			AvatarFileId = avatarFileId;
+			IsActive = true;
+			IsSuperAdmin = false;
+
+			AddDomainEvent(new UserCreatedEvent(this));
+		}
+		#endregion
+
 		private readonly List<UserRole> _userRoles = new();
 		private readonly List<UserGroup> _userGroups = new();
 		private readonly List<UserManagerAssignment> _managerAssignments = new();
@@ -36,7 +65,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public User? Manager { get; init; }
 
 		public bool IsSuperAdmin { get; private set; }
-		public bool IsActive { get; private set; }
+		public bool IsActive { get; private set; } = true;
 
 		public IReadOnlyCollection<UserRole> UserRoles => _userRoles.AsReadOnly();
 		public IReadOnlyCollection<UserGroup> UserGroups => _userGroups.AsReadOnly();
@@ -44,32 +73,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public IReadOnlyCollection<UserManagerAssignment> DirectReportsAssignments => _directReportsAssignments.AsReadOnly();
 		#endregion
 
-		#region EF Constructor
-		private User() { } 
-		public User(
-			string fullName, string username, string employeeCode, string passwordHash, string position,
-			Guid? departmentId, string? email = null, string? phone = null, Guid? avatarFileId = null
-		){
-			Guard.AgainstNullOrWhiteSpace(fullName, nameof(fullName));
-			Guard.AgainstNullOrWhiteSpace(username, nameof(username));
-			Guard.AgainstNullOrWhiteSpace(passwordHash, nameof(passwordHash));
-
-			Id = Guid.NewGuid();
-			FullName = fullName.Trim();
-			Username = username.Trim();
-			EmployeeCode = employeeCode.Trim();
-			PasswordHash = passwordHash;
-			Position = position.Trim();
-			DepartmentId = departmentId;
-			Email = string.IsNullOrWhiteSpace(email) ? null : new Email(email);
-			Phone = string.IsNullOrWhiteSpace(phone) ? null : new Phone(phone);
-			AvatarFileId = avatarFileId;
-			IsActive = true;
-			IsSuperAdmin = false;
-
-			AddDomainEvent(new UserCreatedEvent(this));
-		}
-		#endregion
+		
 
 		#region Domain Behaviors
 		internal void AssignManager(Guid managerId)

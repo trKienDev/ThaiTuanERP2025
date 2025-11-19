@@ -3,7 +3,6 @@ using ThaiTuanERP2025.Domain.Core.Repositories;
 using ThaiTuanERP2025.Domain.Expense.Repositories;
 using ThaiTuanERP2025.Domain.Files.Repositories;
 using ThaiTuanERP2025.Domain.Finance.Repositories;
-
 namespace ThaiTuanERP2025.Domain.Shared.Repositories
 {
 	public interface IUnitOfWork
@@ -11,9 +10,9 @@ namespace ThaiTuanERP2025.Domain.Shared.Repositories
 		// Define the DbContext type
 
 		// Account
-		IUserWriteRepository Users { get; }
+		 IUserWriteRepository Users { get; }
 		IUserManagerAssignmentRepository UserManagerAssignments { get; }
-		IDepartmentWriteRepository Departments { get; }
+		 IDepartmentWriteRepository Departments { get; }
 		IGroupRepository Groups { get; }
 		IUserGroupRepository UserGroups { get; }
 
@@ -24,7 +23,7 @@ namespace ThaiTuanERP2025.Domain.Shared.Repositories
 		IBudgetPlanWriteRepository BudgetPlans { get; }
 		IBudgetPlanDetailWriteRepository BudgetPlanDetails { get; }	
 		IBudgetApproverWriteRepository BudgetApprovers { get; }
-		ILedgerAccountRepository LedgerAccounts { get; }
+		ILedgerAccountWriteRepository LedgerAccounts { get; }
 		ILedgerAccountTypeWriteRepository LedgerAccountTypes { get; }
 		ICashoutCodeWriteRepository CashoutCodes { get; }
 		ICashoutGroupRepository CashoutGroups { get; }

@@ -3,10 +3,11 @@ using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Finance.Enums;
 using ThaiTuanERP2025.Domain.Finance.Events.LedgerAccounts;
+using ThaiTuanERP2025.Domain.Shared.Interfaces;
 
 namespace ThaiTuanERP2025.Domain.Finance.Entities
 {
-	public class LedgerAccount : AuditableEntity
+	public class LedgerAccount : AuditableEntity, IActiveEntity
 	{
 		#region Constructors
 		private LedgerAccount() { }
@@ -49,7 +50,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public bool IsActive { get; private set; } = true;
 
 		public LedgerAccountType LedgerAccountType { get; private set; } = null!;
-		public LedgerAccount? Parent { get; private set; }
+		public LedgerAccount? Parent { get; init; }
 		public LedgerAccountBalanceType LedgerAccountBalanceType { get; private set; }
 		public ICollection<LedgerAccount> Children { get; private set; } = new List<LedgerAccount>();
 		public ICollection<CashoutCode> CashoutCodes { get; private set; } = new List<CashoutCode>();

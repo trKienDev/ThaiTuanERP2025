@@ -2,10 +2,11 @@
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Shared;
 using ThaiTuanERP2025.Domain.Shared.Entities;
+using ThaiTuanERP2025.Domain.Shared.Interfaces;
 
 namespace ThaiTuanERP2025.Domain.Account.Entities
 {
-	public class Department : AuditableEntity
+	public class Department : AuditableEntity, IActiveEntity
 	{
 		private readonly List<User> _users = new();
 		private readonly List<Department> _children = new();

@@ -1,9 +1,11 @@
-﻿using ThaiTuanERP2025.Domain.Account.Repositories;
+﻿using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Domain.Account.Repositories;
 using ThaiTuanERP2025.Domain.Core.Repositories;
 using ThaiTuanERP2025.Domain.Expense.Repositories;
 using ThaiTuanERP2025.Domain.Files.Repositories;
 using ThaiTuanERP2025.Domain.Finance.Repositories;
 using ThaiTuanERP2025.Domain.Shared.Repositories;
+using ThaiTuanERP2025.Infrastructure.Account.Repositories;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
@@ -12,13 +14,12 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 	{
 		private readonly ThaiTuanERP2025DbContext _dbContext;
 
-		public UnitOfWork(
+		public UnitOfWork (
 			ThaiTuanERP2025DbContext dbContext,
 
-			IStoredFilesRepository storedFiles, 
-
+			IStoredFilesRepository storedFiles,
+			AccountRepositoryGroup accounts,
 			// Account
-			IUserWriteRepository users,
 			IUserManagerAssignmentRepository userManagerAssignments,
 			IDepartmentWriteRepository departments,
 			IGroupRepository groups,
@@ -31,7 +32,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 			IBudgetPlanDetailWriteRepository budgetPlanDetails,
 			IBudgetCodeWriteRepository budgetCodes,
 			IBudgetApproverWriteRepository budgetApprovers,
-			ILedgerAccountRepository ledgerAccounts,
+			ILedgerAccountWriteRepository ledgerAccounts,
 			ILedgerAccountTypeWriteRepository ledgerAccountTypes,
 			ICashoutCodeWriteRepository cashoutCodes,
 			ICashoutGroupRepository cashoutGroups,
@@ -72,7 +73,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 
 			StoredFiles = storedFiles;
 
-			Users = users;
+			Users = accounts.Users;
 			UserManagerAssignments = userManagerAssignments;
 			Departments = departments;
 			Groups = groups;
@@ -132,7 +133,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 		public IBudgetPlanDetailWriteRepository BudgetPlanDetails { get; }
 		public IBudgetCodeWriteRepository BudgetCodes { get; }
 		public IBudgetApproverWriteRepository BudgetApprovers { get; }
-		public ILedgerAccountRepository LedgerAccounts { get; }
+		public ILedgerAccountWriteRepository LedgerAccounts { get; }
 		public ILedgerAccountTypeWriteRepository LedgerAccountTypes { get; }
 		public ICashoutCodeWriteRepository CashoutCodes { get; }
 		public ICashoutGroupRepository CashoutGroups { get; }

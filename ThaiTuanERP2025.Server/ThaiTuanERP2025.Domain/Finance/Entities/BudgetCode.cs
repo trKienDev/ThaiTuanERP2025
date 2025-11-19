@@ -1,10 +1,11 @@
 ﻿using ThaiTuanERP2025.Domain.Shared;
 using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Finance.Events;
+using ThaiTuanERP2025.Domain.Shared.Interfaces;
 
 namespace ThaiTuanERP2025.Domain.Finance.Entities
 {
-	public class BudgetCode : AuditableEntity
+	public class BudgetCode : AuditableEntity, IActiveEntity
 	{
 		#region Constructors
 		private BudgetCode() { }

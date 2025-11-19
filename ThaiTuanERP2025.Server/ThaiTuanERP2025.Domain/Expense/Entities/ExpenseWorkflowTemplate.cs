@@ -4,10 +4,11 @@ using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Events.ApprovalWorkflowTemplates;
 using ThaiTuanERP2025.Domain.Expense.Events.ExpenseWorkflowTemplates;
+using ThaiTuanERP2025.Domain.Shared.Interfaces;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
-	public class ExpenseWorkflowTemplate : AuditableEntity
+	public class ExpenseWorkflowTemplate : AuditableEntity, IActiveEntity
 	{
 		#region Constructors
 		private ExpenseWorkflowTemplate() { }

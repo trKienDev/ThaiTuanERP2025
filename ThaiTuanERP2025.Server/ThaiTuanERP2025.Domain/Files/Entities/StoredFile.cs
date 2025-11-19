@@ -6,19 +6,7 @@ namespace ThaiTuanERP2025.Domain.Files.Entities
 {
 	public class StoredFile : AuditableEntity
 	{
-		public string Bucket { get; private set; } = null!;
-		public string ObjectKey { get; private set; } = null!;
-		public string FileName { get; private set; } = null!;
-		public string ContentType { get; private set; } = null!;
-		public long Size { get; private set; }
-		public string? Hash { get; private set; }
-
-		public string Module { get; private set; } = null!;
-		public string Entity { get; private set; } = null!;
-		public string? EntityId { get; private set; }
-
-		public bool IsPublic { get; private set; }
-
+		
 		#region Constructors
 		private StoredFile() { } 
 		public StoredFile(
@@ -47,6 +35,21 @@ namespace ThaiTuanERP2025.Domain.Files.Entities
 
 			AddDomainEvent(new StoredFileCreatedEvent(this));
 		}
+		#endregion
+
+		#region Properties
+		public string Bucket { get; private set; } = null!;
+		public string ObjectKey { get; private set; } = null!;
+		public string FileName { get; private set; } = null!;
+		public string ContentType { get; private set; } = null!;
+		public long Size { get; private set; }
+		public string? Hash { get; private set; }
+
+		public string Module { get; private set; } = null!;
+		public string Entity { get; private set; } = null!;
+		public string? EntityId { get; private set; }
+
+		public bool IsPublic { get; private set; }
 		#endregion
 
 		#region Domain Behaviors

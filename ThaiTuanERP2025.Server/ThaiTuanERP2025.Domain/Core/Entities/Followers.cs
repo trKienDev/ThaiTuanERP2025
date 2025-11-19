@@ -2,16 +2,12 @@
 using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Core.Enums;
+using ThaiTuanERP2025.Domain.Shared.Interfaces;
 
 namespace ThaiTuanERP2025.Domain.Core.Entities
 {
-	public class Follower : AuditableEntity
+	public class Follower : AuditableEntity, IActiveEntity
 	{
-		public Guid SubjectId { get; private set; }
-		public SubjectType SubjectType { get; private set; }
-		public Guid UserId { get; private set; }
-		public bool IsActive { get; private set; } = true;
-
 		#region Constructors
 		private Follower() { } 
 		public Follower(Guid subjectId, SubjectType subjectType, Guid userId)
@@ -26,6 +22,13 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
 
 			// AddDomainEvent(new FollowerCreatedEvent(this));
 		}
+		#endregion
+
+		#region Properties
+		public Guid SubjectId { get; private set; }
+		public SubjectType SubjectType { get; private set; }
+		public Guid UserId { get; private set; }
+		public bool IsActive { get; private set; } = true;
 		#endregion
 
 		#region Domain Behaviors

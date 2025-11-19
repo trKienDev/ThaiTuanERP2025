@@ -1,10 +1,11 @@
 ﻿using ThaiTuanERP2025.Domain.Shared;
 using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Expense.Events.Suppliers;
+using ThaiTuanERP2025.Domain.Shared.Interfaces;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
-	public class Supplier : AuditableEntity
+	public class Supplier : AuditableEntity, IActiveEntity
 	{
 		#region Constructors
 		private Supplier() { }
@@ -26,7 +27,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public bool IsActive { get; private set; } = true;
 		#endregion
 
-		// ===== Domain behaviors =====
+		#region Domain Behaviors
 		public void Rename(string name)
 		{
 			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
@@ -59,5 +60,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 				AddDomainEvent(new SupplierDeactivatedEvent(this));
 			}
 		}
+		#endregion
 	}
 }

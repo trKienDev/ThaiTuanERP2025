@@ -3,13 +3,14 @@ using ThaiTuanERP2025.Domain.Shared;
 using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Finance.Events.CashoutGroups;
+using ThaiTuanERP2025.Domain.Shared.Interfaces;
 
 namespace ThaiTuanERP2025.Domain.Finance.Entities
 {
-	public class CashoutGroup : AuditableEntity
+	public class CashoutGroup : AuditableEntity, IActiveEntity
 	{
+		#region Constructor
 		private CashoutGroup() { }
-
 		public CashoutGroup(string code, string name, string? description = null, Guid? parentId = null)
 		{
 			Guard.AgainstNullOrWhiteSpace(code, nameof(code));
@@ -24,11 +25,13 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 
 			AddDomainEvent(new CashoutGroupCreatedEvent(this));
 		}
+		#endregion
 
+		#region Properties
 		public string Code { get; private set; } = null!;
 		public string Name { get; private set; } = null!;
 		public string? Description { get; private set; }
-		public bool IsActive { get; private set; }
+		public bool IsActive { get; private set; } = true;
 
 		public Guid? ParentId { get; private set; }
 		public CashoutGroup? Parent { get; private set; }
@@ -38,6 +41,8 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 
 		public int Level { get; private set; }
 		public string? Path { get; private set; }
+		#endregion
+
 		#region Domain Behaviors
 
 		public void Rename(string newName)

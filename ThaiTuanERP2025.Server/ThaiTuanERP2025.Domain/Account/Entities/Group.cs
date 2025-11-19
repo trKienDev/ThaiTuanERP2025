@@ -4,14 +4,13 @@ using System.Text.RegularExpressions;
 using ThaiTuanERP2025.Domain.Account.Events.Groups;
 using ThaiTuanERP2025.Domain.Shared;
 using ThaiTuanERP2025.Domain.Shared.Entities;
+using ThaiTuanERP2025.Domain.Shared.Interfaces;
 
 namespace ThaiTuanERP2025.Domain.Account.Entities
 {
-	public class Group : AuditableEntity
+	public class Group : AuditableEntity, IActiveEntity
 	{
-		private readonly List<UserGroup> _userGroups = new();
-		private static readonly Regex SlugRegex = new(@"^[a-z0-9._-]+$", RegexOptions.Compiled);
-
+		#region Constructor
 		private Group() { } // EF only
 
 		public Group(string name, string slug, string description)
@@ -27,6 +26,11 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 
 			AddDomainEvent(new GroupCreatedEvent(this));
 		}
+		#endregion
+
+		#region Properties
+		private readonly List<UserGroup> _userGroups = new();
+		private static readonly Regex SlugRegex = new(@"^[a-z0-9._-]+$", RegexOptions.Compiled);
 
 		public string Name { get; private set; } = string.Empty;
 		public string Slug { get; private set; } = string.Empty;
@@ -35,6 +39,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public Guid AdminId { get; private set; }
 
 		public IReadOnlyCollection<UserGroup> UserGroups => _userGroups.AsReadOnly();
+		#endregion
 
 		#region Domain Behaviors
 		public void Rename(string newName)
