@@ -4,7 +4,11 @@ import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MatDialogRef } from "@angular/material/dialog";
 import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 import { KitDropdownComponent, KitDropdownOption } from "../../../../shared/components/kit-dropdown/kit-dropdown.component";
-import { LedgerAccountTypeKind } from "../../models/ledger-account-type.dto";
+import { LedgerAccountTypeKind, LedgerAccountTypePayload } from "../../models/ledger-account-type.model";
+import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
+import { HttpErrorHandlerService } from "../../../../core/services/http-errror-handler.service";
+import { LedgerAccountTypeApiService } from "../../services/api/ledger-account-type-api.service";
+import { firstValueFrom } from "rxjs";
 
 @Component({
       selector: 'ledger-account-type-request-dialog',
@@ -16,12 +20,15 @@ export class LedgerAccountTypeRequestDialogComponent {
       private readonly dialog = inject(MatDialogRef<LedgerAccountTypeRequestDialogComponent>);
       public submitting: boolean = false;
       public showErrors: boolean = false;
+      private readonly toast = inject(ToastService);
+      private readonly httpErrorHandler = inject(HttpErrorHandlerService);
       private readonly formBuilder = inject(FormBuilder);
+      private readonly LATypeApi = inject(LedgerAccountTypeApiService);
 
       form = this.formBuilder.group({
             name: this.formBuilder.control<string>('', { nonNullable: true, validators: [Validators.required] }),
             code: this.formBuilder.control<string>('', { nonNullable: true, validators: [Validators.required] }),
-            typeKind: this.formBuilder.control<LedgerAccountTypeKind>('asset', { nonNullable: true, validators: [ Validators.required ] }),
+            kind: this.formBuilder.control<LedgerAccountTypeKind>(0, { nonNullable: true, validators: [ Validators.required ] }),
             description: this.formBuilder.control<string | null>(null),
       })
 
@@ -37,23 +44,52 @@ export class LedgerAccountTypeRequestDialogComponent {
       onLedgerAccountTypeKindSelected(opt: KitDropdownOption) {
             switch(opt.id) {
                   case 'asset':
-                        this.form.patchValue({ typeKind: 'asset' });
+                        this.form.patchValue({ kind: 1 });
                         break;
                   case 'liability': 
-                        this.form.patchValue({ typeKind: 'liability' });
+                        this.form.patchValue({ kind: 2 });
                         break;
                   case 'equity':
-                        this.form.patchValue({ typeKind: 'equity' })
+                        this.form.patchValue({ kind: 3 })
                         break;
                   case 'revenue':
-                        this.form.patchValue({ typeKind: 'revenue' })
+                        this.form.patchValue({ kind: 4 })
                         break;
                   case 'expense':
-                        this.form.patchValue({ typeKind: 'expense' });
+                        this.form.patchValue({ kind: 5 });
                         break;
                   default:
-                        this.form.patchValue({ typeKind: 'none' });
+                        this.form.patchValue({ kind: 0 });
                         break;
+            }
+      }
+
+      // submit
+      async submit(): Promise<void> {
+            this.showErrors = true;
+            
+            if(this.form.invalid) {
+                  this.form.markAllAsTouched();
+                  this.toast.warningRich("Vui lòng điền đẩy đủ thông bắt buộc");
+                  return;
+            }
+
+            try {
+                  this.submitting = true;
+                  this.form.disable({ emitEvent: false });
+
+                  const payload: LedgerAccountTypePayload = this.form.getRawValue();
+                  console.log('payload: ', payload);
+                  await firstValueFrom(this.LATypeApi.create(payload));
+                  this.toast.successRich("Tạo loại tài khoản hạch toán thành công");
+                  this.showErrors = false;
+                  this.form.reset();
+                  this.dialog.close(true);
+            } catch(error) {
+                  this.httpErrorHandler.handle(error, "Tạo loại tài khoản thất bại");
+            } finally {
+                  this.submitting = false;
+                  this.form.enable({ emitEvent: true });
             }
       }
 

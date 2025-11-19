@@ -54,6 +54,7 @@ using ThaiTuanERP2025.Application.Core.Followers;
 using ThaiTuanERP2025.Application.Finance.BudgetPlans.Repositories;
 using ThaiTuanERP2025.Application.Core.OutboxMessages;
 using ThaiTuanERP2025.Infrastructure.BackgroundJobs;
+using ThaiTuanERP2025.Application.Finance.LedgerAccountTypes;
 
 namespace ThaiTuanERP2025.Infrastructure
 {
@@ -108,7 +109,8 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IBudgetPlanDetailWriteRepository, BudgetPlanDetailWriteRepository>();
 			services.AddScoped<IBudgetApproverReadRepository, BudgetApproverReadRepository>();
 			services.AddScoped<IBudgetApproverWriteRepository, BudgetApproverWriteRepository>();
-			services.AddScoped<ILedgerAccountTypeRepository, LedgerAccountTypeRepository>();
+			services.AddScoped<ILedgerAccountTypeReadRepository, LedgerAccountTypeReadRepository>();
+			services.AddScoped<ILedgerAccountTypeWriteRepository, LedgerAccountTypeWriteRepository>();
 			services.AddScoped<ILedgerAccountRepository, LedgerAccountRepository>();
 			services.AddScoped<ILedgerAccountReadRepository, LedgerAccountReadRepository>();
 			services.AddScoped<ICashoutCodeWriteRepository, CashoutCodeWriteRepository>();

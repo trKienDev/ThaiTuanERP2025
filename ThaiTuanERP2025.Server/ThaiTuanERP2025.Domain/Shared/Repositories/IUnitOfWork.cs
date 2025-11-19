@@ -25,7 +25,7 @@ namespace ThaiTuanERP2025.Domain.Shared.Repositories
 		IBudgetPlanDetailWriteRepository BudgetPlanDetails { get; }	
 		IBudgetApproverWriteRepository BudgetApprovers { get; }
 		ILedgerAccountRepository LedgerAccounts { get; }
-		ILedgerAccountTypeRepository LedgerAccountTypes { get; }
+		ILedgerAccountTypeWriteRepository LedgerAccountTypes { get; }
 		ICashoutCodeWriteRepository CashoutCodes { get; }
 		ICashoutGroupRepository CashoutGroups { get; }
 

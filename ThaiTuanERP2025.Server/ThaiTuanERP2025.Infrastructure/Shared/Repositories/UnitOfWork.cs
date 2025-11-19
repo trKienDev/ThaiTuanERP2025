@@ -32,7 +32,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 			IBudgetCodeWriteRepository budgetCodes,
 			IBudgetApproverWriteRepository budgetApprovers,
 			ILedgerAccountRepository ledgerAccounts,
-			ILedgerAccountTypeRepository ledgerAccountTypes,
+			ILedgerAccountTypeWriteRepository ledgerAccountTypes,
 			ICashoutCodeWriteRepository cashoutCodes,
 			ICashoutGroupRepository cashoutGroups,
 
@@ -133,7 +133,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 		public IBudgetCodeWriteRepository BudgetCodes { get; }
 		public IBudgetApproverWriteRepository BudgetApprovers { get; }
 		public ILedgerAccountRepository LedgerAccounts { get; }
-		public ILedgerAccountTypeRepository LedgerAccountTypes { get; }
+		public ILedgerAccountTypeWriteRepository LedgerAccountTypes { get; }
 		public ICashoutCodeWriteRepository CashoutCodes { get; }
 		public ICashoutGroupRepository CashoutGroups { get; }
 

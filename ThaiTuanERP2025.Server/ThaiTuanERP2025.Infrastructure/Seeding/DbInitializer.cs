@@ -85,7 +85,8 @@ namespace ThaiTuanERP2025.Infrastructure.Seeding
 				("Tạo nhóm ngân sách", "budget-group.create", null),
 				("Cập nhật kỳ ngân sách", "budget-period.edit", null),
 				("Thêm user duyệt ngân sách", "budget-approver.create", null),
-				("Thao tác user duyệt ngân sách", "budget-approver.actions", null)
+				("Thao tác user duyệt ngân sách", "budget-approver.actions", null),
+				("Tạo loại tài khoản hạch toán", "ledger-account-type.create", null)
 			};
 
 			foreach (var (name, code, desc) in desired)

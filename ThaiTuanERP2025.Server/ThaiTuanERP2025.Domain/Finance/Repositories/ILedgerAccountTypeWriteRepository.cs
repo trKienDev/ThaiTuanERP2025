@@ -3,7 +3,7 @@ using ThaiTuanERP2025.Domain.Finance.Entities;
 
 namespace ThaiTuanERP2025.Domain.Finance.Repositories
 {
-	public interface ILedgerAccountTypeRepository : IBaseWriteRepository<LedgerAccountType>
+	public interface ILedgerAccountTypeWriteRepository : IBaseWriteRepository<LedgerAccountType>
 	{
 	}
 }

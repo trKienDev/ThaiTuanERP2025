@@ -4,6 +4,7 @@ using System.Net;
 using System.Text.Json;
 using ThaiTuanERP2025.Api.Shared;
 using ThaiTuanERP2025.Application.Shared.Exceptions;
+using ThaiTuanERP2025.Domain.Exceptions;
 using FVValidationException = FluentValidation.ValidationException;
 
 namespace ThaiTuanERP2025.Api.Middleware
@@ -57,6 +58,10 @@ namespace ThaiTuanERP2025.Api.Middleware
 				case AppException appEx:
 					statusCode = appEx.StatusCode;
 					message = appEx.Message;
+					break;
+				case DomainException de:
+					statusCode = StatusCodes.Status400BadRequest;
+					message = de.Message;
 					break;
 				case FVValidationException fv:
 					statusCode = (int)HttpStatusCode.BadRequest;

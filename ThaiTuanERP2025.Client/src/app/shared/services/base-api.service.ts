@@ -5,7 +5,7 @@ import { PagedRequest } from "../models/paged-request.model";
 import { PagedResult } from "../models/paged-result.model";
 import { handleApiResponse$ } from "../operators/handle-api-response.operator";
 
-export abstract class BaseApiService<TDto, TRequest, TUpdate = TRequest, TUpdateResponse = TDto> {
+export abstract class BaseApiService<TDto, TPayload, TUpdate = TPayload, TUpdateResponse = TDto> {
       protected constructor(
             protected http: HttpClient,
             protected readonly endpoint: string// e.g. `${environment.apiUrl}/api/taxes`
@@ -49,7 +49,7 @@ export abstract class BaseApiService<TDto, TRequest, TUpdate = TRequest, TUpdate
                   );
       }
 
-      create(payload: TRequest): Observable<void> {
+      create(payload: TPayload): Observable<void> {
             return this.http
                   .post<ApiResponse<void>>(this.endpoint, payload)
                   .pipe(

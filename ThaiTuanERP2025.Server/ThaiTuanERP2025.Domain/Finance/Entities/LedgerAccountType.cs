@@ -19,7 +19,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			Guard.AgainstInvalidEnumValue(kind, nameof(kind));
 
 			Id = Guid.NewGuid();
-			Code = code.Trim().ToUpperInvariant();
+			Code = code.Trim().ToLowerInvariant();
 			Name = name.Trim();
 			LedgerAccountTypeKind = kind;
 			Description = description?.Trim();

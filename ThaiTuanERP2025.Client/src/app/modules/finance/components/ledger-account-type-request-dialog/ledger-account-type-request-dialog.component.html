@@ -1,6 +1,6 @@
 <div class="dialog">
       <div class="dialog-container">
-            <form [formGroup]="form">
+            <form [formGroup]="form" (ngSubmit)="submit()">
                   <div class="dialog-heading">
                         <div class="dialog-title">
                               <h1>Loại tài khoản hạch toán mới</h1>
@@ -29,12 +29,15 @@
                                     [class.is-invalid]="showErrors && form.get('code')?.invalid"
                                     [attr.aria-invalid]="showErrors && form.get('code')?.invalid ? 'true' : null"/>
                                     <label for="code">Mã loại tài khoản <span style="color: red;">  *</span></label>
+                                    <div class="form-input-error" *ngIf="!showErrors">
+                                          <small style="font-style: italic; color: #aaa;">VD: government_source_expenditure</small>
+                                    </div>
                                     <div class="form-input-error" *ngIf="showErrors && form.get('code')?.invalid">
                                           <small>Vui lòng nhập mã loại tài khoản</small>
                                     </div>
                               </div>
                               <div class="flex-1">
-                                    <kit-dropdown [options]="typeKindOptions" [placeholder]="'Chọn kiểu'" formControlName="kindType" (selectionChange)="onLedgerAccountTypeKindSelected($event)" [enableFilter]="false"></kit-dropdown>
+                                    <kit-dropdown [options]="typeKindOptions" [placeholder]="'Chọn kiểu'" formControlName="typeKind" (selectionChange)="onLedgerAccountTypeKindSelected($event)" [enableFilter]="false"></kit-dropdown>
                               </div>
                         </div>
                         <div class="dialog-row">
