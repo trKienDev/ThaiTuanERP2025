@@ -7,7 +7,9 @@ import { KitShellTabsComponent } from "../../../../shared/components/kit-shell-t
       selector: 'account-permission',
       standalone: true,
       imports: [CommonModule, KitShellTabsComponent],
-      templateUrl: './rbac-shell-page.component.html'
+      template: `
+            <kit-shell-tabs [tabs]="tabs"></kit-shell-tabs>
+      `
 })
 export class RBACShellPageComponent {
       readonly tabs = [

@@ -5,7 +5,7 @@ namespace ThaiTuanERP2025.Application.Account.Users
 {
 	public interface IUserReadRepostiory : IBaseReadRepository<User, UserDto>
 	{
-		Task<IReadOnlyList<UserDto>> ListUserDtosWithAvatarAsync(string? keyword, string? role, Guid? departmentId, CancellationToken cancellationToken = default);
+		Task<UserBriefAvatarDto?> GetBriefWithAvatarAsync(Guid userId, CancellationToken cancellationToken);
 		Task<User?> GetWithRolesAndPermissionsAsync(string employeeCode, CancellationToken cancellationToken);
 		Task<User?> GetWithRolesAndPermissionsByIdAsync(Guid userId, CancellationToken cancellationToken);
 		Task<List<Guid>> GetManagerIdsAsync(Guid userId, CancellationToken cancellationToken = default);

@@ -2,7 +2,7 @@ import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { NotificationDto } from "./models/notification.model";
-import { firstValueFrom, Observable } from "rxjs";
+import { Observable } from "rxjs";
 import { AvatarUrlPipe } from "../../../shared/pipes/avatar-url.pipe";
 
 @Component({

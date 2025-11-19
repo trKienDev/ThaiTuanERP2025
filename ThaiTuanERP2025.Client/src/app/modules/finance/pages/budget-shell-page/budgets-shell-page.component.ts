@@ -11,7 +11,9 @@ import { BudgetPlanRequestPanelComponent } from "./budget-plan-request/budget-pl
       selector: 'budgets-shell-page',
       standalone: true,
       imports: [CommonModule, KitShellTabsComponent],
-      templateUrl: './budgets-shell-page.component.html',
+      template: `
+            <kit-shell-tabs [tabs]="tabs"></kit-shell-tabs>
+      `
 })
 export class BudgetShellPageComponent {
       readonly tabs: KitShellTab[] = [

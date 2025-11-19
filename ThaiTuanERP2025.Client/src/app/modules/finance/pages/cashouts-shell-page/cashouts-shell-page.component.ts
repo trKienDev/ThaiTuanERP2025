@@ -8,7 +8,9 @@ import { CashoutGroupPanelComponent } from "./cashout-groups/cashout-group.compo
       selector: 'cashouts-shell-page',
       standalone: true, 
       imports: [CommonModule, KitShellTabsComponent],
-      templateUrl: './cashouts-shell-page.component.html'
+      template: `
+            <kit-shell-tabs [tabs]="tabs"></kit-shell-tabs>
+      `,
 })
 export class CashoutShellPageComponent {
       readonly tabs: KitShellTab[] = [

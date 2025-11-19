@@ -2,6 +2,7 @@
 {
 	public enum LedgerAccountTypeKind
 	{
+		None = 0,
 		Asset = 1,
 		Liability = 2,
 		Equity = 3,

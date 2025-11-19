@@ -10,6 +10,7 @@ namespace ThaiTuanERP2025.Application.Core.Notifications.Contracts
 		public Guid SenderId { get; init; }
 		public UserBriefAvatarDto Sender { get; init; } = default!;
 
+
 		public string Title { get; init; } = default!;
 		public string Message { get; init; } = default!;
 

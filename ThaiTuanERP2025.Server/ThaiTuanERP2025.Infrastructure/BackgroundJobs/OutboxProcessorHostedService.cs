@@ -144,6 +144,7 @@ namespace ThaiTuanERP2025.Infrastructure.BackgroundJobs
 			{
 				Id = payload.NotificationId,
 				SenderId = payload.SenderId,
+				Sender = payload.Sender,
 				Title = payload.Title,
 				Message = payload.Message,
 				Link = payload.LinkUrl,

@@ -1,10 +1,11 @@
 ﻿using System.Text.Json;
+using ThaiTuanERP2025.Application.Account.Users;
 using ThaiTuanERP2025.Application.Core.Notifications;
 using ThaiTuanERP2025.Application.Core.Notifications.Contracts;
 using ThaiTuanERP2025.Application.Shared.Exceptions;
-using ThaiTuanERP2025.Application.Shared.Interfaces;
 using ThaiTuanERP2025.Domain.Core.Entities;
 using ThaiTuanERP2025.Domain.Core.Enums;
+using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Shared.Repositories;
 
 namespace ThaiTuanERP2025.Application.Core.Services
@@ -12,8 +13,10 @@ namespace ThaiTuanERP2025.Application.Core.Services
 	public class NotificationService : INotificationService
 	{
 		private readonly IUnitOfWork _uow;
-		public NotificationService(IUnitOfWork uow) {
+		private readonly IUserReadRepostiory _userRepo;
+		public NotificationService(IUnitOfWork uow, IUserReadRepostiory userRepo) {
 			_uow = uow;	
+			_userRepo = userRepo;	
 		}
 
 		#region Send to single user
@@ -25,18 +28,23 @@ namespace ThaiTuanERP2025.Application.Core.Services
 			var entity = new UserNotification(senderId, receiverId, title, message, linkType, targetId, type);
 			await _uow.UserNotifications.AddAsync(entity, cancellationToken);
 
+			var senderDto = await _userRepo.GetBriefWithAvatarAsync(senderId, cancellationToken);
+			if (senderDto is null)
+				throw new DomainException($"User sender with id {senderId} không tồn tại.");
+			
 			var payload = new NotificationCreatedPayload(
 				senderId,
+				senderDto,
 				receiverId,
 				entity.Id,
 				entity.Title,
 				entity.Message,
-				entity.LinkUrl,
 				entity.LinkType,
-				entity.TargetId,
 				entity.Type,
 				entity.CreatedAt,
-				entity.IsRead
+				entity.IsRead,
+				entity.TargetId,
+				entity.LinkUrl
 			);
 
 			var json = JsonSerializer.Serialize(payload);
@@ -70,18 +78,22 @@ namespace ThaiTuanERP2025.Application.Core.Services
 
 			foreach (var entity in notifications)
 			{
+				var senderDto = await _userRepo.GetBriefWithAvatarAsync(entity.SenderId, cancellationToken)
+					?? throw new NotFoundException("Không tìm thấy dữ liệu người gửi");
+
 				var payload = new NotificationCreatedPayload(
 					senderId,
+					senderDto,
 					entity.ReceiverId,
 					entity.Id,
 					entity.Title,
 					entity.Message,
-					entity.LinkUrl,
 					entity.LinkType,
-					entity.TargetId,
 					entity.Type,
 					entity.CreatedAt,
-					entity.IsRead
+					entity.IsRead,
+					entity.TargetId,
+					entity.LinkUrl
 				);
 
 				var json = JsonSerializer.Serialize(payload);

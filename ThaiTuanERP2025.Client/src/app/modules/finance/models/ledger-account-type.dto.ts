@@ -1,3 +1,5 @@
+export type LedgerAccountTypeKind = 'none' | 'asset' | 'liability' | 'equity' | 'revenue' | 'expense'
+
 export interface LedgerAccountTypeDto {
       id: string;
       code: string;
