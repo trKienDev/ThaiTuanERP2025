@@ -1,5 +1,4 @@
-﻿using ThaiTuanERP2025.Domain.Account.Entities;
-using ThaiTuanERP2025.Domain.Account.Repositories;
+﻿using ThaiTuanERP2025.Domain.Account.Repositories;
 using ThaiTuanERP2025.Domain.Core.Repositories;
 using ThaiTuanERP2025.Domain.Expense.Repositories;
 using ThaiTuanERP2025.Domain.Files.Repositories;
@@ -18,9 +17,9 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 			ThaiTuanERP2025DbContext dbContext,
 
 			IStoredFilesRepository storedFiles,
-			AccountRepositoryGroup accounts,
-			// Account
-			IUserManagerAssignmentRepository userManagerAssignments,
+                        // Account
+                        IUserWriteRepository users,
+                        IUserManagerAssignmentRepository userManagerAssignments,
 			IDepartmentWriteRepository departments,
 			IGroupRepository groups,
 			IUserGroupRepository userGroups,
@@ -73,7 +72,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 
 			StoredFiles = storedFiles;
 
-			Users = accounts.Users;
+			Users = users;
 			UserManagerAssignments = userManagerAssignments;
 			Departments = departments;
 			Groups = groups;

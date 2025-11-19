@@ -15,11 +15,10 @@ export interface LedgerAccountDto {
 export interface LedgerAccountPayload {
       number: string;
       name: string;
-      ledgerAccountTypeId: string;
-      ledgerAccountBalanceType: number; // 0..3
+      balanceType: LedgerAccountBalanceType;
+      ledgerAccountTypeId?: string | null;
       parentLedgerAccountId?: string | null;
       description?: string | null;
-      isActive: boolean;
 }
 
 export enum LedgerAccountBalanceType {

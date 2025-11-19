@@ -6,9 +6,9 @@ namespace ThaiTuanERP2025.Application.Finance.LedgerAccounts.Contracts
 	{
 		public string Number { get; set; } = null!;
 		public string Name { get; set; } = null!;
-		public Guid LedgerAccountTypeId { get; set; }
 		public LedgerAccountBalanceType BalanceType { get; set; }
-		public string? Description { get; set; }
-		public Guid? ParentLedgerAccountId { get; set; }
+		public string? Description { get; set; } = null;
+                public Guid? LedgerAccountTypeId { get; set; } = null;
+                public Guid? ParentLedgerAccountId { get; set; } = null;
 	}
 }

@@ -6,7 +6,6 @@ using ThaiTuanERP2025.Domain.Finance.Entities;
 using ThaiTuanERP2025.Domain.Shared.Extensions;
 using ThaiTuanERP2025.Domain.Shared.Repositories;
 
-
 namespace ThaiTuanERP2025.Application.Finance.LedgerAccounts.Commands
 {
 	public sealed record CreateLedgerAccountCommand(LedgerAccountPayload Payload) : IRequest<Unit>;
@@ -35,9 +34,9 @@ namespace ThaiTuanERP2025.Application.Finance.LedgerAccounts.Commands
 			var ledgerAccount = new LedgerAccount(
 				payload.Number,
 				payload.Name,
-				payload.LedgerAccountTypeId,
 				payload.BalanceType,
 				payload.Description,
+				payload?.LedgerAccountTypeId,
 				parent?.Id
 			);
 
@@ -66,9 +65,6 @@ namespace ThaiTuanERP2025.Application.Finance.LedgerAccounts.Commands
 
 			RuleFor(x => x.Payload.Name)
 			    .NotEmpty().WithMessage("Tên tài khoản là bắt buộc.");
-
-			RuleFor(x => x.Payload.LedgerAccountTypeId)
-			    .NotEmpty().WithMessage("Loại tài khoản là bắt buộc.");
 		}
 	}
 }

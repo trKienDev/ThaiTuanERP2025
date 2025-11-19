@@ -34,12 +34,12 @@ export class LedgerAccountTypeRequestDialogComponent {
 
       // LedgerAccountTypeKind
       typeKindOptions: KitDropdownOption[] = [
-            { id: 'none', label: 'Không có' },
-            { id: 'asset', label: 'Tài sản' },
-            { id: 'liability', label: 'Nợ' },
-            { id: 'equity', label: 'Vốn chủ sở hữu' },
-            { id: 'revenue', label: 'Doanh thu' },
-            { id: 'expense', label: 'Chi phí' },
+            { id: LedgerAccountTypeKind.none.toString(), label: 'Không có' },
+            { id: LedgerAccountTypeKind.asset.toString(), label: 'Tài sản' },
+            { id: LedgerAccountTypeKind.liability.toString(), label: 'Nợ' },
+            { id: LedgerAccountTypeKind.equity.toString(), label: 'Vốn chủ sở hữu' },
+            { id: LedgerAccountTypeKind.revenue.toString(), label: 'Doanh thu' },
+            { id: LedgerAccountTypeKind.expense.toString(), label: 'Chi phí' },
       ];
       onLedgerAccountTypeKindSelected(opt: KitDropdownOption) {
             switch(opt.id) {
@@ -79,7 +79,6 @@ export class LedgerAccountTypeRequestDialogComponent {
                   this.form.disable({ emitEvent: false });
 
                   const payload: LedgerAccountTypePayload = this.form.getRawValue();
-                  console.log('payload: ', payload);
                   await firstValueFrom(this.LAccountTypeFacade.create(payload));
                   this.toast.successRich("Tạo loại tài khoản hạch toán thành công");
                   this.showErrors = false;

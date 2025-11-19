@@ -14,14 +14,13 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public LedgerAccount(
 			string number,
 			string name,
-			Guid ledgerAccountTypeId,
 			LedgerAccountBalanceType balanceType,
 			string? description = null,
-			Guid? parentLedgerAccountId = null
+                        Guid? ledgerAccountTypeId = null,
+		        Guid? parentLedgerAccountId = null
 		) {
 			Guard.AgainstNullOrWhiteSpace(number, nameof(number));
 			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
-			Guard.AgainstDefault(ledgerAccountTypeId, nameof(ledgerAccountTypeId));
 
 			Id = Guid.NewGuid();
 			Number = number.Trim().ToUpperInvariant();
@@ -41,7 +40,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		#region Properties
 		public string Number { get; private set; } = null!;
 		public string Name { get; private set; } = null!;
-		public Guid? LedgerAccountTypeId { get; private set; }
+		public Guid? LedgerAccountTypeId { get; private set; } = null;
 		public Guid? ParentLedgerAccountId { get; private set; }
 
 		public string Path { get; private set; } = "/";

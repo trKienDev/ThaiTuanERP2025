@@ -77,9 +77,6 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IUnitOfWork, UnitOfWork>();
 			services.AddScoped<ICodeGenerator, CodeGenerator>();
 
-			// Group
-			services.AddScoped<AccountRepositoryGroup>();
-
 			// Files
 			services.AddScoped<IStoredFilesRepository, StoredFilesRepository>();
 			services.AddScoped<IStoredFileReadRepository, StoredFileReadRepository>();
