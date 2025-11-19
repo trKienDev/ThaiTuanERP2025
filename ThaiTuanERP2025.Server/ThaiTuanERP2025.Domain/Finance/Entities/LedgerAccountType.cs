@@ -21,7 +21,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			Id = Guid.NewGuid();
 			Code = code.Trim().ToLowerInvariant();
 			Name = name.Trim();
-			LedgerAccountTypeKind = kind;
+			Kind = kind;
 			Description = description?.Trim();
 			IsActive = true;
 
@@ -32,7 +32,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		#region Properties
 		public string Code { get; private set; } = null!;
 		public string Name { get; private set; } = null!;
-		public LedgerAccountTypeKind LedgerAccountTypeKind { get; private set; }
+		public LedgerAccountTypeKind Kind { get; private set; }
 		public string? Description { get; private set; }
 		public bool IsActive { get; private set; }
 

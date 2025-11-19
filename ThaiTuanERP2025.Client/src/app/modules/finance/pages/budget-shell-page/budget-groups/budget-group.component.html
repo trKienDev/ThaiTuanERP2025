@@ -45,13 +45,13 @@
                               <th>Tên nhóm ngân sách</th>
                         </tr>
                   </thead>
-                  <tbody>
-                        <tr *ngFor="let bg of (budgetGroups$ | async) ?? []; trackBy: trackById; let i = index">
+                  <tbody *ngIf="(budgetGroups$ | async) as items">
+                        <tr *ngFor="let bg of items ?? []; trackBy: trackById; let i = index">
                               <td>{{ i + 1}}</td>
                               <td>{{ bg.code }}</td>
                               <td>{{ bg.name }}</td>
                         </tr>
-                        <tr *ngIf="(budgetGroups$ | async)?.length === 0">
+                        <tr *ngIf="items.length === 0">
                               <td colspan="2" class="text-center">Không có dữ liệu.</td>
                         </tr>
                   </tbody>

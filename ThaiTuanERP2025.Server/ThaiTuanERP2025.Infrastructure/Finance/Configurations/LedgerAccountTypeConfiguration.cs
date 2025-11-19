@@ -17,7 +17,7 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 			builder.Property(x => x.Name).IsRequired().HasMaxLength(200);
 			builder.Property(x => x.Description).HasMaxLength(500);
 			builder.Property(x => x.IsActive).HasDefaultValue(true);
-			builder.Property(x => x.LedgerAccountTypeKind).HasConversion<int>().IsRequired();
+			builder.Property(x => x.Kind).HasConversion<int>().IsRequired();
 
 			builder.HasIndex(x => x.Code).IsUnique();
 			builder.HasIndex(x => x.IsActive);

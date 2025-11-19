@@ -1,11 +1,41 @@
 <div class="page-container">
       <div class="page-heading">
-            <div class="page-title">      
-                  <h3 class="icon">⚖️</h3>
-                  <h3 class="title">Loại tài khoản kế toán</h3>
+            <div class="page-title">
+                   <kit-math-icon class="display-flex align-items-center"></kit-math-icon>
+                  <h3 class="title">Danh sách loại tài khoản hạch toán</h3>
             </div>
-            <div class="">
-                  <button *appHasPermission="'ledger-account-type.create'" type="button" class="button default-button" (click)="openLedgerAccountTypeRequestDialog()">Thêm mới</button>
-            </div>
+            <button *appHasPermission="'ledger-account-type.create'" type="button" class="button default-button" (click)="openLedgerAccountTypeRequestDialog()">Thêm mới</button>
+      </div>
+      <div class="page-body">
+            <table class="table">
+                  <thead>
+                        <tr>
+                              <th>#</th>
+                              <th>Tên</th>
+                              <th>Mã</th>
+                              <th>Kiểu</th>
+                              <th>Ghi chú</th>
+                              <th>Hiệu lực</th>
+                        </tr>
+                  </thead>
+                  <tbody *ngIf="(ledgerAccountType$ | async) as items">
+                        <tr *ngFor="let type of items; let i = index">
+                              <td>{{ i + 1 }}</td>
+                              <td>{{ type.name }}</td>
+                              <td>{{ type.code }}</td>
+                              <td>{{ type.kind | ledgerAccountTypeKind }}</td>
+                              <td>{{ type.description }}</td>
+                              <td>
+                                    <label class="switch-1">
+                                          <input type="checkbox" [checked]="type.isActive" disabled>
+                                          <span class="slider"></span>
+                                    </label>
+                              </td>
+                        </tr>
+                        <tr *ngIf="items.length === 0">
+                              <td colspan="6" class="text-center">Không có dữ liệu.</td>
+                        </tr>
+                  </tbody>
+            </table>
       </div>
 </div>

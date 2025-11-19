@@ -12,7 +12,7 @@ export interface LedgerAccountTypeDto {
       id: string;
       code: string;
       name: string;
-      kind: number;
+      kind: LedgerAccountTypeKind;
       isActive: boolean;
       description?: string | null;
 }

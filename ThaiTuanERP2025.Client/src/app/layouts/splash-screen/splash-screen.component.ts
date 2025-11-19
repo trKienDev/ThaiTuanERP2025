@@ -8,8 +8,8 @@ import { Router } from '@angular/router';
       styleUrl: './splash-screen.component.scss'
 })
 export class SplashScreenComponent {
-      constructor(private router: Router) {
-            setTimeout(() => this.router.navigateByUrl('/home'), 1500);
+      constructor(private readonly router: Router) {
+            setTimeout(() => this.router.navigateByUrl('/account'), 1500);
       }
 }
 

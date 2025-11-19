@@ -8,7 +8,7 @@ namespace ThaiTuanERP2025.Application.Finance.LedgerAccountTypes
 	{
 		public LedgerAccountTypeMappingProfile() {
 			CreateMap<LedgerAccountType, LedgerAccountTypeDto>()
-				.ForMember(d => d.LedgerAccountTypeKind, opt => opt.MapFrom(s => (int)s.LedgerAccountTypeKind));
+				.ForMember(d => d.Kind, opt => opt.MapFrom(s => (int)s.Kind));
 		}
 	}
 }

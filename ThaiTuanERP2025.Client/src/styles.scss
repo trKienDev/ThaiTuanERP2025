@@ -51,6 +51,9 @@
       --sidebar-width: 80px;
       --sidebar-padding: 5px;
       --navbar-height: 40px;
+
+      // font-size
+      --main-font-size: 12px;
 }
 
 
@@ -58,10 +61,10 @@ body {
       background-image: linear-gradient(to right top, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff, #fefeff, #fdfdff, #fcfcff, #fafaff, #f7f8ff, #f5f7ff, #f2f5ff);
 }
 html, body { height: 100%; overflow: hidden; }
-body, input { font-family: 'Lexend', sans-serif; font-size: 13px; }
+body, input { font-family: 'Lexend', sans-serif; font-size: var(--main-font-size); }
 textarea { 
       font-family: "Lexend", sans-serif;
-      font-size: 13px;
+      font-size: var(--main-font-size);
       width: 100%;
       min-height: 100px;
       height: fit-content;

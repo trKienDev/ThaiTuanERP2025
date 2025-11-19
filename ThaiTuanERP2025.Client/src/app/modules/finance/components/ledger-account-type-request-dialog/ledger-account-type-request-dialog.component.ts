@@ -7,8 +7,8 @@ import { KitDropdownComponent, KitDropdownOption } from "../../../../shared/comp
 import { LedgerAccountTypeKind, LedgerAccountTypePayload } from "../../models/ledger-account-type.model";
 import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { HttpErrorHandlerService } from "../../../../core/services/http-errror-handler.service";
-import { LedgerAccountTypeApiService } from "../../services/api/ledger-account-type-api.service";
 import { firstValueFrom } from "rxjs";
+import { LedgerAccountTypeFacade } from "../../facades/ledger-account-type.facade";
 
 @Component({
       selector: 'ledger-account-type-request-dialog',
@@ -23,7 +23,7 @@ export class LedgerAccountTypeRequestDialogComponent {
       private readonly toast = inject(ToastService);
       private readonly httpErrorHandler = inject(HttpErrorHandlerService);
       private readonly formBuilder = inject(FormBuilder);
-      private readonly LATypeApi = inject(LedgerAccountTypeApiService);
+      private readonly LAccountTypeFacade = inject(LedgerAccountTypeFacade);
 
       form = this.formBuilder.group({
             name: this.formBuilder.control<string>('', { nonNullable: true, validators: [Validators.required] }),
@@ -80,7 +80,7 @@ export class LedgerAccountTypeRequestDialogComponent {
 
                   const payload: LedgerAccountTypePayload = this.form.getRawValue();
                   console.log('payload: ', payload);
-                  await firstValueFrom(this.LATypeApi.create(payload));
+                  await firstValueFrom(this.LAccountTypeFacade.create(payload));
                   this.toast.successRich("Tạo loại tài khoản hạch toán thành công");
                   this.showErrors = false;
                   this.form.reset();

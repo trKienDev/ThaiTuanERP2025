@@ -2,28 +2,20 @@
       <nav>
             <ul>
                   <li>
-                        <a routerLink="/home" routerLinkActive="active">
-                              <!-- <span class="sidebar-icon material-icons-round">home</span> -->
-                               <span class="sidebar-icon">🏠</span>
-                              <span class="sidebar-title">Trang chủ</span>
-                        </a>
-                  </li>
-                  <li>
-                        <a routerLink="/finance" routerLinkActive="active">
-                              <span class="sidebar-icon">💰</span>
+                        <a routerLink="/finance" routerLinkActive="active" class="display-flex flex-column gap-5px">
+                              <kit-budget-icon [size]="'30px'"></kit-budget-icon>
                               <span class="sidebar-title">Ngân sách</span>
                         </a>
                   </li>
                   <li>
-                        <a routerLink="/expense" routerLinkActive="active">
-                              <span class="sidebar-icon">💳</span>
+                        <a routerLink="/expense" routerLinkActive="active" class="display-flex flex-column gap-5px">
+                              <kit-debit-card-icon [size]="'30px'"></kit-debit-card-icon>
                               <span class="sidebar-title">Thanh toán</span>
                         </a>
                   </li>
                   <li>
-                        <a routerLink="/account" routerLinkActive="active">
-                              <!-- <span class="sidebar-icon material-icons-round">manage_accounts</span> -->
-                              <span class="sidebar-icon">👨🏻‍💼</span>
+                        <a routerLink="/account" routerLinkActive="active" class="display-flex flex-column gap-5px">
+                              <kit-user-icon [size]="'30px'"></kit-user-icon>                              
                               <span class="sidebar-title">Tài khoản</span>
                         </a>
                   </li>
