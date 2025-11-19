@@ -12,7 +12,7 @@ export interface LedgerAccountDto {
       isActive: boolean;
 }
 
-export interface LedgerAccountRequest {
+export interface LedgerAccountPayload {
       number: string;
       name: string;
       ledgerAccountTypeId: string;
@@ -22,38 +22,9 @@ export interface LedgerAccountRequest {
       isActive: boolean;
 }
 
-export interface LedgerAccountTreeDto {
-      id: string;
-      number: string;
-      name: string;
-      ledgerAccountTypeId: string;
-      ledgerAccountTypeName?: string | null;
-      ledgerAccountBalanceType: number | string; // 0..3 or "Debit"...
-      description?: string | null;
-      isActive: boolean;
-      children?: LedgerAccountTreeDto[];
-}
-
-export interface LedgerAccountRow {
-      id: string;
-      number: string;
-      name: string;
-      typeId: string | null;
-      typeName?: string | null;
-      balanceType: number | string;
-      description?: string | null;
-      level: number;
-      hasChildren: boolean;
-      childrenCount: number;
-      isActive: boolean;
-      parentId?: string | null;
-}
-
-export type LedgerAccountBalanceTypeEnum = 1 | 2 | 3 | 4; // Debit,  Credit, Both, None 
-
-export interface LedgerAccountLookupDto {
-      id: string;
-      number: string;
-      name: string;
-      path?: string;
+export enum LedgerAccountBalanceType {
+      none = 0,
+      debit = 1,
+      credit = 2,
+      both = 3,
 }

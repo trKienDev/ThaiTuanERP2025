@@ -12,20 +12,19 @@
 
       th, td {
             border-bottom: 1px solid #e2e8ee;
-            padding: 10px 15px;
+            padding: 8px;
             text-align: center;
             text-wrap: nowrap;
       }
 
       thead th {
-            background-color: var(--main-bg-color); 
+            background-color: var(--primary-theme-color); 
             font-weight: 600;
             text-align: center;
-            color: #4c607a;
       }
 
       tbody tr:hover {
-            background-color: var(--main-bg-color); 
+            background-color: var(--primary-theme-color); 
       }
 
       .tr-non-hover {

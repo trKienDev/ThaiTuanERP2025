@@ -9,7 +9,7 @@ import { KitBaseIcon } from "./directives/kit-base-icon.directive";
             <path d="M29.0909 0H2.90909C1.30244 0 0 1.30244 0 2.90909V20.3636C0 21.9703 1.30244 23.2727 2.90909 23.2727H29.0909C30.6976 23.2727 32 21.9703 32 20.3636V2.90909C32 1.30244 30.6976 0 29.0909 0Z" fill="url(#paint0_radial_103_1394)"/>
             <g style="mix-blend-mode:soft-light">
                   <g style="mix-blend-mode:soft-light">
-                        <path d="M32 4.36365H0V10.1818H32V4.36365Z" fill="#000000"/>
+                        <path d="M32 4.36365H0V10.1818H32V4.36365Z" fill="white"/>
                   </g>
             </g>
             <g style="mix-blend-mode:soft-light">
