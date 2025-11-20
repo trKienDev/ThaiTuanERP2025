@@ -1,91 +1,76 @@
-<div class="kit-dropdown"
-     role="combobox"
-     [attr.aria-expanded]="isOpen"
-     [attr.aria-disabled]="disabled"
-     aria-haspopup="listbox"
-     tabindex="0"
-     [style.width]="computedWidth"
-     [class.has-value]="hasValue"
-     [class.active]="isOpen">
+<div class="kit-dropdown" role="combobox" aria-haspopup="listbox" tabindex="0"
+[attr.aria-expanded]="isOpen"
+[attr.aria-disabled]="disabled"
+[style.width]="computedWidth"
+[class.has-value]="hasValue"
+[class.active]="isOpen">
 
-  <!-- SELECT BOX -->
-  <div class="kit-dropdown-select" (click)="toggle()">
-    <!-- SINGLE -->
-    <ng-container *ngIf="!multiple; else multiSelected">
-      <ng-container *ngIf="selectedLabel">
-        <img *ngIf="selectedImgUrl"
-             [src]="selectedImgUrl"
-             class="option-img" />
-        <span>{{ selectedLabel }}</span>
-      </ng-container>
-    </ng-container>
+      <!-- SELECT BOX -->
+      <div class="kit-dropdown-select" (click)="toggle()">
 
-    <!-- MULTIPLE -->
-    <ng-template #multiSelected>
-      <ng-container *ngIf="selectedOptions.length; else placeholderTpl">
-        <div class="multi-selection">
-          <span class="multi-selected"
-                *ngFor="let opt of selectedOptions"
-                role="button"
-                tabindex="0"
-                (click)="remove(opt.id); $event.stopPropagation()"
-                (keydown.enter)="remove(opt.id); $event.stopPropagation()"
-                (keydown.space)="remove(opt.id); $event.preventDefault(); $event.stopPropagation()">
-            <img *ngIf="opt.imgUrl"
-                 [src]="opt.imgUrl"
-                 class="option-img" />
-            <span>{{ opt.label }}</span>
-          </span>
-        </div>
-      </ng-container>
+            <!-- SINGLE -->
+            <ng-container *ngIf="!multiple; else multiSelected">
+                  <ng-container *ngIf="selectedLabel">
+                        <img *ngIf="selectedImgUrl" [src]="selectedImgUrl" class="option-img" />
+                        <span>{{ selectedLabel }}</span>
+                  </ng-container>
+            </ng-container>
 
-      <ng-template #placeholderTpl>
-        <label class="placeholder-text">{{ placeholder }}</label>
-      </ng-template>
-    </ng-template>
-  </div>
+            <!-- MULTIPLE -->
+            <ng-template #multiSelected>
+                  <ng-container *ngIf="selectedOptions.length; else placeholderTpl">
+                  <div class="multi-selection">
+                        <span class="multi-selected" role="button" tabindex="0"
+                        *ngFor="let opt of selectedOptions"
+                        (click)="remove(opt.id); $event.stopPropagation()"
+                        (keydown.enter)="remove(opt.id); $event.stopPropagation()"
+                        (keydown.space)="remove(opt.id); $event.preventDefault(); $event.stopPropagation()">
+                              <img *ngIf="opt.imgUrl" [src]="opt.imgUrl" class="option-img" />
+                              <span>{{ opt.label }}</span>
+                        </span>
+                  </div>
+                  </ng-container>
 
-  <!-- DROPDOWN MENU -->
-<div class="kit-dropdown-menu" [@slide]="isOpen ? 'open' : 'closed'" [style.max-height]="maxMenuHeight">
-      
-      <!-- FILTER (không cuộn) -->
-      <div class="dropdown-filter-bar" *ngIf="enableFilter">
-            <input #filterInput
-                   type="text"
-                   [placeholder]="filterPlaceholder"
-                   [value]="filterText"
-                   (input)="onFilterInput($event)"
-                   (keydown)="onFilterKeydown($event)" />
+                  <ng-template #placeholderTpl>
+                        <label class="placeholder-text">{{ placeholder }}</label>
+                  </ng-template>
+            </ng-template>
       </div>
 
-      <!-- OPTIONS (cuộn) -->
-      <ul class="dropdown-options-list">
-            <!-- No result -->
-            <li class="no-result" *ngIf="filteredOptions.length === 0">
-                  Không tìm thấy kết quả
-            </li>
+      <!-- DROPDOWN MENU -->
+      <div class="kit-dropdown-menu" [@slide]="isOpen ? 'open' : 'closed'" [style.max-height]="maxMenuHeight">
+      
+            <!-- FILTER (không cuộn) -->
+            <div class="dropdown-filter-bar" *ngIf="enableFilter">
+                  <input #filterInput type="text" [value]="filterText" [placeholder]="filterPlaceholder" (input)="onFilterInput($event)" (keydown)="onFilterKeydown($event)" />
+            </div>
 
-            <li #optionRow
-                *ngFor="let opt of filteredOptions; let i = index"
-                role="option"
-                [attr.aria-selected]="i === focusedIndex"
-                [class.active]="i === focusedIndex"
-                [class.selected]="isSelected(opt.id)"
-                (click)="selectOption(opt)">
+            <!-- OPTIONS (cuộn) -->
+            <ul class="dropdown-options-list">
+                  <!-- No result -->
+                  <li class="no-result" *ngIf="filteredOptions.length === 0">
+                        Không tìm thấy kết quả
+                  </li>
 
-                  <span class="check" *ngIf="multiple">
-                        {{ isSelected(opt.id) ? '✔' : '' }}
-                  </span>
-                  <img *ngIf="opt.imgUrl" [src]="opt.imgUrl" class="option-img" />
-                  <span>{{ opt.label }}</span>
-            </li>
-      </ul>
-</div>
+                  <li #optionRow role="option"
+                  *ngFor="let opt of filteredOptions; let i = index"
+                  [attr.aria-selected]="i === focusedIndex"
+                  [class.active]="i === focusedIndex"
+                  [class.selected]="isSelected(opt.id)"
+                  (click)="selectOption(opt)">
+                        <span class="check" *ngIf="multiple">
+                              {{ isSelected(opt.id) ? '✔' : '' }}
+                        </span>
+                        <img *ngIf="opt.imgUrl" [src]="opt.imgUrl" class="option-img" />
+                        <span>{{ opt.label }}</span>
+                  </li>
+            </ul>
+      </div>
 
 
-  <!-- FLOATING PLACEHOLDER -->
-  <label class="placeholder-text">
-    {{ placeholder }}
-    <span *ngIf="required" style="color: red;">*</span>
-  </label>
+      <!-- FLOATING PLACEHOLDER -->
+      <label class="placeholder-text">
+            {{ placeholder }}
+            <span *ngIf="required" style="color: red;">*</span>
+      </label>
 </div>

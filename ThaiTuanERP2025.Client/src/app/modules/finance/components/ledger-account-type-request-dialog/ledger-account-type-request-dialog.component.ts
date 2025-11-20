@@ -34,35 +34,13 @@ export class LedgerAccountTypeRequestDialogComponent {
 
       // LedgerAccountTypeKind
       typeKindOptions: KitDropdownOption[] = [
-            { id: LedgerAccountTypeKind.none.toString(), label: 'Không có' },
-            { id: LedgerAccountTypeKind.asset.toString(), label: 'Tài sản' },
-            { id: LedgerAccountTypeKind.liability.toString(), label: 'Nợ' },
-            { id: LedgerAccountTypeKind.equity.toString(), label: 'Vốn chủ sở hữu' },
-            { id: LedgerAccountTypeKind.revenue.toString(), label: 'Doanh thu' },
-            { id: LedgerAccountTypeKind.expense.toString(), label: 'Chi phí' },
+            { id: LedgerAccountTypeKind.none, label: 'Không có' },
+            { id: LedgerAccountTypeKind.asset, label: 'Tài sản' },
+            { id: LedgerAccountTypeKind.liability, label: 'Nợ' },
+            { id: LedgerAccountTypeKind.equity, label: 'Vốn chủ sở hữu' },
+            { id: LedgerAccountTypeKind.revenue, label: 'Doanh thu' },
+            { id: LedgerAccountTypeKind.expense, label: 'Chi phí' },
       ];
-      onLedgerAccountTypeKindSelected(opt: KitDropdownOption) {
-            switch(opt.id) {
-                  case 'asset':
-                        this.form.patchValue({ kind: 1 });
-                        break;
-                  case 'liability': 
-                        this.form.patchValue({ kind: 2 });
-                        break;
-                  case 'equity':
-                        this.form.patchValue({ kind: 3 })
-                        break;
-                  case 'revenue':
-                        this.form.patchValue({ kind: 4 })
-                        break;
-                  case 'expense':
-                        this.form.patchValue({ kind: 5 });
-                        break;
-                  default:
-                        this.form.patchValue({ kind: 0 });
-                        break;
-            }
-      }
 
       // submit
       async submit(): Promise<void> {

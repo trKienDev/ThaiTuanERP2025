@@ -31,7 +31,7 @@ export class LedgerAccountRequestDialogComponent {
       form = this.formBuilder.group({
             name: this.formBuilder.control<string>('', { nonNullable: true, validators: [Validators.required] }),
             number: this.formBuilder.control<string>('', { nonNullable: true, validators: [Validators.required] }),
-            balanceType: this.formBuilder.control<LedgerAccountBalanceType>(0, { nonNullable: true, validators: [Validators.required] }),
+            balanceType: this.formBuilder.control<LedgerAccountBalanceType | null>(null, { nonNullable: true, validators: [Validators.required  ] }),
             ledgerAccountTypeId: this.formBuilder.control<string | null>(null),
             description: this.formBuilder.control<string | null>(null),
             parentLedgerAccountId: this.formBuilder.control<string | null>(null),
@@ -39,28 +39,11 @@ export class LedgerAccountRequestDialogComponent {
 
       // LedgerAccountBalanceType
       balanceTypeOptions: KitDropdownOption[] = [
-            { id: 'none', label: 'Không có số dư' },
-            { id: 'debit', label: 'Dư nợ' },
-            { id: 'credit', label: 'Dư có' },
-            { id: 'both', label: 'Lưỡng tính' },
+            { id: LedgerAccountBalanceType.none, label: 'Không có số dư' },
+            { id: LedgerAccountBalanceType.debit, label: 'Dư nợ' },
+            { id: LedgerAccountBalanceType.credit, label: 'Dư có' },
+            { id: LedgerAccountBalanceType.both, label: 'Lưỡng tính' },
       ];
-      onBalanceTypeSelected(opt: KitDropdownOption) {
-            switch(opt.id) {
-                  case 'debit': 
-                        this.form.patchValue({ balanceType: 1 });
-                        break;
-                  case 'credit':
-                        this.form.patchValue({ balanceType: 2 });
-                        break;
-                  case 'both':
-                        this.form.patchValue({ balanceType: 3 });
-                        break;
-                  default: 
-                        this.form.patchValue({ balanceType: 0 });
-                        break;
-            }
-      }
-      
 
       // ledger account type
       public ledgerAccountTypeOptions$ = inject(LedgerAccountTypeOptionStore).options$;
@@ -86,7 +69,12 @@ export class LedgerAccountRequestDialogComponent {
                   this.submitting = true;
                   this.form.disable({ emitEvent: false });
 
-                  const payload: LedgerAccountPayload = this.form.getRawValue();
+                  const raw = this.form.getRawValue();
+                  const payload: LedgerAccountPayload = {
+                        ...raw,
+                        balanceType: raw.balanceType as LedgerAccountBalanceType
+                  };
+
                   console.log('payload: ', payload);
                   await firstValueFrom(this.ledgerAccountFacade.create(payload));
                   this.toast.successRich("Tạo tài khoản hạch toán thành công");

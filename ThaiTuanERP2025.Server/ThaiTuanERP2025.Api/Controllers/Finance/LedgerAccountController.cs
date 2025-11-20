@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Shared;
 using ThaiTuanERP2025.Application.Finance.LedgerAccounts.Commands;
 using ThaiTuanERP2025.Application.Finance.LedgerAccounts.Contracts;
+using ThaiTuanERP2025.Application.Finance.LedgerAccounts.Queries;
 
 namespace ThaiTuanERP2025.Api.Controllers.Finance
 {
@@ -16,6 +17,13 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
                 public LedgerAccountController(IMediator mediator)
                 {
                         _mediator = mediator;
+                }
+
+                [HttpGet]
+                public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+                {
+                        var dtos = await _mediator.Send(new GetAllLedgerAccountsQuery(), cancellationToken);
+                        return Ok(ApiResponse<IReadOnlyList<LedgerAccountDto>>.Success(dtos));
                 }
 
                 [HttpPost]

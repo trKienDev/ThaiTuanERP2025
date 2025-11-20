@@ -2,17 +2,26 @@
 
 namespace ThaiTuanERP2025.Application.Finance.LedgerAccounts.Contracts
 {
-	public record LedgerAccountDto (
-		Guid Id,
-		string Number,
-		string Name,
-		Guid LedgerAccountTypeId,
-		string LedgerAccountTypeName,
-		Guid? ParentLedgerAccountId,
-		LedgerAccountBalanceType LedgerAccountBalanceType,
-		string Path,
-		int Level,
-		string? Description,
-		bool IsActive
-	);
+        public sealed record LedgerAccountDto
+        {
+                public Guid Id { get; init; }
+                public string Number { get; init; } = null!;
+                public string Name { get; init; } = null!;
+                public Guid? LedgerAccountTypeId { get; init; }
+                public Guid? ParentLedgerAccountId { get; init; }
+                public string? Description { get; init; }
+                public int Level { get; init; }
+                public string Path { get; init; } = null!;
+                public LedgerAccountBalanceType BalanceType { get; init; }
+                public bool IsActive { get; init; }
+        }
+
+        public sealed record LedgerAccountTreeDto
+        {
+                public Guid Id { get; init; }
+                public Guid? ParentId { get; init; }
+                public string Number { get; init; } = null!;
+                public string Name { get; init; } = null!;
+                public int Level { get; init; }
+        }
 }

@@ -2,19 +2,27 @@ import { KitDropdownOption } from "./kit-dropdown.component";
 
 type KeyOf<T> = Extract<keyof T, string>;
 
-export type OptionsAdapterConfig<T> = {
-      id: KeyOf<T> | ((item: T) => string);
-      label: KeyOf<T> | ((item: T) => string);
-      imgUrl?: KeyOf<T> | ((item: T) => string | undefined);
+export type OptionsAdapterConfig<TModel, TId = any> = {
+      id: KeyOf<TModel> | ((item: TModel) => TId);
+      label: KeyOf<TModel> | ((item: TModel) => string);
+      imgUrl?: KeyOf<TModel> | ((item: TModel) => string | undefined);
 }
 
-export function mapToDropdownOptions<T>( list: T[], cfg: OptionsAdapterConfig<T> ): KitDropdownOption[] {
-      const getId = (item: T) => typeof cfg.id === 'function' ? cfg.id(item) : String(item[cfg.id]);
-      const getLabel = (item: T) => typeof cfg.label === 'function' ? cfg.label(item) : String(item[cfg.label] ?? '');
+export function mapToDropdownOptions<TModel, TId = any>( list: TModel[], cfg: OptionsAdapterConfig<TModel, TId> ): KitDropdownOption<TId>[] {
+      const getId = (item: TModel): TId => 
+            typeof cfg.id === 'function'  
+                  ? cfg.id(item) 
+                  : ((item as any)[cfg.id] as TId);
+      
+      const getLabel = (item: TModel): string => 
+                  typeof cfg.label === 'function' 
+                        ? cfg.label(item) 
+                        : String((item as any)[cfg.label] ?? '');
 
-      const getImg = (item: T) => typeof cfg.imgUrl === 'function'
-            ? cfg.imgUrl(item)
-            : (cfg.imgUrl ? String(item[cfg.imgUrl] ?? '') : undefined);
+      const getImg = (item: TModel) => 
+            typeof cfg.imgUrl === 'function'
+                  ? cfg.imgUrl(item)
+                  : (cfg.imgUrl ? String(item[cfg.imgUrl] ?? '') : undefined);
 
       return (list ?? []).map(item => {
             const opt: KitDropdownOption = {
