@@ -20,7 +20,7 @@ namespace ThaiTuanERP2025.Application.Account.Permissions.Queries
 		{
 			return await _permissionReadRepo.ListProjectedAsync(
 				q => q.Where(p => p.IsActive && !p.IsDeleted)
-					.OrderBy(p => p.Name)
+					.OrderBy(p => p.Code)
 					.ProjectTo<PermissionDto>(_mapper.ConfigurationProvider),
 				cancellationToken: cancellationToken
 			);

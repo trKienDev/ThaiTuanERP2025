@@ -15,10 +15,7 @@ namespace ThaiTuanERP2025.Application.Finance.LedgerAccounts.Queries
                         
                 public async Task<IReadOnlyList<LedgerAccountDto>> Handle(GetAllLedgerAccountsQuery query, CancellationToken cancellationToken)
                 {
-                        return await _ledgerAccountRepo.GetAllAsync(
-                                x => x.IsActive && !x.IsDeleted,
-                                cancellationToken: cancellationToken
-                        );
+                        return await _ledgerAccountRepo.GetAllActiveAsync(cancellationToken);
                 }
         }
 }

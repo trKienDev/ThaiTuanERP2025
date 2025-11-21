@@ -1,19 +1,65 @@
 import { CommonModule } from "@angular/common";
-import { Component, inject } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { KiAbacusIconComponent } from "../../../../../shared/icons/kit-abacus-icon.component";
 import { MatDialog } from "@angular/material/dialog";
 import { LedgerAccountRequestDialogComponent } from "../../../components/ledger-account-request-dialog/ledger-account-request-dialog.component";
+import { LedgerAccountApiService } from "../../../services/api/ledger-account-api.service";
+import { LedgerAccountTreeDto } from "../../../models/ledger-account.model";
+import { firstValueFrom } from "rxjs";
+import { LedgerAccountBalanceKind } from "../../../pipes/ledger-account.pipe";
+import { HasPermissionDirective } from "../../../../../core/auth/auth.directive";
 
 @Component({
       selector: 'ledger-account-panel',
       standalone: true,
-      imports: [CommonModule, KiAbacusIconComponent],
-      templateUrl: './ledger-account-panel.component.html'
+      imports: [CommonModule, KiAbacusIconComponent, LedgerAccountBalanceKind, HasPermissionDirective],
+      templateUrl: './ledger-account-panel.component.html',
 })
-export class LedgerAccountPanelComponent {
+export class LedgerAccountPanelComponent implements OnInit {
       private readonly dialog = inject(MatDialog);
+      private readonly ledgerAccountApi = inject(LedgerAccountApiService);
+      public ledgerAccountTrees: LedgerAccountTreeDto[] = [];
+
+      ngOnInit(): void {
+            this.loadLedgerAccounTree();
+      }
+
+      private async loadLedgerAccounTree(): Promise<void> {
+            this.ledgerAccountTrees = await firstValueFrom(this.ledgerAccountApi.getTreeAsync());
+      } 
 
       openLedgerAccountRequestDialog() {
-            this.dialog.open(LedgerAccountRequestDialogComponent);
+            const dialogRef = this.dialog.open(LedgerAccountRequestDialogComponent);
+            dialogRef.afterClosed().subscribe((isSuccess: boolean) => {
+                  if (isSuccess) {
+                        this.loadLedgerAccounTree();
+                  }
+            });
+      }
+
+      hasChildren(node: LedgerAccountTreeDto): boolean {
+            return this.ledgerAccountTrees.some(x => x.parentId === node.id);
+      }
+
+      // ==== TABLE ====
+      public expanded: Set<string> = new Set();
+      isExpanded(node: LedgerAccountTreeDto): boolean {
+            return this.expanded.has(node.id);
+      }
+      
+      toggle(node: LedgerAccountTreeDto) {
+            if (this.expanded.has(node.id)) this.expanded.delete(node.id);
+            else this.expanded.add(node.id);
+      }
+
+      isVisible(node: LedgerAccountTreeDto): boolean {
+            if (node.level === 0) return true;
+
+            let parent = this.ledgerAccountTrees.find(x => x.id === node.parentId);
+            while (parent) {
+                  if (!this.expanded.has(parent.id)) return false;
+                  parent = this.ledgerAccountTrees.find(x => x.id === parent?.parentId);
+            }
+            return true;
       }
 }

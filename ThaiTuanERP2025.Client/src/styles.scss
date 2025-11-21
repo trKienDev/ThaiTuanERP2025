@@ -20,6 +20,7 @@
 :root {
       --primary-theme-color: #fcfcfd;
       --secondary-theme-color: #f6f8fa;
+      --primary-fg-color: #A50021;
 
       --cadmium-red: #D22B2B;
       --neon-red-color: #FF3131;
@@ -32,7 +33,7 @@
       --sub-bg-color: #f6f8fa;
       --sub-bg-color_hover: #818b981a;
       --main-theme-bg: #d5a36e;
-      --main-foreground-hover: #A50021;
+     
       --main-theme-fg: #f8e1e1;
       
       --gold-color: #FFD700;
@@ -143,7 +144,7 @@ html, body { height: 100%; margin: 0; }
 }
 .page-body { margin-top: 20px; }
 
-.default-title { font-size: 20px; font-weight: 900; color: var(--main-foreground-hover); }
+.default-title { font-size: 20px; font-weight: 900; color: var(--primary-fg-color); }
 .ahref-non-decoration { text-decoration: none; color: black; }
 .ahref-non-decoration:hover { color: var(--bright-blue-color); text-decoration: underline; cursor: pointer;}
 

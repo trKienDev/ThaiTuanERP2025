@@ -58,6 +58,22 @@
             color: #aaa;
             user-select: none;
       }
+      
+      .has-children {
+            background-color: var(--secondary-theme-color);
+      }
+      .indent-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            
+            .indent-space {
+                  display: inline-block;
+                  flex-shrink: 0; 
+                  width: calc(var(--level) * 40px); 
+            }
+      }
 }
 
 thead, tr, td {

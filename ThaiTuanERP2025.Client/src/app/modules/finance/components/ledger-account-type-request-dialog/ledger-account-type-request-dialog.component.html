@@ -36,8 +36,9 @@
                                           <small>Vui lòng nhập mã loại tài khoản</small>
                                     </div>
                               </div>
-                              <div class="flex-1">
-                                    <kit-dropdown [options]="typeKindOptions" [placeholder]="'Chọn kiểu'" formControlName="kind" [enableFilter]="false"></kit-dropdown>
+                              <div class="flex-1" [class.is-invalid]="showErrors && form.get('kind')?.invalid">
+                                    <kit-dropdown [options]="typeKindOptions" [placeholder]="'Chọn kiểu'" formControlName="kind" [enableFilter]="false" [required]="true"
+                                    [invalid]="showErrors && (form.get('kind')?.invalid ?? false)"></kit-dropdown>
                               </div>
                         </div>
                         <div class="dialog-row">
@@ -48,8 +49,8 @@
                         </div>
                   </div>
                   <div class="dialog-footer display-flex gap-10px">
-                        <kit-spinner-button type="submit" class="width-50pt" cssClass="save-button" [loading]="submitting" [disabled]="submitting" text="Lưu" [loadingText]="''" style="width: 10%;"></kit-spinner-button>
                         <button type="button" class="width-50pt button cancel-button" (click)="close()">Thoát</button>
+                        <kit-spinner-button type="submit" class="width-50pt" cssClass="save-button" [loading]="submitting" [disabled]="submitting" text="Lưu" [loadingText]="''" style="width: 10%;"></kit-spinner-button>
                   </div>
             </form>
       </div>

@@ -75,12 +75,11 @@ export class LedgerAccountRequestDialogComponent {
                         balanceType: raw.balanceType as LedgerAccountBalanceType
                   };
 
-                  console.log('payload: ', payload);
                   await firstValueFrom(this.ledgerAccountFacade.create(payload));
                   this.toast.successRich("Tạo tài khoản hạch toán thành công");
                   this.showErrors = false;
                   this.form.reset();
-                  this.dialog.close();
+                  this.dialog.close(true);
             } catch(error) {
                   this.httpErrorHandler.handle(error, "Tạo tài khoản hạch toán thất bại");
             } finally {

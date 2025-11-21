@@ -7,7 +7,6 @@ namespace ThaiTuanERP2025.Application.Finance.LedgerAccounts
 {
 	public interface ILedgerAccountReadRepository : IBaseReadRepository<LedgerAccount, LedgerAccountDto>
 	{
-                Task<bool> ExistsAsync(Expression<Func<LedgerAccount, bool>> predicate, CancellationToken cancellationToken = default);
                 Task<IReadOnlyList<LedgerAccountDto>> GetAllActiveAsync(CancellationToken cancellationToken = default);
                 Task<IReadOnlyList<LedgerAccountTreeDto>> GetTreeAsync(CancellationToken cancellationToken = default);
                 Task<LedgerAccountDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);

@@ -38,6 +38,8 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 
 			builder.HasIndex(x => x.Number).IsUnique();
 			builder.HasIndex(x => x.IsActive);
+			builder.HasIndex(x => x.Path);
+			builder.HasIndex(x => new { x.Number, x.IsDeleted });
 
 			// Auditable
 			ConfigureAuditUsers(builder);

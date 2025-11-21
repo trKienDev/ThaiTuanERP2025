@@ -28,7 +28,7 @@ export class LedgerAccountTypeRequestDialogComponent {
       form = this.formBuilder.group({
             name: this.formBuilder.control<string>('', { nonNullable: true, validators: [Validators.required] }),
             code: this.formBuilder.control<string>('', { nonNullable: true, validators: [Validators.required] }),
-            kind: this.formBuilder.control<LedgerAccountTypeKind>(0, { nonNullable: true, validators: [ Validators.required ] }),
+            kind: this.formBuilder.control<LedgerAccountTypeKind | null>(null, { nonNullable: true, validators: [ Validators.required ] }),
             description: this.formBuilder.control<string | null>(null),
       })
 
@@ -56,7 +56,11 @@ export class LedgerAccountTypeRequestDialogComponent {
                   this.submitting = true;
                   this.form.disable({ emitEvent: false });
 
-                  const payload: LedgerAccountTypePayload = this.form.getRawValue();
+                  const raw = this.form.getRawValue();
+                  const payload: LedgerAccountTypePayload = {
+                        ...raw,
+                        kind: raw.kind as LedgerAccountTypeKind
+                  }
                   await firstValueFrom(this.LAccountTypeFacade.create(payload));
                   this.toast.successRich("Tạo loại tài khoản hạch toán thành công");
                   this.showErrors = false;

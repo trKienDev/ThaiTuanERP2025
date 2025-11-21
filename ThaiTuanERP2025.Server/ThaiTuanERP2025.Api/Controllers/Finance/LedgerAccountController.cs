@@ -26,6 +26,13 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
                         return Ok(ApiResponse<IReadOnlyList<LedgerAccountDto>>.Success(dtos));
                 }
 
+                [HttpGet("tree")]
+                public async Task<IActionResult> GetTree(CancellationToken cancellationToken)
+                {
+                        var tree = await _mediator.Send(new GetLedgerAccountTreeQuery(), cancellationToken);
+                        return Ok(ApiResponse<IReadOnlyList<LedgerAccountTreeDto>>.Success(tree));
+                }
+
                 [HttpPost]
                 public async Task<IActionResult> Create([FromBody] LedgerAccountPayload payload, CancellationToken cancellationToken)
                 {

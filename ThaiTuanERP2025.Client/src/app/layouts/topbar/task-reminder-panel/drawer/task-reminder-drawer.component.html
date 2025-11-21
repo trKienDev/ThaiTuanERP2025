@@ -1,7 +1,7 @@
 <!-- task-reminder-drawer.component.html -->
 <div class="drawer" (animationend)="onAnimationEnd($event)">
       <header class="drawer-header">
-            <h3 style="color: var(--main-foreground-hover);">Phê duyệt đang chờ ⏳</h3>
+            <h3 style="color: var(--primary-fg-color);">Phê duyệt đang chờ ⏳</h3>
       </header>
       <div class="drawer-body">
             <ng-container *ngIf="sortedReminders().length > 0; else emptyState">

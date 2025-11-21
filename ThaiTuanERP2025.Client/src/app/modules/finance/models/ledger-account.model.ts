@@ -1,17 +1,34 @@
-export interface LedgerAccountDto {
-      id: string;
+// DTO
+export interface LedgerAccountDto
+{
+      id: string
       number: string;
       name: string;
-      ledgerAccountTypeId: string | null;
-      ledgerAccountTypeName?: string | null;
-      parentLedgerAccountId?: string | null;  
-      ledgerAccountBalanceType: number | string; // 0..3 | "Debit"...
+      ledgerAccountTypeId?: string;
+      parentLedgerAccountId?: string;
+      description?: string;
+      level: number
       path: string;
-      level: number;
-      description?: string | null;
+      balanceType: LedgerAccountBalanceType;
       isActive: boolean;
 }
 
+export interface LedgerAccountTreeDto
+{
+      id: string;
+      parentId?: string;
+      number: string
+      name: string;
+      balanceType: LedgerAccountBalanceType;
+      
+      level: number
+      path: string;
+
+      ledgerAccountTypeName?: string;
+      description?: string;
+}
+
+// Payload
 export interface LedgerAccountPayload {
       number: string;
       name: string;
@@ -21,6 +38,7 @@ export interface LedgerAccountPayload {
       description?: string | null;
 }
 
+// Enum
 export enum LedgerAccountBalanceType {
       none = 0,
       debit = 1,

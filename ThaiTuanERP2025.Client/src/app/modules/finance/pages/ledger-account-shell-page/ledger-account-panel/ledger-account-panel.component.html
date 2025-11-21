@@ -4,8 +4,47 @@
                   <kit-abacus-icon class="display-flex align-items-center"></kit-abacus-icon>
                   <h3 class="title">Danh sách tài khoản hạch toán</h3>
             </div>
-            <div>
+            <div *appHasPermission="'ledger-account.create'">
                   <button type="button" class="button default-button" (click)="openLedgerAccountRequestDialog()">Thêm mới</button>
             </div>
+      </div>
+      <div class="page-body">
+            <table class="table">
+                  <thead>
+                        <tr>
+                              <th>Số hiệu</th>
+                              <th>Tên</th>
+                              <th>Tính chất</th>
+                              <th>Loại tài khoản</th>
+                              <th>Mô tả</th>
+                        </tr>
+                  </thead>
+                  <tbody>
+                        <ng-container *ngIf="ledgerAccountTrees.length > 0">
+                              <ng-container *ngFor="let account of ledgerAccountTrees; let i = index">
+                                    <tr *ngIf="isVisible(account)" [class.has-children]="hasChildren(account)">
+                                          <td style="width: 10%;">
+                                                <div class="indent-row" [style.--level]="account.level">
+                                                      <button *ngIf="hasChildren(account)" (click)="toggle(account)" class="none-button">
+                                                            {{ isExpanded(account) ? '🔽' : '▶️' }}
+                                                      </button>
+                                                      <span class="indent-space"></span>
+                                                      {{ account.number }}
+                                                </div>
+                                          </td>
+                                          <td>{{ account.name }}</td>
+                                          <td>{{ account.balanceType | ledgerAccountBalanceType }}</td>
+                                          <td>{{ account.ledgerAccountTypeName ?? '---' }}</td>
+                                          <td>{{ account.description ?? '---' }}</td>
+                                    </tr>
+                              </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="ledgerAccountTrees.length === 0">
+                              <tr>
+                                    <td colspan="5">Không có dữ liệu</td>
+                              </tr>
+                        </ng-container>
+                  </tbody>
+            </table>
       </div>
 </div>
