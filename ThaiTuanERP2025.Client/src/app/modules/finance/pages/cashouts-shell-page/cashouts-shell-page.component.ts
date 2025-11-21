@@ -14,7 +14,7 @@ import { CashoutGroupPanelComponent } from "./cashout-groups-panel/cashout-group
 })
 export class CashoutShellPageComponent {
       readonly tabs: KitShellTab[] = [
-            { id: 'cashout-codes', label: 'Mã dòng tiền ra', component: CashoutCodePanelComponent },
-            { id: 'cashout-groups', label: 'Nhóm dòng tiền ra', component: CashoutGroupPanelComponent },
+            { id: 'cashout-codes', label: 'Mã khoản chi', component: CashoutCodePanelComponent },
+            { id: 'cashout-groups', label: 'Nhóm khoản chi', component: CashoutGroupPanelComponent },
       ]
 }

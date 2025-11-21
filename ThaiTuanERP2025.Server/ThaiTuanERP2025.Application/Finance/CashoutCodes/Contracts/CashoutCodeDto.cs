@@ -1,4 +1,4 @@
-﻿namespace ThaiTuanERP2025.Application.Finance.CashoutCodes
+﻿namespace ThaiTuanERP2025.Application.Finance.CashoutCodes.Contracts
 {
 	public record CashoutCodeDto (
 		Guid Id, string Code, string Name, string? Description, bool IsActive,

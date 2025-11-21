@@ -48,12 +48,12 @@ export class CashoutGroupRequestDialogComponent {
 
                   const payload: CashoutGroupPayload = this.form.getRawValue();
                   await firstValueFrom(this.cashoutGroupFacade.create(payload));
-                  this.toast.successRich("Tạo nhóm khoản tiền ra thành công");
+                  this.toast.successRich("Tạo nhóm khoản chi thành công");
                   this.showErrors = false;
                   this.form.reset();
                   this.dialogRef.close(true);
             } catch(error) {
-                  this.httpErrorHandler.handle(error, "Tạo nhóm khoản tiền ra thất bại");
+                  this.httpErrorHandler.handle(error, "Tạo nhóm khoản chi thất bại");
             } finally {
                   this.submitting = false;
                   this.form.enable({ emitEvent: true });

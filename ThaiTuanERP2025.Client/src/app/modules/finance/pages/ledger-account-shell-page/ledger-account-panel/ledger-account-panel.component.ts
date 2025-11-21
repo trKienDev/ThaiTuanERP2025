@@ -9,11 +9,13 @@ import { firstValueFrom } from "rxjs";
 import { LedgerAccountBalanceKind } from "../../../pipes/ledger-account.pipe";
 import { HasPermissionDirective } from "../../../../../core/auth/auth.directive";
 import { CashoutGroupFacade } from "../../../facades/cashout-group.facade";
+import { KitSquareDownArrowComponent } from "../../../../../shared/icons/arrows/kit-square-down-arrow.component";
+import { KitSquareRightArrowComponent } from "../../../../../shared/icons/arrows/kit-square-right-arrow.component";
 
 @Component({
       selector: 'ledger-account-panel',
       standalone: true,
-      imports: [CommonModule, KiAbacusIconComponent, LedgerAccountBalanceKind, HasPermissionDirective],
+      imports: [CommonModule, KiAbacusIconComponent, LedgerAccountBalanceKind, HasPermissionDirective, KitSquareDownArrowComponent, KitSquareRightArrowComponent],
       templateUrl: './ledger-account-panel.component.html',
 })
 export class LedgerAccountPanelComponent implements OnInit {

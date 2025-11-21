@@ -12,7 +12,7 @@
             <table class="table">
                   <thead>
                         <tr>
-                              <th>Số hiệu</th>
+                              <th style="width: 10%;">Số hiệu</th>
                               <th>Tên</th>
                               <th>Tính chất</th>
                               <th>Loại tài khoản</th>
@@ -23,12 +23,14 @@
                         <ng-container *ngIf="ledgerAccountTrees.length > 0">
                               <ng-container *ngFor="let account of ledgerAccountTrees; let i = index">
                                     <tr *ngIf="isVisible(account)" [class.has-children]="hasChildren(account)">
-                                          <td style="width: 10%;">
-                                                <div class="indent-row" [style.--level]="account.level">
+                                          <td class="display-flex justify-content-center ">
+                                                <div class="display-flex align-items-center gap-5px">
                                                       <button *ngIf="hasChildren(account)" (click)="toggle(account)" class="none-button">
-                                                            {{ isExpanded(account) ? '🔽' : '▶️' }}
+                                                            <ng-container [ngSwitch]="isExpanded(account)">
+                                                                  <kit-square-down-arrow *ngSwitchCase="true"  size="16"></kit-square-down-arrow>
+                                                                  <kit-square-right-arrow *ngSwitchCase="false" size="16"></kit-square-right-arrow>
+                                                            </ng-container>
                                                       </button>
-                                                      <span class="indent-space"></span>
                                                       {{ account.number }}
                                                 </div>
                                           </td>

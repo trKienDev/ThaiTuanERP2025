@@ -12,7 +12,6 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 			builder.ToTable("CashoutCodes", "Finance").HasIndex(x => x.Id);
 
 			// ===== Basic properties =====
-			builder.Property(x => x.Code).HasMaxLength(50).IsRequired();
 			builder.Property(x => x.Name).HasMaxLength(256).IsRequired();
 			builder.Property(x => x.Description).HasMaxLength(1000);
 			builder.Property(x => x.IsActive).IsRequired().HasDefaultValue(true);
@@ -37,9 +36,9 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 				.OnDelete(DeleteBehavior.Restrict);
 
 			// ===== Indexes =====
-			builder.HasIndex(x => new { x.CashoutGroupId, x.Code }).IsUnique(); // Code duy nhất trong mỗi nhóm
+			builder.HasIndex(x => new { x.CashoutGroupId }).IsUnique(); // Code duy nhất trong mỗi nhóm
 			builder.HasIndex(x => x.IsActive);
-			builder.HasIndex(x => x.Name);
+			builder.HasIndex(x => x.Name).IsUnique();
 
 			// Auditable
 			ConfigureAuditUsers(builder);

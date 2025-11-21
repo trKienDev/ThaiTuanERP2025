@@ -1,15 +1,15 @@
 <div class="page-container">
       <div class="page-heading">
             <div class="page-title">
-                  <h3 class="title">Danh sách nhóm khoản tiền ra</h3>
+                  <h3 class="title">Danh sách nhóm khoản chi</h3>
             </div>
-            <button class="button default-button" (click)="openCashoutGroupRequestModal()">Thêm nhóm dòng tiền ra</button>
+            <button *appHasPermission="'cashout-group.create'"  class="button default-button" (click)="openCashoutGroupRequestModal()">Thêm nhóm dòng tiền ra</button>
       </div>
       <div class="page-body">
             <table class="table">
                   <thead>
                         <tr>
-                              <th>Tên</th>
+                              <th class="width-50pt">Tên</th>
                               <th>Mô tả</th>
                         </tr>
                   </thead>
@@ -17,12 +17,14 @@
                         <ng-container *ngIf="cashoutGroupTrees.length > 0">
                               <ng-container *ngFor="let group of cashoutGroupTrees">
                                     <tr *ngIf="isVisible(group)" [class.has-children]="hasChildren(group)">
-                                          <td class="width-50pt">
-                                                <div class="indent-row" [style.--level]="group.level">
+                                          <td class="display-flex justify-content-center">
+                                                <div class="display-flex align-items-center gap-5px">
                                                       <button *ngIf="hasChildren(group)" (click)="toggle(group)" class="none-button">
-                                                            {{ isExpanded(group) ? '🔽' : '▶️' }}
+                                                            <ng-container [ngSwitch]="isExpanded(group)">
+                                                                  <kit-square-down-arrow *ngSwitchCase="true"  size="16"></kit-square-down-arrow>
+                                                                  <kit-square-right-arrow *ngSwitchCase="false" size="16"></kit-square-right-arrow>
+                                                            </ng-container>
                                                       </button>
-                                                      <span class="indent-space"></span>
                                                       {{ group.name }} 
                                                 </div>
                                           </td>

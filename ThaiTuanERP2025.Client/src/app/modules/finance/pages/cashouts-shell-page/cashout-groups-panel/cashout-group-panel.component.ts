@@ -5,11 +5,14 @@ import { MatDialog } from "@angular/material/dialog";
 import { CashoutGroupTreeDto } from "../../../models/cashout-group.model";
 import { firstValueFrom } from "rxjs";
 import { CashoutGroupApiService } from "../../../services/api/cashout-group-api.service";
+import { HasPermissionDirective } from "../../../../../core/auth/auth.directive";
+import { KitSquareRightArrowComponent } from "../../../../../shared/icons/arrows/kit-square-right-arrow.component";
+import { KitSquareDownArrowComponent } from "../../../../../shared/icons/arrows/kit-square-down-arrow.component";
 
 @Component({
       selector: 'cashout-group-panel',
       standalone: true,
-      imports: [ CommonModule ],
+      imports: [CommonModule, HasPermissionDirective, KitSquareRightArrowComponent, KitSquareDownArrowComponent],
       templateUrl: './cashout-group-panel.component.html'
 })
 export class CashoutGroupPanelComponent implements OnInit {
@@ -23,7 +26,6 @@ export class CashoutGroupPanelComponent implements OnInit {
 
       private async loadCashoutGroupTree(): Promise<void> {
             this.cashoutGroupTrees = await firstValueFrom(this.cashoutGroupApi.getTree());
-            console.log('tree: ', this.cashoutGroupTrees);
       }
 
       openCashoutGroupRequestModal(): void {

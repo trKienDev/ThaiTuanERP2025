@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
+using ThaiTuanERP2025.Application.Finance.CashoutCodes.Contracts;
 
 namespace ThaiTuanERP2025.Application.Finance.CashoutCodes.Queries
 {

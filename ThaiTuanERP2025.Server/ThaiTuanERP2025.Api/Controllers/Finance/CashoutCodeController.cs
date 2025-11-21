@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Shared;
 using ThaiTuanERP2025.Application.Finance.CashoutCodes;
+using ThaiTuanERP2025.Application.Finance.CashoutCodes.Commands;
+using ThaiTuanERP2025.Application.Finance.CashoutCodes.Contracts;
 using ThaiTuanERP2025.Application.Finance.CashoutCodes.Queries;
 
 namespace ThaiTuanERP2025.Api.Controllers.Finance
@@ -20,5 +22,12 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 		//	var dtos = await _mediator.Send(new GetAllCashoutCodesQuery(), cancellationToken);
 		//	return Ok(ApiResponse<IReadOnlyList<CashoutCodeDto>>.Success(dtos));	
 		//}
+
+		[HttpPost]
+		public async Task<IActionResult> Create([FromBody] CashoutCodePayload payload, CancellationToken cancellationToken)
+		{
+			var result = await _mediator.Send(new CreateCashoutCodeCommand(payload), cancellationToken);
+			return Ok(ApiResponse<Unit>.Success(result));
+		}
 	}
 }

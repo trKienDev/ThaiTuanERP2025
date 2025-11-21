@@ -2,6 +2,7 @@
 using MediatR;
 using ThaiTuanERP2025.Application.Finance.LedgerAccounts.Contracts;
 using ThaiTuanERP2025.Application.Shared.Exceptions;
+using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Finance.Entities;
 using ThaiTuanERP2025.Domain.Shared.Extensions;
 using ThaiTuanERP2025.Domain.Shared.Repositories;
@@ -23,7 +24,15 @@ namespace ThaiTuanERP2025.Application.Finance.LedgerAccounts.Commands
 			var payload = command.Payload;
 			LedgerAccount? parent = null;
 
-			if(payload.ParentLedgerAccountId.HasValue) 
+			var normalizedName = payload.Name.Trim();
+
+			var exist = await _uow.LedgerAccounts.ExistAsync(
+				x => x.Number == payload.Number || (x.Number == payload.Number && x.Name == normalizedName),
+				cancellationToken: cancellationToken
+			);
+			if( exist ) throw new BusinessRuleViolationException("Tài khoản hạch toán này đã tồn tại");
+
+			if (payload.ParentLedgerAccountId.HasValue) 
 			{
 				parent = await _uow.LedgerAccounts.SingleOrDefaultAsync(
 					q => q.Active().Where(x => x.Id == payload.ParentLedgerAccountId.Value),

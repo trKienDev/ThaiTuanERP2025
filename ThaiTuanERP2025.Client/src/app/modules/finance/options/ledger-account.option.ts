@@ -10,7 +10,7 @@ export class LedgerAccountOptionStore {
       readonly options$ = this.facade.ledgerAccounts$.pipe(
             toDropdownOptions({
                   id: 'id',
-                  label: 'name',
+                  label: (b) => `(${b.number}) - ${b.name}`,
             }),
             shareReplay({ bufferSize: 1, refCount: false })
       );

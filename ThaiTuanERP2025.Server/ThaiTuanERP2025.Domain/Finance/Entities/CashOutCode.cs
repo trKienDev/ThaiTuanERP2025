@@ -9,15 +9,13 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 	{
 		#region Constructors
 		private CashoutCode() { } 
-		public CashoutCode(string code, string name, Guid cashoutGroupId, Guid postingLedgerAccountId, string? description = null)
+		public CashoutCode(string name, Guid cashoutGroupId, Guid postingLedgerAccountId, string? description = null)
 		{
-			Guard.AgainstNullOrWhiteSpace(code, nameof(code));
 			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
 			Guard.AgainstDefault(cashoutGroupId, nameof(cashoutGroupId));
 			Guard.AgainstDefault(postingLedgerAccountId, nameof(postingLedgerAccountId));
 
 			Id = Guid.NewGuid();
-			Code = code.Trim().ToUpperInvariant();
 			Name = name.Trim();
 			CashoutGroupId = cashoutGroupId;
 			PostingLedgerAccountId = postingLedgerAccountId;
@@ -29,7 +27,6 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		#endregion
 
 		#region Properties
-		public string Code { get; private set; } = null!;
 		public string Name { get; private set; } = null!;
 		public Guid CashoutGroupId { get; private set; }
 		public Guid PostingLedgerAccountId { get; private set; }
