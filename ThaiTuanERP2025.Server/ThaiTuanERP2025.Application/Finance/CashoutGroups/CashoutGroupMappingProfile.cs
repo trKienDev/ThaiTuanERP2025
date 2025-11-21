@@ -10,6 +10,7 @@ namespace ThaiTuanERP2025.Application.Finance.CashoutGroups
 		{
 			CreateMap<CashoutGroup, CashoutGroupDto>();
 			CreateMap<CashoutGroup, CashoutGroupTreeDto>();
-		}
+                        CreateMap<CashoutGroup, CashoutGroupTreeWithCodesDto>();
+                }
 	}
 }

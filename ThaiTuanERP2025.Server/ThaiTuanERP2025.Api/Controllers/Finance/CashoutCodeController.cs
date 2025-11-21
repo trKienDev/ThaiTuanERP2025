@@ -6,6 +6,7 @@ using ThaiTuanERP2025.Application.Finance.CashoutCodes;
 using ThaiTuanERP2025.Application.Finance.CashoutCodes.Commands;
 using ThaiTuanERP2025.Application.Finance.CashoutCodes.Contracts;
 using ThaiTuanERP2025.Application.Finance.CashoutCodes.Queries;
+using ThaiTuanERP2025.Application.Finance.CashoutGroups.Contracts;
 
 namespace ThaiTuanERP2025.Api.Controllers.Finance
 {
@@ -17,11 +18,12 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 		private readonly IMediator _mediator;
 		public CashoutCodeController(IMediator mediator) => _mediator = mediator;
 
-		//[HttpGet]
-		//public async Task<IActionResult> GetAll(CancellationToken cancellationToken) {
-		//	var dtos = await _mediator.Send(new GetAllCashoutCodesQuery(), cancellationToken);
-		//	return Ok(ApiResponse<IReadOnlyList<CashoutCodeDto>>.Success(dtos));	
-		//}
+		[HttpGet("tree")]		
+		public async Task<IActionResult> GetTree(CancellationToken cancellationToken)
+		{
+			var tree = await _mediator.Send(new GetCashoutCodeWithGroupTreeQuery(), cancellationToken);
+			return Ok(ApiResponse<IReadOnlyList<CashoutGroupTreeWithCodesDto>>.Success(tree));
+		}
 
 		[HttpPost]
 		public async Task<IActionResult> Create([FromBody] CashoutCodePayload payload, CancellationToken cancellationToken)

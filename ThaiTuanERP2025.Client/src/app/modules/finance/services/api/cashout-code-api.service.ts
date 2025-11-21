@@ -13,6 +13,9 @@ export class CashoutCodeApiService extends BaseApiService<CashoutCodeDto, Cashou
             super(http, `${environment.apiUrl}/cashout-code`);
       }
 
+      getTree()
+
+      
       getByGroup(groupId: string): Observable<CashoutCodeDto[]> {
             const params = new HttpParams().set('groupId', groupId);
             return this.http

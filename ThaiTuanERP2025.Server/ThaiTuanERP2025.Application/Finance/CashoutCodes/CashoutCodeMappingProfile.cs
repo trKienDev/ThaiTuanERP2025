@@ -8,6 +8,7 @@ namespace ThaiTuanERP2025.Application.Finance.CashoutCodes
 	{
 		public CashoutCodeMappingProfile()  {
 			CreateMap<CashoutCode, CashoutCodeDto>();
+			CreateMap<CashoutCode, CashoutCodeTreeDto>();
 		}
 	}
 }

@@ -31,18 +31,18 @@ namespace ThaiTuanERP2025.Application.Finance.CashoutCodes.Commands
 			if (exist) throw new BusinessRuleViolationException("Khoản iền ra này đã tồn tại");
 
 			var cashoutGroup = await _uow.CashoutGroups.ExistAsync(
-				x => x.IsActive && x.Id == payload.CashoutGroupId,
+				x => x.IsActive && x.Id == payload.GroupId,
 				cancellationToken: cancellationToken
 			);
 			if (!cashoutGroup) throw new NotFoundException("Nhóm khoản chi không tồn tại");
 
 			var ledgerAccount = await _uow.LedgerAccounts.ExistAsync(
-				x => x.IsActive && x.Id == payload.PostingLedgerAccountId, 
+				x => x.IsActive && x.Id == payload.LedgerAccountId, 
 				cancellationToken: cancellationToken
 			);
 			if (!ledgerAccount) throw new NotFoundException("Tài khoản hạch toán không tồn tại");
 
-			var entity = new CashoutCode(payload.Name, payload.CashoutGroupId, payload.PostingLedgerAccountId, payload?.Description);
+			var entity = new CashoutCode(payload.Name, payload.GroupId, payload.LedgerAccountId, payload?.Description);
 			await _uow.CashoutCodes.AddAsync(entity, cancellationToken);
 
 			await _uow.SaveChangesAsync(cancellationToken);
@@ -55,8 +55,8 @@ namespace ThaiTuanERP2025.Application.Finance.CashoutCodes.Commands
 		public CreateCashoutCodeCommandValidator()
 		{
 			RuleFor(x => x.Payload.Name).NotEmpty().WithMessage("Tên khoản chi không được để trống");
-			RuleFor(x => x.Payload.CashoutGroupId).NotEmpty().WithMessage("Phải chọn nhóm khoản chi");
-			RuleFor(x => x.Payload.PostingLedgerAccountId).NotEmpty().WithMessage("Phải chọn tài khoản hạch toán");
+			RuleFor(x => x.Payload.GroupId).NotEmpty().WithMessage("Phải chọn nhóm khoản chi");
+			RuleFor(x => x.Payload.LedgerAccountId).NotEmpty().WithMessage("Phải chọn tài khoản hạch toán");
 		}
 	}
 }

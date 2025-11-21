@@ -58,6 +58,7 @@ export class CashoutCodeRequestDialogComponent {
                         groupId: raw.groupId as string,
                         ledgerAccountId: raw.ledgerAccountId as string
                   }
+                  console.log('payload: ', payload);
                   await firstValueFrom(this.cashoutCodeFacade.create(payload));
                   this.toast.successRich("Tạo khoản chi thành công");
                   this.showErrors = false;

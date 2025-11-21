@@ -1,4 +1,6 @@
-﻿namespace ThaiTuanERP2025.Application.Finance.CashoutGroups.Contracts
+﻿using ThaiTuanERP2025.Application.Finance.CashoutCodes.Contracts;
+
+namespace ThaiTuanERP2025.Application.Finance.CashoutGroups.Contracts
 {
 	public sealed record CashoutGroupDto
 	{
@@ -18,4 +20,18 @@
 		public string Path { get; init; } = null!;
 		public string? Description { get; init; }
 	}
+
+        public sealed record CashoutGroupTreeWithCodesDto
+        {
+                public Guid Id { get; set; }
+                public string Name { get; set; } = null!;
+                public string? Description { get; set; }
+                public Guid? ParentId { get; set; }
+                public int Level { get; set; }
+                public int OrderNumber { get; set; }
+                public string Path { get; set; } = "";
+
+                public List<CashoutGroupTreeWithCodesDto> Children { get; set; } = new();
+                public List<CashoutCodeTreeDto> Codes { get; set; } = new();
+        }
 }

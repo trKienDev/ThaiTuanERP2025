@@ -11,9 +11,15 @@ export interface CashoutCodeDto {
       postingLedgerAccountId: string;
       postingLedgerAccountName: string;
 }
+
+export interface CashoutCodeTreeDto {
+      id: string;
+      name: string;
+}
+
 export interface CashoutCodePayload {
       name: string;
       groupId: string;
-     ledgerAccountId: string;
+      ledgerAccountId: string;
       description?: string | null;
 }
