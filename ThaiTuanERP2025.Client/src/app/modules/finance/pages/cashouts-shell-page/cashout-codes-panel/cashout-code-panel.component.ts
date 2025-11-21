@@ -1,17 +1,17 @@
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { CashoutCodeRequestDialogComponent } from "./cashout-code-request-dialog/cashout-code-request-dialog.component";
 import { CashoutCodeDto } from "../../../models/cashout-code.model";
 import { CashoutCodeApiService } from "../../../services/api/cashout-code-api.service";
 import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
 import { ToastService } from "../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
+import { CashoutCodeRequestDialogComponent } from "../../../components/cashout-code-request-dialog/cashout-code-request-dialog.component";
 
 @Component({
       selector: 'cashout-code-panel',
       standalone: true,
       imports: [ CommonModule ],
-      templateUrl: './cashout-code.component.html',
+      templateUrl: './cashout-code-panel.component.html',
 })
 export class CashoutCodePanelComponent implements OnInit {
       private cashoutCodeApi = inject(CashoutCodeApiService);

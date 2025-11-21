@@ -7,6 +7,8 @@ import { BudgetPlanPanelComponent } from "./pages/budget-shell-page/budget-plans
 import { BudgetPlanRequestPanelComponent } from "./pages/budget-shell-page/budget-plan-request/budget-plan-request.component";
 import { LedgerAccountPanelComponent } from "./pages/ledger-account-shell-page/ledger-account-panel/ledger-account-panel.component";
 import { LedgerAccountTypePanelComponent } from "./pages/ledger-account-shell-page/ledger-account-type-panel/ledger-account-type-panel.component";
+import { CashoutCodePanelComponent } from "./pages/cashouts-shell-page/cashout-codes-panel/cashout-code-panel.component";
+import { CashoutGroupPanelComponent } from "./pages/cashouts-shell-page/cashout-groups-panel/cashout-group-panel.component";
 
 export const financeRoutes: Routes = [
       {
@@ -35,7 +37,15 @@ export const financeRoutes: Routes = [
                               { path: 'ledger-account-types', component: LedgerAccountTypePanelComponent }
                         ]
                   },                  
-                  { path: 'cashouts', loadComponent: () => import('./pages/cashouts-shell-page/cashouts-shell-page.component').then((m) => m.CashoutShellPageComponent )}
+                  { 
+                        path: 'cashouts', 
+                        loadComponent: () => import('./pages/cashouts-shell-page/cashouts-shell-page.component').then((m) => m.CashoutShellPageComponent ),
+                        children: [
+                              { path: '', redirectTo: 'cashout-codes', pathMatch: 'full' },
+                              { path: 'cashout-codes', component: CashoutCodePanelComponent },
+                              { path: 'cashout-groups', component: CashoutGroupPanelComponent },
+                        ]
+                  }
             ]
       }
 ];

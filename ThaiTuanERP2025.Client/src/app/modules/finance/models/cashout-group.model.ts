@@ -5,9 +5,18 @@ export interface CashoutGroupDto {
       isActive: boolean;
       description?: string;
 }
-export interface CashoutGroupRequest {
+
+export interface CashoutGroupTreeDto {
+      id: string;
+      parentId?: string;
       name: string;
-      description?: string | null;
-      isActive: boolean;
+      level: number;
+      path?: string;
+      description?: string;
+}
+
+export interface CashoutGroupPayload {
+      name: string;
       parentId?: string | null;
+      description?: string | null;
 }

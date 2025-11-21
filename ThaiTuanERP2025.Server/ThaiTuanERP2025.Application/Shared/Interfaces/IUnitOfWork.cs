@@ -26,7 +26,7 @@ namespace ThaiTuanERP2025.Domain.Shared.Repositories
 		ILedgerAccountWriteRepository LedgerAccounts { get; }
 		ILedgerAccountTypeWriteRepository LedgerAccountTypes { get; }
 		ICashoutCodeWriteRepository CashoutCodes { get; }
-		ICashoutGroupRepository CashoutGroups { get; }
+		ICashoutGroupWriteRepository CashoutGroups { get; }
 
 		// Files
 		IStoredFilesRepository StoredFiles { get; }

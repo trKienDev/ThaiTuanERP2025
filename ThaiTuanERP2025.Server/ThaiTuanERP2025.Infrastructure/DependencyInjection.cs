@@ -55,6 +55,7 @@ using ThaiTuanERP2025.Application.Finance.BudgetPlans.Repositories;
 using ThaiTuanERP2025.Application.Core.OutboxMessages;
 using ThaiTuanERP2025.Infrastructure.BackgroundJobs;
 using ThaiTuanERP2025.Application.Finance.LedgerAccountTypes;
+using ThaiTuanERP2025.Application.Finance.CashoutGroups;
 
 namespace ThaiTuanERP2025.Infrastructure
 {
@@ -114,7 +115,8 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<ILedgerAccountReadRepository, LedgerAccountReadRepository>();
 			services.AddScoped<ICashoutCodeWriteRepository, CashoutCodeWriteRepository>();
 			services.AddScoped<ICashoutCodeReadRepository, CashoutCodeReadRepository>();
-			services.AddScoped<ICashoutGroupRepository, CashoutGroupRepository>();
+			services.AddScoped<ICashoutGroupReadRepository, CashoutGroupReadRepository>();
+			services.AddScoped<ICashoutGroupWriteRepository, CashoutGroupRepository>();
 
 			// Expense
 			services.AddScoped<IInvoiceRepository, InvoiceRepository>();

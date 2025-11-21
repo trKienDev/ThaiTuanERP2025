@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, inject, OnInit } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { LedgerAccountTypeRequestDialogComponent } from "../../../components/ledger-account-type-request-dialog/ledger-account-type-request-dialog.component";
 import { HasPermissionDirective } from "../../../../../core/auth/auth.directive";

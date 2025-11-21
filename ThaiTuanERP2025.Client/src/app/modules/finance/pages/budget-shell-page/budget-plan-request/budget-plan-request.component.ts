@@ -156,8 +156,6 @@ export class BudgetPlanRequestPanelComponent implements OnInit {
 
             if(this.form.invalid) {
                   this.form.markAllAsTouched();
-                  const invalid = this.form.getRawValue();
-                  console.log('form invalid: ', invalid);
                   this.toast.warningRich("Vui lòng điền đẩy đủ thông tin");
                   return;
             }

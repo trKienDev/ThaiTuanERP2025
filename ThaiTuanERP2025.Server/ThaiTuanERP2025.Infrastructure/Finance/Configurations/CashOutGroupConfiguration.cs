@@ -12,12 +12,12 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 			builder.ToTable("CashoutGroups", "Finance").HasKey(x => x.Id);
 
 			// ===== Basic properties =====
-			builder.Property(x => x.Code).HasMaxLength(50).IsRequired();
 			builder.Property(x => x.Name).HasMaxLength(200).IsRequired();
 			builder.Property(x => x.Description).HasMaxLength(500);
-			builder.Property(x => x.Level).IsRequired();
-			builder.Property(x => x.Path).HasMaxLength(500);
-			builder.Property(x => x.IsActive).IsRequired();
+			builder.Property(x => x.Level).IsRequired().HasDefaultValue(0);
+			builder.Property(x => x.IsActive).IsRequired().HasDefaultValue(true);
+			builder.Property(x => x.OrderNumber).IsRequired().HasDefaultValue(0);
+			builder.Property(x => x.Path).HasMaxLength(450).IsRequired();
 
 			// ===== Self-referencing hierarchy (Parent - Children) =====
 			builder.HasOne(x => x.Parent)
@@ -32,9 +32,8 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 				.OnDelete(DeleteBehavior.Cascade);
 
 			// ===== Indexes =====
-			builder.HasIndex(x => x.Code).IsUnique();
 			builder.HasIndex(x => x.IsActive);
-			builder.HasIndex(x => x.Name);
+			builder.HasIndex(x => x.Name).IsUnique();
 
 			// Auditable
 			ConfigureAuditUsers(builder);

@@ -1,8 +1,8 @@
 import { CommonModule } from "@angular/common";
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { KitShellTab, KitShellTabsComponent } from "../../../../shared/components/kit-shell-tabs/kit-shell-tabs.component";
-import { CashoutCodePanelComponent } from "./cashout-codes/cashout-code.component";
-import { CashoutGroupPanelComponent } from "./cashout-groups/cashout-group.component";
+import { CashoutCodePanelComponent } from "./cashout-codes-panel/cashout-code-panel.component";
+import { CashoutGroupPanelComponent } from "./cashout-groups-panel/cashout-group-panel.component";
 
 @Component({
       selector: 'cashouts-shell-page',
@@ -14,7 +14,7 @@ import { CashoutGroupPanelComponent } from "./cashout-groups/cashout-group.compo
 })
 export class CashoutShellPageComponent {
       readonly tabs: KitShellTab[] = [
-            { id: 'code', label: 'Mã dòng tiền ra', component: CashoutCodePanelComponent },
-            { id: 'group', label: 'Nhóm dòng tiền ra', component: CashoutGroupPanelComponent },
+            { id: 'cashout-codes', label: 'Mã dòng tiền ra', component: CashoutCodePanelComponent },
+            { id: 'cashout-groups', label: 'Nhóm dòng tiền ra', component: CashoutGroupPanelComponent },
       ]
 }

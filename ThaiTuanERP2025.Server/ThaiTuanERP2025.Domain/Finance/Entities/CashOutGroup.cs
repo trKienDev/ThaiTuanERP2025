@@ -1,7 +1,5 @@
-﻿using ThaiTuanERP2025.Domain.Account.Entities;
-using ThaiTuanERP2025.Domain.Shared;
+﻿using ThaiTuanERP2025.Domain.Shared;
 using ThaiTuanERP2025.Domain.Shared.Entities;
-using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Finance.Events.CashoutGroups;
 using ThaiTuanERP2025.Domain.Shared.Interfaces;
 
@@ -11,36 +9,36 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 	{
 		#region Constructor
 		private CashoutGroup() { }
-		public CashoutGroup(string code, string name, string? description = null, Guid? parentId = null)
+		public CashoutGroup(string name, Guid? parentId = null, string ? description = null)
 		{
-			Guard.AgainstNullOrWhiteSpace(code, nameof(code));
 			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
 
 			Id = Guid.NewGuid();
-			Code = code.Trim().ToUpperInvariant();
 			Name = name.Trim();
 			Description = description?.Trim();
 			ParentId = parentId;
-			IsActive = true;
+			OrderNumber = 0;
+			Path = string.Empty;
 
 			AddDomainEvent(new CashoutGroupCreatedEvent(this));
 		}
 		#endregion
 
 		#region Properties
-		public string Code { get; private set; } = null!;
 		public string Name { get; private set; } = null!;
 		public string? Description { get; private set; }
 		public bool IsActive { get; private set; } = true;
 
 		public Guid? ParentId { get; private set; }
-		public CashoutGroup? Parent { get; private set; }
+		public CashoutGroup? Parent { get; init; }
 		public ICollection<CashoutGroup> Children { get; private set; } = new List<CashoutGroup>();
 
 		public ICollection<CashoutCode> CashoutCodes { get; private set; } = new List<CashoutCode>();
 
 		public int Level { get; private set; }
-		public string? Path { get; private set; }
+		public int OrderNumber { get; private set; }
+		public string Path { get; private set; } = "";
+
 		#endregion
 
 		#region Domain Behaviors
@@ -52,14 +50,14 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			AddDomainEvent(new CashoutGroupRenamedEvent(this));
 		}
 
-		public void SetParent(Guid? parentId, int level, string? path)
+		public void SetParent(CashoutGroup? parent, int newOrderNumber)
 		{
-			if (parentId == Id)
-				throw new DomainException("Nhóm không thể tự làm cha chính mình.");
+			Level = parent == null ? 0 : parent.Level + 1;
 
-			ParentId = parentId;
-			Level = level;
-			Path = path;
+			OrderNumber = newOrderNumber;
+
+			Path = parent == null ? $"/{OrderNumber}" : $"{parent.Path}/{OrderNumber}";
+
 			AddDomainEvent(new CashoutGroupHierarchyChangedEvent(this));
 		}
 

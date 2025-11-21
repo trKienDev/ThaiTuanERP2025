@@ -34,7 +34,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 			ILedgerAccountWriteRepository ledgerAccounts,
 			ILedgerAccountTypeWriteRepository ledgerAccountTypes,
 			ICashoutCodeWriteRepository cashoutCodes,
-			ICashoutGroupRepository cashoutGroups,
+			ICashoutGroupWriteRepository cashoutGroups,
 
 			// Expense
 			IInvoiceRepository invoices,
@@ -135,7 +135,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 		public ILedgerAccountWriteRepository LedgerAccounts { get; }
 		public ILedgerAccountTypeWriteRepository LedgerAccountTypes { get; }
 		public ICashoutCodeWriteRepository CashoutCodes { get; }
-		public ICashoutGroupRepository CashoutGroups { get; }
+		public ICashoutGroupWriteRepository CashoutGroups { get; }
 
 		// Expense
 		public IInvoiceRepository Invoices { get; }

@@ -1,0 +1,41 @@
+<div class="page-container">
+      <div class="page-heading">
+            <div class="page-title">
+                  <h3 class="title">Danh sách nhóm khoản tiền ra</h3>
+            </div>
+            <button class="button default-button" (click)="openCashoutGroupRequestModal()">Thêm nhóm dòng tiền ra</button>
+      </div>
+      <div class="page-body">
+            <table class="table">
+                  <thead>
+                        <tr>
+                              <th>Tên</th>
+                              <th>Mô tả</th>
+                        </tr>
+                  </thead>
+                  <tbody>
+                        <ng-container *ngIf="cashoutGroupTrees.length > 0">
+                              <ng-container *ngFor="let group of cashoutGroupTrees">
+                                    <tr *ngIf="isVisible(group)" [class.has-children]="hasChildren(group)">
+                                          <td class="width-50pt">
+                                                <div class="indent-row" [style.--level]="group.level">
+                                                      <button *ngIf="hasChildren(group)" (click)="toggle(group)" class="none-button">
+                                                            {{ isExpanded(group) ? '🔽' : '▶️' }}
+                                                      </button>
+                                                      <span class="indent-space"></span>
+                                                      {{ group.name }} 
+                                                </div>
+                                          </td>
+                                          <td>{{ group.description ?? '---' }}</td>
+                                    </tr>
+                              </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="cashoutGroupTrees.length === 0">
+                              <tr>
+                                    <td colspan="2">Không có dữ liệu</td>
+                              </tr>
+                        </ng-container>
+                  </tbody>
+            </table>
+      </div>
+</div>

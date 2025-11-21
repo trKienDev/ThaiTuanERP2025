@@ -8,6 +8,7 @@ import { LedgerAccountTreeDto } from "../../../models/ledger-account.model";
 import { firstValueFrom } from "rxjs";
 import { LedgerAccountBalanceKind } from "../../../pipes/ledger-account.pipe";
 import { HasPermissionDirective } from "../../../../../core/auth/auth.directive";
+import { CashoutGroupFacade } from "../../../facades/cashout-group.facade";
 
 @Component({
       selector: 'ledger-account-panel',
@@ -18,6 +19,7 @@ import { HasPermissionDirective } from "../../../../../core/auth/auth.directive"
 export class LedgerAccountPanelComponent implements OnInit {
       private readonly dialog = inject(MatDialog);
       private readonly ledgerAccountApi = inject(LedgerAccountApiService);
+      private readonly cashoutGroupFacade = inject(CashoutGroupFacade);
       public ledgerAccountTrees: LedgerAccountTreeDto[] = [];
 
       ngOnInit(): void {
@@ -33,20 +35,22 @@ export class LedgerAccountPanelComponent implements OnInit {
             dialogRef.afterClosed().subscribe((isSuccess: boolean) => {
                   if (isSuccess) {
                         this.loadLedgerAccounTree();
+                        this.cashoutGroupFacade.refresh();
                   }
             });
+      }
+
+      // ==== TABLE ====
+      public expanded: Set<string> = new Set();
+      
+      isExpanded(node: LedgerAccountTreeDto): boolean {
+            return this.expanded.has(node.id);
       }
 
       hasChildren(node: LedgerAccountTreeDto): boolean {
             return this.ledgerAccountTrees.some(x => x.parentId === node.id);
       }
 
-      // ==== TABLE ====
-      public expanded: Set<string> = new Set();
-      isExpanded(node: LedgerAccountTreeDto): boolean {
-            return this.expanded.has(node.id);
-      }
-      
       toggle(node: LedgerAccountTreeDto) {
             if (this.expanded.has(node.id)) this.expanded.delete(node.id);
             else this.expanded.add(node.id);
