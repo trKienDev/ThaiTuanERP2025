@@ -17,14 +17,15 @@
                         <ng-container *ngIf="cashoutGroupTrees.length > 0">
                               <ng-container *ngFor="let group of cashoutGroupTrees">
                                     <tr *ngIf="isVisible(group)" [class.has-children]="hasChildren(group)">
-                                          <td class="display-flex justify-content-center">
-                                                <div class="display-flex align-items-center gap-5px">
+                                          <td>
+                                                <div class="indent-row" [style.--level]="group.level">
                                                       <button *ngIf="hasChildren(group)" (click)="toggle(group)" class="none-button">
                                                             <ng-container [ngSwitch]="isExpanded(group)">
                                                                   <kit-square-down-arrow *ngSwitchCase="true"  size="16"></kit-square-down-arrow>
                                                                   <kit-square-right-arrow *ngSwitchCase="false" size="16"></kit-square-right-arrow>
                                                             </ng-container>
                                                       </button>
+                                                      <span class="indent-space"></span>
                                                       {{ group.name }} 
                                                 </div>
                                           </td>

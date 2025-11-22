@@ -6,6 +6,52 @@
             <button class="button default-button" (click)="openCashoutCodeRequestDialog()">Thêm mã khoản chi mới</button>
       </div>
       <div class="page-body">
+            <table class="table">
+                  <thead>
+                        <tr>
+                              <th style="width: 40%;">Mã dòng tiền ra</th>
+                              <th style="width: 30%;">Tài khoản kế toán</th>
+                              <th style="width: 30%;">Mô tả</th>
+                        </tr>
+                  </thead>
+                  <tbody>
+                        <ng-container *ngIf="flatTree.length > 0">
+                              <ng-container *ngFor="let node of flatTree">
+                                    <!-- GROUP -->
+                                    <tr *ngIf="node.type === 'group' && isVisible(node)">
+                                          <td colspan="3" style="background: var(--secondary-theme-color);">
+                                                <div class="indent-row" [style.--level]="node.level">
+                                                      <button *ngIf="node.children.length > 0 || node.codes.length > 0"class="none-button" (click)="toggle(node)">
+                                                            <ng-container [ngSwitch]="isExpanded(node)">
+                                                                  <kit-square-down-arrow *ngSwitchCase="true"></kit-square-down-arrow>
+                                                                  <kit-square-right-arrow *ngSwitchCase="false"></kit-square-right-arrow>
+                                                            </ng-container>
+                                                      </button>
+                                                      <span class="indent-space"></span>
+                                                      <span>{{ node.name }}</span>
+                                                </div>
+                                          </td>
+                                    </tr>
 
+                                    <!-- CODE -->
+                                    <tr *ngIf="node.type === 'code' && isVisible(node)" style="color: #727272;">
+                                          <td>
+                                                <div class="indent-row" [style.--level]="node.level">
+                                                      <span class="indent-space"></span>
+                                                      - {{ node.name }}
+                                                </div>
+                                          </td>
+                                          <td>{{ node.postingLedgerAccountName }}</td>
+                                          <td>{{ node.description ?? '---' }}</td>
+                                    </tr>
+                              </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="flatTree.length === 0">
+                              <tr>
+                                    <td colspan="3">Không có dữ liệu</td>
+                              </tr>
+                        </ng-container>
+                  </tbody>
+            </table>
       </div>
 </div>

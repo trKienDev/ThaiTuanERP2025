@@ -24,43 +24,48 @@ namespace ThaiTuanERP2025.Application.Finance.CashoutCodes.Queries
 
                 public async Task<IReadOnlyList<CashoutGroupTreeWithCodesDto>> Handle(GetCashoutCodeWithGroupTreeQuery query, CancellationToken cancellationToken)
                 {
-                        var groupDtos = (await _cashoutGroupRepo.ListProjectedAsync(
+                        var groupList = (await _cashoutGroupRepo.ListProjectedAsync(
                                 q => q.Where(x => x.IsActive)
                                         .OrderBy(x => x.Path)
                                         .ProjectTo<CashoutGroupTreeWithCodesDto>(_mapper.ConfigurationProvider),
                                 cancellationToken: cancellationToken
-                        )).ToDictionary(g => g.Id);
+                        ));
+			// group dictionary
+			var groups = groupList.ToDictionary(x => x.Id);
 
-                        var codeDtos = await _cashoutCodeRepo.ListProjectedAsync(
+			var codeDtos = await _cashoutCodeRepo.ListProjectedAsync(
                                 q => q.Where(x => x.IsActive)
                                         .ProjectTo<CashoutCodeTreeDto>(_mapper.ConfigurationProvider),
                                 cancellationToken: cancellationToken
                         );
 
-                        // Gán code vào Group theo CashoutGroupDto
-                        foreach (var code in codeDtos)
-                        {
-                                if (groupDtos.TryGetValue(code.CashoutGroupId, out var group))
-                                {
-                                        group.Codes.Add(code);
-                                }
-                        }
+			// Gán code vào Group theo CashoutGroupDto
+			foreach (var code in codeDtos)
+			{
+				if (groups.TryGetValue(code.CashoutGroupId, out var group))
+				{
+					group.Codes.Add(code);
+				}
+			}
 
-                        // Build root
-                        var roots = new List<CashoutGroupTreeWithCodesDto>();
-                        foreach (var group in groupDtos.Values)
-                        {
-                                if (group.ParentId == null)
-                                {
-                                        roots.Add(group);
-                                        continue;
-                                }
+			// Build tree bằng ParentId → Children
+			// Tạo lookup cho ParentId → Groups con
+			var lookup = groups.Values.ToLookup(g => g.ParentId);
 
-                                if (groupDtos.TryGetValue(group.ParentId.Value, out var parent))
-                                        parent.Children.Add(group);
-                        }
+			// Hàm dựng tree đệ quy
+			List<CashoutGroupTreeWithCodesDto> BuildTree(Guid? parentId)
+			{
+				return lookup[parentId]
+					.OrderBy(x => x.OrderNumber)
+					.Select(g => {
+					        g.Children = BuildTree(g.Id);
+					        return g;
+				        }).ToList();
+			}
 
-                        return roots;
+			var roots = BuildTree(null);
+
+			return roots;
                 }
         }
 }

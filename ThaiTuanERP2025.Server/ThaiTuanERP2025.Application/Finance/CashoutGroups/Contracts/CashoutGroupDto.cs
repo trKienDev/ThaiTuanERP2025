@@ -25,13 +25,15 @@ namespace ThaiTuanERP2025.Application.Finance.CashoutGroups.Contracts
         {
                 public Guid Id { get; set; }
                 public string Name { get; set; } = null!;
-                public string? Description { get; set; }
-                public Guid? ParentId { get; set; }
+               
                 public int Level { get; set; }
                 public int OrderNumber { get; set; }
                 public string Path { get; set; } = "";
 
                 public List<CashoutGroupTreeWithCodesDto> Children { get; set; } = new();
                 public List<CashoutCodeTreeDto> Codes { get; set; } = new();
-        }
+
+		public Guid? ParentId { get; set; }
+		public string? Description { get; set; }
+	}
 }

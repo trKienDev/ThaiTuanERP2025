@@ -15,6 +15,10 @@ export interface CashoutCodeDto {
 export interface CashoutCodeTreeDto {
       id: string;
       name: string;
+      cashoutGroupId: string;
+      postingLedgerAccountId: string;
+      postingLedgerAccountName: string;
+      description?: string;
 }
 
 export interface CashoutCodePayload {

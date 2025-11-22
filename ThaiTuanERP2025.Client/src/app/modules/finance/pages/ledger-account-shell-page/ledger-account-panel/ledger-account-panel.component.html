@@ -23,14 +23,15 @@
                         <ng-container *ngIf="ledgerAccountTrees.length > 0">
                               <ng-container *ngFor="let account of ledgerAccountTrees; let i = index">
                                     <tr *ngIf="isVisible(account)" [class.has-children]="hasChildren(account)">
-                                          <td class="display-flex justify-content-center ">
-                                                <div class="display-flex align-items-center gap-5px">
+                                          <td>
+                                                <div class="indent-row" [style.--level]="account.level">
                                                       <button *ngIf="hasChildren(account)" (click)="toggle(account)" class="none-button">
                                                             <ng-container [ngSwitch]="isExpanded(account)">
                                                                   <kit-square-down-arrow *ngSwitchCase="true"  size="16"></kit-square-down-arrow>
                                                                   <kit-square-right-arrow *ngSwitchCase="false" size="16"></kit-square-right-arrow>
                                                             </ng-container>
                                                       </button>
+                                                      <span class="indent-space"></span>
                                                       {{ account.number }}
                                                 </div>
                                           </td>

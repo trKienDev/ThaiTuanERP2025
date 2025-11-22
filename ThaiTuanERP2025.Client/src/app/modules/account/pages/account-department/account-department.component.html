@@ -17,13 +17,13 @@
                   <td>{{ dept.name }}</td>
                   <td>
                         <ng-container *ngIf="dept.primaryManager">
-                              <div class="display-flex justify-content-center align-items-center gap-5px"> 
+                              <div class="display-flex align-items-center gap-5px"> 
                                     <img class="avatar-user" [src]="(dept.primaryManager | avatarUrlPipe)" alt="">
                                     <span>{{ dept?.primaryManager?.fullName }}</span>
                               </div>
                         </ng-container>
                   </td>
-                  <td *appHasPermission="'department.actions'" class="display-flex justify-content-center">
+                  <td *appHasPermission="'department.actions'" class="display-flex">
                         <kit-action-menu [actions]="buildDepartmentActions(dept)"></kit-action-menu>
                   </td>
             </tr>
