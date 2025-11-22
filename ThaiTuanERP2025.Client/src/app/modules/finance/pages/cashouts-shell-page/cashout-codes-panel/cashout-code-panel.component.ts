@@ -7,11 +7,12 @@ import { CashoutCodeApiService } from "../../../services/api/cashout-code-api.se
 import { CashoutGroupTreeWithCodeDto, CashoutTreeNode } from "../../../models/cashout-group.model";
 import { KitSquareDownArrowComponent } from "../../../../../shared/icons/arrows/kit-square-down-arrow.component";
 import { KitSquareRightArrowComponent } from "../../../../../shared/icons/arrows/kit-square-right-arrow.component";
+import { HasPermissionDirective } from "../../../../../core/auth/auth.directive";
 
 @Component({
       selector: 'cashout-code-panel',
       standalone: true,
-      imports: [CommonModule, KitSquareDownArrowComponent, KitSquareRightArrowComponent],
+      imports: [CommonModule, KitSquareDownArrowComponent, KitSquareRightArrowComponent, HasPermissionDirective],
       templateUrl: './cashout-code-panel.component.html',
 })
 export class CashoutCodePanelComponent implements OnInit {

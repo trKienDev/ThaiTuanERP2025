@@ -6,10 +6,10 @@ export class ProgressService {
       constructor() {
             NProgress.configure({
                   showSpinner: false,   // không hiển thị spinner tròn
-                  trickleSpeed: 100,    // tốc độ “chảy” của thanh progress
-                  minimum: 0.1,
+                  trickleSpeed: 150,    // tốc độ “chảy” của thanh progress
+                  minimum: 0.3,
                   easing: 'ease',
-                  speed: 500,           // thời gian hoàn tất
+                  speed: 50,           // thời gian hoàn tất
             });
       }
 

@@ -3,7 +3,7 @@
             <div class="page-title">
                   <h3 class="title">Danh sách mã khoản chi</h3>
             </div>
-            <button class="button default-button" (click)="openCashoutCodeRequestDialog()">Thêm mã khoản chi mới</button>
+            <button *appHasPermission="'cashout-code.create'" class="button default-button" (click)="openCashoutCodeRequestDialog()">Thêm mã khoản chi mới</button>
       </div>
       <div class="page-body">
             <table class="table">
@@ -18,8 +18,8 @@
                         <ng-container *ngIf="flatTree.length > 0">
                               <ng-container *ngFor="let node of flatTree">
                                     <!-- GROUP -->
-                                    <tr *ngIf="node.type === 'group' && isVisible(node)">
-                                          <td colspan="3" style="background: var(--secondary-theme-color);">
+                                    <tr *ngIf="node.type === 'group' && isVisible(node)" [class.has-children]="hasChildren(node)">
+                                          <td colspan="3">
                                                 <div class="indent-row" [style.--level]="node.level">
                                                       <button *ngIf="node.children.length > 0 || node.codes.length > 0"class="none-button" (click)="toggle(node)">
                                                             <ng-container [ngSwitch]="isExpanded(node)">
