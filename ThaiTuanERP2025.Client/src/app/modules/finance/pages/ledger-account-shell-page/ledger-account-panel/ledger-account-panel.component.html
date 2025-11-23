@@ -4,8 +4,12 @@
                   <kit-abacus-icon class="display-flex align-items-center"></kit-abacus-icon>
                   <h3 class="title">Danh sách tài khoản hạch toán</h3>
             </div>
-            <div *appHasPermission="'ledger-account.create'">
-                  <button type="button" class="button default-button" (click)="openLedgerAccountRequestDialog()">Thêm mới</button>
+            <div class="display-flex gap-10px">
+                  <button *appHasPermission="'ledger-account-type.import-excel'" class="excel-button" (click)="openLedgerAccountExcelDialog()">
+                        <kit-excel-icon [size]="15" style="height: 15px; padding-right: 5px;"></kit-excel-icon>
+                        Nhập từ file excel
+                  </button>
+                  <button *appHasPermission="'ledger-account.create'" type="button" class="button default-button" (click)="openLedgerAccountRequestDialog()">Thêm mới</button>
             </div>
       </div>
       <div class="page-body">
@@ -13,7 +17,7 @@
                   <thead>
                         <tr>
                               <th style="width: 10%;">Số hiệu</th>
-                              <th>Tên</th>
+                              <th style="width: 30%;">Tên</th>
                               <th>Tính chất</th>
                               <th>Loại tài khoản</th>
                               <th>Mô tả</th>
@@ -44,7 +48,7 @@
                         </ng-container>
                         <ng-container *ngIf="ledgerAccountTrees.length === 0">
                               <tr>
-                                    <td colspan="5">Không có dữ liệu</td>
+                                    <td colspan="5" class="text-align-center">Không có dữ liệu</td>
                               </tr>
                         </ng-container>
                   </tbody>

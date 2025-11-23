@@ -11,11 +11,13 @@ import { HasPermissionDirective } from "../../../../../core/auth/auth.directive"
 import { CashoutGroupFacade } from "../../../facades/cashout-group.facade";
 import { KitSquareDownArrowComponent } from "../../../../../shared/icons/arrows/kit-square-down-arrow.component";
 import { KitSquareRightArrowComponent } from "../../../../../shared/icons/arrows/kit-square-right-arrow.component";
+import { LedgerAccountExcelDialogComponent } from "../../../components/ledger-account-excel-dialog/ledger-account-excel-dialog.component";
+import { KitExcelIconComponent } from "../../../../../shared/icons/kit-excel-icon.component";
 
 @Component({
       selector: 'ledger-account-panel',
       standalone: true,
-      imports: [CommonModule, KiAbacusIconComponent, LedgerAccountBalanceKind, HasPermissionDirective, KitSquareDownArrowComponent, KitSquareRightArrowComponent],
+      imports: [CommonModule, KiAbacusIconComponent, LedgerAccountBalanceKind, HasPermissionDirective, KitSquareDownArrowComponent, KitSquareRightArrowComponent, KitExcelIconComponent],
       templateUrl: './ledger-account-panel.component.html',
 })
 export class LedgerAccountPanelComponent implements OnInit {
@@ -34,6 +36,16 @@ export class LedgerAccountPanelComponent implements OnInit {
 
       openLedgerAccountRequestDialog() {
             const dialogRef = this.dialog.open(LedgerAccountRequestDialogComponent);
+            dialogRef.afterClosed().subscribe((isSuccess: boolean) => {
+                  if (isSuccess) {
+                        this.loadLedgerAccounTree();
+                        this.cashoutGroupFacade.refresh();
+                  }
+            });
+      }
+      
+      openLedgerAccountExcelDialog() {
+            const dialogRef = this.dialog.open(LedgerAccountExcelDialogComponent);
             dialogRef.afterClosed().subscribe((isSuccess: boolean) => {
                   if (isSuccess) {
                         this.loadLedgerAccounTree();

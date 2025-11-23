@@ -32,10 +32,12 @@
                               <td>{{ type.kind | ledgerAccountTypeKind }}</td>
                               <td>{{ type.description }}</td>
                               <td>
-                                    <label class="switch-1">
-                                          <input type="checkbox" [checked]="type.isActive" disabled>
-                                          <span class="slider"></span>
-                                    </label>
+                                    <div class="display-flex justify-content-center ">
+                                          <label class="switch-1">
+                                                <input type="checkbox" [checked]="type.isActive" disabled>
+                                                <span class="slider"></span>
+                                          </label>
+                                    </div>
                               </td>
                         </tr>
                         <tr *ngIf="items.length === 0">

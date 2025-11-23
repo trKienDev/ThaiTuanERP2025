@@ -5,7 +5,8 @@ using ThaiTuanERP2025.Api.Shared;
 using ThaiTuanERP2025.Application.Finance.LedgerAccounts.Commands;
 using ThaiTuanERP2025.Application.Finance.LedgerAccounts.Contracts;
 using ThaiTuanERP2025.Application.Finance.LedgerAccounts.Queries;
-using ThaiTuanERP2025.Application.Finance.LedgerAccountTypes.Services;
+using ThaiTuanERP2025.Application.Finance.LedgerAccounts.Services;
+using ThaiTuanERP2025.Domain.Exceptions;
 
 namespace ThaiTuanERP2025.Api.Controllers.Finance
 {
@@ -15,9 +16,11 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
         public class LedgerAccountController : ControllerBase
         {
                 private readonly IMediator _mediator;
-                public LedgerAccountController(IMediator mediator)
+                private readonly ILedgerAccountExcelReader _ledgerAccountExcelReader;
+                public LedgerAccountController(IMediator mediator, ILedgerAccountExcelReader ledgerAccountExcelReader)
                 {
                         _mediator = mediator;
+                        _ledgerAccountExcelReader = ledgerAccountExcelReader;
                 }
 
                 [HttpGet]
@@ -38,6 +41,20 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
                 public async Task<IActionResult> Create([FromBody] LedgerAccountPayload payload, CancellationToken cancellationToken)
                 {
                         var result = await _mediator.Send(new CreateLedgerAccountCommand(payload), cancellationToken);
+                        return Ok(ApiResponse<Unit>.Success(result));
+                }
+
+                [HttpPost("excel")]
+                public async Task<IActionResult> ImportExcel(IFormFile file, CancellationToken cancellationToken)
+                {
+                        if (file == null || file.Length == 0)
+                                throw new BusinessRuleViolationException("File trống.");
+
+                        using var stream = file.OpenReadStream();
+                        var rows = _ledgerAccountExcelReader.Read(stream);
+
+                        var result = await _mediator.Send(new BulkCreateLedgerAccountsCommand(rows), cancellationToken);
+
                         return Ok(ApiResponse<Unit>.Success(result));
                 }
         }

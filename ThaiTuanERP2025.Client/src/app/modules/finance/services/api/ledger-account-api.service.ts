@@ -17,4 +17,14 @@ export class LedgerAccountApiService extends BaseApiService<LedgerAccountDto, Le
             return this.http.get<ApiResponse<LedgerAccountTreeDto[]>>(`${this.endpoint}/tree`)
                   .pipe(handleApiResponse$<LedgerAccountTreeDto[]>());
       }
+
+      importExcel(file: File): Observable<void> {
+            const formData = new FormData();
+            formData.append("file", file);
+
+            console.log('form: ', formData);
+
+            return this.http.post<ApiResponse<void>>(`${this.endpoint}/excel`, formData)
+                  .pipe(handleApiResponse$<void>());
+      }
 }

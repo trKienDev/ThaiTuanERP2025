@@ -18,7 +18,7 @@ namespace ThaiTuanERP2025.Application.Finance.LedgerAccounts.Commands
 		{
 			_uow = uow;
 		}
-
+			
 		public async Task<Unit> Handle(CreateLedgerAccountCommand command, CancellationToken cancellationToken)
 		{
 			var payload = command.Payload;
