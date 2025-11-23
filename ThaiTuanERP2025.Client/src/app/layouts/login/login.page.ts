@@ -2,12 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service.js';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { catchError, finalize, tap } from 'rxjs';
-import { handleApiResponse$ } from '../../shared/operators/handle-api-response.operator.js';
-import { LoginResponseDto } from './login-response.model.js';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { firstValueFrom } from 'rxjs';
 import { ToastService } from '../../shared/components/kit-toast-alert/kit-toast-alert.service.js';
 import { KitSpinnerButtonComponent } from "../../shared/components/kit-spinner-button/kit-spinner-button.component";
+import { HttpErrorHandlerService } from '../../core/services/http-errror-handler.service.js';
 
 @Component({
       selector: 'app-login',
@@ -17,29 +16,22 @@ import { KitSpinnerButtonComponent } from "../../shared/components/kit-spinner-b
       styleUrls: ['./login.page.scss'],
 })
 export class LoginComponent implements OnInit{
-      loginForm!: FormGroup;
       showPassword = false;
-      message: string | null = null;
       traceId: string | null = null;
-      public submitting = false;
-      private toast = inject(ToastService);
+      public submitting: boolean = false;
+      public showErrors: boolean = false;
+      private readonly toast = inject(ToastService);
+      private readonly auth = inject(AuthService); 
+      private readonly formBuilder = inject(FormBuilder);
+      private readonly router = inject(Router);
+      private readonly httpErrorHandler = inject(HttpErrorHandlerService);
 
-      alertClosed = {
-            employeeCode: false,
-            password: false,
-            global: false
-      }
-
-      constructor(
-            private authService: AuthService, 
-            private fb: FormBuilder,
-            private router: Router) {}
+      form = this.formBuilder.group({
+            employeeCode: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
+            password: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]})
+      });
 
       ngOnInit() {
-            this.loginForm = this.fb.group({
-                  employeeCode: ['', Validators.required],
-                  password: ['', Validators.required]
-            });
 
             const logoWrapper = document.querySelector('.logo-wrapper');
 
@@ -64,38 +56,33 @@ export class LoginComponent implements OnInit{
             setInterval(triggerShine, 10000);
       }
 
-      closeAlert(field: 'employeeCode' | 'password' | 'global') {
-            this.alertClosed[field] = true;
-      }
-
       togglePassword() {
             this.showPassword = !this.showPassword;
       }
 
-      onLogging(): void {
-            this.submitting = true;
-
-            // Reset trạng thái đóng alert khi submit lại
-            this.alertClosed = { employeeCode: false, password: false, global: false };
-
-            if(this.loginForm.invalid) {
-                  this.loginForm.markAllAsTouched();
+      async onLogging() {
+            this.showErrors = true;
+            
+            if(this.form.invalid) {
+                  this.form.markAllAsTouched();
+                  this.toast.warningRich("Vui lòng điền đầy đủ thông tin");
                   return;
             }
 
-            const { employeeCode, password } = this.loginForm.value;
-            this.message = null;
+            try {
+                  this.submitting = true;
+                  this.form.disable({ emitEvent: false });
 
-            this.authService.login(employeeCode, password).pipe(
-                  handleApiResponse$<LoginResponseDto>(), // xử lý unwrap res.data nếu cần
-                  catchError(err => {
-                        this.toast.errorRich('Sai tài khoản hoặc mật khẩu');
-                        console.error('error: ', err);
-                        throw err;
-                  }),
-                  finalize(() => (this.submitting = false))
-            ).subscribe({
-                  next: () => this.router.navigateByUrl('/splash')
-            });
+                  const { employeeCode, password } = this.form.getRawValue();
+                  await firstValueFrom(this.auth.login(employeeCode, password));
+                  this.toast.successRich("Xác thực thành công");
+                  this.router.navigateByUrl('/splash');
+                  this.showErrors = false;
+            } catch(error) {
+                  this.httpErrorHandler.handle(error, "Đăng nhập thất bại");
+            } finally {
+                  this.submitting = false;
+                  this.form.enable({ emitEvent: true });
+            }
       };
 }

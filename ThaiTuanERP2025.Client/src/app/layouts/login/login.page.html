@@ -5,18 +5,30 @@
                         <img src="thaituanlogo.png" alt="thaituangroup-logo" class="thaituan-logo" />
                   </div>
             </div>
-            <form [formGroup]="loginForm" (ngSubmit)="onLogging()" novalidate>
-                  <div class="form-group">
-                        <label for="username">Mã nhân viên</label>
-                        <input type="text" formControlName="employeeCode" />
+            <form [formGroup]="form" (ngSubmit)="onLogging()" novalidate>
+                  <div class="dialog-row">
+                        <div class="form-input">
+                              <input class="" type="text" formControlName="employeeCode" autocomplete="on" required
+                              [class.is-invalid]="showErrors && form.get('employeeCode')?.invalid"
+                              [attr.aria-invalid]="showErrors && form.get('employeeCode')?.invalid ? 'true' : null" />
+                              <label for="employeeCode">Mã nhân viên <span style="color: red;"> *</span></label>
+                              <div class="form-input-error" *ngIf="showErrors && form.get('employeeCode')?.invalid">
+                                    <small>Vui lòng nhập mã nhân viên</small>
+                              </div>
+                        </div>
                   </div>
-                  <div class="form-group">
-                        <label for="password">Mật khẩu</label>
-                        <div class="password-wrapper">
-                              <input [type]="showPassword ? 'text' : 'password'" formControlName="password" />
+                  <div class="dialog-row">
+                        <div class="form-input password-wrapper">
+                              <input class="" [type]="showPassword ? 'text' : 'password'"  formControlName="password" autocomplete="on" required
+                              [class.is-invalid]="showErrors && form.get('password')?.invalid"
+                              [attr.aria-invalid]="showErrors && form.get('password')?.invalid ? 'true' : null" />
                               <div class="icon-wrapper">
                                     <img [src]="'assets/icons/' + (showPassword ? 'eye-off.svg' : 'eye.svg')" class="toggle-password" width="24" height="24" alt="Toggle visibility" (click)="togglePassword()" />
                               </div>
+                              <label for="password">Mật khẩu <span style="color: red;"> *</span></label>
+                        </div>
+                        <div class="form-input-error" *ngIf="showErrors && form.get('password')?.invalid">
+                              <small>Vui lòng nhập mật khẩu</small>
                         </div>
                   </div>
                   <div class="button-wrapper display-flex justify-content-center">
