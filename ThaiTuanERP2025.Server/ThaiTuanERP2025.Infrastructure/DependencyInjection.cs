@@ -56,6 +56,8 @@ using ThaiTuanERP2025.Application.Core.OutboxMessages;
 using ThaiTuanERP2025.Infrastructure.BackgroundJobs;
 using ThaiTuanERP2025.Application.Finance.LedgerAccountTypes;
 using ThaiTuanERP2025.Application.Finance.CashoutGroups;
+using ThaiTuanERP2025.Application.Finance.LedgerAccountTypes.Services;
+using ThaiTuanERP2025.Infrastructure.Finance.Services;
 
 namespace ThaiTuanERP2025.Infrastructure
 {
@@ -184,6 +186,7 @@ namespace ThaiTuanERP2025.Infrastructure
 			// Service
 			services.AddScoped<ICurrentRequestIpProvider, CurrentRequestIpProvider>();
 			services.AddHostedService<OutboxProcessorHostedService>();
+			services.AddScoped<ILedgerAccountTypeExcelReader, LedgerAccountTypeExcelReaderService>();
 
 			return services;
 		}

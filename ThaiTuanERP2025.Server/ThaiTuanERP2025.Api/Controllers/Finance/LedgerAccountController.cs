@@ -5,6 +5,7 @@ using ThaiTuanERP2025.Api.Shared;
 using ThaiTuanERP2025.Application.Finance.LedgerAccounts.Commands;
 using ThaiTuanERP2025.Application.Finance.LedgerAccounts.Contracts;
 using ThaiTuanERP2025.Application.Finance.LedgerAccounts.Queries;
+using ThaiTuanERP2025.Application.Finance.LedgerAccountTypes.Services;
 
 namespace ThaiTuanERP2025.Api.Controllers.Finance
 {

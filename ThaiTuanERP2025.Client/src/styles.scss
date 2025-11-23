@@ -188,8 +188,6 @@ input[type=number] { -moz-appearance: textfield; }
 .kit-datepicker .mat-calendar-body-row { display: table-row !important; }
 .kit-datepicker .mat-calendar-body-cell { display: table-cell !important; }
 
-
-
 /* mat-snackbar */
 /* Bọc MDC surface: bo góc + shadow + padding đẹp hơn */
 .mat-mdc-snack-bar-container.kit-snack { margin: 16px; }
@@ -247,3 +245,6 @@ input[type=number] { -moz-appearance: textfield; }
       box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
       width: fit-content;
 }
+
+.pointer-events-none { pointer-events: none; opacity: 0.5; }
+.disabled { opacity: 0.5; }

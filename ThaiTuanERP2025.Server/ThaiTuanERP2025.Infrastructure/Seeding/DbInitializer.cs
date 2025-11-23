@@ -87,7 +87,9 @@ namespace ThaiTuanERP2025.Infrastructure.Seeding
 				("Thêm user duyệt ngân sách", "budget-approver.create", null),
 				("Thao tác user duyệt ngân sách", "budget-approver.actions", null),
 				("Tạo loại tài khoản hạch toán", "ledger-account-type.create", null),
-				("Tạo mã khoản chi", "cashout-code.create", null),
+                                ("Thêm loại tài khoản hạch toán từ excel", "ledger-account-type.import-excel", null),
+                                ("Tạo nhóm khoản chi", "cashout-group.create", null),
+                                ("Tạo mã khoản chi", "cashout-code.create", null),
 				("Tạo nhóm khoản chi", "cashout-group.create", null),
 			};
 

@@ -4,7 +4,13 @@
                   <kit-math-icon class="display-flex align-items-center"></kit-math-icon>
                   <h3 class="title">Danh sách loại tài khoản hạch toán</h3>
             </div>
-            <button *appHasPermission="'ledger-account-type.create'" type="button" class="button default-button" (click)="openLedgerAccountTypeRequestDialog()">Thêm mới</button>
+            <div class="display-flex gap-10px">
+                  <button *appHasPermission="'ledger-account-type.import-excel'" class="excel-button" (click)="openLedgerAccountTypeExcelDialog()">
+                        <kit-excel-icon [size]="15" style="height: 15px; padding-right: 5px;"></kit-excel-icon>
+                        Nhập từ file excel
+                  </button>
+                  <button *appHasPermission="'ledger-account-type.create'" type="button" class="button default-button" (click)="openLedgerAccountTypeRequestDialog()">Thêm mới</button>
+            </div>
       </div>
       <div class="page-body">
             <table class="table">
@@ -33,7 +39,7 @@
                               </td>
                         </tr>
                         <tr *ngIf="items.length === 0">
-                              <td colspan="6" class="text-center">Không có dữ liệu.</td>
+                              <td colspan="6" class="text-align-center">Không có dữ liệu.</td>
                         </tr>
                   </tbody>
             </table>

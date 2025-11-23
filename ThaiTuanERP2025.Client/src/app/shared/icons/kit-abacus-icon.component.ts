@@ -5,7 +5,7 @@ import { KitBaseIcon } from "./directives/kit-base-icon.directive";
       selector: 'kit-abacus-icon',
       standalone: true,
       template: `
-            <svg [attr.width]="computedSize" [attr.height]="computedSize" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--twemoji" preserveAspectRatio="xMidYMid meet">
+            <svg  viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--twemoji" preserveAspectRatio="xMidYMid meet">
                   <path fill="#CCD6DD" d="M3 16v-2h30v2zm0 7v-2h30v2zm0 7v-2h30v2zM3 9V7h30v2z"></path>
                   <path fill="#D5AB88" d="M35 33V1a1 1 0 0 0-1-1h-1a1 1 0 0 0-1 1H4a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v32h34zM4 4h28v29H4V4z"></path>
                   <path fill="#3B94D9" d="M19 5.5A1.5 1.5 0 0 0 17.5 7a1.5 1.5 0 1 0-3 0a1.5 1.5 0 1 0-3 0a1.5 1.5 0 1 0-3 0a1.5 1.5 0 1 0-3 0v2a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 3 0V7A1.5 1.5 0 0 0 19 5.5z"></path>
