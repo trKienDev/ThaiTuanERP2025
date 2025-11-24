@@ -26,6 +26,13 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
                         return Ok(ApiResponse<IReadOnlyList<ExpenseWorkflowTemplateDto>>.Success(dtos)); 
                 }
 
+                [HttpGet("{id:guid}")]
+                public async Task<IActionResult> GetById([FromRoute] Guid id, CancellationToken cancellationToken )
+                {
+                        var dto = await _mediator.Send(new GetExpenseWorkflowTemplateByIdQuery(id), cancellationToken);
+                        return Ok(ApiResponse<ExpenseWorkflowTemplateDto>.Success(dto!));
+                }
+
                 [HttpPost]
                 public async Task<IActionResult> Create(ExpenseWorkflowTemplatePayload payload, CancellationToken cancellationToken)
                 {

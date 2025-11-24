@@ -12,3 +12,4 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories.Read
 		public ExpenseWorkflowTemplateReadRepository(ThaiTuanERP2025DbContext dbContext, IMapper mapperConfig) : base(dbContext, mapperConfig) { }
 	}
 }
+	

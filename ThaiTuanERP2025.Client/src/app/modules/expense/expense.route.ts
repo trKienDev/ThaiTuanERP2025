@@ -7,6 +7,7 @@ import { OutgoingPaymentRequestComponent } from "./pages/outgoing-payment-shell-
 import { OutgoingBankAccountComponent } from "./pages/bank-account-shell-page/outgoing-bank-account/outgoing-bank-account.component";
 import { ExpenseWorkflowsPanelComponent } from "./pages/expense-worflow-shell-page/expense-workflows-panel/expense-workflows-panel.component";
 import { ExpenseWorkflowRequestPanel } from "./pages/expense-worflow-shell-page/expense-workflow-request-panel/expense-workflow-request-panel.component";
+import { UpdateExpenseWorkflowPanelComponent } from "./pages/expense-worflow-shell-page/update-expense-workflow-panel/update-expense-workflow-panel.component";
 
 export const expenseRoutes: Routes = [
       {
@@ -50,6 +51,7 @@ export const expenseRoutes: Routes = [
                               { path: '', redirectTo: 'expense-workflows', pathMatch: 'full' },
                               { path: 'expense-workflows', component: ExpenseWorkflowsPanelComponent },
                               { path: 'expense-workflow-request', component: ExpenseWorkflowRequestPanel },
+                              { path: 'update-expense-workflow/:id', component: UpdateExpenseWorkflowPanelComponent },
                         ] 
                   }
             ]
