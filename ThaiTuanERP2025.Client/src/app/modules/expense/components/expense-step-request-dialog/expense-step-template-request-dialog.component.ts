@@ -42,9 +42,12 @@ export class ExpenseStepTemplateRequestDialogComponent implements OnInit {
                   step?: ExpenseStepTemplatePayload;
                   approveMode?: 'Standard' | 'Condition'; 
             }
-      ) {}
+      ) {
+
+      }
 
       ngOnInit(): void {
+            console.log('approveMode: ', this.data?.approveMode);
             if(this.data?.approveMode) {
                   this.approveMode = this.data.approveMode;
                   this.form.patchValue({ approveMode: this.data.approveMode });
@@ -53,6 +56,7 @@ export class ExpenseStepTemplateRequestDialogComponent implements OnInit {
             if(this.data?.step) {
                   this.dialogTitle = 'Sửa bước duyệt'
                   const s = this.data.step;     
+                  console.log('step: ', s);
                   this.form.patchValue({
                         name: s.name,
                         approverIds: s.approverIds ?? [],
@@ -62,6 +66,8 @@ export class ExpenseStepTemplateRequestDialogComponent implements OnInit {
                         slaHours: s.slaHours,
                         order: s.order ?? 1,
                   });
+
+                  console.log('form: ', this.form.getRawValue());
             }
 
             this.form.get('approverMode')?.valueChanges.subscribe(mode => {

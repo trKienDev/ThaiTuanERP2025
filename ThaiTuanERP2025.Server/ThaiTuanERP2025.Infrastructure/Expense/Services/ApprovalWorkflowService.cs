@@ -76,7 +76,7 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 				string? candidatesJson;
 				Guid? defaultApprover = null;
 
-				if (s.ExpenseApproveMode == ExpenseApproveMode.Standard)
+				if (s.ApproveMode == ExpenseApproveMode.Standard)
 				{
 					candidatesJson = s.FixedApproverIdsJson;
 					var arr = JsonUtils.ParseGuidArray(candidatesJson);
@@ -98,7 +98,7 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 					order: s.Order,
 					flowType: s.FlowType,
 					slaHours: s.SlaHours,
-					approverMode: s.ExpenseApproveMode,
+					approverMode: s.ApproveMode,
 					candidatesJson: candidatesJson,
 					defaultApproverId: defaultApprover,
 					selectedApproverId: selected,
@@ -226,7 +226,7 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 			if (tpl is null) return Array.Empty<Guid>();
 
 			// 2) Theo mode
-			if (tpl.ExpenseApproveMode == ExpenseApproveMode.Standard)
+			if (tpl.ApproveMode == ExpenseApproveMode.Standard)
 			{
 				// Nếu template khai báo cố định
 				if (!string.IsNullOrWhiteSpace(tpl.FixedApproverIdsJson))

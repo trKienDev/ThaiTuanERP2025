@@ -16,7 +16,7 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 			builder.Property(x => x.Name).HasMaxLength(200).IsRequired();
 			builder.Property(x => x.Order).IsRequired();
 			builder.Property(x => x.FlowType).HasConversion<int>().IsRequired();
-			builder.Property(x => x.ExpenseApproveMode).HasConversion<int>().IsRequired();
+			builder.Property(x => x.ApproveMode).IsRequired();
 			builder.Property(x => x.SlaHours).IsRequired();
 			builder.Property(x => x.FixedApproverIdsJson).HasColumnType("nvarchar(max)");
 			builder.Property(x => x.ResolverKey).HasMaxLength(100);

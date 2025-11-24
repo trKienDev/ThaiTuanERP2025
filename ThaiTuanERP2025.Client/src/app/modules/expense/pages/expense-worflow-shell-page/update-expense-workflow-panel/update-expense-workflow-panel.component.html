@@ -1,4 +1,4 @@
-<!-- <div class="page-container">
+<div class="page-container">
       <div class="page-heading">
             <div class="page-title">
                   <h3 class="title">Tạo luồng duyệt mới</h3>
@@ -12,7 +12,7 @@
                   <div class="workflow-process-wrapper">
                         <div class="step begin-step">Bắt đầu</div>
 
-                        <ng-container *ngFor="let step of workflowDetail?.steps; let i = index">
+                        <ng-container *ngFor="let step of workflowDetailPayload?.steps; let i = index">
                               <div class="connector-slot">
                                     <div class="connector-line"></div>
                                     <div class="inline-add">
@@ -22,7 +22,7 @@
 
                               <div class="step display-flex align-items-center gap-10px" cdkDrag>
                                     <div class="step-inner" style="line-height: 1.4;">
-                                          <a class="ahref-non-decoration" (click)="editStep(i); $event.preventDefault()">{{ s.name }}</a>
+                                          <a class="ahref-non-decoration" (click)="editStep(i); $event.preventDefault()">{{ step.name }}</a>
                                     </div>
                                     <div> 
                                           <kit-action-menu [actions]="buildStepActtions(i)"></kit-action-menu>
@@ -36,4 +36,4 @@
                   </div>
             </div>
       </div>
-</div> -->
+</div>

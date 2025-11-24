@@ -14,8 +14,8 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflowTemplates.Queries
 
 		public async Task<IReadOnlyList<ExpenseWorkflowTemplateDto>> Handle(GetAllExpenseWorfklowTemplatesQuery query, CancellationToken cancellationToken)
 		{
-			return await _expenseWorkflowTemplateRepo.GetAllAsync(
-				q => q.IsActive,
+			 return await _expenseWorkflowTemplateRepo.ListAsync(
+				q => q.Where(x => x.IsActive),
 				cancellationToken: cancellationToken
 			);
 		}

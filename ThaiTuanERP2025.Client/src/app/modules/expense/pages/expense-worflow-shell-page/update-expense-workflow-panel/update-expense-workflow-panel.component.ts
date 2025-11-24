@@ -11,12 +11,14 @@ import { ExpenseApproveMode, ExpenseStepTemplatePayload } from "../../../models/
 import { ExpenseStepTemplateApiService } from "../../../services/expense-step-template.service";
 import { ActionMenuOption } from "../../../../../shared/components/kit-action-menu/kit-action-menu.model";
 import { ExpenseStepTemplateRequestDialogComponent } from "../../../components/expense-step-request-dialog/expense-step-template-request-dialog.component";
+import { KitActionMenuComponent } from "../../../../../shared/components/kit-action-menu/kit-action-menu.component";
 
 @Component({
       selector: 'update-expense-workflow-panel',
       standalone: true,
-      imports: [ CommonModule ],
-      templateUrl: './update-expense-workflow-panel.component.html'
+      imports: [CommonModule, KitActionMenuComponent],
+      templateUrl: './update-expense-workflow-panel.component.html',
+      styleUrl: './update-expense-workflow-panel.component.scss'
 })
 export class UpdateExpenseWorkflowPanelComponent implements OnInit {
       private readonly route = inject(ActivatedRoute);
@@ -28,8 +30,8 @@ export class UpdateExpenseWorkflowPanelComponent implements OnInit {
       private readonly router = inject(Router);
 
       workflowId!: string;
-      workflowDetailDto!: ExpenseWorkflowTemplateDto;
-      workflowDetailPayload!: ExpenseWorkflowTemplatePayload;
+      workflowDetailDto: ExpenseWorkflowTemplateDto | null = null;
+      workflowDetailPayload: ExpenseWorkflowTemplatePayload | null = null;
 
       form = this.formBuilder.group({
             name: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
@@ -42,8 +44,25 @@ export class UpdateExpenseWorkflowPanelComponent implements OnInit {
             this.getExpenseWorkflowTemplateDetail(this.workflowId);
       }
 
+      editStep(i: number): void {
+             if (!this.workflowDetailPayload) return;  
+
+            const current = this.workflowDetailPayload?.steps[i];
+            console.log('current: ', current);
+            const dialogRef = this.dialog.open(ExpenseStepTemplateRequestDialogComponent, {
+                  data: { step: current, approveMode: current?.approveMode }
+            });
+            dialogRef.afterClosed().subscribe((step?: ExpenseStepTemplatePayload) => {
+                  if(step) {
+                        const updated = { ...step, order: current?.order };
+                        this.workflowDetailPayload!.steps[i] = updated;
+                  }
+            })
+      }
+
       async getExpenseWorkflowTemplateDetail(id: string) {
             this.workflowDetailDto = await firstValueFrom(this.expenseWorkflowTemplateApi.getById(id));
+            console.log('workflowTemplateDto: ', this.workflowDetailDto);
             
             this.workflowDetailPayload = mapExpenseWorkflowTemplateDtoToPayload(this.workflowDetailDto);
             this.form.patchValue(this.workflowDetailPayload);
@@ -56,17 +75,27 @@ export class UpdateExpenseWorkflowPanelComponent implements OnInit {
 
             dialogRef.afterClosed().subscribe((step?: ExpenseStepTemplatePayload) => {
                   if (step) {
-                        const order = this.workflowDetailDto.steps.length + 1;
+                        const order = (this.workflowDetailDto?.steps.length ?? 0) + 1;
                         const newStep: ExpenseStepTemplatePayload = {
                               ...step,
                               order
                         };
 
-                        this.workflowDetailPayload.steps.push(newStep);
+                        this.workflowDetailPayload?.steps.push(newStep);
                   }
             });
       }
 
+      buildStepActtions(index: number): ActionMenuOption[] {
+            const lastIndex = (this.workflowDetailPayload?.steps.length ?? 1) - 1;
+
+            return [
+                 // { label: '⚙️ Sửa', action: () => this.editStep(index) },
+                  { label: '⬅️ Về trước', action: () => this.moveUp(index), disabled: index === 0 },
+                  { label: '➡️ Về sau', action:() => this.moveDown(index), disabled: index === lastIndex },
+                  { label: '⛔ Xóa', color: 'red', action: () => this.removeStep(index)},
+            ]
+      }
       buildAddStepAction(): ActionMenuOption[] {
             return [
                   { label: 'Thêm bước duyệt thông thường', action: () => this.openExpenseStepRequestDialog('Standard') },
@@ -75,20 +104,29 @@ export class UpdateExpenseWorkflowPanelComponent implements OnInit {
       }
 
       private recomputeOrders(): void {
-            this.workflowDetailPayload.steps.forEach((s, idx) => s.order = idx + 1);
+            this.workflowDetailPayload?.steps.forEach((s, idx) => s.order = idx + 1);
       }
       moveUp(i: number): void {
+            if (!this.workflowDetailPayload) return;
             if(i <= 0) return;
-            [this.workflowDetailPayload.steps[i-1], this.workflowDetailPayload.steps[i]] = [this.workflowDetailPayload.steps[i], this.workflowDetailPayload.steps[i - 1]];
+
+            const steps = this.workflowDetailPayload.steps;
+            [steps[i - 1], steps[i]] = [steps[i], steps[i - 1]];
             this.recomputeOrders();
       }
       moveDown(i: number): void {
-            if(i >= this.workflowDetailPayload.steps.length - 1) return;
-            [this.workflowDetailPayload.steps[i], this.steps[i + 1]] = [this.steps[i + 1], this.steps[i]];
+            if (!this.workflowDetailPayload) return;
+
+            const steps = this.workflowDetailPayload.steps;
+            if(i >= steps.length - 1) return;
+
+            [steps[i], steps[i + 1]] = [steps[i + 1], steps[i]];
             this.recomputeOrders();
       }
       removeStep(i: number): void {
-            this.steps.splice(i, 1);
+            if (!this.workflowDetailPayload) return;
+
+            this.workflowDetailPayload.steps.splice(i, 1);
             this.recomputeOrders();
       }
 

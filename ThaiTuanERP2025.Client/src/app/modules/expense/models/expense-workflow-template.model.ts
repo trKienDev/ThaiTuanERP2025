@@ -1,4 +1,4 @@
-import { ExpenseStepTemplateDto, ExpenseStepTemplatePayload } from "./expense-step-template.model";
+import { ExpenseApproveMode, ExpenseFlowType, ExpenseStepTemplateDto, ExpenseStepTemplatePayload } from "./expense-step-template.model";
 
 export interface ExpenseWorkflowTemplateDto {
       id: string;
@@ -21,9 +21,9 @@ export function mapExpenseWorkflowTemplateDtoToPayload(dto: ExpenseWorkflowTempl
             steps: dto.steps.map(step => ({
                   name: step.name,
                   order: step.order,
-                  flowType: step.flowType,
+                  flowType: step.flowType as ExpenseFlowType,
                   slaHours: step.slaHours,
-                  approveMode: step.approverMode,
+                  approveMode: step.approveMode as ExpenseApproveMode,
                   approverIds: step.approverIds ?? [],
                   resolverKey: step.resolverKey ?? null,
                   resolverParams: step.resolverParams ?? null

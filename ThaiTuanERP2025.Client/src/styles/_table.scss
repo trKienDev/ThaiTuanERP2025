@@ -15,12 +15,12 @@
             border-right: 1px solid #e2e8ee;
             padding: 5px;
             text-wrap: nowrap;
+            text-align: center;
       }
 
       thead th {
             background-color: var(--primary-theme-color); 
             font-weight: 600;
-            text-align: left;
       }
 
       tbody tr:hover {

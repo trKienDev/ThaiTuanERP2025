@@ -6,10 +6,10 @@ export interface ExpenseStepTemplateDto {
       workflowTemplateId: string;
       name: string;
       order: number;
-      flowType: ExpenseFlowType;
+      flowType: string;
       slaHours: number;
-      approverMode: ExpenseApproveMode;
-      approverIds?: string[];
+      approveMode: string;
+      approverIds: string[];
       resolverKey?: string;
       resolverParams?: object;
 }

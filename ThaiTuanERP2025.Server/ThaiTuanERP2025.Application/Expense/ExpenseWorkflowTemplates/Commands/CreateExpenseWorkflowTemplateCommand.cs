@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using System.Text.Json;
-using ThaiTuanERP2025.Application.Expense.ExpenseStepTemplates.Contracts;
 using ThaiTuanERP2025.Application.Expense.ExpenseWorkflowTemplates.Contracts;
 using ThaiTuanERP2025.Application.Shared.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Entities;
@@ -69,7 +68,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflowTemplates.Commands
 						order: finalOrder,
 						flowType: flowType,
 						slaHours: slaHours,
-						expenseApproveMode: approveMode,
+						 approveMode: approveMode,
 						fixedApproverIdsJson: fixedApproversJson,
 						resolverKey: s.ResolverKey,
 						resolverParamsJson: resolverParamsJson
