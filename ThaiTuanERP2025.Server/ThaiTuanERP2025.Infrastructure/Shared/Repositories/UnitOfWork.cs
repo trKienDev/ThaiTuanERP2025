@@ -4,7 +4,6 @@ using ThaiTuanERP2025.Domain.Expense.Repositories;
 using ThaiTuanERP2025.Domain.Files.Repositories;
 using ThaiTuanERP2025.Domain.Finance.Repositories;
 using ThaiTuanERP2025.Domain.Shared.Repositories;
-using ThaiTuanERP2025.Infrastructure.Account.Repositories;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
@@ -44,10 +43,10 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 			IOutgoingPaymentRepository outgoingPayments,
 
 			// Workflow	
-			IExpenseStepTemplateRepository approvalStepTemplates,
-			IExpenseWorkflowTemplateRepository approvalWorkflowTemplates,
-			IExpenseStepInstanceRepository approvalStepInstances,
-			IExpenseWorkflowInstanceRepository approvalWorkflowInstances,
+			IExpenseStepTemplateRepository expenseStepTemplates,
+			IExpenseWorkflowTemplateRepository expenseWorkflowTemplates,
+			IExpenseStepInstanceRepository expenseStepInstances,
+			IExpenseWorkflowInstanceRepository expenseWorkflowInstances,
 
 			// Expense Payment
 			IExpensePaymentRepository expensePayments,
@@ -96,10 +95,10 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 			OutgoingBankAccounts = outgoingBankAccounts;
 			OutgoingPayments = outgoingPayments;
 
-			ApprovalStepTemplates = approvalStepTemplates;
-			ApprovalWorkflowTemplates = approvalWorkflowTemplates;
-			ApprovalStepInstances = approvalStepInstances;
-			ApprovalWorkflowInstances = approvalWorkflowInstances;
+			ExpenseStepTemplates = expenseStepTemplates;
+			ExpenseWorkflowTemplates = expenseWorkflowTemplates;
+			ExpenseStepInstances = expenseStepInstances;
+			ExpenseWorkflowInstances = expenseWorkflowInstances;
 
 			ExpensePayments = expensePayments;
 			ExpensePaymentComments = expensePaymentComments;
@@ -145,10 +144,10 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 		public IOutgoingPaymentRepository OutgoingPayments { get; }
 
 		// Workflow
-		public IExpenseWorkflowTemplateRepository ApprovalWorkflowTemplates { get; }
-		public IExpenseStepTemplateRepository ApprovalStepTemplates { get; }
-		public IExpenseWorkflowInstanceRepository ApprovalWorkflowInstances { get; }
-		public IExpenseStepInstanceRepository ApprovalStepInstances { get; }
+		public IExpenseWorkflowTemplateRepository ExpenseWorkflowTemplates { get; }
+		public IExpenseStepTemplateRepository ExpenseStepTemplates { get; }
+		public IExpenseWorkflowInstanceRepository ExpenseWorkflowInstances { get; }
+		public IExpenseStepInstanceRepository ExpenseStepInstances { get; }
 
 		// Expense Payment
 		public IExpensePaymentRepository ExpensePayments { get; }

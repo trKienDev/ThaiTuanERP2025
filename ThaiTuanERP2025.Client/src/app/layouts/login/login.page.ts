@@ -75,7 +75,7 @@ export class LoginComponent implements OnInit{
 
                   const { employeeCode, password } = this.form.getRawValue();
                   await firstValueFrom(this.auth.login(employeeCode, password));
-                  this.toast.successRich("Xác thực thành công");
+                  this.toast.successRich("Đăng nhập thành công");
                   this.router.navigateByUrl('/splash');
                   this.showErrors = false;
             } catch(error) {

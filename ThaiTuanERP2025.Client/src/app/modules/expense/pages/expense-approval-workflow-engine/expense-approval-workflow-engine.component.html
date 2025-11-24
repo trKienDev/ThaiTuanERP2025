@@ -22,13 +22,13 @@
                   <tbody>
                         <tr *ngFor="let wft of (wfTemplates$ | async) ?? []; trackBy: trackById; let i = index;">
                               <td>{{ i + 1 }}</td>
-                              <td>{{ wft.name }}</td>
-                              <td>
+                              <!-- <td>{{ wft.name }}</td> -->
+                              <!-- <td>
                                     <label class="switch-1">
                                           <input type="checkbox" [checked]="wft.isActive">
                                           <span class="slider"></span>
                                     </label>
-                              </td>
+                              </td> -->
                         </tr>
                   </tbody>
             </table>

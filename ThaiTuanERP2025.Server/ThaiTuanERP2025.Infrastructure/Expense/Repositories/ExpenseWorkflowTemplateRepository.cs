@@ -13,26 +13,23 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories
 		{
 		}
 
-		public async Task<bool> ExistsActiveForScopeAsync(string documentType, CancellationToken cancellationToken = default) {
+		public async Task<bool> ExistsActiveForScopeAsync(CancellationToken cancellationToken = default) {
 			var query = _dbSet.AsNoTracking()
-				.Where(x => !x.IsDeleted && x.IsActive && x.DocumentType == documentType);
+				.Where(x => !x.IsDeleted && x.IsActive);
 
 			return await query.AnyAsync();
 		}
 		
-		public async Task<List<ExpenseWorkflowTemplate>> ListByFilterAsync(string? documentType, bool? isActive, CancellationToken cancellationToken = default) {
+		public async Task<List<ExpenseWorkflowTemplate>> ListByFilterAsync(bool? isActive, CancellationToken cancellationToken = default) {
 			var query = _dbSet.AsNoTracking().Where(x => !x.IsDeleted);
 
-			if (!string.IsNullOrWhiteSpace(documentType))
-				query = query.Where(x => x.DocumentType == documentType);
 
 			if (isActive.HasValue)
 				query = query.Where(x => x.IsActive == isActive.Value);
 
 			return await query.OrderByDescending(x => x.IsActive)
-				      .ThenBy(x => x.DocumentType)
-				      .ThenBy(x => x.Name)
-				      .ToListAsync(cancellationToken);
+				.ThenBy(x => x.Name)
+				.ToListAsync(cancellationToken);
 		}
 	}
 }

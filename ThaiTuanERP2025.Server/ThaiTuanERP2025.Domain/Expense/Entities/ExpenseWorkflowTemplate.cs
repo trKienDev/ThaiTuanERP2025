@@ -12,15 +12,13 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 	{
 		#region Constructors
 		private ExpenseWorkflowTemplate() { }
-		public ExpenseWorkflowTemplate(string name, string documentType, int version = 1)
+		public ExpenseWorkflowTemplate(string name, int version = 1)
 		{
 			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
-			Guard.AgainstNullOrWhiteSpace(documentType, nameof(documentType));
 			Guard.AgainstOutOfRange(version, 1, int.MaxValue, nameof(version));
 
 			Id = Guid.NewGuid();
 			Name = name.Trim();
-			DocumentType = documentType.Trim().ToLowerInvariant();
 			Version = version;
 			IsActive = true;
 
@@ -31,9 +29,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		#region Properties
 		[MaxLength(200)]
 		public string Name { get; private set; } = string.Empty;
-
-		[MaxLength(100)]
-		public string DocumentType { get; private set; } = string.Empty;
 
 		public int Version { get; private set; } = 1;
 		public bool IsActive { get; private set; } = true;

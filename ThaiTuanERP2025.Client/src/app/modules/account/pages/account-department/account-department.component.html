@@ -7,7 +7,7 @@
                   <th>Mã phòng ban</th>
                   <th>Tên phòng ban</th>
                   <th>Trường bộ phận</th>
-                  <th *appHasPermission="'department.actions'">Hành động</th>
+                  <th *appHasPermission="'department.actions'" class="text-align-center">Hành động</th>
             </tr>
       </thead>
       <tbody>
@@ -23,7 +23,7 @@
                               </div>
                         </ng-container>
                   </td>
-                  <td *appHasPermission="'department.actions'" class="display-flex">
+                  <td *appHasPermission="'department.actions'" class="display-flex justify-content-center">
                         <kit-action-menu [actions]="buildDepartmentActions(dept)"></kit-action-menu>
                   </td>
             </tr>

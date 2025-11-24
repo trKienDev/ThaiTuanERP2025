@@ -17,7 +17,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public int Order { get; private set; }
 		public ExpenseFlowType FlowType { get; private set; }
 		public int SlaHours { get; private set; }
-		public ApproverMode ApproverMode { get; private set; }
+		public ExpenseApproveMode ApproverMode { get; private set; }
 
 		public string? ResolvedApproverCandidatesJson { get; private set; }
 		public Guid? DefaultApproverId { get; private set; }
@@ -45,7 +45,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		private ExpenseStepInstance() { }
 		public ExpenseStepInstance( 
 			Guid workflowInstanceId, Guid? templateStepId, string name, int order,
-			ExpenseFlowType flowType, int slaHours, ApproverMode approverMode,
+			ExpenseFlowType flowType, int slaHours, ExpenseApproveMode approverMode,
 			string? candidatesJson, Guid? defaultApproverId, Guid? selectedApproverId,
 			StepStatus status = StepStatus.Pending
 		) {

@@ -1,12 +1,12 @@
 import { CommonModule } from "@angular/common";
 import { Component, Inject, inject, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { ApprovalStepTemplateRequest } from "../../../../models/approval-step-template.model";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ToastService } from "../../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
-import { ApprovalWorkflowTemplateRequest } from "../../../../models/approval-workflow-template.model";
 import { firstValueFrom } from "rxjs";
-import { ApprovalWorkflowTemplateApiService } from "../../../../services/approval-workflow-template.service";
+import { ExpenseWorkflowTemplateApiService } from "../../../../services/expense-workflow-template.service";
+import { ExpenseStepTemplatePayload } from "../../../../models/expense-step-template.model";
+import { ExpenseWorkflowTemplatePayload } from "../../../../models/expense-workflow-template.model";
 
 @Component({
       selector: 'save-approval-workflow-template',
@@ -18,12 +18,12 @@ export class SaveApprovalWorkflowTemplateComponent implements OnInit {
       private dialogRef = inject(MatDialogRef<SaveApprovalWorkflowTemplateComponent>);
       private formBuilder = inject(FormBuilder);
       private readonly toastService = inject(ToastService);
-      private readonly wftService = inject(ApprovalWorkflowTemplateApiService);
+      private readonly wftService = inject(ExpenseWorkflowTemplateApiService);
 
       submitting: boolean = false;
       dialogTitle: string = 'Lưu luồng duyệt 2';
 
-      stepTemplateRequest: ApprovalStepTemplateRequest[] = [];
+      stepTemplateRequest: ExpenseStepTemplatePayload[] = [];
 
       form = this.formBuilder.group({
             name: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
@@ -32,7 +32,7 @@ export class SaveApprovalWorkflowTemplateComponent implements OnInit {
 
       constructor(
             @Inject(MAT_DIALOG_DATA) public input?: {
-                  steps?: ApprovalStepTemplateRequest[];
+                  steps?: ExpenseStepTemplatePayload[];
             } 
       ) { }
 
@@ -54,7 +54,7 @@ export class SaveApprovalWorkflowTemplateComponent implements OnInit {
             try {
                   const steps = (this.input?.steps ?? []).map((s, i) => ({ ...s, order: i + 1 }));
                   const raw = this.form.getRawValue();
-                  const payload: ApprovalWorkflowTemplateRequest = {
+                  const payload: ExpenseWorkflowTemplatePayload = {
                         name: raw.name!.trim(),
                         version: raw.version,
                         steps

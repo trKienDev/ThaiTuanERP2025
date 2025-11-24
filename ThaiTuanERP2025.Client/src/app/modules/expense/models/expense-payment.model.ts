@@ -1,5 +1,5 @@
 import { UserDto } from "../../account/models/user.model";
-import { ApprovalWorkflowInstanceDetailDto, ApprovalWorkflowIntanceStatusDto } from "./approval-workflow-instance.model";
+import { ApprovalWorkflowInstanceDetailDto, ApprovalWorkflowIntanceStatusDto } from "./expense-workflow-instance.model";
 import { ExpensePaymentAttachmentDto, ExpensePaymentAttachmentRequest } from "./expense-payment-attachment.model";
 import { ExpensePaymentItemDetailDto, ExpensePaymentItemRequest } from "./expense-paymnet-item.model";
 import { OutgoingPaymentStatusDto } from "./outgoing-payment.model";

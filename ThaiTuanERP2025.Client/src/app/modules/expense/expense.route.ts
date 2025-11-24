@@ -5,6 +5,8 @@ import { ExpensePaymentRequestPanelComponent } from "./pages/expense-payment-she
 import { FollowingOutgoingPaymentComponent } from "./pages/outgoing-payment-shell-page/following-outgoing-payment/following-outgoing-payment.component";
 import { OutgoingPaymentRequestComponent } from "./pages/outgoing-payment-shell-page/outgoing-payment-request/outgoing-payment-request.component";
 import { OutgoingBankAccountComponent } from "./pages/bank-account-shell-page/outgoing-bank-account/outgoing-bank-account.component";
+import { ExpenseWorkflowsPanelComponent } from "./pages/expense-worflow-shell-page/expense-workflows-panel/expense-workflows-panel.component";
+import { ExpenseWorkflowRequestPanel } from "./pages/expense-worflow-shell-page/expense-workflow-request-panel/expense-workflow-request-panel.component";
 
 export const expenseRoutes: Routes = [
       {
@@ -43,6 +45,15 @@ export const expenseRoutes: Routes = [
                   },
                   { path: 'approval-workflow-engine', data: { animation: 'ApprovalWorkflowEnginePage' }, loadComponent: () => import('./pages/expense-approval-workflow-engine/expense-approval-workflow-engine.component').then((m) => m.ExpenseApprovalWorkflowEngineComponent )},
                   { path: 'approval-workflow-engine/approval-workflow-engine-request', loadComponent: () => import('./pages/expense-approval-workflow-engine/expense-approval-workflow-engine-request/expense-approval-workflow-engine-request.component').then((m) => m.ExpenseApprovalWorkflowEngineRequest )},
+                  {
+                        path: 'expense-workflows-shell',
+                        loadComponent: () => import('./pages/expense-worflow-shell-page/expense-worflow-shell-page.component').then((m) => m.ExpenseWorkflowShellPageComponent),
+                        children: [
+                              { path: '', redirectTo: 'expense-workflows', pathMatch: 'full' },
+                              { path: 'expense-workflows', component: ExpenseWorkflowsPanelComponent },
+                              { path: 'expense-workflow-request', component: ExpenseWorkflowRequestPanel },
+                        ] 
+                  }
             ]
       }
 ]

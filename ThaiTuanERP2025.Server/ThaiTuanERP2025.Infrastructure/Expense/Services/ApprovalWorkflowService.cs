@@ -37,14 +37,13 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 		public async Task<Guid> CreateInstanceForExpensePaymentAsync(ExpensePayment expensePayment, Guid workflowTemplateId, IReadOnlyCollection<StepOverrideRequest>? overrides, bool linkToPayment, CancellationToken cancellationToken) 
 		{
 			// 0) Chống trùng: đã có AWI Draft/InProgress cho document này?
-			var existed = await _unitOfWork.ApprovalWorkflowInstances.ExistAsync(
-				x => x.DocumentType == "ExpensePayment"
-				&& x.DocumentId == expensePayment.Id
+			var existed = await _unitOfWork.ExpenseWorkflowInstances.ExistAsync(
+				x => x.DocumentId == expensePayment.Id
 				&& (x.Status == WorkflowStatus.Draft || x.Status == WorkflowStatus.InProgress)
 			);
 			if (existed) return Guid.Empty;
 
-			var tpl = await _unitOfWork.ApprovalWorkflowTemplates.SingleOrDefaultIncludingAsync(t => t.Id == workflowTemplateId && t.IsActive, includes: t => t.Steps)
+			var tpl = await _unitOfWork.ExpenseWorkflowTemplates.SingleOrDefaultIncludingAsync(t => t.Id == workflowTemplateId && t.IsActive, includes: t => t.Steps)
 				?? throw new ConflictException("Workflow template not found or inactive");
 			if (tpl.Steps == null || !tpl.Steps.Any())
 				throw new ConflictException("Workflow template has no steps");
@@ -65,7 +64,7 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 				costCenter: null,
 				rawJson: null
 			);
-			await _unitOfWork.ApprovalWorkflowInstances.AddAsync(awi);
+			await _unitOfWork.ExpenseWorkflowInstances.AddAsync(awi);
 
 			var ovMap = overrides?.ToDictionary(x => x.StepOrder, x => x.SelectedApproverId)
 				?? new Dictionary<int, Guid?>();
@@ -77,7 +76,7 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 				string? candidatesJson;
 				Guid? defaultApprover = null;
 
-				if (s.ApproverMode == ApproverMode.Standard)
+				if (s.ExpenseApproveMode == ExpenseApproveMode.Standard)
 				{
 					candidatesJson = s.FixedApproverIdsJson;
 					var arr = JsonUtils.ParseGuidArray(candidatesJson);
@@ -99,14 +98,14 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 					order: s.Order,
 					flowType: s.FlowType,
 					slaHours: s.SlaHours,
-					approverMode: s.ApproverMode,
+					approverMode: s.ExpenseApproveMode,
 					candidatesJson: candidatesJson,
 					defaultApproverId: defaultApprover,
 					selectedApproverId: selected,
 					status: StepStatus.Pending
 				);
 
-				await _unitOfWork.ApprovalStepInstances.AddAsync(step);
+				await _unitOfWork.ExpenseStepInstances.AddAsync(step);
 			}
 
 			// 4) Link nhanh về payment (nếu domain có property này)
@@ -154,7 +153,7 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 
 		private async Task<ExpenseWorkflowInstance> LoadInstanceWithStepsAsync(Guid instanceId, CancellationToken cancellationToken)
 		{
-			var ins = await _unitOfWork.ApprovalWorkflowInstances.SingleOrDefaultIncludingAsync(
+			var ins = await _unitOfWork.ExpenseWorkflowInstances.SingleOrDefaultIncludingAsync(
 				i => i.Id == instanceId,
 				asNoTracking: false,
 				cancellationToken: cancellationToken,
@@ -210,14 +209,14 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 			ExpenseStepTemplate? tpl = null;
 			if (step.TemplateStepId.HasValue)
 			{
-				tpl = await _unitOfWork.ApprovalStepTemplates
+				tpl = await _unitOfWork.ExpenseStepTemplates
 				    .SingleOrDefaultIncludingAsync(t => t.Id == step.TemplateStepId.Value, cancellationToken: cancellationToken);
 			}
 
 			// Fallback: khớp bằng (WorkflowTemplateId + Order) nếu TemplateStepId không có
 			if (tpl is null)
 			{
-				tpl = await _unitOfWork.ApprovalStepTemplates
+				tpl = await _unitOfWork.ExpenseStepTemplates
 					.SingleOrDefaultIncludingAsync(t =>
 						t.WorkflowTemplateId == ins.TemplateId && t.Order == step.Order,
 						cancellationToken: cancellationToken
@@ -227,7 +226,7 @@ namespace ThaiTuanERP2025.Application.Expense.Services.ApprovalWorkflows
 			if (tpl is null) return Array.Empty<Guid>();
 
 			// 2) Theo mode
-			if (tpl.ApproverMode == ApproverMode.Standard)
+			if (tpl.ExpenseApproveMode == ExpenseApproveMode.Standard)
 			{
 				// Nếu template khai báo cố định
 				if (!string.IsNullOrWhiteSpace(tpl.FixedApproverIdsJson))

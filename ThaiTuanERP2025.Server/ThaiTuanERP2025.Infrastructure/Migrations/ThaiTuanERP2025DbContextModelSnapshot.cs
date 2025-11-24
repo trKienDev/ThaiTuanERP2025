@@ -1288,38 +1288,14 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("AllowOverride")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("ApproverMode")
+                    b.Property<int>("ExpenseApproveMode")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("CreatedByUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("DeletedByUserId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("FixedApproverIdsJson")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("FlowType")
                         .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("ModifiedByUserId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1343,12 +1319,6 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedByUserId");
-
-                    b.HasIndex("DeletedByUserId");
-
-                    b.HasIndex("ModifiedByUserId");
 
                     b.HasIndex("WorkflowTemplateId", "Order")
                         .IsUnique();
@@ -1431,11 +1401,6 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                     b.Property<Guid?>("DeletedByUserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("DocumentType")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -1467,8 +1432,6 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                     b.HasIndex("DeletedByUserId");
 
                     b.HasIndex("ModifiedByUserId");
-
-                    b.HasIndex("DocumentType", "Version");
 
                     b.ToTable("ExpenseWorkflowTemplates", "ExpenseWorkflow");
                 });
@@ -3394,29 +3357,11 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
 
             modelBuilder.Entity("ThaiTuanERP2025.Domain.Expense.Entities.ExpenseStepTemplate", b =>
                 {
-                    b.HasOne("ThaiTuanERP2025.Domain.Account.Entities.User", "CreatedByUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedByUserId");
-
-                    b.HasOne("ThaiTuanERP2025.Domain.Account.Entities.User", "DeletedByUser")
-                        .WithMany()
-                        .HasForeignKey("DeletedByUserId");
-
-                    b.HasOne("ThaiTuanERP2025.Domain.Account.Entities.User", "ModifiedByUser")
-                        .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
-
                     b.HasOne("ThaiTuanERP2025.Domain.Expense.Entities.ExpenseWorkflowTemplate", "WorkflowTemplate")
                         .WithMany("Steps")
                         .HasForeignKey("WorkflowTemplateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("CreatedByUser");
-
-                    b.Navigation("DeletedByUser");
-
-                    b.Navigation("ModifiedByUser");
 
                     b.Navigation("WorkflowTemplate");
                 });

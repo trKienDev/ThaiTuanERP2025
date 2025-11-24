@@ -5,8 +5,8 @@ import { ToastService } from "../../../../../../shared/components/kit-toast-aler
 import { FormBuilder, FormsModule, Validators, ReactiveFormsModule } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { UserOptionStore } from "../../../../../account/options/user-dropdown.option";
-import { ApproverMode, ApprovalStepTemplateRequest, FlowType } from "../../../../models/approval-step-template.model";
 import { logFormErrors } from "../../../../../../shared/utils/form.utils";
+import { ExpenseApproveMode, ExpenseFlowType, ExpenseStepTemplatePayload } from "../../../../models/expense-step-template.model";
 
 @Component({
       selector: 'approval-step-request-dialog',
@@ -24,7 +24,7 @@ export class ApprovalStepRequestDialog implements OnInit {
 
       constructor(
             @Inject(MAT_DIALOG_DATA) public data?: { 
-                  step?: ApprovalStepTemplateRequest;
+                  step?: ExpenseStepTemplatePayload;
                   approverMode?: 'standard' | 'condition'; 
             }
       ) {}
@@ -35,20 +35,20 @@ export class ApprovalStepRequestDialog implements OnInit {
 
       form = this.formBuilder.group({
             name: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
-            approverMode: this.formBuilder.control<string>('standard' as ApproverMode, Validators.required ),
+            approveMode: this.formBuilder.control<string>('Standard' as ExpenseApproveMode, Validators.required ),
             approverIds: this.formBuilder.control<string[]>([]),
             slaHours: this.formBuilder.control<number>(8, { nonNullable: true, validators: [ Validators.min(1) ]}),
-            flowType: this.formBuilder.control<FlowType>('single', { nonNullable: true, validators: [ Validators.required ] }),
+            flowType: this.formBuilder.control<ExpenseFlowType>('Single', { nonNullable: true, validators: [ Validators.required ] }),
             order: this.formBuilder.control<number>(1, { nonNullable: true }),
             allowOverride: this.formBuilder.control<boolean>(true),
             resolverKey: this.formBuilder.control<string>(''),
-            resolverParams: this.formBuilder.control<any | null>(null),
+            resolverParams: this.formBuilder.control<object | null>(null),
       });
 
       ngOnInit(): void {
             if(this.data?.approverMode) {
                   this.approverMode = this.data.approverMode;
-                  this.form.patchValue({ approverMode: this.data.approverMode });
+                  this.form.patchValue({ approveMode: this.data.approverMode });
             }
 
             if(this.data?.step) {
@@ -70,7 +70,7 @@ export class ApprovalStepRequestDialog implements OnInit {
             const current = ctrl.getRawValue() ?? [];
             if (!current.includes(id)) ctrl.setValue([...current, id]);
 
-            if(this.form.controls.flowType.value === 'single') {
+            if(this.form.controls.flowType.value === 'Single') {
                   ctrl.setValue([id]);
             } else {
                   if(!current.includes(id)) ctrl.setValue([...current, id]);
@@ -81,14 +81,14 @@ export class ApprovalStepRequestDialog implements OnInit {
       }
 
       flowTypeOptions: KitDropdownOption[] = [
-            { id: 'single', label: '1 người duyệt' },
-            { id: 'one-of-n', label: '1 trong nhiều người duyệt' }
+            { id: 'Single', label: '1 người duyệt' },
+            { id: 'OneOfN', label: '1 trong nhiều người duyệt' }
       ];
       onFlowTypeSelected(opt: KitDropdownOption) {
-            if(opt.id === 'single') {
-                  this.form.patchValue({ flowType: 'single' });
+            if(opt.id === 'Single') {
+                  this.form.patchValue({ flowType: 'Single' });
             } else {
-                  this.form.patchValue({ flowType: 'one-of-n'});
+                  this.form.patchValue({ flowType: 'OneOfN'});
             }
       }
 
@@ -107,19 +107,18 @@ export class ApprovalStepRequestDialog implements OnInit {
             }
 
             const value = this.form.getRawValue();
-            const flowType = value.flowType === 'single' ? 'single' : 'one-of-n';
-            const approverMode = value.approverMode === 'standard' ? 'standard' : 'condition';
+            const flowType = value.flowType === 'Single' ? 'Single' : 'OneOfN';
+            const approverMode = value.approveMode === 'Standard' ? 'Standard' : 'Condition';
 
-            const payload: ApprovalStepTemplateRequest = {
+            const payload: ExpenseStepTemplatePayload = {
                   name: value.name!.trim(),
                   order: value.order ?? 1,
                   flowType,
                   slaHours: Number(value.slaHours) || 0,
-                  approverMode,
-                  approverIds:  approverMode === 'standard' ? (value.approverIds ?? []) : null,
-                  resolverKey: approverMode === 'condition' ? (value.resolverKey || null) : null,
-                  resolverParams: approverMode === 'condition' ? (value.resolverParams ?? null) : null,
-                  allowOverride: approverMode === 'condition' ? !!value.allowOverride : false,
+                  approveMode: approverMode,
+                  approverIds:  approverMode === 'Standard' ? (value.approverIds ?? []) : null,
+                  resolverKey: approverMode === 'Condition' ? (value.resolverKey || null) : null,
+                  resolverParams: approverMode === 'Condition' ? (value.resolverParams ?? null) : null,
             };
 
             this.dialog.close({ isSuccess: true, step: payload });

@@ -353,7 +353,7 @@ export class KitDropdownComponent<T = any> implements ControlValueAccessor, OnCh
                   return;
             }
 
-            if (event.key === 'Enter' || event.key === ' ') {
+            if (event.key === 'Enter') {
                   event.preventDefault();
                   const idx = this.focusedIndex;
                   if (idx >= 0 && idx < len) {

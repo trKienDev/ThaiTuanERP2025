@@ -18,7 +18,7 @@
                         <th>Phòng ban</th>
                         <th>Vai trò</th>
                         <th>Quản lý</th>
-                        <th *appHasPermission="'user.actions'">Hành động</th>
+                        <th *appHasPermission="'user.actions'" class="text-align-center">Hành động</th>
                   </tr>
             </thead>
             <tbody>
@@ -43,7 +43,7 @@
                               </ul>
                         </td>
                         <td *appHasPermission="'user.actions'">
-                              <div  class="display-flex">
+                              <div  class="display-flex justify-content-center">
                                     <kit-action-menu [actions]="buildUserActions(user)"></kit-action-menu>
                               </div>
                         </td>

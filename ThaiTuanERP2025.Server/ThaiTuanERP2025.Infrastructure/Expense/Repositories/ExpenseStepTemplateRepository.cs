@@ -15,7 +15,7 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories
 
 		public Task<bool> ExistOrderAsync(Guid workflowTemplateId, int order, Guid? excludeId = null, CancellationToken cancellationToken = default) {
 			var query = _dbSet.AsNoTracking()
-				.Where(x => !x.IsDeleted && x.WorkflowTemplateId == workflowTemplateId && x.Order == order);
+				.Where(x => x.WorkflowTemplateId == workflowTemplateId && x.Order == order);
 
 			if(excludeId is Guid ex) query = query.Where(x => x.Id != ex);
 			return query.AnyAsync(cancellationToken);

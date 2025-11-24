@@ -14,12 +14,12 @@ import { UserFacade } from "../../../account/facades/user.facade";
 import { UserDto } from "../../../account/models/user.model";
 import { usePaymentDetail } from "../../composables/use-payment-detail";
 import { FollowingExpensePaymentFacade } from "../../facades/following-expense-payment.facade";
-import { ApproveStepRequest, ApprovalStepInstanceDetailDto, StepStatus } from "../../models/approval-step-instance.model";
+import { ApproveStepRequest, ApprovalStepInstanceDetailDto, StepStatus } from "../../models/expense-step-instance.model";
 import { ExpensePaymentDetailDto, ExpensePaymentStatus } from "../../models/expense-payment.model";
 import { ExpensePaymentStatusPipe } from "../../pipes/expense-payment-status.pipe";
 import { OutgoingPaymentStatusPipe } from "../../pipes/outgoing-payment-status.pipe";
 import { OutgoingPaymentDetailDialogComponent } from "../outgoing-payment-detail-dialog/outgoing-payment-detail-dialog.component";
-import { ApprovalWorkflowInstanceApiService } from "../../services/approval-workflow-instance.service";
+import { ExpenseWorkflowInstanceApiService } from "../../services/expense-workflow-instance.service";
 
 @Component({
       selector: 'expense-payment-detail-dialog',
@@ -77,7 +77,7 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
       currentUser$ = this.userFacade.currentUser$;
       currentUser: UserDto | null = null;
       private toastService = inject(ToastService);
-      private readonly workflowInstanceApi = inject(ApprovalWorkflowInstanceApiService);
+      private readonly workflowInstanceApi = inject(ExpenseWorkflowInstanceApiService);
       paymentId: string = '';
       private paymentLogic = usePaymentDetail();
       loading = this.paymentLogic.isLoading;

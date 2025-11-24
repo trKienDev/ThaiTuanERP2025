@@ -6,9 +6,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { RouterLink } from "@angular/router";
-import { ApprovalWorkflowTemplateApiService } from "../../services/approval-workflow-template.service";
-import { ApprovalWorkflowTemplateDto } from "../../models/approval-workflow-template.model";
-import { ApprovalWorkflowTemplateFacade } from "../../facades/approval-workflow-template.facade";
+import { ExpenseWorkflowTemplateApiService } from "../../services/expense-workflow-template.service";
+import { ExpenseWorkflowTemplateFacade } from "../../facades/expense-workflow-template.facade";
+import { ExpenseWorkflowTemplateDto } from "../../models/expense-workflow-template.model";
 
 @Component({
       selector: 'expense-approval-workflow-engine',
@@ -18,17 +18,17 @@ import { ApprovalWorkflowTemplateFacade } from "../../facades/approval-workflow-
 })
 export class ExpenseApprovalWorkflowEngineComponent{
       private readonly toastService = inject(ToastService);
-      private readonly WfTemplateSer = inject(ApprovalWorkflowTemplateApiService);
+      private readonly WfTemplateSer = inject(ExpenseWorkflowTemplateApiService);
       private readonly dialog = inject(MatDialog);
-      private readonly approvalWorkflowTemplateFacade = inject(ApprovalWorkflowTemplateFacade);
+      private readonly approvalWorkflowTemplateFacade = inject(ExpenseWorkflowTemplateFacade);
       wfTemplates$ = this.approvalWorkflowTemplateFacade.approvalWorkflowTemplates$;
-      wfTemplates: ApprovalWorkflowTemplateDto[] = [];
+      wfTemplates: ExpenseWorkflowTemplateDto[] = [];
 
       errorMessages:string[] = [];
       
       loading = signal(false);
 
-      trackById(index: number, item: ApprovalWorkflowTemplateDto) { return item.id; }
+      trackById(index: number, item: ExpenseWorkflowTemplateDto) { return item.id; }
 
 
 }

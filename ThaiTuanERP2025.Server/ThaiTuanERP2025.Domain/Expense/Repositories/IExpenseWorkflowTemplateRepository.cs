@@ -5,7 +5,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Repositories
 {
 	public interface IExpenseWorkflowTemplateRepository : IBaseWriteRepository<ExpenseWorkflowTemplate>
 	{
-		Task<bool> ExistsActiveForScopeAsync(string documentType, CancellationToken cancellationToken = default);
-		Task<List<ExpenseWorkflowTemplate>> ListByFilterAsync(string? documentType, bool? isActive, CancellationToken cancellationToken = default);
+		Task<bool> ExistsActiveForScopeAsync(CancellationToken cancellationToken = default);
+		Task<List<ExpenseWorkflowTemplate>> ListByFilterAsync(bool? isActive, CancellationToken cancellationToken = default);
 	}
 }

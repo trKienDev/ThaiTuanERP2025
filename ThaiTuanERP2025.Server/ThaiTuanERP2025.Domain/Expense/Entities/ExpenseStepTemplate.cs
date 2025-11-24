@@ -5,7 +5,7 @@ using ThaiTuanERP2025.Domain.Expense.Events.ExpenseStepTemplates;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
-	public class ExpenseStepTemplate : AuditableEntity
+	public class ExpenseStepTemplate : BaseEntity
 	{
 		public Guid WorkflowTemplateId { get; private set; }
 		public ExpenseWorkflowTemplate WorkflowTemplate { get; private set; } = null!;
@@ -13,11 +13,12 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public int Order { get; private set; }
 		public ExpenseFlowType FlowType { get; private set; }
 		public int SlaHours { get; private set; }
-		public ApproverMode ApproverMode { get; private set; }
+		public ExpenseApproveMode ExpenseApproveMode { get; private set; }
 		public string? FixedApproverIdsJson { get; private set; }
+
+		// Chứa tên rule để xác định người duyệt động (creator-manager, "amount-based")
 		public string? ResolverKey { get; private set; }
 		public string? ResolverParamsJson { get; private set; }
-		public bool AllowOverride { get; private set; }
 
 		#region Constructors
 		private ExpenseStepTemplate() { }
@@ -27,17 +28,16 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			int order,
 			ExpenseFlowType flowType,
 			int slaHours,
-			ApproverMode approverMode,
+			ExpenseApproveMode expenseApproveMode,
 			string? fixedApproverIdsJson = null,
 			string? resolverKey = null,
-			string? resolverParamsJson = null,
-			bool allowOverride = false
+			string? resolverParamsJson = null
 		)
 		{
 			Guard.AgainstDefault(workflowTemplateId, nameof(workflowTemplateId));
 			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
 			Guard.AgainstInvalidEnumValue(flowType, nameof(flowType));
-			Guard.AgainstInvalidEnumValue(approverMode, nameof(approverMode));
+			Guard.AgainstInvalidEnumValue(expenseApproveMode, nameof(expenseApproveMode));
 			Guard.AgainstNegative(slaHours, nameof(slaHours));
 
 			Id = Guid.NewGuid();
@@ -46,11 +46,10 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			Order = order;
 			FlowType = flowType;
 			SlaHours = slaHours;
-			ApproverMode = approverMode;
+			ExpenseApproveMode = expenseApproveMode;
 			FixedApproverIdsJson = fixedApproverIdsJson;
 			ResolverKey = resolverKey;
 			ResolverParamsJson = resolverParamsJson;
-			AllowOverride = allowOverride;
 
 			AddDomainEvent(new ExpenseStepTemplateCreatedEvent(this));
 		}
@@ -64,10 +63,10 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			AddDomainEvent(new ExpenseStepTemplateRenamedEvent(this));
 		}
 
-		public void ChangeApproverMode(ApproverMode newMode, string? fixedApproversJson = null, string? resolverKey = null)
+		public void ChangeApproverMode(ExpenseApproveMode newMode, string? fixedApproversJson = null, string? resolverKey = null)
 		{
 			Guard.AgainstInvalidEnumValue(newMode, nameof(newMode));
-			ApproverMode = newMode;
+			ExpenseApproveMode = newMode;
 			FixedApproverIdsJson = fixedApproversJson;
 			ResolverKey = resolverKey;
 			AddDomainEvent(new ExpenseStepTemplateApproverModeChangedEvent(this));
@@ -78,12 +77,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			Guard.AgainstNegative(newSlaHours, nameof(newSlaHours));
 			SlaHours = newSlaHours;
 			AddDomainEvent(new ExpenseStepTemplateSlaUpdatedEvent(this));
-		}
-
-		public void ToggleOverride(bool allow)
-		{
-			AllowOverride = allow;
-			AddDomainEvent(new ExpenseStepTemplateOverrideSettingChangedEvent(this));
 		}
 		#endregion
 	}
