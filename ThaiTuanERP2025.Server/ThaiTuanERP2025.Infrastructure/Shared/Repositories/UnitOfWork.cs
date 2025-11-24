@@ -43,8 +43,8 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 			IOutgoingPaymentRepository outgoingPayments,
 
 			// Workflow	
-			IExpenseStepTemplateRepository expenseStepTemplates,
-			IExpenseWorkflowTemplateRepository expenseWorkflowTemplates,
+			IExpenseStepTemplateWriteRepository expenseStepTemplates,
+			IExpenseWorkflowTemplateWriteRepository expenseWorkflowTemplates,
 			IExpenseStepInstanceRepository expenseStepInstances,
 			IExpenseWorkflowInstanceRepository expenseWorkflowInstances,
 
@@ -144,8 +144,8 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 		public IOutgoingPaymentRepository OutgoingPayments { get; }
 
 		// Workflow
-		public IExpenseWorkflowTemplateRepository ExpenseWorkflowTemplates { get; }
-		public IExpenseStepTemplateRepository ExpenseStepTemplates { get; }
+		public IExpenseWorkflowTemplateWriteRepository ExpenseWorkflowTemplates { get; }
+		public IExpenseStepTemplateWriteRepository ExpenseStepTemplates { get; }
 		public IExpenseWorkflowInstanceRepository ExpenseWorkflowInstances { get; }
 		public IExpenseStepInstanceRepository ExpenseStepInstances { get; }
 

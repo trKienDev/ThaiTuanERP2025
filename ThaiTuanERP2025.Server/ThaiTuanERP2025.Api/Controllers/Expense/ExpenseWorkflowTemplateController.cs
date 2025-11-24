@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Shared;
 using ThaiTuanERP2025.Application.Expense.ExpenseWorkflowTemplates.Commands;
 using ThaiTuanERP2025.Application.Expense.ExpenseWorkflowTemplates.Contracts;
+using ThaiTuanERP2025.Application.Expense.ExpenseWorkflowTemplates.Queries;
 
 namespace ThaiTuanERP2025.Api.Controllers.Expense
 {
@@ -16,6 +17,13 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
                 public ExpenseWorkflowTemplateController(IMediator mediator)
                 {
                         _mediator = mediator;
+                }
+
+                [HttpGet]
+                public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+                {
+                        var dtos = await _mediator.Send(new GetAllExpenseWorfklowTemplatesQuery(), cancellationToken);
+                        return Ok(ApiResponse<IReadOnlyList<ExpenseWorkflowTemplateDto>>.Success(dtos)); 
                 }
 
                 [HttpPost]

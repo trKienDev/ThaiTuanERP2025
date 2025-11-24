@@ -46,21 +46,32 @@ export class SaveExpenseWorkflowTemplateDialogComponent {
                   this.submitting = true;
                   
                   const { name, version, steps } = this.form.getRawValue();
-                  const rawSteps = ((steps as any).data ?? steps) as ExpenseStepTemplatePayload[];
-                  const payload: ExpenseWorkflowTemplatePayload = {
-    name,
-    version,
-    steps: rawSteps.map(step => ({
-        ...step,
-        approverIds: Array.isArray(step.approverIds)
-            ? step.approverIds
-            : step.approverIds
-                ? [step.approverIds] // nếu là string → biến thành array
-                : [],                 // nếu null → array rỗng
-    }))
-};
+                  
+                  const rawSteps: ExpenseStepTemplatePayload[] = 
+                  (steps as any)?.data ?? steps ?? [];
 
-console.log('payload:', payload);
+                  // Chuẩn hoá approverIds
+                  const normalizedSteps = rawSteps.map(step => {
+                        let approverIds: string[] = [];
+
+                        if (Array.isArray(step.approverIds)) {
+                              approverIds = step.approverIds;
+                        } else if (step.approverIds) {
+                              approverIds = [step.approverIds];
+                        }
+
+                        return {
+                              ...step,
+                              approverIds
+                        };
+                  });
+
+                  // Build final payload
+                  const payload: ExpenseWorkflowTemplatePayload = {
+                        name,
+                        version,
+                        steps: normalizedSteps
+                  };
                   console.log('payload: ', payload);
                   await firstValueFrom(this.expenseWorkflowTemplateApi.create(payload));
                   this.toast.successRich("Lưu luồng duyệt thành công");

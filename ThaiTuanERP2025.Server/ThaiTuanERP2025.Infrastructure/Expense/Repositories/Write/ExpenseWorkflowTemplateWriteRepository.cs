@@ -5,11 +5,11 @@ using ThaiTuanERP2025.Domain.Expense.Repositories;
 using ThaiTuanERP2025.Infrastructure.Shared.Repositories;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
-namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories
+namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories.Write
 {
-	public class ExpenseWorkflowTemplateRepository : BaseWriteRepository<ExpenseWorkflowTemplate>, IExpenseWorkflowTemplateRepository
+	public class ExpenseWorkflowTemplateWriteRepository : BaseWriteRepository<ExpenseWorkflowTemplate>, IExpenseWorkflowTemplateWriteRepository
 	{
-		public ExpenseWorkflowTemplateRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider)
+		public ExpenseWorkflowTemplateWriteRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider)
 		{
 		}
 

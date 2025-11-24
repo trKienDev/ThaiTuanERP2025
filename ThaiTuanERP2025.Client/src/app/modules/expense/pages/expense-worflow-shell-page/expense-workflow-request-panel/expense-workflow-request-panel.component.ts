@@ -10,6 +10,7 @@ import { KitActionMenuComponent } from "../../../../../shared/components/kit-act
 import { MatDialog } from "@angular/material/dialog";
 import { ExpenseStepTemplateRequestDialogComponent } from "../../../components/expense-step-request-dialog/expense-step-template-request-dialog.component";
 import { SaveExpenseWorkflowTemplateDialogComponent } from "../../../components/save-expense-workflow-template-dialog/save-expense-workflow-template-dialog.component";
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
       selector: 'expense-workflow-request-panel',
@@ -23,6 +24,8 @@ export class ExpenseWorkflowRequestPanel {
       private readonly formBuilder = inject(FormBuilder);
       private readonly toast = inject(ToastService);
       private readonly expenseStepTemplateApi = inject(ExpenseStepTemplateApiService);
+      private readonly router = inject(Router);
+      private readonly route = inject(ActivatedRoute);
       steps: ExpenseStepTemplatePayload[] = [];
 
       form = this.formBuilder.group({
@@ -68,6 +71,11 @@ export class ExpenseWorkflowRequestPanel {
             const dialogRef = this.dialog.open(SaveExpenseWorkflowTemplateDialogComponent, {
                   data: { data: this.steps }
             });
+            dialogRef.afterClosed().subscribe((isSuccess: boolean) => {
+                  if(isSuccess === true) {
+                        this.router.navigate(['../expense-workflows'], { relativeTo: this.route });
+                  }
+            })
       }
 
       editStep(i: number): void {

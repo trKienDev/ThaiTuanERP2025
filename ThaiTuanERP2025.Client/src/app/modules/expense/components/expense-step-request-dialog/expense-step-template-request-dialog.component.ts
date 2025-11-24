@@ -62,8 +62,6 @@ export class ExpenseStepTemplateRequestDialogComponent implements OnInit {
                         slaHours: s.slaHours,
                         order: s.order ?? 1,
                   });
-
-                  console.log('form: ', this.form.getRawValue());
             }
 
             this.form.get('approverMode')?.valueChanges.subscribe(mode => {

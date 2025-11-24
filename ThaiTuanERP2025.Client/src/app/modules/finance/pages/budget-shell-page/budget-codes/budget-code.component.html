@@ -5,7 +5,7 @@
                   <th>Nhóm ngân sách</th>
                   <th>Mã ngân sách</th>
                   <th>Tên ngân sách</th>
-                  <th>Hiệu lực</th>
+                  <th class="text-align-center">Hiệu lực</th>
             </tr>
       </thead>
       <tbody>
@@ -17,10 +17,12 @@
                         <span class="user-select-none" *ngIf="!budgetCode.isActive" matTooltip="Hết hiệu lực" matTooltipClass="font-lexend">🔒</span>
                   </td>
                   <td>
-                        <label class="switch-1">
-                              <input type="checkbox" [checked]="budgetCode.isActive" (change)="onToggleStatus(budgetCode)">
-                              <span class="slider"></span>
-                        </label>
+                        <div class="display-flex justify-content-center">
+                               <label class="switch-1">
+                                    <input type="checkbox" [checked]="budgetCode.isActive" (change)="onToggleStatus(budgetCode)">
+                                    <span class="slider"></span>
+                              </label>
+                        </div>
                   </td>
             </tr>
             <tr *ngIf="budgetCodes.length === 0">

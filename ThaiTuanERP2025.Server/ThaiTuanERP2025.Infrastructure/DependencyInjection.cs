@@ -59,6 +59,10 @@ using ThaiTuanERP2025.Application.Finance.CashoutGroups;
 using ThaiTuanERP2025.Application.Finance.LedgerAccountTypes.Services;
 using ThaiTuanERP2025.Infrastructure.Finance.Services;
 using ThaiTuanERP2025.Application.Finance.LedgerAccounts.Services;
+using ThaiTuanERP2025.Application.Expense.ExpenseStepTemplates;
+using ThaiTuanERP2025.Infrastructure.Expense.Repositories.Read;
+using ThaiTuanERP2025.Infrastructure.Expense.Repositories.Write;
+using ThaiTuanERP2025.Application.Expense.ExpenseWorkflowTemplates;
 
 namespace ThaiTuanERP2025.Infrastructure
 {
@@ -128,8 +132,11 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<ISupplierRepository, SupplierRepository>();
 			services.AddScoped<IOutgoingBankAccountRepository, OutgoingBankAccountRepository>();
 			services.AddScoped<IOutgoingPaymentRepository, OutgoingPaymentRepository>();
-			services.AddScoped<IExpenseWorkflowTemplateRepository, ExpenseWorkflowTemplateRepository>();
-			services.AddScoped<IExpenseStepTemplateRepository, ExpenseStepTemplateRepository>();
+			services.AddScoped<IExpenseWorkflowTemplateReadRepository, ExpenseWorkflowTemplateReadRepository>();
+			services.AddScoped<IExpenseWorkflowTemplateWriteRepository, ExpenseWorkflowTemplateWriteRepository>();
+			services.AddScoped<IExpenseStepTemplateReadRepository, ExpenseStepTemplateReadRepository>();
+			services.AddScoped<IExpenseStepTemplateWriteRepository, ExpenseStepTemplateWriteRepository>();
+			services.AddScoped<IExpenseStepTemplateReadRepository, ExpenseStepTemplateReadRepository>();
 			services.AddScoped<IExpenseStepInstanceRepository, ExpenseStepInstanceRepository>();
 			services.AddScoped<IExpenseWorkflowInstanceRepository, ExpenseWorkflowInstanceRepository>();
 			services.AddScoped<IExpensePaymentRepository, ExpensePaymentRepository>();

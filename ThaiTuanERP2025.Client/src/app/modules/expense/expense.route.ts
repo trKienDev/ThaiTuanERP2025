@@ -43,8 +43,6 @@ export const expenseRoutes: Routes = [
                               { path: 'supplier-bank-account', loadComponent: () => import('./pages/bank-account-shell-page/supplier-bank-account/supplier-bank-account.component').then((m) => m.SupplierBankAccountComponent) },
                         ]
                   },
-                  { path: 'approval-workflow-engine', data: { animation: 'ApprovalWorkflowEnginePage' }, loadComponent: () => import('./pages/expense-approval-workflow-engine/expense-approval-workflow-engine.component').then((m) => m.ExpenseApprovalWorkflowEngineComponent )},
-                  { path: 'approval-workflow-engine/approval-workflow-engine-request', loadComponent: () => import('./pages/expense-approval-workflow-engine/expense-approval-workflow-engine-request/expense-approval-workflow-engine-request.component').then((m) => m.ExpenseApprovalWorkflowEngineRequest )},
                   {
                         path: 'expense-workflows-shell',
                         loadComponent: () => import('./pages/expense-worflow-shell-page/expense-worflow-shell-page.component').then((m) => m.ExpenseWorkflowShellPageComponent),
