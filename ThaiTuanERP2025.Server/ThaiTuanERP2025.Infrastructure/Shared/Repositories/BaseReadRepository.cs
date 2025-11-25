@@ -16,12 +16,13 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 		protected readonly DbContext _dbContext;
 		protected readonly DbSet<TEntity> _dbSet;
 		protected readonly IConfigurationProvider _mapperConfig;
+		protected readonly IMapper _mapper;
 
 		protected BaseReadRepository(DbContext dbContext, IMapper mapper)
 		{
 			_dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
 			_dbSet = _dbContext.Set<TEntity>();
-			if (mapper is null) throw new ArgumentNullException(nameof(mapper));
+			_mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
 			_mapperConfig = mapper.ConfigurationProvider;
 		}
 

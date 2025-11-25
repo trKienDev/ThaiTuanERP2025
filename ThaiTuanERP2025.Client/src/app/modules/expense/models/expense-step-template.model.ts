@@ -19,7 +19,7 @@ export interface ExpenseStepTemplatePayload {
       order: number;
       flowType: ExpenseFlowType;
       slaHours: number;
-      approverIds: string[] | null;
+      approverIds: string[] | string | null;
       approveMode: ExpenseApproveMode;
       resolverKey?: string | null;
       resolverParams?: object | null;

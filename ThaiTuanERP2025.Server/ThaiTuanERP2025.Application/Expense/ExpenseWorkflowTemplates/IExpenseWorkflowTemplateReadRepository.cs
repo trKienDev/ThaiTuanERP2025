@@ -6,5 +6,6 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflowTemplates
 {
 	public interface IExpenseWorkflowTemplateReadRepository : IBaseReadRepository<ExpenseWorkflowTemplate, ExpenseWorkflowTemplateDto>
 	{
+		Task<ExpenseWorkflowTemplateDto?> GetDetailByIdAsync(Guid id, CancellationToken cancellationToken = default);
 	}
 }

@@ -7,6 +7,7 @@ import { UserOptionStore } from "../../../account/options/user-dropdown.option";
 import { ExpenseApproveMode, ExpenseFlowType, ExpenseStepTemplatePayload } from "../../models/expense-step-template.model";
 import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 import { KitDropdownComponent, KitDropdownOption } from "../../../../shared/components/kit-dropdown/kit-dropdown.component";
+import { take } from "rxjs";
 
 @Component({
       selector: 'expense-step-template-request-dialog',
@@ -29,7 +30,7 @@ export class ExpenseStepTemplateRequestDialogComponent implements OnInit {
       form = this.formBuilder.group({
             name: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
             approveMode: this.formBuilder.control<ExpenseApproveMode>('Standard', { nonNullable: true, validators: Validators.required }),
-            approverIds: this.formBuilder.control<string[] | null>(null),
+            approverIds: this.formBuilder.control<string[] | string | null>(null),
             slaHours: this.formBuilder.control<number>(8, { nonNullable: true, validators: [ Validators.min(1) ]}),
             flowType: this.formBuilder.control<ExpenseFlowType>('Single', { nonNullable: true, validators: [ Validators.required ] }),
             order: this.formBuilder.control<number>(1, { nonNullable: true }),
@@ -54,29 +55,36 @@ export class ExpenseStepTemplateRequestDialogComponent implements OnInit {
             }
 
             if(this.data?.step) {
-                  this.dialogTitle = 'Sửa bước duyệt'
+                  this.dialogTitle = 'Sửa bước duyệt';
+
                   const s = this.data.step;     
                   console.log('step: ', s);
-                  this.form.patchValue({
-                        name: s.name,
-                        approverIds: s.approverIds ?? [],
-                        approveMode: s.approveMode,
-                        resolverKey: s.resolverKey,
-                        flowType: s.flowType,
-                        slaHours: s.slaHours,
-                        order: s.order ?? 1,
+                  
+                  this.userOptions$.pipe(take(1)).subscribe(() => {
+
+                        // nếu single ==> kit-dropdown ở chế độ single --> phải truyền approverIds là string thay vì string[] để không gây lỗi
+                        const isSingle = s.flowType === 'Single';
+
+                        this.form.patchValue({
+                              name: s.name,
+                              approverIds: isSingle ? (s.approverIds?.[0] ?? null)  : (s.approverIds ?? []), 
+                              approveMode: s.approveMode,
+                              resolverKey: s.resolverKey,
+                              flowType: s.flowType,
+                              slaHours: s.slaHours,
+                              order: s.order ?? 1,
+                        });
                   });
 
-                  console.log('form: ', this.form.getRawValue());
             }
 
-            this.form.get('approverMode')?.valueChanges.subscribe(mode => {
-                  this.updateApproverValidation(mode);
+            this.form.get('approveMode')?.valueChanges.subscribe(mode => {
+                 this.updateApproverValidation(mode);
                   this.approveMode = mode; // update UI cho *ngIf
             });
 
             // chạy 1 lần ban đầu
-            this.updateApproverValidation(this.form.get('approverMode')!.value);
+            this.updateApproverValidation(this.form.get('approveMode')!.value);
       }
 
       // === Approver Validation ====

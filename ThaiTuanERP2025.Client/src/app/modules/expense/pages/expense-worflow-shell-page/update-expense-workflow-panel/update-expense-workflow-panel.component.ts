@@ -48,7 +48,6 @@ export class UpdateExpenseWorkflowPanelComponent implements OnInit {
              if (!this.workflowDetailPayload) return;  
 
             const current = this.workflowDetailPayload?.steps[i];
-            console.log('current: ', current);
             const dialogRef = this.dialog.open(ExpenseStepTemplateRequestDialogComponent, {
                   data: { step: current, approveMode: current?.approveMode }
             });
@@ -62,7 +61,6 @@ export class UpdateExpenseWorkflowPanelComponent implements OnInit {
 
       async getExpenseWorkflowTemplateDetail(id: string) {
             this.workflowDetailDto = await firstValueFrom(this.expenseWorkflowTemplateApi.getById(id));
-            console.log('workflowTemplateDto: ', this.workflowDetailDto);
             
             this.workflowDetailPayload = mapExpenseWorkflowTemplateDtoToPayload(this.workflowDetailDto);
             this.form.patchValue(this.workflowDetailPayload);

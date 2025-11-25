@@ -88,11 +88,16 @@ export class KitDropdownComponent<T = any> implements ControlValueAccessor, OnCh
 
       // ===== ControlValueAccessor =====
       writeValue(val: T | T[] | null | undefined): void {
+            console.log("⛳ writeValue value =", val);
+    console.log("⛳ writeValue multiple =", this.multiple);
+
+
             if (this.multiple) {
                   this._values.clear();
                   if (Array.isArray(val)) {
                         val.forEach((v) => this._values.add(v as T));
                   }
+                  console.log("⛳ _values after patch =", Array.from(this._values));
             } else {
                   if (val === null || val === undefined) {
                         this._value = null;
@@ -121,6 +126,8 @@ export class KitDropdownComponent<T = any> implements ControlValueAccessor, OnCh
                   // Khi options thay đổi: đồng bộ lại label + filteredOptions
                   this.syncLabelFromValue();
                   this.resetFilteredOptions();
+
+                  this.syncSelectedOptionsForMultiple();
             }
       }
 
@@ -276,7 +283,9 @@ export class KitDropdownComponent<T = any> implements ControlValueAccessor, OnCh
       }
 
       get selectedOptions(): KitDropdownOption<T>[] {
-            return this.options.filter((o) => this._values.has(o.id));
+            const arr = this.options.filter((o) => this._values.has(o.id));
+            console.log("🔥 selectedOptions =", arr);
+            return arr;
       }
 
       remove(id: T): void {
@@ -399,5 +408,22 @@ export class KitDropdownComponent<T = any> implements ControlValueAccessor, OnCh
             const opt = this.options.find((o) => o.id === this._value);
             this.selectedLabel = opt ? opt.label : null;
             this.selectedImgUrl = opt?.imgUrl ?? null;
+      }
+
+      private syncSelectedOptionsForMultiple(): void {
+            if (!this.multiple) return;
+
+            console.log("🔥 options changed! options =", this.options);
+console.log("🔥 current _values =", Array.from(this._values));
+            // dựa trên danh sách options mới, chọn lại những cái đã tồn tại trong _values
+            const selected = this.options.filter(o => this._values.has(o.id));
+
+            console.log("🔥 matched selected =", selected);
+
+             // clear set cũ
+            this._values.clear();
+
+            // add lại từng id
+            selected.forEach(s => this._values.add(s.id));
       }
 }

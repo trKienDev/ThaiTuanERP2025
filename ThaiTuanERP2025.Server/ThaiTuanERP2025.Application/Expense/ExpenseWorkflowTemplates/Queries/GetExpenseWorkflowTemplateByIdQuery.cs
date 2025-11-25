@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using ThaiTuanERP2025.Application.Expense.ExpenseStepTemplates.Contracts;
 using ThaiTuanERP2025.Application.Expense.ExpenseWorkflowTemplates.Contracts;
 
 namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflowTemplates.Queries
@@ -15,15 +14,8 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflowTemplates.Queries
 
 		public async Task<ExpenseWorkflowTemplateDto?> Handle(GetExpenseWorkflowTemplateByIdQuery query, CancellationToken cancellationToken)
 		{
-			var workflow = await _expenseWorkflowTemplateRepo.GetByIdProjectedAsync(query.Id, cancellationToken)
+			return await _expenseWorkflowTemplateRepo.GetDetailByIdAsync(query.Id, cancellationToken)
 				?? throw new DirectoryNotFoundException("Không tìm thấy luồng duyệt");
-
-                        if (workflow.Steps is List<ExpenseStepTemplateDto> list)
-                        {
-                                list.Sort((a, b) => a.Order.CompareTo(b.Order));
-                        }
-
-                        return workflow;
 		}
 	}
 }

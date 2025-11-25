@@ -8,6 +8,6 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflowTemplates.Contracts
 		public string Name { get; init; } = string.Empty;
 		public int Version { get; init; }
 		public bool IsActive { get; init; }
-		public ICollection<ExpenseStepTemplateDto> Steps { get; init; } = new List<ExpenseStepTemplateDto>();
+		public ICollection<ExpenseStepTemplateDto> Steps { get; set; } = new List<ExpenseStepTemplateDto>();
 	}
 }
