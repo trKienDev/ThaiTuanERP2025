@@ -36,6 +36,8 @@ import { KitOverlaySpinnerComponent } from "../../../../../shared/components/kit
 import { Router } from "@angular/router";
 import { SupplierRequestDialogComponent } from "../../../components/supplier-request-dialog/supplier-request-dialog.component";
 import { AvailableBudgetPlansDialogComponent } from "../../../components/available-budget-plans-dialog/available-budget-plans-dialog.component";
+import { InvoiceImagePreviewDialog } from "../../../components/invoice-preview-dialog/invoice-image-preview-dialog.component";
+import { InvoicePdfPreviewDialog } from "../../../components/invoice-preview-dialog/invoice-pdf-preview-dialog.component";
 
 type UploadStatus = 'queued' | 'uploading' | 'done' | 'error';
 type UploadItem = {
@@ -528,5 +530,42 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
                         ? URL.createObjectURL(file)
                         : null
             });
+      }
+
+      previewInvoice(rowIndex: number) {
+            const row = this.items.at(rowIndex);
+
+            const file = row.get('uploadedInvoiceFile')?.value;
+            const previewUrl = row.get('uploadedInvoicePreviewUrl')?.value;
+
+            if (!file) {
+                  this.toast.warningRich('Chưa có hóa đơn nào được tải lên');
+                  return;
+            }
+
+            // file ảnh → dùng previewUrl
+            if (file.type.startsWith('image/') && previewUrl) {
+                  this.dialog.open(InvoiceImagePreviewDialog, {
+                        data: { src: previewUrl }
+                  });
+                  return;
+            }
+
+            // file PDF → mở dialog PDF viewer
+            if (file.type === 'application/pdf') {
+                  const pdfUrl = URL.createObjectURL(file);
+                  this.dialog.open(InvoicePdfPreviewDialog, {
+                        data: { src: pdfUrl }
+                  });
+                  return;
+            }
+
+            // file Word, docx → tải về (trình duyệt không preview)
+            this.toast.info('File Word không thể preview, hệ thống sẽ tự tải xuống');
+            const url = URL.createObjectURL(file);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = file.name;
+            a.click();
       }
 }
