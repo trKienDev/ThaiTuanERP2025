@@ -553,6 +553,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
 
             // file PDF → mở dialog PDF viewer
             if (file.type === 'application/pdf') {
+                  alert('pdf');
                   const pdfUrl = URL.createObjectURL(file);
                   this.dialog.open(InvoicePdfPreviewDialog, {
                         data: { src: pdfUrl }

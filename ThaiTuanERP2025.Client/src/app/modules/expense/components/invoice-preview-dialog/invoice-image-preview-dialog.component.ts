@@ -52,9 +52,11 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
                   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
                   background: white;
                   border-radius: 2px;
+                  padding: 0 22px;
             }
             .exit-button span {
                   color: red; 
+                  font-size: 20px;
             }
             .exit-button:hover {
                   background: red;
