@@ -1,4 +1,4 @@
-import { ExpenseApproveMode } from './../../../models/expense-step-template.model';
+import { ExpenseApproveMode } from '../../../models/expense-step-template.model';
 import { CommonModule } from "@angular/common";
 import { Component, inject } from "@angular/core";
 import { ExpenseStepTemplatePayload } from "../../../models/expense-step-template.model";
@@ -8,18 +8,18 @@ import { ExpenseStepTemplateApiService } from "../../../services/expense-step-te
 import { ActionMenuOption } from "../../../../../shared/components/kit-action-menu/kit-action-menu.model";
 import { KitActionMenuComponent } from "../../../../../shared/components/kit-action-menu/kit-action-menu.component";
 import { MatDialog } from "@angular/material/dialog";
-import { ExpenseStepTemplateRequestDialogComponent } from "../../../components/expense-step-request-dialog/expense-step-template-request-dialog.component";
 import { SaveExpenseWorkflowTemplateDialogComponent } from "../../../components/save-expense-workflow-template-dialog/save-expense-workflow-template-dialog.component";
 import { ActivatedRoute, Router } from '@angular/router';
+import { ExpenseWorkflowStepDialogComponent } from '../../../components/expense-workflow-step-dialog/expense-workflow-step-dialog.component';
 
 @Component({
       selector: 'expense-workflow-request-panel',
       standalone: true,
       imports: [CommonModule, KitActionMenuComponent],
-      templateUrl: './expense-workflow-request-panel.component.html',
-      styleUrl: './expense-workflow-request-panel.component.scss'
+      templateUrl: './create-expense-workflow-panel.component.html',
+      styleUrl: './create-expense-workflow-panel.component.scss'
 })
-export class ExpenseWorkflowRequestPanel {
+export class CreateExpenseWorkflowPanel {
       private readonly dialog = inject(MatDialog);
       private readonly formBuilder = inject(FormBuilder);
       private readonly toast = inject(ToastService);
@@ -50,7 +50,7 @@ export class ExpenseWorkflowRequestPanel {
       }
 
       openExpenseStepRequestDialog(approveMode: ExpenseApproveMode): void {
-            const dialogRef = this.dialog.open(ExpenseStepTemplateRequestDialogComponent, {
+            const dialogRef = this.dialog.open(ExpenseWorkflowStepDialogComponent, {
                   data: { approveMode }
             });
 
@@ -80,7 +80,7 @@ export class ExpenseWorkflowRequestPanel {
 
       editStep(i: number): void {
             const current = this.steps[i];
-            const dialogRef = this.dialog.open(ExpenseStepTemplateRequestDialogComponent, {
+            const dialogRef = this.dialog.open(ExpenseWorkflowStepDialogComponent, {
                   data: { step: current, approveMode: current.approveMode }
             });
             dialogRef.afterClosed().subscribe((step?: ExpenseStepTemplatePayload) => {
@@ -93,7 +93,9 @@ export class ExpenseWorkflowRequestPanel {
 
       // Step
       private recomputeOrders(): void {
-            this.steps.forEach((s, idx) => s.order = idx + 1);
+            for (const [idx, step] of this.steps.entries()) {
+                  step.order = idx + 1;
+            }
       }
       moveUp(i: number): void {
             if(i <= 0) return;
@@ -108,5 +110,9 @@ export class ExpenseWorkflowRequestPanel {
       removeStep(i: number): void {
             this.steps.splice(i, 1);
             this.recomputeOrders();
+      }
+
+      get canSave(): boolean {
+            return this.steps.length > 0;
       }
 }

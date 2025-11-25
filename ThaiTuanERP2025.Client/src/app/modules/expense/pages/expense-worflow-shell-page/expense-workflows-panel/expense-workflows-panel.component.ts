@@ -7,11 +7,12 @@ import { ActionMenuOption } from '../../../../../shared/components/kit-action-me
 import { KitActionMenuComponent } from "../../../../../shared/components/kit-action-menu/kit-action-menu.component";
 import { ActivatedRoute, Router } from '@angular/router';
 import { KitShellTabsComponent } from '../../../../../shared/components/kit-shell-tabs/kit-shell-tabs.component';
+import { HasPermissionDirective } from "../../../../../core/auth/auth.directive";
 
 @Component({
       selector: 'expense-workflows-panel',
       standalone: true,
-      imports: [CommonModule, KitActionMenuComponent],
+      imports: [CommonModule, KitActionMenuComponent, HasPermissionDirective],
       templateUrl: `expense-workflows-panel.component.html`
 })
 export class ExpenseWorkflowsPanelComponent implements OnInit {
@@ -49,4 +50,15 @@ export class ExpenseWorkflowsPanelComponent implements OnInit {
                   relativeTo: this.route
             });
       }     
+
+      
+
+      redirectToCreateExpenseWorkflowRequestTemplatePanel() {
+            KitShellTabsComponent.allowOnce('create-expense-workflow');
+
+            // 2) Điều hướng sang tab sửa
+            this.router.navigate(['../create-expense-workflow'], {
+                  relativeTo: this.route
+            });
+      }   
 }

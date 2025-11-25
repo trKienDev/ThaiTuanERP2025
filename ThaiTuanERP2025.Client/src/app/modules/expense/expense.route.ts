@@ -6,8 +6,8 @@ import { FollowingOutgoingPaymentComponent } from "./pages/outgoing-payment-shel
 import { OutgoingPaymentRequestComponent } from "./pages/outgoing-payment-shell-page/outgoing-payment-request/outgoing-payment-request.component";
 import { OutgoingBankAccountComponent } from "./pages/bank-account-shell-page/outgoing-bank-account/outgoing-bank-account.component";
 import { ExpenseWorkflowsPanelComponent } from "./pages/expense-worflow-shell-page/expense-workflows-panel/expense-workflows-panel.component";
-import { ExpenseWorkflowRequestPanel } from "./pages/expense-worflow-shell-page/expense-workflow-request-panel/expense-workflow-request-panel.component";
 import { UpdateExpenseWorkflowPanelComponent } from "./pages/expense-worflow-shell-page/update-expense-workflow-panel/update-expense-workflow-panel.component";
+import { CreateExpenseWorkflowPanel } from "./pages/expense-worflow-shell-page/create-expense-workflow-panel/create-expense-workflow-panel.component";
 
 export const expenseRoutes: Routes = [
       {
@@ -50,7 +50,7 @@ export const expenseRoutes: Routes = [
                         children: [
                               { path: '', redirectTo: 'expense-workflows', pathMatch: 'full' },
                               { path: 'expense-workflows', component: ExpenseWorkflowsPanelComponent },
-                              { path: 'expense-workflow-request', component: ExpenseWorkflowRequestPanel },
+                              { path: 'create-expense-workflow', component: CreateExpenseWorkflowPanel },
                               { path: 'update-expense-workflow/:id', component: UpdateExpenseWorkflowPanelComponent },
                         ] 
                   }

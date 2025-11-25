@@ -13,6 +13,17 @@ button, .button {
       border: 1px solid transparent !important;
 }
 
+.button[disabled],
+.button[disabled]:hover,
+.button[disabled]:focus,
+.button[disabled]:active {
+      opacity: 0.5;
+      cursor: not-allowed;
+      background: #aaa;   /* hoặc màu gốc */
+      transform: none !important;   /* tắt animation */        /* tắt hoàn toàn hover */
+}
+
+
 .none-button {
       padding: 0 !important;
       background: none !important;

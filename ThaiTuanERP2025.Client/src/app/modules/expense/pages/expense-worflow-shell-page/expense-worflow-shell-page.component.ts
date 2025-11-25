@@ -2,8 +2,8 @@ import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
 import { KitShellTabsComponent } from "../../../../shared/components/kit-shell-tabs/kit-shell-tabs.component";
 import { ExpenseWorkflowsPanelComponent } from "./expense-workflows-panel/expense-workflows-panel.component";
-import { ExpenseWorkflowRequestPanel } from "./expense-workflow-request-panel/expense-workflow-request-panel.component";
 import { UpdateExpenseWorkflowPanelComponent } from "./update-expense-workflow-panel/update-expense-workflow-panel.component";
+import { CreateExpenseWorkflowPanel } from "./create-expense-workflow-panel/create-expense-workflow-panel.component";
 
 @Component({
       selector: 'expense-workflow-shell-page',
@@ -16,7 +16,7 @@ import { UpdateExpenseWorkflowPanelComponent } from "./update-expense-workflow-p
 export class ExpenseWorkflowShellPageComponent {
       readonly tabs = [
            { id: 'expense-workflows', label: 'Luồng duyệt', component: ExpenseWorkflowsPanelComponent },
-           { id: 'expense-workflow-request', label: 'Tạo luồng duyêt', component: ExpenseWorkflowRequestPanel },
+           { id: 'create-expense-workflow', label: 'Tạo luồng duyêt', component: CreateExpenseWorkflowPanel, hidden: true },
            { id: 'update-expense-workflow', label: 'Sửa luồng duyêt', component: UpdateExpenseWorkflowPanelComponent, hidden: true },
       ]
 }

@@ -10,13 +10,13 @@ import { KitDropdownComponent, KitDropdownOption } from "../../../../shared/comp
 import { take } from "rxjs";
 
 @Component({
-      selector: 'expense-step-template-request-dialog',
+      selector: 'expense-workflow-step-dialog',
       standalone: true,
       imports: [CommonModule, KitSpinnerButtonComponent, ReactiveFormsModule, KitDropdownComponent],
-      templateUrl: './expense-step-template-request-dialog.component.html'
+      templateUrl: './expense-workflow-step-dialog.component.html'
 })
-export class ExpenseStepTemplateRequestDialogComponent implements OnInit {
-      private readonly dialogRef = inject(MatDialogRef<ExpenseStepTemplateRequestDialogComponent>);
+export class ExpenseWorkflowStepDialogComponent implements OnInit {
+      private readonly dialogRef = inject(MatDialogRef<ExpenseWorkflowStepDialogComponent>);
       private readonly toast = inject(ToastService);
       private readonly formBuilder = inject(FormBuilder);
 

@@ -10,8 +10,8 @@ import { ToastService } from "../../../../../shared/components/kit-toast-alert/k
 import { ExpenseApproveMode, ExpenseStepTemplatePayload } from "../../../models/expense-step-template.model";
 import { ExpenseStepTemplateApiService } from "../../../services/expense-step-template.service";
 import { ActionMenuOption } from "../../../../../shared/components/kit-action-menu/kit-action-menu.model";
-import { ExpenseStepTemplateRequestDialogComponent } from "../../../components/expense-step-request-dialog/expense-step-template-request-dialog.component";
 import { KitActionMenuComponent } from "../../../../../shared/components/kit-action-menu/kit-action-menu.component";
+import { ExpenseWorkflowStepDialogComponent } from "../../../components/expense-workflow-step-dialog/expense-workflow-step-dialog.component";
 
 @Component({
       selector: 'update-expense-workflow-panel',
@@ -48,7 +48,7 @@ export class UpdateExpenseWorkflowPanelComponent implements OnInit {
              if (!this.workflowDetailPayload) return;  
 
             const current = this.workflowDetailPayload?.steps[i];
-            const dialogRef = this.dialog.open(ExpenseStepTemplateRequestDialogComponent, {
+            const dialogRef = this.dialog.open(ExpenseWorkflowStepDialogComponent, {
                   data: { step: current, approveMode: current?.approveMode }
             });
             dialogRef.afterClosed().subscribe((step?: ExpenseStepTemplatePayload) => {
@@ -67,7 +67,7 @@ export class UpdateExpenseWorkflowPanelComponent implements OnInit {
       }
 
       openExpenseStepRequestDialog(approveMode: ExpenseApproveMode): void {
-            const dialogRef = this.dialog.open(ExpenseStepTemplateRequestDialogComponent, {
+            const dialogRef = this.dialog.open(ExpenseWorkflowStepDialogComponent, {
                   data: { approveMode }
             });
 

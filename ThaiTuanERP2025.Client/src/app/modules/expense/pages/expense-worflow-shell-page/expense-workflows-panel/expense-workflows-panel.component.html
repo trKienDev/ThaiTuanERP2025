@@ -3,6 +3,9 @@
             <div class="page-title">
                   <h3 class="title">Danh sách luồng duyệt</h3>
             </div>
+            <div>
+                  <button *appHasPermission="'expense-workflow-template.create'" type="button" class="button default-button" (click)="redirectToCreateExpenseWorkflowRequestTemplatePanel()">Tạo luồng duyệt mới</button>
+            </div>
       </div>
       <div class="page-body">
             <table class="table">
@@ -11,7 +14,7 @@
                               <th>#</th>
                               <th>Tên</th>
                               <th class="text-align-center">Hiệu lực</th>
-                              <th class="text-align-center">Hành động</th>
+                              <th class="text-align-center" *appHasPermission="'expense-workflow-template.create'">Hành động</th>
                         </tr>
                   </thead>
                   <tbody>
@@ -28,7 +31,7 @@
                                                       </label>
                                                 </div>
                                           </td>
-                                          <td>
+                                          <td *appHasPermission="'expense-workflow-template.create'">
                                                 <div class="display-flex justify-content-center">
                                                       <kit-action-menu [actions]="buildExpenseWorkflowTemplateActions(i)"></kit-action-menu>
                                                 </div>
