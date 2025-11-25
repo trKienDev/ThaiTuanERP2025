@@ -43,7 +43,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 		[HttpGet("available")]
 		public async Task<IActionResult> GetAvailable(CancellationToken cancellationToken) {
 			var result = await _mediator.Send(new GetAvailableBudgetPeriodQuery(), cancellationToken);
-			return Ok(ApiResponse<IReadOnlyList<BudgetPeriodDto>>.Success(result));	
+			return Ok(ApiResponse<IReadOnlyList<BudgetPeriodDto>>.Success(result));
 		}
 
 		[HasPermission("budget-period.create-for-year")]

@@ -16,9 +16,10 @@ import { BudgetPlanApiService } from "../../../services/api/budget-plan-api.serv
 import { BudgetPeriodApiService } from "../../../services/api/budget-period-api.service";
 import { BudgetCodeApiService } from "../../../services/api/budget-code-api.service";
 import { BudgetApproverApiService } from "../../../services/api/budget-approver-api.service";
+import { UserFacade } from "../../../../account/facades/user.facade";
 
 interface BudgetPlanDetailsForm {
-      budgetCodeId: FormControl<string>;
+      budgetCodeId: FormControl<string | null>;
       amount: FormControl<number>;
       note: FormControl<string | null>;
 }
@@ -37,26 +38,31 @@ export class BudgetPlanRequestPanelComponent implements OnInit {
       private readonly userApi = inject(UserApiService);
       private readonly budgetPlanApi = inject(BudgetPlanApiService);
       private readonly httpErrorHandler = inject(HttpErrorHandlerService);
+      private readonly budgetPeriodApi = inject(BudgetPeriodApiService);
+      private readonly currentUser$ = inject(UserFacade).currentUser$;
+      
+      // ===== FORM =====
+      form = this.formBuilder.group({
+            departmentId: this.formBuilder.control<string | null>(null, { nonNullable: true, validators: [ Validators.required ]}),
+            budgetPeriodId: this.formBuilder.control<string | null>(null, { nonNullable: true, validators: [ Validators.required ]}),
+            selectedApproverId: this.formBuilder.control<string | null>(null, { nonNullable: true, validators: [ Validators.required ]}),
+            selectedReviewerId: this.formBuilder.control<string | null>(null, { nonNullable: true, validators: [ Validators.required ]}),
+            details: this.formBuilder.array<FormGroup<BudgetPlanDetailsForm>>([ this.budgetPlanDetails()]),
+      });
 
-      ngOnInit(): void {
+      async ngOnInit(): Promise<void> {
             this.loadBudgetApprovers();
             this.loadBudgetPeriodOptions();
             this.loadBudgetReviewers();
             this.loadAvailableBudgetCodes();
-      }
 
-      // ===== FORM =====
-      form = this.formBuilder.group({
-            departmentId: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
-            budgetPeriodId: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
-            selectedApproverId: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
-            selectedReviewerId: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
-            details: this.formBuilder.array<FormGroup<BudgetPlanDetailsForm>>([ this.budgetPlanDetails()]),
-      });
+            let currentUser = await firstValueFrom(this.currentUser$); 
+            this.form.patchValue({ departmentId: currentUser.departmentId }); 
+      }
 
       budgetPlanDetails(): FormGroup<BudgetPlanDetailsForm> {
             return this.formBuilder.group({
-                  budgetCodeId: this.formBuilder.control<string>('', { nonNullable: true, validators: Validators.required }),
+                  budgetCodeId: this.formBuilder.control<string | null>(null, { nonNullable: true, validators: Validators.required }),
                   amount: this.formBuilder.control<number>(0, { nonNullable: true, validators: Validators.required }),
                   note: this.formBuilder.control<string | null>(null)
             });
@@ -73,7 +79,6 @@ export class BudgetPlanRequestPanelComponent implements OnInit {
       }
 
       // ==== Budget Period ====
-      private readonly budgetPeriodApi = inject(BudgetPeriodApiService);
       public budgetPeriodOptions: KitDropdownOption[] = [];
       loadBudgetPeriodOptions() {
             this.budgetPeriodApi.getAvailable().subscribe({

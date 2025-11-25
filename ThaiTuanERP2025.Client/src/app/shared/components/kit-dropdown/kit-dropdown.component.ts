@@ -50,7 +50,9 @@ export class KitDropdownComponent<T = any> implements ControlValueAccessor, OnCh
       @Input() required = false;
       @Input() visibleItemCount: number = 6;
 
+      @Input({ transform: booleanAttribute }) autoSelectFirst = false;
       @Input({ transform: booleanAttribute }) invalid = false;
+
       @HostBinding('class.invalid') get hostInvalidClass() {
             return this.invalid;
       }
@@ -121,8 +123,11 @@ export class KitDropdownComponent<T = any> implements ControlValueAccessor, OnCh
                   // Khi options thay đổi: đồng bộ lại label + filteredOptions
                   this.syncLabelFromValue();
                   this.resetFilteredOptions();
-
                   this.syncSelectedOptionsForMultiple();
+
+                  if (this.autoSelectFirst) {
+                        this.tryAutoSelectFirst();
+                  }
             }
       }
 
@@ -416,4 +421,34 @@ export class KitDropdownComponent<T = any> implements ControlValueAccessor, OnCh
             // add lại từng id
             selected.forEach(s => this._values.add(s.id));
       }
+
+      private tryAutoSelectFirst(): void {
+            if (!this.autoSelectFirst) return;
+            if (!this.filteredOptions || this.filteredOptions.length === 0) return;
+
+            // Nếu single và chưa có value
+            if (!this.multiple && (this._value === null || this._value === undefined)) {
+                  const first = this.filteredOptions[0];
+                  this._value = first.id;
+                  this.selectedLabel = first.label;
+                  this.selectedImgUrl = first.imgUrl ?? null;
+
+                  this.onChange(this._value);
+                  this.onTouched();
+                  this.selectionChange.emit(first);
+                  return;
+            }
+
+            // Nếu multiple và chưa có giá trị nào
+            if (this.multiple && this._values.size === 0) {
+                  const first = this.filteredOptions[0];
+                  this._values.add(first.id);
+
+                  const selectedIds = Array.from(this._values);
+                  this.onChange(selectedIds);
+                  this.onTouched();
+                  this.selectionChangeMany.emit(this.selectedOptions);
+            }
+      }
+
 }

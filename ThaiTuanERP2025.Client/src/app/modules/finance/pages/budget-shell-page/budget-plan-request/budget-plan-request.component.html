@@ -22,7 +22,7 @@
                               </div>
                               <div class="width-50pt">
                                     <kit-dropdown formControlName="budgetPeriodId" [options]="budgetPeriodOptions"  [placeholder]="'Chọn kỳ ngân sách'"  [required]="true"
-                                    [invalid]="showErrors && (form.get('budgetPeriodId')?.invalid ?? false)" [enableFilter]="false"></kit-dropdown>
+                                    [invalid]="showErrors && (form.get('budgetPeriodId')?.invalid ?? false)" [enableFilter]="false" [autoSelectFirst]="true"></kit-dropdown>
                                     <div class="form-input-error" *ngIf="showErrors && form.get('budgetPeriodId')?.invalid">
                                           <small>Vui lòng chọn kỳ ngân sách</small>
                                     </div>
@@ -32,7 +32,7 @@
                               <div class="width-50pt">
                                     <kit-dropdown  [options]="budgetReviewerOptions" [placeholder]="'User xem xét'" [required]="true" [enableFilter]="false"
                                     [invalid]="showErrors && (form.get('reviewerId')?.invalid ?? false)" (selectionChange)="onReviewerSelected($event)"
-                                    formControlName="selectedReviewerId"></kit-dropdown>
+                                    formControlName="selectedReviewerId" [autoSelectFirst]="true"></kit-dropdown>
                                     <div class="form-input-error" *ngIf="showErrors && form.get('reviewerId')?.invalid">
                                           <small>Vui lòng chọn user xem xét</small>
                                     </div>
@@ -76,8 +76,8 @@
                                                 <td>
                                                       <input type="text" formControlName="note">
                                                 </td>
-                                                <td class="display-flex justify-content-center">
-                                                      <div>
+                                                <td>
+                                                      <div class="display-flex justify-content-center">
                                                             <button type="button" class="button danger-button" aria-label="Xóa dòng" (click)="removeDetail(i)" style="max-height: 36px;">
                                                                   <span class="material-icons-outlined">close</span>
                                                             </button>
