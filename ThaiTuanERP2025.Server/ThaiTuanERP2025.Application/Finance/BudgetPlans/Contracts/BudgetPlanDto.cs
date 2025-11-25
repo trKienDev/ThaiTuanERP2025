@@ -38,8 +38,7 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Contracts
 	public sealed record BudgetPlanDetailDto {
 		public Guid Id { get; init; }
 		public Guid BudgetCodeId { get; init; }
-		public BudgetCodeDto BudgetCode { get; init; }
-
+		public BudgetCodeDto BudgetCode { get; init; } = default!;
 		public decimal Amount { get; init; }
 	}
 }

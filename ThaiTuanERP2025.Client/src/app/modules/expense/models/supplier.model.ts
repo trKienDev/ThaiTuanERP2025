@@ -4,8 +4,7 @@ export interface SupplierDto {
       taxCode?: string | null;
       isActive: boolean;
 }
-export interface SupplierRequest {
+export interface SupplierPayload {
       name: string,
       taxCode?: string | null;
-      isActive: boolean;
 }

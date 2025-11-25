@@ -29,12 +29,13 @@ import { BankAccountApiService } from "../../../services/bank-account.service";
 import { ExpensePaymentApiService } from "../../../services/expense-payment.service";
 import { MiniInvoiceRequestDialogComponent } from "../../invoices/invoice-request/mini-invoice-request-dialog/mini-invoice-request-dialog.component";
 import { MyInvoicesDialogComponent } from "../../invoices/my-invoices-dialog/my-invoices-dialog.component";
-import { ExpenseBudgetCodeDialogComponent } from "../../../../finance/pages/budget-shell-page/budget-codes/expense-budget-code/expense-budget-code.component";
 import { KitFileUploaderComponent } from "../../../../../shared/components/kit-file-uploader/kit-file-uploader.component";
 import { TextareaNoSpellcheckDirective } from "../../../../../shared/directives/textarea/textarea-no-spellcheck.directive";
 import { KitSpinnerButtonComponent } from "../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 import { KitOverlaySpinnerComponent } from "../../../../../shared/components/kit-overlay-spinner/kit-overlay-spinner.component";
 import { Router } from "@angular/router";
+import { SupplierRequestDialogComponent } from "../../../components/supplier-request-dialog/supplier-request-dialog.component";
+import { AvailableBudgetPlansDialogComponent } from "../../../components/available-budget-plans-dialog/available-budget-plans-dialog.component";
 
 type UploadStatus = 'queued' | 'uploading' | 'done' | 'error';
 type UploadItem = {
@@ -58,7 +59,7 @@ type PaymentItem = {
       taxRatePercent: FormControl<string>;
       taxAmount: FormControl<number>; // readonly
       totalWithTax: FormControl<number>; // readonly
-      budgetCodeId: FormControl<string | null>; 
+      budgetPlanDetailId: FormControl<string | null>; 
       cashoutCodeId: FormControl<string | null>;
 };
 
@@ -303,34 +304,33 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
             }
       } 
 
-      // openCreateSupplierDialog(): void {
-      //       const dialogRef = this.dialog.open(SupplierRequestDialogComponent);
+      openCreateSupplierDialog(): void {
+            const dialogRef = this.dialog.open(SupplierRequestDialogComponent);
 
-      //       dialogRef.afterClosed().subscribe((created) => {
-      //             if(created?.id) {
-      //                   this.selectedPayee = PayeeType.supplier;
-      //                   this.form.patchValue({ supplierId: created.id });
-      //             }
-      //       })
-      // }
-
-      openExpenseBudgetCodeDialog(rowIndex: number): void {
+            dialogRef.afterClosed().subscribe((createdSupplierId) => {
+                  if(createdSupplierId?.id) {
+                        this.selectedPayee = PayeeType.supplier;
+                        this.form.patchValue({ supplierId: createdSupplierId });
+                  }
+            })
+      }
+      openAvailableBudgetPlanDetails(rowIndex: number): void {
             const row = this.items.at(rowIndex);
-            const selectedId = row.get('budgetCodeId')?.value;
+            const selectedId = row.get('budgetPlanDetailId')?.value;
 
-            const dialogRef = this.dialog.open(ExpenseBudgetCodeDialogComponent, {
-                  data: { selectedBudgetCodeId: selectedId },
+            const dialogRef = this.dialog.open(AvailableBudgetPlansDialogComponent, {
+                  data: selectedId ,
             });
 
-            dialogRef.afterClosed().subscribe((result: { success?: boolean, budgetCodeId?: string, budgetAmount?: number } | undefined) => {
-                  if(!result?.success || !result.budgetCodeId || !result.budgetAmount) return;
+            dialogRef.afterClosed().subscribe((result: { detailId?: string, amount?: number } | undefined) => {
+                  if(!result?.detailId || !result.amount) return;
                   
-                  const budgetAmount = Number(result.budgetAmount);
+                  const amount = Number(result.amount);
                   const totalWithTax = Number(row.get('totalWithTax')?.value ?? 0);
 
                   // Cho phép vượt 5%
                   const tolerance = 0.05; // 5%
-                  const allowed = Math.round(budgetAmount * (1 + tolerance));
+                  const allowed = Math.round(amount * (1 + tolerance));
 
                   if (totalWithTax > allowed) {
                         this.confirmService.validateBudgetLimit$({
@@ -341,7 +341,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
                         return; 
                   }
 
-                  row.patchValue({ budgetCodeId: result.budgetCodeId }, { emitEvent: true });
+                  row.patchValue({ budgetPlanDetailId: result.detailId }, { emitEvent: true });
                   this.toast.successRich('Đã chọn mã ngân sách');
             });
       }
@@ -357,7 +357,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
                   amount: this.formBuilder.nonNullable.control<number>(0),
                   taxAmount: this.formBuilder.nonNullable.control<number>(0),
                   totalWithTax: this.formBuilder.nonNullable.control<number>(0),
-                  budgetCodeId: this.formBuilder.control<string | null>(null),
+                  budgetPlanDetailId: this.formBuilder.control<string | null>(null),
                   cashoutCodeId: this.formBuilder.control<string | null>(null),
             });
 
@@ -462,7 +462,9 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
             if (this.isBusy) return;
 
             if(this.form.invalid) {
-                  this.toast.errorRich('Vui lòng nhập đầy đủ thông tin');
+                  this.form.markAllAsTouched();
+                  alert('invalid');
+                  // this.toast.errorRich('Vui lòng nhập đầy đủ thông tin');
                   return;
             }
 
@@ -470,7 +472,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
             const items = (raw.items ?? []).map(it => ({
                   itemName: it.itemName,
                   invoiceId: it.invoiceId ?? undefined,
-                  budgetCodeId: it.budgetCodeId ?? undefined,
+                  budgetCodeId: it.budgetPlanDetailId ?? undefined,
                   cashoutCodeId: it.cashoutCodeId ?? undefined,
                   quantity: Number(it.quantity ?? 0),
                   unitPrice: Number(it.unitPrice ?? 0),

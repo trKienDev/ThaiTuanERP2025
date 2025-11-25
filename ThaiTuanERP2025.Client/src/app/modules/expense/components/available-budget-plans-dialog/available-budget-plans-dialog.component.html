@@ -1,0 +1,48 @@
+<div class="dialog">
+      <div class="dialog-container">
+            <div class="dialog-heading">
+                  <div class="dialog-title">
+                        <h1>Kế hoạch ngân sách</h1>
+                  </div>
+                  <div class="dialog-close">
+                        <button type="button" class="close-button" (click)="close()" aria-label="Đóng">
+                              <span class="text material-icons-outlined">close</span>
+                        </button>
+                  </div>
+            </div>
+            <div class="dialog-body">
+                  <table class="table">
+                        <thead>
+                              <tr>
+                                    <th>#</th>
+                                    <th>Mã ngân sách</th>
+                                    <th>Tên ngân sách</th>
+                                    <th>Số tiền khả dụng</th>
+                                    <th>Chọn</th>
+                              </tr>
+                        </thead>
+                        <tbody>
+                              <ng-container *ngIf="availableDetails.length > 0">
+                                    <ng-container *ngFor="let detail of availableDetails; let i = index">
+                                          <tr>
+                                                <td>{{ i + 1 }}</td>
+                                                <td>{{ detail.budgetCode.code }}</td>
+                                                <td>{{ detail.budgetCode.name }}</td>
+                                                <td>{{ detail.amount | number:'1.0-2' }} VND</td>
+                                                <td>
+                                                      <input type="checkbox" (click)="selectBudgetPlanDetail(detail)" [checked]="detail.id === selectedDetailId" style="width: unset;">
+                                                </td>
+                                          </tr>
+                                    </ng-container>
+                              </ng-container>
+                              <ng-container *ngIf="availableDetails.length === 0">
+                                    <tr>
+                                          <td colspan="5">Không có kế hoạch ngân sách khả dụng</td>
+                                    </tr>
+                              </ng-container>
+                        </tbody>
+                  </table>
+            </div>
+            <div class="dialog-footer"></div>
+      </div>
+</div>

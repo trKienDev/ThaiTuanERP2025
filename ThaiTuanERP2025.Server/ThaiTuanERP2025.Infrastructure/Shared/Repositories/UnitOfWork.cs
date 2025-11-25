@@ -38,7 +38,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 			// Expense
 			IInvoiceRepository invoices,
 			IInvoiceFileRepository invoiceFiles,
-			ISupplierRepository suppliers,
+			ISupplierWriteRepository suppliers,
 			IOutgoingBankAccountRepository outgoingBankAccounts,
 			IOutgoingPaymentRepository outgoingPayments,
 
@@ -139,7 +139,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 		// Expense
 		public IInvoiceRepository Invoices { get; }
 		public IInvoiceFileRepository InvoiceFiles { get; }
-		public ISupplierRepository Suppliers { get; }
+		public ISupplierWriteRepository Suppliers { get; }
 		public IOutgoingBankAccountRepository OutgoingBankAccounts { get; }
 		public IOutgoingPaymentRepository OutgoingPayments { get; }
 

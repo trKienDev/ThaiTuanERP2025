@@ -1,6 +1,6 @@
 import { BehaviorSubject, Observable, shareReplay, switchMap, tap } from "rxjs"
 
-export abstract class BaseApiFacade<Dto, Request, Update = Request, UpdateResponse = Dto> {
+export abstract class BaseApiFacade<Dto, CreatePayload, CreateResponse = void, UpdatePayload = CreatePayload, UpdateResponse = Dto> {
       protected readonly reload$ = new BehaviorSubject<void>(undefined);
 
       /** 
@@ -11,8 +11,8 @@ export abstract class BaseApiFacade<Dto, Request, Update = Request, UpdateRespon
 
       protected constructor(protected service: {
             getAll: () => Observable<Dto[]>;
-            create: (req: Request) => Observable<void>;
-            update: (id: string, req: Update) => Observable<UpdateResponse>;
+            create: (payload: CreatePayload) => Observable<CreateResponse>;
+            update: (id: string, payload: UpdatePayload) => Observable<UpdateResponse>;
             delete: (id: string) => Observable<boolean>;
             toggleActive: (id: string) => Observable<boolean>;
       }) {
@@ -30,11 +30,11 @@ export abstract class BaseApiFacade<Dto, Request, Update = Request, UpdateRespon
 
       refresh() { this.reload$.next(); }
 
-      create(req: Request) {
-            return this.service.create(req).pipe(tap(() => this.refresh()));
+      create(payload: CreatePayload) {
+            return this.service.create(payload).pipe(tap(() => this.refresh()));
       }
-      update(id: string, req: Update) {
-            return this.service.update(id, req).pipe(tap(() => this.refresh()));
+      update(id: string, payload: UpdatePayload) {
+            return this.service.update(id, payload).pipe(tap(() => this.refresh()));
       }
       delete(id: string) {
             return this.service.delete(id).pipe(tap(() => this.refresh()));

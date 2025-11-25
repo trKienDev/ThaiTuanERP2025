@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
 using ThaiTuanERP2025.Api.Shared;
 using ThaiTuanERP2025.Application.Finance.BudgetPlans.Commands;
 using ThaiTuanERP2025.Application.Finance.BudgetPlans.Contracts;
@@ -34,6 +33,12 @@ namespace ThaiTuanERP2025.Api.Controllers.Finance
 		public async Task<IActionResult> GetById([FromRoute] Guid id, CancellationToken cancellationToken) {
 			var dto = await _mediator.Send(new GetBudgetPlanByIdQuery(id), cancellationToken);
 			return Ok(ApiResponse<BudgetPlanDto>.Success(dto));
+		}
+
+		[HttpGet("available/details")]
+		public async Task<IActionResult> GetAvailableDetails(CancellationToken cancellationToken) {
+			var details = await _mediator.Send(new GetAvailabelBudgetPlanDetailsQuery(), cancellationToken);
+			return Ok(ApiResponse<IReadOnlyList<BudgetPlanDetailDto>>.Success(details));
 		}
 
 		#region POST

@@ -14,7 +14,7 @@ export interface BudgetPeriodLookupDto {
 }
 
 
-export interface BudgetPeriodRequest {
+export interface BudgetPeriodPayload {
       year: number;
       month: number;
       startDate: Date;

@@ -88,16 +88,11 @@ export class KitDropdownComponent<T = any> implements ControlValueAccessor, OnCh
 
       // ===== ControlValueAccessor =====
       writeValue(val: T | T[] | null | undefined): void {
-            console.log("⛳ writeValue value =", val);
-    console.log("⛳ writeValue multiple =", this.multiple);
-
-
             if (this.multiple) {
                   this._values.clear();
                   if (Array.isArray(val)) {
                         val.forEach((v) => this._values.add(v as T));
                   }
-                  console.log("⛳ _values after patch =", Array.from(this._values));
             } else {
                   if (val === null || val === undefined) {
                         this._value = null;
@@ -284,7 +279,6 @@ export class KitDropdownComponent<T = any> implements ControlValueAccessor, OnCh
 
       get selectedOptions(): KitDropdownOption<T>[] {
             const arr = this.options.filter((o) => this._values.has(o.id));
-            console.log("🔥 selectedOptions =", arr);
             return arr;
       }
 
@@ -413,14 +407,10 @@ export class KitDropdownComponent<T = any> implements ControlValueAccessor, OnCh
       private syncSelectedOptionsForMultiple(): void {
             if (!this.multiple) return;
 
-            console.log("🔥 options changed! options =", this.options);
-console.log("🔥 current _values =", Array.from(this._values));
             // dựa trên danh sách options mới, chọn lại những cái đã tồn tại trong _values
             const selected = this.options.filter(o => this._values.has(o.id));
 
-            console.log("🔥 matched selected =", selected);
-
-             // clear set cũ
+            // clear set cũ
             this._values.clear();
 
             // add lại từng id

@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { environment } from "../../../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
-import { BudgetPlanDto, BudgetPlanRequest } from "../../models/budget-plan.model";
+import { BudgetPlanDetailDto, BudgetPlanDto, BudgetPlanRequest } from "../../models/budget-plan.model";
 import { Observable } from "rxjs";
 import { ApiResponse } from "../../../../shared/models/api-response.model";
 import { handleApiResponse$ } from "../../../../shared/operators/handle-api-response.operator";
@@ -16,6 +16,11 @@ export class BudgetPlanApiService extends BaseApiService<BudgetPlanDto, BudgetPl
       getFollowing(budgetPeriodId: string): Observable<BudgetPlanDto[]> {
             return this.http.get<ApiResponse<BudgetPlanDto[]>>(`${this.endpoint}/following/${budgetPeriodId}`)
                   .pipe(handleApiResponse$<BudgetPlanDto[]>());
+      }
+
+      getAvailableDetails(): Observable<BudgetPlanDetailDto[]> {
+            return this.http.get<ApiResponse<BudgetPlanDetailDto[]>>(`${this.endpoint}/available/details`)
+                  .pipe(handleApiResponse$<BudgetPlanDetailDto[]>());
       }
 
       updateDetailAmount(planDetailId: string, amount: number): Observable<void> {

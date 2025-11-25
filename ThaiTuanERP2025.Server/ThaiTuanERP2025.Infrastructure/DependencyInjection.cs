@@ -63,6 +63,7 @@ using ThaiTuanERP2025.Application.Expense.ExpenseStepTemplates;
 using ThaiTuanERP2025.Infrastructure.Expense.Repositories.Read;
 using ThaiTuanERP2025.Infrastructure.Expense.Repositories.Write;
 using ThaiTuanERP2025.Application.Expense.ExpenseWorkflowTemplates;
+using ThaiTuanERP2025.Application.Expense.Suppliers;
 
 namespace ThaiTuanERP2025.Infrastructure
 {
@@ -129,7 +130,8 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IInvoiceRepository, InvoiceRepository>();
 			services.AddScoped<IInvoiceReadRepository, InvoiceReadRepository>();
 			services.AddScoped<IInvoiceFileRepository, InvoiceFileRepository>();
-			services.AddScoped<ISupplierRepository, SupplierRepository>();
+			services.AddScoped<ISupplierReadRepository, SupplierReadRepository>();
+			services.AddScoped<ISupplierWriteRepository, SupplierWriteRepository>();
 			services.AddScoped<IOutgoingBankAccountRepository, OutgoingBankAccountRepository>();
 			services.AddScoped<IOutgoingPaymentRepository, OutgoingPaymentRepository>();
 			services.AddScoped<IExpenseWorkflowTemplateReadRepository, ExpenseWorkflowTemplateReadRepository>();
