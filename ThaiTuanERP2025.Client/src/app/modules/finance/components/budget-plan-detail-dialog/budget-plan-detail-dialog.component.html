@@ -71,14 +71,14 @@
             </div>
             <div class="dialog-footer display-flex gap-10px">
                   <ng-container *ngIf="showReviewButton">
+                        <button class="width-50pt button cancel-button" (click)="close(false)">Hủy</button>
                         <div class="width-50pt">
                               <kit-spinner-button type="button" cssClass="width-100pt save-button" [loading]="submitting" text="Gửi phê duyệt" (click)="markReview()"></kit-spinner-button>
                         </div>
-                        <button class="width-50pt button cancel-button" (click)="close(false)">Hủy</button>
                   </ng-container>
                   <ng-container *ngIf="showApproveButton">
-                        <kit-spinner-button class="flex-1" type="button" cssClass="submit-button" [loading]="submitting" text="Phê duyệt" (click)="approve()"></kit-spinner-button>
                         <kit-spinner-button class="flex-1" type="button" cssClass="danger-button display-flex justify-content-center" [loading]="submitting" text="Từ chối"></kit-spinner-button>
+                        <kit-spinner-button class="flex-1" type="button" cssClass="submit-button" [loading]="submitting" text="Phê duyệt" (click)="approve()"></kit-spinner-button>
                   </ng-container>
             </div>
       </div>

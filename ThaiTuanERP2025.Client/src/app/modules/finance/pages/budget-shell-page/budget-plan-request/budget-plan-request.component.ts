@@ -32,14 +32,17 @@ interface BudgetPlanDetailsForm {
 })
 export class BudgetPlanRequestPanelComponent implements OnInit {
       private readonly formBuilder = inject(FormBuilder);
-      public submitting: boolean = false;
-      public showErrors: boolean = false;
+      submitting = false;
+      showErrors = false;
+      detailOptions: KitDropdownOption[][] = [];
       private readonly toast = inject(ToastService);
       private readonly userApi = inject(UserApiService);
       private readonly budgetPlanApi = inject(BudgetPlanApiService);
       private readonly httpErrorHandler = inject(HttpErrorHandlerService);
       private readonly budgetPeriodApi = inject(BudgetPeriodApiService);
       private readonly currentUser$ = inject(UserFacade).currentUser$;
+
+     
       
       // ===== FORM =====
       form = this.formBuilder.group({
@@ -54,7 +57,7 @@ export class BudgetPlanRequestPanelComponent implements OnInit {
             this.loadBudgetApprovers();
             this.loadBudgetPeriodOptions();
             this.loadBudgetReviewers();
-            this.loadAvailableBudgetCodes();
+            this.loadAllBudgetCodes();
 
             let currentUser = await firstValueFrom(this.currentUser$); 
             this.form.patchValue({ departmentId: currentUser.departmentId }); 
@@ -70,16 +73,21 @@ export class BudgetPlanRequestPanelComponent implements OnInit {
       get details(): FormArray<FormGroup<BudgetPlanDetailsForm>> {
             return this.form.controls.details;
       }
+
       trackByIndex = (_: number, __: any) => _;
       addDetail(): void {
             this.details.push(this.budgetPlanDetails());
+            this.detailOptions.push([...this.budgetCodeOptions]);
+            this.rebuildAvailableBudgetCodes();
       }
       removeDetail(i: number): void {
             this.details.removeAt(i);
+            this.detailOptions.splice(i, 1);
+            this.rebuildAvailableBudgetCodes();
       }
 
       // ==== Budget Period ====
-      public budgetPeriodOptions: KitDropdownOption[] = [];
+      budgetPeriodOptions: KitDropdownOption[] = [];
       loadBudgetPeriodOptions() {
             this.budgetPeriodApi.getAvailable().subscribe({
                   next: (budgetPeriods) => {
@@ -94,22 +102,22 @@ export class BudgetPlanRequestPanelComponent implements OnInit {
 
       // ==== Bugdet Codes ====
      private readonly budgetCodeApi = inject(BudgetCodeApiService);
-     public budgetCodeOptions: KitDropdownOption[] = [];
-     loadAvailableBudgetCodes() {
+     budgetCodeOptions: KitDropdownOption[] = [];
+     loadAllBudgetCodes() {
             this.budgetCodeApi.getAll().subscribe({
                   next: (budgetCodes) => {
                         this.budgetCodeOptions = budgetCodes.map(bc => ({
                               id: bc.id,
                               label: `${bc.code} - ${bc.name}`
                         }));
+                        this.detailOptions = this.details.controls.map(_ => [...this.budgetCodeOptions]);
                   },
                   error: (err => handleHttpError(err))
             })
       }
       onBudgetCodeSelected(index: number, opt: KitDropdownOption) {
-            this.details.at(index).patchValue({
-                  budgetCodeId: opt.id
-            });
+            this.details.at(index).patchValue({ budgetCodeId: opt.id });
+            this.rebuildAvailableBudgetCodes();
       }
 
       // ==== Budget Reviewers ====
@@ -192,5 +200,19 @@ export class BudgetPlanRequestPanelComponent implements OnInit {
                   this.showErrors = false;
                   this.submitting = false;
             }     
+      }
+
+      private rebuildAvailableBudgetCodes() {
+            const selectedIds = this.details.controls
+                  .map(ctrl => ctrl.get('budgetCodeId')?.value)
+                  .filter(v => !!v);
+
+            this.detailOptions = this.details.controls.map((ctrl, i) => {
+                  const currentSelected = ctrl.get('budgetCodeId')?.value;
+
+                  return this.budgetCodeOptions.filter(opt =>
+                        opt.id === currentSelected || !selectedIds.includes(opt.id)
+                  );
+            });
       }
 }

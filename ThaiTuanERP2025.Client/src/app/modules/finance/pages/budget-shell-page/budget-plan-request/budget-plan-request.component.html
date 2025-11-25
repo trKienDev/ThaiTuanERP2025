@@ -64,7 +64,7 @@
                                           <tr *ngFor="let row of details.controls; let i = index; trackBy: trackByIndex;" [formGroupName]="i">
                                                 <td>{{ i + 1 }}</td>
                                                 <td>
-                                                      <kit-dropdown formControlName="budgetCodeId" [options]="budgetCodeOptions" [placeholder]="'Chọn mã ngân sách'" [required]="true" [enableFilter]="false"
+                                                      <kit-dropdown formControlName="budgetCodeId" [options]="detailOptions[i]" [placeholder]="'Chọn mã ngân sách'" [required]="true" [enableFilter]="false"
                                                       [invalid]="showErrors && (row.get('budgetCodeId')?.invalid ?? false)" (selectionChange)="onBudgetCodeSelected(i, $event)"></kit-dropdown>
                                                       <div class="form-input-error" *ngIf="showErrors && row.get('budgetCodeId')?.invalid">
                                                             <small>Vui lòng chọn mã ngân sách</small>
