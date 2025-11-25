@@ -51,7 +51,8 @@ type UploadItem = {
 
 type PaymentItem = {
       itemName: FormControl<string>;
-      invoiceId: FormControl<string | null>;
+      uploadedInvoiceFile: FormControl<File | null>;
+      uploadedInvoicePreviewUrl: FormControl<string | null>; 
       quantity: FormControl<number | null>;
       unitPrice: FormControl<number | null>;
       taxRate: FormControl<number>;
@@ -240,43 +241,6 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
             return opts.find(o => o.id === id)?.label ?? '';
       }
 
-      async openMiniInvoiceRequestDialog(rowIndex: number) {
-            const row = this.items.at(rowIndex);
-            const oldId = row.get('invoiceId')!.value;
-
-            this.confirmService.confirmReplaceInvoice$(!!oldId).subscribe(ok => {
-                  if (!ok) return;
-
-                  const ref = this.dialog.open(MiniInvoiceRequestDialogComponent);
-
-                  ref.afterClosed().subscribe((result?: { success?: boolean; invoiceId?: string }) => {
-                        if (result?.success && result.invoiceId) {
-                              if (oldId === result.invoiceId) return;
-                              row.patchValue({ invoiceId: result.invoiceId }, { emitEvent: true });
-                        }
-                  });
-            });
-      }
-
-      async openMyInvoicesDialog(rowIndex: number) {
-            const row = this.items.at(rowIndex);
-            const oldId = row.get('invoiceId')!.value;
-
-            this.confirmService.confirmReplaceInvoice$(!!oldId).subscribe(ok => {
-                  if(!ok) return;
-
-                  const ref = this.dialog.open(MyInvoicesDialogComponent);
-
-                  ref.afterClosed().subscribe((result: { success?: boolean; invoiceId?: string } | undefined) => {
-                        if (!result?.success || !result.invoiceId) return;
-                        
-                        if (oldId === result.invoiceId) return;
-                        row.patchValue({ invoiceId: result.invoiceId }, { emitEvent: true });
-                        this.toast.successRich('Đã chọn hóa đơn');
-                  });
-            });
-
-      }
 
       payeeOptions: KitDropdownOption[] = [
             { id: 'supplier', label: 'Nhà cung cấp' },
@@ -349,7 +313,8 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       newItemGroup(): FormGroup<PaymentItem> {
             const group = this.formBuilder.group<PaymentItem>({
                   itemName: this.formBuilder.nonNullable.control<string>('', [Validators.required, Validators.maxLength(256)]),
-                  invoiceId: this.formBuilder.control<string | null>(null),
+                  uploadedInvoiceFile: this.formBuilder.control<File | null>(null),
+                  uploadedInvoicePreviewUrl: this.formBuilder.control<string | null>(null),
                   quantity: this.formBuilder.control<number | null>(null, { validators: [Validators.required, Validators.pattern('^[0-9]+$'), Validators.min(1)] }),
                   unitPrice: this.formBuilder.control<number | null>(null, { validators: [Validators.required, Validators.min(0)] }),
                   taxRate: this.formBuilder.nonNullable.control<number>(0), // mặc định 10%
@@ -451,7 +416,6 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
                   this.toast.info?.('Dòng này chưa liên kết hóa đơn');    // ToastService đã inject sẵn :contentReference[oaicite:1]{index=1}
                   return;
             }
-            row.patchValue({ invoiceId: null }, { emitEvent: true });
 
             this.onMenuClosed?.(); 
             this.toast.successRich?.('Đã gỡ liên kết hóa đơn');  
@@ -471,8 +435,8 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
             const raw = this.form.getRawValue();
             const items = (raw.items ?? []).map(it => ({
                   itemName: it.itemName,
-                  invoiceId: it.invoiceId ?? undefined,
                   budgetCodeId: it.budgetPlanDetailId ?? undefined,
+                  invoiceFile: it.uploadedInvoiceFile ?? undefined,
                   cashoutCodeId: it.cashoutCodeId ?? undefined,
                   quantity: Number(it.quantity ?? 0),
                   unitPrice: Number(it.unitPrice ?? 0),
@@ -534,5 +498,35 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       // 3. trạng thái bận chung
       get isBusy() {
             return this.submitting || this.isUploading;
+      }
+
+      onInvoiceFileSelected(event: Event, rowIndex: number) {
+            console.log('run invocie file selected');
+            const input = event.target as HTMLInputElement;
+            if (!input.files || input.files.length === 0) return;
+
+            const file = input.files[0];
+
+            // Kiểm tra loại file
+            const allowedTypes = [
+                  'image/png', 'image/jpeg', 'image/jpg',
+                  'application/pdf',
+                  'application/msword',
+                  'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            ];
+
+            if (!allowedTypes.includes(file.type)) {
+                  this.toast.errorRich('File không hợp lệ. Chỉ chấp nhận hình ảnh, PDF, Word.');
+                  return;
+            }
+
+            const row = this.items.at(rowIndex);
+
+            row.patchValue({
+                  uploadedInvoiceFile: file,
+                  uploadedInvoicePreviewUrl: file.type.startsWith('image/') 
+                        ? URL.createObjectURL(file)
+                        : null
+            });
       }
 }
