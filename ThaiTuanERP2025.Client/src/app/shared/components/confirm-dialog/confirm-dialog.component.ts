@@ -2,6 +2,8 @@ import { CommonModule } from "@angular/common";
 import { Component, Inject } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+import { KitWarningIconComponent } from "../../icons/kit-warning-icon.component";
+import { KitDangerIconComponent } from "../../icons/kit-danger-icon.component";
 
 export type ConfirmDialogData = {
       title?: string;
@@ -14,7 +16,7 @@ export type ConfirmDialogData = {
 @Component({
       selector: 'kit-confirm-dialog',
       standalone: true,
-      imports: [ CommonModule, MatDialogModule, MatButtonModule ],
+      imports: [CommonModule, MatDialogModule, MatButtonModule, KitWarningIconComponent, KitDangerIconComponent],
       templateUrl: './confirm-dialog.component.html',
       styleUrl: './confirm-dialog.component.scss'
 })

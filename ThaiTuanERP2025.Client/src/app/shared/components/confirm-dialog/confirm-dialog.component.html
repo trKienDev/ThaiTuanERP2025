@@ -4,7 +4,10 @@
 
             <ng-container>
                   <div class="dialog-icon-wrapper display-flex justify-content-center align-items-center" style="margin: 30px 0px;">
-                        <span *ngIf="data.tone !== 'error'" class="dialog-icon">⚠️</span>
+                        <span *ngIf="data.tone !== 'error' && data.tone !== 'danger'" class="dialog-icon">⚠️</span>
+                        <ng-container *ngIf="data.tone === 'danger'">
+                              <kit-danger-icon class="dialog-icon" [size]="80"></kit-danger-icon>
+                        </ng-container>
                         <span *ngIf="data.tone === 'error'" class="dialog-icon">⛔</span>
                   </div>
             </ng-container>

@@ -36,6 +36,7 @@ import { SupplierRequestDialogComponent } from "../../../components/supplier-req
 import { AvailableBudgetPlansDialogComponent } from "../../../components/available-budget-plans-dialog/available-budget-plans-dialog.component";
 import { FileImagePreviewDialog } from "../../../../../shared/components/file-preview/file-image-preview-dialog.component";
 import { FilePdfPreviewDialog } from "../../../../../shared/components/file-preview/file-pdf-preview-dialog.component";
+import { AmountToWordsPipe } from "../../../../../shared/pipes/amount-to-words.pipe";
 
 type UploadStatus = 'queued' | 'uploading' | 'done' | 'error';
 type UploadItem = {
@@ -67,7 +68,7 @@ type PaymentItem = {
 @Component({
       selector: 'new-expense-payment-request',
       templateUrl: './expense-payment-request.component.html',
-      imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule, KitDropdownComponent, MatDialogModule, MoneyFormatDirective, OverlayModule, MatSnackBarModule, MatDatepickerModule, HttpClientModule, KitFileUploaderComponent, TextareaNoSpellcheckDirective, KitSpinnerButtonComponent, KitOverlaySpinnerComponent],
+      imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule, KitDropdownComponent, MatDialogModule, MoneyFormatDirective, OverlayModule, MatSnackBarModule, MatDatepickerModule, HttpClientModule, KitFileUploaderComponent, TextareaNoSpellcheckDirective, KitSpinnerButtonComponent, KitOverlaySpinnerComponent, AmountToWordsPipe],
       styleUrls: ['./expense-payment-request.component.scss'],
       standalone: true,
       providers: [...provideMondayFirstDateAdapter() ]
@@ -77,15 +78,14 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       private readonly formBuilder = inject(FormBuilder);
       private readonly dialog = inject(MatDialog);
       private readonly toast = inject(ToastService);
-      private readonly userOptionsStore = inject(UserOptionStore);
-      private readonly supplierOptionStore = inject(SupplierOptionStore);
       private readonly managerOptionStore = inject(ManagerOptionStore);
       private readonly userFacade = inject(UserFacade);
-      private readonly supplierFacade = inject(SupplierFacade);
-      public submitting = false;
       private readonly expensePaymentService = inject(ExpensePaymentApiService);
       private readonly router = inject(Router);
       private readonly confirm = inject(ConfirmService);
+
+      submitting = false;
+      showErrors = false;
 
       public readonly uploadMeta = {
             module: 'expense',
@@ -95,9 +95,10 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       }
       public uploads: UploadItem[] = [];
 
-      userOptions$ = this.userOptionsStore.option$; 
-      supplierOptions$ = this.supplierOptionStore.option$;
-      suppliers$ = this.supplierFacade.suppliers$;
+      
+      userOptions$ = inject(UserOptionStore).option$; 
+      supplierOptions$ = inject(SupplierOptionStore).option$;
+      suppliers$ = inject(SupplierFacade).suppliers$;
       currentUser$ = this.userFacade.currentUser$;
       currentUser: UserDto | null = null;
       managerOptions$!: Observable<KitDropdownOption[]>;
@@ -189,7 +190,6 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
             this.destroy$.complete();
       }
 
-
       onSupplierSelected(opt: KitDropdownOption) {
             this.form.patchValue({ supplierId: opt.id });
       }
@@ -209,7 +209,6 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       onManagerApproverSelected(opt: KitDropdownOption) {
             this.form.patchValue({ managerApproverId: opt.id });
       }
-
 
       loadBudgetCodes(): void {
             this.budegetCodeService.getAll().subscribe({
@@ -239,7 +238,6 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
             if(!id) return '';
             return opts.find(o => o.id === id)?.label ?? '';
       }
-
 
       payeeOptions: KitDropdownOption[] = [
             { id: 'supplier', label: 'Nhà cung cấp' },
@@ -413,8 +411,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
 
             if(this.form.invalid) {
                   this.form.markAllAsTouched();
-                  alert('invalid');
-                  // this.toast.errorRich('Vui lòng nhập đầy đủ thông tin');
+                  this.toast.warningRich('Vui lòng nhập đầy đủ thông tin');
                   return;
             }
 
@@ -463,12 +460,13 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
 
             this.submitting = true;
             try {
-                  const result = await firstValueFrom(this.expensePaymentService.create(payload));
-                  this.router.navigate(
-                        ['/expense/expense-payment-shell/following-payments'],
-                        { queryParams: { paymentId: result } }
-                  );
-                  this.toast.successRich('Gửi phê duyệt thành công');
+                  console.log('payload: ', payload);
+                  // const result = await firstValueFrom(this.expensePaymentService.create(payload));
+                  // this.router.navigate(
+                  //       ['/expense/expense-payment-shell/following-payments'],
+                  //       { queryParams: { paymentId: result } }
+                  // );
+                  // this.toast.successRich('Gửi phê duyệt thành công');
             } catch(error) {
                   console.error('Gửi phê duyệt thất bại', error);
                   this.toast.errorRich('Gửi phê duyệt thất bại');
@@ -486,6 +484,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
             return this.submitting || this.isUploading;
       }
 
+      // === PREVIEW INVOICE ===
       onInvoiceFileSelected(event: Event, rowIndex: number) {
             console.log('run invocie file selected');
             const input = event.target as HTMLInputElement;

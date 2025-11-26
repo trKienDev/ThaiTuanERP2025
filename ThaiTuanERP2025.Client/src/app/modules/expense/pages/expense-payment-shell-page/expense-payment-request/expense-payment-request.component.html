@@ -180,7 +180,9 @@
                   <div class="width-50pt">
                         <div class="display-flex gap-10px">
                               <label class="label width-fit-content text-no-wrap align-content-center" for="name">Tổng thanh toán 🔒</label>
-                              <input class="dark dark-alert user-select-none" [value]="form.get('totalWithTax')?.value | number:'1.0-2'" disabled />
+                              <!-- <input class="dark dark-alert user-select-none" [value]="form.get('totalWithTax')?.value | number:'1.0-2'" disabled /> -->
+                               <input class="dark dark-alert user-select-none"
+       [value]="form.get('totalWithTax')?.value | amountToWords" disabled />
                         </div>
                   </div>
                   <div class="width-50pt">
@@ -207,7 +209,7 @@
                         <kit-dropdown [multiple]="true" [options]="(userOptions$ | async) ?? []"  (selectionChange)="onFollowerSelected($event)" [width]="'100%'" [placeholder]="'Thêm người theo dõi'"></kit-dropdown>
                   </div>
                   <div style="width: 30%;">
-                        <kit-dropdown [options]="(managerOptions$ | async) ?? []"  [width]="'100%'" (selectionChange)="onManagerApproverSelected($event)" [placeholder]="'Chọn quản lý duyệt'"></kit-dropdown>
+                        <kit-dropdown [options]="(managerOptions$ | async) ?? []"  [width]="'100%'" (selectionChange)="onManagerApproverSelected($event)" [placeholder]="'Chọn quản lý duyệt'" [required]="true"></kit-dropdown>
                   </div>
             </div>
 
