@@ -1,16 +1,16 @@
 import { Injectable } from "@angular/core";
-import { ExpensePaymentDetailDto, ExpensePaymentDto, ExpensePaymentPayload, ExpensePaymentSummaryDto } from "../models/expense-payment.model";
+import { ExpensePaymentDetailDto, ExpensePaymentDto, ExpensePaymentPayload, ExpensePaymentSummaryDto } from "../../models/expense-payment.model";
 import { HttpClient, HttpParams } from "@angular/common/http";
-import { environment } from "../../../../environments/environment";
+import { environment } from "../../../../../environments/environment";
 import { catchError, Observable, throwError } from "rxjs";
-import { ApiResponse } from "../../../shared/models/api-response.model";
-import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
-import { BaseApiService } from "../../../shared/services/base-api.service";
+import { ApiResponse } from "../../../../shared/models/api-response.model";
+import { handleApiResponse$ } from "../../../../shared/operators/handle-api-response.operator";
+import { BaseApiService } from "../../../../shared/services/base-api.service";
 
-@Injectable({ providedIn: 'root' }) 
+@Injectable({ providedIn: 'root' })
 export class ExpensePaymentApiService extends BaseApiService<ExpensePaymentDto, ExpensePaymentPayload> {
       constructor(http: HttpClient) {
-            super(http, `${environment.apiUrl}/expense-payments`);
+            super(http, `${environment.apiUrl}/expense-payment`);
       }
 
       getDetailById(id: string): Observable<ExpensePaymentDetailDto> {
@@ -27,7 +27,7 @@ export class ExpensePaymentApiService extends BaseApiService<ExpensePaymentDto, 
                   .set('page', page.toString())
                   .set('pageSize', pageSize.toString());
 
-            if(updatedAfter) {
+            if (updatedAfter) {
                   params = params.set('updatedAfter', updatedAfter);
             }
 

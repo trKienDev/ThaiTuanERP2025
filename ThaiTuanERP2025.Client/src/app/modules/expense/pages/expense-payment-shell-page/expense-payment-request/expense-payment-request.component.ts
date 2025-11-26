@@ -23,7 +23,7 @@ import { BankAccountDto } from "../../../models/bank-account.model";
 import { PayeeType, ExpensePaymentPayload } from "../../../models/expense-payment.model";
 import { SupplierOptionStore } from "../../../options/supplier-dropdown-option.store";
 import { BankAccountApiService } from "../../../services/bank-account.service";
-import { ExpensePaymentApiService } from "../../../services/expense-payment.service";
+import { ExpensePaymentApiService } from "../../../services/api/expense-payment.service";
 import { KitFileUploaderComponent } from "../../../../../shared/components/kit-file-uploader/kit-file-uploader.component";
 import { TextareaNoSpellcheckDirective } from "../../../../../shared/directives/textarea/textarea-no-spellcheck.directive";
 import { KitSpinnerButtonComponent } from "../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
@@ -52,7 +52,7 @@ type UploadItem = {
 type PaymentItem = {
       itemName: FormControl<string>;
       uploadedInvoiceFile: FormControl<File | null>;
-      uploadedInvoicePreviewUrl: FormControl<string | null>; 
+      uploadedInvoicePreviewUrl: FormControl<string | null>;
       invoiceStoredFileId: FormControl<string | null>;
       quantity: FormControl<number | null>;
       unitPrice: FormControl<number | null>;
@@ -61,7 +61,7 @@ type PaymentItem = {
       taxRatePercent: FormControl<string>;
       taxAmount: FormControl<number>; // readonly
       totalWithTax: FormControl<number>; // readonly
-      budgetPlanDetailId: FormControl<string | null>; 
+      budgetPlanDetailId: FormControl<string | null>;
 };
 
 @Component({
@@ -70,7 +70,7 @@ type PaymentItem = {
       imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule, KitDropdownComponent, MatDialogModule, MoneyFormatDirective, OverlayModule, MatSnackBarModule, MatDatepickerModule, HttpClientModule, KitFileUploaderComponent, TextareaNoSpellcheckDirective, KitSpinnerButtonComponent, KitOverlaySpinnerComponent, AmountToWordsPipe],
       styleUrls: ['./expense-payment-request.component.scss'],
       standalone: true,
-      providers: [...provideMondayFirstDateAdapter() ]
+      providers: [...provideMondayFirstDateAdapter()]
 })
 export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       private readonly destroy$ = new Subject<void>();
@@ -96,8 +96,8 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       }
       public uploads: UploadItem[] = [];
 
-      
-      userOptions$ = inject(UserOptionStore).option$; 
+
+      userOptions$ = inject(UserOptionStore).option$;
       supplierOptions$ = inject(SupplierOptionStore).option$;
       suppliers$ = inject(SupplierFacade).suppliers$;
       currentUser$ = this.userFacade.currentUser$;
@@ -108,7 +108,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       budgetCodeOptiopns: KitDropdownOption[] = [];
       cashoutCodeOptions: KitDropdownOption[] = [];
       supplierBankAccounts: BankAccountDto[] = [];
-      selectedBankAccount: BankAccountDto | null = null;     
+      selectedBankAccount: BankAccountDto | null = null;
 
       // reactive form
       form = this.formBuilder.group({
@@ -118,7 +118,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
             accountNumber: this.formBuilder.control<string>('', { nonNullable: true, validators: [Validators.required] }),
             beneficiaryName: this.formBuilder.control<string>('', { nonNullable: true, validators: [Validators.required] }),
             description: this.formBuilder.control<string | null>(null),
-            items: this.formBuilder.array<FormGroup<PaymentItem>>([ this.newItemGroup() ]),
+            items: this.formBuilder.array<FormGroup<PaymentItem>>([this.newItemGroup()]),
             totalAmount: this.formBuilder.nonNullable.control<number>(0),
             totalTax: this.formBuilder.nonNullable.control<number>(0),
             totalWithTax: this.formBuilder.nonNullable.control<number>(0),
@@ -135,15 +135,15 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
             this.form.get('totalAmount')!.disable({ emitEvent: false });
             this.form.get('totalTax')!.disable({ emitEvent: false });
             this.form.get('totalWithTax')!.disable({ emitEvent: false });
-            
+
             this.form.get('supplierId')!.valueChanges.pipe(
-                  startWith(this.form.get('supplierId')!.value), 
+                  startWith(this.form.get('supplierId')!.value),
                   switchMap(id => id ? this.bankAccountApi.listBySupplier(id) : of([])),
                   takeUntil(this.destroy$)
             ).subscribe(accounts => {
                   this.supplierBankAccounts = accounts ?? [];
             });
-            
+
 
             this.form.get('items')!.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
                   const totalAmount = this.totalAmount;
@@ -151,11 +151,11 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
 
                   const totalTax = this.totalTax;
                   this.form.get('totalTax')!.setValue(totalTax, { emitEvent: false });
-                  
+
                   const totalWithTax = this.totalWithTax;
                   this.form.get('totalWithTax')!.setValue(totalWithTax, { emitEvent: false });
             })
-            
+
             this.currencyOptions = [
                   { id: 'vnd', label: 'VND' }
             ]
@@ -182,7 +182,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       }
 
       labelOf = (opts: KitDropdownOption[], id: string | null): string => {
-            if(!id) return '';
+            if (!id) return '';
             return opts.find(o => o.id === id)?.label ?? '';
       }
 
@@ -194,7 +194,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       onPayeeSelected(opt: KitDropdownOption) {
             this.selectedPayee = opt.id === 'supplier' ? PayeeType.supplier : PayeeType.employee;
             if (this.selectedPayee === PayeeType.employee) {
-                  this.form.patchValue({ supplierId: null, bankName:'', accountNumber:'', beneficiaryName:'' }, { emitEvent:false });
+                  this.form.patchValue({ supplierId: null, bankName: '', accountNumber: '', beneficiaryName: '' }, { emitEvent: false });
                   this.supplierBankAccounts = [];
                   this.selectedBankAccount = null;
             }
@@ -205,18 +205,18 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
             { id: 'false', label: 'Không nhập kho' },
       ]
       onGoodsReceiptSelected(opt: KitDropdownOption) {
-            if(opt.id === 'true') {
+            if (opt.id === 'true') {
                   this.form.patchValue({ hasGoodsReceipt: true });
             } else {
                   this.form.patchValue({ hasGoodsReceipt: false });
             }
-      } 
+      }
 
       openCreateSupplierDialog(): void {
             const dialogRef = this.dialog.open(SupplierRequestDialogComponent);
 
             dialogRef.afterClosed().subscribe((createdSupplierId) => {
-                  if(createdSupplierId?.id) {
+                  if (createdSupplierId?.id) {
                         this.selectedPayee = PayeeType.supplier;
                         this.form.patchValue({ supplierId: createdSupplierId });
                   }
@@ -227,12 +227,12 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
             const selectedId = row.get('budgetPlanDetailId')?.value;
 
             const dialogRef = this.dialog.open(AvailableBudgetPlansDialogComponent, {
-                  data: selectedId ,
+                  data: selectedId,
             });
 
             dialogRef.afterClosed().subscribe((result: { detailId?: string, amount?: number } | undefined) => {
-                  if(!result?.detailId || !result.amount) return;
-                  
+                  if (!result?.detailId || !result.amount) return;
+
                   const amount = Number(result.amount);
                   const totalWithTax = Number(row.get('totalWithTax')?.value ?? 0);
 
@@ -246,7 +246,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
                         }).subscribe(ok => {
                               if (!ok) return;
                         });
-                        return; 
+                        return;
                   }
 
                   row.patchValue({ budgetPlanDetailId: result.detailId }, { emitEvent: true });
@@ -263,7 +263,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
                   quantity: this.formBuilder.control<number | null>(null, { validators: [Validators.required, Validators.pattern('^[0-9]+$'), Validators.min(1)] }),
                   unitPrice: this.formBuilder.control<number | null>(null, { validators: [Validators.required, Validators.min(0)] }),
                   taxRate: this.formBuilder.nonNullable.control<number>(0), // mặc định 10%
-                  taxRatePercent: this.formBuilder.nonNullable.control<string>('0'),  
+                  taxRatePercent: this.formBuilder.nonNullable.control<string>('0'),
                   amount: this.formBuilder.nonNullable.control<number>(0),
                   taxAmount: this.formBuilder.nonNullable.control<number>(0),
                   totalWithTax: this.formBuilder.nonNullable.control<number>(0),
@@ -295,7 +295,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
 
                   const amount = quantity * price;
                   // const suggestedTax = amount * rate;
-                  const suggestedTax = Math.round(amount * rate); 
+                  const suggestedTax = Math.round(amount * rate);
 
                   group.controls.amount.setValue(amount, { emitEvent: false });
 
@@ -342,7 +342,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       invoiceMenuOpenIndex: number | null = null;
       invoiceMenuOverlayPosition: ConnectedPosition[] = [
             { originX: 'center', originY: 'bottom', overlayX: 'center', overlayY: 'top', offsetY: 8 },
-            { originX: 'end', originY: 'top',    overlayX: 'end',    overlayY: 'bottom', offsetY: -8 },
+            { originX: 'end', originY: 'top', overlayX: 'end', overlayY: 'bottom', offsetY: -8 },
       ]
       toggleInvoiceMenu(i: number, ev: MouseEvent) {
             ev.stopPropagation();
@@ -356,7 +356,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
             // chặn double-click & chặn khi vẫn còn upload file
             if (this.isBusy) return;
 
-            if(this.form.invalid) {
+            if (this.form.invalid) {
                   this.form.markAllAsTouched();
                   this.toast.warningRich('Vui lòng nhập đầy đủ thông tin');
 
@@ -377,11 +377,11 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
                         firstInvalidControl.scrollIntoView({ behavior: 'smooth', block: 'center' });
                         firstInvalidControl.focus();
                   }
-                  
+
                   return;
             }
 
-            
+
             this.submitting = true;
             try {
                   const raw = this.form.getRawValue();
@@ -418,7 +418,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
                               size: u.size,
                               url: u.url,
                         }));
-                  
+
                   const payload: ExpensePaymentPayload = {
                         name: raw.name,
                         payeeType: this.selectedPayee ?? PayeeType.supplier,
@@ -443,7 +443,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
                   //       { queryParams: { paymentId: result } }
                   // );
                   this.toast.successRich('Gửi phê duyệt thành công');
-            } catch(error) {
+            } catch (error) {
                   console.error('Gửi phê duyệt thất bại', error);
                   this.toast.errorRich('Gửi phê duyệt thất bại');
             } finally {
@@ -452,7 +452,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
                   this.submitting = false;
             }
       }
-      
+
       get isUploading() {
             return this.uploads?.some(u => u.status === 'uploading');
       }
@@ -486,7 +486,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
 
             row.patchValue({
                   uploadedInvoiceFile: file,
-                  uploadedInvoicePreviewUrl: file.type.startsWith('image/') 
+                  uploadedInvoicePreviewUrl: file.type.startsWith('image/')
                         ? URL.createObjectURL(file)
                         : null
             });

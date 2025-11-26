@@ -1,7 +1,7 @@
 import { inject, signal } from "@angular/core";
 import { firstValueFrom } from "rxjs";
 import { ExpensePaymentDetailDto } from "../models/expense-payment.model";
-import { ExpensePaymentApiService } from "../services/expense-payment.service";
+import { ExpensePaymentApiService } from "../services/api/expense-payment.service";
 import { ToastService } from "../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 
 export function usePaymentDetail() {
@@ -23,7 +23,7 @@ export function usePaymentDetail() {
 		} catch (err: any) {
 			console.error('Failed to load payment detail', err);
 			error.set('Không thể tải dữ liệu thanh toán');
-                  toastService.errorRich("Không thể tải dữ liệu thanh toán");
+			toastService.errorRich("Không thể tải dữ liệu thanh toán");
 		} finally {
 			isLoading.set(false);
 		}

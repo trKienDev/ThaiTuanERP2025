@@ -1,7 +1,7 @@
 import { computed, inject, Injectable, signal, WritableSignal } from "@angular/core";
 import { ExpensePaymentSummaryDto } from "../models/expense-payment.model";
 import { firstValueFrom } from "rxjs";
-import { ExpensePaymentApiService } from "../services/expense-payment.service";
+import { ExpensePaymentApiService } from "../services/api/expense-payment.service";
 
 @Injectable({ providedIn: 'root' })
 export class FollowingExpensePaymentFacade {

@@ -7,7 +7,7 @@
 		public Guid BudgetPlanDetailId { get; init; }
 		public int Quantity { get; init;  }
 		public decimal UnitPrice { get; init; }
-		public int taxRate { get; init; } = 0;
+		public decimal taxRate { get; init; } 
 		public decimal Amount { get; init; }
 		public decimal TaxAmount { get; init; } = 0;
 		public decimal TotalWithTax { get; init; }
