@@ -143,11 +143,11 @@
                                                 [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayBackdropClass]="'cdk-overlay-transparent-backdrop'" 
                                                 (backdropClick)="onMenuClosed()" (overlayOutsideClick)="onMenuClosed()" [cdkConnectedOverlayPositions]="invoiceMenuOverlayPosition">
                                                       <div class="invoice-menu-panel dropdown-menu-panel" role="menu" aria-label="invoice actions" (keydown.escape)="onMenuClosed()" tabindex="0">
-                                                            <button type="button" class="dropdown-menu-item" (click)="previewInvoice(i); onMenuClosed()">Xem hóa đơn đã tải</button>
-                                                            <button type="button" class="dropdown-menu-item" (click)="fileInput.click(); onMenuClosed()">Tải hóa đơn mới</button>
+                                                            <button type="button" class="dropdown-menu-item" (click)="previewInvoice(i); onMenuClosed()" [disabled]="!canPreviewInvoice(i)">Xem hóa đơn đã tải</button>
+                                                            <button type="button" class="dropdown-menu-item" (click)="onUploadInvoiceClicked(i, fileInput); onMenuClosed()">Tải hóa đơn mới</button>
                                                             <button type="button" class="dropdown-menu-item" 
-                                                            [disabled]="!row.get('invoiceId')?.value" 
-                                                            [ngStyle]="{ color: row.get('invoiceId')?.value ? 'red' : 'unset' }"
+                                                            [disabled]="!canUnlinkInvoice(i)"
+                                                            [ngStyle]="{ color: canUnlinkInvoice(i) ? 'red' : 'unset' }"
                                                             (click)="unlinkInvoice(i)">Gỡ hóa đơn đã liên kết</button>
                                                       </div>
                                                 </ng-template>

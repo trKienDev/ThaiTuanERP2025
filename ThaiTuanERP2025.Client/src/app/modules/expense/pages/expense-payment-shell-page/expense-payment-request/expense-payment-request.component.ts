@@ -27,8 +27,6 @@ import { PayeeType, ExpensePaymentRequest } from "../../../models/expense-paymen
 import { SupplierOptionStore } from "../../../options/supplier-dropdown-option.store";
 import { BankAccountApiService } from "../../../services/bank-account.service";
 import { ExpensePaymentApiService } from "../../../services/expense-payment.service";
-import { MiniInvoiceRequestDialogComponent } from "../../invoices/invoice-request/mini-invoice-request-dialog/mini-invoice-request-dialog.component";
-import { MyInvoicesDialogComponent } from "../../invoices/my-invoices-dialog/my-invoices-dialog.component";
 import { KitFileUploaderComponent } from "../../../../../shared/components/kit-file-uploader/kit-file-uploader.component";
 import { TextareaNoSpellcheckDirective } from "../../../../../shared/directives/textarea/textarea-no-spellcheck.directive";
 import { KitSpinnerButtonComponent } from "../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
@@ -36,8 +34,8 @@ import { KitOverlaySpinnerComponent } from "../../../../../shared/components/kit
 import { Router } from "@angular/router";
 import { SupplierRequestDialogComponent } from "../../../components/supplier-request-dialog/supplier-request-dialog.component";
 import { AvailableBudgetPlansDialogComponent } from "../../../components/available-budget-plans-dialog/available-budget-plans-dialog.component";
-import { InvoiceImagePreviewDialog } from "../../../components/invoice-preview-dialog/invoice-image-preview-dialog.component";
-import { InvoicePdfPreviewDialog } from "../../../components/invoice-preview-dialog/invoice-pdf-preview-dialog.component";
+import { FileImagePreviewDialog } from "../../../../../shared/components/file-preview/file-image-preview-dialog.component";
+import { FilePdfPreviewDialog } from "../../../../../shared/components/file-preview/file-pdf-preview-dialog.component";
 
 type UploadStatus = 'queued' | 'uploading' | 'done' | 'error';
 type UploadItem = {
@@ -87,6 +85,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       public submitting = false;
       private readonly expensePaymentService = inject(ExpensePaymentApiService);
       private readonly router = inject(Router);
+      private readonly confirm = inject(ConfirmService);
 
       public readonly uploadMeta = {
             module: 'expense',
@@ -114,7 +113,6 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
             private readonly bankAccountService: BankAccountApiService,
             private readonly budegetCodeService: BudgetCodeApiService,
             private readonly cashoutCodeService: CashoutCodeApiService,
-            private readonly confirmService: ConfirmService,
       ) { }
 
       // reactive form
@@ -299,7 +297,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
                   const allowed = Math.round(amount * (1 + tolerance));
 
                   if (totalWithTax > allowed) {
-                        this.confirmService.validateBudgetLimit$({
+                        this.confirm.validateBudgetLimit$({
                               message: `Khoản thanh toán vượt quá ngân sách cho phép`
                         }).subscribe(ok => {
                               if (!ok) return;
@@ -408,19 +406,6 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       }
       onMenuClosed() {
             this.invoiceMenuOpenIndex = null;
-      }
-
-      unlinkInvoice(i: number) {
-            const row = this.items.at(i);
-            const current = row.get('invoiceId')!.value;
-
-            if (!current) {
-                  this.toast.info?.('Dòng này chưa liên kết hóa đơn');    // ToastService đã inject sẵn :contentReference[oaicite:1]{index=1}
-                  return;
-            }
-
-            this.onMenuClosed?.(); 
-            this.toast.successRich?.('Đã gỡ liên kết hóa đơn');  
       }
 
       async Submit(): Promise<void> {
@@ -545,7 +530,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
 
             // file ảnh → dùng previewUrl
             if (file.type.startsWith('image/') && previewUrl) {
-                  this.dialog.open(InvoiceImagePreviewDialog, {
+                  this.dialog.open(FileImagePreviewDialog, {
                         data: { src: previewUrl }
                   });
                   return;
@@ -553,9 +538,8 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
 
             // file PDF → mở dialog PDF viewer
             if (file.type === 'application/pdf') {
-                  alert('pdf');
                   const pdfUrl = URL.createObjectURL(file);
-                  this.dialog.open(InvoicePdfPreviewDialog, {
+                  this.dialog.open(FilePdfPreviewDialog, {
                         data: { src: pdfUrl }
                   });
                   return;
@@ -568,5 +552,64 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
             a.href = url;
             a.download = file.name;
             a.click();
+      }
+
+      canPreviewInvoice(index: number): boolean {
+            const row = this.items.at(index);
+            const file = row.get('uploadedInvoiceFile')?.value;
+
+            if (!file) return false;
+
+            const type = file.type ?? '';
+            return type.startsWith('image/') || type === 'application/pdf';
+      }
+
+      canUnlinkInvoice(index: number): boolean {
+            const row = this.items.at(index);
+            const file = row.get('uploadedInvoiceFile')?.value;
+            return !!file; // enable nếu đã có file
+      }
+      unlinkInvoice(i: number) {
+            const row = this.items.at(i);
+            const file = row.get('uploadedInvoiceFile')?.value;
+
+            if (!file) {
+                  this.toast.infoRich('Dòng này chưa có hóa đơn nào để gỡ');
+                  return;
+            }
+
+            // Clear file
+            row.patchValue({
+                  uploadedInvoiceFile: null,
+                  uploadedInvoicePreviewUrl: null
+            });
+
+            this.toast.successRich('Đã gỡ hóa đơn đã liên kết');
+
+            // Đóng menu nếu đang mở
+            this.onMenuClosed();
+      }
+
+      onUploadInvoiceClicked(rowIndex: number, fileInput: HTMLInputElement) {
+            const row = this.items.at(rowIndex);
+            const alreadyHasInvoice = !!row.get('uploadedInvoiceFile')?.value;
+
+            // Nếu chưa có file → mở bình thường
+            if (!alreadyHasInvoice) {
+                  fileInput.click();
+                  return;
+            }
+
+            // Nếu đã có → hỏi confirm thay thế
+            this.confirm.warn$(
+                  'Dòng này đã có hoá đơn. Bạn có muốn tải lên hoá đơn thay thế?',
+                  'Thay thế hoá đơn',
+                  'Thay thế',
+                  'Giữ nguyên'
+            ).subscribe(ok => {
+                  if (ok) {
+                        fileInput.click();
+                  }
+            });
       }
 }

@@ -20,15 +20,16 @@
                   </div>
             </ng-container>
             <ng-container>
-                  <div class="confirm-button">
-                        <ng-container *ngIf="data.tone === 'danger'">
+                  <ng-container *ngIf="data.tone === 'danger'">
+                        <div class="confirm-button">
                               <button class="button danger-cancel" (click)="close(false)">Quay lại</button>
-                        </ng-container>
-                        <ng-container *ngIf="data.tone === 'error'">
+                        </div>
+                  </ng-container>
+                  <ng-container *ngIf="data.tone === 'error'">
+                        <div class="confirm-button">
                               <button class="button error-confirm-button" (click)="close(false)">Quay lại</button>
-                        </ng-container>
-                        
-                  </div>
+                        </div>
+                  </ng-container>
             </ng-container>
       </div>
 </div>
