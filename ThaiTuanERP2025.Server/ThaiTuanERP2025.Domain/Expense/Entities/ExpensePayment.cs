@@ -14,7 +14,9 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		private ExpensePayment() { } // EF
 
-		public ExpensePayment(string name, PayeeType payeeType, DateTime dueDate, Guid managerApproverId, string? description)
+		public ExpensePayment(
+			string name, bool hasGoodsReceipt, PayeeType payeeType, DateTime dueDate, Guid managerApproverId, string? description
+		)
 		{
 			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
 			Guard.AgainstInvalidEnumValue(payeeType, nameof(payeeType));
@@ -22,6 +24,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 			Id = Guid.NewGuid();
 			Name = name.Trim();
+			HasGoodsReceipt = hasGoodsReceipt;
 			PayeeType = payeeType;
 			DueDate = dueDate;
 			ManagerApproverId = managerApproverId;
@@ -36,7 +39,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public string SubId { get; private set; } = default!;
 		public PayeeType PayeeType { get; private set; }
 		public Guid? SupplierId { get; private set; }
-		public Supplier? Supplier { get; private set; }
+		public Supplier? Supplier { get; private set; } 
 
 		public string BankName { get; private set; } = string.Empty;
 		public string AccountNumber { get; private set; } = string.Empty;
@@ -86,10 +89,12 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			BeneficiaryName = beneficiaryName.Trim();
 		}
 
-		public ExpensePaymentItem AddItem(string itemName, int quantity, decimal unitPrice, decimal taxRate,
-			Guid? budgetCodeId, Guid? cashoutCodeId, Guid? invoiceId = null, decimal? overrideTaxAmount = null)
-		{
-			var item = new ExpensePaymentItem(Id, itemName, quantity, unitPrice, taxRate, budgetCodeId, cashoutCodeId, invoiceId, overrideTaxAmount);
+		public ExpensePaymentItem AddItem(
+			string itemName, 
+			int quantity, decimal unitPrice, decimal taxRate, decimal totalWithTax,
+			Guid budgetPlanDetailId, Guid? invoiceFileId = null
+		) {
+			var item = new ExpensePaymentItem(Id, itemName, quantity, unitPrice, taxRate, totalWithTax, budgetPlanDetailId, invoiceFileId);
 			_items.Add(item);
 			RecalculateTotals();
 			return item;

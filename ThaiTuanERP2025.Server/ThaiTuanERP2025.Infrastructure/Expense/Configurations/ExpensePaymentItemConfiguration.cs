@@ -27,23 +27,11 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 				.HasForeignKey(x => x.ExpensePaymentId)
 				.OnDelete(DeleteBehavior.Cascade); // chỉ cascade từ root → item
 
-			// BudgetCode
-			builder.HasOne(x => x.BudgetCode)
+			builder.HasOne(x => x.InvoiceFile)
 				.WithMany()
-				.HasForeignKey(x => x.BudgetCodeId)
-				.OnDelete(DeleteBehavior.Restrict);
-
-			// CashoutCode
-			builder.HasOne(x => x.CashoutCode)
-				.WithMany()
-				.HasForeignKey(x => x.CashoutCodeId)
-				.OnDelete(DeleteBehavior.Restrict);
-
-			// Invoice
-			builder.HasOne(x => x.Invoice)
-				.WithMany()
-				.HasForeignKey(x => x.InvoiceId)
-				.OnDelete(DeleteBehavior.Restrict);
+				.HasForeignKey(x => x.InvoiceFileId)
+				.IsRequired(false)
+				.OnDelete(DeleteBehavior.SetNull);
 
 			// ===== Indexes =====
 			builder.HasIndex(x => x.ExpensePaymentId);

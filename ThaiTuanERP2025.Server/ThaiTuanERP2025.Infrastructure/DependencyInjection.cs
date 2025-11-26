@@ -14,7 +14,6 @@ using ThaiTuanERP2025.Application.Shared.Services;
 using ThaiTuanERP2025.Application.Core.Notifications;
 using ThaiTuanERP2025.Application.Core.Reminders;
 using ThaiTuanERP2025.Application.Core.Services;
-using ThaiTuanERP2025.Application.Expense.Invoices;
 using ThaiTuanERP2025.Application.Files;
 using ThaiTuanERP2025.Application.Finance.BudgetApprovers;
 using ThaiTuanERP2025.Application.Finance.BudgetCodes;
@@ -130,9 +129,6 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<ICashoutGroupWriteRepository, CashoutGroupRepository>();
 
 			// Expense
-			services.AddScoped<IInvoiceRepository, InvoiceRepository>();
-			services.AddScoped<IInvoiceReadRepository, InvoiceReadRepository>();
-			services.AddScoped<IInvoiceFileRepository, InvoiceFileRepository>();
 			services.AddScoped<ISupplierReadRepository, SupplierReadRepository>();
 			services.AddScoped<ISupplierWriteRepository, SupplierWriteRepository>();
 			services.AddScoped<IOutgoingBankAccountRepository, OutgoingBankAccountRepository>();
@@ -144,7 +140,8 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IExpenseStepTemplateReadRepository, ExpenseStepTemplateReadRepository>();
 			services.AddScoped<IExpenseStepInstanceRepository, ExpenseStepInstanceRepository>();
 			services.AddScoped<IExpenseWorkflowInstanceRepository, ExpenseWorkflowInstanceRepository>();
-			services.AddScoped<IExpensePaymentRepository, ExpensePaymentRepository>();
+			services.AddScoped<IExpensePaymentWriteRepository, ExpensePaymentWriteRepository>();
+			services.AddScoped<IExpensePaymentItemsWriteRepository, ExpensePaymentItemsWriteRepository>();
 			services.AddScoped<IExpensePaymentCommentRepository, ExpensePaymentCommentRepository>();
 			services.AddScoped<IExpensePaymentCommentTagRepository, ExpensePaymentCommentTagRepository>();
 			services.AddScoped<IExpensePaymentCommentAttachmentRepository, ExpensePaymentCommentAttachmentRepository>();

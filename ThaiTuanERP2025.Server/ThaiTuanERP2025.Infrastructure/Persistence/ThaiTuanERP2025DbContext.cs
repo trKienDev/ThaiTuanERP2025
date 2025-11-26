@@ -51,8 +51,6 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		
 		// Expense
 		public DbSet<Supplier> Suppliers => Set<Supplier>();
-		public DbSet<Invoice> Invoices => Set<Invoice>();
-		public DbSet<InvoiceFile> InvoiceFiles => Set<InvoiceFile>();
 		public DbSet<BudgetCode> BudgetCodes => Set<BudgetCode>();
 		public DbSet<BudgetGroup> BudgetGroups => Set<BudgetGroup>();
 		public DbSet<BudgetPeriod> BudgetPeriods => Set<BudgetPeriod>();

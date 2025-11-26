@@ -32,8 +32,6 @@ namespace ThaiTuanERP2025.Domain.Shared.Repositories
 		IStoredFilesRepository StoredFiles { get; }
 
 		// Expense
-		IInvoiceRepository Invoices { get; }
-		IInvoiceFileRepository InvoiceFiles { get; }
 		ISupplierWriteRepository Suppliers { get; }
 		IOutgoingBankAccountRepository OutgoingBankAccounts { get; }
 		IOutgoingPaymentRepository OutgoingPayments { get; }
@@ -45,7 +43,8 @@ namespace ThaiTuanERP2025.Domain.Shared.Repositories
 		IExpenseStepInstanceRepository ExpenseStepInstances { get; }
 
 		// Expense Payment
-		IExpensePaymentRepository ExpensePayments { get; }
+		IExpensePaymentWriteRepository ExpensePayments { get; }
+		IExpensePaymentItemsWriteRepository ExpensePaymentItems { get; }
 		IExpensePaymentCommentRepository ExpensePaymentComments { get; }
 		IExpensePaymentCommentAttachmentRepository ExpensePaymentCommentAttachments { get; }
 		IExpensePaymentCommentTagRepository ExpensePaymentCommentTags { get; }

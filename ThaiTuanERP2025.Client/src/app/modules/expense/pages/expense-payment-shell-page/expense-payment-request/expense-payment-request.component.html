@@ -6,7 +6,7 @@
                   </div>
                   <div class="process-button-container display-flex gap-10px">
                         <button type="button" class="button cancel-button">Hủy</button>
-                        <kit-spinner-button type="submit" cssClass="save-button" [loading]="submitting" [disabled]="isBusy || form.invalid" text="Gửi phê duyệt" loadingText="Đang gửi…"></kit-spinner-button>
+                        <kit-spinner-button type="submit" cssClass="save-button" [loading]="submitting" [disabled]="submitting || isBusy" text="Gửi phê duyệt" loadingText="Đang gửi…"></kit-spinner-button>
                   </div>
             </div>
             <div class="form-row">
@@ -180,9 +180,7 @@
                   <div class="width-50pt">
                         <div class="display-flex gap-10px">
                               <label class="label width-fit-content text-no-wrap align-content-center" for="name">Tổng thanh toán 🔒</label>
-                              <!-- <input class="dark dark-alert user-select-none" [value]="form.get('totalWithTax')?.value | number:'1.0-2'" disabled /> -->
-                               <input class="dark dark-alert user-select-none"
-       [value]="form.get('totalWithTax')?.value | amountToWords" disabled />
+                              <input class="dark dark-alert user-select-none" [value]="form.get('totalWithTax')?.value | amountToWords" disabled />
                         </div>
                   </div>
                   <div class="width-50pt">
@@ -196,11 +194,9 @@
             </div>
 
             <div class="form-row">
-                  <!-- <span class="display-block">Nội dung thanh toán <span style="color: red;">*</span></span>
-                  <textarea class="margin-top-10px" formControlName="description" placeholder="Trình bày nội dung ở đây" noSpellcheck></textarea> -->
                   <div class="form-input">
-                        <textarea formControlName="description" placeholder="" noSpellcheck required></textarea>
-                        <label for="code">Nội dung thanh toán <span style="color: red;">  *</span></label>
+                        <textarea formControlName="description" placeholder="" noSpellcheck></textarea>
+                        <label for="code">Nội dung thanh toán</label>
                   </div>
             </div>
 

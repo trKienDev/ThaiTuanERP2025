@@ -18,12 +18,10 @@ export interface ExpensePaymentItemDto {
       totalWithTax: number;
 }
 
-export interface ExpensePaymentItemRequest {
-      invoiceId?: string;
-      budgetCodeId?: string;
-      cashoutCodeId?: string;
-
+export interface ExpensePaymentItemPayload {
       itemName: string;
+      invoiceStoredFileId?: string | undefined;
+      budgetPlanDetailId: string;
       quantity: number;
       unitPrice: number;
       taxRate: number;

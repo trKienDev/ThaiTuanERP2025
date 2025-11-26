@@ -36,8 +36,6 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 			ICashoutGroupWriteRepository cashoutGroups,
 
 			// Expense
-			IInvoiceRepository invoices,
-			IInvoiceFileRepository invoiceFiles,
 			ISupplierWriteRepository suppliers,
 			IOutgoingBankAccountRepository outgoingBankAccounts,
 			IOutgoingPaymentRepository outgoingPayments,
@@ -49,7 +47,8 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 			IExpenseWorkflowInstanceRepository expenseWorkflowInstances,
 
 			// Expense Payment
-			IExpensePaymentRepository expensePayments,
+			IExpensePaymentWriteRepository expensePayments,
+			IExpensePaymentItemsWriteRepository expensePaymentItems,
 			IExpensePaymentCommentRepository expensePaymentComments,
 			IExpensePaymentCommentTagRepository expensePaymentCommentTags,
 			IExpensePaymentCommentAttachmentRepository expensePaymentCommentAttachments,
@@ -89,8 +88,6 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 			CashoutCodes = cashoutCodes;
 			CashoutGroups = cashoutGroups;
 
-			Invoices = invoices;
-			InvoiceFiles = invoiceFiles;
 			Suppliers = suppliers;
 			OutgoingBankAccounts = outgoingBankAccounts;
 			OutgoingPayments = outgoingPayments;
@@ -101,6 +98,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 			ExpenseWorkflowInstances = expenseWorkflowInstances;
 
 			ExpensePayments = expensePayments;
+			ExpensePaymentItems = expensePaymentItems;
 			ExpensePaymentComments = expensePaymentComments;
 			ExpensePaymentCommentAttachments = expensePaymentCommentAttachments;
 			ExpensePaymentCommentTags = expensePaymentCommentTags;
@@ -137,8 +135,6 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 		public ICashoutGroupWriteRepository CashoutGroups { get; }
 
 		// Expense
-		public IInvoiceRepository Invoices { get; }
-		public IInvoiceFileRepository InvoiceFiles { get; }
 		public ISupplierWriteRepository Suppliers { get; }
 		public IOutgoingBankAccountRepository OutgoingBankAccounts { get; }
 		public IOutgoingPaymentRepository OutgoingPayments { get; }
@@ -150,7 +146,8 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 		public IExpenseStepInstanceRepository ExpenseStepInstances { get; }
 
 		// Expense Payment
-		public IExpensePaymentRepository ExpensePayments { get; }
+		public IExpensePaymentWriteRepository ExpensePayments { get; }
+		public IExpensePaymentItemsWriteRepository ExpensePaymentItems { get; }
 		public IExpensePaymentCommentRepository ExpensePaymentComments { get; }
 		public IExpensePaymentCommentAttachmentRepository ExpensePaymentCommentAttachments { get; }
 		public IExpensePaymentCommentTagRepository ExpensePaymentCommentTags { get; }

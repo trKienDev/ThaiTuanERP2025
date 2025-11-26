@@ -1,7 +1,7 @@
 import { UserDto } from "../../account/models/user.model";
 import { ApprovalWorkflowInstanceDetailDto, ApprovalWorkflowIntanceStatusDto } from "./expense-workflow-instance.model";
 import { ExpensePaymentAttachmentDto, ExpensePaymentAttachmentRequest } from "./expense-payment-attachment.model";
-import { ExpensePaymentItemDetailDto, ExpensePaymentItemRequest } from "./expense-paymnet-item.model";
+import { ExpensePaymentItemDetailDto, ExpensePaymentItemPayload } from "./expense-payment-item.model";
 import { OutgoingPaymentStatusDto } from "./outgoing-payment.model";
 import { SupplierDto } from "./supplier.model";
 
@@ -44,7 +44,7 @@ export interface ExpensePaymentDto {
       attachments: ExpensePaymentAttachmentDto[];
 }
 
-export interface ExpensePaymentRequest {
+export interface ExpensePaymentPayload {
       name: string;
       payeeType: PayeeType;
       supplierId?: string;
@@ -56,17 +56,11 @@ export interface ExpensePaymentRequest {
       
       dueDate: Date;
       hasGoodsReceipt: boolean;
-      totalAmount: number;
-      totalTax: number;
-      totalWithTax: number;
 
-      status: ExpensePaymentStatus;
-
-      items: ExpensePaymentItemRequest[];
-      attachments: ExpensePaymentAttachmentRequest[];
+      items: ExpensePaymentItemPayload[];
+      // attachments: ExpensePaymentAttachmentRequest[];
       followerIds: string[];
-
-
+      
       managerApproverId: string;
 }
 

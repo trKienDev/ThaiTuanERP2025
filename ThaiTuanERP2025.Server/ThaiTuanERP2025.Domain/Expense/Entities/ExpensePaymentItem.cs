@@ -2,6 +2,7 @@
 using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Expense.Events.ExpensePaymentItems;
 using ThaiTuanERP2025.Domain.Finance.Entities;
+using ThaiTuanERP2025.Domain.Files.Entities;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
@@ -11,9 +12,8 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		private ExpensePaymentItem() { } 
 		internal ExpensePaymentItem(
 			Guid expensePaymentId, string itemName, 
-			int quantity, decimal unitPrice, decimal taxRate,
-			Guid? budgetCodeId, Guid? cashoutCodeId, Guid? invoiceId,
-			decimal? overrideTaxAmount = null
+			int quantity, decimal unitPrice, decimal taxRate, decimal totalWithTax,
+			Guid budgetPlanDetailId, Guid? invoiceFileId
 		) {
 			Guard.AgainstDefault(expensePaymentId, nameof(expensePaymentId));
 			Guard.AgainstNullOrWhiteSpace(itemName, nameof(itemName));
@@ -23,17 +23,13 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 			Id = Guid.NewGuid();
 			ExpensePaymentId = expensePaymentId;
-
+			BudgetPlanDetailId = budgetPlanDetailId;
 			ItemName = itemName.Trim();
 			Quantity = quantity;
 			UnitPrice = unitPrice;
 			TaxRate = taxRate;
-
-			BudgetCodeId = budgetCodeId;
-			CashoutCodeId = cashoutCodeId;
-			InvoiceId = invoiceId;
-
-			Recalculate(overrideTaxAmount);
+			TotalWithTax = totalWithTax;
+			InvoiceFileId = invoiceFileId;
 
 			AddDomainEvent(new ExpensePaymentItemAddedEvent(this));
 		}
@@ -45,8 +41,11 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		public string ItemName { get; private set; } = string.Empty;
 
-		public Guid? InvoiceId { get; private set; }
-		public Invoice? Invoice { get; private set; }
+		public Guid? InvoiceFileId { get; private set;  }
+		public StoredFile? InvoiceFile { get; init; }
+
+		public Guid BudgetPlanDetailId { get; private set; }
+		public BudgetPlanDetail BudgetPlanDetail { get; init; } 
 
 		public int Quantity { get; private set; }
 		public decimal UnitPrice { get; private set; }
@@ -56,11 +55,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public decimal TaxAmount { get; private set; }
 		public decimal TotalWithTax { get; private set; }
 
-		public Guid? BudgetCodeId { get; private set; }
-		public BudgetCode? BudgetCode { get; private set; }
-
-		public Guid? CashoutCodeId { get; private set; }
-		public CashoutCode? CashoutCode { get; private set; }
 		#endregion
 
 		#region Domain Behaviors
@@ -94,22 +88,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			Recalculate(taxAmount);
 			AddDomainEvent(new ExpensePaymentItemUpdatedEvent(this));
 		}
-
-		public void LinkInvoice(Guid invoiceId)
-		{
-			Guard.AgainstDefault(invoiceId, nameof(invoiceId));
-			InvoiceId = invoiceId;
-			AddDomainEvent(new ExpensePaymentItemLinkedInvoiceEvent(this, invoiceId));
-		}
-
-		public void UnlinkInvoice()
-		{
-			InvoiceId = null;
-			AddDomainEvent(new ExpensePaymentItemUnlinkedInvoiceEvent(this));
-		}
-
-		public void SetBudgetCode(Guid? id) => BudgetCodeId = id;
-		public void SetCashoutCode(Guid? id) => CashoutCodeId = id;
 
 		private void Recalculate(decimal? overrideTaxAmount)
 		{

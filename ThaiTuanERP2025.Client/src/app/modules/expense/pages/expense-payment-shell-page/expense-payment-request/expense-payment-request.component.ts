@@ -14,16 +14,13 @@ import { KitDropdownComponent, KitDropdownOption } from "../../../../../shared/c
 import { ToastService } from "../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { provideMondayFirstDateAdapter } from "../../../../../shared/date/provide-monday-first-date-adapter";
 import { MoneyFormatDirective } from "../../../../../shared/directives/money/money-format.directive";
-import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
 import { UserFacade } from "../../../../account/facades/user.facade";
 import { UserDto } from "../../../../account/models/user.model";
 import { UserOptionStore } from "../../../../account/options/user-dropdown.option";
 import { ManagerOptionStore } from "../../../../account/options/user-manager.option";
-import { BudgetCodeApiService } from "../../../../finance/services/api/budget-code-api.service";
-import { CashoutCodeApiService } from "../../../../finance/services/api/cashout-code-api.service";
 import { SupplierFacade } from "../../../facades/supplier.facade";
 import { BankAccountDto } from "../../../models/bank-account.model";
-import { PayeeType, ExpensePaymentRequest } from "../../../models/expense-payment.model";
+import { PayeeType, ExpensePaymentPayload } from "../../../models/expense-payment.model";
 import { SupplierOptionStore } from "../../../options/supplier-dropdown-option.store";
 import { BankAccountApiService } from "../../../services/bank-account.service";
 import { ExpensePaymentApiService } from "../../../services/expense-payment.service";
@@ -37,6 +34,8 @@ import { AvailableBudgetPlansDialogComponent } from "../../../components/availab
 import { FileImagePreviewDialog } from "../../../../../shared/components/file-preview/file-image-preview-dialog.component";
 import { FilePdfPreviewDialog } from "../../../../../shared/components/file-preview/file-pdf-preview-dialog.component";
 import { AmountToWordsPipe } from "../../../../../shared/pipes/amount-to-words.pipe";
+import { FileService } from "../../../../../shared/services/file.service";
+import { ExpensePaymentItemPayload } from "../../../models/expense-payment-item.model";
 
 type UploadStatus = 'queued' | 'uploading' | 'done' | 'error';
 type UploadItem = {
@@ -54,6 +53,7 @@ type PaymentItem = {
       itemName: FormControl<string>;
       uploadedInvoiceFile: FormControl<File | null>;
       uploadedInvoicePreviewUrl: FormControl<string | null>; 
+      invoiceStoredFileId: FormControl<string | null>;
       quantity: FormControl<number | null>;
       unitPrice: FormControl<number | null>;
       taxRate: FormControl<number>;
@@ -62,7 +62,6 @@ type PaymentItem = {
       taxAmount: FormControl<number>; // readonly
       totalWithTax: FormControl<number>; // readonly
       budgetPlanDetailId: FormControl<string | null>; 
-      cashoutCodeId: FormControl<string | null>;
 };
 
 @Component({
@@ -83,6 +82,8 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       private readonly expensePaymentService = inject(ExpensePaymentApiService);
       private readonly router = inject(Router);
       private readonly confirm = inject(ConfirmService);
+      private readonly bankAccountApi = inject(BankAccountApiService);
+      private readonly fileService = inject(FileService);
 
       submitting = false;
       showErrors = false;
@@ -106,15 +107,8 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       currencyOptions: KitDropdownOption[] = [];
       budgetCodeOptiopns: KitDropdownOption[] = [];
       cashoutCodeOptions: KitDropdownOption[] = [];
-
       supplierBankAccounts: BankAccountDto[] = [];
       selectedBankAccount: BankAccountDto | null = null;     
-
-      constructor(
-            private readonly bankAccountService: BankAccountApiService,
-            private readonly budegetCodeService: BudgetCodeApiService,
-            private readonly cashoutCodeService: CashoutCodeApiService,
-      ) { }
 
       // reactive form
       form = this.formBuilder.group({
@@ -123,7 +117,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
             bankName: this.formBuilder.control<string>('', { nonNullable: true, validators: [Validators.required] }),
             accountNumber: this.formBuilder.control<string>('', { nonNullable: true, validators: [Validators.required] }),
             beneficiaryName: this.formBuilder.control<string>('', { nonNullable: true, validators: [Validators.required] }),
-            description: this.formBuilder.control<string>(''),
+            description: this.formBuilder.control<string | null>(null),
             items: this.formBuilder.array<FormGroup<PaymentItem>>([ this.newItemGroup() ]),
             totalAmount: this.formBuilder.nonNullable.control<number>(0),
             totalTax: this.formBuilder.nonNullable.control<number>(0),
@@ -137,9 +131,6 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       async ngOnInit(): Promise<void> {
             this.managerOptions$ = this.managerOptionStore.getManagerOptions$();
 
-            this.loadBudgetCodes();
-            this.loadCashoutCodeOptions();
-
             // Khi supplierId đổi → load bank accounts → chọn mặc định → patch vào form
             this.form.get('totalAmount')!.disable({ emitEvent: false });
             this.form.get('totalTax')!.disable({ emitEvent: false });
@@ -147,12 +138,10 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
             
             this.form.get('supplierId')!.valueChanges.pipe(
                   startWith(this.form.get('supplierId')!.value), 
-                  switchMap(id => id ? this.bankAccountService.listBySupplier(id) : of([])),
+                  switchMap(id => id ? this.bankAccountApi.listBySupplier(id) : of([])),
                   takeUntil(this.destroy$)
             ).subscribe(accounts => {
                   this.supplierBankAccounts = accounts ?? [];
-                  this.selectedBankAccount = this.pickDefulatBankAccount(this.supplierBankAccounts);
-                  this.applyBankAccountToForm(this.selectedBankAccount);
             });
             
 
@@ -170,24 +159,6 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
             this.currencyOptions = [
                   { id: 'vnd', label: 'VND' }
             ]
-      }
-
-      // Ưu tiên account đang active, không có thì lấy cái đầu
-      private pickDefulatBankAccount(list: Array<{ isActive?: boolean } & any>): any | null {
-            return list.find(a => !!a.isActive) ?? list[0] ?? null;
-      }
-      // Patch 3 control theo selectedBankAccount (hoặc clear nếu null)
-      private applyBankAccountToForm(acc: BankAccountDto | null) {
-            this.form.patchValue({
-                  bankName: acc?.bankName ?? '',
-                  accountNumber: acc?.accountNumber ?? '',
-                  beneficiaryName: acc?.beneficiaryName ?? '',
-            }, { emitEvent: false }); // tránh vòng lặp valueChanges không cần thiết
-      }
-
-      ngOnDestroy(): void {
-            this.destroy$.next();
-            this.destroy$.complete();
       }
 
       onSupplierSelected(opt: KitDropdownOption) {
@@ -208,30 +179,6 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       }
       onManagerApproverSelected(opt: KitDropdownOption) {
             this.form.patchValue({ managerApproverId: opt.id });
-      }
-
-      loadBudgetCodes(): void {
-            this.budegetCodeService.getAll().subscribe({
-                  next: (budgetCodes) => {
-                        this.budgetCodeOptiopns = budgetCodes.map(bc => ({
-                              id: bc.id,
-                              label: `${bc.code} - ${bc.name}`
-                        }));
-                  }, 
-                  error: (err => handleHttpError(err))
-            })
-      }
-
-      loadCashoutCodeOptions(): void {
-            this.cashoutCodeService.getAll().subscribe({
-                  next: (cashoutCodes) => {
-                        this.cashoutCodeOptions = cashoutCodes.map(co => ({
-                              id: co.id,
-                              label: co.name
-                        }));
-                  },
-                  error: (err => handleHttpError(err))
-            })
       }
 
       labelOf = (opts: KitDropdownOption[], id: string | null): string => {
@@ -312,6 +259,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
                   itemName: this.formBuilder.nonNullable.control<string>('', [Validators.required, Validators.maxLength(256)]),
                   uploadedInvoiceFile: this.formBuilder.control<File | null>(null),
                   uploadedInvoicePreviewUrl: this.formBuilder.control<string | null>(null),
+                  invoiceStoredFileId: this.formBuilder.control<string | null>(null),
                   quantity: this.formBuilder.control<number | null>(null, { validators: [Validators.required, Validators.pattern('^[0-9]+$'), Validators.min(1)] }),
                   unitPrice: this.formBuilder.control<number | null>(null, { validators: [Validators.required, Validators.min(0)] }),
                   taxRate: this.formBuilder.nonNullable.control<number>(0), // mặc định 10%
@@ -320,7 +268,6 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
                   taxAmount: this.formBuilder.nonNullable.control<number>(0),
                   totalWithTax: this.formBuilder.nonNullable.control<number>(0),
                   budgetPlanDetailId: this.formBuilder.control<string | null>(null),
-                  cashoutCodeId: this.formBuilder.control<string | null>(null),
             });
 
             // đồng bộ: khi user gõ %
@@ -340,7 +287,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
                   group.controls.taxRatePercent.setValue(String(percent), { emitEvent: false });
             });
 
-                        // Tính tự động nhưng KHÔNG đè giá trị user đã sửa (dựa theo .dirty)
+            // Tính tự động nhưng KHÔNG đè giá trị user đã sửa (dựa theo .dirty)
             group.valueChanges.subscribe(v => {
                   const quantity = Number(v.quantity ?? 0);
                   const price = Number(v.unitPrice ?? 0);
@@ -412,61 +359,90 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
             if(this.form.invalid) {
                   this.form.markAllAsTouched();
                   this.toast.warningRich('Vui lòng nhập đầy đủ thông tin');
+
+                  const invalidControls = Object.entries(this.form.controls)
+                        .filter(([_, control]) => control.invalid)
+                        .map(([name, control]) => ({
+                              field: name,
+                              errors: control.errors
+                        }));
+
+                  console.group('⚠️ Form invalid');
+                  console.table(invalidControls);
+                  console.groupEnd();
+
+                  // Scroll đến control đầu tiên bị lỗi
+                  const firstInvalidControl = document.querySelector('.ng-invalid[formControlName]') as HTMLElement;
+                  if (firstInvalidControl) {
+                        firstInvalidControl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        firstInvalidControl.focus();
+                  }
+                  
                   return;
             }
 
-            const raw = this.form.getRawValue();
-            const items = (raw.items ?? []).map(it => ({
-                  itemName: it.itemName,
-                  budgetCodeId: it.budgetPlanDetailId ?? undefined,
-                  invoiceFile: it.uploadedInvoiceFile ?? undefined,
-                  cashoutCodeId: it.cashoutCodeId ?? undefined,
-                  quantity: Number(it.quantity ?? 0),
-                  unitPrice: Number(it.unitPrice ?? 0),
-                  taxRate: Number(it.taxRate ?? 0),
-                  amount: Number(it.amount ?? 0),
-                  taxAmount: Number(it.taxAmount ?? 0),
-                  totalWithTax: Number(it.totalWithTax ?? 0),
-            }));
-
-            const attachments = this.uploads.filter(u => u.status === 'done' && (u.objectKey || u.fileId))
-                  .map(u => ({
-                        fileId: u.fileId,
-                        objectKey: u.objectKey!,
-                        fileName: u.name,
-                        size: u.size,
-                        url: u.url,
-                  }));
             
-            const payload: ExpensePaymentRequest = {
-                  name: raw.name,
-                  payeeType: this.selectedPayee ?? PayeeType.supplier,
-                  supplierId: this.selectedPayee === PayeeType.supplier ? raw.supplierId ?? undefined : undefined,
-                  bankName: raw.bankName,
-                  accountNumber: raw.accountNumber,
-                  description: raw.description ?? '',
-                  beneficiaryName: raw.beneficiaryName,
-                  dueDate: raw.dueDate,
-                  hasGoodsReceipt: raw.hasGoodsReceipt ?? false,
-                  totalAmount: Number(raw.totalAmount ?? 0),
-                  totalTax: Number(raw.totalTax ?? 0),
-                  totalWithTax: Number(raw.totalWithTax ?? 0),
-                  status: 1, // ExpensePaymentStatus.submitted
-                  items,
-                  attachments,
-                  followerIds: raw.followerIds,
-                  managerApproverId: raw.managerApproverId,
-            }
-
             this.submitting = true;
             try {
+                  const raw = this.form.getRawValue();
+
+                  const uploadedInvoiceResults: (string | undefined)[] = [];
+
+                  for (const [i, item] of raw.items.entries()) {
+                        if (item.uploadedInvoiceFile) {
+                              const file = item.uploadedInvoiceFile;
+
+                              const result = await firstValueFrom(this.fileService.uploadFile(file, 'expense', 'invoice', undefined, false));
+
+                              uploadedInvoiceResults[i] = result.data?.id; // StoredFileId
+                        }
+                  }
+
+                  const items: ExpensePaymentItemPayload[] = (raw.items ?? []).map((it, i) => ({
+                        itemName: it.itemName,
+                        budgetPlanDetailId: it.budgetPlanDetailId!,
+                        invoiceStoredFileId: uploadedInvoiceResults[i] ?? undefined,
+                        quantity: Number(it.quantity ?? 0),
+                        unitPrice: Number(it.unitPrice ?? 0),
+                        taxRate: Number(it.taxRate ?? 0),
+                        amount: Number(it.amount ?? 0),
+                        taxAmount: Number(it.taxAmount ?? 0),
+                        totalWithTax: Number(it.totalWithTax ?? 0),
+                  }));
+
+                  const attachments = this.uploads.filter(u => u.status === 'done' && (u.objectKey || u.fileId))
+                        .map(u => ({
+                              fileId: u.fileId,
+                              objectKey: u.objectKey!,
+                              fileName: u.name,
+                              size: u.size,
+                              url: u.url,
+                        }));
+                  
+                  const payload: ExpensePaymentPayload = {
+                        name: raw.name,
+                        payeeType: this.selectedPayee ?? PayeeType.supplier,
+                        supplierId: this.selectedPayee === PayeeType.supplier ? raw.supplierId ?? undefined : undefined,
+                        bankName: raw.bankName,
+                        accountNumber: raw.accountNumber,
+                        description: raw.description ?? '',
+                        beneficiaryName: raw.beneficiaryName,
+                        dueDate: raw.dueDate,
+                        hasGoodsReceipt: raw.hasGoodsReceipt ?? false,
+                        items,
+                        // attachments,
+                        followerIds: raw.followerIds,
+                        managerApproverId: raw.managerApproverId,
+                  }
+
+
                   console.log('payload: ', payload);
-                  // const result = await firstValueFrom(this.expensePaymentService.create(payload));
+                  const result = await firstValueFrom(this.expensePaymentService.create(payload));
                   // this.router.navigate(
                   //       ['/expense/expense-payment-shell/following-payments'],
                   //       { queryParams: { paymentId: result } }
                   // );
-                  // this.toast.successRich('Gửi phê duyệt thành công');
+                  this.toast.successRich('Gửi phê duyệt thành công');
             } catch(error) {
                   console.error('Gửi phê duyệt thất bại', error);
                   this.toast.errorRich('Gửi phê duyệt thất bại');
@@ -476,6 +452,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
                   this.submitting = false;
             }
       }
+      
       get isUploading() {
             return this.uploads?.some(u => u.status === 'uploading');
       }
@@ -609,5 +586,11 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
                         fileInput.click();
                   }
             });
+      }
+
+      // === DESTROY ===
+      ngOnDestroy(): void {
+            this.destroy$.next();
+            this.destroy$.complete();
       }
 }

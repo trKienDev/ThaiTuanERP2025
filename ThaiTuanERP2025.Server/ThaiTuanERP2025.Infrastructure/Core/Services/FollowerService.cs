@@ -19,7 +19,6 @@ namespace ThaiTuanERP2025.Infrastructure.Core.Services
 			{
 				SubjectType.ExpensePayment => await _unitOfWork.ExpensePayments.ExistAsync(e => e.Id == subjectId, cancellationToken),
 				SubjectType.OutgoingPayment => await _unitOfWork.OutgoingPayments.ExistAsync(e => e.Id == subjectId, cancellationToken),
-				SubjectType.Invoice => await _unitOfWork.Invoices.ExistAsync(e => e.Id == subjectId, cancellationToken),
 				_ => false
 			};
 

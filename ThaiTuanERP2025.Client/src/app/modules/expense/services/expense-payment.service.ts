@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { ExpensePaymentDetailDto, ExpensePaymentDto, ExpensePaymentRequest, ExpensePaymentSummaryDto } from "../models/expense-payment.model";
+import { ExpensePaymentDetailDto, ExpensePaymentDto, ExpensePaymentPayload, ExpensePaymentSummaryDto } from "../models/expense-payment.model";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { environment } from "../../../../environments/environment";
 import { catchError, Observable, throwError } from "rxjs";
@@ -8,7 +8,7 @@ import { handleApiResponse$ } from "../../../shared/operators/handle-api-respons
 import { BaseApiService } from "../../../shared/services/base-api.service";
 
 @Injectable({ providedIn: 'root' }) 
-export class ExpensePaymentApiService extends BaseApiService<ExpensePaymentDto, ExpensePaymentRequest> {
+export class ExpensePaymentApiService extends BaseApiService<ExpensePaymentDto, ExpensePaymentPayload> {
       constructor(http: HttpClient) {
             super(http, `${environment.apiUrl}/expense-payments`);
       }
