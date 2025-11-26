@@ -9,6 +9,23 @@
       box-shadow: rgba(255, 255, 255, 0.77) 0px 10px 36px 0px, rgba(255, 255, 255, 0.09) 0px 0px 0px 1px;
       display: flex;
       flex-direction: column;
+      position: relative;
+}
+.dialog-exit {
+      position: absolute;
+      top: 0;
+      right: 0;
+
+      .exit-button {
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            background: white;
+            border-radius: 2px;
+            padding: 3px 16px;
+            &:hover { background: red; }
+            &:hover span { color: white; }
+            span { color: red; font-size: 20px; }
+      }
 }
 .dialog-container {
       display: flex;
