@@ -3,7 +3,7 @@ using ThaiTuanERP2025.Domain.Shared.Repositories;
 
 namespace ThaiTuanERP2025.Domain.Account.Repositories
 {
-	public interface IUserManagerAssignmentRepository : IBaseWriteRepository<UserManagerAssignment>
+	public interface IUserManagerAssignmentWriteRepository : IBaseWriteRepository<UserManagerAssignment>
 	{
 	}
 }

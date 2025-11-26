@@ -1,5 +1,5 @@
 import { inject, Injectable } from "@angular/core";
-import { UserDto,  UserRequest } from "../models/user.model";
+import { UserBriefAvatarDto, UserDto,  UserRequest } from "../models/user.model";
 import { Observable, shareReplay, startWith, Subject, switchMap, tap } from "rxjs";
 import { UserApiService } from "../services/api/user-api.service";
 import { BaseApiFacade } from "../../../shared/facades/base-api.facade";
@@ -46,9 +46,7 @@ export class UserFacade extends BaseApiFacade<UserDto, UserRequest>{
       invalidateManagerIds(userId: string): void {
             this.managerIdsCache.delete(userId);
       }
-      getManagers$(userId: string): Observable<UserDto[]> {
-            return this.userService.getManagers(userId).pipe(
-                  shareReplay({ bufferSize: 1, refCount: true })
-            );
+      getMyManagers$(): Observable<UserBriefAvatarDto[]> {
+            return this.userService.getMyManagers().pipe(shareReplay({ bufferSize: 1, refCount: true }));
       }
 }

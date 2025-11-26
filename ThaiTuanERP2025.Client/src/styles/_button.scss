@@ -13,26 +13,13 @@ button, .button {
       border: 1px solid transparent !important;
 }
 
-.button[disabled],
-.button[disabled]:hover,
-.button[disabled]:focus,
-.button[disabled]:active {
-      opacity: 0.5;
-      cursor: not-allowed;
-      background: #aaa;   /* hoặc màu gốc */
-      transform: none !important;   /* tắt animation */        /* tắt hoàn toàn hover */
-}
+.button[disabled], .button[disabled]:hover, .button[disabled]:focus, .button[disabled]:active { opacity: 0.5; cursor: not-allowed; background: #aaa; transform: none !important; }
 
-
-.none-button {
-      padding: 0 !important;
-      background: none !important;
-      border: none !important;
-      cursor: pointer;
-}
+// *** none button ***
+.none-button { padding: 0 !important; background: none !important; border: none !important; cursor: pointer; }
 
 // *** default button ***
-.default-button { background-color: #f6f8fa; box-shadow: 0px 1px 0px 0px #1f23280a; color: #696e75; cursor: pointer; user-select: none; border: 1px solid #d1d9e0 !important; }
+.default-button { background-color: #f6f8fa; box-shadow: 0px 1px 0px 0px #1f23280a; color: #696e75; cursor: pointer; user-select: none; border: 1px solid #d1d9e0 !important; display: flex; justify-content: center; align-items: center; }
 .default-button:hover { transition-duration: 80ms; background-color: #eff2f5; color: #25292e;}
 
 // *** button-1 ***
@@ -65,12 +52,6 @@ button, .button {
 .danger-button:active { background-color: #D33A2C; box-shadow: rgba(0, 0, 0, 0.12) 0 1px 3px 0 inset; color: #FFFFFF; }
 .danger-button:hover { background-color: #FFE3E3; border-color: #FAA4A4 !important; }
 .danger-button:active:hover, .danger-button:focus:hover, .danger-button:focus { background-color: #D33A2C; box-shadow: rgba(0, 0, 0, 0.12) 0 1px 3px 0 inset; color: #FFFFFF; }
-
-/*** icon-button ***/
-.icon-button { background-color: #17a2b8; outline: 2px #17a2b8 solid; outline-offset: -2px; border-radius: 5px; border: none; cursor: pointer; transition: 400ms; }
-.icon-button .text { color: white; font-size: 22px; transition: 400ms; }
-.icon-button:hover { background-color: transparent; }
-.icon-button:hover .text { color: #138496; border-color: #117a8b; }
 
 /*** link-button ***/
 .link-button { color: var(--ultramarin); background-color: var(--light-blue-color); border-color: none !important; border: none !important; border-bottom: 2px solid var(--ultramarin) !important; border-radius: unset; border-top-left-radius: 5px; border-top-right-radius: 5px; }

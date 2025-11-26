@@ -1,20 +1,22 @@
-<div class="dialog" style="min-width: 600px;">
+<div class="dialog" style="min-width: 40vw;">
       <div class="dialog-container">
             <div class="dialog-heading">
-                  <div class="display-flex align-items-center">
-                        <ng-container *ngIf="isExpired(budgetPlan.dueAt) && budgetPlan.status != 2">
-                              <div class="margin-left-auto">
-                                    <span class="badge danger-badge">Quá hạn duyệt</span>
-                              </div>
-                        </ng-container>
-                        <ng-container *ngIf="!isExpired(budgetPlan.dueAt) && budgetPlan.status != 2">
-                              <div class="payment-due-time margin-left-auto">
-                                    <kit-flip-countdown [timeLeft]="getSecondsRemaining(budgetPlan.dueAt)"></kit-flip-countdown>
-                              </div>
-                        </ng-container>
-                  </div>
-                  <div class="dialog-title">
-                        <h1>Chi tiết ngân sách</h1>
+                  <div class="display-flex gap-10px">
+                        <div class="display-flex align-items-center">
+                              <ng-container *ngIf="isExpired(budgetPlan.dueAt) && budgetPlan.status != 2">
+                                    <div class="margin-left-auto">
+                                          <span class="badge danger-badge">Quá hạn duyệt</span>
+                                    </div>
+                              </ng-container>
+                              <ng-container *ngIf="!isExpired(budgetPlan.dueAt) && budgetPlan.status != 2">
+                                    <div class="payment-due-time margin-left-auto">
+                                          <kit-flip-countdown [timeLeft]="getSecondsRemaining(budgetPlan.dueAt)"></kit-flip-countdown>
+                                    </div>
+                              </ng-container>
+                        </div>
+                        <div class="dialog-title display-flex justify-content-center">
+                              <h1>Chi tiết ngân sách</h1>
+                        </div>
                   </div>
                   <div class="dialog-exit">
                         <button type="button" class="exit-button" (click)="close()">
@@ -26,11 +28,11 @@
                   <table class="table">
                         <thead>
                               <tr>
-                                    <th>#</th>
-                                    <th>Mã ngân sách</th>
-                                    <th>Kinh phí</th>
+                                    <th style="width: 10%;">#</th>
+                                    <th style="width: 40%;">Mã ngân sách</th>
+                                    <th style="width: 35%;">Kinh phí</th>
                                     <ng-container *ngIf="showReviewButton">
-                                          <th>Chỉnh sửa</th>
+                                          <th style="width: 15%;">Chỉnh sửa</th>
                                     </ng-container>
                               </tr>
                         </thead>
@@ -51,7 +53,7 @@
                                           <td>
                                                 <!-- Nếu đang edit -->
                                                 <ng-container *ngIf="editingIndex === i; else editButton">
-                                                      <div class="display-flex gap-5px">
+                                                      <div class="display-flex justify-content-center gap-5px">
                                                             <button class="button pintura-button" (click)="saveEdit(detail)" [disabled]="submitting">Lưu</button>
                                                             <button class="button cancel-button" (click)="cancelEdit()" [disabled]="submitting">Hủy</button>
                                                       </div>
@@ -59,9 +61,11 @@
 
                                                 <!-- Nút Edit -->
                                                 <ng-template #editButton>
-                                                      <button class="button icon-button" (click)="startEdit(i, detail)" style="max-height: 36px;">
-                                                            <span class="text material-icons-round" style="font-size: 13px;">create</span>
-                                                      </button>
+                                                      <div class="display-flex justify-content-center">
+                                                            <button class="button default-button" (click)="startEdit(i, detail)" style="max-height: 36px;">
+                                                                  <span class="text material-icons-round" style="font-size: 13px;">create</span>
+                                                            </button>
+                                                      </div>
                                                 </ng-template>
                                           </td>
                                     </ng-container>

@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using MediatR;
+using ThaiTuanERP2025.Application.Account.Users.Repositories;
 
 namespace ThaiTuanERP2025.Application.Account.Users.Queries
 {

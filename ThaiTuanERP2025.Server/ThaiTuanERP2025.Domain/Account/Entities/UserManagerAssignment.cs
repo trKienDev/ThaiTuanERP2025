@@ -7,6 +7,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 {
 	public class UserManagerAssignment : AuditableEntity
 	{
+		#region Properties
 		public Guid UserId { get; private set; }
 		public User User { get; private set; } = default!;
 
@@ -18,6 +19,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 
 		public DateTime AssignedAt { get; private set; } = DateTime.UtcNow;
 		public DateTime? RevokedAt { get; private set; }
+		#endregion
 
 		#region EF Core Constructor
 		private UserManagerAssignment() { } 

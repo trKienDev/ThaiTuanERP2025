@@ -2,7 +2,6 @@
       <form [formGroup]="form" class="display-flex flex-column gap-10px" (ngSubmit)="submit()">
             <div class="page-heading">
                   <div class="page-title">
-                        <h3 class="icon">🧮</h3>
                         <h3 class="title">Tạo kế hoạch ngân sách</h3>
                   </div>
                   <div class="actions display-flex gap-10px">
@@ -10,7 +9,7 @@
                         <kit-spinner-button type="submit" cssClass="save-button" [loading]="submitting" text="Gửi xem xét" loadingText="Đang gửi…"></kit-spinner-button>
                   </div>
             </div>
-            <div class="page-body">
+            <div class="page-body display-flex flex-column gap-20px">
                   <div class="budget-plan-general display-flex flex-column gap-10px">
                         <div class="row display-flex gap-10px">
                               <div class="width-50pt">
@@ -47,17 +46,17 @@
                               </div>
                         </div>
                   </div>
-                  <div class="budget-plan-table-detail margin-top-15px">
+                  <div class="budget-plan-table-detail">
                         <div>
                               <label class="label">Bảng chi tiết <span style="color: red;">  *</span></label>
                               <table class="table margin-top-15px">
                                     <thead>
                                           <tr>
-                                                <th style="width: 1%;">#</th>
-                                                <th>Mã ngân sách</th>
-                                                <th>Số tiền</th>
-                                                <th>Ghi chú</th>
-                                                <th>Xóa</th>
+                                                <th style="width: 4%;">#</th>
+                                                <th style="width: 30%;">Mã ngân sách</th>
+                                                <th style="width: 20%;">Số tiền</th>
+                                                <th style="width: 40%;">Ghi chú</th>
+                                                <th style="width: 6%;">Xóa</th>
                                           </tr>
                                     </thead>
                                     <tbody formArrayName="details">

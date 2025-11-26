@@ -14,6 +14,8 @@
                         </div>
                   </div>
                   <div class="dialog-body">
+
+                        <!-- PRIMARY MANAGER -->
                         <div class="dialog-row">
                               <kit-dropdown [options]="(managerOptions$ | async) ?? []" [placeholder]="'Chọn quản lý trưởng'" formControlName="primaryManagerId" 
                               (selectionChange)="onPrimaryManagerSelected($event)" [required]="true"
@@ -22,8 +24,30 @@
                                     <small>Vui lòng chọn quản lý chính</small>
                               </div>
                         </div>
+
+                        <!-- VICE MANAGERS -->
                         <div class="dialog-row">
                               <kit-dropdown [multiple]="true" [options]="(viceOptions$ | async) ?? []" [placeholder]="'Chọn quản lý phụ'" formControlName="viceManagerIds" (selectionChange)="onViceManagersSelected($event)"></kit-dropdown>
+                        </div>
+                        
+                        <!-- CASCADE OPTION -->
+                        <div class="dialog-row margin-bottom-10">
+                              <label class="checkbox-row display-flex align-items-center gap-5px">
+                                    <input type="checkbox" formControlName="cascadeToMembers" class="width-fit-content"/>
+                                    <span>Cập nhật lại quản lý cho tất cả nhân viên trong phòng ban</span>
+                              </label>
+                        </div>
+
+                        <!-- REPLACE / MERGE MODE -->
+                        <div class="dialog-row display-flex flex-column gap-10px" *ngIf="form.get('cascadeToMembers')?.value">
+                              <label class="radio-row display-flex align-items-center gap-5px">
+                                    <input type="radio" formControlName="replaceMode" [value]="true" class="width-fit-content"/>
+                                    <span>Thay thế (xoá quản lý cũ, dùng quản lý phòng ban)</span>
+                              </label>
+                              <label class="radio-row display-flex align-items-center gap-5px">
+                                    <input type="radio" formControlName="replaceMode" [value]="false" class="width-fit-content"/>
+                                    <span>Gộp thêm (giữ quản lý cũ & thêm quản lý phòng ban)</span>
+                              </label>
                         </div>
                   </div>
                   <div class="dialog-footer display-flex gap-10px">

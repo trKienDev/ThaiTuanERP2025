@@ -1,13 +1,13 @@
 import { CommonModule } from "@angular/common";
 import { Component, Inject, inject} from "@angular/core";
-import { FormBuilder, ReactiveFormsModule } from "@angular/forms";
+import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { combineLatest, firstValueFrom, map, startWith } from "rxjs";
 import { KitDropdownComponent, KitDropdownOption } from "../../../../shared/components/kit-dropdown/kit-dropdown.component";
 import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { handleHttpError } from "../../../../shared/utils/handle-http-errors.util";
 import { DepartmentFacade } from "../../facades/department.facade";
-import { DepartmentDto, SetDepartmentManagerRequest } from "../../models/department.model";
+import { DepartmentDto, SetDepartmentManagerPayload } from "../../models/department.model";
 import { UserOptionStore } from "../../options/user-dropdown.option";
 import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 import { ConfirmService } from "../../../../shared/components/confirm-dialog/confirm.service";
@@ -49,8 +49,10 @@ export class DepartmentManagerDialogComponent {
       }
 
       form = this.formBuilder.group({
-            primaryManagerId: this.formBuilder.control<string>('', { nonNullable: true }),
-            viceManagerIds: this.formBuilder.control<string[]>([], { nonNullable: false })
+            primaryManagerId: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ] }),
+            viceManagerIds: this.formBuilder.control<string[]>([], { nonNullable: false, validators: [ Validators.required ] }),
+            cascadeToMembers: this.formBuilder.control<boolean>(false, { nonNullable: true }),
+            replaceMode: this.formBuilder.control<boolean>(true, { nonNullable: true })
       }, {
             validators: [(fg) => {
                   const primary = fg.get('primaryManagerId')?.value;
@@ -120,9 +122,11 @@ export class DepartmentManagerDialogComponent {
                   this.form.disable({ emitEvent: false });
 
                   const raw = this.form.getRawValue();
-                  const payload: SetDepartmentManagerRequest = {
+                  const payload: SetDepartmentManagerPayload = {
                         primaryManagerId: raw.primaryManagerId,
                         viceManagerIds: raw.viceManagerIds,
+                        cascadeToMembers: raw.cascadeToMembers,
+                        replaceMode: raw.replaceMode
                   };
                   console.log('payload: ', payload);
                   const result = await firstValueFrom(this.departmentFacade.setManager(this.depatment.id, payload));

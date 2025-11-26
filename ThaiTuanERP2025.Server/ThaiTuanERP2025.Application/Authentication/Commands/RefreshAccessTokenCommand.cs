@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
-using ThaiTuanERP2025.Application.Account.Users;
+using ThaiTuanERP2025.Application.Account.Users.Repositories;
 using ThaiTuanERP2025.Application.Authentication.DTOs;
 using ThaiTuanERP2025.Application.Authentication.Repositories;
 using ThaiTuanERP2025.Application.Authentication.Services;

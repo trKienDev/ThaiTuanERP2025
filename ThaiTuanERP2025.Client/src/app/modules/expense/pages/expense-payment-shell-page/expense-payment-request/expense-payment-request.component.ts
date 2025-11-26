@@ -134,8 +134,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       });
 
       async ngOnInit(): Promise<void> {
-            this.currentUser = await firstValueFrom(this.currentUser$);
-            this.managerOptions$ = this.managerOptionStore.getManagerOptions$(this.currentUser.id);
+            this.managerOptions$ = this.managerOptionStore.getManagerOptions$();
 
             this.loadBudgetCodes();
             this.loadCashoutCodeOptions();

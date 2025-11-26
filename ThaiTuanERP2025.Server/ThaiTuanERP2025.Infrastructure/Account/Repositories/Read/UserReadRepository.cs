@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using ThaiTuanERP2025.Application.Account.Users;
 using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Infrastructure.Shared.Repositories;
 using ThaiTuanERP2025.Infrastructure.Persistence;
+using ThaiTuanERP2025.Application.Account.Users.Repositories;
+using ThaiTuanERP2025.Application.Account.Users;
 
 namespace ThaiTuanERP2025.Infrastructure.Account.Repositories.Read
 {
@@ -27,6 +28,22 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories.Read
 						AvatarFileObjectKey = u.AvatarFileObjectKey
 					}
 				).SingleOrDefaultAsync(cancellationToken);
+		}
+
+		public Task<List<UserBriefAvatarDto>> GetBriefWithAvatarAsync(IEnumerable<Guid> userIds, CancellationToken cancellationToken = default)
+		{
+			return _dbSet.AsNoTracking()
+				.Where(u => userIds.Contains(u.Id))
+				.Select(u => new UserBriefAvatarDto
+				{
+					Id = u.Id,
+					FullName = u.FullName,
+					Username = u.Username,
+					EmployeeCode = u.EmployeeCode,
+					AvatarFileId = u.AvatarFileId,
+					AvatarFileObjectKey = u.AvatarFileObjectKey
+				})
+				.ToListAsync(cancellationToken);
 		}
 
 		public Task<User?> GetWithRolesAndPermissionsAsync(string employeeCode, CancellationToken cancellationToken)

@@ -36,9 +36,9 @@ export class UserApiService extends BaseApiService<UserDto, UserRequest> {
                   .pipe(handleApiResponse$<string[]>());
       }
 
-      getManagers(id: string): Observable<UserDto[]> {
-            return this.http.get<ApiResponse<UserDto[]>>(`${this.endpoint}/${id}/managers`)
-                  .pipe(handleApiResponse$<UserDto[]>());
+      getMyManagers(): Observable<UserBriefAvatarDto[]> {
+            return this.http.get<ApiResponse<UserBriefAvatarDto[]>>(`${this.endpoint}/me/managers`)
+                  .pipe(handleApiResponse$<UserBriefAvatarDto[]>());
       }
 
       setManagers(id: string, request: SetUserManagerRequest): Observable<string> {

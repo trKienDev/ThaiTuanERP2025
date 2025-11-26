@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using ThaiTuanERP2025.Application.Account.Departments;
-using ThaiTuanERP2025.Application.Account.Users;
+using ThaiTuanERP2025.Application.Account.Users.Repositories;
 using ThaiTuanERP2025.Application.Finance.BudgetPeriods;
 using ThaiTuanERP2025.Application.Finance.BudgetPlans.Contracts;
 using ThaiTuanERP2025.Application.Finance.BudgetPlans.Repositories;

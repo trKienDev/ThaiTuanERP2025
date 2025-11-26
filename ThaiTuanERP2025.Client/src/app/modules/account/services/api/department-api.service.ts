@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { DepartmentDto, DepartmentRequest, SetDepartmentManagerRequest} from "../../models/department.model";
+import { DepartmentDto, DepartmentRequest, SetDepartmentManagerPayload } from "../../models/department.model";
 import { environment } from "../../../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
@@ -13,7 +13,7 @@ export class DepartmentApiService extends BaseApiService<DepartmentDto, Departme
             super(http,`${environment.apiUrl}/department`);
       }
 
-      setManager(id: string, request: SetDepartmentManagerRequest): Observable<string> {
+      setManager(id: string, request: SetDepartmentManagerPayload): Observable<string> {
             return this.http.put<ApiResponse<string>>(`${this.endpoint}/${id}/managers`, request)
                   .pipe(handleApiResponse$<string>());
       }

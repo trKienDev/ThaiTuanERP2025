@@ -18,7 +18,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 			IStoredFilesRepository storedFiles,
                         // Account
                         IUserWriteRepository users,
-                        IUserManagerAssignmentRepository userManagerAssignments,
+                        IUserManagerAssignmentWriteRepository userManagerAssignments,
 			IDepartmentWriteRepository departments,
 			IGroupRepository groups,
 			IUserGroupRepository userGroups,
@@ -119,7 +119,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 		public IStoredFilesRepository StoredFiles { get; }
 		// Account
 		public IUserWriteRepository Users { get; }
-		public IUserManagerAssignmentRepository UserManagerAssignments { get; }
+		public IUserManagerAssignmentWriteRepository UserManagerAssignments { get; }
 		public IDepartmentWriteRepository Departments { get; }
 		public IGroupRepository Groups { get; }
 		public IUserGroupRepository UserGroups { get; }

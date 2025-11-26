@@ -17,6 +17,7 @@ import { BudgetPeriodApiService } from "../../../services/api/budget-period-api.
 import { BudgetCodeApiService } from "../../../services/api/budget-code-api.service";
 import { BudgetApproverApiService } from "../../../services/api/budget-approver-api.service";
 import { UserFacade } from "../../../../account/facades/user.facade";
+import { AmountToWordsPipe } from "../../../../../shared/pipes/amount-to-words.pipe";
 
 interface BudgetPlanDetailsForm {
       budgetCodeId: FormControl<string | null>;
@@ -27,7 +28,7 @@ interface BudgetPlanDetailsForm {
 @Component({
       selector: 'budget-plan-request',
       standalone: true,
-      imports: [CommonModule, KitDropdownComponent, ReactiveFormsModule, MoneyFormatDirective, KitSpinnerButtonComponent],
+      imports: [CommonModule, KitDropdownComponent, ReactiveFormsModule, MoneyFormatDirective, KitSpinnerButtonComponent ],
       templateUrl: './budget-plan-request.component.html'
 })
 export class BudgetPlanRequestPanelComponent implements OnInit {

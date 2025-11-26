@@ -1,5 +1,5 @@
 import { inject, Injectable } from "@angular/core";
-import { DepartmentDto, DepartmentRequest, SetDepartmentManagerRequest } from "../models/department.model";
+import { DepartmentDto, DepartmentRequest, SetDepartmentManagerPayload } from "../models/department.model";
 import { Observable, tap } from "rxjs";
 import { BaseApiFacade } from "../../../shared/facades/base-api.facade";
 import { DepartmentApiService } from "../services/api/department-api.service";
@@ -12,7 +12,7 @@ export class DepartmentFacade extends BaseApiFacade<DepartmentDto, DepartmentReq
       }
       readonly departments$: Observable<DepartmentDto[]> = this.list$;
 
-      setManager(id: string, req: SetDepartmentManagerRequest): Observable<string> {
+      setManager(id: string, req: SetDepartmentManagerPayload): Observable<string> {
             return this.departmentApi.setManager(id, req).pipe(
                   tap(() => this.refresh())
             )

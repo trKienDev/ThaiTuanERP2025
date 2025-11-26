@@ -71,7 +71,9 @@
                                           </div>
                                     </td>
                                     <td>
-                                          <button type="button" class="button default-button padding-5px" (click)="openBudgetPlanDetailDialog(plans)">Chi tiết</button>
+                                          <div class="display-flex justify-content-center">
+                                                <button type="button" class="button default-button padding-5px" (click)="openBudgetPlanDetailDialog(plans)">Chi tiết</button>
+                                          </div>
                                     </td>
                                     <td>{{ plans.createdAt | date:'dd/MM/yyyy' }}</td>
                               </tr>

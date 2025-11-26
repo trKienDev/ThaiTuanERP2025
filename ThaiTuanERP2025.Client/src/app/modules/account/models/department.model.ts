@@ -22,7 +22,9 @@ export interface DepartmentRequest {
       parentId?: string | null;
 }
 
-export interface SetDepartmentManagerRequest {
+export interface SetDepartmentManagerPayload {
       primaryManagerId: string;
       viceManagerIds: string[] | null;
+      cascadeToMembers: boolean;  // áp dụng thay đổi manager cho các thành viên trong phòng ban 
+      replaceMode: boolean; // xóa các manager cũ của từng thành viên hay giữ lại
 }

@@ -11,7 +11,7 @@ namespace ThaiTuanERP2025.Domain.Shared.Repositories
 
 		// Account
 		 IUserWriteRepository Users { get; }
-		IUserManagerAssignmentRepository UserManagerAssignments { get; }
+		IUserManagerAssignmentWriteRepository UserManagerAssignments { get; }
 		 IDepartmentWriteRepository Departments { get; }
 		IGroupRepository Groups { get; }
 		IUserGroupRepository UserGroups { get; }

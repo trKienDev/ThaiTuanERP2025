@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using ThaiTuanERP2025.Application.Account.Departments;
 using ThaiTuanERP2025.Application.Account.Permissions;
 using ThaiTuanERP2025.Application.Account.Roles;
-using ThaiTuanERP2025.Application.Account.Users;
 using ThaiTuanERP2025.Application.Authentication.Repositories;
 using ThaiTuanERP2025.Application.Shared.Authentication;
 using ThaiTuanERP2025.Application.Shared.Events;
@@ -64,6 +63,9 @@ using ThaiTuanERP2025.Infrastructure.Expense.Repositories.Read;
 using ThaiTuanERP2025.Infrastructure.Expense.Repositories.Write;
 using ThaiTuanERP2025.Application.Expense.ExpenseWorkflowTemplates;
 using ThaiTuanERP2025.Application.Expense.Suppliers;
+using ThaiTuanERP2025.Application.Account.Users.Repositories;
+using ThaiTuanERP2025.Application.Account.Users.Services;
+using ThaiTuanERP2025.Infrastructure.Account.Services;
 
 namespace ThaiTuanERP2025.Infrastructure
 {
@@ -91,9 +93,10 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IStoredFileReadRepository, StoredFileReadRepository>();
 
 			// Account
-			services.AddScoped<IUserWriteRepository, UserWriteRepository>();
 			services.AddScoped<IUserReadRepostiory, UserReadRepository>();
-			services.AddScoped<IUserManagerAssignmentRepository, UserManagerAssignmentRepository>();
+			services.AddScoped<IUserWriteRepository, UserWriteRepository>();
+			services.AddScoped<IUserManagerAssignmentReadRepository, UserManagerAssignmentReadRepository>();
+			services.AddScoped<IUserManagerAssignmentWriteRepository, UserManagerAssignmentWriteRepository>();
 			services.AddScoped<IDepartmentWriteRepository, DepartmentWriteRepository>();
 			services.AddScoped<IDepartmentReadRepository, DepartmentReadRepository>();
 			services.AddScoped<IGroupRepository, GroupRepository>();
@@ -198,6 +201,7 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddHostedService<OutboxProcessorHostedService>();
 			services.AddScoped<ILedgerAccountTypeExcelReader, LedgerAccountTypeExcelReaderService>();
 			services.AddScoped<ILedgerAccountExcelReader, LedgerAccountExcelReaderService>();
+			services.AddScoped<IUserManagerService, UserManagerService>();
 
 			return services;
 		}

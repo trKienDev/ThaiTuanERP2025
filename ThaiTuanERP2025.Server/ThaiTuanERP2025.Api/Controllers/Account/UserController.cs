@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Shared;
 using ThaiTuanERP2025.Api.Security;
-using ThaiTuanERP2025.Application.Account.Users;
 using ThaiTuanERP2025.Application.Account.Users.Commands;
 using ThaiTuanERP2025.Application.Account.Users.Queries;
 using ThaiTuanERP2025.Application.Account.Users.Requests;
+using ThaiTuanERP2025.Application.Account.Users;
 
 namespace ThaiTuanERP2025.Api.Controllers.Account
 {
@@ -46,6 +46,13 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 		{
 			var result = await _mediator.Send(new GetUserManagerIdsQuery(Id), cancellationToken);
 			return Ok(ApiResponse<IReadOnlyList<Guid>>.Success(result));
+		}
+
+		[HttpGet("me/managers")]
+		public async Task<IActionResult> GetMyManagers(CancellationToken cancellationToken)
+		{
+			var dtos = await _mediator.Send(new GetMyManagersQuery(), cancellationToken);
+			return Ok(ApiResponse<IReadOnlyList<UserBriefAvatarDto>>.Success(dtos));
 		}
 
 		[HttpGet("me/department/managers")]

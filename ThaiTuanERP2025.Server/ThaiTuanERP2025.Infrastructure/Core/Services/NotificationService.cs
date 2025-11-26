@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
-using ThaiTuanERP2025.Application.Account.Users;
+using ThaiTuanERP2025.Application.Account.Users.Repositories;
 using ThaiTuanERP2025.Application.Core.Notifications;
 using ThaiTuanERP2025.Application.Core.Notifications.Contracts;
 using ThaiTuanERP2025.Application.Shared.Exceptions;

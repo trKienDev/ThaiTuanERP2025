@@ -161,7 +161,7 @@ input[type=number] { -moz-appearance: textfield; }
 /* target đúng nơi Material render (overlay) */
 .cdk-overlay-pane .mat-mdc-dialog-surface {  
       overflow-y: unset; 
-      border-radius: 10px;
+      border-radius: 5px;
 }
 .cdk-overlay-pane .cdk-overlay-black-backdrop { background: rgba(15, 15, 15, 0.5); }
 
