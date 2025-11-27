@@ -19,7 +19,7 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 			builder.Property(x => x.ApproveMode).IsRequired();
 			builder.Property(x => x.SlaHours).IsRequired();
 			builder.Property(x => x.FixedApproverIdsJson).HasColumnType("nvarchar(max)");
-			builder.Property(x => x.ResolverKey).HasMaxLength(100);
+			builder.Property(x => x.ResolverKey).IsRequired().HasConversion<int>();
 			builder.Property(x => x.ResolverParamsJson).HasColumnType("nvarchar(max)");
 
 			builder.HasIndex(x => new { x.WorkflowTemplateId, x.Order }).IsUnique();

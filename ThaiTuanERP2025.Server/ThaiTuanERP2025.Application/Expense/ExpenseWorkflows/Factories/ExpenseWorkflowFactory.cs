@@ -60,11 +60,18 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Factories
 
 					defaultApproverId = ids.FirstOrDefault();
 					selectedApproverId = defaultApproverId;
+				} else // Duyệt có điều kiện
+				{
+					if(stepTemplate.ResolverKey == ExpenseStepResolverKey.DepartmentManager)
+					{
+						defaultApproverId = payment.ManagerApproverId;
+						selectedApproverId = payment.ManagerApproverId;
+					}
 				}
 
 				var stepInstance = new ExpenseStepInstance(
 					workflowInstanceId: workflowInstance.Id,
-					templateStepId: stepTemplate.Id,
+					stepTemplateId: stepTemplate.Id,
 					name: stepTemplate.Name,
 					order: stepTemplate.Order,
 					flowType: stepTemplate.FlowType,

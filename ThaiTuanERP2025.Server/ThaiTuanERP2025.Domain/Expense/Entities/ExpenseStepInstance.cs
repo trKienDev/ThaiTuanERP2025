@@ -12,7 +12,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		#region Constructors
 		private ExpenseStepInstance() { }
 		public ExpenseStepInstance(
-			Guid workflowInstanceId, Guid? templateStepId, string name, int order,
+			Guid workflowInstanceId, Guid stepTemplateId, string name, int order,
 			ExpenseFlowType flowType, int slaHours, ExpenseApproveMode approverMode,
 			string? candidatesJson, Guid? defaultApproverId, Guid? selectedApproverId,
 			StepStatus status = StepStatus.Pending
@@ -25,7 +25,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 			Id = Guid.NewGuid();
 			WorkflowInstanceId = workflowInstanceId;
-			TemplateStepId = templateStepId;
+			StepTemplateId = stepTemplateId;
 			Name = name.Trim();
 			Order = order;
 			FlowType = flowType;
@@ -43,7 +43,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		#region Properties
 		public Guid WorkflowInstanceId { get; private set; }
 		public ExpenseWorkflowInstance WorkflowInstance { get; private set; } = null!;
-		public Guid? TemplateStepId { get; private set; }
+		public Guid StepTemplateId { get; private set; }
 
 		public string Name { get; private set; } = string.Empty;
 		public int Order { get; private set; }

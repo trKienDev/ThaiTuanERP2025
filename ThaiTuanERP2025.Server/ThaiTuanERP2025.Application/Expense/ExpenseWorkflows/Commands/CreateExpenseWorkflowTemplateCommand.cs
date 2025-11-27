@@ -33,6 +33,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
 					var s = ordered[i];
 					var flowType = Enum.Parse<ExpenseFlowType>(s.FlowType, ignoreCase: true);
 					var approveMode = Enum.Parse<ExpenseApproveMode>(s.ApproveMode, ignoreCase: true);
+					var resolverKey = Enum.Parse<ExpenseStepResolverKey>(s.ResolverKey, ignoreCase: true);
 
 					string? fixedApproversJson = null;
 					string? resolverParamsJson = null;
@@ -48,9 +49,6 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
 					}
 					else // Mode = Condition
 					{
-						if (string.IsNullOrWhiteSpace(s.ResolverKey))
-							throw new ConflictException($"Bước {i + 1}: ApproverMode=condition yêu cầu ResolverKey.");
-
 						if (s.ResolverParams != null)
 							resolverParamsJson = JsonSerializer.Serialize(s.ResolverParams);
 					}
@@ -68,9 +66,9 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
 						order: finalOrder,
 						flowType: flowType,
 						slaHours: slaHours,
-						 approveMode: approveMode,
+						approveMode: approveMode,
 						fixedApproverIdsJson: fixedApproversJson,
-						resolverKey: s.ResolverKey,
+						resolverKey: resolverKey,
 						resolverParamsJson: resolverParamsJson
 					);
 

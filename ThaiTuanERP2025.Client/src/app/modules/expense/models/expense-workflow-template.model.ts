@@ -1,4 +1,4 @@
-import { ExpenseApproveMode, ExpenseFlowType, ExpenseStepTemplateDto, ExpenseStepTemplatePayload } from "./expense-step-template.model";
+import { ExpenseApproveMode, ExpenseFlowType, ExpenseStepResolverKey, ExpenseStepTemplateDto, ExpenseStepTemplatePayload } from "./expense-step-template.model";
 
 export interface ExpenseWorkflowTemplateDto {
       id: string;
@@ -25,7 +25,7 @@ export function mapExpenseWorkflowTemplateDtoToPayload(dto: ExpenseWorkflowTempl
                   slaHours: step.slaHours,
                   approveMode: step.approveMode as ExpenseApproveMode,
                   approverIds: step.approverIds ?? [],
-                  resolverKey: step.resolverKey ?? null,
+                  resolverKey: step.resolverKey as ExpenseStepResolverKey,
                   resolverParams: step.resolverParams ?? null
             }))
       };

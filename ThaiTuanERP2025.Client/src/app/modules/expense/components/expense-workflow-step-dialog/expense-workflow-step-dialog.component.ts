@@ -4,7 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { UserOptionStore } from "../../../account/options/user-dropdown.option";
-import { ExpenseApproveMode, ExpenseFlowType, ExpenseStepTemplatePayload } from "../../models/expense-step-template.model";
+import { ExpenseApproveMode, ExpenseFlowType, ExpenseStepResolverKey, ExpenseStepTemplatePayload } from "../../models/expense-step-template.model";
 import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 import { KitDropdownComponent, KitDropdownOption } from "../../../../shared/components/kit-dropdown/kit-dropdown.component";
 import { take } from "rxjs";
@@ -34,7 +34,7 @@ export class ExpenseWorkflowStepDialogComponent implements OnInit {
             slaHours: this.formBuilder.control<number>(8, { nonNullable: true, validators: [ Validators.min(1) ]}),
             flowType: this.formBuilder.control<ExpenseFlowType>('Single', { nonNullable: true, validators: [ Validators.required ] }),
             order: this.formBuilder.control<number>(1, { nonNullable: true }),
-            resolverKey: this.formBuilder.control<string | null>(null),
+            resolverKey: this.formBuilder.control<ExpenseStepResolverKey>('None', { nonNullable: true }),
             resolverParams: this.formBuilder.control<object | null>(null),
       });
 
@@ -113,8 +113,9 @@ export class ExpenseWorkflowStepDialogComponent implements OnInit {
 
       // === Approver Type - condition ====
       approverTypeSelection: KitDropdownOption[] = [
-            { id: 'manager-department', label: 'Chọn quản lý theo phòng ban' }
+            { id: 'DepartmentManager', label: 'Chọn quản lý theo phòng ban' }
       ];
+      
 
       create() {
             this.showErrors = true;
@@ -128,7 +129,6 @@ export class ExpenseWorkflowStepDialogComponent implements OnInit {
             console.log('payload: ', payload);
             this.close(payload);
             this.showErrors = false;
-
       }
 
       close(step?: ExpenseStepTemplatePayload): void {

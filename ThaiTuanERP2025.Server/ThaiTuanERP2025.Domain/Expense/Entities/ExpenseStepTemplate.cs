@@ -16,8 +16,8 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
                         ExpenseFlowType flowType,
                         int slaHours,
                         ExpenseApproveMode approveMode,
+			ExpenseStepResolverKey resolverKey = ExpenseStepResolverKey.None,
                         string? fixedApproverIdsJson = null,
-                        string? resolverKey = null,
                         string? resolverParamsJson = null
                 )
                 {
@@ -53,7 +53,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public string? FixedApproverIdsJson { get; private set; }
 
 		// Chứa tên rule để xác định người duyệt động (creator-manager, "amount-based")
-		public string? ResolverKey { get; private set; }
+		public ExpenseStepResolverKey ResolverKey { get; private set; } = ExpenseStepResolverKey.None;
 		public string? ResolverParamsJson { get; private set; }
                 #endregion
 
@@ -63,15 +63,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			Guard.AgainstNullOrWhiteSpace(newName, nameof(newName));
 			Name = newName.Trim();
 			AddDomainEvent(new ExpenseStepTemplateRenamedEvent(this));
-		}
-
-		public void ChangeApproverMode(ExpenseApproveMode newMode, string? fixedApproversJson = null, string? resolverKey = null)
-		{
-			Guard.AgainstInvalidEnumValue(newMode, nameof(newMode));
-			ApproveMode = newMode;
-			FixedApproverIdsJson = fixedApproversJson;
-			ResolverKey = resolverKey;
-			AddDomainEvent(new ExpenseStepTemplateApproverModeChangedEvent(this));
 		}
 
 		public void UpdateSla(int newSlaHours)

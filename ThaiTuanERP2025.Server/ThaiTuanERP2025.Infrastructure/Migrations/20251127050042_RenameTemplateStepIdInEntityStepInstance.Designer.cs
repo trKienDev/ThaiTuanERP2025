@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 namespace ThaiTuanERP2025.Infrastructure.Migrations
 {
     [DbContext(typeof(ThaiTuanERP2025DbContext))]
-    partial class ThaiTuanERP2025DbContextModelSnapshot : ModelSnapshot
+    [Migration("20251127050042_RenameTemplateStepIdInEntityStepInstance")]
+    partial class RenameTemplateStepIdInEntityStepInstance
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1300,8 +1303,9 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                     b.Property<int>("Order")
                         .HasColumnType("int");
 
-                    b.Property<int>("ResolverKey")
-                        .HasColumnType("int");
+                    b.Property<string>("ResolverKey")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ResolverParamsJson")
                         .HasColumnType("nvarchar(max)");

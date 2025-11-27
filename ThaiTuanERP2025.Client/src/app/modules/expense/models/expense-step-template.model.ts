@@ -1,5 +1,6 @@
 export type ExpenseFlowType = 'Single' | 'OneOfN';
 export type ExpenseApproveMode = 'Standard' | 'Condition';
+export type ExpenseStepResolverKey = 'None' | 'DepartmentManager';
 
 export interface ExpenseStepTemplateDto {
       id: string;
@@ -10,7 +11,7 @@ export interface ExpenseStepTemplateDto {
       slaHours: number;
       approveMode: string;
       approverIds: string[];
-      resolverKey?: string;
+      resolverKey?: ExpenseStepResolverKey;
       resolverParams?: object;
 }
 
@@ -21,7 +22,7 @@ export interface ExpenseStepTemplatePayload {
       slaHours: number;
       approverIds: string[] | string | null;
       approveMode: ExpenseApproveMode;
-      resolverKey?: string | null;
+      resolverKey: ExpenseStepResolverKey;
       resolverParams?: object | null;
 }
 

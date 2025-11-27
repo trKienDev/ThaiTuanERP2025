@@ -12,6 +12,7 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 			builder.ToTable("ExpenseStepInstances", "ExpenseWorkflow");
 			builder.HasKey(x => x.Id);
 
+			builder.Property(x => x.StepTemplateId).IsRequired();
 			builder.Property(x => x.Name).HasMaxLength(200).IsRequired();
 			builder.Property(x => x.Order).IsRequired();
 			builder.Property(x => x.FlowType).HasConversion<int>().IsRequired();
@@ -41,7 +42,7 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 			// Foreinkey to Step Template
 			builder.HasOne<ExpenseStepTemplate>()
 				.WithMany()
-				.HasForeignKey(x => x.TemplateStepId)
+				.HasForeignKey(x => x.StepTemplateId)
 				.OnDelete(DeleteBehavior.Restrict);
 		}
 	}

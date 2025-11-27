@@ -13,7 +13,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Contracts
 		public List<Guid>? ApproverIds { get; init; } = new List<Guid>();
 
 		// Condition
-		public string? ResolverKey { get; init; }
+		public string ResolverKey { get; init; } = ExpenseStepResolverKey.None.ToString();
 		public object? ResolverParams { get; init; }
 	};
 }
