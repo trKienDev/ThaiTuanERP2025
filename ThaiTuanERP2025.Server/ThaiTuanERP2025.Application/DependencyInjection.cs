@@ -5,6 +5,7 @@ using FluentValidation;
 using ThaiTuanERP2025.Application.Behaviors;
 using ThaiTuanERP2025.Domain.Shared.Events;
 using ThaiTuanERP2025.Application.Finance.BudgetPlans.Services;
+using ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Factories;
 
 namespace ThaiTuanERP2025.Application
 {
@@ -38,6 +39,7 @@ namespace ThaiTuanERP2025.Application
 
 			// Services
 			services.AddScoped<IBudgetPlanPermissionService, BudgetPlanPermissionService>();
+			services.AddScoped<IExpenseWorkflowFactory, ExpenseWorkflowFactory>();
 
 			return services;
 		}

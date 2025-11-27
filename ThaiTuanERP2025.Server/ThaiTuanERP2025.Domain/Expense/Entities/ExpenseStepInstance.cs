@@ -9,6 +9,38 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
 	public class ExpenseStepInstance : AuditableEntity
 	{
+		#region Constructors
+		private ExpenseStepInstance() { }
+		public ExpenseStepInstance(
+			Guid workflowInstanceId, Guid? templateStepId, string name, int order,
+			ExpenseFlowType flowType, int slaHours, ExpenseApproveMode approverMode,
+			string? candidatesJson, Guid? defaultApproverId, Guid? selectedApproverId,
+			StepStatus status = StepStatus.Pending
+		)
+		{
+			Guard.AgainstDefault(workflowInstanceId, nameof(workflowInstanceId));
+			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
+			Guard.AgainstInvalidEnumValue(flowType, nameof(flowType));
+			Guard.AgainstInvalidEnumValue(approverMode, nameof(approverMode));
+
+			Id = Guid.NewGuid();
+			WorkflowInstanceId = workflowInstanceId;
+			TemplateStepId = templateStepId;
+			Name = name.Trim();
+			Order = order;
+			FlowType = flowType;
+			SlaHours = slaHours;
+			ApproverMode = approverMode;
+			ResolvedApproverCandidatesJson = candidatesJson;
+			DefaultApproverId = defaultApproverId;
+			SelectedApproverId = selectedApproverId;
+			Status = status;
+
+			AddDomainEvent(new ExpenseStepInstanceCreatedEvent(this));
+		}
+		#endregion
+
+		#region Properties
 		public Guid WorkflowInstanceId { get; private set; }
 		public ExpenseWorkflowInstance WorkflowInstance { get; private set; } = null!;
 		public Guid? TemplateStepId { get; private set; }
@@ -40,35 +72,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public bool SlaBreached { get; private set; }
 
 		public string? HistoryJson { get; private set; }
-
-		#region Constructors
-		private ExpenseStepInstance() { }
-		public ExpenseStepInstance( 
-			Guid workflowInstanceId, Guid? templateStepId, string name, int order,
-			ExpenseFlowType flowType, int slaHours, ExpenseApproveMode approverMode,
-			string? candidatesJson, Guid? defaultApproverId, Guid? selectedApproverId,
-			StepStatus status = StepStatus.Pending
-		) {
-			Guard.AgainstDefault(workflowInstanceId, nameof(workflowInstanceId));
-			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
-			Guard.AgainstInvalidEnumValue(flowType, nameof(flowType));
-			Guard.AgainstInvalidEnumValue(approverMode, nameof(approverMode));
-
-			Id = Guid.NewGuid();
-			WorkflowInstanceId = workflowInstanceId;
-			TemplateStepId = templateStepId;
-			Name = name.Trim();
-			Order = order;
-			FlowType = flowType;
-			SlaHours = slaHours;
-			ApproverMode = approverMode;
-			ResolvedApproverCandidatesJson = candidatesJson;
-			DefaultApproverId = defaultApproverId;
-			SelectedApproverId = selectedApproverId;
-			Status = status;
-
-			AddDomainEvent(new ExpenseStepInstanceCreatedEvent(this));
-		}
 		#endregion
 
 		#region Domain Behaviors

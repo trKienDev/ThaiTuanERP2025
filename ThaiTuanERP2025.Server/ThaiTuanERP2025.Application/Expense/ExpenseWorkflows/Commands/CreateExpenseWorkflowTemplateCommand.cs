@@ -1,12 +1,12 @@
 ﻿using MediatR;
 using System.Text.Json;
-using ThaiTuanERP2025.Application.Expense.ExpenseWorkflowTemplates.Contracts;
+using ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Contracts;
 using ThaiTuanERP2025.Application.Shared.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Expense.Enums;
 using ThaiTuanERP2025.Domain.Shared.Repositories;
 
-namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflowTemplates.Commands
+namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
 {
 	public sealed record CreateExpenseWorkflowTemplateCommand(ExpenseWorkflowTemplatePayload Payload) : IRequest<Unit>;
 

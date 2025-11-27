@@ -12,20 +12,5 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories.Write
 		public ExpensePaymentWriteRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider)
 		{
 		}
-
-
-
-		public async Task<ExpenseWorkflowInstance?> GetWorkflowInstanceAsync(Guid documentId, CancellationToken cancellationToken = default)
-		{
-			return await _context.Set<ExpenseWorkflowInstance>()
-				.AsNoTracking()
-				.AsSplitQuery()
-				.Include(i => i.Steps)
-				.SingleOrDefaultAsync(i =>
-					i.DocumentType == "ExpensePayment" &&
-					i.DocumentId == documentId,
-					cancellationToken
-				);
-		}
 	}
 }

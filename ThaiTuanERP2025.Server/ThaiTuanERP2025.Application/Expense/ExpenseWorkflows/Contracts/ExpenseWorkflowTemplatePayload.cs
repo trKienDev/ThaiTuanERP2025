@@ -1,6 +1,4 @@
-﻿using ThaiTuanERP2025.Application.Expense.ExpenseStepTemplates.Contracts;
-
-namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflowTemplates.Contracts
+﻿namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Contracts
 {
 	public sealed record ExpenseWorkflowTemplatePayload
 	{

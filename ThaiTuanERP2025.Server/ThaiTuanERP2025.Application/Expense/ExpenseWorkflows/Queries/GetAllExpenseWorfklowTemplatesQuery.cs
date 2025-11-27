@@ -1,5 +1,6 @@
 ﻿using MediatR;
-using ThaiTuanERP2025.Application.Expense.ExpenseWorkflowTemplates.Contracts;
+using ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Contracts;
+using ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Repositories;
 
 namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflowTemplates.Queries
 {

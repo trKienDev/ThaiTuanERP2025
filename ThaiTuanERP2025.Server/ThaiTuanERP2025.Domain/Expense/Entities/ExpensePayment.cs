@@ -8,12 +8,8 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
 	public class ExpensePayment : AuditableEntity
 	{
-		private readonly List<ExpensePaymentItem> _items = new();
-		private readonly List<ExpensePaymentAttachment> _attachments = new();
-		private readonly List<OutgoingPayment> _outgoingPayments = new();
-
+		#region Constructor
 		private ExpensePayment() { } // EF
-
 		public ExpensePayment(
 			string name, bool hasGoodsReceipt, PayeeType payeeType, DateTime dueDate, Guid managerApproverId, string? description
 		)
@@ -30,11 +26,14 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			ManagerApproverId = managerApproverId;
 			Status = ExpensePaymentStatus.Pending;
 			Description = description?.Trim() ?? string.Empty;
-
-			AddDomainEvent(new ExpensePaymentCreatedEvent(this));
 		}
+		#endregion
 
 		#region Properties
+		private readonly List<ExpensePaymentItem> _items = new();
+		private readonly List<ExpensePaymentAttachment> _attachments = new();
+		private readonly List<OutgoingPayment> _outgoingPayments = new();
+
 		public string Name { get; private set; } = string.Empty;
 		public string SubId { get; private set; } = default!;
 		public PayeeType PayeeType { get; private set; }
@@ -144,6 +143,13 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			TotalTax = _items.Sum(i => i.TaxAmount);
 			TotalWithTax = _items.Sum(i => i.TotalWithTax);
 			RemainingOutgoingAmount = TotalWithTax - OutgoingAmountPaid;
+		}
+
+		public void LinkWorkflowInstance(ExpenseWorkflowInstance instance)
+		{
+			Guard.AgainstNull(instance, nameof(instance));
+			CurrentWorkflowInstanceId = instance.Id;
+			CurrentWorkflowInstance = instance;
 		}
 
 		#endregion

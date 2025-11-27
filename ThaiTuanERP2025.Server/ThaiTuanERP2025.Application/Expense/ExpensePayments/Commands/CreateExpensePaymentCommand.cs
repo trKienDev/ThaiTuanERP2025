@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
 using ThaiTuanERP2025.Application.Expense.ExpensePayments.Contracts;
+using ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Factories;
 using ThaiTuanERP2025.Application.Finance.BudgetTransasctions;
 using ThaiTuanERP2025.Application.Shared.Exceptions;
 using ThaiTuanERP2025.Application.Shared.Services;
@@ -20,13 +21,16 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
 		private readonly IUnitOfWork _uow;
 		private readonly IDocumentSubIdGeneratorService _documentSubIdGeneratorService;
 		private readonly IBudgetTransactionReadRepository _budgetTransasctionRepo;
+		private readonly IExpenseWorkflowFactory _expenseWorkflowFactory;
 		public CreateExpensePaymentCommandHandler(
 			IUnitOfWork uow, IDocumentSubIdGeneratorService documentSubIdGeneratorService,
-			IBudgetTransactionReadRepository budgetTransactionRepo
+			IBudgetTransactionReadRepository budgetTransactionRepo,
+			IExpenseWorkflowFactory expenseWorkflowFactory
 		) {
 			_uow = uow; 
 			_documentSubIdGeneratorService = documentSubIdGeneratorService;
 			_budgetTransasctionRepo = budgetTransactionRepo;
+			_expenseWorkflowFactory = expenseWorkflowFactory;
 		}
 
 		public async Task<Unit> Handle(CreateExpensePaymentCommand command, CancellationToken cancellationToken)
@@ -86,9 +90,13 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
 				await _uow.BudgetTransactions.AddAsync(newTransaction, cancellationToken);
 			}
 
-
-			// Save
 			await _uow.ExpensePayments.AddAsync(newPayment, cancellationToken);
+
+			// expense workflow instance
+			var workflowInstance = await _expenseWorkflowFactory.CreateForExpensePaymentAsync(newPayment, cancellationToken);
+			newPayment.LinkWorkflowInstance(workflowInstance);
+			await _uow.ExpenseWorkflowInstances.AddAsync(workflowInstance, cancellationToken);
+
 			await _uow.SaveChangesAsync(cancellationToken);
 			return Unit.Value;
 		}

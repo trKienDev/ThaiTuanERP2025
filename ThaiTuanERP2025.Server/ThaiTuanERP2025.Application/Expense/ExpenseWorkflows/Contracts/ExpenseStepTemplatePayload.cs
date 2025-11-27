@@ -1,6 +1,6 @@
 ﻿using ThaiTuanERP2025.Domain.Expense.Enums;
 
-namespace ThaiTuanERP2025.Application.Expense.ExpenseStepTemplates.Contracts
+namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Contracts
 {
 	public sealed record ExpenseStepTemplatePayload {
 		public string Name { get; init; } = string.Empty;

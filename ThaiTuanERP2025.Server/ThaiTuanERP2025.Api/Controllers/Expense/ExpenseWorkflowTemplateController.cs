@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Shared;
-using ThaiTuanERP2025.Application.Expense.ExpenseWorkflowTemplates.Commands;
-using ThaiTuanERP2025.Application.Expense.ExpenseWorkflowTemplates.Contracts;
+using ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands;
+using ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Contracts;
 using ThaiTuanERP2025.Application.Expense.ExpenseWorkflowTemplates.Queries;
 
 namespace ThaiTuanERP2025.Api.Controllers.Expense

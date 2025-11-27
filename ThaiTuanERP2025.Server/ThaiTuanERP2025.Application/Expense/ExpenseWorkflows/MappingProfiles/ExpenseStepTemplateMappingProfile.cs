@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using System.Text.Json;
-using ThaiTuanERP2025.Application.Expense.ExpenseStepTemplates.Contracts;
+using ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Contracts;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 
-namespace ThaiTuanERP2025.Application.Expense.ExpenseStepTemplates
+namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.MappingProfiles
 {
 	public sealed class ExpenseStepTemplateMappingProfile : Profile
 	{

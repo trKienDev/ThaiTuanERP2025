@@ -17,6 +17,7 @@ import { HttpErrorHandlerService } from '../../core/services/http-errror-handler
 })
 export class LoginComponent implements OnInit{
       showPassword = false;
+      disabledLoginButton = false;
       traceId: string | null = null;
       public submitting: boolean = false;
       public showErrors: boolean = false;
@@ -71,6 +72,7 @@ export class LoginComponent implements OnInit{
 
             try {
                   this.submitting = true;
+                  this.disabledLoginButton = true;
                   this.form.disable({ emitEvent: false });
 
                   const { employeeCode, password } = this.form.getRawValue();
@@ -80,9 +82,10 @@ export class LoginComponent implements OnInit{
                   this.showErrors = false;
             } catch(error) {
                   this.httpErrorHandler.handle(error, "Đăng nhập thất bại");
+                  this.form.enable({ emitEvent: true });
+                  this.disabledLoginButton = true;
             } finally {
                   this.submitting = false;
-                  this.form.enable({ emitEvent: true });
             }
       };
 }

@@ -26,6 +26,11 @@
     <PackageReference Include="Minio" Version="6.0.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Expense\Contracts\" />
+    <Folder Include="Expense\Services\" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

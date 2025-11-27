@@ -6,10 +6,5 @@ namespace ThaiTuanERP2025.Domain.Expense.Repositories
 {
 	public interface IExpenseWorkflowInstanceRepository : IBaseWriteRepository<ExpenseWorkflowInstance>
 	{
-		Task<List<ExpenseWorkflowInstance>> ListByFilterAsync(
-			string? documentType, Guid? documentId, WorkflowStatus? status,
-			string? budgetCode, decimal? minAmount, decimal? maxAmount,
-			CancellationToken cancellationToken
-		);
 	}
 }
