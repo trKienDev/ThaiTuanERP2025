@@ -2,6 +2,7 @@
 using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Finance.Enums;
 using ThaiTuanERP2025.Domain.Finance.Events.BudgetTransactions;
+using ThaiTuanERP2025.Domain.Expense.Entities;
 
 namespace ThaiTuanERP2025.Domain.Finance.Entities
 {
@@ -12,16 +13,16 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 	{
 		#region Constructors
 		private BudgetTransaction() { } 
-		public BudgetTransaction(Guid budgetPlanId, Guid paymentId, decimal amount, BudgetTransactionType type)
+		public BudgetTransaction(Guid planDetailId, Guid paymentItemId, decimal amount, BudgetTransactionType type)
 		{
-			Guard.AgainstDefault(budgetPlanId, nameof(budgetPlanId));
-			Guard.AgainstDefault(paymentId, nameof(paymentId));
+			Guard.AgainstDefault(planDetailId, nameof(planDetailId));
+			Guard.AgainstDefault(paymentItemId, nameof(paymentItemId));
 			Guard.AgainstZeroOrNegative(amount, nameof(amount));
 			Guard.AgainstInvalidEnumValue(type, nameof(type));
 
 			Id = Guid.NewGuid();
-			BudgetPlanId = budgetPlanId;
-			PaymentId = paymentId;
+			BudgetPlanDetailId = planDetailId;
+			ExpensePaymentItemId = paymentItemId;
 			Amount = amount;
 			Type = type;
 			TransactionDate = DateTime.UtcNow;
@@ -31,13 +32,16 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		#endregion
 
 		#region Properties
-		public Guid BudgetPlanId { get; private set; }
-		public Guid PaymentId { get; private set; }
+		public Guid BudgetPlanDetailId { get; private set; }
+		public BudgetPlan BudgetPlanDetail { get; private set; } = null!;
+
+		public Guid ExpensePaymentItemId { get; private set; }
+		public ExpensePaymentItem ExpensePaymentItem { get; private set; } = null!;
+
 		public decimal Amount { get; private set; }
 		public BudgetTransactionType Type { get; private set; }
 		public DateTime TransactionDate { get; private set; }
 
-		public BudgetPlan BudgetPlan { get; private set; } = null!;
 		#endregion
 
 		#region Domain Behaviors

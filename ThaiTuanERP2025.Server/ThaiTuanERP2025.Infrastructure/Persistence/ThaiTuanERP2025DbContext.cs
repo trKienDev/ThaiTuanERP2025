@@ -55,6 +55,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<BudgetGroup> BudgetGroups => Set<BudgetGroup>();
 		public DbSet<BudgetPeriod> BudgetPeriods => Set<BudgetPeriod>();
 		public DbSet<BudgetPlan> BudgetPlans => Set<BudgetPlan>();
+		public DbSet<BudgetPlanDetail> BudgetPlanDetails => Set<BudgetPlanDetail>();
 		public DbSet<ExpenseWorkflowTemplate> ApprovalWorkflowTemplates => Set<ExpenseWorkflowTemplate>();
 		public DbSet<ExpenseStepTemplate> ApproverStepTemplates => Set<ExpenseStepTemplate>();
 		public DbSet<ExpenseWorkflowInstance> ApprovalWorkflowInstances => Set<ExpenseWorkflowInstance>();

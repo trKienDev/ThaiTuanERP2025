@@ -28,8 +28,9 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		}
 		#endregion
 
-		private readonly List<BudgetPlanDetail> _details = new();
 		#region Properties
+		private readonly List<BudgetPlanDetail> _details = new();
+
 		public Guid DepartmentId { get; private set; }
 		public Guid BudgetPeriodId { get; private set; }
 		public bool IsActive { get; private set; } = true;

@@ -65,6 +65,7 @@ using ThaiTuanERP2025.Application.Expense.Suppliers;
 using ThaiTuanERP2025.Application.Account.Users.Repositories;
 using ThaiTuanERP2025.Application.Account.Users.Services;
 using ThaiTuanERP2025.Infrastructure.Account.Services;
+using ThaiTuanERP2025.Application.Finance.BudgetTransasctions;
 
 namespace ThaiTuanERP2025.Infrastructure
 {
@@ -116,6 +117,8 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IBudgetPeriodReadRepository, BudgetPeriodReadRepository>();
 			services.AddScoped<IBudgetPlanReadRepository, BudgetPlanReadRepository>();
 			services.AddScoped<IBudgetPlanWriteRepository, BudgetPlanWriteRepository>();
+			services.AddScoped<IBudgetTransactionReadRepository, BudgetTransasctionReadRepository>();
+			services.AddScoped<IBudgetTransactionWriteRepository, BudgetTransactionWriteRepository>();
 			services.AddScoped<IBudgetPlanDetailWriteRepository, BudgetPlanDetailWriteRepository>();
 			services.AddScoped<IBudgetApproverReadRepository, BudgetApproverReadRepository>();
 			services.AddScoped<IBudgetApproverWriteRepository, BudgetApproverWriteRepository>();

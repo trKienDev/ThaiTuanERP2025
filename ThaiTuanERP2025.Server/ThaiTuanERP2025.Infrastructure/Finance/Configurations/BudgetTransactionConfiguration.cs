@@ -10,12 +10,24 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 		{
 			builder.ToTable("BudgetTransaction", "Finance");
 
-			builder.HasKey(bt => bt.Id);
+			builder.HasKey(x => x.Id);
 
 			// ===== Basic properties =====
 			builder.Property(x => x.Amount).HasColumnType("decimal(18,2)").IsRequired();
 			builder.Property(x => x.Type).HasConversion<int>().IsRequired();
 			builder.Property(x => x.TransactionDate).IsRequired();
+
+			// Foreign Key
+			builder.HasOne(x => x.BudgetPlanDetail)
+			       .WithMany() // hoặc .WithMany(bd => bd.Transactions)
+			       .HasForeignKey(x => x.BudgetPlanDetailId)
+			       .OnDelete(DeleteBehavior.Restrict);
+
+			// FK: ExpensePaymentItem
+			builder.HasOne(x => x.ExpensePaymentItem)
+			       .WithMany()
+			       .HasForeignKey(x => x.ExpensePaymentItemId)
+			       .OnDelete(DeleteBehavior.Restrict);
 
 			// ===== Indexes =====
 			builder.HasIndex(x => x.TransactionDate);
