@@ -21,7 +21,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
 		private readonly IUnitOfWork _uow;
 		private readonly IDocumentSubIdGeneratorService _documentSubIdGeneratorService;
 		private readonly IBudgetTransactionReadRepository _budgetTransasctionRepo;
-		private readonly IExpenseWorkflowFactory _expenseWorkflowFactory;
+
 		public CreateExpensePaymentCommandHandler(
 			IUnitOfWork uow, IDocumentSubIdGeneratorService documentSubIdGeneratorService,
 			IBudgetTransactionReadRepository budgetTransactionRepo,
@@ -30,7 +30,6 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
 			_uow = uow; 
 			_documentSubIdGeneratorService = documentSubIdGeneratorService;
 			_budgetTransasctionRepo = budgetTransactionRepo;
-			_expenseWorkflowFactory = expenseWorkflowFactory;
 		}
 
 		public async Task<Unit> Handle(CreateExpensePaymentCommand command, CancellationToken cancellationToken)
@@ -81,7 +80,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
 				);
 
 				// Create BudgetTransaction
-				var newTransaction = new BudgetTransaction(
+				var newTransaction = new BudgetTransaction (
 					planDetailId: item.BudgetPlanDetailId,
 					paymentItemId: paymentItem.Id, // lấy newPaymentItemId,
 					amount: item.TotalWithTax,
@@ -91,12 +90,6 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
 			}
 
 			await _uow.ExpensePayments.AddAsync(newPayment, cancellationToken);
-
-			// expense workflow instance
-			var workflowInstance = await _expenseWorkflowFactory.CreateForExpensePaymentAsync(newPayment, cancellationToken);
-			newPayment.LinkWorkflowInstance(workflowInstance);
-			await _uow.ExpenseWorkflowInstances.AddAsync(workflowInstance, cancellationToken);
-
 			await _uow.SaveChangesAsync(cancellationToken);
 			return Unit.Value;
 		}

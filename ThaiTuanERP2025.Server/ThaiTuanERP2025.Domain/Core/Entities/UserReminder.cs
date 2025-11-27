@@ -1,5 +1,6 @@
 ﻿using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Core.Enums;
+using ThaiTuanERP2025.Domain.Core.Utilities;
 using ThaiTuanERP2025.Domain.Shared;
 using ThaiTuanERP2025.Domain.Shared.Entities;
 
@@ -18,7 +19,7 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
 			UserId = userId;
 			Subject = subject;
 			Message = message;
-			LinkUrl = ResolveLink(linkType, targetId);
+			LinkUrl = AppLinkResolver.Resolve(linkType, targetId);
 			SlaHours = slaHours;
 			DueAt = dueAt;
 			IsResolved = false;
@@ -55,18 +56,5 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
 			ResolvedAt = DateTime.UtcNow;
 		}
 		#endregion
-
-		private static string? ResolveLink(LinkType type, Guid id)
-		{
-			return type switch
-			{
-				LinkType.BudgetPlanReview => SubjectLinks.BudgetPlanDetail(id),
-				LinkType.BudgetPlanDetail => SubjectLinks.BudgetPlanDetail(id),
-				LinkType.ExpensePaymentDetail => SubjectLinks.ExpensePaymentDetail(id),
-				LinkType.RequestDetail => SubjectLinks.RequestDetail(id),
-				LinkType.Dashboard => SubjectLinks.Dashboard(),
-				_ => null
-			};
-		}
 	}
 }

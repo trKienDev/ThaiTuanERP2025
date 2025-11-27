@@ -3,16 +3,26 @@ using System.Reflection;
 using MediatR;
 using FluentValidation;
 using ThaiTuanERP2025.Application.Behaviors;
-using ThaiTuanERP2025.Domain.Shared.Events;
 using ThaiTuanERP2025.Application.Finance.BudgetPlans.Services;
 using ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Factories;
+using ThaiTuanERP2025.Application.Shared.Services;
 
 namespace ThaiTuanERP2025.Application
 {
 	public static class DependencyInjection
 	{
+		// Flag static để đảm bảo AddApplication chỉ chạy đúng 1 lần trong toàn bộ process
+		private static bool _applicationServicesAdded = false;
+
 		public static IServiceCollection AddApplication(this IServiceCollection services)
 		{
+			// Nếu đã chạy rồi → bỏ qua, không đăng ký lần nữa
+			if (_applicationServicesAdded)
+				return services;
+
+			_applicationServicesAdded = true;
+			Console.WriteLine(">>> AddApplication() CALLED");
+
 			// Lấy assembly Application một cách an toàn
 			var appAssembly = Assembly.GetExecutingAssembly();
 
@@ -31,15 +41,12 @@ namespace ThaiTuanERP2025.Application
 			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
 			// MediatR
-			services.AddMediatR(
-				typeof(IDomainEvent).Assembly,           // Domain Layer
-				typeof(AssemblyMarker).Assembly,         // Application Layer
-				Assembly.GetExecutingAssembly()          // API Layer
-			);
+			services.AddMediatR(typeof(AssemblyMarker).Assembly);
 
 			// Services
 			services.AddScoped<IBudgetPlanPermissionService, BudgetPlanPermissionService>();
 			services.AddScoped<IExpenseWorkflowFactory, ExpenseWorkflowFactory>();
+			services.AddScoped<IDocumentResolver, DocumentResolver>();
 
 			return services;
 		}

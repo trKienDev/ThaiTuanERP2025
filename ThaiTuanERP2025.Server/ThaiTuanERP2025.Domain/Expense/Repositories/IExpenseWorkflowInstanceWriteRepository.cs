@@ -4,7 +4,7 @@ using ThaiTuanERP2025.Domain.Expense.Enums;
 
 namespace ThaiTuanERP2025.Domain.Expense.Repositories
 {
-	public interface IExpenseWorkflowInstanceRepository : IBaseWriteRepository<ExpenseWorkflowInstance>
+	public interface IExpenseWorkflowInstanceWriteRepository : IBaseWriteRepository<ExpenseWorkflowInstance>
 	{
 	}
 }

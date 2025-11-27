@@ -65,6 +65,7 @@ using ThaiTuanERP2025.Application.Account.Users.Services;
 using ThaiTuanERP2025.Infrastructure.Account.Services;
 using ThaiTuanERP2025.Application.Finance.BudgetTransasctions;
 using ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Repositories;
+using ThaiTuanERP2025.Application.Expense.ExpensePayments.Repositories;
 
 namespace ThaiTuanERP2025.Infrastructure
 {
@@ -141,7 +142,9 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IExpenseStepTemplateWriteRepository, ExpenseStepTemplateWriteRepository>();
 			services.AddScoped<IExpenseStepTemplateReadRepository, ExpenseStepTemplateReadRepository>();
 			services.AddScoped<IExpenseStepInstanceRepository, ExpenseStepInstanceRepository>();
-			services.AddScoped<IExpenseWorkflowInstanceRepository, ExpenseWorkflowInstanceRepository>();
+			services.AddScoped<IExpenseWorkflowInstanceReadRepository, ExpenseWorkflowInstanceReadRepository>();
+			services.AddScoped<IExpenseWorkflowInstanceWriteRepository, ExpenseWorkflowInstanceWriteRepository>();
+			services.AddScoped<IExpensePaymentReadRepository, ExpensePaymentReadRepository>();
 			services.AddScoped<IExpensePaymentWriteRepository, ExpensePaymentWriteRepository>();
 			services.AddScoped<IExpensePaymentItemsWriteRepository, ExpensePaymentItemsWriteRepository>();
 			services.AddScoped<IExpensePaymentCommentRepository, ExpensePaymentCommentRepository>();
@@ -183,7 +186,6 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.Configure<DocumentSubIdOptions>(opt => {
 				opt.TypeDigits[DocumentType.ExpensePayment] = "01";
 				opt.TypeDigits[DocumentType.OutgoingPayment] = "02";
-				opt.TypeDigits[DocumentType.Invoice] = "03";
 			});
 
 			// DomainEventDispatcher

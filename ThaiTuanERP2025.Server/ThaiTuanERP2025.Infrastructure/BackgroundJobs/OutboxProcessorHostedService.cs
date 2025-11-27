@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
-using System.Threading;
 using ThaiTuanERP2025.Application.Core.Notifications.Contracts;
 using ThaiTuanERP2025.Application.Core.OutboxMessages;
 using ThaiTuanERP2025.Application.Core.Reminders.Contracts;

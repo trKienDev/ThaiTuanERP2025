@@ -2,7 +2,7 @@
 using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Enums;
-using ThaiTuanERP2025.Domain.Expense.Events.ExpensePayments;
+using ThaiTuanERP2025.Domain.Expense.Events;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
@@ -26,6 +26,8 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			ManagerApproverId = managerApproverId;
 			Status = ExpensePaymentStatus.Pending;
 			Description = description?.Trim() ?? string.Empty;
+
+			AddDomainEvent(new ExpensePaymentCreatedEvent(this));
 		}
 		#endregion
 
@@ -66,18 +68,18 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		#endregion
 
 		#region Domain Behaviors
-		public void SetSubId(string subId)
+		internal void SetSubId(string subId)
 		{
 			Guard.AgainstNullOrWhiteSpace(subId, nameof(subId));
 			SubId = subId.Trim();
 		}
 
-		public void SetSupplier(Guid? supplierId)
+		internal void SetSupplier(Guid? supplierId)
 		{
 			SupplierId = supplierId;
 		}
 
-		public void SetBankInfo(string bankName, string accountNumber, string beneficiaryName)
+		internal void SetBankInfo(string bankName, string accountNumber, string beneficiaryName)
 		{
 			Guard.AgainstNullOrWhiteSpace(bankName, nameof(bankName));
 			Guard.AgainstNullOrWhiteSpace(accountNumber, nameof(accountNumber));
@@ -88,7 +90,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			BeneficiaryName = beneficiaryName.Trim();
 		}
 
-		public ExpensePaymentItem AddItem(
+		internal ExpensePaymentItem AddItem(
 			string itemName, 
 			int quantity, decimal unitPrice, decimal taxRate, decimal totalWithTax,
 			Guid budgetPlanDetailId, Guid? invoiceFileId = null
@@ -99,45 +101,45 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			return item;
 		}
 
-		public void Submit()
+		internal void Submit()
 		{
 			if (!_items.Any())
 				throw new DomainException("Không thể gửi duyệt phiếu không có hạng mục chi.");
 			Status = ExpensePaymentStatus.Submitted;
-			AddDomainEvent(new ExpensePaymentSubmittedEvent(this));
+			// AddDomainEvent(new ExpensePaymentSubmittedEvent(this));
 		}
 
-		public void Approve()
+		internal void Approve()
 		{
 			Status = ExpensePaymentStatus.Approved;
-			AddDomainEvent(new ExpensePaymentApprovedEvent(this));
+			// AddDomainEvent(new ExpensePaymentApprovedEvent(this));
 		}
 
-		public void Reject(string reason)
+		internal void Reject(string reason)
 		{
 			Status = ExpensePaymentStatus.Rejected;
-			AddDomainEvent(new ExpensePaymentRejectedEvent(this, reason));
+			// AddDomainEvent(new ExpensePaymentRejectedEvent(this, reason));
 		}
 
-		public void Cancel()
+		internal void Cancel()
 		{
 			Status = ExpensePaymentStatus.Cancelled;
-			AddDomainEvent(new ExpensePaymentCancelledEvent(this));
+			// AddDomainEvent(new ExpensePaymentCancelledEvent(this));
 		}
 
-		public void ReadyForOutgoingPayment()
+		internal void ReadyForOutgoingPayment()
 		{
 			Status = ExpensePaymentStatus.ReadyForPayment;
-			AddDomainEvent(new ExpensePaymentReadyForPaymentEvent(this));
+			// AddDomainEvent(new ExpensePaymentReadyForPaymentEvent(this));
 		}
 
-		public void FullyPaid()
+		internal void FullyPaid()
 		{
 			Status = ExpensePaymentStatus.FullyPaid;
-			AddDomainEvent(new ExpensePaymentFullyPaidEvent(this));
+			// AddDomainEvent(new ExpensePaymentFullyPaidEvent(this));
 		}
 
-		public void RecalculateTotals()
+		internal void RecalculateTotals()
 		{
 			TotalAmount = _items.Sum(i => i.Amount);
 			TotalTax = _items.Sum(i => i.TaxAmount);
@@ -145,7 +147,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			RemainingOutgoingAmount = TotalWithTax - OutgoingAmountPaid;
 		}
 
-		public void LinkWorkflowInstance(ExpenseWorkflowInstance instance)
+		internal void LinkWorkflowInstance(ExpenseWorkflowInstance instance)
 		{
 			Guard.AgainstNull(instance, nameof(instance));
 			CurrentWorkflowInstanceId = instance.Id;

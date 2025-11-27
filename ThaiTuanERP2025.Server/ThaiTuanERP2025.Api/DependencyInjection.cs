@@ -25,12 +25,6 @@ namespace ThaiTuanERP2025.Api
 			services.AddScoped<ICurrentUserService, CurrentUserService>();
 			services.AddScoped<IPasswordHasher, PasswordHasher>();
 
-			// Approval workflow
-			//services.AddScoped<IApproverResolver, CreatorManagerResolver>();
-			//services.AddScoped<IApproverResolverRegistry, ApproverResolverRegistry>();
-			////services.AddScoped<IApprovalWorkflowService, ApprovalWorkflowService>();
-			//services.AddScoped<ApprovalWorkflowResolverService>();
-
 			services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 
 			// Reminders & Background jobs
@@ -40,7 +34,7 @@ namespace ThaiTuanERP2025.Api
 			services.AddScoped<IFollowerService, FollowerService>();
 
 			//  Domain Events publisher
-			services.AddScoped<IApplicationEventPublisher, ApplicationEventPublisher>();
+			// services.AddScoped<IApplicationEventPublisher, ApplicationEventPublisher>();
 
 			// JWT
 			services.AddJwtAuthentication(configuration);

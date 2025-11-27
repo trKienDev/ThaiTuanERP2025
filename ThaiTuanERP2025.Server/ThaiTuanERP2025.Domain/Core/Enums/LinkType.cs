@@ -4,16 +4,18 @@
 	{
 		None = 0,
 
-		// [1] Expense
-		// [1][1] BudgetPlan
+		// [1] Finance
+		// [1][2] BudgetPlan
 		BudgetPlanReview = 111,
 		BudgetPlanDetail = 112,
 		BudgetPlanApproved = 113,
 
-		// [1][2] Expense 
-		ExpensePaymentDetail = 121,
+		// [2] Expense 
+		// [2][1]: ExpensePayment
+		ExpensePaymentApprove = 211,
 
-		// [2] Request
+
+		// [3] Request
 		RequestDetail = 31,
 
 		// Others

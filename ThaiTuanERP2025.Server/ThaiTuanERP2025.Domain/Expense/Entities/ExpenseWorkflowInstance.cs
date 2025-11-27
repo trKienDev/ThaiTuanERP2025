@@ -2,9 +2,8 @@
 using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Enums;
-using ThaiTuanERP2025.Domain.Expense.Events.ApprovalWorkflowInstances;
-using ThaiTuanERP2025.Domain.Expense.Events.ExpenseWorkflowInstances;
 using ThaiTuanERP2025.Domain.Shared.Enums;
+using ThaiTuanERP2025.Domain.Expense.Events;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
@@ -27,7 +26,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			TemplateVersion = templateVersion;
 			DocumentType = documentType;
 			DocumentId = documentId;
-			Status = WorkflowStatus.Draft;
+			Status = ExpenseWorkflowStatus.Draft;
 
 			AddDomainEvent(new ExpenseWorkflowInstanceCreatedEvent(this));
 		}
@@ -38,7 +37,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public int TemplateVersion { get; private set; }
 		public DocumentType DocumentType { get; private set; }
 		public Guid DocumentId { get; private set; }
-		public WorkflowStatus Status { get; private set; } = WorkflowStatus.Draft;
+		public ExpenseWorkflowStatus Status { get; private set; } = ExpenseWorkflowStatus.Draft;
 		public int CurrentStepOrder { get; private set; } = 1;
 
 		public ICollection<ExpenseStepInstance> Steps { get; private set; } = new List<ExpenseStepInstance>();
@@ -46,32 +45,30 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		#region Domain Behaviors
 
-		public void Start(int firstOrder)
+		internal void Start()
 		{
-			if (Status != WorkflowStatus.Draft)
+			if (Status != ExpenseWorkflowStatus.Draft)
 				throw new DomainException("Workflow chỉ có thể khởi động khi ở trạng thái Draft.");
 
 			if (!Steps.Any())
 				throw new DomainException("Workflow phải có ít nhất một bước phê duyệt để bắt đầu.");
 
-			Status = WorkflowStatus.InProgress;
-			CurrentStepOrder = firstOrder;
+			Status = ExpenseWorkflowStatus.InProgress;
 
 			AddDomainEvent(new ExpenseWorkflowInstanceStartedEvent(this));
 		}
 
-		public void MoveToNextStep(int nextOrder)
+		internal void MoveToNextStep(int nextOrder)
 		{
-			if (Status != WorkflowStatus.InProgress)
+			if (Status != ExpenseWorkflowStatus.InProgress)
 				throw new DomainException("Không thể chuyển bước khi workflow chưa ở trạng thái InProgress.");
 
 			CurrentStepOrder = nextOrder;
-			AddDomainEvent(new ExpenseWorkflowInstanceStepChangedEvent(this, nextOrder));
 		}
 
-		public void SetCurrentStepOrder(int newOrder)
+		internal void SetCurrentStepOrder(int newOrder)
 		{
-			if (Status != WorkflowStatus.InProgress)
+			if (Status != ExpenseWorkflowStatus.InProgress)
 				throw new DomainException("Chỉ có thể thay đổi bước hiện tại khi workflow đang ở trạng thái InProgress.");
 
 			if (newOrder <= 0)
@@ -85,26 +82,22 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 			// Cập nhật
 			CurrentStepOrder = newOrder;
-
-			AddDomainEvent(new ExpenseWorkflowInstanceStepChangedEvent(this, newOrder));
 		}
 
-		public void MarkApproved(Guid byUserId, string? reason = null)
+		internal void MarkApproved(Guid byUserId, string? reason = null)
 		{
-			if (Status == WorkflowStatus.Approved)
+			if (Status == ExpenseWorkflowStatus.Approved)
 				return;
 
-			if (Status != WorkflowStatus.InProgress)
+			if (Status != ExpenseWorkflowStatus.InProgress)
 				throw new DomainException("Chỉ có thể phê duyệt workflow đang xử lý.");
 
-			Status = WorkflowStatus.Approved;
-			AddDomainEvent(new ExpenseWorkflowInstanceApprovedEvent(this));
+			Status = ExpenseWorkflowStatus.Approved;
 		}
 
-		public void MarkInProgress()
+		internal void MarkInProgress()
 		{
-			Status = WorkflowStatus.InProgress;
-			AddDomainEvent(new ExpenseWorkflowInstanceStatusChangedEvent(this, WorkflowStatus.InProgress));
+			Status = ExpenseWorkflowStatus.InProgress;
 		}
 
 		#endregion

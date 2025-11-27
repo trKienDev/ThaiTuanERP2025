@@ -1,6 +1,6 @@
 ﻿namespace ThaiTuanERP2025.Domain.Expense.Enums
 {
-	public enum WorkflowStatus : byte
+	public enum ExpenseWorkflowStatus : byte
 	{
 		Draft = 0,
 		InProgress = 1,

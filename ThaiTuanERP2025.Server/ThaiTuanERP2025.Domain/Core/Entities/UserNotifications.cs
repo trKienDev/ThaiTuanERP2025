@@ -2,6 +2,7 @@
 using ThaiTuanERP2025.Domain.Shared;
 using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Core.Enums;
+using ThaiTuanERP2025.Domain.Core.Utilities;
 
 namespace ThaiTuanERP2025.Domain.Core.Entities
 {
@@ -21,7 +22,7 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
 			SenderId = senderId;
 			ReceiverId = receiverId;
 			Message = message;
-			LinkUrl = ResolveLink(linkType, targetId);
+			LinkUrl = AppLinkResolver.Resolve(linkType, targetId);
 			TargetId = targetId;
 			LinkType = linkType;
 			Type = type;
@@ -64,31 +65,6 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
 				IsRead = true;
 				ReadAt = DateTime.UtcNow;
 			}
-		}
-		#endregion
-
-		#region helper function
-		private static string? ResolveLink(LinkType type, Guid? id)
-		{
-			return type switch
-			{
-				LinkType.BudgetPlanReview when id.HasValue 
-					=> SubjectLinks.BudgetPlanDetail(id.Value),
-
-				LinkType.BudgetPlanDetail when id.HasValue
-					=> SubjectLinks.BudgetPlanDetail(id.Value),
-
-				LinkType.ExpensePaymentDetail when id.HasValue
-					=> SubjectLinks.ExpensePaymentDetail(id.Value),
-
-				LinkType.RequestDetail when id.HasValue
-					=> SubjectLinks.RequestDetail(id.Value),
-
-				LinkType.Dashboard
-					=> SubjectLinks.Dashboard(),
-
-				_ => null
-			};
 		}
 		#endregion
 	}

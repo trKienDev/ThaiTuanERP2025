@@ -17,9 +17,9 @@
 
   <ItemGroup>
     <Folder Include="Core\Services\" />
-    <Folder Include="Expense\ExpensePayments\Repositories\" />
     <Folder Include="Finance\Requests\" />
     <Folder Include="Finance\Validators\" />
+    <Folder Include="Shared\Enums\" />
   </ItemGroup>
 
   <PropertyGroup>

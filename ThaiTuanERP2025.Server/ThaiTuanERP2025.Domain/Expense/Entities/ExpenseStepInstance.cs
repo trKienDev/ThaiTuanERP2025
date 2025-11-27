@@ -3,7 +3,7 @@ using ThaiTuanERP2025.Domain.Shared;
 using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Enums;
-using ThaiTuanERP2025.Domain.Expense.Events.ApprovalStepInstances;
+using ThaiTuanERP2025.Domain.Expense.Events;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
@@ -35,8 +35,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			DefaultApproverId = defaultApproverId;
 			SelectedApproverId = selectedApproverId;
 			Status = status;
-
-			AddDomainEvent(new ExpenseStepInstanceCreatedEvent(this));
 		}
 		#endregion
 
@@ -75,27 +73,32 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		#endregion
 
 		#region Domain Behaviors
-		public void Activate(DateTime utcNow)
+		internal void Activate()
 		{
+			if (SelectedApproverId is null)
+				throw new DomainException("Không thể activate step khi chưa có người duyệt.");
+
+			if(DueAt is null)
+				throw new DomainException("Không thể activate step khi chưa có thời hạn.");
+
 			if (Status != StepStatus.Pending)
 				throw new DomainException("Chỉ bước đang chờ mới được kích hoạt.");
 			Status = StepStatus.Waiting;
-			StartedAt = utcNow;
-			DueAt = utcNow.AddHours(SlaHours);
+			StartedAt = DateTime.UtcNow;
+			DueAt = DateTime.UtcNow.AddHours(SlaHours);
 			AddDomainEvent(new ExpenseStepInstanceActivatedEvent(this));
 		}
 
-		public void Approve(Guid by, DateTime utcNow)
+		internal void Approve(Guid by, DateTime utcNow)
 		{
 			if (Status != StepStatus.Waiting)
 				throw new DomainException("Không thể duyệt bước không ở trạng thái 'Waiting'.");
 			Status = StepStatus.Approved;
 			ApprovedBy = by;
 			ApprovedAt = utcNow;
-			AddDomainEvent(new ExpenseStepInstanceApprovedEvent(this));
 		}
 
-		public void Reject(Guid by, string? comment, DateTime utcNow)
+		internal void Reject(Guid by, string? comment, DateTime utcNow)
 		{
 			if (Status != StepStatus.Waiting)
 				throw new DomainException("Không thể từ chối bước không ở trạng thái 'Waiting'.");
@@ -103,29 +106,25 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			RejectedBy = by;
 			RejectedAt = utcNow;
 			Comments = comment;
-			AddDomainEvent(new ExpenseStepInstanceRejectedEvent(this));
 		}
 
-		public void Skip(string? reason)
+		internal void Skip(string? reason)
 		{
 			if (Status is StepStatus.Approved or StepStatus.Skipped)
 				return;
 			Status = StepStatus.Skipped;
 			Comments = reason;
-			AddDomainEvent(new ExpenseStepInstanceSkippedEvent(this));
 		}
 
-		public void MarkSlaBreached()
+		internal void MarkSlaBreached()
 		{
 			if (SlaBreached) return;
 			SlaBreached = true;
-			AddDomainEvent(new ExpenseStepInstanceSlaBreachedEvent(this));
 		}
 
-		public void SetResolvedApproverCandidates(IEnumerable<Guid> ids)
+		internal void SetResolvedApproverCandidates(IEnumerable<Guid> ids)
 		{
-			ResolvedApproverCandidatesJson =
-				System.Text.Json.JsonSerializer.Serialize(ids?.Distinct() ?? Enumerable.Empty<Guid>());
+			ResolvedApproverCandidatesJson = System.Text.Json.JsonSerializer.Serialize(ids?.Distinct() ?? Enumerable.Empty<Guid>());
 		}
 		#endregion
 	}
