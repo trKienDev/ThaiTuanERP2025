@@ -253,3 +253,5 @@ input[type=number] { -moz-appearance: textfield; }
 
 .pointer-events-none { pointer-events: none; opacity: 0.5; }
 .disabled { opacity: 0.5; }
+
+.label-currency { color: var(--primary-fg-color); }

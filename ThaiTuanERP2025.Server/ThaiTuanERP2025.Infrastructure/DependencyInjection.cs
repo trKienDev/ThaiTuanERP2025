@@ -141,7 +141,8 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IExpenseStepTemplateReadRepository, ExpenseStepTemplateReadRepository>();
 			services.AddScoped<IExpenseStepTemplateWriteRepository, ExpenseStepTemplateWriteRepository>();
 			services.AddScoped<IExpenseStepTemplateReadRepository, ExpenseStepTemplateReadRepository>();
-			services.AddScoped<IExpenseStepInstanceRepository, ExpenseStepInstanceRepository>();
+			services.AddScoped<IExpenseStepInstanceReadRepository, ExpenseStepInstanceReadRepository>();
+			services.AddScoped<IExpenseStepInstanceWriteRepository, ExpenseStepInstanceWriteRepository>();
 			services.AddScoped<IExpenseWorkflowInstanceReadRepository, ExpenseWorkflowInstanceReadRepository>();
 			services.AddScoped<IExpenseWorkflowInstanceWriteRepository, ExpenseWorkflowInstanceWriteRepository>();
 			services.AddScoped<IExpensePaymentReadRepository, ExpensePaymentReadRepository>();

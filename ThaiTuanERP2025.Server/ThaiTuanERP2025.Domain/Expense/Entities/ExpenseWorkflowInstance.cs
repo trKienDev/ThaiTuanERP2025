@@ -3,8 +3,6 @@ using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Enums;
 using ThaiTuanERP2025.Domain.Shared.Enums;
-using ThaiTuanERP2025.Domain.Expense.Events;
-using System.Runtime.CompilerServices;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {

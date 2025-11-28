@@ -14,7 +14,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public ExpenseStepInstance(
 			Guid workflowInstanceId, Guid stepTemplateId, string name, int order,
 			ExpenseFlowType flowType, int slaHours, ExpenseApproveMode approverMode,
-			string approversJson,  StepStatus status = StepStatus.Pending
+			string approversJson,  ExpenseStepStatus status = ExpenseStepStatus.Pending
 		)
 		{
 			Guard.AgainstDefault(workflowInstanceId, nameof(workflowInstanceId));
@@ -48,7 +48,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		public string ResolvedApproversJson { get; private set; }
 
-		public StepStatus Status { get; private set; } = StepStatus.Pending;
+		public ExpenseStepStatus Status { get; private set; } = ExpenseStepStatus.Pending;
 
 		public DateTime? StartedAt { get; private set; }
 		public DateTime? DueAt { get; private set; }
@@ -68,27 +68,27 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		#region Domain Behaviors
 		internal void Activate()
 		{
-			if (Status != StepStatus.Pending)
+			if (Status != ExpenseStepStatus.Pending)
 				throw new DomainException("Chỉ bước đang chờ mới được kích hoạt.");
-			Status = StepStatus.Waiting;
+			Status = ExpenseStepStatus.Waiting;
 			StartedAt = DateTime.UtcNow;
 			DueAt = DateTime.UtcNow.AddHours(SlaHours);
 		}
 
 		internal void Approve(Guid by, DateTime utcNow)
 		{
-			if (Status != StepStatus.Waiting)
+			if (Status != ExpenseStepStatus.Waiting)
 				throw new DomainException("Không thể duyệt bước không ở trạng thái 'Waiting'.");
-			Status = StepStatus.Approved;
+			Status = ExpenseStepStatus.Approved;
 			ApprovedBy = by;
 			ApprovedAt = utcNow;
 		}
 
 		internal void Reject(Guid by, string? comment, DateTime utcNow)
 		{
-			if (Status != StepStatus.Waiting)
+			if (Status != ExpenseStepStatus.Waiting)
 				throw new DomainException("Không thể từ chối bước không ở trạng thái 'Waiting'.");
-			Status = StepStatus.Rejected;
+			Status = ExpenseStepStatus.Rejected;
 			RejectedBy = by;
 			RejectedAt = utcNow;
 			Comments = comment;
@@ -96,9 +96,9 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		internal void Skip(string? reason)
 		{
-			if (Status is StepStatus.Approved or StepStatus.Skipped)
+			if (Status is ExpenseStepStatus.Approved or ExpenseStepStatus.Skipped)
 				return;
-			Status = StepStatus.Skipped;
+			Status = ExpenseStepStatus.Skipped;
 			Comments = reason;
 		}
 

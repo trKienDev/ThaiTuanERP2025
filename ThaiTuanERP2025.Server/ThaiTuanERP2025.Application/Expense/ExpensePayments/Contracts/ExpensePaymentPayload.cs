@@ -6,7 +6,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Contracts
 	{
 		public string Name { get; init; } = default!;
 		public string? Description { get; init; } = string.Empty;
-		public PayeeType PayeeType { get; init; } 
+		public ExpensePayeeType PayeeType { get; init; } 
 		public Guid? SupplierId { get; init; }
 		public Guid ManagerApproverId { get; init; }
 

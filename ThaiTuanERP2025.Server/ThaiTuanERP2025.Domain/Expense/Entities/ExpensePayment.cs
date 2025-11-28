@@ -2,8 +2,6 @@
 using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Enums;
-using ThaiTuanERP2025.Domain.Expense.Events;
-
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
 	public class ExpensePayment : AuditableEntity
@@ -11,7 +9,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		#region Constructor
 		private ExpensePayment() { } // EF
 		public ExpensePayment(
-			string name, bool hasGoodsReceipt, PayeeType payeeType, DateTime dueDate, Guid managerApproverId, string? description
+			string name, bool hasGoodsReceipt, ExpensePayeeType payeeType, DateTime dueDate, Guid managerApproverId, string? description
 		)
 		{
 			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
@@ -36,7 +34,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		public string Name { get; private set; } = string.Empty;
 		public string SubId { get; private set; } = default!;
-		public PayeeType PayeeType { get; private set; }
+		public ExpensePayeeType PayeeType { get; private set; }
 		public Guid? SupplierId { get; private set; }
 		public Supplier? Supplier { get; private set; } 
 
@@ -89,11 +87,11 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		}
 
 		internal ExpensePaymentItem AddItem(
-			string itemName, 
-			int quantity, decimal unitPrice, decimal taxRate, decimal totalWithTax,
+			string itemName,  int quantity, decimal unitPrice, decimal taxRate, 
+			decimal amount, decimal taxAmount, decimal totalWithTax,
 			Guid budgetPlanDetailId, Guid? invoiceFileId = null
 		) {
-			var item = new ExpensePaymentItem(Id, itemName, quantity, unitPrice, taxRate, totalWithTax, budgetPlanDetailId, invoiceFileId);
+			var item = new ExpensePaymentItem(Id, itemName, quantity, unitPrice, taxRate, amount, taxAmount, totalWithTax, budgetPlanDetailId, invoiceFileId);
 			_items.Add(item);
 			RecalculateTotals();
 			return item;
@@ -104,45 +102,48 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			if (!_items.Any())
 				throw new DomainException("Không thể gửi duyệt phiếu không có hạng mục chi.");
 			Status = ExpensePaymentStatus.Submitted;
-			// AddDomainEvent(new ExpensePaymentSubmittedEvent(this));
 		}
 
 		internal void Approve()
 		{
 			Status = ExpensePaymentStatus.Approved;
-			// AddDomainEvent(new ExpensePaymentApprovedEvent(this));
 		}
 
 		internal void Reject(string reason)
 		{
 			Status = ExpensePaymentStatus.Rejected;
-			// AddDomainEvent(new ExpensePaymentRejectedEvent(this, reason));
 		}
 
 		internal void Cancel()
 		{
 			Status = ExpensePaymentStatus.Cancelled;
-			// AddDomainEvent(new ExpensePaymentCancelledEvent(this));
 		}
 
 		internal void ReadyForOutgoingPayment()
 		{
 			Status = ExpensePaymentStatus.ReadyForPayment;
-			// AddDomainEvent(new ExpensePaymentReadyForPaymentEvent(this));
 		}
 
 		internal void FullyPaid()
 		{
 			Status = ExpensePaymentStatus.FullyPaid;
-			// AddDomainEvent(new ExpensePaymentFullyPaidEvent(this));
 		}
 
 		internal void RecalculateTotals()
 		{
+			var oldTotalWithTax = TotalWithTax;
+
+			// Cộng từng phần
 			TotalAmount = _items.Sum(i => i.Amount);
 			TotalTax = _items.Sum(i => i.TaxAmount);
 			TotalWithTax = _items.Sum(i => i.TotalWithTax);
 			RemainingOutgoingAmount = TotalWithTax - OutgoingAmountPaid;
+
+			// Nếu có thay đổi tổng -> raise domain event
+			if (TotalWithTax != oldTotalWithTax)
+			{
+				// AddDomainEvent(new ExpensePaymentTotalsChangedEvent(this));
+			}
 		}
 
 		internal void LinkWorkflowInstance(ExpenseWorkflowInstance instance)

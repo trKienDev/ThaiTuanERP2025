@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { ExpensePaymentDetailDto, ExpensePaymentDto, ExpensePaymentPayload, ExpensePaymentSummaryDto } from "../../models/expense-payment.model";
+import { ExpensePaymentDetailDto, ExpensePaymentDto, ExpensePaymentLookupDto, ExpensePaymentPayload } from "../../models/expense-payment.model";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { environment } from "../../../../../environments/environment";
 import { catchError, Observable, throwError } from "rxjs";
@@ -22,20 +22,28 @@ export class ExpensePaymentApiService extends BaseApiService<ExpensePaymentDto, 
                   );
       }
 
-      getFollowingPaymentsPaged(page: number, pageSize: number, updatedAfter?: string): Observable<ExpensePaymentSummaryDto[]> {
-            let params = new HttpParams()
-                  .set('page', page.toString())
-                  .set('pageSize', pageSize.toString());
-
-            if (updatedAfter) {
-                  params = params.set('updatedAfter', updatedAfter);
-            }
-
-            return this.http.
-                  get<ApiResponse<ExpensePaymentSummaryDto[]>>(`${this.endpoint}/following`, { params })
+      getFollowing(): Observable<ExpensePaymentLookupDto[]> {
+            return this.http.get<ApiResponse<ExpensePaymentLookupDto[]>>(`${this.endpoint}/following`)
                   .pipe(
-                        handleApiResponse$<ExpensePaymentSummaryDto[]>(),
+                        handleApiResponse$<ExpensePaymentLookupDto[]>(),
                         catchError(err => throwError(() => err))
-                  );
+                  )
       }
+
+      // getFollowingPaymentsPaged(page: number, pageSize: number, updatedAfter?: string): Observable<ExpensePaymentSummaryDto[]> {
+      //       let params = new HttpParams()
+      //             .set('page', page.toString())
+      //             .set('pageSize', pageSize.toString());
+
+      //       if (updatedAfter) {
+      //             params = params.set('updatedAfter', updatedAfter);
+      //       }
+
+      //       return this.http.
+      //             get<ApiResponse<ExpensePaymentSummaryDto[]>>(`${this.endpoint}/following`, { params })
+      //             .pipe(
+      //                   handleApiResponse$<ExpensePaymentSummaryDto[]>(),
+      //                   catchError(err => throwError(() => err))
+      //             );
+      // }
 } 

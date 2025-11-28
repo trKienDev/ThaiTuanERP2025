@@ -4,7 +4,7 @@ import { OutgoingPaymentDto } from "../../../models/outgoing-payment.model";
 import { OutgoingPaymentStatusPipe } from "../../../pipes/outgoing-payment-status.pipe";
 import { MatDialog } from "@angular/material/dialog";
 import { OutgoingPaymentFacade } from "../../../facades/outgoing-payment.facade";
-import { ExpensePaymentDetailDialogComponent } from "../../../components/expense-payment-detail-dialog/expense-payment-detail-dialog.component";
+// import { ExpensePaymentDetailDialogComponent } from "../../../components/expense-payment-detail-dialog/expense-payment-detail-dialog.component";
 import { OutgoingPaymentDetailDialogComponent } from "../../../components/outgoing-payment-detail-dialog/outgoing-payment-detail-dialog.component";
 
 @Component({
@@ -24,17 +24,17 @@ export class FollowingOutgoingPaymentComponent implements OnInit {
 
       trackById(index: number, item: OutgoingPaymentDto) { return item.id; }
 
-      openExpensePaymentDetailDialog(paymentId: string) {
-            const dialogRef = this.dialog.open(ExpensePaymentDetailDialogComponent, {
-                  data: paymentId,
-            });
+      // openExpensePaymentDetailDialog(paymentId: string) {
+      //       const dialogRef = this.dialog.open(ExpensePaymentDetailDialogComponent, {
+      //             data: paymentId,
+      //       });
 
-            dialogRef.afterClosed().subscribe((result: any) => {
-                  if (result?.success) {
-                        // Handle success result if needed
-                  }     
-            });
-      }
+      //       dialogRef.afterClosed().subscribe((result: any) => {
+      //             if (result?.success) {
+      //                   // Handle success result if needed
+      //             }     
+      //       });
+      // }
 
       openOutgoingPaymentDetailDialog(outgoingPaymentId: string) {
             const dialogRef = this.dialog.open(OutgoingPaymentDetailDialogComponent, {

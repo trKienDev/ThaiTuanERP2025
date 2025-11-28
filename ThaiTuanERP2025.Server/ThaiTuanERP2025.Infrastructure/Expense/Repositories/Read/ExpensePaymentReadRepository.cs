@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using DocumentFormat.OpenXml.Office2010.Excel;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using ThaiTuanERP2025.Application.Expense.ExpensePayments.Contracts;
 using ThaiTuanERP2025.Application.Expense.ExpensePayments.Repositories;
@@ -26,6 +26,14 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories.Read
 			return await _dbSet.AsNoTracking()
 				.Where(x => x.Id == expensePaymentId)
 				.Select(x => x.Id)
+				.SingleOrDefaultAsync(cancellationToken);
+		}
+
+		public async Task<ExpensePaymentLookupDto?> GetLookupById(Guid id, CancellationToken cancellationToken = default)
+		{
+			return await _dbSet.AsNoTracking()
+				.Where(x => x.Id == id)
+				.ProjectTo<ExpensePaymentLookupDto>(_mapperConfig)
 				.SingleOrDefaultAsync(cancellationToken);
 		}
 	}

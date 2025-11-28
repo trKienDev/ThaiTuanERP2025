@@ -1,6 +1,6 @@
 ﻿namespace ThaiTuanERP2025.Domain.Expense.Enums
 {
-	public enum StepStatus : byte
+	public enum ExpenseStepStatus : byte
 	{
 		Pending = 0, // Chưa kích hoạt
 		Waiting = 1, // chờ duyệt

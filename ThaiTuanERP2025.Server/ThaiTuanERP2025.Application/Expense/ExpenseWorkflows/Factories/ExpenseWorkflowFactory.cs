@@ -69,7 +69,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Factories
 					slaHours: stepTemplate.SlaHours,
 					approverMode: stepTemplate.ApproveMode,
 					approversJson: approversJson,
-					status: StepStatus.Pending
+					status: ExpenseStepStatus.Pending
 				);
 
 				workflowInstance.Steps.Add(stepInstance);

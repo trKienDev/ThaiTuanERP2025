@@ -41,7 +41,7 @@ namespace ThaiTuanERP2025.Domain.Shared.Repositories
 		IExpenseStepTemplateWriteRepository ExpenseStepTemplates { get; }
 		IExpenseWorkflowTemplateWriteRepository ExpenseWorkflowTemplates { get; }
 		IExpenseWorkflowInstanceWriteRepository ExpenseWorkflowInstances { get; }
-		IExpenseStepInstanceRepository ExpenseStepInstances { get; }
+		IExpenseStepInstanceWriteRepository ExpenseStepInstances { get; }
 
 		// Expense Payment
 		IExpensePaymentWriteRepository ExpensePayments { get; }

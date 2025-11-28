@@ -1,4 +1,5 @@
-import { UserDto } from "../../account/models/user.model";
+import { UserBriefAvatarDto, UserDto } from "../../account/models/user.model";
+import { ExpensePaymentStatus } from "./expense-payment.model";
 import { ExpenseApproveMode, ExpenseFlowType } from "./expense-step-template.model";
 
 export enum StepStatus {
@@ -37,6 +38,12 @@ export interface ApprovalStepInstanceDto {
       history?: object;
 }
 
+export interface ExpenseStepInstanceBriefDto {
+      order: number;
+      status: ExpensePaymentStatus;
+      approvedByUser?: UserBriefAvatarDto;
+}
+
 export interface ApprovalStepInstanceDetailDto extends ApprovalStepInstanceDto {
       approverCandidates: UserDto[];
 
@@ -47,6 +54,8 @@ export interface ApprovalStepInstanceDetailDto extends ApprovalStepInstanceDto {
       currentStepOrder: number;
 }
 
+
+// ==== DELETE ====
 export interface ApproveStepRequest {
       userId: string;
       paymentId: string;

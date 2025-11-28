@@ -41,9 +41,7 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Queries
 			var userId = _currentUser.UserId ?? throw new NotFoundException("User không hợp lệ");
 
 			var following = await _followerRepo.GetAllAsync(
-				q => q.UserId == userId 
-					&& q.DocumentType == DocumentType.BudgetPlan
-					&& q.IsActive && !q.IsDeleted,
+				q => q.UserId == userId  && q.DocumentType == DocumentType.BudgetPlan,
 				cancellationToken: cancellationToken
 			);
 			if(!following.Any()) return Array.Empty<BudgetPlanDto>();
@@ -55,7 +53,6 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Queries
 			var planDtos = await _budgetPlanRepo.ListProjectedAsync(
 				q => q.Where(p => documentIds.Contains(p.Id)
 					&& p.IsActive
-					&& !p.IsDeleted
 					&& p.BudgetPeriodId == query.PeriodId
 				).ProjectTo<BudgetPlanDto>(_mapper.ConfigurationProvider),
 				cancellationToken: cancellationToken

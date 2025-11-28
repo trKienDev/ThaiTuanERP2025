@@ -1,5 +1,21 @@
-import { ApprovalStepInstanceDetailDto, ApprovalStepInstanceDto, ApprovalStepInstanceStatusDto } from "./expense-step-instance.model";
+import { ApprovalStepInstanceDetailDto, ApprovalStepInstanceDto, ApprovalStepInstanceStatusDto, ExpenseStepInstanceBriefDto } from "./expense-step-instance.model";
 
+export enum ExpenseWorkflowStatus {
+      draft = 0,
+      inProgress = 1,
+      approved = 2,
+      rejected = 3,
+      cancelled = 4,
+      expired = 5,
+}
+
+export interface ExpenseWorkflowInstanceBriefDto {
+      status: ExpenseWorkflowStatus;
+      currentStepOrder: number;
+      steps: ExpenseStepInstanceBriefDto[];
+}
+
+// delete 
 export interface ApprovalWorkflowInstanceDto {
       id: string;
       templateId: string;

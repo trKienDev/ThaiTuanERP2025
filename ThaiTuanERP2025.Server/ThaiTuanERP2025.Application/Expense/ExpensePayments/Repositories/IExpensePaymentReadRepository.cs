@@ -8,5 +8,6 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Repositories
 	{
 		Task<string?> GetNameAsync(Guid expensePaymentId, CancellationToken cancellationToken = default);
 		Task<Guid> GetCreatorIdAsync(Guid expensePaymentId, CancellationToken cancellationToken = default);
+		Task<ExpensePaymentLookupDto?> GetLookupById(Guid id, CancellationToken cancellationToken = default);
 	}
 }

@@ -6,7 +6,7 @@
                   <h3 class="title">Thanh toán đang theo dõi</h3>
             </div>
             <div class="actions">
-                  <kit-refresh-button [disabled]="loadingSig()" color="#ff342b" (clicked)="manualRefresh()"></kit-refresh-button>
+                  <!-- <kit-refresh-button [disabled]="loadingSig()" color="#ff342b" (clicked)="manualRefresh()"></kit-refresh-button> -->
             </div>
       </div>
 
@@ -15,54 +15,60 @@
                   <table class="table margin-top-20px">
                         <thead>
                               <tr>
-                              <th>Tên thanh toán</th>
-                              <th>Trạng thái</th>
-                              <th>Người duyệt</th>
-                              <th>Thành tiền</th>
-                              <th>Tổng thuế</th>
-                              <th>Tổng tiền</th>
-                              <th>Số tiền đã tạo lệnh</th>
-                              <th>Người tạo</th>
-                              <th>Tạo lúc</th>
+                                    <th>#</th>
+                                    <th>Tên thanh toán</th>
+                                    <th>Trạng thái</th>
+                                    <th>Người duyệt</th>
+                                    <th>Thành tiền</th>
+                                    <th>Tổng thuế</th>
+                                    <th>Tổng tiền</th>
+                                    <th>Số tiền đã tạo lệnh</th>
+                                    <th>Người tạo</th>
+                                    <th>Tạo lúc</th>
                               </tr>
                         </thead>
                         <tbody>
-                              <tr *ngFor="let payment of paymentsSig(); trackBy: trackById">
-                                    <td>
-                                          <a class="link-text" (click)="openExpensePaymentDetailDialog(payment.id)">
-                                                {{ payment.name }}
-                                          </a>
-                                    </td>
-                                    <td>
-                                          <span class="label-status-badge" [ngClass]="(payment.status | expensePaymentStatus).class">
-                                                {{ (payment.status | expensePaymentStatus).text }}
-                                          </span>
-                                    </td>
-                                    <td>
-                                          <ng-container *ngFor="let step of payment.workflowInstanceStatus.steps">
-                                                <img *ngIf="step.approvedByUser" class="avatar-user approver-avatar" [src]="step.approvedByUser | avatarUrlPipe" alt="approved by">
-                                                <img *ngIf="step.rejectedByUser" class="avatar-user rejecter-avatar" [src]="step.rejectedByUser | avatarUrlPipe" alt="rejected by">
-                                                <img *ngIf="!step.approvedByUser && !step.rejectedByUser && step.status === 'Waiting'" class="avatar-user waiting-avatar" [src]="step.defaultApproverUser | avatarUrlPipe" alt="{{ step.status }}">
-                                          </ng-container>
-                                    </td>
-                                    <td>{{ payment.totalAmount   | number: '1.0-0' }}</td>
-                                    <td>{{ payment.totalTax      | number: '1.0-0' }}</td>
-                                    <td>{{ payment.totalWithTax  | number: '1.0-0' }}</td>
-                                    <td>{{ payment.outgoingAmountPaid | number: '1.0-0' }}</td>
-                                    <td>
-                                          <img class="avatar-user" [src]="payment.createdByUser | avatarUrlPipe" alt="created by">
-                                    </td>
-                                    <td>{{ payment.createdDate | date: 'dd/MM/yyyy' }}</td>
-                              </tr>
+                              <ng-container *ngIf="followingExpensePayments.length > 0">
+                                    <ng-container *ngFor="let payment of followingExpensePayments; let i = index">
+                                          <tr>
+                                                <td>{{ i + 1 }}</td>
+                                                <td>{{ payment.name }}</td>
+                                                <td>
+                                                      <div class="label-status" [@statusChangeFade]="payment.status">
+                                                            <span class="label-status-badge" [ngClass]="(payment.status | expensePaymentStatus).class">
+                                                                  {{ (payment.status | expensePaymentStatus).text }}
+                                                            </span>
+                                                      </div>
+                                                </td>
+                                                <td></td>
+                                                <td>{{ payment.totalAmount | number: '1.0-0' }} <label class="label-currency">VNĐ</label></td>
+                                                <td>{{ payment.totalTax | number: '1.0-0' }} <label class="label-currency">VNĐ</label></td>
+                                                <td>{{ payment.totalWithTax  | number: '1.0-0' }} <label class="label-currency">VNĐ</label></td>
+                                                <td>{{ payment.outgoingAmountPaid | number: '1.0-0' }} <label class="label-currency">VNĐ</label></td>
+                                                <td>
+                                                      <div class="display-flex align-items-center justify-content-center">
+                                                            <img class="avatar-user" [src]="payment.createdByUser | avatarUrlPipe" alt="">
+                                                            <span>{{ payment.createdByUser.fullName }}</span>
+                                                      </div>
+                                                </td>
+                                                <td>{{ payment.createdAt | date: 'HH:mm dd/MM/yyyy' }}</td>
+                                          </tr>
+                                    </ng-container>
+                              </ng-container>
+                              <ng-container *ngIf="followingExpensePayments.length === 0">
+                                    <tr>
+                                          <td colspan="10">Không có dữ liệu</td>
+                                    </tr>
+                              </ng-container>
                         </tbody>
                   </table>
             <!-- Sentinel để bắt đáy -->
             <div #infiniteAnchor class="infinite-anchor"></div>
             <!-- Loading / End states -->
-            <div class="list-state" *ngIf="loadingSig()">
+            <!-- <div class="list-state" *ngIf="loadingSig()">
                   <kit-loading-spinner></kit-loading-spinner>
             </div>
             <div class="list-state dim" *ngIf="!loadingSig() && endReachedSig()">Đã tải hết</div>
-            </div>
+            </div> -->
       </div>
 </div>      

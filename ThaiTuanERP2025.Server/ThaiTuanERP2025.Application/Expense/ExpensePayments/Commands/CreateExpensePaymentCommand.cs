@@ -88,6 +88,8 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
 					quantity: item.Quantity,
 					unitPrice: item.UnitPrice,
 					taxRate: item.taxRate,
+					amount: item.Amount,
+					taxAmount: item.TaxAmount,
 					totalWithTax: item.TotalWithTax,
 					budgetPlanDetailId: item.BudgetPlanDetailId,
 					invoiceFileId: item.InvoiceStoredFileId

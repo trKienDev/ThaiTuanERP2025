@@ -9,10 +9,11 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 	public class ExpensePaymentItem : AuditableEntity
 	{
 		#region EF Constructor
-		private ExpensePaymentItem() { } 
+		private ExpensePaymentItem() { }
 		internal ExpensePaymentItem(
 			Guid expensePaymentId, string itemName, 
-			int quantity, decimal unitPrice, decimal taxRate, decimal totalWithTax,
+			int quantity, decimal unitPrice, decimal taxRate,
+			decimal amount, decimal taxAmount, decimal totalWithTax,
 			Guid budgetPlanDetailId, Guid? invoiceFileId
 		) {
 			Guard.AgainstDefault(expensePaymentId, nameof(expensePaymentId));
@@ -28,6 +29,8 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			Quantity = quantity;
 			UnitPrice = unitPrice;
 			TaxRate = taxRate;
+			Amount = amount;
+			TaxAmount = taxAmount;
 			TotalWithTax = totalWithTax;
 			InvoiceFileId = invoiceFileId;
 
@@ -58,47 +61,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		#endregion
 
 		#region Domain Behaviors
-		public void UpdateQuantity(int quantity, decimal? overrideTaxAmount = null)
-		{
-			Guard.AgainstZeroOrNegative(quantity, nameof(quantity));
-			Quantity = quantity;
-			Recalculate(overrideTaxAmount);
-			AddDomainEvent(new ExpensePaymentItemUpdatedEvent(this));
-		}
-
-		public void UpdateUnitPrice(decimal unitPrice, decimal? overrideTaxAmount = null)
-		{
-			Guard.AgainstZeroOrNegative(unitPrice, nameof(unitPrice));
-			UnitPrice = unitPrice;
-			Recalculate(overrideTaxAmount);
-			AddDomainEvent(new ExpensePaymentItemUpdatedEvent(this));
-		}
-
-		public void UpdateTaxRate(decimal taxRate, decimal? overrideTaxAmount = null)
-		{
-			Guard.AgainstOutOfRange(taxRate, 0, 1, nameof(taxRate));
-			TaxRate = taxRate;
-			Recalculate(overrideTaxAmount);
-			AddDomainEvent(new ExpensePaymentItemUpdatedEvent(this));
-		}
-
-		public void OverrideTaxAmount(decimal taxAmount)
-		{
-			Guard.AgainstZeroOrNegative(taxAmount, nameof(taxAmount));
-			Recalculate(taxAmount);
-			AddDomainEvent(new ExpensePaymentItemUpdatedEvent(this));
-		}
-
-		private void Recalculate(decimal? overrideTaxAmount)
-		{
-			Amount = Quantity * UnitPrice;
-
-			var suggestedTax = Math.Round(Amount * TaxRate, 0, MidpointRounding.AwayFromZero);
-			TaxAmount = overrideTaxAmount ?? suggestedTax;
-
-			TotalWithTax = Amount + TaxAmount;
-		}
-
 		#endregion
 	}
 }

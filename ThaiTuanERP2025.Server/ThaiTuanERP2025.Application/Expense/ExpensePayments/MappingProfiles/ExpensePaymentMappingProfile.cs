@@ -7,6 +7,9 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.MappingProfiles
 	public sealed class ExpensePaymentMappingProfile : Profile { 
 		public ExpensePaymentMappingProfile() {
 			CreateMap<ExpensePayment, ExpensePaymentDto>();
+
+			CreateMap<ExpensePayment, ExpensePaymentLookupDto>()
+				.ForMember(dest => dest.WorkflowInstance, opt => opt.MapFrom(src => src.CurrentWorkflowInstance));
 		}
 	}
 }
