@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using MediatR;
+using ThaiTuanERP2025.Application.Core.Followers;
 using ThaiTuanERP2025.Application.Core.Notifications;
 using ThaiTuanERP2025.Application.Core.Reminders;
 using ThaiTuanERP2025.Application.Expense.ExpensePayments.Contracts;
@@ -27,12 +28,14 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
 		private readonly IExpenseWorkflowFactory _expenseWorkflowFactory;
 		private readonly INotificationService _notificationService;
 		private readonly IReminderService _reminderService;
+		private readonly IFollowerService _followerService;
 		public CreateExpensePaymentCommandHandler(
 			IUnitOfWork uow, IDocumentSubIdGeneratorService documentSubIdGeneratorService,
 			IBudgetTransactionReadRepository budgetTransactionRepo,
 			IExpenseWorkflowFactory expenseWorkflowFactory,
 			INotificationService notificationService,
-			IReminderService reminderService
+			IReminderService reminderService,
+			IFollowerService followerService
 		) {
 			_uow = uow; 
 			_documentSubIdGeneratorService = documentSubIdGeneratorService;
@@ -40,6 +43,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
 			_expenseWorkflowFactory = expenseWorkflowFactory;
 			_notificationService = notificationService;
 			_reminderService = reminderService;
+			_followerService = followerService;
 		}
 
 		public async Task<Unit> Handle(CreateExpensePaymentCommand command, CancellationToken cancellationToken)
@@ -100,9 +104,6 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
 			}
 			await _uow.ExpensePayments.AddAsync(newPayment, cancellationToken);
 
-			// Adđ Followers
-
-
 			// Create WorkflowInstance
 			var workflowInstnace = await _expenseWorkflowFactory.CreateForExpensePaymentAsync(newPayment, cancellationToken);
 			newPayment.LinkWorkflowInstance(workflowInstnace);
@@ -111,6 +112,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
 			// start workflow instance
 			workflowInstnace.Start();
 
+			// first step
 			var firstStep = workflowInstnace.GetFirstStep();
 			if (firstStep.DueAt is null)
 				throw new DomainException("Step hiện tại chưa có thời hạn, không thể tạo reminder.");
@@ -123,6 +125,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
 
 			foreach (var approverId in approverIds)
 			{
+				// schedule reminders
 				await _reminderService.ScheduleReminderAsync(
 					userId: approverId,
 					subject: subject,
@@ -134,6 +137,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
 					cancellationToken
 				);
 
+				// send notifications
 				await _notificationService.SendAsync(
 					senderId: newPayment.CreatedByUserId!.Value,
 					receiverId: approverId,
@@ -144,8 +148,11 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
 					type: NotificationType.Task,
 					cancellationToken
 				);
-			}
 
+				// add followers
+			}
+			await _followerService.FollowManyAsync(DocumentType.ExpensePayment, newPayment.Id, approverIds, cancellationToken);
+			await _followerService.FollowAsync(DocumentType.ExpensePayment, newPayment.Id, newPayment.CreatedByUserId!.Value, cancellationToken);
 			await _uow.SaveChangesAsync(cancellationToken);
 			return Unit.Value;
 		}

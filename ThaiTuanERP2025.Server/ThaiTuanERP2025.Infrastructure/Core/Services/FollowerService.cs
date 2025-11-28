@@ -14,7 +14,7 @@ namespace ThaiTuanERP2025.Infrastructure.Core.Services
 			_unitOfWork = unitOfWork;
 		}
 
-		public async Task FollowAsync(Guid documentId, DocumentType documentType, Guid userId, CancellationToken cancellationToken) {
+		public async Task FollowAsync(DocumentType documentType, Guid documentId, Guid userId, CancellationToken cancellationToken) {
 			bool exists = documentType switch
 			{
 				DocumentType.ExpensePayment => await _unitOfWork.ExpensePayments.ExistAsync(e => e.Id == documentId, cancellationToken),
@@ -22,8 +22,7 @@ namespace ThaiTuanERP2025.Infrastructure.Core.Services
 				_ => false
 			};
 
-			if (!exists)
-				throw new NotFoundException($"{documentType}({documentId}) not found");
+			if (!exists) throw new NotFoundException($"{documentType}({documentId}) not found");
 
 			// Kiểm tra đã follow chưa
 			bool existsFollow = await _unitOfWork.Followers.ExistAsync(
@@ -31,10 +30,10 @@ namespace ThaiTuanERP2025.Infrastructure.Core.Services
 				cancellationToken
 			);
 
-			if (existsFollow)
-				return;
+			if (existsFollow) return;
 
 			var follower = new Follower(documentId, documentType, userId);
+			await _unitOfWork.Followers.AddAsync(follower, cancellationToken);
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 		}
 
