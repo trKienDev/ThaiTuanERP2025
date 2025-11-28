@@ -26,8 +26,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			ManagerApproverId = managerApproverId;
 			Status = ExpensePaymentStatus.Pending;
 			Description = description?.Trim() ?? string.Empty;
-
-			AddDomainEvent(new ExpensePaymentCreatedEvent(this));
 		}
 		#endregion
 

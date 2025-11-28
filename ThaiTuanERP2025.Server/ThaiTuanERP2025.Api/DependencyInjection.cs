@@ -34,7 +34,7 @@ namespace ThaiTuanERP2025.Api
 			services.AddScoped<IFollowerService, FollowerService>();
 
 			//  Domain Events publisher
-			// services.AddScoped<IApplicationEventPublisher, ApplicationEventPublisher>();
+			services.AddScoped<IApplicationEventPublisher, ApplicationEventPublisher>();
 
 			// JWT
 			services.AddJwtAuthentication(configuration);

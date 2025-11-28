@@ -83,7 +83,7 @@ export class LoginComponent implements OnInit{
             } catch(error) {
                   this.httpErrorHandler.handle(error, "Đăng nhập thất bại");
                   this.form.enable({ emitEvent: true });
-                  this.disabledLoginButton = true;
+                  this.disabledLoginButton = false;
             } finally {
                   this.submitting = false;
             }

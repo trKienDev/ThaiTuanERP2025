@@ -78,15 +78,11 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			if (SelectedApproverId is null)
 				throw new DomainException("Không thể activate step khi chưa có người duyệt.");
 
-			if(DueAt is null)
-				throw new DomainException("Không thể activate step khi chưa có thời hạn.");
-
 			if (Status != StepStatus.Pending)
 				throw new DomainException("Chỉ bước đang chờ mới được kích hoạt.");
 			Status = StepStatus.Waiting;
 			StartedAt = DateTime.UtcNow;
 			DueAt = DateTime.UtcNow.AddHours(SlaHours);
-			AddDomainEvent(new ExpenseStepInstanceActivatedEvent(this));
 		}
 
 		internal void Approve(Guid by, DateTime utcNow)

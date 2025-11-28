@@ -4,6 +4,7 @@ using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Enums;
 using ThaiTuanERP2025.Domain.Shared.Enums;
 using ThaiTuanERP2025.Domain.Expense.Events;
+using System.Runtime.CompilerServices;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
@@ -27,8 +28,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			DocumentType = documentType;
 			DocumentId = documentId;
 			Status = ExpenseWorkflowStatus.Draft;
-
-			AddDomainEvent(new ExpenseWorkflowInstanceCreatedEvent(this));
 		}
 		#endregion
 
@@ -55,7 +54,19 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 			Status = ExpenseWorkflowStatus.InProgress;
 
-			AddDomainEvent(new ExpenseWorkflowInstanceStartedEvent(this));
+			ActivateFirstStep();
+		}
+
+		internal ExpenseStepInstance GetFirstStep()
+		{
+			return Steps.OrderBy(s => s.Order).FirstOrDefault()
+				?? throw new DomainException("Workflow không có bước nào.");
+		}
+
+		internal void ActivateFirstStep()
+		{
+			var first = GetFirstStep();
+			first.Activate();
 		}
 
 		internal void MoveToNextStep(int nextOrder)

@@ -21,7 +21,6 @@ namespace ThaiTuanERP2025.Application
 				return services;
 
 			_applicationServicesAdded = true;
-			Console.WriteLine(">>> AddApplication() CALLED");
 
 			// Lấy assembly Application một cách an toàn
 			var appAssembly = Assembly.GetExecutingAssembly();

@@ -1,10 +1,13 @@
 ﻿using FluentValidation;
 using MediatR;
+using ThaiTuanERP2025.Application.Core.Notifications;
+using ThaiTuanERP2025.Application.Core.Reminders;
 using ThaiTuanERP2025.Application.Expense.ExpensePayments.Contracts;
 using ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Factories;
 using ThaiTuanERP2025.Application.Finance.BudgetTransasctions;
 using ThaiTuanERP2025.Application.Shared.Exceptions;
 using ThaiTuanERP2025.Application.Shared.Services;
+using ThaiTuanERP2025.Domain.Core.Enums;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Finance.Entities;
@@ -21,15 +24,22 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
 		private readonly IUnitOfWork _uow;
 		private readonly IDocumentSubIdGeneratorService _documentSubIdGeneratorService;
 		private readonly IBudgetTransactionReadRepository _budgetTransasctionRepo;
-
+		private readonly IExpenseWorkflowFactory _expenseWorkflowFactory;
+		private readonly INotificationService _notificationService;
+		private readonly IReminderService _reminderService;
 		public CreateExpensePaymentCommandHandler(
 			IUnitOfWork uow, IDocumentSubIdGeneratorService documentSubIdGeneratorService,
 			IBudgetTransactionReadRepository budgetTransactionRepo,
-			IExpenseWorkflowFactory expenseWorkflowFactory
+			IExpenseWorkflowFactory expenseWorkflowFactory,
+			INotificationService notificationService,
+			IReminderService reminderService
 		) {
 			_uow = uow; 
 			_documentSubIdGeneratorService = documentSubIdGeneratorService;
 			_budgetTransasctionRepo = budgetTransactionRepo;
+			_expenseWorkflowFactory = expenseWorkflowFactory;
+			_notificationService = notificationService;
+			_reminderService = reminderService;
 		}
 
 		public async Task<Unit> Handle(CreateExpensePaymentCommand command, CancellationToken cancellationToken)
@@ -88,8 +98,48 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
 				);
 				await _uow.BudgetTransactions.AddAsync(newTransaction, cancellationToken);
 			}
-
 			await _uow.ExpensePayments.AddAsync(newPayment, cancellationToken);
+
+			// Create WorkflowInstance
+			var workflowInstnace = await _expenseWorkflowFactory.CreateForExpensePaymentAsync(newPayment, cancellationToken);
+			newPayment.LinkWorkflowInstance(workflowInstnace);
+			await _uow.ExpenseWorkflowInstances.AddAsync(workflowInstnace, cancellationToken);
+			// start workflow instance
+			workflowInstnace.Start();
+
+			var firstStep = workflowInstnace.GetFirstStep();
+			if (firstStep.SelectedApproverId is null)
+				throw new DomainException("Step hiện tại chưa có người duyệt (SelectedApproverId = null), không thể tạo reminder.");
+
+			if (firstStep.DueAt is null)
+				throw new DomainException("Step hiện tại chưa có thời hạn, không thể tạo reminder.");
+
+			var message = $"Thanh toán {newPayment.Name} đang chờ bạn duyệt";
+			// Set reminder for approver
+			await _reminderService.ScheduleReminderAsync(
+				userId: firstStep.SelectedApproverId.Value,
+				subject: $"Duyệt thanh toán {newPayment.Name}",
+				message: message,
+				slaHours: firstStep.SlaHours,
+				dueAt: firstStep.DueAt.Value,
+				linkType: LinkType.ExpensePaymentApprove,
+				targetId: workflowInstnace.DocumentId,
+				cancellationToken
+			);
+
+
+
+			await _notificationService.SendAsync(
+				senderId: newPayment.CreatedByUserId.Value,
+				receiverId: firstStep.SelectedApproverId.Value,
+				title: $"Duyệt thanh toán { newPayment.Name }",
+				message: message,
+				linkType: LinkType.ExpensePaymentApprove,
+				targetId: workflowInstnace.DocumentId,
+				type: NotificationType.Task,
+				cancellationToken
+			);
+
 			await _uow.SaveChangesAsync(cancellationToken);
 			return Unit.Value;
 		}
