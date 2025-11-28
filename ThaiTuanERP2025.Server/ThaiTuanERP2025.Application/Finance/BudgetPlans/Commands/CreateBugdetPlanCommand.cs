@@ -7,6 +7,7 @@ using ThaiTuanERP2025.Domain.Core.Entities;
 using ThaiTuanERP2025.Domain.Core.Enums;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Finance.Entities;
+using ThaiTuanERP2025.Domain.Shared.Enums;
 using ThaiTuanERP2025.Domain.Shared.Repositories;
 
 namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Commands
@@ -67,9 +68,9 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Commands
 
 			// ==== Follower ====
 			var followers = new List<Follower> {
-				new Follower(budgetPlan.Id, SubjectType.BudgetPlan, userId),
-				new Follower(budgetPlan.Id, SubjectType.BudgetPlan, request.SelectedApproverId),
-				new Follower(budgetPlan.Id, SubjectType.BudgetPlan, request.SelectedReviewerId)
+				new Follower(budgetPlan.Id, DocumentType.BudgetPlan, userId),
+				new Follower(budgetPlan.Id, DocumentType.BudgetPlan, request.SelectedApproverId),
+				new Follower(budgetPlan.Id, DocumentType.BudgetPlan, request.SelectedReviewerId)
 			};
 			await _uow.Followers.AddRangeAsync(followers, cancellationToken);
 

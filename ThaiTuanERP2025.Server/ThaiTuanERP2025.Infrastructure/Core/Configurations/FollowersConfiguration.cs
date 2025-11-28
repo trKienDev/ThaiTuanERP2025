@@ -14,8 +14,8 @@ namespace ThaiTuanERP2025.Infrastructure.Core.Configurations
 			builder.HasKey(f => f.Id);
 
 			// ===== Properties =====
-			builder.Property(x => x.SubjectId).IsRequired();
-			builder.Property(x => x.SubjectType).IsRequired().HasConversion<int>();
+			builder.Property(x => x.DocumentId).IsRequired();
+			builder.Property(x => x.DocumentType).IsRequired().HasConversion<int>();
 			builder.Property(x => x.UserId).IsRequired();
 			builder.Property(x => x.IsActive).IsRequired();
 

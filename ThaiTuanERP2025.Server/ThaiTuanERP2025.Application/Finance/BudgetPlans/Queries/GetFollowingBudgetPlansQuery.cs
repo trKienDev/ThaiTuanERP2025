@@ -9,7 +9,7 @@ using ThaiTuanERP2025.Application.Finance.BudgetPlans.Repositories;
 using ThaiTuanERP2025.Application.Finance.BudgetPlans.Services;
 using ThaiTuanERP2025.Application.Shared.Exceptions;
 using ThaiTuanERP2025.Application.Shared.Interfaces;
-using ThaiTuanERP2025.Domain.Core.Enums;
+using ThaiTuanERP2025.Domain.Shared.Enums;
 
 namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Queries
 {
@@ -41,18 +41,19 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Queries
 			var userId = _currentUser.UserId ?? throw new NotFoundException("User không hợp lệ");
 
 			var following = await _followerRepo.GetAllAsync(
-				q => q.UserId == userId && q.SubjectType == SubjectType.BudgetPlan
+				q => q.UserId == userId 
+					&& q.DocumentType == DocumentType.BudgetPlan
 					&& q.IsActive && !q.IsDeleted,
 				cancellationToken: cancellationToken
 			);
 			if(!following.Any()) return Array.Empty<BudgetPlanDto>();
 
-			var subjectIds = following.Select(f => f.SubjectId).ToList();
-			if (!subjectIds.Any())
+			var documentIds = following.Select(f => f.DocumentId).ToList();
+			if (!documentIds.Any())
 				return Array.Empty<BudgetPlanDto>();
 
 			var planDtos = await _budgetPlanRepo.ListProjectedAsync(
-				q => q.Where(p => subjectIds.Contains(p.Id)
+				q => q.Where(p => documentIds.Contains(p.Id)
 					&& p.IsActive
 					&& !p.IsDeleted
 					&& p.BudgetPeriodId == query.PeriodId

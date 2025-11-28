@@ -3,6 +3,7 @@ using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Core.Enums;
 using ThaiTuanERP2025.Domain.Shared.Interfaces;
+using ThaiTuanERP2025.Domain.Shared.Enums;
 
 namespace ThaiTuanERP2025.Domain.Core.Entities
 {
@@ -10,13 +11,13 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
 	{
 		#region Constructors
 		private Follower() { } 
-		public Follower(Guid subjectId, SubjectType subjectType, Guid userId)
+		public Follower(Guid documentId, DocumentType documentType, Guid userId)
 		{
 			Guard.AgainstDefault(userId, nameof(userId));
 
 			Id = Guid.NewGuid();
-			SubjectId = subjectId;
-			SubjectType = subjectType;
+			DocumentId = documentId;
+			DocumentType = documentType;
 			UserId = userId;
 			IsActive = true;
 
@@ -25,8 +26,8 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
 		#endregion
 
 		#region Properties
-		public Guid SubjectId { get; private set; }
-		public SubjectType SubjectType { get; private set; }
+		public Guid DocumentId { get; private set; }
+		public DocumentType DocumentType { get; private set; }
 		public Guid UserId { get; private set; }
 		public bool IsActive { get; private set; } = true;
 		#endregion

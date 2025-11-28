@@ -1,7 +1,7 @@
 ﻿using ThaiTuanERP2025.Application.Core.Followers;
 using ThaiTuanERP2025.Application.Shared.Exceptions;
 using ThaiTuanERP2025.Domain.Core.Entities;
-using ThaiTuanERP2025.Domain.Core.Enums;
+using ThaiTuanERP2025.Domain.Shared.Enums;
 using ThaiTuanERP2025.Domain.Shared.Repositories;
 
 namespace ThaiTuanERP2025.Infrastructure.Core.Services
@@ -14,38 +14,38 @@ namespace ThaiTuanERP2025.Infrastructure.Core.Services
 			_unitOfWork = unitOfWork;
 		}
 
-		public async Task FollowAsync(SubjectType subjectType, Guid subjectId, Guid userId, CancellationToken cancellationToken) {
-			bool exists = subjectType switch
+		public async Task FollowAsync(Guid documentId, DocumentType documentType, Guid userId, CancellationToken cancellationToken) {
+			bool exists = documentType switch
 			{
-				SubjectType.ExpensePayment => await _unitOfWork.ExpensePayments.ExistAsync(e => e.Id == subjectId, cancellationToken),
-				SubjectType.OutgoingPayment => await _unitOfWork.OutgoingPayments.ExistAsync(e => e.Id == subjectId, cancellationToken),
+				DocumentType.ExpensePayment => await _unitOfWork.ExpensePayments.ExistAsync(e => e.Id == documentId, cancellationToken),
+				DocumentType.OutgoingPayment => await _unitOfWork.OutgoingPayments.ExistAsync(e => e.Id == documentId, cancellationToken),
 				_ => false
 			};
 
 			if (!exists)
-				throw new NotFoundException($"{subjectType}({subjectId}) not found");
+				throw new NotFoundException($"{documentType}({documentId}) not found");
 
 			// Kiểm tra đã follow chưa
 			bool existsFollow = await _unitOfWork.Followers.ExistAsync(
-				f => f.SubjectType == subjectType && f.SubjectId == subjectId && f.UserId == userId,
+				f => f.DocumentType == documentType && f.DocumentId == documentId && f.UserId == userId,
 				cancellationToken
 			);
 
 			if (existsFollow)
 				return;
 
-			var follower = new Follower(subjectId, subjectType, userId);
+			var follower = new Follower(documentId, documentType, userId);
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 		}
 
-		public async Task FollowManyAsync(SubjectType subjectType, Guid subjectId, IEnumerable<Guid> userIds, CancellationToken cancellationToken)
+		public async Task FollowManyAsync(DocumentType subjectType, Guid subjectId, IEnumerable<Guid> userIds, CancellationToken cancellationToken)
 		{
 			var set = new HashSet<Guid>(userIds.Where(u => u != Guid.Empty));
 			if (set.Count == 0) return;
 
 			// Lấy những follower đã tồn tại để tránh trùng
 			var existing = await _unitOfWork.Followers.ListAsync(
-				q => q.Where(f => f.SubjectType == subjectType && f.SubjectId == subjectId && set.Contains(f.UserId)),
+				q => q.Where(f => f.DocumentType == subjectType && f.DocumentId == subjectId && set.Contains(f.UserId)),
 				cancellationToken: cancellationToken
 			);
 			var existedUserIds = existing.Select(f => f.UserId).ToHashSet();
@@ -59,10 +59,10 @@ namespace ThaiTuanERP2025.Infrastructure.Core.Services
 			}
 		}
 
-		public async Task UnfollowAsync(SubjectType subjectType, Guid subjectId, Guid userId, CancellationToken cancellationToken) {
+		public async Task UnfollowAsync(DocumentType documentType, Guid documentId, Guid userId, CancellationToken cancellationToken) {
 			var item = await _unitOfWork.Followers.SingleOrDefaultIncludingAsync(
-				f => f.SubjectType == subjectType && 
-					f.SubjectId == subjectId &&
+				f => f.DocumentType == documentType && 
+					f.DocumentId == documentId &&
 					f.UserId == userId,
 				cancellationToken: cancellationToken
 			);
@@ -73,9 +73,9 @@ namespace ThaiTuanERP2025.Infrastructure.Core.Services
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 		}
 
-		public async Task<bool> IsFollowingAsync(SubjectType subjectType, Guid subjectId, Guid userId, CancellationToken cancellationToken) {
+		public async Task<bool> IsFollowingAsync(DocumentType documentType, Guid documentId, Guid userId, CancellationToken cancellationToken) {
 			return await _unitOfWork.Followers.ExistAsync(
-				f => f.SubjectType == subjectType && f.SubjectId == subjectId && f.UserId == userId,
+				f => f.DocumentType == documentType && f.DocumentId == documentId && f.UserId == userId,
 				cancellationToken
 			);
 		}

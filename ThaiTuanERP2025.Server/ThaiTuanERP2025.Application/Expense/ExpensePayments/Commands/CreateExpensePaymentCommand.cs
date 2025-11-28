@@ -100,6 +100,9 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
 			}
 			await _uow.ExpensePayments.AddAsync(newPayment, cancellationToken);
 
+			// Adđ Followers
+
+
 			// Create WorkflowInstance
 			var workflowInstnace = await _expenseWorkflowFactory.CreateForExpensePaymentAsync(newPayment, cancellationToken);
 			newPayment.LinkWorkflowInstance(workflowInstnace);

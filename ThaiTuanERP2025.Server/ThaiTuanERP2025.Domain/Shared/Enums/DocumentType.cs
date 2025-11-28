@@ -6,6 +6,9 @@
 			ExpensePayment = 11,
 			AdvancedPayment = 12,
 			AdvancedExpensePayemtn = 13,
-			OutgoingPayment = 14, 
+			OutgoingPayment = 14,
+			
+			// [2]: Finance
+			BudgetPlan = 21,
 		}
 }

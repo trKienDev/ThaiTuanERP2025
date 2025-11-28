@@ -1,12 +1,13 @@
 ﻿using ThaiTuanERP2025.Domain.Core.Enums;
+using ThaiTuanERP2025.Domain.Shared.Enums;
 
 namespace ThaiTuanERP2025.Application.Core.Followers
 {
 	public interface IFollowerService
 	{
-		Task FollowAsync(SubjectType subjectType, Guid subjectId, Guid userId, CancellationToken cancellationToken);
-		Task FollowManyAsync(SubjectType subjectType, Guid subjectId, IEnumerable<Guid> userIds, CancellationToken cancellationToken);
-		Task UnfollowAsync(SubjectType subjectType, Guid subjectId, Guid userId, CancellationToken cancellationToken);
-		Task<bool> IsFollowingAsync(SubjectType subjectType, Guid subjectId, Guid userId, CancellationToken cancellationToken);
+		Task FollowAsync(Guid documentId, DocumentType documentType, Guid userId, CancellationToken cancellationToken);
+		Task FollowManyAsync(DocumentType subjectType, Guid subjectId, IEnumerable<Guid> userIds, CancellationToken cancellationToken);
+		Task UnfollowAsync(DocumentType documentType, Guid documentId, Guid userId, CancellationToken cancellationToken);
+		Task<bool> IsFollowingAsync(DocumentType documentType, Guid documentId, Guid userId, CancellationToken cancellationToken);
 	}
 }
