@@ -1,9 +1,9 @@
-﻿using ThaiTuanERP2025.Domain.Account.Entities;
-using ThaiTuanERP2025.Domain.Shared;
-using ThaiTuanERP2025.Domain.Shared.Entities;
+﻿using System.Text.Json;
+using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Enums;
-using ThaiTuanERP2025.Domain.Expense.Events;
+using ThaiTuanERP2025.Domain.Shared;
+using ThaiTuanERP2025.Domain.Shared.Entities;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
@@ -14,8 +14,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public ExpenseStepInstance(
 			Guid workflowInstanceId, Guid stepTemplateId, string name, int order,
 			ExpenseFlowType flowType, int slaHours, ExpenseApproveMode approverMode,
-			string? candidatesJson, Guid? defaultApproverId, Guid? selectedApproverId,
-			StepStatus status = StepStatus.Pending
+			string approversJson,  StepStatus status = StepStatus.Pending
 		)
 		{
 			Guard.AgainstDefault(workflowInstanceId, nameof(workflowInstanceId));
@@ -31,9 +30,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			FlowType = flowType;
 			SlaHours = slaHours;
 			ApproverMode = approverMode;
-			ResolvedApproverCandidatesJson = candidatesJson;
-			DefaultApproverId = defaultApproverId;
-			SelectedApproverId = selectedApproverId;
+			ResolvedApproversJson = approversJson;
 			Status = status;
 		}
 		#endregion
@@ -49,9 +46,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public int SlaHours { get; private set; }
 		public ExpenseApproveMode ApproverMode { get; private set; }
 
-		public string? ResolvedApproverCandidatesJson { get; private set; }
-		public Guid? DefaultApproverId { get; private set; }
-		public Guid? SelectedApproverId { get; private set; }
+		public string ResolvedApproversJson { get; private set; }
 
 		public StepStatus Status { get; private set; } = StepStatus.Pending;
 
@@ -68,16 +63,11 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		public string? Comments { get; private set; }
 		public bool SlaBreached { get; private set; }
-
-		public string? HistoryJson { get; private set; }
 		#endregion
 
 		#region Domain Behaviors
 		internal void Activate()
 		{
-			if (SelectedApproverId is null)
-				throw new DomainException("Không thể activate step khi chưa có người duyệt.");
-
 			if (Status != StepStatus.Pending)
 				throw new DomainException("Chỉ bước đang chờ mới được kích hoạt.");
 			Status = StepStatus.Waiting;
@@ -118,10 +108,30 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			SlaBreached = true;
 		}
 
-		internal void SetResolvedApproverCandidates(IEnumerable<Guid> ids)
+		internal void SetResolvedApproveres(IEnumerable<Guid> ids)
 		{
-			ResolvedApproverCandidatesJson = System.Text.Json.JsonSerializer.Serialize(ids?.Distinct() ?? Enumerable.Empty<Guid>());
+			ResolvedApproversJson = System.Text.Json.JsonSerializer.Serialize(ids?.Distinct() ?? Enumerable.Empty<Guid>());
 		}
+
+		internal IReadOnlyCollection<Guid> GetResolvedApproverIds()
+		{
+			if (string.IsNullOrWhiteSpace(ResolvedApproversJson))
+				return Array.Empty<Guid>();
+
+			try
+			{
+				var list = JsonSerializer.Deserialize<List<Guid>>(ResolvedApproversJson);
+				return (list ?? new List<Guid>()).Distinct().ToArray();
+			}
+			catch (JsonException)
+			{
+				// tuỳ bạn, có thể:
+				// - ném DomainException
+				// - hoặc trả về empty để chỗ gọi xử lý
+				throw new DomainException("Dữ liệu người duyệt của step không hợp lệ.");
+			}
+		}
+
 		#endregion
 	}
 }

@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Expense\Contracts\" />
     <Folder Include="Expense\Services\" />
   </ItemGroup>
 

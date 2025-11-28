@@ -46,26 +46,17 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Factories
 			// 4 ) Generate step instances
 			foreach (var stepTemplate in orderedSteps)
 			{
-				string? candidatesJson = null;
-				Guid? defaultApproverId = null;
-				Guid? selectedApproverId = null;
+				string approversJson = string.Empty;
 
 				// Nếu step duyệt cố định → copy approver list
 				if (stepTemplate.ApproveMode == ExpenseApproveMode.Standard && !string.IsNullOrWhiteSpace(stepTemplate.FixedApproverIdsJson))
 				{
-					candidatesJson = stepTemplate.FixedApproverIdsJson;
-
-					var ids = JsonSerializer.Deserialize<List<Guid>>(stepTemplate.FixedApproverIdsJson)
-					    ?? new List<Guid>();
-
-					defaultApproverId = ids.FirstOrDefault();
-					selectedApproverId = defaultApproverId;
+					approversJson = stepTemplate.FixedApproverIdsJson;
 				} else // Duyệt có điều kiện
 				{
 					if(stepTemplate.ResolverKey == ExpenseStepResolverKey.DepartmentManager)
 					{
-						defaultApproverId = payment.ManagerApproverId;
-						selectedApproverId = payment.ManagerApproverId;
+						approversJson = JsonSerializer.Serialize( new List<Guid> { payment.ManagerApproverId } );
 					}
 				}
 
@@ -77,9 +68,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Factories
 					flowType: stepTemplate.FlowType,
 					slaHours: stepTemplate.SlaHours,
 					approverMode: stepTemplate.ApproveMode,
-					candidatesJson: candidatesJson,
-					defaultApproverId: defaultApproverId,
-					selectedApproverId: selectedApproverId,
+					approversJson: approversJson,
 					status: StepStatus.Pending
 				);
 

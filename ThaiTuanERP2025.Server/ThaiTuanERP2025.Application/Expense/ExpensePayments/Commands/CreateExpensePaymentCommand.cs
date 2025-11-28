@@ -107,41 +107,44 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
 			var workflowInstnace = await _expenseWorkflowFactory.CreateForExpensePaymentAsync(newPayment, cancellationToken);
 			newPayment.LinkWorkflowInstance(workflowInstnace);
 			await _uow.ExpenseWorkflowInstances.AddAsync(workflowInstnace, cancellationToken);
+
 			// start workflow instance
 			workflowInstnace.Start();
 
 			var firstStep = workflowInstnace.GetFirstStep();
-			if (firstStep.SelectedApproverId is null)
-				throw new DomainException("Step hiện tại chưa có người duyệt (SelectedApproverId = null), không thể tạo reminder.");
-
 			if (firstStep.DueAt is null)
 				throw new DomainException("Step hiện tại chưa có thời hạn, không thể tạo reminder.");
 
+			var approverIds = firstStep.GetResolvedApproverIds().ToList();
+			if (!approverIds.Any()) throw new DomainException("Step hiện tại chưa có người duyệt, không thể tạo reminder.");
+
 			var message = $"Thanh toán {newPayment.Name} đang chờ bạn duyệt";
-			// Set reminder for approver
-			await _reminderService.ScheduleReminderAsync(
-				userId: firstStep.SelectedApproverId.Value,
-				subject: $"Duyệt thanh toán {newPayment.Name}",
-				message: message,
-				slaHours: firstStep.SlaHours,
-				dueAt: firstStep.DueAt.Value,
-				linkType: LinkType.ExpensePaymentApprove,
-				targetId: workflowInstnace.DocumentId,
-				cancellationToken
-			);
+			var subject = $"Duyệt thanh toán {newPayment.Name}";
 
+			foreach (var approverId in approverIds)
+			{
+				await _reminderService.ScheduleReminderAsync(
+					userId: approverId,
+					subject: subject,
+					message: message,
+					slaHours: firstStep.SlaHours,
+					dueAt: firstStep.DueAt.Value,
+					linkType: LinkType.ExpensePaymentApprove,
+					targetId: workflowInstnace.DocumentId,
+					cancellationToken
+				);
 
-
-			await _notificationService.SendAsync(
-				senderId: newPayment.CreatedByUserId.Value,
-				receiverId: firstStep.SelectedApproverId.Value,
-				title: $"Duyệt thanh toán { newPayment.Name }",
-				message: message,
-				linkType: LinkType.ExpensePaymentApprove,
-				targetId: workflowInstnace.DocumentId,
-				type: NotificationType.Task,
-				cancellationToken
-			);
+				await _notificationService.SendAsync(
+					senderId: newPayment.CreatedByUserId!.Value,
+					receiverId: approverId,
+					title: subject,
+					message: message,
+					linkType: LinkType.ExpensePaymentApprove,
+					targetId: workflowInstnace.DocumentId,
+					type: NotificationType.Task,
+					cancellationToken
+				);
+			}
 
 			await _uow.SaveChangesAsync(cancellationToken);
 			return Unit.Value;
