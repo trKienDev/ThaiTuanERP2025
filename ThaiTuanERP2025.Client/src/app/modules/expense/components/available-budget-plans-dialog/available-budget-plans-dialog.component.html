@@ -28,7 +28,7 @@
                                                 <td>{{ i + 1 }}</td>
                                                 <td>{{ detail.budgetCode.code }}</td>
                                                 <td>{{ detail.budgetCode.name }}</td>
-                                                <td>{{ detail.amount | number:'1.0-2' }} VND</td>
+                                                <td>{{ detail.remainingAmount | number:'1.0-2' }} VND</td>
                                                 <td>
                                                       <input type="checkbox" (click)="selectBudgetPlanDetail(detail)" [checked]="detail.id === selectedDetailId" style="width: unset;">
                                                 </td>

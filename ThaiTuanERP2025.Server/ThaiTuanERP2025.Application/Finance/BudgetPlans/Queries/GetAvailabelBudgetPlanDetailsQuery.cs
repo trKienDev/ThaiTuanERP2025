@@ -4,6 +4,7 @@ using ThaiTuanERP2025.Application.Account.Users.Repositories;
 using ThaiTuanERP2025.Application.Finance.BudgetPeriods;
 using ThaiTuanERP2025.Application.Finance.BudgetPlans.Contracts;
 using ThaiTuanERP2025.Application.Finance.BudgetPlans.Repositories;
+using ThaiTuanERP2025.Application.Finance.BudgetTransasctions;
 using ThaiTuanERP2025.Application.Shared.Exceptions;
 using ThaiTuanERP2025.Application.Shared.Interfaces;
 using ThaiTuanERP2025.Domain.Exceptions;
@@ -16,18 +17,20 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Queries
 	{
 		private readonly IBudgetPeriodReadRepository _budgetPeriodRepo;
 		private readonly IBudgetPlanReadRepository _budgetPlanRepo;
+		private readonly IBudgetTransactionReadRepository _budgetTransactionRepo;
 		private readonly ICurrentUserService _currentUser;
 		private readonly IUserReadRepostiory _userRepo;
 		private readonly IDepartmentReadRepository _departmentRepo;
 		public GetAvailabelBudgetPlanDetailsQueryHandler(
 			IBudgetPlanReadRepository budgetPlanRepo, IBudgetPeriodReadRepository budgetPeriodRepo, ICurrentUserService currentUser,
-			IUserReadRepostiory userRepo, IDepartmentReadRepository departmentRepo
+			IUserReadRepostiory userRepo, IDepartmentReadRepository departmentRepo, IBudgetTransactionReadRepository budgetTransactionRepo
 		)
 		{
 			_budgetPeriodRepo = budgetPeriodRepo;
 			_budgetPlanRepo = budgetPlanRepo;
 			_currentUser = currentUser;
 			_userRepo = userRepo;
+			_budgetTransactionRepo = budgetTransactionRepo;
 			_departmentRepo = departmentRepo;
 		}
 
@@ -50,7 +53,17 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Queries
 				cancellationToken: cancellationToken
 			);
 
-			return availablePlans.SelectMany(x => x.Details).ToList();
-		}
+			var details = availablePlans.SelectMany(x => x.Details).ToList();
+			var detailIds = details.Select(d => d.Id);
+                        var spentMap = await _budgetTransactionRepo.GetRemainingByDetailIdsAsync(detailIds, cancellationToken);
+
+                        foreach (var d in details)
+                        {
+                                var spent = spentMap.TryGetValue(d.Id, out var s) ? s : 0m;
+                                d.RemainingAmount = d.Amount - spent;
+                        }
+
+                        return details;
+                }
 	}
 }

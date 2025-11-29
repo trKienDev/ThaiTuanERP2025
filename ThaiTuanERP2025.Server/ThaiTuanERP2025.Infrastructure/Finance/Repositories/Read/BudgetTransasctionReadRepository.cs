@@ -24,5 +24,18 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Repositories.Read
 
 			return detail.Amount - spent;
 		}
-	}
+
+                public async Task<Dictionary<Guid, decimal>> GetRemainingByDetailIdsAsync(IEnumerable<Guid> detailIds, CancellationToken cancellationToken)
+                {
+                        return await _dbSet
+                                .Where(x => detailIds.Contains(x.BudgetPlanDetailId))
+                                .GroupBy(x => x.BudgetPlanDetailId)
+                                .Select(g => new
+                                {
+                                        DetailId = g.Key,
+                                        Spent = g.Sum(x => x.Type == BudgetTransactionType.Debit ? x.Amount : -x.Amount)
+                                })
+                                .ToDictionaryAsync(x => x.DetailId, x => x.Spent, cancellationToken);
+                }
+        }
 }

@@ -40,5 +40,6 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Contracts
 		public Guid BudgetCodeId { get; init; }
 		public BudgetCodeDto BudgetCode { get; init; } = default!;
 		public decimal Amount { get; init; }
+		public decimal RemainingAmount { get; set; }
 	}
 }

@@ -6,5 +6,6 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetTransasctions
 	public interface IBudgetTransactionReadRepository : IBaseReadRepository<BudgetTransaction, BudgetTransactionDto>
 	{
 		Task<decimal> GetRemainingAsync(Guid budgetPlanDetailId, CancellationToken cancellationToken);
-	}
+		Task<Dictionary<Guid, decimal>> GetRemainingByDetailIdsAsync(IEnumerable<Guid> detailIds, CancellationToken cancellationToken);
+        }
 }

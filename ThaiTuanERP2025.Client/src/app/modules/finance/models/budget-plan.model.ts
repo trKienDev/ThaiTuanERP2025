@@ -43,6 +43,7 @@ export interface BudgetPlanDetailDto {
       budgetCodeId: string;
       budgetCode: BudgetCodeDto;
       amount: number;
+      remainingAmount: number;
 }
 
 export interface BudgetPlanReview extends BudgetPlanDto {
