@@ -20,7 +20,6 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Contracts
 		public decimal OutgoingAmountPaid { get; init; }
 		public decimal RemainingOutgoingAmount { get; init; }
 		public DateTime CreatedAt { get; init; }
-
 		public Guid CreatedByUserId { get; init; }
 		public UserBriefAvatarDto CreatedByUser { get; init; } = new UserBriefAvatarDto();
 
@@ -32,6 +31,11 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Contracts
 		public string Name { get; init; } = string.Empty;
 		public string SubId { get; init; } = string.Empty;
 		public string? Description { get; init; } = string.Empty;
+		public DateTime DueAt { get; init; }
+		public bool HasGoodsReceipt { get; init; }
+		public ExpensePaymentStatus Status { get; init; }
+		public ExpenseWorkflowInstanceBriefDto? WorkflowInstance { get; init; }
+		public IReadOnlyList<ExpensePaymentItemLookupDto> Items { get; init; } = Array.Empty<ExpensePaymentItemLookupDto>();
 
 		public ExpensePayeeType PayeeType { get; init; }
 		public Guid? SupplierId { get; init; }
@@ -41,9 +45,6 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Contracts
 		public string AccountNumber { get; init; } = string.Empty;
 		public string BeneficiaryName { get; init; } = string.Empty;
 
-		public DateTime DueAt { get; init; }
-		public bool HasGoodsReceipt { get; init; }
-		
 		public decimal TotalAmount { get; init; }
 		public decimal TotalTax { get; init; }
 		public decimal TotalWithTax { get; init; }
@@ -53,8 +54,5 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Contracts
 		public Guid CreatedByUserId { get; init; }
 		public UserBriefAvatarDto CreatedByUser { get; init; } = new UserBriefAvatarDto();
 		public DateTime CreatedAt { get; init; }
-
-		public ExpenseWorkflowInstanceBriefDto? WorkflowInstance { get; init; }
-		public IReadOnlyList<ExpensePaymentItemLookupDto> Items { get; init; } = Array.Empty<ExpensePaymentItemLookupDto>();
 	}
 }

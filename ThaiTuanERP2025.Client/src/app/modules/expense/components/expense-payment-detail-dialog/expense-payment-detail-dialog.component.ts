@@ -6,12 +6,14 @@ import { ExpensePaymentApiService } from '../../services/api/expense-payment.ser
 import { firstValueFrom } from 'rxjs';
 import { AvatarUrlPipe } from "../../../../shared/pipes/avatar-url.pipe";
 import { trigger, transition, style, animate } from '@angular/animations';
+import { ExpensePaymentStatusPipe } from "../../pipes/expense-payment-status.pipe";
+import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 
 
 @Component({
       selector: 'expense-payment-detail-dialog',
       standalone: true,
-      imports: [CommonModule, AvatarUrlPipe],
+      imports: [CommonModule, AvatarUrlPipe, ExpensePaymentStatusPipe, KitSpinnerButtonComponent],
       templateUrl: './expense-payment-detail-dialog.component.html',
       styleUrl: './expense-payment-detail-dialog.component.scss',
       animations: [

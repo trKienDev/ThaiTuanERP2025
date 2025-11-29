@@ -18,4 +18,9 @@ namespace ThaiTuanERP2025.Domain.Expense.Events
 	{
 		public ExpenseStepInstanceActivatedEvent(ExpenseStepInstance stepInstance) : base(stepInstance) { }	
 	}
+
+	public sealed class ExpenseStepInstanceApprovedEvent : ExpenseStepInstanceEventBase
+	{
+		public ExpenseStepInstanceApprovedEvent(ExpenseStepInstance stepInstance) : base(stepInstance) { }
+	}
 }

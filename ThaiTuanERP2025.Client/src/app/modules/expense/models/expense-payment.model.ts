@@ -69,6 +69,9 @@ export interface ExpensePaymentDetailDto {
       name: string;
       subId: string;
       description?: string;
+      workflowInstance: ExpenseWorkflowInstanceBriefDto;
+      items: ExpensePaymentItemLookupDto[];
+      status: ExpensePaymentStatus;
 
       payeeType: PayeeType;
       supplierId?: string;
@@ -91,8 +94,6 @@ export interface ExpensePaymentDetailDto {
       createdByUser: UserBriefAvatarDto;
       createdAt: string;
 
-      workflowInstance: ExpenseWorkflowInstanceBriefDto;
-      items: ExpensePaymentItemLookupDto[];
 }
 
 export interface ExpensePaymentLookupDto {
