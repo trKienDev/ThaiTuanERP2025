@@ -83,7 +83,7 @@
                                                                   <label class="amount-label">Số tiền thanh toán</label>
                                                                   <span>{{ outgoingPaymentDetail.expensePayment.totalWithTax | number:'1.0-0' }} VNĐ</span>
                                                                   <span class="amount-date">Ngày phát sinh: 
-                                                                        <span style="font-weight: bold;">{{ outgoingPaymentDetail.expensePayment.createdDate | date: 'dd/MM/yyyy' }}</span>
+                                                                        <span style="font-weight: bold;">{{ outgoingPaymentDetail.expensePayment.createdAt | date: 'dd/MM/yyyy' }}</span>
                                                                   </span>
                                                             </div>
                                                             <div class="amount-block">
@@ -123,9 +123,9 @@
                                                                                     <td class="item-total-with-tax">{{ item.totalWithTax | number:'1.0-0' }} VNĐ</td>
                                                                                     <td class="item-budget-code">{{ item.budgetCode?.code}} - {{ item.budgetCode?.name }}</td>
                                                                                     <td class="item-invoice">
-                                                                                          <button type="button" class="button" [ngClass]="item.invoice ? 'default-button' : 'cancel-button'">
+                                                                                          <!-- <button type="button" class="button" [ngClass]="item.invoice ? 'default-button' : 'cancel-button'">
                                                                                                 {{ item.invoice ? 'Xem hóa đơn' : 'Không hóa đơn' }}
-                                                                                          </button>
+                                                                                          </button> -->
                                                                                     </td>
                                                                               </tr>
                                                                         </tbody>

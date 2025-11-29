@@ -61,7 +61,19 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 				?? throw new DomainException("Workflow không có bước nào.");
 		}
 
-		internal void ActivateFirstStep()
+		internal ExpenseStepInstance GetCurrentStep()
+		{
+                        var step = Steps.FirstOrDefault(s => s.Order == CurrentStepOrder);
+
+                        return step ?? throw new DomainException($"Không tìm thấy bước duyệt (Order={CurrentStepOrder}) trong workflow.");
+                }
+
+                internal ExpenseStepInstance? GetStepByOrder(int order)
+                {
+                        return Steps.FirstOrDefault(s => s.Order == order);
+                }
+
+                internal void ActivateFirstStep()
 		{
 			var first = GetFirstStep();
 			first.Activate();
@@ -75,7 +87,23 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			CurrentStepOrder = nextOrder;
 		}
 
-		internal void SetCurrentStepOrder(int newOrder)
+                internal void ActivateNextStep()
+                {
+                        var nextOrder = CurrentStepOrder + 1;
+                        var nextStep = GetStepByOrder(nextOrder);
+
+                        if (nextStep == null)
+                        {
+                                // Không có bước nữa → workflow hoàn tất
+                                MarkApproved(Guid.Empty); // or mark auto-approved
+                                return;
+                        }
+
+			SetCurrentStepOrder(nextOrder);
+                        nextStep.Activate();
+                }
+
+                internal void SetCurrentStepOrder(int newOrder)
 		{
 			if (Status != ExpenseWorkflowStatus.InProgress)
 				throw new DomainException("Chỉ có thể thay đổi bước hiện tại khi workflow đang ở trạng thái InProgress.");

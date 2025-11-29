@@ -34,7 +34,7 @@
                         </div>
                         <div class="form-row display-flex gap-20px align-items-center">
                               <label class="form-label" for="receiver-payment">Công ty trả cho: </label>
-                              <span class="receiver-name">{{ paymentDetail()?.supplier?.name }}</span>
+                              <!-- <span class="receiver-name">{{ paymentDetail()?.supplier?.name }}</span> -->
                         </div>
                         <div class="form-row">
                               <label class="form-label" for="payment-bank">Tài khoản thụ hưởng: </label>
@@ -112,9 +112,9 @@
                                                 <td class="item-total-with-tax">{{ item.totalWithTax | number:'1.0-0' }} VNĐ</td>
                                                 <td class="item-budget-code">{{ item.budgetCode?.code}} - {{ item.budgetCode?.name }}</td>
                                                 <td class="item-invoice">
-                                                      <button type="button" class="button" [ngClass]="item.invoice ? 'default-button' : 'cancel-button'">
+                                                      <!-- <button type="button" class="button" [ngClass]="item.invoice ? 'default-button' : 'cancel-button'">
                                                             {{ item.invoice ? 'Xem hóa đơn' : 'Không hóa đơn' }}
-                                                      </button>
+                                                      </button> -->
                                                 </td>
                                           </tr>
                                     </tbody>
@@ -133,7 +133,7 @@
                         <div class="form-row display-flex gap-10px">
                               <div class="form-column flex-1">
                                     <label class="form-label" for="name">Ngày tạo thanh toán 🔒</label>
-                                    <input class="dark dark-alert user-select-none margin-top-10px" [value]="paymentDetail()?.createdDate| date:'dd/MM/yyyy'" disabled />
+                                    <input class="dark dark-alert user-select-none margin-top-10px" [value]="paymentDetail()?.createdAt | date:'dd/MM/yyyy'" disabled />
                               </div>
                               <div class="form-column flex-1">
                                     <label class="form-label" for="name">Hạn thanh toán <span style="color: red;">  *</span></label>

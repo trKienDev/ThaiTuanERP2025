@@ -10,6 +10,7 @@ export enum ExpenseWorkflowStatus {
 }
 
 export interface ExpenseWorkflowInstanceBriefDto {
+      id: string;
       status: ExpenseWorkflowStatus;
       currentStepOrder: number;
       steps: ExpenseStepInstanceBriefDto[];

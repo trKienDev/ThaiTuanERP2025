@@ -2,7 +2,6 @@
 using ThaiTuanERP2025.Domain.Account.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Enums;
-using ThaiTuanERP2025.Domain.Expense.Events;
 using ThaiTuanERP2025.Domain.Shared;
 using ThaiTuanERP2025.Domain.Shared.Entities;
 
@@ -91,7 +90,11 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 				throw new DomainException("Bước duyệt này đã quá hạn (SLA breached).");
 		}
 
-		internal void Approve(Guid approverId)
+                internal bool IsFullyApproved()
+                {
+                        return Status == ExpenseStepStatus.Approved;
+                }
+                internal void Approve(Guid approverId)
 		{
 			if (Status != ExpenseStepStatus.Waiting)
 				throw new DomainException("Không thể duyệt bước không ở trạng thái 'Waiting'.");

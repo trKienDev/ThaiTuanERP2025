@@ -93,7 +93,6 @@ export interface ExpensePaymentDetailDto {
 
       createdByUser: UserBriefAvatarDto;
       createdAt: string;
-
 }
 
 export interface ExpensePaymentLookupDto {

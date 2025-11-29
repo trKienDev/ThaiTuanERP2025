@@ -35,7 +35,7 @@
             flex-direction: column;
 
             label {
-                  color: var(--money-color);
+                  font-weight: 600;
             }
       }
       .payment-amount-block:not(:last-child)::after {

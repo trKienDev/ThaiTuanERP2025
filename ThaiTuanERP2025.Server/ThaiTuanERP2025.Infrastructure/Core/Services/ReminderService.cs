@@ -44,7 +44,59 @@ namespace ThaiTuanERP2025.Application.Core.Services
 			await _uow.SaveChangesWithoutDispatchAsync(cancellationToken);
 		}
 
-		public async Task MarkResolvedAsync(Guid reminderId, CancellationToken cancellationToken = default)
+                public async Task ScheduleReminderManyAsync(
+			IEnumerable<Guid> userIds,
+			string subject,
+			string message,
+			int slaHours,
+			DateTime dueAt,
+			LinkType linkType,
+			Guid targetId,
+			CancellationToken cancellationToken = default
+		) {
+                        if (userIds == null || !userIds.Any()) return;
+
+                        var reminders = new List<UserReminder>();
+                        var outboxes = new List<OutboxMessage>();
+
+                        foreach (var userId in userIds.Distinct())
+                        {
+                                // === Create Reminder ===
+                                var reminder = new UserReminder(
+					userId,
+					subject,
+					message,
+					slaHours,
+					dueAt,
+					linkType,
+					targetId
+                                );
+                                reminders.Add(reminder);
+
+                                // === Create Outbox for each user ===
+                                var payload = new ReminderCreatedPayload(
+					userId,
+					reminder.Id,
+					reminder.Subject,
+					reminder.Message,
+					reminder.LinkUrl,
+					reminder.SlaHours,
+					reminder.DueAt
+                                );
+
+                                var json = JsonSerializer.Serialize(payload);
+                                outboxes.Add(new OutboxMessage("ReminderCreated", json));
+                        }
+
+                        // === Insert in batch ===
+                        await _uow.UserReminders.AddRangeAsync(reminders, cancellationToken);
+                        await _uow.OutboxMessages.AddRangeAsync(outboxes, cancellationToken);
+
+                        // === Save only once ===
+                        await _uow.SaveChangesWithoutDispatchAsync(cancellationToken);
+                }
+
+                public async Task MarkResolvedAsync(Guid reminderId, CancellationToken cancellationToken = default)
 		{
 			// 1. Tìm reminder
 			var reminder = await _uow.UserReminders.GetByIdAsync(reminderId, cancellationToken);

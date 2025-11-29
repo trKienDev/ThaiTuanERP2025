@@ -8,7 +8,8 @@ import { AvatarUrlPipe } from "../../../../shared/pipes/avatar-url.pipe";
 import { trigger, transition, style, animate } from '@angular/animations';
 import { ExpensePaymentStatusPipe } from "../../pipes/expense-payment-status.pipe";
 import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
-
+import { ExpenseWorkflowInstanceApiService } from '../../services/api/expense-workflow-instance.service';
+import { ToastService } from '../../../../shared/components/kit-toast-alert/kit-toast-alert.service';
 
 @Component({
       selector: 'expense-payment-detail-dialog',
@@ -17,6 +18,12 @@ import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spi
       templateUrl: './expense-payment-detail-dialog.component.html',
       styleUrl: './expense-payment-detail-dialog.component.scss',
       animations: [
+            trigger('statusChangeFade', [
+                  transition('* => *', [
+                        style({ opacity: 0, transform: 'scale(0.98)' }),
+                        animate('280ms ease-out', style({ opacity: 1, transform: 'scale(1)' }))
+                  ])
+            ]),
             trigger('tabSwitchFade', [
                   transition(':enter', [
                         style({ opacity: 0, transform: 'translateX(20px)' }),
@@ -31,6 +38,8 @@ import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spi
 export class ExpensePaymentDetailDialogComponent {
       private readonly dialogRef = inject(MatDialogRef<ExpensePaymentDetailDialogComponent>);
       private readonly expensePaymentApi = inject(ExpensePaymentApiService);
+      private readonly expenseWorkflowInstanceApi = inject(ExpenseWorkflowInstanceApiService);
+      private readonly toast = inject(ToastService);
 
       paymentId: string;
       paymentDetail: ExpensePaymentDetailDto | null = null;
@@ -42,7 +51,6 @@ export class ExpensePaymentDetailDialogComponent {
 
       async getPaymentDetail(id: string) {
             this.paymentDetail = await firstValueFrom(this.expensePaymentApi.getDetailById(id));
-            console.log('detail: ', this.paymentDetail);
       }
 
       // === TAB NAVIGATION ===
@@ -50,6 +58,17 @@ export class ExpensePaymentDetailDialogComponent {
       setActiveTab(tab: 'items' | 'outgoings') {
             this.activeTab = tab;
       }
+
+      // actions
+      async approve() {
+            if (!this.paymentDetail?.workflowInstance?.id) {
+                  this.toast.errorRich("Không thể truy vấn luồng duyệt của thanh toán này");
+                  console.error("workflowInstance.id is missing");
+                  return;
+            }
+            const resut = await firstValueFrom(this.expenseWorkflowInstanceApi.approve(this.paymentDetail?.workflowInstance.id));
+      }
+
 
       close(isSuccess: boolean = false) {
             this.dialogRef.close(isSuccess);
