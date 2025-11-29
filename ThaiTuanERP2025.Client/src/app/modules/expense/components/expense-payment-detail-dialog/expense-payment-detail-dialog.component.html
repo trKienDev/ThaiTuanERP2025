@@ -12,7 +12,7 @@
             </div>
             <div class="dialog-body">
                   <div class="payment-header display-flex gap-10px align-items-center justify-content-between">
-                       <div class="display-flex gap-10px align-items-center">
+                       <div class="left display-flex gap-10px align-items-center">
                               <div class="payment-status" [@statusChangeFade]="paymentDetail?.status">
                                     <span class="label-status-badge" [ngClass]="(paymentDetail?.status | expensePaymentStatus).class">
                                           {{ (paymentDetail?.status | expensePaymentStatus).text }}
@@ -20,9 +20,16 @@
                               </div>
                               <h3 class="payment-name">{{ paymentDetail?.name }}</h3>
                        </div>
-                        <div class="payment-actions display-flex gap-10px align-items-center">
-                              <kit-spinner-button type="button" cssClass="submit-button"  text="Duyệt" loadingText="Đang duyệt…" (click)="approve()"></kit-spinner-button>
-                              <kit-spinner-button type="button" cssClass="danger-button" text="Từ chối" loadingText="Đang từ chối…"></kit-spinner-button>
+                        <div class="right display-flex gap-10px">
+                              <ng-container *ngIf="currentStepStatus$ | async as step">
+                                    <div class="payment-expired-badge margin-left-auto" *ngIf="step.expired">
+                                          <span class="badge danger-badge">Quá hạn duyệt</span>
+                                    </div>
+                                    <div *ngIf="!step.expired" class="payment-actions display-flex gap-5px align-items-center">
+                                          <kit-spinner-button type="button" cssClass="submit-button"  text="Duyệt" loadingText="Đang duyệt…" (click)="approve()"></kit-spinner-button>
+                                          <kit-spinner-button type="button" cssClass="danger-button" text="Từ chối" loadingText="Đang từ chối…"></kit-spinner-button>
+                                    </div>
+                              </ng-container>
                         </div>
                   </div>
                   <div class="payment-infor display-flex flex-column gap-10px">

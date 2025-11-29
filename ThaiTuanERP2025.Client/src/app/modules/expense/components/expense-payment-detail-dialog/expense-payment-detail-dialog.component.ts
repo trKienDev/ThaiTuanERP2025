@@ -3,13 +3,15 @@ import { CommonModule } from "@angular/common";
 import { Component, Inject, inject, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { ExpensePaymentApiService } from '../../services/api/expense-payment.service';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, map, Observable } from 'rxjs';
 import { AvatarUrlPipe } from "../../../../shared/pipes/avatar-url.pipe";
 import { trigger, transition, style, animate } from '@angular/animations';
 import { ExpensePaymentStatusPipe } from "../../pipes/expense-payment-status.pipe";
 import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 import { ExpenseWorkflowInstanceApiService } from '../../services/api/expense-workflow-instance.service';
 import { ToastService } from '../../../../shared/components/kit-toast-alert/kit-toast-alert.service';
+import { ExpenseStepInstanceBriefDto } from '../../models/expense-step-instance.model';
+import { CountdownService } from '../../../../shared/services/countdown.service';
 
 @Component({
       selector: 'expense-payment-detail-dialog',
@@ -40,6 +42,8 @@ export class ExpensePaymentDetailDialogComponent {
       private readonly expensePaymentApi = inject(ExpensePaymentApiService);
       private readonly expenseWorkflowInstanceApi = inject(ExpenseWorkflowInstanceApiService);
       private readonly toast = inject(ToastService);
+      currentStepStatus$!: Observable<{ seconds: number, expired: boolean }>;
+      private readonly countdown = inject(CountdownService);
 
       paymentId: string;
       paymentDetail: ExpensePaymentDetailDto | null = null;
@@ -51,9 +55,39 @@ export class ExpensePaymentDetailDialogComponent {
 
       async getPaymentDetail(id: string) {
             this.paymentDetail = await firstValueFrom(this.expensePaymentApi.getDetailById(id));
+
+            const step = this.currentStep;
+
+            if (!step?.dueAt) {
+                  console.warn("Current step has no dueAt → skip countdown");
+                  return;
+            }
+            if (step) { 
+                  const due = new Date(step.dueAt);
+
+                  this.currentStepStatus$ = this.countdown.createCountdown(due).pipe(
+                        map(seconds => ({
+                              seconds,
+                              expired: seconds <= 0
+                        }))
+                  );
+            }
       }
 
-      // === TAB NAVIGATION ===
+      // ==== CURRENT STEP ====
+      get currentStep(): ExpenseStepInstanceBriefDto | undefined {
+            const wf = this.paymentDetail?.workflowInstance;
+            if (!wf) return undefined;
+            return wf.steps.find(s => s.order === wf.currentStepOrder);
+      }
+      get currentStepSafe(): ExpenseStepInstanceBriefDto | null {
+            const wf = this.paymentDetail?.workflowInstance;
+            if (!wf || !wf.steps || wf.steps.length === 0) return null;
+            return wf.steps[wf.currentStepOrder] || null;
+      }
+
+
+      // === TAB NAVIGATION ===     
       activeTab: 'items' | 'outgoings' = 'items';
       setActiveTab(tab: 'items' | 'outgoings') {
             this.activeTab = tab;

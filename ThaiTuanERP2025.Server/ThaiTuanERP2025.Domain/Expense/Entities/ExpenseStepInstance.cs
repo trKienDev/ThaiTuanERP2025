@@ -7,73 +7,73 @@ using ThaiTuanERP2025.Domain.Shared.Entities;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
-	public class ExpenseStepInstance : AuditableEntity
-	{
-		#region Constructors
-		private ExpenseStepInstance() { }
-		public ExpenseStepInstance(
-			Guid workflowInstanceId, Guid stepTemplateId, string name, int order,
-			ExpenseFlowType flowType, int slaHours, ExpenseApproveMode approverMode,
-			string approversJson,  ExpenseStepStatus status = ExpenseStepStatus.Pending
-		)
+		public class ExpenseStepInstance : AuditableEntity
 		{
-			Guard.AgainstDefault(workflowInstanceId, nameof(workflowInstanceId));
-			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
-			Guard.AgainstInvalidEnumValue(flowType, nameof(flowType));
-			Guard.AgainstInvalidEnumValue(approverMode, nameof(approverMode));
+			#region Constructors
+			private ExpenseStepInstance() { }
+			public ExpenseStepInstance(
+				Guid workflowInstanceId, Guid stepTemplateId, string name, int order,
+				ExpenseFlowType flowType, int slaHours, ExpenseApproveMode approverMode,
+				string approversJson,  ExpenseStepStatus status = ExpenseStepStatus.Pending
+			)
+			{
+				Guard.AgainstDefault(workflowInstanceId, nameof(workflowInstanceId));
+				Guard.AgainstNullOrWhiteSpace(name, nameof(name));
+				Guard.AgainstInvalidEnumValue(flowType, nameof(flowType));
+				Guard.AgainstInvalidEnumValue(approverMode, nameof(approverMode));
 
-			Id = Guid.NewGuid();
-			WorkflowInstanceId = workflowInstanceId;
-			StepTemplateId = stepTemplateId;
-			Name = name.Trim();
-			Order = order;
-			FlowType = flowType;
-			SlaHours = slaHours;
-			ApproverMode = approverMode;
-			ResolvedApproversJson = approversJson;
-			Status = status;
-		}
-		#endregion
+				Id = Guid.NewGuid();
+				WorkflowInstanceId = workflowInstanceId;
+				StepTemplateId = stepTemplateId;
+				Name = name.Trim();
+				Order = order;
+				FlowType = flowType;
+				SlaHours = slaHours;
+				ApproverMode = approverMode;
+				ResolvedApproversJson = approversJson;
+				Status = status;
+			}
+			#endregion
 
-		#region Properties
-		public Guid WorkflowInstanceId { get; private set; }
-		public ExpenseWorkflowInstance WorkflowInstance { get; private set; } = null!;
-		public Guid StepTemplateId { get; private set; }
+			#region Properties
+			public Guid WorkflowInstanceId { get; private set; }
+			public ExpenseWorkflowInstance WorkflowInstance { get; private set; } = null!;
+			public Guid StepTemplateId { get; private set; }
 
-		public string Name { get; private set; } = string.Empty;
-		public int Order { get; private set; }
-		public ExpenseFlowType FlowType { get; private set; }
-		public int SlaHours { get; private set; }
-		public ExpenseApproveMode ApproverMode { get; private set; }
+			public string Name { get; private set; } = string.Empty;
+			public int Order { get; private set; }
+			public ExpenseFlowType FlowType { get; private set; }
+			public int SlaHours { get; private set; }
+			public ExpenseApproveMode ApproverMode { get; private set; }
 
-		public string ResolvedApproversJson { get; private set; }
+			public string ResolvedApproversJson { get; private set; }
 
-		public ExpenseStepStatus Status { get; private set; } = ExpenseStepStatus.Pending;
+			public ExpenseStepStatus Status { get; private set; } = ExpenseStepStatus.Pending;
 
-		public DateTime? StartedAt { get; private set; }
-		public DateTime? DueAt { get; private set; }
+			public DateTime? StartedAt { get; private set; }
+			public DateTime? DueAt { get; private set; }
 
-		public DateTime? ApprovedAt { get; private set; }
-		public Guid? ApprovedBy { get; private set; }
-		public User? ApprovedByUser { get; private set; }
+			public DateTime? ApprovedAt { get; private set; }
+			public Guid? ApprovedBy { get; private set; }
+			public User? ApprovedByUser { get; private set; }
 
-		public DateTime? RejectedAt { get; private set; }
-		public Guid? RejectedBy { get; private set; }
-		public User? RejectedByUser { get; private set; }
+			public DateTime? RejectedAt { get; private set; }
+			public Guid? RejectedBy { get; private set; }
+			public User? RejectedByUser { get; private set; }
 
-		public string? Comments { get; private set; }
-		public bool SlaBreached { get; private set; }
-		#endregion
+			public string? Comments { get; private set; }
+			public bool SlaBreached { get; private set; }
+			#endregion
 
-		#region Domain Behaviors
-		internal void Activate()
-		{
-			if (Status != ExpenseStepStatus.Pending)
-				throw new DomainException("Chỉ bước đang chờ mới được kích hoạt.");
-			Status = ExpenseStepStatus.Waiting;
-			StartedAt = DateTime.UtcNow;
-			DueAt = DateTime.UtcNow.AddHours(SlaHours);
-		}
+			#region Domain Behaviors
+			internal void Activate()
+			{
+				if (Status != ExpenseStepStatus.Pending)
+					throw new DomainException("Chỉ bước đang chờ mới được kích hoạt.");
+				Status = ExpenseStepStatus.Waiting;
+				StartedAt = DateTime.UtcNow;
+				DueAt = DateTime.UtcNow.AddHours(SlaHours);
+			}
 
 		internal bool IsExpired()
 		{
