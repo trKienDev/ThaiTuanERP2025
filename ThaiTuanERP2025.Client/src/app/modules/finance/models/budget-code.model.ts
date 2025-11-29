@@ -1,3 +1,10 @@
+export interface BudgetCodeRequest {
+      code: string;
+      name: string;
+      budgetGroupId: string;
+      cashoutCodeId: string;
+}
+
 export interface BudgetCodeDto {
       id: string;
       code: string;
@@ -8,11 +15,10 @@ export interface BudgetCodeDto {
       createdDate: string;
 }
 
-export interface BudgetCodeRequest {
-      code: string;
+export interface BudgetCodeLookupDto {
+      id: string;
       name: string;
-      budgetGroupId: string;
-      cashoutCodeId: string;
+      code: string;
 }
 
 export interface BudgetCodeWithAmountDto {

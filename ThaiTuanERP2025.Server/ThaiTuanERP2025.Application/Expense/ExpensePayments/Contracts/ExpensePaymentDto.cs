@@ -55,5 +55,6 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Contracts
 		public DateTime CreatedAt { get; init; }
 
 		public ExpenseWorkflowInstanceBriefDto? WorkflowInstance { get; init; }
+		public IReadOnlyList<ExpensePaymentItemLookupDto> Items { get; init; } = Array.Empty<ExpensePaymentItemLookupDto>();
 	}
 }

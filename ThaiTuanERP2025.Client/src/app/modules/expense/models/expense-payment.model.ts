@@ -1,7 +1,7 @@
 import { UserBriefAvatarDto, UserDto } from "../../account/models/user.model";
 import { ApprovalWorkflowInstanceDetailDto, ExpenseWorkflowInstanceBriefDto } from "./expense-workflow-instance.model";
 import { ExpensePaymentAttachmentDto } from "./expense-payment-attachment.model";
-import { ExpensePaymentItemDetailDto, ExpensePaymentItemPayload } from "./expense-payment-item.model";
+import { ExpensePaymentItemDetailDto, ExpensePaymentItemLookupDto, ExpensePaymentItemPayload } from "./expense-payment-item.model";
 import { OutgoingPaymentStatusDto } from "./outgoing-payment.model";
 import { SupplierDto } from "./supplier.model";
 
@@ -86,12 +86,13 @@ export interface ExpensePaymentDetailDto {
       totalWithTax: number;
       
       outgoingAmountPaid: number;
-      remainingOutoingAmount: number;
+      remainingOutgoingAmount: number;
 
       createdByUser: UserBriefAvatarDto;
       createdAt: string;
 
       workflowInstance: ExpenseWorkflowInstanceBriefDto;
+      items: ExpensePaymentItemLookupDto[];
 }
 
 export interface ExpensePaymentLookupDto {
