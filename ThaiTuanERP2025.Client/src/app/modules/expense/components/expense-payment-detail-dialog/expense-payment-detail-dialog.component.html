@@ -1,0 +1,78 @@
+<div class="dialog">
+      <div class="dialog-container">
+            <div class="dialog-heading">
+                  <div class="dialog-title">
+                        <h1>Chi tiết thanh toán</h1>
+                  </div>
+                  <div class="dialog-exit">
+                        <button type="button" class="exit-button" (click)="close()">
+                              <span class="text material-icons-outlined">close</span>
+                        </button>
+                  </div>
+            </div>
+            <div class="dialog-body">
+                  <div class="payment-header">
+                        <h3 class="payment-name">{{ paymentDetail?.name }}</h3>
+                  </div>
+                  <div class="payment-infor">
+                        <div class="general-infor primary-card">
+                              <div class="card-wrapper">
+                                    <div class="card-header">Thông tin thanh toán</div>
+                                    <div class="card-body">
+                                          <div>
+                                                <label for="sub-id">ID chi phí</label>
+                                                <span>{{ paymentDetail?.subId }}</span>
+                                          </div>
+                                          <div>
+                                                <label for="created-by-ủe">Tạo bởi</label>
+                                                <div class="display-flex gap-5px align-items-center">
+                                                      <img class="avatar-user" [src]="paymentDetail?.createdByUser | avatarUrlPipe">
+                                                      <span>{{ paymentDetail?.createdByUser?.fullName}}</span>
+                                                </div>
+                                          </div>
+                                          <div>
+                                                <label for="created-at">Tạo lúc</label>
+                                                <span>{{ paymentDetail?.createdAt | date: 'HH:mm dd/MM/yyyy' }}</span>
+                                          </div>
+                                          <div>
+                                                <label for="supplier">Nhà cung cấp</label>
+                                                <span>{{ paymentDetail?.supplierName }}</span>
+                                          </div>
+                                          <div>
+                                                <label for="bank-name">Tên ngân hàng</label>
+                                                <span>{{ paymentDetail?.bankName }}</span>
+                                          </div>
+                                          <div>
+                                                <label for="bank-account">Số tài khoản</label>
+                                                <span>{{ paymentDetail?.accountNumber }}</span>
+                                          </div>
+                                          <div>
+                                                <label for="beneficiary-name">Người thụ hưởng</label>
+                                                <span>{{ paymentDetail?.beneficiaryName }}</span>
+                                          </div>
+                                          <div class="">
+                                                <label for="description">Mô tả</label>
+                                                <span>{{ paymentDetail?.description || '---'}}</span>
+                                          </div>
+                                          <div>
+                                                <label for="workflow-instance">Luồng duyệt</label>
+                                                <ng-container *ngIf="(paymentDetail?.workflowInstance?.steps?.length ?? 0) > 0">
+                                                      <ng-container *ngFor="let step of paymentDetail?.workflowInstance?.steps">
+                                                            <div class="expense-step">
+                                                                  <img class="avatar-user" [src]="step.approvedByUser| avatarUrlPipe">
+                                                            </div>
+                                                      </ng-container>
+                                                </ng-container>
+                                          </div>
+                                    </div>
+                              </div>
+                        </div>
+                        <div class="amount-infor primary-card">
+                              <div class="card-wrapper">
+                                    
+                              </div>
+                        </div>
+                  </div>
+            </div>
+      </div>
+</div>

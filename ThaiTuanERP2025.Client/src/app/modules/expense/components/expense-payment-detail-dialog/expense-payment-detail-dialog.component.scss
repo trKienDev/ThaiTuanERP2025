@@ -1,0 +1,13 @@
+.general-infor {
+      .card-body > div {
+            display: grid;
+            grid-template-columns: 150px 1fr; /* label 150px, value auto */
+            margin-bottom: 15px;
+      }
+      .card-body label {
+            color: #aaa;
+      }
+      .avatar-user {
+            margin: 0;
+      }
+}

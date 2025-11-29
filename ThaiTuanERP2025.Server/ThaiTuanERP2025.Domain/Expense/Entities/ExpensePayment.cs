@@ -9,7 +9,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		#region Constructor
 		private ExpensePayment() { } // EF
 		public ExpensePayment(
-			string name, bool hasGoodsReceipt, ExpensePayeeType payeeType, DateTime dueDate, Guid managerApproverId, string? description
+			string name, bool hasGoodsReceipt, ExpensePayeeType payeeType, DateTime dueAt, Guid managerApproverId, string? description
 		)
 		{
 			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
@@ -20,7 +20,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			Name = name.Trim();
 			HasGoodsReceipt = hasGoodsReceipt;
 			PayeeType = payeeType;
-			DueDate = dueDate;
+			DueAt = dueAt;
 			ManagerApproverId = managerApproverId;
 			Status = ExpensePaymentStatus.Pending;
 			Description = description?.Trim() ?? string.Empty;
@@ -42,7 +42,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public string AccountNumber { get; private set; } = string.Empty;
 		public string BeneficiaryName { get; private set; } = string.Empty;
 
-		public DateTime DueDate { get; private set; }
+		public DateTime DueAt { get; private set; }
 		public bool HasGoodsReceipt { get; private set; }
 		public string? Description { get; private set; }
 

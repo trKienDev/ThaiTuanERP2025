@@ -15,7 +15,7 @@ export class ExpensePaymentApiService extends BaseApiService<ExpensePaymentDto, 
 
       getDetailById(id: string): Observable<ExpensePaymentDetailDto> {
             return this.http.
-                  get<ApiResponse<ExpensePaymentDetailDto>>(`${this.endpoint}/${id}/detail`)
+                  get<ApiResponse<ExpensePaymentDetailDto>>(`${this.endpoint}/detail/${id}`)
                   .pipe(
                         handleApiResponse$<ExpensePaymentDetailDto>(),
                         catchError(err => throwError(() => err))

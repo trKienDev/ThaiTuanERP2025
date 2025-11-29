@@ -8,8 +8,9 @@ import { KitLoadingSpinnerComponent } from "../../../../../shared/components/kit
 import { KitRefreshButtonComponent } from "../../../../../shared/components/kit-refresh-button/kit-refresh-button.component";
 import { ActivatedRoute } from '@angular/router';
 import { ExpensePaymentApiService } from '../../../services/api/expense-payment.service';
-import { ExpensePaymentDto, ExpensePaymentLookupDto } from '../../../models/expense-payment.model';
+import {  ExpensePaymentLookupDto } from '../../../models/expense-payment.model';
 import { firstValueFrom } from 'rxjs';
+import { ExpensePaymentDetailDialogComponent } from '../../../components/expense-payment-detail-dialog/expense-payment-detail-dialog.component';
 
 @Component({
       selector: 'expense-payments-panel',
@@ -27,8 +28,12 @@ export class FollowingExpensePaymentsPanelComponent {
 
       async ngOnInit(): Promise<void> {
             this.followingExpensePayments = await firstValueFrom(this.expensePaymentApi.getFollowing());
-            console.log('following: ', this.followingExpensePayments);
+      }
 
+      openExpensePaymentDetailDialog(paymentId: string) {
+            this.dialog.open(ExpensePaymentDetailDialogComponent, {
+                  data: paymentId
+            });
       }
 
 }

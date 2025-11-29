@@ -68,7 +68,6 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 			// Indexes
 			builder.HasIndex(p => p.SubId).IsUnique();
 			builder.HasIndex(x => x.SupplierId);
-			builder.HasIndex(x => x.DueDate);
 			builder.HasIndex(x => x.Status);
 			builder.HasIndex(p => p.ManagerApproverId);
 

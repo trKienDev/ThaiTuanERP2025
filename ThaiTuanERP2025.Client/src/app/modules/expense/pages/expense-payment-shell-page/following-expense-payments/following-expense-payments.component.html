@@ -32,7 +32,14 @@
                                     <ng-container *ngFor="let payment of followingExpensePayments; let i = index">
                                           <tr>
                                                 <td>{{ i + 1 }}</td>
-                                                <td>{{ payment.name }}</td>
+                                                <td>
+                                                      <div class="payment-name display-flex gap-5px justify-content-center" (click)="openExpensePaymentDetailDialog(payment.id)">
+                                                            <span class="material-icons-outlined" style="font-size: 14px;">visibility</span> 
+                                                            <a class="link-text display-flex gap-5px justify-content-center"> 
+                                                                  {{ payment.name }}
+                                                            </a>
+                                                      </div>
+                                                </td>
                                                 <td>
                                                       <div class="label-status" [@statusChangeFade]="payment.status">
                                                             <span class="label-status-badge" [ngClass]="(payment.status | expensePaymentStatus).class">

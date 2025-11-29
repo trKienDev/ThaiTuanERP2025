@@ -54,7 +54,7 @@ export interface ExpensePaymentDto {
       accountNumber: string;
       beneficiaryName: string;
       
-      dueDate: Date;
+      dueAt: string;
       hasGoodReceipt: boolean;
       totalAmount: number;
       totalTax: number;
@@ -64,28 +64,34 @@ export interface ExpensePaymentDto {
       attachments: ExpensePaymentAttachmentDto[];
 }
 
-export interface ExpensePaymentDetailDto extends ExpensePaymentDto {
+export interface ExpensePaymentDetailDto {
+      id: string;
+      name: string;
       subId: string;
+      description?: string;
 
-      createdByUserId: string;
-      createdByUser: UserDto;
+      payeeType: PayeeType;
+      supplierId?: string;
+      supplierName?: string;
 
-      createdByDepartmentId: string;
-      createdByDepartmentName?: string;
+      bankName: string;
+      accountNumber: string;
+      beneficiaryName: string;
 
-      status: number;
+      dueAt: string;
+      hasGoodsReceipt: boolean;
+
+      totalAmount: number;
+      totalTax: number;
+      totalWithTax: number;
+      
       outgoingAmountPaid: number;
-      remainingOutgoingAmount: number;
+      remainingOutoingAmount: number;
 
-      createdDate: Date;
-      updatedBy?: UserDto;
-      updatedAt?: Date;
+      createdByUser: UserBriefAvatarDto;
+      createdAt: string;
 
-      followers: UserDto[];
-
-      workflowInstanceDetail?: ApprovalWorkflowInstanceDetailDto;
-
-      outgoingPayments: OutgoingPaymentStatusDto[];
+      workflowInstance: ExpenseWorkflowInstanceBriefDto;
 }
 
 export interface ExpensePaymentLookupDto {

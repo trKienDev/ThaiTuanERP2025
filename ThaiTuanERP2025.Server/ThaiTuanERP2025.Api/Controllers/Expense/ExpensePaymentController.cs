@@ -25,6 +25,16 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
                         return Ok(ApiResponse<IReadOnlyList<ExpensePaymentLookupDto>>.Success(followingDtos));
                 }
 
+                [HttpGet("detail/{id:guid}")]
+                public async Task<IActionResult> GetDetail([FromRoute] Guid id, CancellationToken cancellationToken)
+                {
+                        var detail = await _mediator.Send(new GetExpensePaymentDetailQuery(id), cancellationToken);
+                        if (detail is null)
+                                return BadRequest(ApiResponse<string>.Fail("Không tìm thấy chi tiết thanh toán"));
+
+                        return Ok(ApiResponse<ExpensePaymentDetailDto>.Success(detail));
+                }
+
                [HttpPost]
                public async Task<IActionResult> Create([FromBody] ExpensePaymentPayload payload, CancellationToken cancellationToken)
                {
