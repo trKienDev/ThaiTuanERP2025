@@ -27,17 +27,17 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPeriods.Commands
 				int prevMonth = month == 1 ? 12 : month - 1;
 				int prevYear = month == 1 ? year - 1 : year;
 
-				var startDate = UtcDate(prevYear, prevMonth, 20);
-				var endDate = UtcDate(prevYear, prevMonth, DateTime.DaysInMonth(prevYear, prevMonth));
+                                var startDate = new DateOnly(prevYear, prevMonth, 20);
 
-				newPeriods.Add(new BudgetPeriod(year, month, startDate, endDate));
+                                var lastDayOfPrevMonth = DateTime.DaysInMonth(prevYear, prevMonth);
+                                var endDate = new DateOnly(prevYear, prevMonth, lastDayOfPrevMonth);
+
+                                newPeriods.Add(new BudgetPeriod(year, month, startDate, endDate));
 			}
 
 			await _uow.BudgetPeriods.AddRangeAsync(newPeriods, cancellationToken);
 			await _uow.SaveChangesAsync(cancellationToken);
 			return Unit.Value;
 		}
-
-		private static DateTime UtcDate(int y, int m, int d) => new DateTime(y, m, d, 0, 0, 0, DateTimeKind.Utc);
 	}
 }

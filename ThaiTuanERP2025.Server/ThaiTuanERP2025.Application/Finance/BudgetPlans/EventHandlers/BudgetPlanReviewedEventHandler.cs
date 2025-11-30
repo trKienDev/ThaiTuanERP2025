@@ -35,7 +35,11 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.EventHandlers
 
 			// resolve reminder for reviewer
 			var reviewerReminder = await _uow.UserReminders.SingleOrDefaultAsync(
-				q => q.Where(x => x.UserId == domainEvent.BudgetPlan.ReviewedByUserId && !x.IsResolved),
+				q => q.Where(
+					x => x.UserId == domainEvent.BudgetPlan.ReviewedByUserId
+                                                && x.TargetId == domainEvent.BudgetPlan.Id
+                                                && !x.IsResolved
+				),
 				asNoTracking: false,
 				cancellationToken: cancellationToken
 			);

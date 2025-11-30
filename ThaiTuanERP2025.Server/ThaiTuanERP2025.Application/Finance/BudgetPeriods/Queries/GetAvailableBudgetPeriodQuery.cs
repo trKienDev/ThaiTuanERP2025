@@ -18,7 +18,7 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPeriods.Queries
 			var now = DateTime.UtcNow;
 			return await _budgetPeriodRepo.ListProjectedAsync(
 				q => q.Where(bp => !bp.IsDeleted
-					&& bp.StartDate <= now && bp.EndDate >= now
+					&& bp.Month == now.Month && bp.Year == now.Year
 				).OrderBy(bp => bp.Month)
 				.ProjectTo<BudgetPeriodDto>(_mapper.ConfigurationProvider),
 				cancellationToken: cancellationToken

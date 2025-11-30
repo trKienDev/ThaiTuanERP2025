@@ -19,8 +19,8 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Repositories.Read
 			return await Query()
 				.Where( 
 					bp => !bp.IsDeleted
-					&& bp.StartDate <= now
-					&& bp.EndDate >= now
+					&& bp.Year == now.Year
+					&& bp.Month == now.Month
 				).OrderBy(bp => bp.Month)
 				.ProjectTo<BudgetPeriodDto>(_mapperConfig)
 				.ToListAsync(cancellationToken);
@@ -31,7 +31,7 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Repositories.Read
 			var now = DateTime.UtcNow;
 
 			return Query()
-				.Where(bp => !bp.IsDeleted && bp.StartDate <= now && bp.EndDate >= now)
+				.Where(bp => !bp.IsDeleted && bp.Month == now.Month && bp.Year == now.Year)
 				.OrderBy(bp => bp.Month)
 				.Select(bp => bp.Id)
 				.ToListAsync(cancellationToken);

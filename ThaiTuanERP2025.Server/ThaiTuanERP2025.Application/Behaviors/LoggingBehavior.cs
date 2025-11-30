@@ -19,13 +19,14 @@ namespace ThaiTuanERP2025.Application.Behaviors
 		{
 			var requestName = typeof(TRequest).Name;
 
-			_logger.LogInformation("▶️ Handling {RequestName} with data: {@Request}", requestName, request);
+                        _logger.LogInformation("▶️ Handling {RequestName}", requestName);
 
-			var response = await next();
+                        var response = await next();
 
-			_logger.LogInformation("✅ Handled {RequestName}", requestName);
+                        _logger.LogInformation("✅ Handled {RequestName}", requestName);
 
-			return response;
+
+                        return response;
 		}
 	}
 }

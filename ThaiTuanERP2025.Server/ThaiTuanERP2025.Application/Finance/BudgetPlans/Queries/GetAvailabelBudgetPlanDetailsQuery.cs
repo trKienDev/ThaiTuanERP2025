@@ -50,7 +50,7 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Queries
 			var availablePlans = await _budgetPlanRepo.GetAllAsync(
 				q => q.DepartmentId == currentUser.DepartmentId 
 					&& availablePeriodIds.Contains(q.BudgetPeriodId),
-				cancellationToken: cancellationToken
+				cancellationToken: cancellationToken	
 			);
 
 			var details = availablePlans.SelectMany(x => x.Details).ToList();

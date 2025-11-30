@@ -17,11 +17,9 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPeriods.Queries
 		}
 		
 		public async Task<IReadOnlyList<BudgetPeriodLookupDto>> Handle(GetAllBudgetPeriodsQuery query, CancellationToken cancellationToken) {
-			var today = DateTime.UtcNow.Date;
 			return await _budgetPeriodRepo.ListProjectedAsync(
-				q => q.Where(x =>
-					today >= x.StartDate.Date && today <= x.EndDate.Date
-				).ProjectTo<BudgetPeriodLookupDto>(_mapper.ConfigurationProvider),
+				q => q.Where(x => !x.IsDeleted)
+					.ProjectTo<BudgetPeriodLookupDto>(_mapper.ConfigurationProvider),
 				cancellationToken: cancellationToken
 			);
 		}

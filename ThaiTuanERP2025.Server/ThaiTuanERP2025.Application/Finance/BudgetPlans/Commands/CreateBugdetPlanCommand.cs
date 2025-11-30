@@ -57,8 +57,8 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Commands
 
 			foreach (var d in request.Details)
 			{
-				var code = _uow.BudgetCodes.ExistAsync(q => q.Id == d.BudgetCodeId, cancellationToken);
-				if (code is null) throw new DirectoryNotFoundException("Mã ngân sách không tồn tại");
+				var code = await _uow.BudgetCodes.ExistAsync(q => q.Id == d.BudgetCodeId, cancellationToken);
+				if (!code) throw new DirectoryNotFoundException("Mã ngân sách không tồn tại");
 
 				budgetPlan.AddDetail(d.BudgetCodeId, d.Amount);
 			}

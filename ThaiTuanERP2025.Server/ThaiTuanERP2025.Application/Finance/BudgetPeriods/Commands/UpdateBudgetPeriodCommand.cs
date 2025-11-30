@@ -5,7 +5,7 @@ using ThaiTuanERP2025.Domain.Shared.Repositories;
 
 namespace ThaiTuanERP2025.Application.Finance.BudgetPeriods.Commands
 {
-	public sealed record UpdateBudgetPeriodRequest(DateTime StartDate, DateTime EndDate);
+	public sealed record UpdateBudgetPeriodRequest(DateOnly StartDate, DateOnly EndDate);
 	public sealed record UpdateBudgetPeriodCommand(Guid Id, UpdateBudgetPeriodRequest Request) : IRequest<Unit>;
 
 	public sealed class UpdateBudgetPeriodCommandHandler : IRequestHandler<UpdateBudgetPeriodCommand, Unit> {

@@ -6,7 +6,6 @@ import { Observable } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
 export class BudgetPeriodFacade extends BaseApiFacade<BudgetPeriodDto, BudgetPeriodPayload, void, UpdateBudgetPeriodPayload, void> {
-      private readonly budgetPeriodApiService = inject(BudgetPeriodApiService);
       constructor() {
             super(inject(BudgetPeriodApiService));
       }

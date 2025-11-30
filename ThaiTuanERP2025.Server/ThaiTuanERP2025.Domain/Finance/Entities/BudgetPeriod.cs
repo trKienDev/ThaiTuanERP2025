@@ -10,7 +10,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 	{
 		#region Constructors
 		private BudgetPeriod() { }
-		public BudgetPeriod(int year, int month, DateTime startDate, DateTime endDate)
+		public BudgetPeriod(int year, int month, DateOnly startDate, DateOnly endDate)
 		{
 			Guard.AgainstOutOfRange(year, 2000, 2100, nameof(year));
 			Guard.AgainstOutOfRange(month, 1, 12, nameof(month));
@@ -29,13 +29,20 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		#region Properties
 		public int Year { get; private set; }
 		public int Month { get; private set; }
-		public DateTime StartDate { get; private set; }
-		public DateTime EndDate { get; private set; }
+		public DateOnly StartDate { get; private set; }
+		public DateOnly EndDate { get; private set; }
 
-		[NotMapped]
-		public bool IsActive => DateTime.UtcNow.Date >= StartDate.Date && DateTime.UtcNow.Date <= EndDate.Date;
+                [NotMapped]
+                public bool IsActive
+                {
+                        get
+                        {
+                                var today = DateOnly.FromDateTime(DateTime.UtcNow);
+                                return today >= StartDate && today <= EndDate;
+                        }
+                }
 
-		public ICollection<BudgetPlan> BudgetPlans { get; private set; } = new List<BudgetPlan>();
+                public ICollection<BudgetPlan> BudgetPlans { get; private set; } = new List<BudgetPlan>();
 		#endregion
 
 		#region Domain Behaviors
@@ -65,7 +72,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			AddDomainEvent(new BudgetPlanRemovedFromPeriodEvent(this, plan));
 		}
 
-		internal void SetStartDate(DateTime startDate)
+		internal void SetStartDate(DateOnly startDate)
 		{
 			if (startDate > EndDate)
 				throw new DomainException("Ngày bắt đầu không thể lớn hơn ngày kết thúc.");
@@ -73,7 +80,7 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 			AddDomainEvent(new BudgetPeriodUpdatedEvent(this));
 		}
 
-		internal void SetEndDate(DateTime endDate)
+		internal void SetEndDate(DateOnly endDate)
 		{
 			if (endDate < StartDate)
 				throw new DomainException("Ngày kết thúc không thể trước ngày bắt đầu.");

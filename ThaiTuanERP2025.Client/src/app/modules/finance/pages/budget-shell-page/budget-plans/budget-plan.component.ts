@@ -61,12 +61,10 @@ export class BudgetPlanPanelComponent implements OnInit, OnDestroy {
             ),
       ]).pipe(
             map(([periods, year]) =>
-                  year
-                        ? periods
-                              .filter(p => p.year === year)
-                              .map(p => p.month)
-                              .sort((a, b) => a - b)
-                        : []
+                  year ? periods.filter(p => p.year === year)
+                        .map(p => p.month)
+                        .sort((a, b) => a - b)
+                  : []
             ),
             shareReplay({ bufferSize: 1, refCount: true })
       );

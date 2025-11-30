@@ -78,7 +78,7 @@ namespace ThaiTuanERP2025.Domain.Shared
 			}
 		}
 
-		public static void AgainstInvalidDateRange(DateTime startDate, DateTime endDate, string paramName)
+		public static void AgainstInvalidDateRange(DateOnly startDate, DateOnly endDate, string paramName)
 		{
 			if (startDate > endDate)
 				throw new DomainException($"{paramName}: Ngày bắt đầu không được lớn hơn ngày kết thúc");

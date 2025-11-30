@@ -16,8 +16,8 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 			// ===== Basic properties =====
 			builder.Property(x => x.Year).IsRequired();
 			builder.Property(x => x.Month).IsRequired();
-			builder.Property(x => x.StartDate).IsRequired();
-			builder.Property(x => x.EndDate).IsRequired();
+			builder.Property(x => x.StartDate).HasColumnType("date").IsRequired();
+			builder.Property(x => x.EndDate).HasColumnType("date").IsRequired();
 
 			// ===== Navigation BudgetPlans =====
 			builder.Navigation(nameof(BudgetPeriod.BudgetPlans))
