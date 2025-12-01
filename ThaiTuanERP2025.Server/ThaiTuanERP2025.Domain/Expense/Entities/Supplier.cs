@@ -25,10 +25,13 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public string Name { get; private set; } = null!;
 		public string? TaxCode { get; private set; }
 		public bool IsActive { get; private set; } = true;
-		#endregion
+                public string? BeneficiaryAccountNumber { get; private set; }
+                public string? BeneficiaryName { get; private set; }
+                public string? BeneficiaryBankName { get; private set; }
+                #endregion
 
-		#region Domain Behaviors
-		public void Rename(string name)
+                #region Domain Behaviors
+                internal void Rename(string name)
 		{
 			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
 			if (Name.Equals(name.Trim(), StringComparison.OrdinalIgnoreCase)) return;
@@ -37,13 +40,13 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			AddDomainEvent(new SupplierRenamedEvent(this));
 		}
 
-		public void SetTaxCode(string? taxCode)
+		internal void SetTaxCode(string? taxCode)
 		{
 			TaxCode = string.IsNullOrWhiteSpace(taxCode) ? null : taxCode.Trim();
 			AddDomainEvent(new SupplierUpdatedEvent(this));
 		}
 
-		public void Activate()
+		internal void Activate()
 		{
 			if (!IsActive)
 			{
@@ -52,7 +55,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			}
 		}
 
-		public void Deactivate()
+		internal void Deactivate()
 		{
 			if (IsActive)
 			{
@@ -60,6 +63,26 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 				AddDomainEvent(new SupplierDeactivatedEvent(this));
 			}
 		}
-		#endregion
-	}
+                #endregion
+
+                internal void SetBeneficiaryInfo(string? accountNumber, string? beneficiaryName, string? bankName)
+                {
+                        // Chuẩn hóa dữ liệu (trim hoặc null nếu empty)
+                        var newAccountNumber = string.IsNullOrWhiteSpace(accountNumber) ? null : accountNumber.Trim();
+                        var newBeneficiaryName = string.IsNullOrWhiteSpace(beneficiaryName) ? null : beneficiaryName.Trim();
+                        var newBankName = string.IsNullOrWhiteSpace(bankName) ? null : bankName.Trim();
+
+                        // Nếu không có thay đổi gì → không raise event
+                        bool accountChanged = !string.Equals(BeneficiaryAccountNumber, newAccountNumber, StringComparison.OrdinalIgnoreCase);
+                        bool nameChanged = !string.Equals(BeneficiaryName, newBeneficiaryName, StringComparison.OrdinalIgnoreCase);
+                        bool bankChanged = !string.Equals(BeneficiaryBankName, newBankName, StringComparison.OrdinalIgnoreCase);
+
+                        if (!accountChanged && !nameChanged && !bankChanged) return;
+
+                        // Cập nhật giá trị
+                        BeneficiaryAccountNumber = newAccountNumber;
+                        BeneficiaryName = newBeneficiaryName;
+                        BeneficiaryBankName = newBankName;
+                }
+        }
 }

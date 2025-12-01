@@ -9,7 +9,7 @@
                         <ng-container *ngFor="let n of items; trackBy: trackById" >
                               <li [class.unread-notification]="!n.isRead" class="notification-item display-flex align-items-center gap-10px" [class.unread]="!n.isRead" (click)="onClickItem(n)">
                                     <div class="sender">
-                                          <img class="avatar-user" [src]="n.sender | avatarUrlPipe" alt="avatar-user">
+                                          <img class="avatar-user" [src]="n.sender | avatarUrlPipe">
                                     </div>
                                     <div class="content">
                                           <div class="title-wrapper display-flex gap-10px align-items-center">

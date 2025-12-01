@@ -7,6 +7,8 @@ namespace ThaiTuanERP2025.Application.Expense.Suppliers
 	{
 		public SupplierMappingProfile() {
 			CreateMap<Supplier, SupplierDto>();
+
+			CreateMap<Supplier, SupplierBeneficiaryInforDto>();
 		} 
 	}
 }

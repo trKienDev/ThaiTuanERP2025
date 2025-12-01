@@ -14,6 +14,7 @@ using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Finance.Entities;
 using ThaiTuanERP2025.Domain.Finance.Enums;
 using ThaiTuanERP2025.Domain.Shared.Enums;
+using ThaiTuanERP2025.Domain.Shared.Extensions;
 using ThaiTuanERP2025.Domain.Shared.Repositories;
 
 namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
@@ -64,15 +65,22 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
 			);
 			if (paymentExist) throw new BusinessRuleViolationException("Trùng tên với 1 chi phí thanh toán đã tồn tại");
 
-			// Validate Supplier
-			var supplierExist = await _uow.Suppliers.ExistAsync(
-				q => q.Id == payload.SupplierId && q.IsActive,
+                        // Validate Supplier
+                        var supplier = await _uow.Suppliers.SingleOrDefaultAsync(
+				q => q.Where(x => x.Id == payload.SupplierId && x.IsActive),
+				asNoTracking: false,
 				cancellationToken: cancellationToken
 			);
-			if (!supplierExist) throw new NotFoundException("Không tìm thấy nhà cung cấp");
+                        if (supplier is null) throw new NotFoundException("Không tìm thấy nhà cung cấp");
 
-			// payment
-			var newPayment = new ExpensePayment(nameNorm, payload.hasGoodsReceipt, payload.PayeeType, payload.DueDate, payload.ManagerApproverId, payload.Description);
+                        supplier.SetBeneficiaryInfo(
+				accountNumber: accountNumberNorm,
+				beneficiaryName: beneficiaryNameNorm,
+				bankName: bankNameNorm
+			);
+
+                        // payment
+                        var newPayment = new ExpensePayment(nameNorm, payload.hasGoodsReceipt, payload.PayeeType, payload.DueDate, payload.ManagerApproverId, payload.Description);
 
 			// subId
 			var subId = await _documentSubIdGeneratorService.NextSubIdAsync(DocumentType.ExpensePayment, DateTime.UtcNow, cancellationToken);
@@ -179,7 +187,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
 			RuleFor(x => x.Payload.Description).MaximumLength(2048).WithMessage("Mô tả không vượt quá 2048 ký tự");
 			RuleFor(x => x.Payload.PayeeType).NotEmpty().WithMessage("Đối tượng thụ hưởng không được để trống");
 			RuleFor(x => x.Payload.BankName).NotEmpty().WithMessage("Tên ngân hàng không được để trống");
-			RuleFor(x => x.Payload.DueDate).Must(d => d.Date >= DateTime.Today).WithMessage("Hạn thanh toán không được phép là ngày trong quá khứ");
+			RuleFor(x => x.Payload.DueDate).Must(d => d.Date >= DateTime.UtcNow.Date).WithMessage("Hạn thanh toán không được phép là ngày trong quá khứ");
 			RuleFor(x => x.Payload.AccountNumber).NotEmpty().WithMessage("Số tài khoản ngân hàng không được để trống");
 			RuleFor(x => x.Payload.BeneficiaryName).NotEmpty().WithMessage("Tên người thụ hưởng không được để trống");
 			RuleFor(x => x.Payload.DueDate).NotEmpty().WithMessage("Hạn thanh toán không được để trống");
