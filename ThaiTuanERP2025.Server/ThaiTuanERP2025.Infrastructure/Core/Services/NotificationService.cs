@@ -19,19 +19,64 @@ namespace ThaiTuanERP2025.Application.Core.Services
 			_userRepo = userRepo;	
 		}
 
-		#region Send to single user
+		#region Send
 		public async Task SendAsync(
 			Guid senderId, Guid receiverId, string title, string message,
 			LinkType linkType, Guid? targetId, NotificationType type = NotificationType.Info, 
 			CancellationToken cancellationToken = default
 		) {
-			var entity = new UserNotification(senderId, receiverId, title, message, linkType, targetId, type);
-			await _uow.UserNotifications.AddAsync(entity, cancellationToken);
+			var (entity, outbox) = await CreateNotificationInternalAsync(
+			senderId, receiverId, title, message, linkType, targetId, type, cancellationToken);
 
-			var senderDto = await _userRepo.GetBriefWithAvatarAsync(senderId, cancellationToken);
-			if (senderDto is null)
-				throw new DomainException($"User sender with id {senderId} không tồn tại.");
-			
+			await _uow.UserNotifications.AddAsync(entity, cancellationToken);
+			await _uow.OutboxMessages.AddAsync(outbox, cancellationToken);
+
+			await _uow.SaveChangesWithoutDispatchAsync(cancellationToken);
+		}
+
+		public async Task SendToManyAsync(
+			Guid senderId,
+			IEnumerable<Guid> userIds,
+			string title,
+			string message,
+			LinkType linkType,
+			Guid? targetId = null,
+			NotificationType type = NotificationType.Info,
+			CancellationToken cancellationToken = default
+		) {
+			var receivers = userIds.Distinct().ToList();
+			if (!receivers.Any())
+				return;
+
+			var notifications = new List<UserNotification>();
+			var outboxes = new List<OutboxMessage>();
+
+			foreach (var receiverId in receivers)
+			{
+				var (entity, outbox) = await CreateNotificationInternalAsync(
+				    senderId, receiverId, title, message, linkType, targetId, type, cancellationToken);
+
+				notifications.Add(entity);
+				outboxes.Add(outbox);
+			}
+
+			await _uow.UserNotifications.AddRangeAsync(notifications, cancellationToken);
+			await _uow.OutboxMessages.AddRangeAsync(outboxes, cancellationToken);
+
+			await _uow.SaveChangesWithoutDispatchAsync(cancellationToken);
+		}
+
+		// === PRIVATE ===
+		private async Task<(UserNotification entity, OutboxMessage outbox)> CreateNotificationInternalAsync( Guid senderId, Guid receiverId, string title, string message, LinkType linkType, Guid? targetId, NotificationType type, CancellationToken cancellationToken)
+		{
+			// === Entity ===
+			var entity = new UserNotification(senderId, receiverId, title, message, linkType, targetId, type);
+
+			// === Sender DTO ===
+			var senderDto = await _userRepo.GetBriefWithAvatarAsync(senderId, cancellationToken)
+			    ?? throw new DomainException($"User sender with id {senderId} không tồn tại.");
+
+			// === Payload ===
 			var payload = new NotificationCreatedPayload(
 				senderId,
 				senderDto,
@@ -50,92 +95,63 @@ namespace ThaiTuanERP2025.Application.Core.Services
 			var json = JsonSerializer.Serialize(payload);
 
 			var outbox = new OutboxMessage("NotificationCreated", json);
-			await _uow.OutboxMessages.AddAsync(outbox, cancellationToken);
 
-			await _uow.SaveChangesWithoutDispatchAsync(cancellationToken);
+			return (entity, outbox);
 		}
 		#endregion
 
-		#region Send to many users
-		public async Task SendToManyAsync(
-			Guid senderId,
-			IEnumerable<Guid> userIds,
-			string title,
-			string message,
-			LinkType linkType,
-			Guid? targetId = null,
-			NotificationType type = NotificationType.Info,
-			CancellationToken cancellationToken = default
-		) {
-			var receivers = userIds.Distinct().ToList();
-			if (!receivers.Any()) return;
+		#region Mark
+		// === PUBLIC ===
+		public async Task MarkAsReadAsync(Guid notificationId, CancellationToken cancellationToken = default)
+		{
+			var (_, outbox) = await MarkAsReadInternalAsync(notificationId, cancellationToken);
 
-			var notifications = receivers.Select(
-				uid => new UserNotification(senderId, uid, title, message, linkType, targetId, type)
-			).ToList();
+			await _uow.OutboxMessages.AddAsync(outbox, cancellationToken);
+			await _uow.SaveChangesWithoutDispatchAsync(cancellationToken);
+		}
 
-			await _uow.UserNotifications.AddRangeAsync(notifications, cancellationToken);
+		public async Task MarkAsReadManyAsync(IEnumerable<Guid> notificationIds, CancellationToken cancellationToken = default)
+		{
+			if (notificationIds == null || !notificationIds.Any())
+				return;
 
-			foreach (var entity in notifications)
+			var outboxes = new List<OutboxMessage>();
+
+			foreach (var id in notificationIds.Distinct())
 			{
-				var senderDto = await _userRepo.GetBriefWithAvatarAsync(entity.SenderId, cancellationToken)
-					?? throw new NotFoundException("Không tìm thấy dữ liệu người gửi");
-
-				var payload = new NotificationCreatedPayload(
-					senderId,
-					senderDto,
-					entity.ReceiverId,
-					entity.Id,
-					entity.Title,
-					entity.Message,
-					entity.LinkType,
-					entity.Type,
-					entity.CreatedAt,
-					entity.IsRead,
-					entity.TargetId,
-					entity.LinkUrl
-				);
-
-				var json = JsonSerializer.Serialize(payload);
-
-				var outbox = new OutboxMessage("NotificationCreated", json);
-				await _uow.OutboxMessages.AddAsync(outbox, cancellationToken);
+				var (_, outbox) = await MarkAsReadInternalAsync(id, cancellationToken);
+				outboxes.Add(outbox);
 			}
 
+			await _uow.OutboxMessages.AddRangeAsync(outboxes, cancellationToken);
 			await _uow.SaveChangesWithoutDispatchAsync(cancellationToken);
 		}
-		#endregion
 
-		#region MarkAsRead
-		public async Task MarkAsReadAsync(Guid notificationId, Guid userId, CancellationToken cancellationToken = default)
+		// ==== PRIVATE ====
+		private async Task<(UserNotification entity, OutboxMessage outbox)> MarkAsReadInternalAsync(Guid notificationId, CancellationToken cancellationToken)
 		{
-			// Lấy notification
-			var entity = await _uow.UserNotifications.SingleOrDefaultAsync(
-				q => q.Where(x => x.Id == notificationId && x.ReceiverId == userId),
-				asNoTracking: false,
-				cancellationToken: cancellationToken
-			);
+			// 1. Lấy notification
+			var entity = await _uow.UserNotifications.GetByIdAsync(notificationId, cancellationToken);
 
 			if (entity == null)
 				throw new NotFoundException("Notification not found");
 
-			// Domain behavior
+			// 2. Domain behavior
 			entity.MarkAsRead();
 
-			// (Optionally) gửi Outbox event MarkRead để sync realtime
+			// 3. Outbox
 			var payload = new NotificationReadPayload(
-				entity.Id,
-				entity.ReceiverId,
-				entity.ReadAt!.Value
+			    entity.Id,
+			    entity.ReceiverId,
+			    entity.ReadAt!.Value
 			);
 
 			var json = JsonSerializer.Serialize(payload);
 			var outbox = new OutboxMessage("NotificationRead", json);
 
-			await _uow.OutboxMessages.AddAsync(outbox, cancellationToken);
-
-			await _uow.SaveChangesWithoutDispatchAsync(cancellationToken);
+			return (entity, outbox);
 		}
+
 		#endregion
 	}
 }

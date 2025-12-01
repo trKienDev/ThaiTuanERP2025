@@ -25,9 +25,12 @@
                                     <div class="payment-expired-badge margin-left-auto" *ngIf="step.expired">
                                           <span class="badge danger-badge">Quá hạn duyệt</span>
                                     </div>
-                                    <div *ngIf="!step.expired" class="payment-actions display-flex gap-5px align-items-center">
+                                    <div *ngIf="!step.expired && canApproveOrReject" class="payment-actions display-flex gap-5px align-items-center">
                                           <kit-spinner-button type="button" cssClass="submit-button"  text="Duyệt" [loading]="approving" [disabled]="submitting" loadingText="Đang duyệt…" (click)="approve()"></kit-spinner-button>
                                           <kit-spinner-button type="button" cssClass="danger-button" text="Từ chối" [loading]="rejecting" [disabled]="submitting" loadingText="Đang từ chối…"></kit-spinner-button>
+                                          <div class="time-clock-border">
+                                                <kit-flip-countdown style="height: 100%;" [timeLeft]="step.seconds"></kit-flip-countdown>
+                                          </div>
                                     </div>
                               </ng-container>
                         </div>

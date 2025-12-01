@@ -1,5 +1,4 @@
-﻿using ThaiTuanERP2025.Application.Shared.Interfaces;
-using ThaiTuanERP2025.Application.Core.Reminders;
+﻿using ThaiTuanERP2025.Application.Core.Reminders;
 using ThaiTuanERP2025.Domain.Core.Entities;
 using ThaiTuanERP2025.Domain.Shared.Repositories;
 using ThaiTuanERP2025.Domain.Core.Enums;
@@ -12,23 +11,51 @@ namespace ThaiTuanERP2025.Application.Core.Services
 	public class ReminderService : IReminderService
 	{
 		private readonly IUnitOfWork _uow;
-		private readonly IRealtimeNotifier _realtime;
-		public ReminderService(IUnitOfWork uow, IRealtimeNotifier realtime) {
+		public ReminderService(IUnitOfWork uow) {
 			_uow = uow;
-			_realtime = realtime;
 		}
 
-		public async Task ScheduleReminderAsync (
-			Guid userId, string subject, string message, int slaHours, DateTime dueAt,
-			LinkType linkType, Guid targetId,
-			CancellationToken cancellationToken = default
-		) {
-			// === Reminder ===
-			var reminder = new UserReminder(userId, subject, message, slaHours, dueAt, linkType, targetId);
-			await _uow.UserReminders.AddAsync(reminder, cancellationToken);
+		#region Schedule
+		// ==== PUBLIC ====
+		public async Task ScheduleReminderAsync(Guid userId, string subject, string message, int slaHours, DateTime dueAt, LinkType linkType, Guid targetId, CancellationToken cancellationToken = default) {
+			var (reminder, outbox) = CreateReminderInternal(userId, subject, message, slaHours, dueAt, linkType, targetId);
 
-			// === Outbox ===
-			var outboxMessagePayload = new ReminderCreatedPayload (
+			await _uow.UserReminders.AddAsync(reminder, cancellationToken);
+			await _uow.OutboxMessages.AddAsync(outbox, cancellationToken);
+
+			await _uow.SaveChangesWithoutDispatchAsync(cancellationToken);
+		}
+
+		public async Task ScheduleReminderManyAsync(IEnumerable<Guid> userIds, string subject, string message, int slaHours, DateTime dueAt, LinkType linkType, Guid targetId, CancellationToken cancellationToken = default)
+		{
+			if(userIds == null || !userIds.Any()) return;
+
+			var reminders = new List<UserReminder>();
+			var outboxes = new List<OutboxMessage>();
+
+			foreach (var userId in userIds.Distinct())
+			{
+				var (reminder, outbox) = CreateReminderInternal(
+				    userId, subject, message, slaHours, dueAt, linkType, targetId);
+
+				reminders.Add(reminder);
+				outboxes.Add(outbox);
+			}
+
+			await _uow.UserReminders.AddRangeAsync(reminders, cancellationToken);
+			await _uow.OutboxMessages.AddRangeAsync(outboxes, cancellationToken);
+
+			await _uow.SaveChangesWithoutDispatchAsync(cancellationToken);
+		}
+
+		// ==== PRIVATE ====
+		private (UserReminder reminder, OutboxMessage outbox) CreateReminderInternal(Guid userId, string subject, string message, int slaHours, DateTime dueAt, LinkType linkType, Guid targetId)
+		{
+			// Create reminder (domain entity)
+			var reminder = new UserReminder(userId, subject, message, slaHours, dueAt, linkType, targetId);
+
+			// Create outbox payload
+			var payload = new ReminderCreatedPayload(
 				userId,
 				reminder.Id,
 				reminder.Subject,
@@ -37,76 +64,50 @@ namespace ThaiTuanERP2025.Application.Core.Services
 				reminder.SlaHours,
 				reminder.DueAt
 			);
-			var json = JsonSerializer.Serialize(outboxMessagePayload);
-			var outbox = new OutboxMessage("ReminderCreated", json);
-			await _uow.OutboxMessages.AddAsync(outbox, cancellationToken);
 
+			var json = JsonSerializer.Serialize(payload);
+			var outbox = new OutboxMessage("ReminderCreated", json);
+
+			return (reminder, outbox);
+		}
+		#endregion
+
+		#region Resolve
+		// ==== PUBLIC ====
+		public async Task MarkResolvedAsync(Guid reminderId, CancellationToken cancellationToken = default)
+		{
+			var (_, outbox) = await ResolveOneAsync(reminderId, cancellationToken);
+
+			await _uow.OutboxMessages.AddAsync(outbox, cancellationToken);
 			await _uow.SaveChangesWithoutDispatchAsync(cancellationToken);
 		}
 
-                public async Task ScheduleReminderManyAsync(
-			IEnumerable<Guid> userIds,
-			string subject,
-			string message,
-			int slaHours,
-			DateTime dueAt,
-			LinkType linkType,
-			Guid targetId,
-			CancellationToken cancellationToken = default
-		) {
-                        if (userIds == null || !userIds.Any()) return;
-
-                        var reminders = new List<UserReminder>();
-                        var outboxes = new List<OutboxMessage>();
-
-                        foreach (var userId in userIds.Distinct())
-                        {
-                                // === Create Reminder ===
-                                var reminder = new UserReminder(
-					userId,
-					subject,
-					message,
-					slaHours,
-					dueAt,
-					linkType,
-					targetId
-                                );
-                                reminders.Add(reminder);
-
-                                // === Create Outbox for each user ===
-                                var payload = new ReminderCreatedPayload(
-					userId,
-					reminder.Id,
-					reminder.Subject,
-					reminder.Message,
-					reminder.LinkUrl,
-					reminder.SlaHours,
-					reminder.DueAt
-                                );
-
-                                var json = JsonSerializer.Serialize(payload);
-                                outboxes.Add(new OutboxMessage("ReminderCreated", json));
-                        }
-
-                        // === Insert in batch ===
-                        await _uow.UserReminders.AddRangeAsync(reminders, cancellationToken);
-                        await _uow.OutboxMessages.AddRangeAsync(outboxes, cancellationToken);
-
-                        // === Save only once ===
-                        await _uow.SaveChangesWithoutDispatchAsync(cancellationToken);
-                }
-
-                public async Task MarkResolvedAsync(Guid reminderId, CancellationToken cancellationToken = default)
+		public async Task MarkResolvedManyAsync(IEnumerable<Guid> reminderIds, CancellationToken cancellationToken = default)
 		{
-			// 1. Tìm reminder
+			if (reminderIds == null || !reminderIds.Any())
+				return;
+
+			var outboxes = new List<OutboxMessage>();
+
+			foreach (var id in reminderIds.Distinct())
+			{
+				var (_, outbox) = await ResolveOneAsync(id, cancellationToken);
+				outboxes.Add(outbox);
+			}
+
+			await _uow.OutboxMessages.AddRangeAsync(outboxes, cancellationToken);
+			await _uow.SaveChangesWithoutDispatchAsync(cancellationToken);
+		}
+		
+		// ==== Private =====
+		private async Task<(UserReminder reminder, OutboxMessage outbox)> ResolveOneAsync(Guid reminderId, CancellationToken cancellationToken)
+		{
 			var reminder = await _uow.UserReminders.GetByIdAsync(reminderId, cancellationToken);
 			if (reminder == null)
 				throw new NotFoundException($"Reminder {reminderId} not found");
 
-			// 2. Domain behavior
 			reminder.MarkResolved();
 
-			// 3. Ghi Outbox để push RealTime / Notification
 			var payload = new ReminderResolvedPayload(
 				reminder.Id,
 				reminder.UserId,
@@ -116,10 +117,9 @@ namespace ThaiTuanERP2025.Application.Core.Services
 
 			var json = JsonSerializer.Serialize(payload);
 			var outbox = new OutboxMessage("ReminderResolved", json);
-			await _uow.OutboxMessages.AddAsync(outbox, cancellationToken);
 
-			// 4. Lưu
-			await _uow.SaveChangesWithoutDispatchAsync(cancellationToken);
+			return (reminder, outbox);
 		}
+		#endregion
 	}
 }

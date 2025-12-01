@@ -1,4 +1,4 @@
-import { ApprovalStepInstanceDetailDto, ApprovalStepInstanceDto, ApprovalStepInstanceStatusDto, ExpenseStepInstanceBriefDto } from "./expense-step-instance.model";
+import { ApprovalStepInstanceDetailDto, ApprovalStepInstanceDto, ApprovalStepInstanceStatusDto, ExpenseStepInstanceBriefDto, ExpenseStepInstanceDetailDto } from "./expense-step-instance.model";
 
 export enum ExpenseWorkflowStatus {
       draft = 0,
@@ -14,6 +14,13 @@ export interface ExpenseWorkflowInstanceBriefDto {
       status: ExpenseWorkflowStatus;
       currentStepOrder: number;
       steps: ExpenseStepInstanceBriefDto[];
+}
+
+export interface ExpenseWorkflowInstanceDetailDto {
+      id: string;
+      status: ExpenseWorkflowStatus;
+      currentStepOrder: number;
+      steps: ExpenseStepInstanceDetailDto[];
 }
 
 // delete 
@@ -46,10 +53,7 @@ export interface ApprovalWorkflowInstanceRequest {
       startImmediately: boolean;
 }
 
-export interface ApprovalWorkflowInstanceDetailDto {
-      workflowInstance: ApprovalWorkflowInstanceDto;
-      steps: ApprovalStepInstanceDetailDto[];
-}
+
 
 export interface ApprovalWorkflowIntanceStatusDto {
       status: number;

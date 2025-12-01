@@ -30,20 +30,4 @@ export class ExpensePaymentApiService extends BaseApiService<ExpensePaymentDto, 
                   )
       }
 
-      // getFollowingPaymentsPaged(page: number, pageSize: number, updatedAfter?: string): Observable<ExpensePaymentSummaryDto[]> {
-      //       let params = new HttpParams()
-      //             .set('page', page.toString())
-      //             .set('pageSize', pageSize.toString());
-
-      //       if (updatedAfter) {
-      //             params = params.set('updatedAfter', updatedAfter);
-      //       }
-
-      //       return this.http.
-      //             get<ApiResponse<ExpensePaymentSummaryDto[]>>(`${this.endpoint}/following`, { params })
-      //             .pipe(
-      //                   handleApiResponse$<ExpensePaymentSummaryDto[]>(),
-      //                   catchError(err => throwError(() => err))
-      //             );
-      // }
 } 

@@ -59,7 +59,7 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.EventHandlers
 				cancellationToken: cancellationToken
 			);
 			if (approverTaskNotification is not null)
-				await _notification.MarkAsReadAsync(approverTaskNotification.Id, approverId, cancellationToken);
+				await _notification.MarkAsReadAsync(approverTaskNotification.Id, cancellationToken);
 
 			// Send notifications to creator and reviewer
 			await _notification.SendToManyAsync(

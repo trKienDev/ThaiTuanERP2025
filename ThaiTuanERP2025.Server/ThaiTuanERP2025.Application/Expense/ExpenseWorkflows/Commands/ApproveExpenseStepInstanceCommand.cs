@@ -22,9 +22,12 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
 		private readonly IReminderService _reminderService;
 		private readonly IExpensePaymentReadRepository _expensePaymentRepo;
 		private readonly IFollowerService _followerService;
+		private readonly IUserReminderReadRepository _reminderRepo;
+		private readonly IUserNotificationReadRepository _notificationRepo;
 		public ApproveExpenseStepInstanceCommandHandler(
 			IUnitOfWork uow, ICurrentUserService currentUser, INotificationService notificationSerivce, IReminderService reminderService,
-			IExpensePaymentReadRepository expensePaymentRepo, IFollowerService followerService
+			IExpensePaymentReadRepository expensePaymentRepo, IFollowerService followerService, IUserReminderReadRepository reminderRepo,
+			IUserNotificationReadRepository notificationRepo
 		) {
 			_uow = uow;
 			_currentUser = currentUser;
@@ -32,6 +35,8 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
 			_notificationService = notificationSerivce;
 			_expensePaymentRepo = expensePaymentRepo;
 			_followerService = followerService;	
+			_reminderRepo = reminderRepo;
+			_notificationRepo = notificationRepo;
 		}
 			
 		public async Task<Unit> Handle(ApproveExpenseStepInstanceCommand command, CancellationToken cancellationToken)
@@ -70,6 +75,18 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
                         if (nextStep.DueAt is null)
                                 throw new AppException("Step hiện tại chưa có hạn xử lý (DueAt = null).");
 
+			// ==== REMINDER ====
+			// resolve reminder for current approver
+			var resolveReminderIds = await _reminderRepo.ListProjectedAsync(
+				q => q.Where(
+					x => approverIds.Contains(x.UserId)
+						&& x.TargetId == workflowInstance.DocumentId
+						&& !x.IsResolved
+				).Select(x => x.Id),
+				cancellationToken: cancellationToken
+			) ?? throw new NotFoundException("Không tìm thấy nhắc việc của người duyệt");
+			await _reminderService.MarkResolvedManyAsync(resolveReminderIds, cancellationToken);
+
                         var nextApproverIds = nextStep.GetResolvedApproverIds();
 			// set reminder for next approver
 			await _reminderService.ScheduleReminderManyAsync(
@@ -83,8 +100,23 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
 				cancellationToken
 			);
 
+			// ==== NOTIFICATIONS ====
 			var creatorId = await _expensePaymentRepo.GetCreatorIdAsync(workflowInstance.DocumentId, cancellationToken)
 				?? throw new NotFoundException("Không tìm thấy thông tin người tạo thanh toán này");
+
+			// mark as read
+			var taskNotificaitonIds = await _notificationRepo.ListProjectedAsync(
+				q => q.Where(x => 
+					approverIds.Contains(x.ReceiverId)
+					&& x.TargetId == workflowInstance.DocumentId
+					&& x.Type == Domain.Core.Enums.NotificationType.Task
+					&& !x.IsRead
+				).Select(x => x.Id),
+				cancellationToken: cancellationToken
+			);
+			if (taskNotificaitonIds.Any())
+				await _notificationService.MarkAsReadManyAsync(taskNotificaitonIds, cancellationToken);
+
 
 			// send notifications
 			await _notificationService.SendToManyAsync(
@@ -98,6 +130,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
 				cancellationToken: cancellationToken
 			);
 
+			// ==== FOLLOWERS ====
 			// Set Follow for next approver
 			await _followerService.FollowManyAsync(DocumentType.ExpensePayment, workflowInstance.DocumentId, nextApproverIds, cancellationToken);
 

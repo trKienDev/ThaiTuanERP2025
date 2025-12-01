@@ -16,4 +16,12 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Contracts
 		public int CurrentStepOrder { get; init; }
 		public IReadOnlyCollection<ExpenseStepInstanceBriefDto> Steps { get; init; } = Array.Empty<ExpenseStepInstanceBriefDto>();
 	}
+
+	public sealed record ExpenseWorkflowInstanceDetailDto
+	{
+		public Guid Id { get; init; }
+		public ExpenseWorkflowStatus Status { get; init; }
+		public int CurrentStepOrder { get; init; }
+		public IReadOnlyCollection<ExpenseStepInstanceDetailDto> Steps { get; init; } = Array.Empty<ExpenseStepInstanceDetailDto>();
+	}
 }

@@ -45,6 +45,14 @@ export interface ExpenseStepInstanceBriefDto {
       dueAt?: string;
 }
 
+export interface ExpenseStepInstanceDetailDto {
+      order: number;
+      status: ExpensePaymentStatus;
+      approvedByUser?: UserBriefAvatarDto;
+      dueAt?: string;
+      approverIds: string[];
+}
+
 export interface ApprovalStepInstanceDetailDto extends ApprovalStepInstanceDto {
       approverCandidates: UserDto[];
 

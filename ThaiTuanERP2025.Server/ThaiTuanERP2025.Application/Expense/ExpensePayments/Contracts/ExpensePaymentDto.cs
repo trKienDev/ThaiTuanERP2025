@@ -32,7 +32,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Contracts
 		public DateTime DueAt { get; init; }
 		public bool HasGoodsReceipt { get; init; }
 		public ExpensePaymentStatus Status { get; init; }
-		public ExpenseWorkflowInstanceBriefDto? WorkflowInstance { get; init; }
+		public ExpenseWorkflowInstanceDetailDto? WorkflowInstance { get; init; }
 		public IReadOnlyList<ExpensePaymentItemLookupDto> Items { get; init; } = Array.Empty<ExpensePaymentItemLookupDto>();
 
 		public ExpensePayeeType PayeeType { get; init; }

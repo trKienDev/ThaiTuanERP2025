@@ -51,7 +51,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Queries
 				}
 			}
 
-			return followingPayments;
+			return followingPayments.OrderByDescending(x => x.CreatedAt).ToList();
 		}
 	}
 }

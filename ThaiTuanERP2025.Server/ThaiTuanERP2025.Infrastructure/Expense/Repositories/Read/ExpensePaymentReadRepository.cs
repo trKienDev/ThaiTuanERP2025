@@ -39,10 +39,12 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories.Read
 
 		public async Task<ExpensePaymentDetailDto?> GetDetailById(Guid id, CancellationToken cancellationToken = default)
 		{
-			return await _dbSet.AsNoTracking()
-				.Where(x => x.Id == id)
-				.ProjectTo<ExpensePaymentDetailDto>(_mapperConfig)
-				.SingleOrDefaultAsync(cancellationToken);
+			var payment = await _dbSet
+				.Include(x => x.CurrentWorkflowInstance).ThenInclude(w => w.Steps)
+				.Include(x => x.Items).ThenInclude(i => i.BudgetPlanDetail).ThenInclude(b => b.BudgetCode)
+				.FirstOrDefaultAsync(x => x.Id == id);
+
+			return _mapper.Map<ExpensePaymentDetailDto>(payment);
 		}
 	}
 }

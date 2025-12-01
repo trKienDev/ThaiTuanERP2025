@@ -3,23 +3,24 @@ import { CommonModule } from "@angular/common";
 import { Component, Inject, inject, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { ExpensePaymentApiService } from '../../services/api/expense-payment.service';
-import { firstValueFrom, map, Observable } from 'rxjs';
+import { firstValueFrom, map, Observable, shareReplay } from 'rxjs';
 import { AvatarUrlPipe } from "../../../../shared/pipes/avatar-url.pipe";
 import { trigger, transition, style, animate } from '@angular/animations';
 import { ExpensePaymentStatusPipe } from "../../pipes/expense-payment-status.pipe";
 import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 import { ExpenseWorkflowInstanceApiService } from '../../services/api/expense-workflow-instance.service';
 import { ToastService } from '../../../../shared/components/kit-toast-alert/kit-toast-alert.service';
-import { ExpenseStepInstanceBriefDto } from '../../models/expense-step-instance.model';
+import {  ExpenseStepInstanceDetailDto } from '../../models/expense-step-instance.model';
 import { CountdownService } from '../../../../shared/services/countdown.service';
 import { HttpErrorHandlerService } from '../../../../core/services/http-errror-handler.service';
-import { handleHttpError } from '../../../../shared/utils/handle-http-errors.util';
 import { Router } from '@angular/router';
+import { UserFacade } from '../../../account/facades/user.facade';
+import { KitFlipCountdownComponent } from "../../../../shared/components/kit-flip-countdown/kit-flip-countdown.component";
 
 @Component({
       selector: 'expense-payment-detail-dialog',
       standalone: true,
-      imports: [CommonModule, AvatarUrlPipe, ExpensePaymentStatusPipe, KitSpinnerButtonComponent],
+      imports: [CommonModule, AvatarUrlPipe, ExpensePaymentStatusPipe, KitSpinnerButtonComponent, KitFlipCountdownComponent],
       templateUrl: './expense-payment-detail-dialog.component.html',
       styleUrl: './expense-payment-detail-dialog.component.scss',
       animations: [
@@ -49,12 +50,12 @@ export class ExpensePaymentDetailDialogComponent {
       private readonly countdown = inject(CountdownService);
       private readonly httpErrorHandler = inject(HttpErrorHandlerService);
       private readonly router = inject(Router);
+      private readonly currentUser$ = inject(UserFacade).currentUser$;
       approving = false;
       rejecting = false;
       submitting = false;
+      canApproveOrReject = false;
       
-
-
       paymentId: string;
       paymentDetail: ExpensePaymentDetailDto | null = null;
 
@@ -67,6 +68,8 @@ export class ExpensePaymentDetailDialogComponent {
             this.paymentDetail = await firstValueFrom(this.expensePaymentApi.getDetailById(id));
 
             const step = this.currentStep;
+            const userId = (await firstValueFrom(this.currentUser$)).id;
+            this.canApproveOrReject = step?.approverIds?.includes(userId) ?? false;
 
             if (!step?.dueAt) {
                   console.warn("Current step has no dueAt → skip countdown");
@@ -79,18 +82,19 @@ export class ExpensePaymentDetailDialogComponent {
                         map(seconds => ({
                               seconds,
                               expired: seconds <= 0
-                        }))
+                        })),
+                        shareReplay(1)
                   );
             }
       }
 
       // ==== CURRENT STEP ====
-      get currentStep(): ExpenseStepInstanceBriefDto | undefined {
+      get currentStep(): ExpenseStepInstanceDetailDto | undefined {
             const wf = this.paymentDetail?.workflowInstance;
             if (!wf) return undefined;
             return wf.steps.find(s => s.order === wf.currentStepOrder);
       }
-      get currentStepSafe(): ExpenseStepInstanceBriefDto | null {
+      get currentStepSafe(): ExpenseStepInstanceDetailDto | null {
             const wf = this.paymentDetail?.workflowInstance;
             if (!wf || !wf.steps || wf.steps.length === 0) return null;
             return wf.steps[wf.currentStepOrder] || null;
@@ -115,6 +119,7 @@ export class ExpensePaymentDetailDialogComponent {
 
             try {
                   await firstValueFrom(this.expenseWorkflowInstanceApi.approve(this.paymentDetail?.workflowInstance.id));
+                  this.toast.successRich("Duyệt thanh toán thành công");
                   this.close(true);
                   this.router.navigateByUrl('expense/expense-payment-shell/following-payments');
             } catch(error) {
@@ -123,7 +128,6 @@ export class ExpensePaymentDetailDialogComponent {
                   this.approving = false;
                   this.submitting = false;
             }
-            
       }
 
 

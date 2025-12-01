@@ -1,5 +1,5 @@
 import { UserBriefAvatarDto, UserDto } from "../../account/models/user.model";
-import { ApprovalWorkflowInstanceDetailDto, ExpenseWorkflowInstanceBriefDto } from "./expense-workflow-instance.model";
+import { ExpenseWorkflowInstanceBriefDto, ExpenseWorkflowInstanceDetailDto } from "./expense-workflow-instance.model";
 import { ExpensePaymentAttachmentDto } from "./expense-payment-attachment.model";
 import { ExpensePaymentItemDetailDto, ExpensePaymentItemLookupDto, ExpensePaymentItemPayload } from "./expense-payment-item.model";
 import { OutgoingPaymentStatusDto } from "./outgoing-payment.model";
@@ -69,7 +69,7 @@ export interface ExpensePaymentDetailDto {
       name: string;
       subId: string;
       description?: string;
-      workflowInstance: ExpenseWorkflowInstanceBriefDto;
+      workflowInstance: ExpenseWorkflowInstanceDetailDto;
       items: ExpensePaymentItemLookupDto[];
       status: ExpensePaymentStatus;
 
