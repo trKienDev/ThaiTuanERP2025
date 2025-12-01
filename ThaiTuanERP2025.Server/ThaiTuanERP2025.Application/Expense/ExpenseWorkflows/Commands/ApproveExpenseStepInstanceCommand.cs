@@ -1,11 +1,13 @@
 ﻿using FluentValidation;
 using MediatR;
+using ThaiTuanERP2025.Application.Core.Followers;
 using ThaiTuanERP2025.Application.Core.Notifications;
 using ThaiTuanERP2025.Application.Core.Reminders;
 using ThaiTuanERP2025.Application.Expense.ExpensePayments.Repositories;
 using ThaiTuanERP2025.Application.Shared.Exceptions;
 using ThaiTuanERP2025.Application.Shared.Interfaces;
 using ThaiTuanERP2025.Domain.Exceptions;
+using ThaiTuanERP2025.Domain.Shared.Enums;
 using ThaiTuanERP2025.Domain.Shared.Repositories;
 
 namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
@@ -19,15 +21,17 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
 		private readonly INotificationService _notificationService;
 		private readonly IReminderService _reminderService;
 		private readonly IExpensePaymentReadRepository _expensePaymentRepo;
+		private readonly IFollowerService _followerService;
 		public ApproveExpenseStepInstanceCommandHandler(
 			IUnitOfWork uow, ICurrentUserService currentUser, INotificationService notificationSerivce, IReminderService reminderService,
-			IExpensePaymentReadRepository expensePaymentRepo
+			IExpensePaymentReadRepository expensePaymentRepo, IFollowerService followerService
 		) {
 			_uow = uow;
 			_currentUser = currentUser;
 			_reminderService = reminderService;
 			_notificationService = notificationSerivce;
 			_expensePaymentRepo = expensePaymentRepo;
+			_followerService = followerService;	
 		}
 			
 		public async Task<Unit> Handle(ApproveExpenseStepInstanceCommand command, CancellationToken cancellationToken)
@@ -57,6 +61,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
                                 workflowInstance.ActivateNextStep();
                         }
 
+			// ==== AFTER APPROVE ===
 			var expensePaymentName = await _expensePaymentRepo.GetNameAsync(workflowInstance.DocumentId, cancellationToken);
 			var message = $"Thanh toán {expensePaymentName} đang chờ bạn duyệt";
 			var subject = $"Duyệt thanh toán {expensePaymentName}";
@@ -92,6 +97,9 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
 				type: Domain.Core.Enums.NotificationType.Task,
 				cancellationToken: cancellationToken
 			);
+
+			// Set Follow for next approver
+			await _followerService.FollowManyAsync(DocumentType.ExpensePayment, workflowInstance.DocumentId, nextApproverIds, cancellationToken);
 
                         await _uow.SaveChangesAsync(cancellationToken);
 			return Unit.Value;

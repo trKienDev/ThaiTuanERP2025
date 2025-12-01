@@ -12,6 +12,9 @@ import { ExpenseWorkflowInstanceApiService } from '../../services/api/expense-wo
 import { ToastService } from '../../../../shared/components/kit-toast-alert/kit-toast-alert.service';
 import { ExpenseStepInstanceBriefDto } from '../../models/expense-step-instance.model';
 import { CountdownService } from '../../../../shared/services/countdown.service';
+import { HttpErrorHandlerService } from '../../../../core/services/http-errror-handler.service';
+import { handleHttpError } from '../../../../shared/utils/handle-http-errors.util';
+import { Router } from '@angular/router';
 
 @Component({
       selector: 'expense-payment-detail-dialog',
@@ -44,6 +47,13 @@ export class ExpensePaymentDetailDialogComponent {
       private readonly toast = inject(ToastService);
       currentStepStatus$!: Observable<{ seconds: number, expired: boolean }>;
       private readonly countdown = inject(CountdownService);
+      private readonly httpErrorHandler = inject(HttpErrorHandlerService);
+      private readonly router = inject(Router);
+      approving = false;
+      rejecting = false;
+      submitting = false;
+      
+
 
       paymentId: string;
       paymentDetail: ExpensePaymentDetailDto | null = null;
@@ -95,12 +105,25 @@ export class ExpensePaymentDetailDialogComponent {
 
       // actions
       async approve() {
+            this.approving = true;
+            this.submitting = true;
             if (!this.paymentDetail?.workflowInstance?.id) {
                   this.toast.errorRich("Không thể truy vấn luồng duyệt của thanh toán này");
                   console.error("workflowInstance.id is missing");
                   return;
             }
-            const resut = await firstValueFrom(this.expenseWorkflowInstanceApi.approve(this.paymentDetail?.workflowInstance.id));
+
+            try {
+                  await firstValueFrom(this.expenseWorkflowInstanceApi.approve(this.paymentDetail?.workflowInstance.id));
+                  this.close(true);
+                  this.router.navigateByUrl('expense/expense-payment-shell/following-payments');
+            } catch(error) {
+                  this.httpErrorHandler.handle(error, "Duyệt thất bại");
+            } finally {
+                  this.approving = false;
+                  this.submitting = false;
+            }
+            
       }
 
 
