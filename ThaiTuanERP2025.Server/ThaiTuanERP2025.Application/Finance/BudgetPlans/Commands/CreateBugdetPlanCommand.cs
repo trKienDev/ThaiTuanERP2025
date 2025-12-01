@@ -74,7 +74,6 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Commands
 			await _uow.Followers.AddRangeAsync(followers, cancellationToken);
 
 			await _uow.SaveChangesAsync(cancellationToken);
-
 			return Unit.Value;
 		}
 

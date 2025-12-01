@@ -55,12 +55,11 @@ namespace ThaiTuanERP2025.Application.Finance.BudgetPlans.Queries
 
 			var details = availablePlans.SelectMany(x => x.Details).ToList();
 			var detailIds = details.Select(d => d.Id);
-                        var spentMap = await _budgetTransactionRepo.GetRemainingByDetailIdsAsync(detailIds, cancellationToken);
+                        var remainingMap = await _budgetTransactionRepo.GetRemainingByDetailIdsAsync(detailIds, cancellationToken);
 
                         foreach (var d in details)
                         {
-                                var spent = spentMap.TryGetValue(d.Id, out var s) ? s : 0m;
-                                d.RemainingAmount = d.Amount - spent;
+                                d.RemainingAmount = remainingMap.TryGetValue(d.Id, out var r) ? r : d.Amount;
                         }
 
                         return details;

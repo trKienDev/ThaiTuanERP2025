@@ -5,7 +5,7 @@
                         <div class="username">&#64; {{ user?.username || '---' }}</div>
                   </div>
                   <div class="avatar-img-wrapper">
-                        <img class="avatar-img" [src]="previewAvatarSrc || (user | avatarUrlPipe)" [alt]="user?.fullName || user?.username || 'avatar user'" (click)="triggerAvatarUpload()" role="button" tabindex="0" (keydown.enter)="triggerAvatarUpload()" (keydown.space)="triggerAvatarUpload()" style="cursor: pointer;"/>
+                        <img class="avatar-img" [src]="previewAvatarSrc || (user | avatarUrlPipe)" (click)="triggerAvatarUpload()" role="button" tabindex="0" (keydown.enter)="triggerAvatarUpload()" (keydown.space)="triggerAvatarUpload()" style="cursor: pointer;"/>
                         <input type="file" id="avatar-input" hidden accept="image/png, image/jpeg, image/jpg" (change)="onAvatarSelected($event)"/>
                   </div>
                   <div class="save-avatar-wrapper display-flex justify-content-center">

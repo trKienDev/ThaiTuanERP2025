@@ -26,7 +26,7 @@
                         <td>{{ i + 1 }}</td>
                         <td>
                               <div class="display-flex justify-content-center align-items-center gap-5px">
-                                    <img class="avatar-user" [src]="user | avatarUrlPipe" alt="avatar-user">
+                                    <img class="avatar-user" [src]="user | avatarUrlPipe">
                                     <span>{{ user.fullName }}</span> 
                               </div>
                         </td>
@@ -39,7 +39,7 @@
                         </td>
                         <td>
                               <ul *ngFor="let manager of user.managers">
-                                    <li><img class="avatar-user" [src]="manager | avatarUrlPipe" alt="avatar-user"></li>
+                                    <li><img class="avatar-user" [src]="manager | avatarUrlPipe"></li>
                               </ul>
                         </td>
                         <td *appHasPermission="'user.actions'">

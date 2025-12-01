@@ -13,11 +13,10 @@
 }
 .main-content-container {
       background-color: white;
-      // border: 1px solid var(--default-border-color);
       border-radius: 5px;
       -webkit-overflow-scrolling: touch; 
       position: relative;
-      padding: 5px;
+      padding-left: 5px;
 }
 .main-content-border {
       box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;

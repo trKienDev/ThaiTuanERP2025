@@ -42,16 +42,38 @@ namespace ThaiTuanERP2025.Domain.Finance.Entities
 		public BudgetTransactionType Type { get; private set; }
 		public DateTime TransactionDate { get; private set; }
 
-		#endregion
+                public Guid? OriginalTransactionId { get; private set; }
+                public Guid? ReversedByTransactionId { get; private set; }
 
-		#region Domain Behaviors
+                public BudgetTransaction? OriginalTransaction { get; private set; }
+                public BudgetTransaction? ReversedByTransaction { get; private set; }
 
-		public void Reverse()
+                #endregion
+
+                #region Domain Behaviors
+
+                public BudgetTransaction CreateReverse()
+                {
+                        var reversed = new BudgetTransaction(
+				  planDetailId: this.BudgetPlanDetailId,
+				  paymentItemId: this.ExpensePaymentItemId,
+				  amount: this.Amount,
+				  type: BudgetTransactionType.Credit
+		      );
+
+                        // Gán quan hệ 2 chiều
+                        reversed.OriginalTransactionId = this.Id;
+                        this.ReversedByTransactionId = reversed.Id;
+
+			return reversed;
+                }
+
+                internal void Reverse()
 		{
 			AddDomainEvent(new BudgetTransactionReversedEvent(this));
 		}
 
-		public void AdjustAmount(decimal newAmount)
+		internal void AdjustAmount(decimal newAmount)
 		{
 			Guard.AgainstZeroOrNegative(newAmount, nameof(newAmount));
 			Amount = newAmount;

@@ -7,6 +7,9 @@ using ThaiTuanERP2025.Application.Expense.ExpensePayments.Repositories;
 using ThaiTuanERP2025.Application.Shared.Exceptions;
 using ThaiTuanERP2025.Application.Shared.Interfaces;
 using ThaiTuanERP2025.Domain.Exceptions;
+using ThaiTuanERP2025.Domain.Finance.Entities;
+using ThaiTuanERP2025.Domain.Finance.Enums;
+using ThaiTuanERP2025.Domain.Finance.Events.BudgetTransactions;
 using ThaiTuanERP2025.Domain.Shared.Repositories;
 
 namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
@@ -54,8 +57,9 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
 				cancellationToken: cancellationToken
 			) ?? throw new NotFoundException("Không tìm thấy workflow");
 
-			var expensePayment = await _uow.ExpensePayments.SingleOrDefaultAsync(
-				q => q.Where(x => x.Id == workflowInstance.DocumentId),
+			var expensePayment = await _uow.ExpensePayments.SingleOrDefaultIncludingAsync(
+				predicate: x => x.Id == workflowInstance.DocumentId,
+				includes: x => x.Items,
 				asNoTracking: false,
 				cancellationToken: cancellationToken
 			) ?? throw new NotFoundException("Không tìm thấy thanh toán yêu cầu");
@@ -67,6 +71,28 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
 
 			workflowInstance.MarkRejected(userId);
 			expensePayment.MarkRejected();
+
+			// ==== RECORD BUDGET TRANSACTION =====
+			foreach(var item in expensePayment.Items)
+			{
+				var debitTransactions = await _uow.BudgetTransactions.ListAsync(
+					q => q.Where(x =>
+						x.ExpensePaymentItemId == item.Id &&
+						x.Type == BudgetTransactionType.Debit
+					),
+					asNoTracking: false,
+					cancellationToken: cancellationToken
+				);
+
+                                foreach (var debit in debitTransactions)
+                                {
+                                        // Tạo transaction Credit để đảo ngược
+                                        var reverse = debit.CreateReverse();
+
+                                        await _uow.BudgetTransactions.AddAsync(reverse, cancellationToken);
+                                }
+                        }
+
 			// === AFTER REJECT ===
 			// Reminders
 			// resolve reminder for current approver
