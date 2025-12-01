@@ -25,7 +25,7 @@
                                     <div class="payment-expired-badge margin-left-auto" *ngIf="step.expired">
                                           <span class="badge danger-badge">Quá hạn duyệt</span>
                                     </div>
-                                    <div *ngIf="!step.expired && canApproveOrReject" class="payment-actions display-flex gap-5px align-items-center">
+                                    <div *ngIf="!step.expired && canApproveOrReject && isInProgress" class="payment-actions display-flex gap-5px align-items-center">
                                           <kit-spinner-button type="button" cssClass="submit-button"  text="Duyệt" [loading]="approving" [disabled]="submitting" loadingText="Đang duyệt…" (click)="approve()"></kit-spinner-button>
                                           <kit-spinner-button type="button" cssClass="danger-button" text="Từ chối" [loading]="rejecting" [disabled]="submitting" loadingText="Đang từ chối…" (click)="reject()"></kit-spinner-button>
                                           <div class="time-clock-border">
@@ -80,9 +80,17 @@
                                                 <ng-container *ngIf="(paymentDetail?.workflowInstance?.steps?.length ?? 0) > 0">
                                                       <div class="approvers display-flex gap-5px">
                                                             <ng-container *ngFor="let step of paymentDetail?.workflowInstance?.steps">
-                                                                  <div class="expense-step">
-                                                                        <img class="avatar-user" [src]="step.approvedByUser| avatarUrlPipe">
-                                                                  </div>
+                                                                  <ng-container *ngIf="step.approvedByUser">
+                                                                        <div class="expense-step">
+                                                                              <img class="avatar-user approved-user" [src]="step.approvedByUser | avatarUrlPipe">
+                                                                              <span class="status-icon approved-icon">✓</span>
+                                                                        </div>
+                                                                  </ng-container>
+                                                                  <ng-container *ngIf="step.rejectedByUser">
+                                                                        <div class="expense-step">
+                                                                              <img class="avatar-user rejected-user" [src]="step.rejectedByUser | avatarUrlPipe">
+                                                                        </div>
+                                                                  </ng-container>
                                                             </ng-container>
                                                       </div>
                                                 </ng-container>

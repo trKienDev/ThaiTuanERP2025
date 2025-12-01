@@ -23,7 +23,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.MappingProfiles
 				.ForMember(
 					dest => dest.Steps,
 					opt => opt.MapFrom(src =>
-						src.Steps.Where(s => s.Status == ExpenseStepStatus.Approved || s.Status == ExpenseStepStatus.Waiting).OrderBy(s => s.Order)
+						src.Steps.OrderBy(s => s.Order)
 					)
 				);
 		}

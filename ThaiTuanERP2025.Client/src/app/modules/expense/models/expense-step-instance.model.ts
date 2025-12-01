@@ -49,6 +49,7 @@ export interface ExpenseStepInstanceDetailDto {
       order: number;
       status: ExpensePaymentStatus;
       approvedByUser?: UserBriefAvatarDto;
+      rejectedByUser?: UserBriefAvatarDto;
       dueAt?: string;
       approverIds: string[];
 }

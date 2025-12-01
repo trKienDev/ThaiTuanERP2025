@@ -36,7 +36,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public string SubId { get; private set; } = default!;
 		public ExpensePayeeType PayeeType { get; private set; }
 		public Guid? SupplierId { get; private set; }
-		public Supplier? Supplier { get; private set; } 
+		public Supplier? Supplier { get; set; } 
 
 		public string BankName { get; private set; } = string.Empty;
 		public string AccountNumber { get; private set; } = string.Empty;

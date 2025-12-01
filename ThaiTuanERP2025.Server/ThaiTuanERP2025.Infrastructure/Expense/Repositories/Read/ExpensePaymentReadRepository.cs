@@ -49,7 +49,9 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories.Read
 		{
 			var payment = await _dbSet
 				.Include(x => x.CreatedByUser)
+				.Include(x => x.Supplier)
 				.Include(x => x.CurrentWorkflowInstance).ThenInclude(w => w.Steps).ThenInclude(s => s.ApprovedByUser)
+				.Include(x => x.CurrentWorkflowInstance).ThenInclude(w => w.Steps).ThenInclude(s => s.RejectedByUser)
 				.Include(x => x.Items).ThenInclude(i => i.BudgetPlanDetail).ThenInclude(b => b.BudgetCode)
 				.FirstOrDefaultAsync(x => x.Id == id);
 

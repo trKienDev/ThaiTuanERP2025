@@ -16,6 +16,7 @@ import { HttpErrorHandlerService } from '../../../../core/services/http-errror-h
 import { Router } from '@angular/router';
 import { UserFacade } from '../../../account/facades/user.facade';
 import { KitFlipCountdownComponent } from "../../../../shared/components/kit-flip-countdown/kit-flip-countdown.component";
+import { ExpenseWorkflowStatus } from '../../models/expense-workflow-instance.model';
 
 @Component({
       selector: 'expense-payment-detail-dialog',
@@ -55,6 +56,7 @@ export class ExpensePaymentDetailDialogComponent {
       rejecting = false;
       submitting = false;
       canApproveOrReject = false;
+      isInProgress = false;
       
       paymentId: string;
       paymentDetail: ExpensePaymentDetailDto | null = null;
@@ -69,7 +71,10 @@ export class ExpensePaymentDetailDialogComponent {
 
             const step = this.currentStep;
             const userId = (await firstValueFrom(this.currentUser$)).id;
+            console.log('payment detail: ', this.paymentDetail);
+
             this.canApproveOrReject = step?.approverIds?.includes(userId) ?? false;
+            this.isInProgress = this.paymentDetail.workflowInstance.status === ExpenseWorkflowStatus.inProgress;
 
             if (!step?.dueAt) {
                   console.warn("Current step has no dueAt → skip countdown");

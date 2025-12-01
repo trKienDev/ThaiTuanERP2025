@@ -20,6 +20,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Contracts
 		public int Order { get; init; }
 		public ExpenseStepStatus Status { get; init; }
 		public UserBriefAvatarDto? ApprovedByUser { get; init; } = null;
+		public UserBriefAvatarDto? RejectedByUser { get; init; } = null;
 		public DateTime? DueAt { get; init; }
 		public List<Guid> ApproverIds { get; set; } = new();
 	}

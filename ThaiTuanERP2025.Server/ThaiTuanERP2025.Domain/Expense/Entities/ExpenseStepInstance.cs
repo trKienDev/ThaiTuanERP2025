@@ -55,11 +55,11 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		public DateTime? ApprovedAt { get; private set; }
 		public Guid? ApprovedBy { get; private set; }
-		public User? ApprovedByUser { get; private set; }
+		public User? ApprovedByUser { get; set; }
 
 		public DateTime? RejectedAt { get; private set; }
 		public Guid? RejectedBy { get; private set; }
-		public User? RejectedByUser { get; private set; }
+		public User? RejectedByUser { get; set; }
 
 		public string? Comments { get; private set; }
 		public bool SlaBreached { get; private set; }

@@ -19,6 +19,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.MappingProfiles
 
 			CreateMap<ExpenseStepInstance, ExpenseStepInstanceDetailDto>()
 				.ForMember(dest => dest.ApprovedByUser, opt => opt.MapFrom(src => src.ApprovedByUser))
+				.ForMember(dest => dest.RejectedByUser, opt => opt.MapFrom(src => src.RejectedByUser))
 				.ForMember(dest => dest.DueAt, opt => opt.MapFrom(
 					src => src.DueAt.HasValue ? TimeZoneConverter.ToVietnamTime(src.DueAt.Value) : (DateTime?)null)
 				)
