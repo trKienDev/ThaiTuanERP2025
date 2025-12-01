@@ -109,14 +109,13 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			SlaBreached = true;
 	}
 
-	internal void Reject(Guid by, string? comment)
+	internal void Reject(Guid by)
 	{
 		if (Status != ExpenseStepStatus.Waiting)
 			throw new DomainException("Không thể từ chối bước không ở trạng thái 'Waiting'.");
 		Status = ExpenseStepStatus.Rejected;
 		RejectedBy = by;
 		RejectedAt = DateTime.UtcNow;
-		Comments = comment;
 	}
 
 	internal void Skip(string? reason)

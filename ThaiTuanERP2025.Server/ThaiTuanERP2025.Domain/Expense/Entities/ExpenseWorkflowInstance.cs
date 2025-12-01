@@ -137,6 +137,18 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			Status = ExpenseWorkflowStatus.InProgress;
 		}
 
+		internal void MarkRejected(Guid byUserId)
+		{
+			if (Status == ExpenseWorkflowStatus.Rejected) return;
+			if(Status != ExpenseWorkflowStatus.InProgress)
+				throw new DomainException("Chỉ có thể phê duyệt thanh toán đang xử lý.");
+
+			Status = ExpenseWorkflowStatus.Rejected;
+
+			var currentStep = GetCurrentStep();
+			currentStep.Reject(byUserId);
+		}
+
 		#endregion
 	}
 }

@@ -7,13 +7,12 @@
             <ng-container *ngIf="items.length > 0; else emptyState">
                   <ul class="notification-list">
                         <ng-container *ngFor="let n of items; trackBy: trackById" >
-                              <li class="notification-item display-flex align-items-center gap-10px" [class.unread]="!n.isRead" (click)="onClickItem(n)">
+                              <li [class.unread-notification]="!n.isRead" class="notification-item display-flex align-items-center gap-10px" [class.unread]="!n.isRead" (click)="onClickItem(n)">
                                     <div class="sender">
                                           <img class="avatar-user" [src]="n.sender | avatarUrlPipe" alt="avatar-user">
                                     </div>
                                     <div class="content">
                                           <div class="title-wrapper display-flex gap-10px align-items-center">
-                                                <div class="unread-dot" *ngIf="!n.isRead"></div>
                                                 <div class="title-text">{{ n.title || 'Thông báo' }}</div>
                                           </div>
                                           <div class="message" *ngIf="n.message">{{ n.message }}</div>

@@ -54,18 +54,20 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
 				cancellationToken: cancellationToken
 			) ?? throw new NotFoundException("Không tìm thấy workflow");
 
+			var expensePayment = await _uow.ExpensePayments.SingleOrDefaultAsync(
+				q => q.Where(x => x.Id == workflowInstance.DocumentId),
+				asNoTracking: false,
+				cancellationToken: cancellationToken
+			) ?? throw new NotFoundException("Không tìm thấy thanh toán yêu cầu");
+
 			var currentStep = workflowInstance.GetCurrentStep();
 			var approverIds = currentStep.GetResolvedApproverIds();
 			if (!approverIds.Contains(userId))
 				throw new BusinessRuleViolationException("Bạn không có quyền duyệt");
 
-			currentStep.Reject(userId, null);
-			workflowInstance.ActivateNextStep();
-
+			workflowInstance.MarkRejected(userId);
+			expensePayment.MarkRejected();
 			// === AFTER REJECT ===
-			var expensePaymentId = workflowInstance.DocumentId;
-			var expensePaymentName = await _expensePaymentRepo.GetNameAsync(expensePaymentId, cancellationToken);
-
 			// Reminders
 			// resolve reminder for current approver
 			var resolveReminderIds = await _reminderRepo.ListProjectedAsync(
@@ -97,16 +99,16 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
 
 			// Send notification to creator
 			var userName = await _userRepo.GetUserNameAsync(userId, cancellationToken);
-			var managerApproverId = await _expensePaymentRepo.GetManagerApproverId(expensePaymentId, cancellationToken);
+			var managerApproverId = await _expensePaymentRepo.GetManagerApproverId(expensePayment.Id, cancellationToken);
 
 			var receivers = new List<Guid> { creatorId, managerApproverId }.Where(id => id != Guid.Empty).Distinct().ToList();
 			await _notificationService.SendToManyAsync(
 				senderId: userId,
 				userIds: receivers,
-				title: $"{expensePaymentName} đã bị {userName} từ chối",
-				message: $"Thanh toán {expensePaymentName} đã bị {userName} từ chối",
+				title: $"{expensePayment.Name} đã bị {userName} từ chối",
+				message: $"Thanh toán {expensePayment.Name} đã bị {userName} từ chối",
 				linkType: Domain.Core.Enums.LinkType.ExpensePaymentDetail,
-				expensePaymentId,
+				expensePayment.Id,
 				type: Domain.Core.Enums.NotificationType.Info,
 				cancellationToken: cancellationToken
 			);
