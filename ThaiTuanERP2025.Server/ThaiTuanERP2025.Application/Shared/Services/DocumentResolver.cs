@@ -6,7 +6,7 @@ namespace ThaiTuanERP2025.Application.Shared.Services
 	public interface IDocumentResolver
 	{
 		Task<string> GetDocumentNameAsync(DocumentType type, Guid documentId, CancellationToken cancellationToken);
-		Task<Guid> GetDocumentCreatorIdAsync(DocumentType type, Guid documentId, CancellationToken cancellationToken);
+		Task<Guid?> GetDocumentCreatorIdAsync(DocumentType type, Guid documentId, CancellationToken cancellationToken);
 	}
 
 	public sealed class DocumentResolver : IDocumentResolver
@@ -26,7 +26,7 @@ namespace ThaiTuanERP2025.Application.Shared.Services
 			};
 		}
 
-		public async Task<Guid> GetDocumentCreatorIdAsync(DocumentType type, Guid documentId, CancellationToken cancellationToken)
+		public async Task<Guid?> GetDocumentCreatorIdAsync(DocumentType type, Guid documentId, CancellationToken cancellationToken)
 		{
 			return type switch
 			{

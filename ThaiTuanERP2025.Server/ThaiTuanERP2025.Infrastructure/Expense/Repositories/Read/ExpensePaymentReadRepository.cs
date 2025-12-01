@@ -21,11 +21,11 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories.Read
 				.SingleOrDefaultAsync(cancellationToken);
 		}
 
-		public async Task<Guid> GetCreatorIdAsync(Guid expensePaymentId, CancellationToken cancellationToken = default)
+		public async Task<Guid?> GetCreatorIdAsync(Guid expensePaymentId, CancellationToken cancellationToken = default)
 		{
 			return await _dbSet.AsNoTracking()
 				.Where(x => x.Id == expensePaymentId)
-				.Select(x => x.Id)
+				.Select(x => x.CreatedByUserId)
 				.SingleOrDefaultAsync(cancellationToken);
 		}
 

@@ -108,7 +108,5 @@ export interface ExpensePaymentLookupDto {
       createdByUserId: string;
       createdByUser: UserBriefAvatarDto;
 
-      workflowInstance: ExpenseWorkflowInstanceBriefDto;
-
       createdAt: string;
 }

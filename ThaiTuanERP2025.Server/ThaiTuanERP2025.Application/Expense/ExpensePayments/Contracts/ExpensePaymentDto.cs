@@ -22,8 +22,6 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Contracts
 		public DateTime CreatedAt { get; init; }
 		public Guid CreatedByUserId { get; init; }
 		public UserBriefAvatarDto CreatedByUser { get; init; } = new UserBriefAvatarDto();
-
-		public ExpenseWorkflowInstanceBriefDto? WorkflowInstance { get; init; }
 	}
 
 	public sealed record ExpensePaymentDetailDto

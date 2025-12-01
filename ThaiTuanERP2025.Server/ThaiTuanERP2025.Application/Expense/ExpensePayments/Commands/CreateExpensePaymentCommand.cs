@@ -56,12 +56,13 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
 			var bankNameNorm = payload.BankName.Trim();
 			var beneficiaryNameNorm = payload.BeneficiaryName.Trim();
 
-			// payment
-			var newPayment = new ExpensePayment(nameNorm, payload.hasGoodsReceipt, payload.PayeeType, payload.DueDate, payload.ManagerApproverId, payload.Description);
-
-			// subId
-			var subId = await _documentSubIdGeneratorService.NextSubIdAsync(DocumentType.ExpensePayment, DateTime.UtcNow, cancellationToken);
-			newPayment.SetSubId(subId);
+			// ==== VALIDATE ====
+			// Validate Name
+			var paymentExist = await _uow.ExpensePayments.ExistAsync(
+				q => q.Name == nameNorm,
+				cancellationToken: cancellationToken
+			);
+			if (paymentExist) throw new BusinessRuleViolationException("Trùng tên với 1 chi phí thanh toán đã tồn tại");
 
 			// Validate Supplier
 			var supplierExist = await _uow.Suppliers.ExistAsync(
@@ -69,6 +70,13 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
 				cancellationToken: cancellationToken
 			);
 			if (!supplierExist) throw new NotFoundException("Không tìm thấy nhà cung cấp");
+
+			// payment
+			var newPayment = new ExpensePayment(nameNorm, payload.hasGoodsReceipt, payload.PayeeType, payload.DueDate, payload.ManagerApproverId, payload.Description);
+
+			// subId
+			var subId = await _documentSubIdGeneratorService.NextSubIdAsync(DocumentType.ExpensePayment, DateTime.UtcNow, cancellationToken);
+			newPayment.SetSubId(subId);			
 			newPayment.SetSupplier(payload.SupplierId);
 
 			// Bank

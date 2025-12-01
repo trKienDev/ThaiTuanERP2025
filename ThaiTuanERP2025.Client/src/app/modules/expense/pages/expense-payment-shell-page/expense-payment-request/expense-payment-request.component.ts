@@ -36,6 +36,7 @@ import { FilePdfPreviewDialog } from "../../../../../shared/components/file-prev
 import { AmountToWordsPipe } from "../../../../../shared/pipes/amount-to-words.pipe";
 import { FileService } from "../../../../../shared/services/file.service";
 import { ExpensePaymentItemPayload } from "../../../models/expense-payment-item.model";
+import { HttpErrorHandlerService } from "../../../../../core/services/http-errror-handler.service";
 
 type UploadStatus = 'queued' | 'uploading' | 'done' | 'error';
 type UploadItem = {
@@ -84,6 +85,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       private readonly confirm = inject(ConfirmService);
       private readonly bankAccountApi = inject(BankAccountApiService);
       private readonly fileService = inject(FileService);
+      private readonly httpErrorHandler = inject(HttpErrorHandlerService);
 
       submitting = false;
       showErrors = false;
@@ -444,8 +446,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
                   // );
                   this.toast.successRich('Gửi phê duyệt thành công');
             } catch (error) {
-                  console.error('Gửi phê duyệt thất bại', error);
-                  this.toast.errorRich('Gửi phê duyệt thất bại');
+                  this.httpErrorHandler.handle(error, "Gửi phê duyệt thất bại");
             } finally {
                   // demo 
                   // await this.wait(800);

@@ -57,7 +57,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
                                 workflowInstance.ActivateNextStep();
                         }
 
-			var expensePaymentName = _expensePaymentRepo.GetNameAsync(workflowInstance.DocumentId, cancellationToken);
+			var expensePaymentName = await _expensePaymentRepo.GetNameAsync(workflowInstance.DocumentId, cancellationToken);
 			var message = $"Thanh toán {expensePaymentName} đang chờ bạn duyệt";
 			var subject = $"Duyệt thanh toán {expensePaymentName}";
 
@@ -65,7 +65,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
                         if (nextStep.DueAt is null)
                                 throw new AppException("Step hiện tại chưa có hạn xử lý (DueAt = null).");
 
-                        var nextApproverIds = currentStep.GetResolvedApproverIds();
+                        var nextApproverIds = nextStep.GetResolvedApproverIds();
 			// set reminder for next approver
 			await _reminderService.ScheduleReminderManyAsync(
 				userIds: nextApproverIds,
@@ -78,7 +78,8 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
 				cancellationToken
 			);
 
-			var creatorId = await _expensePaymentRepo.GetCreatorIdAsync(workflowInstance.DocumentId, cancellationToken);
+			var creatorId = await _expensePaymentRepo.GetCreatorIdAsync(workflowInstance.DocumentId, cancellationToken)
+				?? throw new NotFoundException("Không tìm thấy thông tin người tạo thanh toán này");
 
 			// send notifications
 			await _notificationService.SendToManyAsync(
