@@ -94,9 +94,9 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
                         if (nextStep == null)
                         {
-                                // Không có bước nữa → workflow hoàn tất
-                                MarkApproved(Guid.Empty); // or mark auto-approved
-                                return;
+				// Không có bước nữa → workflow hoàn tất
+				MarkApproved(Guid.Empty, "Auto-approved — no more steps.");
+				return;
                         }
 
 			SetCurrentStepOrder(nextOrder);

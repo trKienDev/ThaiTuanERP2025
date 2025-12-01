@@ -13,8 +13,13 @@ export class ExpenseWorkflowInstanceApiService extends BaseApiService<ApprovalWo
             super(http, `${environment.apiUrl}/expense-workflow-instance`);
       }
 
-      approve(stepId: string): Observable<void> {
-            return this.http.post<ApiResponse<void>>(`${this.endpoint}/approve/${stepId}`, null)
+      approve(workflowId: string): Observable<void> {
+            return this.http.post<ApiResponse<void>>(`${this.endpoint}/approve/${workflowId}`, null)
                   .pipe(handleApiResponse$<void>());
       }
-}
+
+      reject(workflowId: string): Observable<void> {
+            return this.http.post<ApiResponse<void>>(`${this.endpoint}/reject/${workflowId}`, null) 
+                  .pipe(handleApiResponse$<void>());
+      }
+} 

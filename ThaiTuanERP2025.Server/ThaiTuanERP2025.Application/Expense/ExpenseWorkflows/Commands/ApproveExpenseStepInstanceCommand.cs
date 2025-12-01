@@ -46,7 +46,6 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
 			var userExist = await _uow.Users.ExistAsync(q => q.Id == userId && q.IsActive, cancellationToken);
 			if (!userExist) throw new UnauthorizedException("Tài khoản của bạn không hợp lệ");
 
-
 			var workflowInstance = await _uow.ExpenseWorkflowInstances.SingleOrDefaultIncludingAsync(
 				q => q.Id == command.WorkflowInstanceId,
 				includes: x => x.Steps,
@@ -95,7 +94,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
 				message: message,
 				slaHours: nextStep.SlaHours,
 				dueAt: nextStep.DueAt.Value,
-				linkType: Domain.Core.Enums.LinkType.ExpensePaymentApprove,
+				linkType: Domain.Core.Enums.LinkType.ExpensePaymentDetail,
 				targetId: workflowInstance.DocumentId,
 				cancellationToken
 			);
@@ -117,14 +116,13 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
 			if (taskNotificaitonIds.Any())
 				await _notificationService.MarkAsReadManyAsync(taskNotificaitonIds, cancellationToken);
 
-
 			// send notifications
 			await _notificationService.SendToManyAsync(
 				senderId: creatorId,
 				nextApproverIds,
 				title: subject,
 				message: message,
-				linkType: Domain.Core.Enums.LinkType.ExpensePaymentApprove,
+				linkType: Domain.Core.Enums.LinkType.ExpensePaymentDetail,
 				targetId: workflowInstance.DocumentId,
 				type: Domain.Core.Enums.NotificationType.Task,
 				cancellationToken: cancellationToken

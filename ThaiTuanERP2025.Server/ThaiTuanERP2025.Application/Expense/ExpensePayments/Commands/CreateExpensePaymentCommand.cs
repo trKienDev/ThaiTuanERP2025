@@ -142,7 +142,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
 					message: message,
 					slaHours: firstStep.SlaHours,
 					dueAt: firstStep.DueAt.Value,
-					linkType: LinkType.ExpensePaymentApprove,
+					linkType: LinkType.ExpensePaymentDetail,
 					targetId: workflowInstnace.DocumentId,
 					cancellationToken
 				);
@@ -153,7 +153,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
 					receiverId: approverId,
 					title: subject,
 					message: message,
-					linkType: LinkType.ExpensePaymentApprove,
+					linkType: LinkType.ExpensePaymentDetail,
 					targetId: workflowInstnace.DocumentId,
 					type: NotificationType.Task,
 					cancellationToken

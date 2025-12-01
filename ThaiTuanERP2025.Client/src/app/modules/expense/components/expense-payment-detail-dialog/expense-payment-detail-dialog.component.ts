@@ -130,6 +130,28 @@ export class ExpensePaymentDetailDialogComponent {
             }
       }
 
+      async reject() {
+            this.rejecting = true;
+            this.submitting = true;
+            if (!this.paymentDetail?.workflowInstance?.id) {
+                  this.toast.errorRich("Không thể truy vấn luồng duyệt của thanh toán này");
+                  console.error("workflowInstance.id is missing");
+                  return;
+            }
+
+            try {
+                  await firstValueFrom(this.expenseWorkflowInstanceApi.reject(this.paymentDetail?.workflowInstance.id));
+                  this.toast.successRich("Đã từ chối thanh toán");
+                  this.close(true);
+                  this.router.navigateByUrl('expense/expense-payment-shell/following-payments');
+            } catch(error) {
+                  this.httpErrorHandler.handle(error, "Từ chối thất bại");
+            } finally {
+                  this.rejecting = false;
+                  this.submitting = false;
+            }
+      }
+
 
       close(isSuccess: boolean = false) {
             this.dialogRef.close(isSuccess);

@@ -26,6 +26,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Contracts
 
 	public sealed record ExpensePaymentDetailDto
 	{
+		public Guid Id { get; init; } = Guid.Empty;
 		public string Name { get; init; } = string.Empty;
 		public string SubId { get; init; } = string.Empty;
 		public string? Description { get; init; } = string.Empty;

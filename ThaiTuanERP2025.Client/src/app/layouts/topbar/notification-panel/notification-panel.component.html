@@ -7,7 +7,6 @@
             <ng-container *ngIf="items.length > 0; else emptyState">
                   <ul class="notification-list">
                         <ng-container *ngFor="let n of items; trackBy: trackById" >
-                              <span>{{ n.link }}</span>
                               <li class="notification-item display-flex align-items-center gap-10px" [class.unread]="!n.isRead" (click)="onClickItem(n)">
                                     <div class="sender">
                                           <img class="avatar-user" [src]="n.sender | avatarUrlPipe" alt="avatar-user">

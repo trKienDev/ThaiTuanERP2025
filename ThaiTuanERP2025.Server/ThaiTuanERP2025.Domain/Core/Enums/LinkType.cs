@@ -10,10 +10,10 @@
 		BudgetPlanDetail = 112,
 		BudgetPlanApproved = 113,
 
+
 		// [2] Expense 
 		// [2][1]: ExpensePayment
-		ExpensePaymentApprove = 211,
-
+		ExpensePaymentDetail = 211,
 
 		// [3] Request
 		RequestDetail = 31,

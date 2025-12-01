@@ -11,7 +11,7 @@ namespace ThaiTuanERP2025.Domain.Core.Utilities
 			{
 				LinkType.BudgetPlanReview when id.HasValue => SubjectLinks.BudgetPlanDetail(id.Value),
 				LinkType.BudgetPlanDetail when id.HasValue => SubjectLinks.BudgetPlanDetail(id.Value),
-				LinkType.ExpensePaymentApprove when id.HasValue => SubjectLinks.ExpensePaymentApprove(id.Value),
+				LinkType.ExpensePaymentDetail when id.HasValue => SubjectLinks.ExpensePaymentApprove(id.Value),
 				LinkType.Dashboard => SubjectLinks.Dashboard(),
 				_ => SubjectLinks.Dashboard(),
 			};

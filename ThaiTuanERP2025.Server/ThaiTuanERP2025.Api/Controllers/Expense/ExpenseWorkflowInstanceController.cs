@@ -23,5 +23,12 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
                         var result = await _mediator.Send(new ApproveExpenseStepInstanceCommand(id), cancellationToken);
                         return Ok(ApiResponse<Unit>.Success(result));
                 }
+
+                [HttpPost("reject/{id:guid}")]
+                public async Task<IActionResult> Reject([FromRoute] Guid id, CancellationToken cancellationToken)
+                {
+                        var result = await _mediator.Send(new RejectExpenseStepInstanceCommand(id), cancellationToken);
+                        return Ok(ApiResponse<Unit>.Success(result));
+                }
         }
 }

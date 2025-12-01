@@ -11,8 +11,15 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories.Read
 	public class UserReadRepository : BaseReadRepository<User, UserDto>, IUserReadRepostiory
 	{
 		private ThaiTuanERP2025DbContext DbContext => (ThaiTuanERP2025DbContext)_dbContext;
-		public UserReadRepository(ThaiTuanERP2025DbContext context, IMapper mapper)
-			: base(context, mapper) { }
+		public UserReadRepository(ThaiTuanERP2025DbContext context, IMapper mapper) : base(context, mapper) { }
+
+		public async Task<string?> GetUserNameAsync(Guid userId, CancellationToken cancellationToken)
+		{
+			return await _dbSet.AsNoTracking()
+				.Where(x => x.Id == userId)
+				.Select(x => x.FullName)
+				.SingleOrDefaultAsync(cancellationToken);
+		}
 
 		public Task<UserBriefAvatarDto?> GetBriefWithAvatarAsync(Guid userId, CancellationToken cancellationToken)
 		{

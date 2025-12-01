@@ -29,6 +29,14 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories.Read
 				.SingleOrDefaultAsync(cancellationToken);
 		}
 
+		public async Task<Guid> GetManagerApproverId(Guid expensePaymentId, CancellationToken cancellationToken = default)
+		{
+			return await _dbSet.AsNoTracking()
+				.Where(x => x.Id == expensePaymentId)
+				.Select(x => x.ManagerApproverId)
+				.SingleOrDefaultAsync(cancellationToken);
+		}
+
 		public async Task<ExpensePaymentLookupDto?> GetLookupById(Guid id, CancellationToken cancellationToken = default)
 		{
 			return await _dbSet.AsNoTracking()
@@ -40,7 +48,8 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories.Read
 		public async Task<ExpensePaymentDetailDto?> GetDetailById(Guid id, CancellationToken cancellationToken = default)
 		{
 			var payment = await _dbSet
-				.Include(x => x.CurrentWorkflowInstance).ThenInclude(w => w.Steps)
+				.Include(x => x.CreatedByUser)
+				.Include(x => x.CurrentWorkflowInstance).ThenInclude(w => w.Steps).ThenInclude(s => s.ApprovedByUser)
 				.Include(x => x.Items).ThenInclude(i => i.BudgetPlanDetail).ThenInclude(b => b.BudgetCode)
 				.FirstOrDefaultAsync(x => x.Id == id);
 

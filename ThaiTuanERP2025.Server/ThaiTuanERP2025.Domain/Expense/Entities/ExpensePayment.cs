@@ -104,16 +104,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			Status = ExpensePaymentStatus.Submitted;
 		}
 
-		internal void Approve()
-		{
-			Status = ExpensePaymentStatus.Approved;
-		}
-
-		internal void Reject(string reason)
-		{
-			Status = ExpensePaymentStatus.Rejected;
-		}
-
 		internal void Cancel()
 		{
 			Status = ExpensePaymentStatus.Cancelled;
