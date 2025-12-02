@@ -17,8 +17,9 @@ import { Router } from '@angular/router';
 import { UserFacade } from '../../../account/facades/user.facade';
 import { KitFlipCountdownComponent } from "../../../../shared/components/kit-flip-countdown/kit-flip-countdown.component";
 import { ExpenseWorkflowStatus } from '../../models/expense-workflow-instance.model';
-import { FilePreviewService } from '../../../../core/services/file-preview.service';
+import { FilePreviewService, StoredFileMetadataDto } from '../../../../core/services/file-preview.service';
 import { ExpensePaymentItemLookupDto } from '../../models/expense-payment-item.model';
+import { ExpensePaymentAttachmentDto } from '../../models/expense-payment-attachment.model';
 
 @Component({
       selector: 'expense-payment-detail-dialog',
@@ -163,7 +164,7 @@ export class ExpensePaymentDetailDialogComponent {
 
       previewInvoice(item: ExpensePaymentItemLookupDto) {
             if (!item.invoiceFile) {
-                  this.toast.error("Không tìm thấy hóa đơn");
+                  this.toast.errorRich("Không tìm thấy hóa đơn");
                   return;
             }
 
@@ -175,7 +176,19 @@ export class ExpensePaymentDetailDialogComponent {
             });
       }
 
+      previewAttachment(item: StoredFileMetadataDto) {
+            if(!item) {
+                  this.toast.errorRich("Không tìm thấy tệp đính kèm");
+                  return;
+            }
 
+            this.filePreview.previewStoredFile({
+                  fileId: item.fileId ?? '',
+                  objectKey: item.objectKey ?? '',
+                  fileName: item.fileName ?? '',
+                  isPublic: item.isPublic ?? false
+            })
+      }
 
       close(isSuccess: boolean = false) {
             this.dialogRef.close(isSuccess);

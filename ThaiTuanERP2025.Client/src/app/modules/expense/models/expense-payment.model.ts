@@ -4,6 +4,7 @@ import { ExpensePaymentAttachmentDto } from "./expense-payment-attachment.model"
 import { ExpensePaymentItemDetailDto, ExpensePaymentItemLookupDto, ExpensePaymentItemPayload } from "./expense-payment-item.model";
 import { OutgoingPaymentStatusDto } from "./outgoing-payment.model";
 import { SupplierDto } from "./supplier.model";
+import { StoredFileMetadataDto } from "../../../core/services/file-preview.service";
 
 export enum PayeeType {
       supplier = 1,
@@ -36,7 +37,6 @@ export interface ExpensePaymentPayload {
       hasGoodsReceipt: boolean;
 
       items: ExpensePaymentItemPayload[];
-      // attachments: ExpensePaymentAttachmentRequest[];
       followerIds: string[];
       
       managerApproverId: string;
@@ -72,6 +72,8 @@ export interface ExpensePaymentDetailDto {
       description?: string;
       workflowInstance: ExpenseWorkflowInstanceDetailDto;
       items: ExpensePaymentItemLookupDto[];
+      attachments: ExpensePaymentAttachmentDto[];
+
       status: ExpensePaymentStatus;
 
       payeeType: PayeeType;

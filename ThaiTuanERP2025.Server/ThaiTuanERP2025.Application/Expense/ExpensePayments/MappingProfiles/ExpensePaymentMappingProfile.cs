@@ -22,6 +22,9 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.MappingProfiles
 			CreateMap<ExpensePaymentItem, ExpensePaymentItemLookupDto>()
 				.ForMember(dest => dest.InvoiceFile, opt => opt.MapFrom(src => src.InvoiceFile))
 				.ForMember(dest => dest.BudgetCode, opt => opt.MapFrom(src => src.BudgetPlanDetail.BudgetCode));
+
+			CreateMap<ExpensePaymentAttachment, ExpensePaymentAttachmentDto>()
+				.ForMember(dest => dest.StoredFile, opt => opt.MapFrom(src => src.StoredFile));
 		}
 	}
 }

@@ -35,6 +35,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Contracts
 		public ExpensePaymentStatus Status { get; init; }
 		public ExpenseWorkflowInstanceDetailDto? WorkflowInstance { get; init; }
 		public IReadOnlyList<ExpensePaymentItemLookupDto> Items { get; init; } = Array.Empty<ExpensePaymentItemLookupDto>();
+		public IReadOnlyList<ExpensePaymentAttachmentDto> Attachments { get; init; } = Array.Empty<ExpensePaymentAttachmentDto>();
 
 		public ExpensePayeeType PayeeType { get; init; }
 		public Guid? SupplierId { get; init; }

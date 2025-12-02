@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
-using ThaiTuanERP2025.Infrastructure.Core.Configurations;
+using ThaiTuanERP2025.Infrastructure.StoredFiles.Configurations;
 
 namespace ThaiTuanERP2025.Api.Startup
 {

@@ -2,6 +2,7 @@
 using ThaiTuanERP2025.Domain.Core.Repositories;
 using ThaiTuanERP2025.Domain.Expense.Repositories;
 using ThaiTuanERP2025.Domain.Finance.Repositories;
+using ThaiTuanERP2025.Domain.StoredFiles.Repositories;
 namespace ThaiTuanERP2025.Domain.Shared.Repositories
 {
 	public interface IUnitOfWork

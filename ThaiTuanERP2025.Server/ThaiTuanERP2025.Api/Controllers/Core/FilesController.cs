@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Shared;
-using ThaiTuanERP2025.Application.Core.Files.Commands;
-using ThaiTuanERP2025.Application.Core.Files.Common;
-using ThaiTuanERP2025.Application.Core.Files.Queries;
+using ThaiTuanERP2025.Application.Files.Commands;
+using ThaiTuanERP2025.Application.Files.Common;
+using ThaiTuanERP2025.Application.Files.Queries;
 
 namespace ThaiTuanERP2025.Api.Controllers.Core
 {

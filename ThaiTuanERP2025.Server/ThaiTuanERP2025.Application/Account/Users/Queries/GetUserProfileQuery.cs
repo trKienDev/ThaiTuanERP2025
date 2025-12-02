@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using System.Security.Claims;
 using ThaiTuanERP2025.Application.Account.Users.Repositories;
-using ThaiTuanERP2025.Application.Core.Files;
+using ThaiTuanERP2025.Application.Files;
 using ThaiTuanERP2025.Application.Shared.Exceptions;
 
 namespace ThaiTuanERP2025.Application.Account.Users.Queries

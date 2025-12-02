@@ -61,10 +61,12 @@ using ThaiTuanERP2025.Infrastructure.Account.Services;
 using ThaiTuanERP2025.Application.Finance.BudgetTransasctions;
 using ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Repositories;
 using ThaiTuanERP2025.Application.Expense.ExpensePayments.Repositories;
-using ThaiTuanERP2025.Application.Core.Files;
-using ThaiTuanERP2025.Application.Core.Files.Interfaces;
-using ThaiTuanERP2025.Infrastructure.Core.Configurations;
-using ThaiTuanERP2025.Infrastructure.Core.FileStorage;
+using ThaiTuanERP2025.Application.Files;
+using ThaiTuanERP2025.Application.Files.Interfaces;
+using ThaiTuanERP2025.Domain.StoredFiles.Repositories;
+using ThaiTuanERP2025.Infrastructure.StoredFiles.Repositories;
+using ThaiTuanERP2025.Infrastructure.StoredFiles.Configurations;
+using ThaiTuanERP2025.Infrastructure.StoredFiles;
 
 namespace ThaiTuanERP2025.Infrastructure
 {
@@ -88,7 +90,7 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<ICodeGenerator, CodeGenerator>();
 
 			// Files
-			services.AddScoped<IStoredFilesRepository, StoredFilesRepository>();
+			services.AddScoped<IStoredFilesRepository, StoredFileWriteRepository>();
 			services.AddScoped<IStoredFileReadRepository, StoredFileReadRepository>();
 
 			// Account

@@ -54,7 +54,8 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories.Read
 				.Include(x => x.CurrentWorkflowInstance).ThenInclude(w => w.Steps).ThenInclude(s => s.RejectedByUser)
 				.Include(x => x.Items).ThenInclude(i => i.BudgetPlanDetail).ThenInclude(b => b.BudgetCode)
 				.Include(x => x.Items).ThenInclude(i => i.InvoiceFile)
-				.FirstOrDefaultAsync(x => x.Id == id);
+				.Include(x => x.Attachments).ThenInclude(a => a.StoredFile)
+                                .FirstOrDefaultAsync(x => x.Id == id);
 
 			return _mapper.Map<ExpensePaymentDetailDto>(payment);
 		}

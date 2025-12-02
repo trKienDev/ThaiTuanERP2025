@@ -57,12 +57,12 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		public IReadOnlyCollection<ExpensePaymentItem> Items => _items.AsReadOnly();
 		public IReadOnlyCollection<OutgoingPayment> OutgoingPayments => _outgoingPayments.AsReadOnly();
+                public IReadOnlyCollection<ExpensePaymentAttachment> Attachments => _attachments.AsReadOnly();
 
-		public Guid? CurrentWorkflowInstanceId { get; private set; }
+                public Guid? CurrentWorkflowInstanceId { get; private set; }
 		public ExpenseWorkflowInstance? CurrentWorkflowInstance { get; private set; }
 		public Guid ManagerApproverId { get; private set; }
 
-		public IReadOnlyCollection<ExpensePaymentAttachment> Attachments => _attachments.AsReadOnly();
 		#endregion
 
 		#region Domain Behaviors

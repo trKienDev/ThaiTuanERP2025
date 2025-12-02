@@ -6,8 +6,8 @@ using ThaiTuanERP2025.Application.Behaviors;
 using ThaiTuanERP2025.Application.Finance.BudgetPlans.Services;
 using ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Factories;
 using ThaiTuanERP2025.Application.Shared.Services;
-using ThaiTuanERP2025.Application.Core.Files.Authorization.Interfaces;
-using ThaiTuanERP2025.Application.Core.Files.Authorization;
+using ThaiTuanERP2025.Application.Files.Authorization;
+using ThaiTuanERP2025.Application.Files.Authorization.Interfaces;
 
 namespace ThaiTuanERP2025.Application
 {

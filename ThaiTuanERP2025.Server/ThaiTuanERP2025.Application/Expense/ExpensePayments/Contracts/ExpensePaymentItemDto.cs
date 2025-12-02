@@ -1,4 +1,4 @@
-﻿using ThaiTuanERP2025.Application.Core.Files.Contracts;
+﻿using ThaiTuanERP2025.Application.Files.Contracts;
 using ThaiTuanERP2025.Application.Finance.BudgetCodes;
 
 namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Contracts

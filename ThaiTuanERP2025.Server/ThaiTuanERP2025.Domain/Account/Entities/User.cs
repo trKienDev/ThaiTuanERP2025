@@ -4,7 +4,7 @@ using ThaiTuanERP2025.Domain.Shared;
 using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Shared.Interfaces;
-using ThaiTuanERP2025.Domain.Core.Entities;
+using ThaiTuanERP2025.Domain.StoredFiles.Entities;
 
 namespace ThaiTuanERP2025.Domain.Account.Entities
 {
