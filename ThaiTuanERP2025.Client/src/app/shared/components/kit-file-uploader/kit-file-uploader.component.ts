@@ -1,10 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FileService } from '../../services/file.service';
 import { ToastService } from '../kit-toast-alert/kit-toast-alert.service';
-import { UploadMeta, UploadItem, UploadFileResult } from './upload-item.model';
-
-type UploadEvent = | { type: 'progress'; percent: number } | { type: 'done'; data?: UploadFileResult };
+import { UploadMeta, UploadItem } from './upload-item.model';
 
 @Component({
       selector: 'kit-file-uploader',
@@ -23,7 +21,8 @@ export class KitFileUploaderComponent {
       @Output() completed = new EventEmitter<UploadItem>();      // bắn từng file khi done
       @Output() removed = new EventEmitter<UploadItem>();        // bắn khi xoá
 
-      constructor(private fileService: FileService, private toast: ToastService) {}
+      private readonly fileService = inject(FileService);
+      private readonly toast = inject(ToastService);
 
       onFileSelected(ev: Event) {
             const input = ev.target as HTMLInputElement;
@@ -37,56 +36,20 @@ export class KitFileUploaderComponent {
                   }
                   const item: UploadItem = { file: f, name: f.name, size: f.size, progress: 0, status: 'queued' };
                   this.uploads.push(item);
-                  this.uploadOne(item);
             }
             this.uploadsChange.emit(this.uploads);
             input.value = '';
       }
 
-      private uploadOne(item: UploadItem) {
-            if (!item.size) { 
-                  item.status = 'error'; 
-                  this.toast.errorRich('File không hợp lệ', { sticky: true });
-                  return;
-            }
 
-            item.status = 'uploading';
-            this.fileService.uploadFileWithProgress$(item.file, this.meta).subscribe({
-                  next: (evt: UploadEvent) => {
-                        if (evt.type === 'progress') {
-                              item.progress = Math.min(100, Math.max(0, Math.round(evt.percent)));
-                        } else if (evt.type === 'done') {
-                              const data = evt.data; // UploadFileResult | undefined
-                              item.objectKey = data?.objectKey ?? data?.id ?? item.objectKey;
-                              (item as any).fileId = data?.id ?? (item as any).fileId;
-                              (item as any).url = data?.url ?? (item as any).url;
-
-                              item.progress = 100;
-                              item.status = 'done';
-                              this.completed.emit(item);
-                              this.uploadsChange.emit(this.uploads);
-                        }
-                  },
-                  error: (err) => { 
-                        item.status = 'error';
-                        this.toast.errorRich('Tải tệp thất bại');
-                  }
-            });
-      }
 
       remove(i: number) {
             const item = this.uploads[i];
-            if (item.status === 'uploading') return;
-            const fileId = (item as any).fileId as string | undefined;
-            if (fileId) {
-                  this.fileService.hardDelete$(fileId).subscribe({
-                        error: () => this.toast.errorRich('Không xóa được tệp')
-                  });
-            }
             this.uploads.splice(i, 1);
+
             this.removed.emit(item);
             this.uploadsChange.emit(this.uploads);
       }
 
-      get isUploading() { return this.uploads?.some(u => u.status === 'uploading'); }
+      get hasQueued() { return this.uploads.some(u => u.status === 'queued'); }
 }

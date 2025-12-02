@@ -49,6 +49,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 			// Expense Payment
 			IExpensePaymentWriteRepository expensePayments,
 			IExpensePaymentItemsWriteRepository expensePaymentItems,
+			IExpensePaymentAttachmentWriteRepository expensePaymentAttachments,
 			IExpensePaymentCommentRepository expensePaymentComments,
 			IExpensePaymentCommentTagRepository expensePaymentCommentTags,
 			IExpensePaymentCommentAttachmentRepository expensePaymentCommentAttachments,
@@ -100,6 +101,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 
 			ExpensePayments = expensePayments;
 			ExpensePaymentItems = expensePaymentItems;
+			ExpensePaymentAttachments = expensePaymentAttachments;
 			ExpensePaymentComments = expensePaymentComments;
 			ExpensePaymentCommentAttachments = expensePaymentCommentAttachments;
 			ExpensePaymentCommentTags = expensePaymentCommentTags;
@@ -150,6 +152,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 		// Expense Payment
 		public IExpensePaymentWriteRepository ExpensePayments { get; }
 		public IExpensePaymentItemsWriteRepository ExpensePaymentItems { get; }
+		public IExpensePaymentAttachmentWriteRepository ExpensePaymentAttachments { get; }
 		public IExpensePaymentCommentRepository ExpensePaymentComments { get; }
 		public IExpensePaymentCommentAttachmentRepository ExpensePaymentCommentAttachments { get; }
 		public IExpensePaymentCommentTagRepository ExpensePaymentCommentTags { get; }

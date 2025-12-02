@@ -100,11 +100,11 @@
                                                             <label for="beneficiary-name">Người thụ hưởng</label>
                                                             <span>{{ paymentDetail?.beneficiaryName }}</span>
                                                       </div>
+                                                      <div class="column">
+                                                            <label for="description">Mô tả</label>
+                                                            <span>{{ paymentDetail?.description || '---'}}</span>
+                                                      </div>
                                                 </div>
-                                          </div>
-                                          <div class="column">
-                                                <label for="description">Mô tả</label>
-                                                <span>{{ paymentDetail?.description || '---'}}</span>
                                           </div>
                                           <div class="column">
                                                 <label for="followers">Người theo dõi</label>

@@ -18,6 +18,8 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Contracts
 		public bool hasGoodsReceipt { get; init; }
 
 		public List<ExpensePaymentItemPayload> Items { get; init; } = new List<ExpensePaymentItemPayload>();
-		public List<Guid> followerIds { get; init; } = new List<Guid>();
+		public IEnumerable<Guid> FollowerIds { get; init; } = Array.Empty<Guid>();
+
+		public IEnumerable<Guid> AttachmentIds { get; init; } = Array.Empty<Guid>();
 	}
 }

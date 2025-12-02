@@ -4,7 +4,7 @@
             <div class="button default-button">
                   <label for="kitUploaderInput" class="cursor-pointer">Chọn file (PDF/Ảnh)</label>
             </div>
-            <span *ngIf="!(uploads?.length)" class="file-name muted" style="color:#888; margin-left:10px;">Chưa chọn file</span>
+            <span *ngIf="!(uploads?.length)" class="file-name muted" style="color: #aaa; margin-left:10px;">Chưa chọn file</span>
       </div>
 
       <ul class="uploader-list" *ngIf="uploads?.length">
@@ -15,18 +15,14 @@
                         </div>
                         <div class="status-line" [ngClass]="u.status">
                               <ng-container [ngSwitch]="u.status">
-                                    <span *ngSwitchCase="'queued'">Đang chờ...</span>
-                                    <span *ngSwitchCase="'uploading'">Đang tải lên: {{ u.progress | number:'1.0-0' }}%</span>
-                                    <span *ngSwitchCase="'done'">✔ Đã tải</span>
-                                    <span *ngSwitchCase="'error'">✖ Lỗi</span>
+                                    <span *ngSwitchCase="'queued'">Đang chờ gửi…</span>
+                                    <span *ngSwitchCase="'done'">✔ Đã lưu</span>
+                                    <span *ngSwitchCase="'error'">✖ Lỗi lưu</span>
                               </ng-container>
                         </div>
                         <button type="button" class="display-flex close-button" (click)="remove(i)" [disabled]="u.status === 'uploading'">
                               <span class="text material-icons-outlined" style="font-size: 15px;">close</span>
                         </button>
-                  </div>
-                  <div class="progress" *ngIf="u.status === 'uploading'">
-                        <div class="progress-bar" [style.width.%]="u.progress"></div>
                   </div>
             </li>
       </ul>

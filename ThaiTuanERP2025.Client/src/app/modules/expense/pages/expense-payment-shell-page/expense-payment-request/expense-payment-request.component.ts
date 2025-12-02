@@ -28,7 +28,6 @@ import { KitFileUploaderComponent } from "../../../../../shared/components/kit-f
 import { TextareaNoSpellcheckDirective } from "../../../../../shared/directives/textarea/textarea-no-spellcheck.directive";
 import { KitSpinnerButtonComponent } from "../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 import { KitOverlaySpinnerComponent } from "../../../../../shared/components/kit-overlay-spinner/kit-overlay-spinner.component";
-import { Router } from "@angular/router";
 import { SupplierRequestDialogComponent } from "../../../components/supplier-request-dialog/supplier-request-dialog.component";
 import { AvailableBudgetPlansDialogComponent } from "../../../components/available-budget-plans-dialog/available-budget-plans-dialog.component";
 import { AmountToWordsPipe } from "../../../../../shared/pipes/amount-to-words.pipe";
@@ -37,18 +36,7 @@ import { ExpensePaymentItemPayload } from "../../../models/expense-payment-item.
 import { HttpErrorHandlerService } from "../../../../../core/services/http-errror-handler.service";
 import { SupplierApiService } from "../../../services/api/supplier.service";
 import { FilePreviewService } from "../../../../../core/services/file-preview.service";
-
-type UploadStatus = 'queued' | 'uploading' | 'done' | 'error';
-type UploadItem = {
-      file: File;
-      name: string;
-      size: number;
-      progress: number;    // 0..100
-      status: UploadStatus;
-      objectKey?: string;  // trả về từ server khi thành công
-      fileId?: string;
-      url?: string;
-};
+import { UploadItem } from "../../../../../shared/components/kit-file-uploader/upload-item.model";
 
 type PaymentItem = {
       itemName: FormControl<string>;
@@ -82,7 +70,6 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       private readonly userFacade = inject(UserFacade);
       private readonly expensePaymentService = inject(ExpensePaymentApiService);
       private readonly supplierApi = inject(SupplierApiService);
-      private readonly router = inject(Router);
       private readonly confirm = inject(ConfirmService);
       private readonly bankAccountApi = inject(BankAccountApiService);
       private readonly fileService = inject(FileService);
@@ -130,7 +117,8 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
             dueDate: this.formBuilder.nonNullable.control<Date>(new Date(), { validators: [Validators.required, this.minDateValidator() ] }),
             hasGoodsReceipt: this.formBuilder.nonNullable.control<boolean>(false),
             followerIds: this.formBuilder.nonNullable.control<string[]>([]),
-            managerApproverId: this.formBuilder.nonNullable.control<string>('', { validators: Validators.required })
+            managerApproverId: this.formBuilder.nonNullable.control<string>('', { validators: Validators.required }),
+            attachmentIds: this.formBuilder.control<string[] | null>(null),
       });
 
       async ngOnInit(): Promise<void> {
@@ -182,16 +170,6 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       onUserSelected(opt: KitDropdownOption) {
             alert(`Bạn đã chọn: ${opt.label} (id = ${opt.id})`);
       }
-      // onFollowerSelected(opt: KitDropdownOption) {
-      //       const id = typeof opt === 'string' ? opt : opt.id;
-      //       const ctrl = this.form.controls.followerIds;
-      //       const current = ctrl.getRawValue() ?? [];
-      //       if (!current.includes(id)) ctrl.setValue([...current, id]);
-
-      //       ctrl.markAsDirty();
-      //       ctrl.updateValueAndValidity();
-      // }
-
 
       onManagerApproverSelected(opt: KitDropdownOption) {
             this.form.patchValue({ managerApproverId: opt.id });
@@ -402,8 +380,8 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
             try {
                   const raw = this.form.getRawValue();
 
+                  // === UPLOAD INVOICES ===
                   const uploadedInvoiceResults: (string | undefined)[] = [];
-
                   for (const [i, item] of raw.items.entries()) {
                         if (item.uploadedInvoiceFile) {
                               const file = item.uploadedInvoiceFile;
@@ -414,6 +392,25 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
                         }
                   }
 
+                  // === UPLOAD ATTACHMENTS ===
+                  const uploadedAttachmentIds: string[] = [];
+                  for (const u of this.uploads) {
+                        try {
+                              const result = await firstValueFrom(
+                                    this.fileService.uploadFile(u.file, 'expense', 'payment-attachment', undefined, false)
+                              );
+
+                              if (result.data?.id) {
+                                    uploadedAttachmentIds.push(result.data.id);
+                                    u.fileId = result.data.id;
+                                    u.status = 'done';
+                              }
+                        } catch (err) {
+                              u.status = 'error';
+                        }
+                  }
+
+                  // ==== Build Item payload ====
                   const items: ExpensePaymentItemPayload[] = (raw.items ?? []).map((it, i) => ({
                         itemName: it.itemName,
                         budgetPlanDetailId: it.budgetPlanDetailId!,
@@ -426,15 +423,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
                         totalWithTax: Number(it.totalWithTax ?? 0),
                   }));
 
-                  const attachments = this.uploads.filter(u => u.status === 'done' && (u.objectKey || u.fileId))
-                        .map(u => ({
-                              fileId: u.fileId,
-                              objectKey: u.objectKey!,
-                              fileName: u.name,
-                              size: u.size,
-                              url: u.url,
-                        }));
-
+                  // ==== Build Payload ====
                   const payload: ExpensePaymentPayload = {
                         name: raw.name,
                         payeeType: this.selectedPayee ?? PayeeType.supplier,
@@ -446,14 +435,14 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
                         dueDate: raw.dueDate,
                         hasGoodsReceipt: raw.hasGoodsReceipt ?? false,
                         items,
-                        // attachments,
+                        attachmentIds: uploadedAttachmentIds.length > 0 ? uploadedAttachmentIds : undefined,
                         followerIds: raw.followerIds,
                         managerApproverId: raw.managerApproverId,
                   }
 
 
                   console.log('payload: ', payload);
-                  const result = await firstValueFrom(this.expensePaymentService.create(payload));
+                  await firstValueFrom(this.expensePaymentService.create(payload));
                   // this.router.navigate(
                   //       ['/expense/expense-payment-shell/following-payments'],
                   //       { queryParams: { paymentId: result } }
@@ -477,6 +466,28 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       }
 
       // === PREVIEW INVOICE ===
+      onUploadInvoiceClicked(rowIndex: number, fileInput: HTMLInputElement) {
+            const row = this.items.at(rowIndex);
+            const alreadyHasInvoice = !!row.get('uploadedInvoiceFile')?.value;
+
+            // Nếu chưa có file → mở bình thường
+            if (!alreadyHasInvoice) {
+                  fileInput.click();
+                  return;
+            }
+
+            // Nếu đã có → hỏi confirm thay thế
+            this.confirm.warn$(
+                  'Dòng này đã có hoá đơn. Bạn có muốn tải lên hoá đơn thay thế?',
+                  'Thay thế hoá đơn',
+                  'Thay thế',
+                  'Giữ nguyên'
+            ).subscribe(ok => {
+                  if (ok) {
+                        fileInput.click();
+                  }
+            });
+      }
       onInvoiceFileSelected(event: Event, rowIndex: number) {
             console.log('run invocie file selected');
             const input = event.target as HTMLInputElement;
@@ -501,9 +512,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
 
             row.patchValue({
                   uploadedInvoiceFile: file,
-                  uploadedInvoicePreviewUrl: file.type.startsWith('image/')
-                        ? URL.createObjectURL(file)
-                        : null
+                  uploadedInvoicePreviewUrl: file.type.startsWith('image/') ? URL.createObjectURL(file) : null
             });
       }
 
@@ -550,28 +559,9 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
             this.onMenuClosed();
       }
 
-      onUploadInvoiceClicked(rowIndex: number, fileInput: HTMLInputElement) {
-            const row = this.items.at(rowIndex);
-            const alreadyHasInvoice = !!row.get('uploadedInvoiceFile')?.value;
 
-            // Nếu chưa có file → mở bình thường
-            if (!alreadyHasInvoice) {
-                  fileInput.click();
-                  return;
-            }
 
-            // Nếu đã có → hỏi confirm thay thế
-            this.confirm.warn$(
-                  'Dòng này đã có hoá đơn. Bạn có muốn tải lên hoá đơn thay thế?',
-                  'Thay thế hoá đơn',
-                  'Thay thế',
-                  'Giữ nguyên'
-            ).subscribe(ok => {
-                  if (ok) {
-                        fileInput.click();
-                  }
-            });
-      }
+      // ==== PRIVATE METHODS ====
 
       private minDateValidator(min: Date = new Date()) {
             min.setHours(0, 0, 0, 0);

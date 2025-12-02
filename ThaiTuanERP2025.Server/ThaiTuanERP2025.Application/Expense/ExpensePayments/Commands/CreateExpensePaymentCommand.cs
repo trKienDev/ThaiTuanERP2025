@@ -121,6 +121,12 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
 			}
 			await _uow.ExpensePayments.AddAsync(newPayment, cancellationToken);
 
+			// === ATTACHMENTS ===
+			if (payload.AttachmentIds.Any())
+			{
+				newPayment.AddAttachments(payload.AttachmentIds);
+			}
+
 			// Create WorkflowInstance
 			var workflowInstnace = await _expenseWorkflowFactory.CreateForExpensePaymentAsync(newPayment, cancellationToken);
 			newPayment.LinkWorkflowInstance(workflowInstnace);
@@ -171,7 +177,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
 			}
 			// add followers
 			await _followerService.FollowManyAsync(DocumentType.ExpensePayment, newPayment.Id, approverIds, cancellationToken);
-			await _followerService.FollowManyAsync(DocumentType.ExpensePayment, newPayment.Id, payload.followerIds, cancellationToken);
+			await _followerService.FollowManyAsync(DocumentType.ExpensePayment, newPayment.Id, payload.FollowerIds, cancellationToken);
 			await _followerService.FollowAsync(DocumentType.ExpensePayment, newPayment.Id, newPayment.CreatedByUserId!.Value, cancellationToken);
 			await _uow.SaveChangesAsync(cancellationToken);
 			return Unit.Value;

@@ -45,6 +45,7 @@ namespace ThaiTuanERP2025.Domain.Shared.Repositories
 		// Expense Payment
 		IExpensePaymentWriteRepository ExpensePayments { get; }
 		IExpensePaymentItemsWriteRepository ExpensePaymentItems { get; }
+		IExpensePaymentAttachmentWriteRepository ExpensePaymentAttachments { get; }
 		IExpensePaymentCommentRepository ExpensePaymentComments { get; }
 		IExpensePaymentCommentAttachmentRepository ExpensePaymentCommentAttachments { get; }
 		IExpensePaymentCommentTagRepository ExpensePaymentCommentTags { get; }

@@ -17,9 +17,3 @@ export interface UploadMeta {
       entityId?: string;
       isPublic?: boolean;
 }
-
-export interface UploadFileResult {
-      id?: string;
-      objectKey?: string;
-      url?: string;
-}

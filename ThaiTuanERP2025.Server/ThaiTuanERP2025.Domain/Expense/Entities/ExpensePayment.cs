@@ -2,6 +2,7 @@
 using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Enums;
+
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
 	public class ExpensePayment : AuditableEntity
@@ -29,8 +30,8 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		#region Properties
 		private readonly List<ExpensePaymentItem> _items = new();
-		private readonly List<ExpensePaymentAttachment> _attachments = new();
 		private readonly List<OutgoingPayment> _outgoingPayments = new();
+		private readonly List<ExpensePaymentAttachment> _attachments = new();
 
 		public string Name { get; private set; } = string.Empty;
 		public string SubId { get; private set; } = default!;
@@ -55,12 +56,13 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public ExpensePaymentStatus Status { get; private set; }
 
 		public IReadOnlyCollection<ExpensePaymentItem> Items => _items.AsReadOnly();
-		public IReadOnlyCollection<ExpensePaymentAttachment> Attachments => _attachments.AsReadOnly();
 		public IReadOnlyCollection<OutgoingPayment> OutgoingPayments => _outgoingPayments.AsReadOnly();
 
 		public Guid? CurrentWorkflowInstanceId { get; private set; }
 		public ExpenseWorkflowInstance? CurrentWorkflowInstance { get; private set; }
 		public Guid ManagerApproverId { get; private set; }
+
+		public IReadOnlyCollection<ExpensePaymentAttachment> Attachments => _attachments.AsReadOnly();
 		#endregion
 
 		#region Domain Behaviors
@@ -86,11 +88,8 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			BeneficiaryName = beneficiaryName.Trim();
 		}
 
-		internal ExpensePaymentItem AddItem(
-			string itemName,  int quantity, decimal unitPrice, decimal taxRate, 
-			decimal amount, decimal taxAmount, decimal totalWithTax,
-			Guid budgetPlanDetailId, Guid? invoiceFileId = null
-		) {
+		internal ExpensePaymentItem AddItem(string itemName,  int quantity, decimal unitPrice, decimal taxRate,  decimal amount, decimal taxAmount, decimal totalWithTax, Guid budgetPlanDetailId, Guid? invoiceFileId = null)
+		{
 			var item = new ExpensePaymentItem(Id, itemName, quantity, unitPrice, taxRate, amount, taxAmount, totalWithTax, budgetPlanDetailId, invoiceFileId);
 			_items.Add(item);
 			RecalculateTotals();
@@ -150,6 +149,21 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			CurrentWorkflowInstance = instance;
 		}
 
+		internal ExpensePaymentAttachment AddAttachment(Guid storedFileId)
+		{
+			Guard.AgainstDefault(storedFileId, nameof(storedFileId));
+
+			// Id ở đây là Id của chính ExpensePayment
+			var att = new ExpensePaymentAttachment(Id, storedFileId);
+			_attachments.Add(att);
+			return att;
+		}
+
+		internal void AddAttachments(IEnumerable<Guid> storedFileIds)
+		{
+			foreach (var id in storedFileIds)
+				AddAttachment(id);
+		}
 		#endregion
 	}
 }

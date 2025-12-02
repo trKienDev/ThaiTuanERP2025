@@ -40,6 +40,7 @@ export interface ExpensePaymentPayload {
       followerIds: string[];
       
       managerApproverId: string;
+      attachmentIds?: string[] | null;
 }
 
 export interface ExpensePaymentDto {

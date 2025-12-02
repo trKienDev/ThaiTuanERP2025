@@ -1,23 +1,34 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ThaiTuanERP2025.Domain.Expense.Entities;
+using ThaiTuanERP2025.Infrastructure.Persistence.Configurations;
 
 namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 {
-	public class ExpensePaymentAttachmentConfiguration : IEntityTypeConfiguration<ExpensePaymentAttachment>
+	public class ExpensePaymentAttachmentConfiguration : BaseEntityConfiguration<ExpensePaymentAttachment>
 	{
-		public void Configure(EntityTypeBuilder<ExpensePaymentAttachment> builder)
+		public override void Configure(EntityTypeBuilder<ExpensePaymentAttachment> builder)
 		{
 			builder.ToTable("ExpensePaymentAttachments", "Expense");
 			builder.HasKey(x => x.Id);
 
-			builder.Property(x => x.ObjectKey).HasMaxLength(512).IsRequired();
-			builder.Property(x => x.FileName).HasMaxLength(256).IsRequired();
-			builder.Property(x => x.Url).HasMaxLength(1024);
-			builder.Property(x => x.Size).IsRequired();
+			// Relationships
+			builder.HasOne(x => x.ExpensePayment)
+				.WithMany(p => p.Attachments)
+				.HasForeignKey(x => x.ExpensePaymentId)
+				.OnDelete(DeleteBehavior.Cascade);
 
+			builder.HasOne(x => x.StoredFile)
+				.WithMany() // StoredFile không cần navigation ngược
+				.HasForeignKey(x => x.StoredFileId)
+				.OnDelete(DeleteBehavior.Restrict);
+
+			// Indexes
 			builder.HasIndex(x => x.ExpensePaymentId);
-			builder.HasIndex(x => x.FileId);
+			builder.HasIndex(x => x.StoredFileId);
+
+			// Audit
+			ConfigureAuditUsers(builder);
 		}
 	}
 }
