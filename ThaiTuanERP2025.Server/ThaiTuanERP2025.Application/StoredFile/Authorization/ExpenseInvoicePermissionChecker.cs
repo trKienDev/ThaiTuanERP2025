@@ -1,7 +1,7 @@
 ﻿using ThaiTuanERP2025.Application.Expense.ExpensePayments.Repositories;
 using ThaiTuanERP2025.Application.Files.Authorization.Interfaces;
 using ThaiTuanERP2025.Domain.Expense.Services;
-using ThaiTuanERP2025.Domain.StoredFiles.Entities;
+using ThaiTuanERP2025.Domain.StoredFiles.Constants;
 
 namespace ThaiTuanERP2025.Application.Files.Authorization
 {
@@ -13,7 +13,7 @@ namespace ThaiTuanERP2025.Application.Files.Authorization
 			_expensePaymentRepo = expensePaymentRepo;
 		}
 
-		public bool CanHandle(string module, string entity) => module.Equals("expense", StringComparison.OrdinalIgnoreCase) && entity.Equals("invoice", StringComparison.OrdinalIgnoreCase);
+		public bool CanHandle(string module, string entity) => module.Equals(FileModules.Expense, StringComparison.OrdinalIgnoreCase) && entity.Equals(ExpenseFileEntities.Invoice, StringComparison.OrdinalIgnoreCase);
 
 		public async Task<bool> HasPermissionAsync(StoredFile file, Guid userId, CancellationToken ct)
 		{
