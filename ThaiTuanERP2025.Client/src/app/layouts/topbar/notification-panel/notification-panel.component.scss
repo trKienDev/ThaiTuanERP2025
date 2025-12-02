@@ -31,7 +31,6 @@
 .notification-item {
       padding: 8px 12px;
       cursor: pointer; 
-      width: fit-content;
       &:hover { background: #f6f8fa; }
 
       .title-text { text-wrap: nowrap; width: fit-content; font-weight: bold; }

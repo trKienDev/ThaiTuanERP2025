@@ -2,7 +2,7 @@
 using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Expense.Events.ExpensePaymentItems;
 using ThaiTuanERP2025.Domain.Finance.Entities;
-using ThaiTuanERP2025.Domain.Files.Entities;
+using ThaiTuanERP2025.Domain.Core.Entities;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {

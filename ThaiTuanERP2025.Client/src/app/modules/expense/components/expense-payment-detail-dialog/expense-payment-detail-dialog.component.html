@@ -76,6 +76,10 @@
                                                 <span>{{ paymentDetail?.description || '---'}}</span>
                                           </div>
                                           <div>
+                                                <label for="hasGoodsReceipt">Đã nhập kho</label>
+                                                <input type="checkbox" [checked]="paymentDetail?.hasGoodsReceipt" disabled style="width: fit-content;"/>
+                                          </div>
+                                          <div>
                                                 <label for="workflow-instance">Luồng duyệt</label>
                                                 <ng-container *ngIf="(paymentDetail?.workflowInstance?.steps?.length ?? 0) > 0">
                                                       <div class="approvers display-flex gap-5px">
@@ -150,19 +154,20 @@
                                                       <tbody>
                                                             <tr *ngFor="let item of paymentDetail?.items; let i = index">
                                                                   <td>{{ i + 1 }}</td>
-                                                                        <td class="item-name">{{ item.itemName }}</td>
-                                                                        <td class="item-quanity">{{ item.quantity | number:'1.0-0' }}</td>
-                                                                        <td class="item-unit-price">{{ item.unitPrice | number:'1.0-0' }} <span class="label-currency">VND</span></td>
-                                                                        <td class="item-amount">{{ item.amount | number:'1.0-0' }} <span class="label-currency">VND</span></td>
-                                                                        <td class="item-tax">{{ (item.taxRate * 100) | number:'1.0-0' }}%</td>
-                                                                        <td class="item-tax-amount">{{ item.taxAmount | number:'1.0-0' }} <span class="label-currency">VND</span></td>
-                                                                        <td class="item-total-with-tax">{{ item.totalWithTax | number:'1.0-0' }} <span class="label-currency">VND</span></td>
-                                                                        <td class="item-budget-code">{{ item.budgetCode.code }} - {{ item.budgetCode.name }}</td>
-                                                                        <td class="item-invoice">
-                                                                              <!-- <button type="button" class="button" [ngClass]="item.invoice ? 'default-button' : 'cancel-button'">
-                                                                                    {{ item.invoice ? 'Xem hóa đơn' : 'Không hóa đơn' }}
-                                                                              </button> -->
-                                                                        </td>
+                                                                  <td class="item-name">{{ item.itemName }}</td>
+                                                                  <td class="item-quanity">{{ item.quantity | number:'1.0-0' }}</td>
+                                                                  <td class="item-unit-price">{{ item.unitPrice | number:'1.0-0' }} <span class="label-currency">VND</span></td>
+                                                                  <td class="item-amount">{{ item.amount | number:'1.0-0' }} <span class="label-currency">VND</span></td>
+                                                                  <td class="item-tax">{{ (item.taxRate * 100) | number:'1.0-0' }}%</td>
+                                                                  <td class="item-tax-amount">{{ item.taxAmount | number:'1.0-0' }} <span class="label-currency">VND</span></td>
+                                                                  <td class="item-total-with-tax">{{ item.totalWithTax | number:'1.0-0' }} <span class="label-currency">VND</span></td>
+                                                                  <td class="item-budget-code">{{ item.budgetCode.code }} - {{ item.budgetCode.name }}</td>
+                                                                  <td class="item-invoice">
+                                                                        <div class="display-flex justify-content-center align-items-center">
+                                                                              <button *ngIf="item.invoiceFile"type="button" class="default-button" (click)="previewInvoice(item)">Xem hóa đơn</button>
+                                                                              <span *ngIf="!item.invoiceFile" class="text-muted">Không có hóa đơn</span>
+                                                                        </div>
+                                                                  </td>
                                                             </tr>
                                                       </tbody>
                                                       <tfoot *ngIf="paymentDetail?.items?.length">

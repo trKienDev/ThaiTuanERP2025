@@ -53,9 +53,18 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories.Read
 				.Include(x => x.CurrentWorkflowInstance).ThenInclude(w => w.Steps).ThenInclude(s => s.ApprovedByUser)
 				.Include(x => x.CurrentWorkflowInstance).ThenInclude(w => w.Steps).ThenInclude(s => s.RejectedByUser)
 				.Include(x => x.Items).ThenInclude(i => i.BudgetPlanDetail).ThenInclude(b => b.BudgetCode)
+				.Include(x => x.Items).ThenInclude(i => i.InvoiceFile)
 				.FirstOrDefaultAsync(x => x.Id == id);
 
 			return _mapper.Map<ExpensePaymentDetailDto>(payment);
+		}
+
+		public async Task<ExpensePayment?> GetByInvoiceFileIdAsync(Guid fileId, CancellationToken cancellationToken = default)
+		{
+			return await _dbSet
+				.Include(x => x.Items)
+				.Include(x => x.CurrentWorkflowInstance).ThenInclude(w => w.Steps)
+				.FirstOrDefaultAsync(x => x.Items.Any(i => i.InvoiceFileId == fileId), cancellationToken);
 		}
 	}
 }

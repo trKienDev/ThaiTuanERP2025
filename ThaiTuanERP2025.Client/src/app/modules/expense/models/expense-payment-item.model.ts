@@ -1,3 +1,4 @@
+import { StoredFileMetadataDto } from "../../../core/services/file-preview.service";
 import { BudgetCodeDto, BudgetCodeLookupDto } from "../../finance/models/budget-code.model";
 import { CashoutCodeDto } from "../../finance/models/cashout-code.model";
 import { InvoiceDto } from "./invoice.model";
@@ -39,6 +40,7 @@ export interface ExpensePaymentItemLookupDto {
       amount: number;
       taxAmount: number;
       totalWithTax: number;
+      invoiceFile?: StoredFileMetadataDto | null;
 
       budgetCode: BudgetCodeLookupDto;
       cashoutCodeName: string;

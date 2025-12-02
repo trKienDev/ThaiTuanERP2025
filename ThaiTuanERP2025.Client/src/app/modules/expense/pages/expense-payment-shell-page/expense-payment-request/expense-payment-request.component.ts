@@ -31,8 +31,6 @@ import { KitOverlaySpinnerComponent } from "../../../../../shared/components/kit
 import { Router } from "@angular/router";
 import { SupplierRequestDialogComponent } from "../../../components/supplier-request-dialog/supplier-request-dialog.component";
 import { AvailableBudgetPlansDialogComponent } from "../../../components/available-budget-plans-dialog/available-budget-plans-dialog.component";
-import { FileImagePreviewDialog } from "../../../../../shared/components/file-preview/file-image-preview-dialog.component";
-import { FilePdfPreviewDialog } from "../../../../../shared/components/file-preview/file-pdf-preview-dialog.component";
 import { AmountToWordsPipe } from "../../../../../shared/pipes/amount-to-words.pipe";
 import { FileService } from "../../../../../shared/services/file.service";
 import { ExpensePaymentItemPayload } from "../../../models/expense-payment-item.model";
@@ -127,11 +125,12 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
             totalAmount: this.formBuilder.nonNullable.control<number>(0),
             totalTax: this.formBuilder.nonNullable.control<number>(0),
             totalWithTax: this.formBuilder.nonNullable.control<number>(0),
-            dueDate: this.formBuilder.nonNullable.control<Date>(new Date(), { validators: [Validators.required] }),
+            dueDate: this.formBuilder.nonNullable.control<Date>(new Date(), { validators: [Validators.required, this.minDateValidator() ] }),
             hasGoodsReceipt: this.formBuilder.nonNullable.control<boolean>(false),
             followerIds: this.formBuilder.nonNullable.control<string[]>([]),
             managerApproverId: this.formBuilder.nonNullable.control<string>('', { validators: Validators.required })
       });
+      filePreviewService: any;
 
       async ngOnInit(): Promise<void> {
             this.managerOptions$ = this.managerOptionStore.getManagerOptions$();
@@ -506,40 +505,10 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       }
 
       previewInvoice(rowIndex: number) {
-            const row = this.items.at(rowIndex);
+            const file = this.items.at(rowIndex).get('uploadedInvoiceFile')?.value;
+            if (!file) return this.toast.warningRich('Chưa có hóa đơn');
 
-            const file = row.get('uploadedInvoiceFile')?.value;
-            const previewUrl = row.get('uploadedInvoicePreviewUrl')?.value;
-
-            if (!file) {
-                  this.toast.warningRich('Chưa có hóa đơn nào được tải lên');
-                  return;
-            }
-
-            // file ảnh → dùng previewUrl
-            if (file.type.startsWith('image/') && previewUrl) {
-                  this.dialog.open(FileImagePreviewDialog, {
-                        data: { src: previewUrl }
-                  });
-                  return;
-            }
-
-            // file PDF → mở dialog PDF viewer
-            if (file.type === 'application/pdf') {
-                  const pdfUrl = URL.createObjectURL(file);
-                  this.dialog.open(FilePdfPreviewDialog, {
-                        data: { src: pdfUrl }
-                  });
-                  return;
-            }
-
-            // file Word, docx → tải về (trình duyệt không preview)
-            this.toast.info('File Word không thể preview, hệ thống sẽ tự tải xuống');
-            const url = URL.createObjectURL(file);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = file.name;
-            a.click();
+            this.filePreviewService.previewLocalFile(file);
       }
 
       canPreviewInvoice(index: number): boolean {

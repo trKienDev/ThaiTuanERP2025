@@ -6,6 +6,8 @@ using ThaiTuanERP2025.Application.Behaviors;
 using ThaiTuanERP2025.Application.Finance.BudgetPlans.Services;
 using ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Factories;
 using ThaiTuanERP2025.Application.Shared.Services;
+using ThaiTuanERP2025.Application.Core.Files.Authorization.Interfaces;
+using ThaiTuanERP2025.Application.Core.Files.Authorization;
 
 namespace ThaiTuanERP2025.Application
 {
@@ -46,6 +48,9 @@ namespace ThaiTuanERP2025.Application
 			services.AddScoped<IBudgetPlanPermissionService, BudgetPlanPermissionService>();
 			services.AddScoped<IExpenseWorkflowFactory, ExpenseWorkflowFactory>();
 			services.AddScoped<IDocumentResolver, DocumentResolver>();
+
+			// FilePermissionChecker
+			services.AddScoped<IStoredFilePermissionChecker, ExpenseInvoicePermissionChecker>();
 
 			return services;
 		}

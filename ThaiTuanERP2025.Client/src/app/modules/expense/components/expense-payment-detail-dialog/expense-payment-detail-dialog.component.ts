@@ -17,6 +17,8 @@ import { Router } from '@angular/router';
 import { UserFacade } from '../../../account/facades/user.facade';
 import { KitFlipCountdownComponent } from "../../../../shared/components/kit-flip-countdown/kit-flip-countdown.component";
 import { ExpenseWorkflowStatus } from '../../models/expense-workflow-instance.model';
+import { FilePreviewService } from '../../../../core/services/file-preview.service';
+import { ExpensePaymentItemLookupDto } from '../../models/expense-payment-item.model';
 
 @Component({
       selector: 'expense-payment-detail-dialog',
@@ -52,6 +54,7 @@ export class ExpensePaymentDetailDialogComponent {
       private readonly httpErrorHandler = inject(HttpErrorHandlerService);
       private readonly router = inject(Router);
       private readonly currentUser$ = inject(UserFacade).currentUser$;
+      private readonly filePreview = inject(FilePreviewService);
       approving = false;
       rejecting = false;
       submitting = false;
@@ -61,6 +64,7 @@ export class ExpensePaymentDetailDialogComponent {
       paymentId: string;
       paymentDetail: ExpensePaymentDetailDto | null = null;
 
+
       constructor(@Inject(MAT_DIALOG_DATA) public data: string) {
             this.paymentId = data;
             this.getPaymentDetail(this.paymentId);
@@ -68,10 +72,10 @@ export class ExpensePaymentDetailDialogComponent {
 
       async getPaymentDetail(id: string) {
             this.paymentDetail = await firstValueFrom(this.expensePaymentApi.getDetailById(id));
+            console.log('Payment detail loaded:', this.paymentDetail);
 
             const step = this.currentStep;
             const userId = (await firstValueFrom(this.currentUser$)).id;
-            console.log('payment detail: ', this.paymentDetail);
 
             this.canApproveOrReject = step?.approverIds?.includes(userId) ?? false;
             this.isInProgress = this.paymentDetail.workflowInstance.status === ExpenseWorkflowStatus.inProgress;
@@ -156,6 +160,21 @@ export class ExpensePaymentDetailDialogComponent {
                   this.submitting = false;
             }
       }
+
+      previewInvoice(item: ExpensePaymentItemLookupDto) {
+            if (!item.invoiceFile) {
+                  this.toast.error("Không tìm thấy hóa đơn");
+                  return;
+            }
+
+            this.filePreview.previewStoredFile({
+                  fileId: item.invoiceFile.fileId ?? '',
+                  objectKey: item.invoiceFile.objectKey ?? '',
+                  fileName: item.invoiceFile.fileName ?? 'invoice',
+                  isPublic: item.invoiceFile.isPublic ?? false
+            });
+      }
+
 
 
       close(isSuccess: boolean = false) {

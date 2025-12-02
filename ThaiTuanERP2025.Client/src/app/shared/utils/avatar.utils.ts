@@ -1,6 +1,5 @@
 import { environment } from "../../../environments/environment";
 
-
 export function resolveAvatarUrl(
       user: { avatarFileId?: string | null; avatarFileObjectKey?: string | null } | null | undefined
 ): string {

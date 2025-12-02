@@ -14,7 +14,6 @@ using ThaiTuanERP2025.Application.Shared.Services;
 using ThaiTuanERP2025.Application.Core.Notifications;
 using ThaiTuanERP2025.Application.Core.Reminders;
 using ThaiTuanERP2025.Application.Core.Services;
-using ThaiTuanERP2025.Application.Files;
 using ThaiTuanERP2025.Application.Finance.BudgetApprovers;
 using ThaiTuanERP2025.Application.Finance.BudgetCodes;
 using ThaiTuanERP2025.Application.Finance.BudgetGroups;
@@ -25,7 +24,6 @@ using ThaiTuanERP2025.Domain.Account.Repositories;
 using ThaiTuanERP2025.Domain.Shared.Enums;
 using ThaiTuanERP2025.Domain.Core.Repositories;
 using ThaiTuanERP2025.Domain.Expense.Repositories;
-using ThaiTuanERP2025.Domain.Files.Repositories;
 using ThaiTuanERP2025.Domain.Finance.Repositories;
 using ThaiTuanERP2025.Infrastructure.Account.Repositories;
 using ThaiTuanERP2025.Infrastructure.Account.Repositories.Read;
@@ -43,9 +41,6 @@ using ThaiTuanERP2025.Infrastructure.Finance.Repositories.Read;
 using ThaiTuanERP2025.Infrastructure.Finance.Repositories.Write;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 using ThaiTuanERP2025.Infrastructure.Realtime;
-using ThaiTuanERP2025.Infrastructure.StoredFiles.Configurations;
-using ThaiTuanERP2025.Infrastructure.StoredFiles.FileStorage;
-using ThaiTuanERP2025.Infrastructure.StoredFiles.Repositories;
 using ThaiTuanERP2025.Infrastructure.Shared.Repositories;
 using ThaiTuanERP2025.Domain.Shared.Repositories;
 using ThaiTuanERP2025.Application.Core.Followers;
@@ -66,6 +61,10 @@ using ThaiTuanERP2025.Infrastructure.Account.Services;
 using ThaiTuanERP2025.Application.Finance.BudgetTransasctions;
 using ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Repositories;
 using ThaiTuanERP2025.Application.Expense.ExpensePayments.Repositories;
+using ThaiTuanERP2025.Application.Core.Files;
+using ThaiTuanERP2025.Application.Core.Files.Interfaces;
+using ThaiTuanERP2025.Infrastructure.Core.Configurations;
+using ThaiTuanERP2025.Infrastructure.Core.FileStorage;
 
 namespace ThaiTuanERP2025.Infrastructure
 {

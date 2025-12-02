@@ -2,9 +2,9 @@
 using MediatR;
 using ThaiTuanERP2025.Application.Account.Departments;
 using ThaiTuanERP2025.Application.Shared.Interfaces;
-using ThaiTuanERP2025.Application.Files;
 using ThaiTuanERP2025.Application.Shared.Exceptions;
 using ThaiTuanERP2025.Application.Account.Users.Repositories;
+using ThaiTuanERP2025.Application.Core.Files;
 
 namespace ThaiTuanERP2025.Application.Account.Users.Queries
 {

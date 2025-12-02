@@ -20,6 +20,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.MappingProfiles
 				.ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items));
 
 			CreateMap<ExpensePaymentItem, ExpensePaymentItemLookupDto>()
+				.ForMember(dest => dest.InvoiceFile, opt => opt.MapFrom(src => src.InvoiceFile))
 				.ForMember(dest => dest.BudgetCode, opt => opt.MapFrom(src => src.BudgetPlanDetail.BudgetCode));
 		}
 	}
