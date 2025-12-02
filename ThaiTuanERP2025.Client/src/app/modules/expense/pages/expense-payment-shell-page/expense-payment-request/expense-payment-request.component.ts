@@ -36,6 +36,7 @@ import { FileService } from "../../../../../shared/services/file.service";
 import { ExpensePaymentItemPayload } from "../../../models/expense-payment-item.model";
 import { HttpErrorHandlerService } from "../../../../../core/services/http-errror-handler.service";
 import { SupplierApiService } from "../../../services/api/supplier.service";
+import { FilePreviewService } from "../../../../../core/services/file-preview.service";
 
 type UploadStatus = 'queued' | 'uploading' | 'done' | 'error';
 type UploadItem = {
@@ -86,6 +87,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       private readonly bankAccountApi = inject(BankAccountApiService);
       private readonly fileService = inject(FileService);
       private readonly httpErrorHandler = inject(HttpErrorHandlerService);
+      private readonly filePreview = inject(FilePreviewService);
 
       submitting = false;
       showErrors = false;
@@ -130,7 +132,6 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
             followerIds: this.formBuilder.nonNullable.control<string[]>([]),
             managerApproverId: this.formBuilder.nonNullable.control<string>('', { validators: Validators.required })
       });
-      filePreviewService: any;
 
       async ngOnInit(): Promise<void> {
             this.managerOptions$ = this.managerOptionStore.getManagerOptions$();
@@ -181,15 +182,17 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       onUserSelected(opt: KitDropdownOption) {
             alert(`Bạn đã chọn: ${opt.label} (id = ${opt.id})`);
       }
-      onFollowerSelected(opt: KitDropdownOption) {
-            const id = typeof opt === 'string' ? opt : opt.id;
-            const ctrl = this.form.controls.followerIds;
-            const current = ctrl.getRawValue() ?? [];
-            if (!current.includes(id)) ctrl.setValue([...current, id]);
+      // onFollowerSelected(opt: KitDropdownOption) {
+      //       const id = typeof opt === 'string' ? opt : opt.id;
+      //       const ctrl = this.form.controls.followerIds;
+      //       const current = ctrl.getRawValue() ?? [];
+      //       if (!current.includes(id)) ctrl.setValue([...current, id]);
 
-            ctrl.markAsDirty();
-            ctrl.updateValueAndValidity();
-      }
+      //       ctrl.markAsDirty();
+      //       ctrl.updateValueAndValidity();
+      // }
+
+
       onManagerApproverSelected(opt: KitDropdownOption) {
             this.form.patchValue({ managerApproverId: opt.id });
       }
@@ -508,7 +511,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
             const file = this.items.at(rowIndex).get('uploadedInvoiceFile')?.value;
             if (!file) return this.toast.warningRich('Chưa có hóa đơn');
 
-            this.filePreviewService.previewLocalFile(file);
+            this.filePreview.previewLocalFile(file);
       }
 
       canPreviewInvoice(index: number): boolean {

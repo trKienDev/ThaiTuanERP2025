@@ -202,7 +202,7 @@
 
             <div class="form-row display-flex gap-10px">
                   <div style="width: 70%;">
-                        <kit-dropdown [multiple]="true" [options]="(userOptions$ | async) ?? []"  (selectionChange)="onFollowerSelected($event)" [width]="'100%'" [placeholder]="'Thêm người theo dõi'"></kit-dropdown>
+                        <kit-dropdown [multiple]="true" [options]="(userOptions$ | async) ?? []" formControlName="followerIds" [placeholder]="'Thêm người theo dõi'" [multiple]="true"></kit-dropdown>
                   </div>
                   <div style="width: 30%;">
                         <kit-dropdown [options]="(managerOptions$ | async) ?? []"  [width]="'100%'" (selectionChange)="onManagerApproverSelected($event)" [placeholder]="'Chọn quản lý duyệt'" [required]="true"></kit-dropdown>

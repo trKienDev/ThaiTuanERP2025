@@ -14,7 +14,6 @@ using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Finance.Entities;
 using ThaiTuanERP2025.Domain.Finance.Enums;
 using ThaiTuanERP2025.Domain.Shared.Enums;
-using ThaiTuanERP2025.Domain.Shared.Extensions;
 using ThaiTuanERP2025.Domain.Shared.Repositories;
 
 namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
@@ -167,9 +166,12 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
 					cancellationToken
 				);
 
-				// add followers
+				
+
 			}
+			// add followers
 			await _followerService.FollowManyAsync(DocumentType.ExpensePayment, newPayment.Id, approverIds, cancellationToken);
+			await _followerService.FollowManyAsync(DocumentType.ExpensePayment, newPayment.Id, payload.followerIds, cancellationToken);
 			await _followerService.FollowAsync(DocumentType.ExpensePayment, newPayment.Id, newPayment.CreatedByUserId!.Value, cancellationToken);
 			await _uow.SaveChangesAsync(cancellationToken);
 			return Unit.Value;

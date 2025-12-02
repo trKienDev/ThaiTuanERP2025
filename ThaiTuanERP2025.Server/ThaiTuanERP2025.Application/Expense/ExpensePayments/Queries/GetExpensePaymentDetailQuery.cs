@@ -1,8 +1,11 @@
 ﻿using FluentValidation;
 using MediatR;
+using ThaiTuanERP2025.Application.Account.Users.Repositories;
+using ThaiTuanERP2025.Application.Core.Followers;
 using ThaiTuanERP2025.Application.Expense.ExpensePayments.Contracts;
 using ThaiTuanERP2025.Application.Expense.ExpensePayments.Repositories;
-using ThaiTuanERP2025.Domain.Shared;
+using ThaiTuanERP2025.Application.Shared.Exceptions;
+using ThaiTuanERP2025.Domain.Shared.Enums;
 
 namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Queries
 {
@@ -10,17 +13,34 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Queries
 	public sealed class GetExpensePaymentDetailQueryHandler : IRequestHandler<GetExpensePaymentDetailQuery, ExpensePaymentDetailDto?>
 	{
 		private readonly IExpensePaymentReadRepository _expensePaymentRepo;
-		public GetExpensePaymentDetailQueryHandler(IExpensePaymentReadRepository expensePaymentRepo)
+		private readonly IFollowerReadRepository _folllowerRepo;
+		private readonly IUserReadRepostiory _userRepo;
+		public GetExpensePaymentDetailQueryHandler(IExpensePaymentReadRepository expensePaymentRepo, IFollowerReadRepository followerRepo, IUserReadRepostiory userRepo)
 		{
 			_expensePaymentRepo = expensePaymentRepo;
+			_folllowerRepo = followerRepo;
+			_userRepo = userRepo;
 		}
 
 		public async Task<ExpensePaymentDetailDto?> Handle(GetExpensePaymentDetailQuery query, CancellationToken cancellationToken)
 		{
-			Guard.AgainstDefault(query.Id, nameof(query.Id));
+			var paymentDetail = await _expensePaymentRepo.GetDetailById(query.Id, cancellationToken)
+				?? throw new NotFoundException("Khoản thanh toán không tồn tại");
 
-			return await _expensePaymentRepo.GetDetailById(query.Id, cancellationToken);
+			var followerIds = await _folllowerRepo.ListProjectedAsync(
+				q => q.Where(x => 
+					x.DocumentId == paymentDetail.Id 
+					&& x.DocumentType == DocumentType.ExpensePayment
+				).Select(x => x.UserId),
+				cancellationToken: cancellationToken
+			);
 
+			var followerBriefAvatar = await _userRepo.GetBriefWithAvatarManyAsync(followerIds, cancellationToken);
+			paymentDetail = paymentDetail with
+			{
+				Followers = followerBriefAvatar
+			};
+			return paymentDetail;
 		}
 
 		public sealed class GetExpensePaymentDetailQueryValidator : AbstractValidator<GetExpensePaymentDetailQuery>

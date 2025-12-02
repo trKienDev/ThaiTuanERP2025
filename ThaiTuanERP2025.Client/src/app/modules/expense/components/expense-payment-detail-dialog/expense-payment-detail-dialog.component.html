@@ -40,61 +40,80 @@
                               <div class="card-wrapper">
                                     <div class="card-header">Thông tin thanh toán</div>
                                     <div class="card-body">
-                                          <div>
-                                                <label for="sub-id">ID chi phí</label>
-                                                <span>{{ paymentDetail?.subId }}</span>
-                                          </div>
-                                          <div>
-                                                <label for="created-by-ủe">Tạo bởi</label>
-                                                <div class="display-flex gap-5px align-items-center">
-                                                      <img class="avatar-user" [src]="paymentDetail?.createdByUser | avatarUrlPipe">
-                                                      <span>{{ paymentDetail?.createdByUser?.fullName}}</span>
+                                          <div class="display-flex gap-10px">
+                                                <div class="left-side flex-1">
+                                                      <div class="column">
+                                                            <label for="sub-id">ID chi phí</label>
+                                                            <span>{{ paymentDetail?.subId }}</span>
+                                                      </div>
+                                                      <div class="column">
+                                                            <label for="created-by-ủe">Tạo bởi</label>
+                                                            <div class="display-flex gap-5px align-items-center">
+                                                                  <img class="avatar-user" [src]="paymentDetail?.createdByUser | avatarUrlPipe">
+                                                                  <span>{{ paymentDetail?.createdByUser?.fullName}}</span>
+                                                            </div>
+                                                      </div>
+                                                      <div class="column">
+                                                            <label for="created-at">Tạo lúc</label>
+                                                            <span>{{ paymentDetail?.createdAt | date: 'HH:mm dd/MM/yyyy' }}</span>
+                                                      </div>
+                                                      <div class="column">
+                                                            <label for="hasGoodsReceipt">Đã nhập kho</label>
+                                                            <input type="checkbox" [checked]="paymentDetail?.hasGoodsReceipt" disabled style="width: fit-content;"/>
+                                                      </div>
+                                                      <div class="column">
+                                                            <label for="workflow-instance">Luồng duyệt</label>
+                                                            <ng-container *ngIf="(paymentDetail?.workflowInstance?.steps?.length ?? 0) > 0">
+                                                                  <div class="approvers display-flex gap-5px">
+                                                                        <ng-container *ngFor="let step of paymentDetail?.workflowInstance?.steps">
+                                                                              <ng-container *ngIf="step.approvedByUser">
+                                                                                    <div class="expense-step">
+                                                                                          <img class="avatar-user approved-user" [src]="step.approvedByUser | avatarUrlPipe">
+                                                                                          <span class="status-icon approved-icon">✓</span>
+                                                                                    </div>
+                                                                              </ng-container>
+                                                                              <ng-container *ngIf="step.rejectedByUser">
+                                                                                    <div class="expense-step">
+                                                                                          <img class="avatar-user rejected-user" [src]="step.rejectedByUser | avatarUrlPipe">
+                                                                                          <span class="status-icon rejected-icon">✗</span>
+                                                                                    </div>
+                                                                              </ng-container>
+                                                                        </ng-container>
+                                                                  </div>
+                                                            </ng-container>
+                                                      </div>
+                                                </div>
+                                                <div class="right-side flex-1">
+                                                      <div class="column">
+                                                            <label for="supplier">Nhà cung cấp</label>
+                                                            <span>{{ paymentDetail?.supplierName }}</span>
+                                                      </div>
+                                                      <div class="column">
+                                                            <label for="bank-name">Tên ngân hàng</label>
+                                                            <span>{{ paymentDetail?.bankName }}</span>
+                                                      </div>
+                                                      <div class="column">
+                                                            <label for="bank-account">Số tài khoản</label>
+                                                            <span>{{ paymentDetail?.accountNumber }}</span>
+                                                      </div>
+                                                      <div class="column">
+                                                            <label for="beneficiary-name">Người thụ hưởng</label>
+                                                            <span>{{ paymentDetail?.beneficiaryName }}</span>
+                                                      </div>
                                                 </div>
                                           </div>
-                                          <div>
-                                                <label for="created-at">Tạo lúc</label>
-                                                <span>{{ paymentDetail?.createdAt | date: 'HH:mm dd/MM/yyyy' }}</span>
-                                          </div>
-                                          <div>
-                                                <label for="supplier">Nhà cung cấp</label>
-                                                <span>{{ paymentDetail?.supplierName }}</span>
-                                          </div>
-                                          <div>
-                                                <label for="bank-name">Tên ngân hàng</label>
-                                                <span>{{ paymentDetail?.bankName }}</span>
-                                          </div>
-                                          <div>
-                                                <label for="bank-account">Số tài khoản</label>
-                                                <span>{{ paymentDetail?.accountNumber }}</span>
-                                          </div>
-                                          <div>
-                                                <label for="beneficiary-name">Người thụ hưởng</label>
-                                                <span>{{ paymentDetail?.beneficiaryName }}</span>
-                                          </div>
-                                          <div class="">
+                                          <div class="column">
                                                 <label for="description">Mô tả</label>
                                                 <span>{{ paymentDetail?.description || '---'}}</span>
                                           </div>
-                                          <div>
-                                                <label for="hasGoodsReceipt">Đã nhập kho</label>
-                                                <input type="checkbox" [checked]="paymentDetail?.hasGoodsReceipt" disabled style="width: fit-content;"/>
-                                          </div>
-                                          <div>
-                                                <label for="workflow-instance">Luồng duyệt</label>
-                                                <ng-container *ngIf="(paymentDetail?.workflowInstance?.steps?.length ?? 0) > 0">
-                                                      <div class="approvers display-flex gap-5px">
-                                                            <ng-container *ngFor="let step of paymentDetail?.workflowInstance?.steps">
-                                                                  <ng-container *ngIf="step.approvedByUser">
-                                                                        <div class="expense-step">
-                                                                              <img class="avatar-user approved-user" [src]="step.approvedByUser | avatarUrlPipe">
-                                                                              <span class="status-icon approved-icon">✓</span>
-                                                                        </div>
-                                                                  </ng-container>
-                                                                  <ng-container *ngIf="step.rejectedByUser">
-                                                                        <div class="expense-step">
-                                                                              <img class="avatar-user rejected-user" [src]="step.rejectedByUser | avatarUrlPipe">
-                                                                        </div>
-                                                                  </ng-container>
+                                          <div class="column">
+                                                <label for="followers">Người theo dõi</label>
+                                                <ng-container *ngIf="(paymentDetail?.followers?.length ?? 0) > 0">
+                                                      <div class="payment-followers display-flex gap-5px align-items-center">
+                                                            <ng-container *ngFor="let follower of paymentDetail?.followers">
+                                                                  <div class="payment-follower">
+                                                                        <img class="avatar-user" [src]="follower | avatarUrlPipe">
+                                                                  </div>
                                                             </ng-container>
                                                       </div>
                                                 </ng-container>

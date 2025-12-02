@@ -37,7 +37,7 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories.Read
 				).SingleOrDefaultAsync(cancellationToken);
 		}
 
-		public Task<List<UserBriefAvatarDto>> GetBriefWithAvatarAsync(IEnumerable<Guid> userIds, CancellationToken cancellationToken = default)
+		public Task<List<UserBriefAvatarDto>> GetBriefWithAvatarManyAsync(IEnumerable<Guid> userIds, CancellationToken cancellationToken = default)
 		{
 			return _dbSet.AsNoTracking()
 				.Where(u => userIds.Contains(u.Id))

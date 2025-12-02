@@ -53,5 +53,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Contracts
 		public Guid CreatedByUserId { get; init; }
 		public UserBriefAvatarDto CreatedByUser { get; init; } = new UserBriefAvatarDto();
 		public DateTime CreatedAt { get; init; }
+
+		public IReadOnlyList<UserBriefAvatarDto> Followers { get; set; } = Array.Empty<UserBriefAvatarDto>();	
 	}
 }

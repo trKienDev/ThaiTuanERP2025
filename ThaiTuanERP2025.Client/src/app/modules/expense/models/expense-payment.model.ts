@@ -93,6 +93,8 @@ export interface ExpensePaymentDetailDto {
 
       createdByUser: UserBriefAvatarDto;
       createdAt: string;
+
+      followers: UserBriefAvatarDto[];
 }
 
 export interface ExpensePaymentLookupDto {

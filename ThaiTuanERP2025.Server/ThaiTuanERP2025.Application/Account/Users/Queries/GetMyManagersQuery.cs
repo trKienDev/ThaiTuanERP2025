@@ -30,7 +30,7 @@ namespace ThaiTuanERP2025.Application.Account.Users.Queries
 			if(managerIds.Count  == 0)
 				return Array.Empty<UserBriefAvatarDto>();
 
-			return await _userRepo.GetBriefWithAvatarAsync(managerIds, cancellationToken);
+			return await _userRepo.GetBriefWithAvatarManyAsync(managerIds, cancellationToken);
 		}
 	}
 }

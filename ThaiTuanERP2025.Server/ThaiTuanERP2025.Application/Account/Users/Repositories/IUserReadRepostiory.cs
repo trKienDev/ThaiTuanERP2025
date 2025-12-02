@@ -7,7 +7,7 @@ namespace ThaiTuanERP2025.Application.Account.Users.Repositories
 	{
 		Task<string?> GetUserNameAsync(Guid userId, CancellationToken cancellationToken);
 		Task<UserBriefAvatarDto?> GetBriefWithAvatarAsync(Guid userId, CancellationToken cancellationToken);
-		Task<List<UserBriefAvatarDto>> GetBriefWithAvatarAsync(IEnumerable<Guid> userIds, CancellationToken cancellationToken = default);
+		Task<List<UserBriefAvatarDto>> GetBriefWithAvatarManyAsync(IEnumerable<Guid> userIds, CancellationToken cancellationToken = default);
 		Task<User?> GetWithRolesAndPermissionsAsync(string employeeCode, CancellationToken cancellationToken);
 		Task<User?> GetWithRolesAndPermissionsByIdAsync(Guid userId, CancellationToken cancellationToken);
 		Task<List<Guid>> GetManagerIdsAsync(Guid userId, CancellationToken cancellationToken = default);

@@ -1,5 +1,4 @@
 ﻿using ThaiTuanERP2025.Domain.Shared;
-using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Shared.Enums;
 
 namespace ThaiTuanERP2025.Domain.Core.Entities
