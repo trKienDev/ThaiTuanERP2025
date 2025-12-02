@@ -26,6 +26,13 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
                         return Ok(ApiResponse<IReadOnlyList<SupplierDto>>.Success(dtos));
                 }
 
+                [HttpGet("{id:guid}/beneficiary")]
+                public async Task<IActionResult> GetBeneficiaryById([FromRoute] Guid id, CancellationToken cancellationToken)
+                {
+                        var dto = await _mediator.Send(new GetSupplierBeneficiaryInforQuery(id), cancellationToken);
+                        return Ok(ApiResponse<SupplierBeneficiaryInforDto>.Success(dto));
+                }
+
                 [HttpPost]
                 public async Task<IActionResult> Create([FromBody] CreateSupplierCommand command, CancellationToken cancellationToken) { 
                         var result = await _mediator.Send(command, cancellationToken);

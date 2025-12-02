@@ -9,10 +9,5 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories.Read
 	public sealed class SupplierReadRepository : BaseReadRepository<Supplier, SupplierDto>, ISupplierReadRepository
 	{	
 		public SupplierReadRepository(ThaiTuanERP2025DbContext dbContext, IMapper mapperConfig) : base(dbContext, mapperConfig) { }
-
-		public async Task<SupplierBeneficiaryInforDto> GetSupplierBeneficiaryInfor(Guid supplierId, CancellationToken cancellationToken)
-		{
-
-		}
 	}
 }

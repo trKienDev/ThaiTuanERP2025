@@ -193,6 +193,7 @@ input[type=number] { -moz-appearance: textfield; }
 .kit-datepicker .mat-calendar-body-selected { background-color: #1976d2; color: white; }
 .kit-datepicker .mat-calendar-body-row { display: table-row !important; }
 .kit-datepicker .mat-calendar-body-cell { display: table-cell !important; }
+.mat-calendar-body-disabled { color: #aaa !important; opacity: 0.5 !important; pointer-events: none !important; }
 
 /* mat-snackbar */
 /* Bọc MDC surface: bo góc + shadow + padding đẹp hơn */

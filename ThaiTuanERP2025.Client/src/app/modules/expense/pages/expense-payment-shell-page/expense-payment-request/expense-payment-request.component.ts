@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnDestroy, OnInit } from "@angular/core";
-import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ConnectedPosition, OverlayModule } from "@angular/cdk/overlay";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { Subject, Observable, firstValueFrom, startWith, switchMap, of, takeUntil } from "rxjs";
@@ -37,6 +37,7 @@ import { AmountToWordsPipe } from "../../../../../shared/pipes/amount-to-words.p
 import { FileService } from "../../../../../shared/services/file.service";
 import { ExpensePaymentItemPayload } from "../../../models/expense-payment-item.model";
 import { HttpErrorHandlerService } from "../../../../../core/services/http-errror-handler.service";
+import { SupplierApiService } from "../../../services/api/supplier.service";
 
 type UploadStatus = 'queued' | 'uploading' | 'done' | 'error';
 type UploadItem = {
@@ -81,6 +82,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       private readonly managerOptionStore = inject(ManagerOptionStore);
       private readonly userFacade = inject(UserFacade);
       private readonly expensePaymentService = inject(ExpensePaymentApiService);
+      private readonly supplierApi = inject(SupplierApiService);
       private readonly router = inject(Router);
       private readonly confirm = inject(ConfirmService);
       private readonly bankAccountApi = inject(BankAccountApiService);
@@ -89,6 +91,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
 
       submitting = false;
       showErrors = false;
+      today = new Date();
 
       public readonly uploadMeta = {
             module: 'expense',
@@ -163,8 +166,17 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
             ]
       }
 
-      onSupplierSelected(opt: KitDropdownOption) {
+      async onSupplierSelected(opt: KitDropdownOption) {
             this.form.patchValue({ supplierId: opt.id });
+            const supplierBeneficiary = await firstValueFrom(this.supplierApi.getBeneficiaryById(opt.id));
+            console.log('supplier beneficiary: ', supplierBeneficiary);
+            if (supplierBeneficiary) {
+                  this.form.patchValue({
+                        bankName: supplierBeneficiary.beneficiaryBankName ?? '',
+                        accountNumber: supplierBeneficiary.beneficiaryAccountNumber ?? '',
+                        beneficiaryName: supplierBeneficiary.beneficiaryName ?? '',
+                  });
+            }
       }
 
       onUserSelected(opt: KitDropdownOption) {
@@ -587,6 +599,15 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
                         fileInput.click();
                   }
             });
+      }
+
+      private minDateValidator(min: Date = new Date()) {
+            min.setHours(0, 0, 0, 0);
+            return (control: AbstractControl) => {
+                  const value = control.value;
+                  if (!value) return null;
+                  return value < min ? { minDate: true } : null;
+            };
       }
 
       // === DESTROY ===
