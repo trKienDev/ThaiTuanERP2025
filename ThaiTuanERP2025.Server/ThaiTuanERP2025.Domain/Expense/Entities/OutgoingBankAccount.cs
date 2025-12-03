@@ -1,5 +1,4 @@
-﻿using ThaiTuanERP2025.Domain.Account.Entities;
-using ThaiTuanERP2025.Domain.Shared;
+﻿using ThaiTuanERP2025.Domain.Shared;
 using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Expense.Events.OutgoingBankAccounts;
 using ThaiTuanERP2025.Domain.Shared.Interfaces;

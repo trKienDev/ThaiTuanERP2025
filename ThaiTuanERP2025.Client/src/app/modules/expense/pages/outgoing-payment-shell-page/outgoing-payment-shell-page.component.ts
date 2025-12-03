@@ -7,12 +7,14 @@ import { OutgoingPaymentRequestComponent } from "./outgoing-payment-request/outg
 @Component({
       selector: 'outgoing-payment-shell-page',
       standalone: true,
-      templateUrl: './outgoing-payment-shell-page.component.html',
+      template: `
+            <kit-shell-tabs [tabs]="tabs"></kit-shell-tabs>
+      `,
       imports: [ CommonModule, KitShellTabsComponent]
 })
 export class OutgoingPaymentShellPageComponent {
       readonly tabs: KitShellTab[] = [
             { id: 'following-outgoing-payments', label: 'Khoản chi', component: FollowingOutgoingPaymentComponent },
-            { id: 'outgoing-payment-request', label: 'Khoản chi mới', component: OutgoingPaymentRequestComponent, hidden: true },
+            { id: 'outgoing-payment-request', label: 'Khoản chi mới', component: OutgoingPaymentRequestComponent },
       ]
 }

@@ -32,10 +32,6 @@
                               <label class="form-label" for="name" style="width: 8%;">Tài khoản tiền ra <span style="color: red;">*</span></label>
                               <kit-dropdown [options]="(OBAccountOptions | async) ?? []" [placeholder]="'Chọn tài khoản tiền ra'" style="width: 100%;" (selectionChange)="onOBAccountSelected($event)"></kit-dropdown>
                         </div>
-                        <div class="form-row display-flex gap-20px align-items-center">
-                              <label class="form-label" for="receiver-payment">Công ty trả cho: </label>
-                              <!-- <span class="receiver-name">{{ paymentDetail()?.supplier?.name }}</span> -->
-                        </div>
                         <div class="form-row">
                               <label class="form-label" for="payment-bank">Tài khoản thụ hưởng: </label>
                               <div class="receiver-payment display-flex gap-10px margin-top-20px">

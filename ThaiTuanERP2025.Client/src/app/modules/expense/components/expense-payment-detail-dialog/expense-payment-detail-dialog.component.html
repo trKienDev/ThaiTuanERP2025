@@ -33,6 +33,11 @@
                                           </div>
                                     </div>
                               </ng-container>
+                              <ng-container *ngIf="paymentDetail?.status === 3">
+                                    <button type="button" class="button pintura-button" [disabled]="submitting" (click)="redirectToOutgoingPaymentRequestPage(paymentId)">
+                                          Ghi nhận khoản chi
+                                    </button>
+                              </ng-container>
                         </div>
                   </div>
                   <div class="payment-infor display-flex flex-column gap-10px">

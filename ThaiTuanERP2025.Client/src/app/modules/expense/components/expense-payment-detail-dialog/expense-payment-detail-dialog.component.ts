@@ -191,6 +191,11 @@ export class ExpensePaymentDetailDialogComponent {
             })
       }
 
+      redirectToOutgoingPaymentRequestPage(paymentId: string) {
+            this.dialogRef.close({ redirect: true, paymentId });
+            this.router.navigateByUrl(`/expense/outgoing-payment-shell/outgoing-payment-request/${paymentId}`);  
+      }
+
       close(isSuccess: boolean = false) {
             this.dialogRef.close(isSuccess);
       }

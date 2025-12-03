@@ -7,7 +7,9 @@ import { FollowingExpensePaymentsPanelComponent } from "./following-expense-paym
 @Component({
       selector: 'expense-payment-shell-page',
       standalone: true,
-      templateUrl: './expense-payment-shell-page.component.html',
+      template: `
+            <kit-shell-tabs [tabs]="tabs"></kit-shell-tabs>
+      `,
       imports: [ CommonModule, KitShellTabsComponent]
 })
 export class ExpensePaymentShellPageComponent {

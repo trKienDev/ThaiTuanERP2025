@@ -30,7 +30,9 @@ export class SupplierRequestDialogComponent {
       });
 
       async submit(): Promise<void> {
+            alert('submit');
             this.showErrors = true;
+
             if(this.form.invalid) {
                   this.form.markAllAsTouched();
                   this.toast.warningRich("Vui lòng điền đẩy đủ thông tin");
@@ -42,7 +44,6 @@ export class SupplierRequestDialogComponent {
                   this.form.disable({ emitEvent: false });
 
                   const payload = this.form.getRawValue();
-                  console.log('payload: ', payload);
                   const created = await firstValueFrom(this.supplierFacade.create(payload));
 
                   this.toast.successRich("Thêm nhà cung cấp mới thành công");
@@ -52,7 +53,7 @@ export class SupplierRequestDialogComponent {
                   this.httpErrorHandler.handle(error, "Thêm nhà cung cấp mới thất bại");
             } finally {
                   this.submitting = false;
-                  this.form.disable({ emitEvent: false });
+                  this.form.enable({ emitEvent: false });
             }
       }     
 

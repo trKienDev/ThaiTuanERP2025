@@ -21,10 +21,10 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 
 			// ========== Index ==========
 			// Đảm bảo một AccountNumber duy nhất trong hệ thống
-			builder.HasIndex(x => x.AccountNumber).IsUnique();
+			builder.HasIndex(x => x.Name).IsUnique();
 
 			// Tối ưu tìm kiếm theo trạng thái và tên
-			builder.HasIndex(x => new { x.IsActive, x.Name });
+			builder.HasIndex(x => x.Name );
 
 			// Auditable	
 			ConfigureAuditUsers(builder);

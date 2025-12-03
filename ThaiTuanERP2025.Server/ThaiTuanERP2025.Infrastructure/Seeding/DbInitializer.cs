@@ -93,6 +93,7 @@ namespace ThaiTuanERP2025.Infrastructure.Seeding
 				("Tạo nhóm khoản chi", "cashout-group.create", null),
 				("Tạo luồng duyệt thanh toán", "expense-workflow-template.create", null),
 				("Thao tác luồng duyệt thanh toán", "expense-workflow-template.actions", null),
+				("Thêm Tài khoản ngân hàng - khoản chi", "outgoing-bank-account.create", null),
 			};
 
 			foreach (var (name, code, desc) in desired)

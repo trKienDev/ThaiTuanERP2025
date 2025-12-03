@@ -9,7 +9,6 @@ import { ExpensePaymentApiService } from '../../../services/api/expense-payment.
 import {  ExpensePaymentLookupDto } from '../../../models/expense-payment.model';
 import { firstValueFrom } from 'rxjs';
 import { ExpensePaymentDetailDialogComponent } from '../../../components/expense-payment-detail-dialog/expense-payment-detail-dialog.component';
-import { ConfirmService } from '../../../../../shared/components/confirm-dialog/confirm.service';
 
 @Component({
       selector: 'expense-payments-panel',
@@ -58,11 +57,15 @@ export class FollowingExpensePaymentsPanelComponent implements OnInit {
                         await this.reloadFollowingPayments();
                   }
 
-                  // Dọn query param nếu có
+                  if (result?.redirect) {
+                        return;
+                  }
+
+                        // Dọn query param nếu có
                   this.router.navigate([], {
-                  relativeTo: this.route,
-                  queryParams: { openExpensePaymentId: null },
-                  queryParamsHandling: 'merge'
+                        relativeTo: this.route,
+                        queryParams: { openExpensePaymentId: null },
+                        queryParamsHandling: 'merge'
                   });
             });
       }

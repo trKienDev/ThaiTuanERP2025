@@ -67,6 +67,7 @@ using ThaiTuanERP2025.Domain.StoredFiles.Repositories;
 using ThaiTuanERP2025.Infrastructure.StoredFiles.Repositories;
 using ThaiTuanERP2025.Infrastructure.StoredFiles.Configurations;
 using ThaiTuanERP2025.Infrastructure.StoredFiles;
+using ThaiTuanERP2025.Application.Expense.OutgoingBankAccounts;
 
 namespace ThaiTuanERP2025.Infrastructure
 {
@@ -135,7 +136,8 @@ namespace ThaiTuanERP2025.Infrastructure
 			// Expense
 			services.AddScoped<ISupplierReadRepository, SupplierReadRepository>();
 			services.AddScoped<ISupplierWriteRepository, SupplierWriteRepository>();
-			services.AddScoped<IOutgoingBankAccountRepository, OutgoingBankAccountRepository>();
+			services.AddScoped<IOutgoingBankAccountReadRepository, OutgoingBankAccountReadRepository>();
+			services.AddScoped<IOutgoingBankAccountWriteRepository, OutgoingBankAccountWriteRepository>();
 			services.AddScoped<IOutgoingPaymentRepository, OutgoingPaymentRepository>();
 			services.AddScoped<IExpenseWorkflowTemplateReadRepository, ExpenseWorkflowTemplateReadRepository>();
 			services.AddScoped<IExpenseWorkflowTemplateWriteRepository, ExpenseWorkflowTemplateWriteRepository>();

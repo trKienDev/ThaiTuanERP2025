@@ -10,4 +10,9 @@ export interface OutgoingBankAccountDto extends OutgoingBankAccount {
       isActive: boolean;
 }
 
-export interface OutgoingBankAccountRequest extends OutgoingBankAccount {}
+export interface OutgoingBankAccountPayload {
+      name: string;
+      bankName: string;
+      accountNumber: string;
+      ownerName: string;
+}

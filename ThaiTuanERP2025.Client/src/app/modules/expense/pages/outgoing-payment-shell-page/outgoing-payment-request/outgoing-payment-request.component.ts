@@ -21,10 +21,10 @@ import { KitOverlaySpinnerComponent } from "../../../../../shared/components/kit
 
 @Component({
       selector: 'outgoing-payment-request',
-      templateUrl: './outgoing-payment-request.component.html',
       standalone: true,
       imports: [CommonModule, ReactiveFormsModule, KitDropdownComponent, KitFileUploaderComponent, MoneyFormatDirective, Kit404PageComponent, KitLoadingSpinnerComponent, MatDatepickerModule, KitSpinnerButtonComponent, KitOverlaySpinnerComponent],
       styleUrls: ['./outgoing-payment-request.component.scss'],
+      templateUrl: './outgoing-payment-request.component.html',
       providers: [...provideMondayFirstDateAdapter()]
 })
 export class OutgoingPaymentRequestComponent implements OnInit {

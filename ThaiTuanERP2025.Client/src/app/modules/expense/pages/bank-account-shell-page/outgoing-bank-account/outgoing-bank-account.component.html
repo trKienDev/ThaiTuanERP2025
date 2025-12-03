@@ -5,7 +5,7 @@
                   <h3 class="title">Tài khoản tiền ra</h3>
             </div>
             <div class="actions">
-                  <button class="button default-button" (click)="openNewOutgoingBankAccountDialog()">Thêm Tài khoản tiền ra</button>
+                  <button *appHasPermission="'outgoing-bank-account.create'" class="button default-button" (click)="openNewOutgoingBankAccountDialog()">Thêm Tài khoản tiền ra</button>
             </div>
       </div>
       <div class="page-body">
@@ -17,16 +17,32 @@
                               <th>Ngân hàng</th>
                               <th>Số tài khoản</th>
                               <th>Chủ tài khoản</th>
+                              <th>Hiệu lực</th>
                         </tr>
                   </thead>
                   <tbody>
-                        <tr *ngFor="let account of (OBAccounts$ | async) ?? []; trackBy: trackById; let i = index;">
-                              <td>{{ i + 1 }}</td>
-                              <td>{{ account.name }}</td>
-                              <td>{{ account.bankName }}</td>
-                              <td>{{ account.accountNumber }}</td>
-                              <td>{{ account.ownerName }}</td>
-                        </tr>
+                        <ng-container *ngIf="((outgoingBankAccounts$ | async)?.length ?? 0) > 0">
+                              <tr *ngFor="let account of (outgoingBankAccounts$ | async) ?? []; trackBy: trackById; let i = index;">
+                                    <td>{{ i + 1 }}</td>
+                                    <td>{{ account.name }}</td>
+                                    <td>{{ account.bankName }}</td>
+                                    <td>{{ account.accountNumber }}</td>
+                                    <td>{{ account.ownerName }}</td>
+                                    <td>
+                                          <div class="display-flex justify-content-center">
+                                                <label class="switch-1">
+                                                      <input type="checkbox" [checked]="account.isActive" disabled>
+                                                      <span class="slider"></span>
+                                                </label>
+                                          </div>
+                                    </td>
+                              </tr>
+                        </ng-container>
+                        <ng-container *ngIf="((outgoingBankAccounts$ | async)?.length ?? 0) === 0">
+                              <tr>
+                                    <td colspan="5" class="text-center">Không có tài khoản tiền ra nào</td>
+                              </tr>
+                        </ng-container>
                   </tbody>
             </table>
       </div>
