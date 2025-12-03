@@ -3,6 +3,7 @@ using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Enums;
 using ThaiTuanERP2025.Domain.Shared.Enums;
+using ThaiTuanERP2025.Domain.Expense.Events;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
@@ -130,6 +131,8 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 				throw new DomainException("Chỉ có thể phê duyệt workflow đang xử lý.");
 
 			Status = ExpenseWorkflowStatus.Approved;
+
+			AddDomainEvent(new ExpenseWorkflowInstanceApprovedEvent(this, this.DocumentId, this.DocumentType));
 		}
 
 		internal void MarkInProgress()

@@ -103,10 +103,21 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			Status = ExpensePaymentStatus.Submitted;
 		}
 
+		internal void MarkApproved()
+		{
+			if(Status != ExpensePaymentStatus.Pending)
+				throw new DomainException("Thanh toán chưa ở trạng thái chờ duyệt");
+			Status = ExpensePaymentStatus.Approved;
+		}
+
 		internal void MarkRejected()
 		{
 			if (Status != ExpensePaymentStatus.Pending)
 				throw new DomainException("Thanh toán chưa ở trạng thái chờ duyệt");
+
+			if (Status == ExpensePaymentStatus.Approved)
+				return;
+
 			Status = ExpensePaymentStatus.Rejected;
 		}
 

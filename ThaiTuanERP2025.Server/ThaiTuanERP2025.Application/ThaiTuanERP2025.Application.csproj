@@ -18,7 +18,6 @@
   <ItemGroup>
     <Folder Include="Core\Services\" />
     <Folder Include="Expense\ExpensePayments\EventHandlers\" />
-    <Folder Include="Expense\ExpenseWorkflows\EventHandlers\" />
     <Folder Include="Finance\Requests\" />
     <Folder Include="Finance\Validators\" />
     <Folder Include="Shared\Enums\" />

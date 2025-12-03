@@ -59,6 +59,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
 			if (!approverIds.Contains(userId))
 				throw new BusinessRuleViolationException("Bạn không có quyền duyệt");
 
+			// ==== APPROVE ====
 			currentStep.Approve(userId);
                         if (currentStep.IsFullyApproved())
                         {
