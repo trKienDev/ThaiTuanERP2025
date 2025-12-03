@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
-import { OutgoingPaymentRequest, OutgoingPaymentSummaryDto } from "../models/outgoing-payment.model";
+import { OutgoingPaymentPayload, OutgoingPaymentSummaryDto } from "../models/outgoing-payment.model";
 import { Observable, shareReplay, switchMap, tap, BehaviorSubject } from "rxjs";
 import { BaseApiFacade } from "../../../shared/facades/base-api.facade";
-import { OutgoingPaymentApiService } from "../services/outgoing-payment.service";
+import { OutgoingPaymentApiService } from "../services/api/outgoing-payment.service";
 
 @Injectable({ providedIn: 'root'})
-export class OutgoingPaymentFacade extends BaseApiFacade<OutgoingPaymentSummaryDto, OutgoingPaymentRequest> {
+export class OutgoingPaymentFacade extends BaseApiFacade<OutgoingPaymentSummaryDto, OutgoingPaymentPayload> {
       constructor(private outgoingPaymentApiService: OutgoingPaymentApiService) {
             super(outgoingPaymentApiService);
       }  
@@ -29,11 +29,11 @@ export class OutgoingPaymentFacade extends BaseApiFacade<OutgoingPaymentSummaryD
       }
 
       /** Override create/update/delete để tự refresh following nếu cần */
-      override create(req: OutgoingPaymentRequest) {
+      override create(req: OutgoingPaymentPayload) {
             return super.create(req).pipe(tap(() => this.refreshFollowing()));
       }
 
-      override update(id: string, req: OutgoingPaymentRequest) {
+      override update(id: string, req: OutgoingPaymentPayload) {
             return super.update(id, req).pipe(tap(() => this.refreshFollowing()));
       }
       

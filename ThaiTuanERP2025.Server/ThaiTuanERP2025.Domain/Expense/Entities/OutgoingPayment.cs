@@ -14,12 +14,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 		#region Constructors
 		private OutgoingPayment() { } 
-		public OutgoingPayment(
-			string name, decimal outgoingAmount,
-			string bankName, string accountNumber, string beneficiaryName,
-			DateTime dueDate,
-			Guid outgoingBankAccountId, Guid expensePaymentId,
-			string? description = null)
+		public OutgoingPayment(string name, decimal outgoingAmount, string bankName, string accountNumber, string beneficiaryName, DateTime dueAt, Guid outgoingBankAccountId, Guid expensePaymentId, string? description = null)
 		{
 			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
 			Guard.AgainstZeroOrNegative(outgoingAmount, nameof(outgoingAmount));
@@ -33,7 +28,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			AccountNumber = accountNumber?.Trim() ?? string.Empty;
 			BeneficiaryName = beneficiaryName?.Trim() ?? string.Empty;
 			OutgoingAmount = outgoingAmount;
-			DueDate = dueDate;
+			DueAt = dueAt;
 			OutgoingBankAccountId = outgoingBankAccountId;
 			ExpensePaymentId = expensePaymentId;
 			Status = OutgoingPaymentStatus.Pending;
@@ -53,9 +48,9 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public string AccountNumber { get; private set; } = string.Empty;
 		public string BeneficiaryName { get; private set; } = string.Empty;
 
-		public DateTime PostingDate { get; private set; }
-		public DateTime PaymentDate { get; private set; }
-		public DateTime DueDate { get; private set; }
+		public DateTime PostingAt { get; private set; }
+		public DateTime PaymentAt { get; private set; }
+		public DateTime DueAt { get; private set; }
 
 		public Guid OutgoingBankAccountId { get; private set; }
 		public OutgoingBankAccount OutgoingBankAccount { get; private set; } = null!;
@@ -119,7 +114,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 				throw new InvalidOperationException("Chỉ chứng từ ở trạng thái Pending mới được duyệt.");
 
 			ChangeStatus(OutgoingPaymentStatus.Approved);
-			PostingDate = DateTime.UtcNow;
+			PostingAt = DateTime.UtcNow;
 			AddDomainEvent(new OutgoingPaymentApprovedEvent(this, actorUserId));
 		}
 
@@ -131,7 +126,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 				throw new InvalidOperationException("Chỉ chứng từ đã duyệt mới được tạo lệnh.");
 
 			ChangeStatus(OutgoingPaymentStatus.Created);
-			PaymentDate = DateTime.UtcNow;
+			PaymentAt = DateTime.UtcNow;
 			AddDomainEvent(new OutgoingPaymentCreatedDomainEvent(this, actorUserId));
 		}
 
@@ -147,6 +142,4 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		}
 		#endregion
 	}
-
-
 }

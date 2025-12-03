@@ -10,6 +10,18 @@ export enum OutgoingPaymentStatus {
       cancelled = 3, // đã hủy
 }
 
+export interface OutgoingPaymentPayload {
+      name: string;
+      outgoingAmount: number;
+      bankName: string;
+      accountNumber: string;
+      beneficiaryName: string;
+      dueAt: Date;
+      outgoingBankAccountId: string;
+      expensePaymentId: string;
+      description?: string;
+}
+
 export interface OutgoingPayment {
       name: string;
       description?: string;
@@ -31,12 +43,6 @@ export interface OutgoingPayment {
 
 export interface OutgoingPaymentDto extends OutgoingPayment {
       id: string;
-}
-
-export interface OutgoingPaymentRequest extends OutgoingPayment {
-      expensePaymentId: string;
-      outgoingBankAccountId: string;
-      dueDate: Date;
 }
 
 export interface OutgoingPaymentDetailDto extends OutgoingPaymentDto {

@@ -9,7 +9,7 @@ import { AvatarUrlPipe } from "../../../../shared/pipes/avatar-url.pipe";
 import { useOutgoingPaymentDetail } from "../../composables/use-outgoing-payment-detail";
 import { OutgoingPaymentDetailDto } from "../../models/outgoing-payment.model";
 import { OutgoingPaymentStatusPipe } from "../../pipes/outgoing-payment-status.pipe";
-import { OutgoingPaymentApiService } from "../../services/outgoing-payment.service";
+import { OutgoingPaymentApiService } from "../../services/api/outgoing-payment.service";
 
 @Component({
       selector: 'outgoing-payment-detail-dialog',

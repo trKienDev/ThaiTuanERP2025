@@ -1,8 +1,8 @@
 import { inject, signal } from "@angular/core";
-import { OutgoingPaymentApiService } from "../services/outgoing-payment.service";
 import { OutgoingPaymentDetailDto } from "../models/outgoing-payment.model";
 import { ToastService } from "../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { firstValueFrom } from "rxjs";
+import { OutgoingPaymentApiService } from "../services/api/outgoing-payment.service";
 
 export function useOutgoingPaymentDetail() {
       const outgoingPaymentApi = inject(OutgoingPaymentApiService);

@@ -7,22 +7,23 @@ import { OutgoingBankAccountOptionStore } from "../../../options/outgoing-bank-a
 import { KitDropdownComponent, KitDropdownOption } from "../../../../../shared/components/kit-dropdown/kit-dropdown.component";
 import { ToastService } from "../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { KitFileUploaderComponent } from "../../../../../shared/components/kit-file-uploader/kit-file-uploader.component";
-import { UploadItem } from "../../../../../shared/components/kit-file-uploader/upload-item.model";
 import { MoneyFormatDirective } from "../../../../../shared/directives/money/money-format.directive";
 import { Kit404PageComponent } from "../../../../../shared/components/kit-404-page/kit-404-page.component";
 import { KitLoadingSpinnerComponent } from "../../../../../shared/components/kit-loading-spinner/kit-loading-spinner.component";
 import { provideMondayFirstDateAdapter } from "../../../../../shared/date/provide-monday-first-date-adapter";
 import { MatDatepickerModule } from "@angular/material/datepicker";
-import { OutgoingPaymentApiService } from "../../../services/outgoing-payment.service";
 import { firstValueFrom } from "rxjs";
-import { OutgoingPaymentRequest } from "../../../models/outgoing-payment.model";
+import { OutgoingPaymentPayload } from "../../../models/outgoing-payment.model";
 import { KitSpinnerButtonComponent } from "../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 import { KitOverlaySpinnerComponent } from "../../../../../shared/components/kit-overlay-spinner/kit-overlay-spinner.component";
+import { OutgoingPaymentApiService } from "../../../services/api/outgoing-payment.service";
+import { UploadItem } from "../../../../../shared/components/kit-file-uploader/upload-item.model";
+import { UserOptionStore } from "../../../../account/options/user-dropdown.option";
 
 @Component({
       selector: 'outgoing-payment-request',
       standalone: true,
-      imports: [CommonModule, ReactiveFormsModule, KitDropdownComponent, KitFileUploaderComponent, MoneyFormatDirective, Kit404PageComponent, KitLoadingSpinnerComponent, MatDatepickerModule, KitSpinnerButtonComponent, KitOverlaySpinnerComponent],
+      imports: [CommonModule, ReactiveFormsModule, KitDropdownComponent, MoneyFormatDirective, Kit404PageComponent, KitLoadingSpinnerComponent, MatDatepickerModule, KitSpinnerButtonComponent, KitOverlaySpinnerComponent, KitFileUploaderComponent],
       styleUrls: ['./outgoing-payment-request.component.scss'],
       templateUrl: './outgoing-payment-request.component.html',
       providers: [...provideMondayFirstDateAdapter()]
@@ -30,9 +31,10 @@ import { KitOverlaySpinnerComponent } from "../../../../../shared/components/kit
 export class OutgoingPaymentRequestComponent implements OnInit {
       private readonly route = inject(ActivatedRoute);
       private readonly formBuilder = inject(FormBuilder);
-      private readonly OBAccountOptionsStore = inject(OutgoingBankAccountOptionStore);
-      OBAccountOptions = this.OBAccountOptionsStore.options$;
-      private readonly outgoingPaymentService = inject(OutgoingPaymentApiService);
+      outgoingBankOptions = inject(OutgoingBankAccountOptionStore).options$;
+      private readonly outgoingPaymentApi = inject(OutgoingPaymentApiService);
+
+      userOptions = inject(UserOptionStore).option$;
 
       private readonly paymentLogic = usePaymentDetail();
       loading = this.paymentLogic.isLoading;
@@ -43,8 +45,6 @@ export class OutgoingPaymentRequestComponent implements OnInit {
       public submitted = false;
       public errorMessages: string[] = [];
 
-      private readonly toast = inject(ToastService);
-
       public readonly uploadMeta = {
             module: 'expense',
             entity: 'outgoing-payment-attachment',
@@ -52,6 +52,8 @@ export class OutgoingPaymentRequestComponent implements OnInit {
             isPublic: false
       }
       public uploads: UploadItem[] = [];
+
+      private readonly toast = inject(ToastService);
 
       form = this.formBuilder.group({
             name: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required] }),
@@ -63,7 +65,7 @@ export class OutgoingPaymentRequestComponent implements OnInit {
             followerIds: this.formBuilder.nonNullable.control<string[]>([]),
             expensePaymentId: this.formBuilder.nonNullable.control<string>('', { validators: [Validators.required] }),
             outgoingBankAccountId: this.formBuilder.nonNullable.control<string>('', { validators: [Validators.required] }),
-            dueDate: this.formBuilder.nonNullable.control<Date>(new Date(), { validators: [Validators.required] }),
+            dueAt: this.formBuilder.nonNullable.control<Date>(new Date(), { validators: [Validators.required] }),
             supplierId: this.formBuilder.control<string | null>(null),
             employeeId: this.formBuilder.control<string | null>(null),
       });
@@ -89,6 +91,7 @@ export class OutgoingPaymentRequestComponent implements OnInit {
                         beneficiaryName: detail.beneficiaryName,
                         expensePaymentId: detail.id,
                         supplierId: detail.supplierId || null,
+                        followerIds: detail.followers?.map(f => f.id) || [],
                         // employeeId: detail.employeeId || null,
                   });
             }
@@ -135,9 +138,9 @@ export class OutgoingPaymentRequestComponent implements OnInit {
             this.submitting = true;
 
             try {
-                  const payload = this.form.getRawValue() as OutgoingPaymentRequest;
+                  const payload = this.form.getRawValue() as OutgoingPaymentPayload;
                   console.log('Submitting payload:', payload);
-                  await firstValueFrom(this.outgoingPaymentService.create(payload));
+                  await firstValueFrom(this.outgoingPaymentApi.create(payload));
                   this.toast.successRich("Tạo yêu cầu khoản tiền ra thành công");
                   return;
             } catch(error) {

@@ -6,9 +6,9 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 
 namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories
 {
-	public class OutgoingPaymentRepository : BaseWriteRepository<OutgoingPayment>, IOutgoingPaymentRepository
+	public class OutgoingPaymentWriteRepository : BaseWriteRepository<OutgoingPayment>, IOutgoingPaymentWriteRepository
 	{
-		public OutgoingPaymentRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider)
+		public OutgoingPaymentWriteRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider)
 		{
 		}
 	}

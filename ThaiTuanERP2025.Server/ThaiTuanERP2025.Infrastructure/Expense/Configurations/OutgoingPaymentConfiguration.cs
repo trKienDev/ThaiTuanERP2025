@@ -19,9 +19,9 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 			builder.Property(x => x.AccountNumber).HasMaxLength(64);
 			builder.Property(x => x.BeneficiaryName).HasMaxLength(256);
 			builder.Property(x => x.OutgoingAmount).HasPrecision(18, 2).IsRequired();
-			builder.Property(x => x.DueDate).IsRequired();
-			builder.Property(x => x.PostingDate);
-			builder.Property(x => x.PaymentDate);
+			builder.Property(x => x.DueAt).IsRequired();
+			builder.Property(x => x.PostingAt);
+			builder.Property(x => x.PaymentAt);
 			builder.Property(x => x.Status).HasConversion<int>().HasMaxLength(30).IsRequired();
 
 			// === Relationships ===
@@ -46,11 +46,12 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 				.OnDelete(DeleteBehavior.Restrict);
 
 			// === Indexes ===
+			builder.HasIndex(o => o.Name).IsUnique();
 			builder.HasIndex(o => o.ExpensePaymentId);
 			builder.HasIndex(o => o.OutgoingBankAccountId);
-			builder.HasIndex(o => o.DueDate);
-			builder.HasIndex(o => o.PostingDate);
-			builder.HasIndex(o => o.PaymentDate);
+			builder.HasIndex(o => o.DueAt);
+			builder.HasIndex(o => o.PostingAt);
+			builder.HasIndex(o => o.PaymentAt);
 		}
 	}
 }
