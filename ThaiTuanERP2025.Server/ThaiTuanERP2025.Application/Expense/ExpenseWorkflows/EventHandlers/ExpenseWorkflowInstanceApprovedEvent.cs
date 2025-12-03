@@ -9,15 +9,11 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.EventHandlers
 {
 	public sealed class ExpenseWorkflowInstanceApprovedEventHandler : INotificationHandler<ExpenseWorkflowInstanceApprovedEvent>
 	{
-		private readonly INotificationService _notification;
-		private readonly IReminderService _reminder;
 		private readonly IUnitOfWork _uow;
 		public ExpenseWorkflowInstanceApprovedEventHandler(
 			INotificationService notificaiton, IReminderService reminder, IUnitOfWork uow	
 		)
 		{
-			_notification = notificaiton;
-			_reminder = reminder;
 			_uow = uow;
 		}
 

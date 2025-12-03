@@ -10,7 +10,6 @@ using ThaiTuanERP2025.Domain.Shared.Enums;
 namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Queries
 {
 	public sealed record GetFollowingExpensePaymentsQuery : IRequest<IReadOnlyList<ExpensePaymentLookupDto>>;
-
 	public sealed class GetFollowingExpensePaymentsQueryHandler : IRequestHandler<GetFollowingExpensePaymentsQuery, IReadOnlyList<ExpensePaymentLookupDto>>
 	{
 		private readonly IExpensePaymentReadRepository _expensePaymentRepo;

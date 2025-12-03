@@ -14,7 +14,6 @@ using ThaiTuanERP2025.Domain.Shared.Repositories;
 namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
 {
 	public sealed record ApproveExpenseStepInstanceCommand(Guid WorkflowInstanceId) : IRequest<Unit>;
-
 	public sealed class ApproveExpenseStepInstanceCommandHandler : IRequestHandler<ApproveExpenseStepInstanceCommand, Unit>
 	{
 		private readonly IUnitOfWork _uow;

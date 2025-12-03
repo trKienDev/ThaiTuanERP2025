@@ -22,7 +22,6 @@ export class FollowingExpensePaymentsPanelComponent implements OnInit {
       private dialog = inject(MatDialog);
       private route = inject(ActivatedRoute);
       private readonly expensePaymentApi = inject(ExpensePaymentApiService);
-      private readonly confirm = inject(ConfirmService);
       private readonly matDialog = inject(MatDialog);
       private readonly router = inject(Router);
       followingExpensePayments: ExpensePaymentLookupDto[] = [];
@@ -35,9 +34,7 @@ export class FollowingExpensePaymentsPanelComponent implements OnInit {
       }
 
       openExpensePaymentDetailDialog(paymentId: string) {
-            this.dialog.open(ExpensePaymentDetailDialogComponent, {
-                  data: paymentId
-            });
+            this.showExpensePaymentDialog(paymentId);
       }
 
       private listenOpenByQueryParam(): void {
@@ -45,23 +42,32 @@ export class FollowingExpensePaymentsPanelComponent implements OnInit {
                   const paymentId = params.get('openExpensePaymentId');
 
                   if (paymentId) {
-                        this.activateExpensePaymentetailDialog(paymentId);
+                        this.showExpensePaymentDialog(paymentId);
                   }
             });
       }
-      private async activateExpensePaymentetailDialog(paymentId: string): Promise<void> {
+
+      private showExpensePaymentDialog(paymentId: string): void {
             const dialogRef = this.matDialog.open(ExpensePaymentDetailDialogComponent, {
                   data: paymentId
             });
 
-            // Clear query params khi đóng dialog (tránh auto-open khi refresh)
-            dialogRef.afterClosed().subscribe(success => {
+            dialogRef.afterClosed().subscribe(async (result) => {
+                  // Nếu user đã approve/reject → result === true
+                  if (result) {
+                        await this.reloadFollowingPayments();
+                  }
+
+                  // Dọn query param nếu có
                   this.router.navigate([], {
-                        relativeTo: this.route,
-                        queryParams: { openExpensePaymentId: null },
-                        queryParamsHandling: 'merge'
+                  relativeTo: this.route,
+                  queryParams: { openExpensePaymentId: null },
+                  queryParamsHandling: 'merge'
                   });
             });
       }
 
+      private async reloadFollowingPayments(): Promise<void> {
+           this.followingExpensePayments = await firstValueFrom(this.expensePaymentApi.getFollowing());
+      }
 }

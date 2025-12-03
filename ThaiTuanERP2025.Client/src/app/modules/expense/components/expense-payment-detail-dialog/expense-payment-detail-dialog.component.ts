@@ -152,6 +152,7 @@ export class ExpensePaymentDetailDialogComponent {
             try {
                   await firstValueFrom(this.expenseWorkflowInstanceApi.reject(this.paymentDetail?.workflowInstance.id));
                   this.toast.successRich("Đã từ chối thanh toán");
+                  
                   this.close(true);
                   this.router.navigateByUrl('expense/expense-payment-shell/following-payments');
             } catch(error) {
