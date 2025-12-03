@@ -22,7 +22,7 @@
                        </div>
                         <div class="right display-flex gap-10px">
                               <ng-container *ngIf="currentStepStatus$ | async as step">
-                                    <div class="payment-expired-badge margin-left-auto" *ngIf="step.expired">
+                                    <div class="payment-expired-badge margin-left-auto" *ngIf="step.expired && isInProgress">
                                           <span class="badge danger-badge">Quá hạn duyệt</span>
                                     </div>
                                     <div *ngIf="!step.expired && canApproveOrReject && isInProgress" class="payment-actions display-flex gap-5px align-items-center">

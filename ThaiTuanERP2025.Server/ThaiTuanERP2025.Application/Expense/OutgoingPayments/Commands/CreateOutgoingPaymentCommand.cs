@@ -1,8 +1,12 @@
 ﻿using FluentValidation;
 using MediatR;
+using ThaiTuanERP2025.Application.Core.Followers;
+using ThaiTuanERP2025.Application.Core.Notifications;
+using ThaiTuanERP2025.Application.Expense.ExpensePayments.Repositories;
 using ThaiTuanERP2025.Application.Expense.OutgoingPayments.Contracts;
 using ThaiTuanERP2025.Application.Shared.Services;
 using ThaiTuanERP2025.Domain.Expense.Entities;
+using ThaiTuanERP2025.Domain.Shared.Enums;
 using ThaiTuanERP2025.Domain.Shared.Repositories;
 
 namespace ThaiTuanERP2025.Application.Expense.OutgoingPayments.Commands
@@ -12,17 +16,25 @@ namespace ThaiTuanERP2025.Application.Expense.OutgoingPayments.Commands
 	{
 		private readonly IUnitOfWork _uow;
 		private readonly IDocumentSubIdGeneratorService _documentSubIdGenerator;
+		private readonly IFollowerService _followerService;
+		private readonly IExpensePaymentReadRepository _expensePaymentRepo;
+		private readonly INotificationService _notificationService;
 		public CreateOutgoingPaymentCommandHandler(
-			IUnitOfWork uow, IDocumentSubIdGeneratorService documentSubIdGenerator)
-		{
+			IUnitOfWork uow, IDocumentSubIdGeneratorService documentSubIdGenerator, IFollowerService followerService,
+			IExpensePaymentReadRepository expensePaymentRepo, INotificationService notificationService
+		) {
 			_uow = uow;
 			_documentSubIdGenerator = documentSubIdGenerator;
+			_followerService = followerService;
+			_expensePaymentRepo = expensePaymentRepo;
+			_notificationService = notificationService;
 		}
 
 		public async Task<Unit> Handle(CreateOutgoingPaymentCommand command, CancellationToken cancellationToken)
 		{
 			var payload = command.Payload;
 
+			#region Create entitty OutgoingPayment
 			// Normialization
 			var nameNorm = payload.Name.Trim();
 			var bankNameNorm = payload.BankName.Trim();
@@ -48,9 +60,38 @@ namespace ThaiTuanERP2025.Application.Expense.OutgoingPayments.Commands
 
 			var subId = await _documentSubIdGenerator.NextSubIdAsync(Domain.Shared.Enums.DocumentType.OutgoingPayment, DateTime.UtcNow, cancellationToken);
 			newOutgoingPayment.SetSubId(subId);
-
 			await _uow.OutgoingPayments.AddAsync(newOutgoingPayment, cancellationToken);
 			await _uow.SaveChangesAsync(cancellationToken);
+                        #endregion
+
+
+                        #region Add Followers
+                        if (newOutgoingPayment.CreatedByUserId is not null)
+				await _followerService.FollowAsync(DocumentType.OutgoingPayment, newOutgoingPayment.Id, newOutgoingPayment.CreatedByUserId.Value, cancellationToken);
+
+			var expensePaymentCreatorId = await _expensePaymentRepo.GetCreatorIdAsync(payload.ExpensePaymentId, cancellationToken);
+			if (expensePaymentCreatorId is not null)
+				await _followerService.FollowAsync(DocumentType.OutgoingPayment, newOutgoingPayment.Id, expensePaymentCreatorId.Value, cancellationToken);
+			#endregion
+
+			#region Notifiaction
+			var expensePaymentName = await _expensePaymentRepo.GetNameAsync(payload.ExpensePaymentId, cancellationToken);
+			if (expensePaymentCreatorId is not null && newOutgoingPayment.CreatedByUserId is not null)
+			{
+				await _notificationService.SendAsync(
+					senderId: newOutgoingPayment.CreatedByUserId.Value,
+					receiverId: expensePaymentCreatorId.Value,
+					title: $"Thanh toán {expensePaymentName} đã được tạo khoản chi",
+					message: $"Thanh toán {expensePaymentName} đã được tạo khoản chi",
+					linkType: Domain.Core.Enums.LinkType.OutgongPaymentPending,
+					targetId: newOutgoingPayment.Id,
+					type: Domain.Core.Enums.NotificationType.Info,
+					cancellationToken: cancellationToken
+				);
+			}
+                        #endregion
+
+                        await _uow.SaveChangesAsync(cancellationToken);
 			return Unit.Value;
 		}
 	}

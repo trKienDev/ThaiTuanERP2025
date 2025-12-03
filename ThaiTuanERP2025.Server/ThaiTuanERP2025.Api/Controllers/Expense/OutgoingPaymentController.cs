@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using ThaiTuanERP2025.Api.Shared;
 using ThaiTuanERP2025.Application.Expense.OutgoingPayments.Commands;
 using ThaiTuanERP2025.Application.Expense.OutgoingPayments.Contracts;
+using ThaiTuanERP2025.Application.Expense.OutgoingPayments.Queries;
 
 namespace ThaiTuanERP2025.Api.Controllers.Expense
 {
@@ -17,6 +18,13 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
                 {
                         _mediator = mediator;
 		}
+
+                [HttpGet]
+                public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+                {
+                        var result = await _mediator.Send(new GetAllOutgoingPaymentsQuery(), cancellationToken);
+                        return Ok(ApiResponse<IReadOnlyList<OutgoingPaymentDto>>.Success(result));
+                }
 
                 [HttpPost]
                 public async Task<IActionResult> Create([FromBody] OutgoingPaymentPayload payload, CancellationToken cancellationToken)

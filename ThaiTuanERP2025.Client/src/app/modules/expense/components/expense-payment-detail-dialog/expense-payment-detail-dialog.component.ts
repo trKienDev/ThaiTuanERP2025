@@ -19,7 +19,6 @@ import { KitFlipCountdownComponent } from "../../../../shared/components/kit-fli
 import { ExpenseWorkflowStatus } from '../../models/expense-workflow-instance.model';
 import { FilePreviewService, StoredFileMetadataDto } from '../../../../core/services/file-preview.service';
 import { ExpensePaymentItemLookupDto } from '../../models/expense-payment-item.model';
-import { ExpensePaymentAttachmentDto } from '../../models/expense-payment-attachment.model';
 
 @Component({
       selector: 'expense-payment-detail-dialog',
@@ -80,6 +79,7 @@ export class ExpensePaymentDetailDialogComponent {
 
             this.canApproveOrReject = step?.approverIds?.includes(userId) ?? false;
             this.isInProgress = this.paymentDetail.workflowInstance.status === ExpenseWorkflowStatus.inProgress;
+            console.log('progress: ', this.paymentDetail.workflowInstance.status);
 
             if (!step?.dueAt) {
                   console.warn("Current step has no dueAt → skip countdown");

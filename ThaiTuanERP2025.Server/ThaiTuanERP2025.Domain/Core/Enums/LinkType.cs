@@ -4,18 +4,16 @@
 	{
 		None,
 
-		// [1] Finance
-		// [1][2] BudgetPlan
+		// Finance
 		BudgetPlanReview,
 		BudgetPlanDetail,
 		BudgetPlanApproved,
 
-
-		// [2] Expense 
-		// [2][1]: ExpensePayment
+		// Expense 
 		ExpensePaymentDetail,
+		OutgongPaymentPending,
 
-		// [3] Request
+		// Request
 		RequestDetail,
 
 		// Others

@@ -121,19 +121,21 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
 			}
 			await _uow.ExpensePayments.AddAsync(newPayment, cancellationToken);
 
-			// === ATTACHMENTS ===
-			if (payload.AttachmentIds.Any())
+                        #region Attachment
+                        if (payload.AttachmentIds.Any())
 			{
 				newPayment.AddAttachments(payload.AttachmentIds);
 			}
+                        #endregion
 
-			// Create WorkflowInstance
-			var workflowInstnace = await _expenseWorkflowFactory.CreateForExpensePaymentAsync(newPayment, cancellationToken);
+                        #region WorkflowInstance
+                        var workflowInstnace = await _expenseWorkflowFactory.CreateForExpensePaymentAsync(newPayment, cancellationToken);
 			newPayment.LinkWorkflowInstance(workflowInstnace);
 			await _uow.ExpenseWorkflowInstances.AddAsync(workflowInstnace, cancellationToken);
 
 			// start workflow instance
 			workflowInstnace.Start();
+			#endregion
 
 			// first step
 			var firstStep = workflowInstnace.GetFirstStep();
@@ -172,13 +174,12 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Commands
 					cancellationToken
 				);
 
-				
-
 			}
 			// add followers
 			await _followerService.FollowManyAsync(DocumentType.ExpensePayment, newPayment.Id, approverIds, cancellationToken);
 			await _followerService.FollowManyAsync(DocumentType.ExpensePayment, newPayment.Id, payload.FollowerIds, cancellationToken);
 			await _followerService.FollowAsync(DocumentType.ExpensePayment, newPayment.Id, newPayment.CreatedByUserId!.Value, cancellationToken);
+
 			await _uow.SaveChangesAsync(cancellationToken);
 			return Unit.Value;
 		}

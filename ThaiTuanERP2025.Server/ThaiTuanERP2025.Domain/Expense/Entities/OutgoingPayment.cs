@@ -32,8 +32,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			OutgoingBankAccountId = outgoingBankAccountId;
 			ExpensePaymentId = expensePaymentId;
 			Status = OutgoingPaymentStatus.Pending;
-
-			AddDomainEvent(new OutgoingPaymentCreatedEvent(this));
 		}
 		#endregion
 
