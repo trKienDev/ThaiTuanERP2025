@@ -2,21 +2,21 @@
 {
 	public enum LinkType
 	{
-		None = 0,
+		None,
 
 		// [1] Finance
 		// [1][2] BudgetPlan
-		BudgetPlanReview = 111,
-		BudgetPlanDetail = 112,
-		BudgetPlanApproved = 113,
+		BudgetPlanReview,
+		BudgetPlanDetail,
+		BudgetPlanApproved,
 
 
 		// [2] Expense 
 		// [2][1]: ExpensePayment
-		ExpensePaymentDetail = 211,
+		ExpensePaymentDetail,
 
 		// [3] Request
-		RequestDetail = 31,
+		RequestDetail,
 
 		// Others
 		Dashboard

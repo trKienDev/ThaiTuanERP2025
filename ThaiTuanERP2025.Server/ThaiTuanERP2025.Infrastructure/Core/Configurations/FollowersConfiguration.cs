@@ -13,7 +13,7 @@ namespace ThaiTuanERP2025.Infrastructure.Core.Configurations
 			// ===== Properties =====
 			builder.Property(x => x.DocumentId).IsRequired();
 			builder.HasKey(x => new { x.DocumentId, x.UserId });
-			builder.Property(x => x.DocumentType).IsRequired().HasConversion<int>();
+			builder.Property(x => x.DocumentType).IsRequired().HasConversion<string>();
 			builder.Property(x => x.UserId).IsRequired();
 		}
 	}

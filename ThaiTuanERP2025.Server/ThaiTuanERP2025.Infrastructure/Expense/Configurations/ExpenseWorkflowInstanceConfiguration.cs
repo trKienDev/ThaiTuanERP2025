@@ -11,7 +11,7 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 			builder.ToTable("ExpesneWorkflowInstance", "ExpenseWorkflow");
 			builder.HasKey(x => x.Id);
 
-			builder.Property(x => x.DocumentType).IsRequired().HasConversion<int>();
+			builder.Property(x => x.DocumentType).IsRequired().HasConversion<string>();
 			builder.Property(x => x.Status).HasConversion<int>().IsRequired();
 			builder.Property(x => x.TemplateVersion).IsRequired();
 

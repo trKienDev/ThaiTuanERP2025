@@ -12,17 +12,11 @@ namespace ThaiTuanERP2025.Infrastructure.Core.Configurations
 			builder.HasKey(n => n.Id);
 
 			builder.Property(n => n.Title).IsRequired().HasMaxLength(256);
-
 			builder.Property(n => n.Message).IsRequired();
-
 			builder.Property(n => n.LinkUrl).HasMaxLength(500);
-
-			builder.Property(n => n.Type)
-				.HasConversion<int>()
-				.IsRequired();
-
+			builder.Property(n => n.Type).HasConversion<int>().IsRequired();
+			builder.Property(n => n.LinkType).HasConversion<string>().IsRequired();
 			builder.Property(n => n.IsRead).IsRequired();
-
 			builder.Property(n => n.ReadAt).HasColumnType("datetime2");
 
 			builder.HasOne(n => n.Sender)
