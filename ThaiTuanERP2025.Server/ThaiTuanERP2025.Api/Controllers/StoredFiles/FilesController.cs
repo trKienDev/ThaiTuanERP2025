@@ -6,7 +6,7 @@ using ThaiTuanERP2025.Application.Files.Commands;
 using ThaiTuanERP2025.Application.Files.Common;
 using ThaiTuanERP2025.Application.Files.Queries;
 
-namespace ThaiTuanERP2025.Api.Controllers.Core
+namespace ThaiTuanERP2025.Api.Controllers.StoredFiles
 {
 	[ApiController]
 	[Authorize]

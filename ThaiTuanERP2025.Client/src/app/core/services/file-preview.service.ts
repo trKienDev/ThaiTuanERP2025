@@ -83,7 +83,7 @@ export class FilePreviewService {
 
             // Case 2: file private → bắt buộc cần fileId để gọi /api/files/{id}/download
             if (!fileId) {
-                  this.toast.error('Không tìm thấy fileId để tải file từ server');
+                  this.toast.errorRich('Không tìm thấy fileId để tải file từ server');
                   return;
             }
 
@@ -93,7 +93,7 @@ export class FilePreviewService {
                   this.previewBlob(blob, fileName ?? 'file');
             } catch (error) {
                   console.error('[FilePreviewService] previewStoredFile error: ', error);
-                  this.toast.error('Không thể tải file từ server');
+                  this.toast.errorRich('Không thể tải file từ server');
             }
       }
 

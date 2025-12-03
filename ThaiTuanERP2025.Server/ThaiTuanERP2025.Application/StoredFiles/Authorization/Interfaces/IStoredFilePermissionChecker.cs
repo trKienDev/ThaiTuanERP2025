@@ -1,6 +1,6 @@
 ﻿using ThaiTuanERP2025.Domain.StoredFiles.Entities;
 
-namespace ThaiTuanERP2025.Application.Files.Authorization.Interfaces
+namespace ThaiTuanERP2025.Application.StoredFiles.Authorization.Interfaces
 {
 	public interface IStoredFilePermissionChecker
 	{

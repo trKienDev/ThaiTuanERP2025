@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using ThaiTuanERP2025.Application.Files.Authorization.Interfaces;
 using ThaiTuanERP2025.Application.Files.Contracts;
 using ThaiTuanERP2025.Application.Files.Interfaces;
 using ThaiTuanERP2025.Application.Shared.Exceptions;
 using ThaiTuanERP2025.Application.Shared.Interfaces;
+using ThaiTuanERP2025.Application.StoredFiles.Authorization.Interfaces;
 using ThaiTuanERP2025.Domain.Shared.Repositories;
 
 namespace ThaiTuanERP2025.Application.Files.Queries
@@ -16,18 +16,17 @@ namespace ThaiTuanERP2025.Application.Files.Queries
 		private readonly IFileStorage _storageFile;
 		private readonly ICurrentUserService _currentUser;
 		private readonly IEnumerable<IStoredFilePermissionChecker> _checkers;
-		public DownloadStoredFileQueryHandler(
-			IUnitOfWork uow, IFileStorage storageFile, ICurrentUserService currentUser, IEnumerable<IStoredFilePermissionChecker> checkers
-		) {
+		public DownloadStoredFileQueryHandler(IUnitOfWork uow, IFileStorage storageFile, ICurrentUserService currentUser, IEnumerable<IStoredFilePermissionChecker> checkers) {
 			_uow = uow;
 			_storageFile = storageFile;
 			_currentUser = currentUser;
 			_checkers = checkers;
 		}
 
-		public async Task<StoredFileDownloadDto> Handle(DownloadStoredFileQuery request, CancellationToken cancellationToken = default)
+		public async Task<StoredFileDownloadDto> Handle(DownloadStoredFileQuery request, CancellationToken cancellationToken)
 		{
 			var file = await _uow.StoredFiles.GetByIdAsync(request.FileId) ?? throw new NotFoundException("File không tồn tại");
+			Console.WriteLine($"MODULE={file.Module}, ENTITY={file.Entity}");
 			var userId = _currentUser.UserId ?? throw new UnauthorizedException("Không xác định được user");
 
 			// Nếu file private → tìm checker phù hợp

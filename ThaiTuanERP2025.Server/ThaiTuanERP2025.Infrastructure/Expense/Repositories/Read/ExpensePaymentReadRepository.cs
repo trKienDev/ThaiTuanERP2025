@@ -67,5 +67,13 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories.Read
 				.Include(x => x.CurrentWorkflowInstance).ThenInclude(w => w.Steps)
 				.FirstOrDefaultAsync(x => x.Items.Any(i => i.InvoiceFileId == fileId), cancellationToken);
 		}
+
+		public async Task<ExpensePayment?> GetByAttachmentFileIdAsync(Guid fileId, CancellationToken cancellationToken = default)
+		{
+			return await _dbSet
+				.Include(x => x.Attachments)
+				.Include(x => x.CurrentWorkflowInstance).ThenInclude(w => w.Steps)
+				.FirstOrDefaultAsync(x => x.Attachments.Any(a => a.StoredFileId == fileId), cancellationToken);
+		}
 	}
 }

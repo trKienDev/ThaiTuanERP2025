@@ -1,7 +1,8 @@
 ﻿using ThaiTuanERP2025.Application.Expense.ExpensePayments.Repositories;
-using ThaiTuanERP2025.Application.Files.Authorization.Interfaces;
+using ThaiTuanERP2025.Application.StoredFiles.Authorization.Interfaces;
 using ThaiTuanERP2025.Domain.Expense.Services;
 using ThaiTuanERP2025.Domain.StoredFiles.Constants;
+using ThaiTuanERP2025.Domain.StoredFiles.Entities;
 
 namespace ThaiTuanERP2025.Application.Files.Authorization
 {
@@ -13,12 +14,14 @@ namespace ThaiTuanERP2025.Application.Files.Authorization
 			_expensePaymentRepo = expensePaymentRepo;
 		}
 
-		public bool CanHandle(string module, string entity) => module.Equals(FileModules.Expense, StringComparison.OrdinalIgnoreCase) && entity.Equals(ExpenseFileEntities.Invoice, StringComparison.OrdinalIgnoreCase);
+		public bool CanHandle(string module, string entity) 
+			=> module.Equals(FileModules.Expense, StringComparison.OrdinalIgnoreCase) 
+			&& entity.Equals(ExpenseFileEntities.Invoice, StringComparison.OrdinalIgnoreCase);
 
-		public async Task<bool> HasPermissionAsync(StoredFile file, Guid userId, CancellationToken ct)
+		public async Task<bool> HasPermissionAsync(StoredFile file, Guid userId, CancellationToken cancellationToken)
 		{
 			// Tìm ExpensePayment chứa file invoice này
-			var ep = await _expensePaymentRepo.GetByInvoiceFileIdAsync(file.Id, ct);
+			var ep = await _expensePaymentRepo.GetByInvoiceFileIdAsync(file.Id, cancellationToken);
 			if (ep == null) return false;
 
 			return ExpensePaymentPermissionChecker.CanViewExpensePayment(ep, userId);
