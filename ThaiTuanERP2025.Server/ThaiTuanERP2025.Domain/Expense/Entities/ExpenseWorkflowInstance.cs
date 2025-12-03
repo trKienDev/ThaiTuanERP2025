@@ -69,7 +69,15 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
                         return step ?? throw new DomainException($"Không tìm thấy bước duyệt (Order={CurrentStepOrder}) trong workflow.");
                 }
 
-                internal ExpenseStepInstance? GetStepByOrder(int order)
+		internal ExpenseStepInstance GetLastStep()
+		{
+			if (!Steps.Any())
+				throw new DomainException("Workflow không có bước nào.");
+
+			return Steps.OrderByDescending(s => s.Order).First();
+		}
+
+		internal ExpenseStepInstance? GetStepByOrder(int order)
                 {
                         return Steps.FirstOrDefault(s => s.Order == order);
                 }

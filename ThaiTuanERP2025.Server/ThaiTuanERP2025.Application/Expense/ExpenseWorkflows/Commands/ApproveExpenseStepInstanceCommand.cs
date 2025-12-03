@@ -6,6 +6,7 @@ using ThaiTuanERP2025.Application.Core.Reminders;
 using ThaiTuanERP2025.Application.Expense.ExpensePayments.Repositories;
 using ThaiTuanERP2025.Application.Shared.Exceptions;
 using ThaiTuanERP2025.Application.Shared.Interfaces;
+using ThaiTuanERP2025.Domain.Core.Enums;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Shared.Enums;
 using ThaiTuanERP2025.Domain.Shared.Repositories;
@@ -66,7 +67,39 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
                                 workflowInstance.ActivateNextStep();
                         }
 
-			// ==== AFTER APPROVE ===
+			var (creatorId, paymentName) = await LoadCreatorAndNameAsync(
+				workflowInstance.DocumentId,
+				cancellationToken
+			);
+
+			// resolve previous approvers reminder / mark notifications as read
+			await ResolveCurrentApproverWorkAsync(workflowInstance.DocumentId, approverIds, cancellationToken);
+
+			// === IF WORKFLOW INSTANCE HAS BEEN APPROVED ====
+			if (workflowInstance.Status == Domain.Expense.Enums.ExpenseWorkflowStatus.Approved)
+			{
+				
+				
+				var lastStep = workflowInstance.GetLastStep();
+				if(lastStep.ApprovedBy is null)
+					throw new AppException("Không tìm thấy thông tin người duyệt bước cuối cùng");
+
+				await _notificationService.SendAsync(
+					senderId: lastStep.ApprovedBy.Value,
+					receiverId: creatorId,
+					title: $"Thanh toán {paymentName} đã được phê duyệt",
+					message: $"Thanh toán {paymentName} đã được duyệt",
+					linkType: Domain.Core.Enums.LinkType.ExpensePaymentDetail,
+					targetId: workflowInstance.DocumentId,
+					type: Domain.Core.Enums.NotificationType.Task,
+					cancellationToken: cancellationToken
+				);
+
+				await _uow.SaveChangesAsync(cancellationToken);
+				return Unit.Value;
+			}
+
+			// ==== IF WORKFLOW INSTANCE NOT APPROVED YET ===
 			var expensePaymentName = await _expensePaymentRepo.GetNameAsync(workflowInstance.DocumentId, cancellationToken);
 			var message = $"Thanh toán {expensePaymentName} đang chờ bạn duyệt";
 			var subject = $"Duyệt thanh toán {expensePaymentName}";
@@ -75,19 +108,9 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
                         if (nextStep.DueAt is null)
                                 throw new AppException("Step hiện tại chưa có hạn xử lý (DueAt = null).");
 
-			// ==== REMINDER ====
-			// resolve reminder for current approver
-			var resolveReminderIds = await _reminderRepo.ListProjectedAsync(
-				q => q.Where(
-					x => approverIds.Contains(x.UserId)
-						&& x.TargetId == workflowInstance.DocumentId
-						&& !x.IsResolved
-				).Select(x => x.Id),
-				cancellationToken: cancellationToken
-			) ?? throw new NotFoundException("Không tìm thấy nhắc việc của người duyệt");
-			await _reminderService.MarkResolvedManyAsync(resolveReminderIds, cancellationToken);
 
-                        var nextApproverIds = nextStep.GetResolvedApproverIds();
+			// ==== REMINDER ====
+			var nextApproverIds = nextStep.GetResolvedApproverIds();
 			// set reminder for next approver
 			await _reminderService.ScheduleReminderManyAsync(
 				userIds: nextApproverIds,
@@ -101,21 +124,6 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
 			);
 
 			// ==== NOTIFICATIONS ====
-			var creatorId = await _expensePaymentRepo.GetCreatorIdAsync(workflowInstance.DocumentId, cancellationToken)
-				?? throw new NotFoundException("Không tìm thấy thông tin người tạo thanh toán này");
-
-			// mark as read
-			var taskNotificaitonIds = await _notificationRepo.ListProjectedAsync(
-				q => q.Where(x => 
-					approverIds.Contains(x.ReceiverId)
-					&& x.TargetId == workflowInstance.DocumentId
-					&& x.Type == Domain.Core.Enums.NotificationType.Task
-					&& !x.IsRead
-				).Select(x => x.Id),
-				cancellationToken: cancellationToken
-			);
-			if (taskNotificaitonIds.Any())
-				await _notificationService.MarkAsReadManyAsync(taskNotificaitonIds, cancellationToken);
 
 			// send notifications
 			await _notificationService.SendToManyAsync(
@@ -136,6 +144,42 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
                         await _uow.SaveChangesAsync(cancellationToken);
 			return Unit.Value;
 		}
+
+		private async Task ResolveCurrentApproverWorkAsync(Guid documentId, IReadOnlyCollection<Guid> approverIds, CancellationToken cancellationToken)
+		{
+			// Resolve reminders
+			var resolveReminderIds = await _reminderRepo.ListProjectedAsync(
+				q => q.Where(x => approverIds.Contains(x.UserId) && x.TargetId == documentId && !x.IsResolved)
+					.Select(x => x.Id),
+				cancellationToken: cancellationToken
+			) ?? new List<Guid>();
+
+			if (resolveReminderIds.Any())
+				await _reminderService.MarkResolvedManyAsync(resolveReminderIds, cancellationToken);
+
+			var taskNotificationIds = await _notificationRepo.ListProjectedAsync(
+				q => q.Where(x => approverIds.Contains(x.ReceiverId)
+					&& x.TargetId == documentId
+					&& x.Type == NotificationType.Task
+					&& !x.IsRead
+				).Select(x => x.Id),
+				cancellationToken: cancellationToken
+			) ?? new List<Guid>();
+
+			if (taskNotificationIds.Any())
+				await _notificationService.MarkAsReadManyAsync(taskNotificationIds, cancellationToken);
+		}
+
+		private async Task<(Guid creatorId, string paymentName)>LoadCreatorAndNameAsync(Guid documentId, CancellationToken cancellationToken)
+		{
+			var creatorId = await _expensePaymentRepo.GetCreatorIdAsync(documentId, cancellationToken)
+				?? throw new NotFoundException("Không tìm thấy thông tin người tạo thanh toán này");
+
+			var paymentName = await _expensePaymentRepo.GetNameAsync(documentId, cancellationToken)
+				?? throw new NotFoundException("Không tìm thấy tên thanh toán");
+
+			return (creatorId, paymentName);
+		}
 	}
 
 	public sealed class ApproveExpenseStepInstanceCommandValidator : AbstractValidator<ApproveExpenseStepInstanceCommand>
@@ -145,4 +189,6 @@ namespace ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Commands
 			RuleFor(x => x.WorkflowInstanceId).NotEmpty().WithMessage("Định danh bước duyệt không được để trống");
 		}
 	}
+
+	
 }
