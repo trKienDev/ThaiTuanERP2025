@@ -2,6 +2,9 @@
       .payment-name {
             color: var(--bright-blue-color);
             user-select: text;
+            cursor: pointer;
+      }
+      .payment-name:hover {
             text-decoration: underline;
       }
 }

@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
 using ThaiTuanERP2025.Application.Expense.OutgoingPayments.Contracts;
+using ThaiTuanERP2025.Application.Shared.Services;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Shared.Repositories;
 
@@ -10,9 +11,12 @@ namespace ThaiTuanERP2025.Application.Expense.OutgoingPayments.Commands
 	public sealed class CreateOutgoingPaymentCommandHandler : IRequestHandler<CreateOutgoingPaymentCommand, Unit>
 	{
 		private readonly IUnitOfWork _uow;
-		public CreateOutgoingPaymentCommandHandler(IUnitOfWork uow)
+		private readonly IDocumentSubIdGeneratorService _documentSubIdGenerator;
+		public CreateOutgoingPaymentCommandHandler(
+			IUnitOfWork uow, IDocumentSubIdGeneratorService documentSubIdGenerator)
 		{
 			_uow = uow;
+			_documentSubIdGenerator = documentSubIdGenerator;
 		}
 
 		public async Task<Unit> Handle(CreateOutgoingPaymentCommand command, CancellationToken cancellationToken)
@@ -30,7 +34,7 @@ namespace ThaiTuanERP2025.Application.Expense.OutgoingPayments.Commands
 			);
 			if (exist) throw new ValidationException($"Khoản chi {nameNorm} đã tồn tại");
 
-			var entity = new OutgoingPayment(
+			var newOutgoingPayment = new OutgoingPayment(
 				nameNorm,
 				payload.OutgoingAmount,
 				bankNameNorm,
@@ -42,7 +46,10 @@ namespace ThaiTuanERP2025.Application.Expense.OutgoingPayments.Commands
 				payload.Description
 			);
 
-			await _uow.OutgoingPayments.AddAsync(entity, cancellationToken);
+			var subId = await _documentSubIdGenerator.NextSubIdAsync(Domain.Shared.Enums.DocumentType.OutgoingPayment, DateTime.UtcNow, cancellationToken);
+			newOutgoingPayment.SetSubId(subId);
+
+			await _uow.OutgoingPayments.AddAsync(newOutgoingPayment, cancellationToken);
 			await _uow.SaveChangesAsync(cancellationToken);
 			return Unit.Value;
 		}

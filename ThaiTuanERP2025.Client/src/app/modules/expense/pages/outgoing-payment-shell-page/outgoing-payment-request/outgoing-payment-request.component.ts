@@ -4,7 +4,7 @@ import { ActivatedRoute } from "@angular/router";
 import { usePaymentDetail } from "../../../composables/use-payment-detail";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { OutgoingBankAccountOptionStore } from "../../../options/outgoing-bank-account-option.store";
-import { KitDropdownComponent, KitDropdownOption } from "../../../../../shared/components/kit-dropdown/kit-dropdown.component";
+import { KitDropdownComponent } from "../../../../../shared/components/kit-dropdown/kit-dropdown.component";
 import { ToastService } from "../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { KitFileUploaderComponent } from "../../../../../shared/components/kit-file-uploader/kit-file-uploader.component";
 import { MoneyFormatDirective } from "../../../../../shared/directives/money/money-format.directive";
@@ -19,6 +19,9 @@ import { KitOverlaySpinnerComponent } from "../../../../../shared/components/kit
 import { OutgoingPaymentApiService } from "../../../services/api/outgoing-payment.service";
 import { UploadItem } from "../../../../../shared/components/kit-file-uploader/upload-item.model";
 import { UserOptionStore } from "../../../../account/options/user-dropdown.option";
+import { MatDialog } from "@angular/material/dialog";
+import { ExpensePaymentDetailDialogComponent } from "../../../components/expense-payment-detail-dialog/expense-payment-detail-dialog.component";
+import { HttpErrorHandlerService } from "../../../../../core/services/http-errror-handler.service";
 
 @Component({
       selector: 'outgoing-payment-request',
@@ -31,10 +34,12 @@ import { UserOptionStore } from "../../../../account/options/user-dropdown.optio
 export class OutgoingPaymentRequestComponent implements OnInit {
       private readonly route = inject(ActivatedRoute);
       private readonly formBuilder = inject(FormBuilder);
-      outgoingBankOptions = inject(OutgoingBankAccountOptionStore).options$;
       private readonly outgoingPaymentApi = inject(OutgoingPaymentApiService);
+      private readonly dialog = inject(MatDialog)
+      private readonly httpErrorHandler = inject(HttpErrorHandlerService);
 
       userOptions = inject(UserOptionStore).option$;
+      outgoingBankOptions = inject(OutgoingBankAccountOptionStore).options$;
 
       private readonly paymentLogic = usePaymentDetail();
       loading = this.paymentLogic.isLoading;
@@ -43,7 +48,8 @@ export class OutgoingPaymentRequestComponent implements OnInit {
 
       public submitting = false;
       public submitted = false;
-      public errorMessages: string[] = [];
+      public showErrors = false;
+
 
       public readonly uploadMeta = {
             module: 'expense',
@@ -61,10 +67,10 @@ export class OutgoingPaymentRequestComponent implements OnInit {
             bankName: this.formBuilder.control<string>('', { nonNullable: true, validators: [Validators.required] }),
             accountNumber: this.formBuilder.control<string>('', { nonNullable: true, validators: [Validators.required] }),
             beneficiaryName: this.formBuilder.control<string>('', { nonNullable: true, validators: [Validators.required] }),
-            outgoingAmount: this.formBuilder.nonNullable.control<number>(0, { validators: [Validators.required, Validators.min(1)] }),
+            outgoingAmount: this.formBuilder.nonNullable.control<number | null>(0, { validators: [Validators.required, Validators.min(1)] }),
             followerIds: this.formBuilder.nonNullable.control<string[]>([]),
             expensePaymentId: this.formBuilder.nonNullable.control<string>('', { validators: [Validators.required] }),
-            outgoingBankAccountId: this.formBuilder.nonNullable.control<string>('', { validators: [Validators.required] }),
+            outgoingBankAccountId: this.formBuilder.nonNullable.control<string | null>(null, { validators: [Validators.required] }),
             dueAt: this.formBuilder.nonNullable.control<Date>(new Date(), { validators: [Validators.required] }),
             supplierId: this.formBuilder.control<string | null>(null),
             employeeId: this.formBuilder.control<string | null>(null),
@@ -96,56 +102,37 @@ export class OutgoingPaymentRequestComponent implements OnInit {
                   });
             }
       });
-      
-      onOBAccountSelected(opt: KitDropdownOption) {
-            this.form.patchValue({ outgoingBankAccountId: opt.id });
-      }
 
       ngOnInit() {
             const id = this.route.snapshot.paramMap.get('id');
             if (id) this.paymentLogic.load(id);
       }
 
+      openExpensePaymentDetailDialog(paymentId: string) { 
+            this.dialog.open(ExpensePaymentDetailDialogComponent, { data: paymentId });
+      }
+
       async submit(): Promise<void> {
-            this.submitted = true;
+            this.showErrors = true;
             
             if (this.form.invalid) {
                   this.form.markAllAsTouched();
-
-                  // 🔍 In ra danh sách field lỗi + loại lỗi
-                  const invalidControls = Object.entries(this.form.controls)
-                        .filter(([_, control]) => control.invalid)
-                        .map(([name, control]) => ({
-                              field: name,
-                              errors: control.errors
-                        }));
-
-                  console.group('⚠️ Form invalid');
-                  console.table(invalidControls);
-                  console.groupEnd();
-
-                  // Scroll đến control đầu tiên bị lỗi
-                  const firstInvalidControl = document.querySelector('.ng-invalid[formControlName]') as HTMLElement;
-                  if (firstInvalidControl) {
-                        firstInvalidControl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        firstInvalidControl.focus();
-                  }
-
                   this.toast.warningRich('Vui lòng kiểm tra và điền đầy đủ các thông tin bắt buộc.');
                   return;
             }
 
-            this.submitting = true;
-
             try {
+                  this.submitting = true;
+
                   const payload = this.form.getRawValue() as OutgoingPaymentPayload;
                   console.log('Submitting payload:', payload);
                   await firstValueFrom(this.outgoingPaymentApi.create(payload));
+
+                  this.showErrors = false;
                   this.toast.successRich("Tạo yêu cầu khoản tiền ra thành công");
                   return;
             } catch(error) {
-                  this.toast.errorRich("Có lỗi xảy ra, vui lòng thử lại");
-                  console.error(error);
+                  this.httpErrorHandler.handle(error, 'Không thể tạo yêu cầu khoản chi');
             } finally {
                   this.submitting = false;
             }

@@ -18,7 +18,6 @@ import { ExpensePaymentDetailDialogComponent } from '../../../components/expense
       imports: [CommonModule, ExpensePaymentStatusPipe, AvatarUrlPipe ],
 })
 export class FollowingExpensePaymentsPanelComponent implements OnInit {
-      private dialog = inject(MatDialog);
       private route = inject(ActivatedRoute);
       private readonly expensePaymentApi = inject(ExpensePaymentApiService);
       private readonly matDialog = inject(MatDialog);

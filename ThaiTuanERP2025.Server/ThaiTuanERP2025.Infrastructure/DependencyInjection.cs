@@ -189,8 +189,11 @@ namespace ThaiTuanERP2025.Infrastructure
 
 			// DocumentSubIdOptions
 			services.Configure<DocumentSubIdOptions>(opt => {
-				opt.TypeDigits[DocumentType.ExpensePayment] = "01";
-				opt.TypeDigits[DocumentType.OutgoingPayment] = "02";
+				// Expense
+				opt.TypeDigits[DocumentType.ExpensePayment] = "11";
+				opt.TypeDigits[DocumentType.AdvancedPayment] = "12";
+				opt.TypeDigits[DocumentType.AdvancedExpensePayment] = "13";
+				opt.TypeDigits[DocumentType.OutgoingPayment] = "14";
 			});
 
 			// DomainEventDispatcher

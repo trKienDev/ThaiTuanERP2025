@@ -52,7 +52,7 @@
                                                             <span>{{ paymentDetail?.subId }}</span>
                                                       </div>
                                                       <div class="column">
-                                                            <label for="created-by-ủe">Tạo bởi</label>
+                                                            <label for="created-by-user" class="align-content-center">Tạo bởi</label>
                                                             <div class="display-flex gap-5px align-items-center">
                                                                   <img class="avatar-user" [src]="paymentDetail?.createdByUser | avatarUrlPipe">
                                                                   <span>{{ paymentDetail?.createdByUser?.fullName}}</span>
@@ -67,7 +67,7 @@
                                                             <input type="checkbox" [checked]="paymentDetail?.hasGoodsReceipt" disabled style="width: fit-content;"/>
                                                       </div>
                                                       <div class="column">
-                                                            <label for="workflow-instance">Luồng duyệt</label>
+                                                            <label for="workflow-instance" class="align-content-center">Luồng duyệt</label>
                                                             <ng-container *ngIf="(paymentDetail?.workflowInstance?.steps?.length ?? 0) > 0">
                                                                   <div class="approvers display-flex gap-5px">
                                                                         <ng-container *ngFor="let step of paymentDetail?.workflowInstance?.steps">
@@ -112,7 +112,7 @@
                                                 </div>
                                           </div>
                                           <div class="column">
-                                                <label for="followers">Người theo dõi</label>
+                                                <label for="followers" class="align-content-center">Người theo dõi</label>
                                                 <ng-container *ngIf="(paymentDetail?.followers?.length ?? 0) > 0">
                                                       <div class="payment-followers display-flex gap-5px align-items-center">
                                                             <ng-container *ngFor="let follower of paymentDetail?.followers">

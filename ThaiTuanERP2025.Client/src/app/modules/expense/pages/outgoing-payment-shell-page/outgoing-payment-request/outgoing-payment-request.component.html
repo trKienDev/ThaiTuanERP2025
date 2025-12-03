@@ -10,27 +10,32 @@
                         <div class="page-title">
                               <h3 class="icon">💷</h3>
                               <h3 class="title">Ghi nhận khoản tiền ra</h3>
-                              <h3 class="title payment-name">{{ detail.name }}</h3>
+                              <h3 class="title payment-name" (click)="openExpensePaymentDetailDialog(paymentDetail()?.id!)">{{ detail.name }}</h3>
                         </div>
                         <div class="process-button-container display-flex gap-10px">
                               <button type="button" class="button cancel-button" [disabled]="loading()">Hủy</button>
-                              <kit-spinner-button type="submit" cssClass="save-button" [loading]="submitting" [disabled]="isBusy || form.invalid" text="Tạo khoản chi" loadingText="Đang xử lý…"></kit-spinner-button>
+                              <kit-spinner-button type="submit" cssClass="save-button" [loading]="submitting" [disabled]="isBusy" text="Tạo khoản chi" loadingText="Đang xử lý…"></kit-spinner-button>
                         </div>
                   </div>
 
                   <div class="request-body margin-top-20px">
                         <div class="form-row">
                               <div class="form-input">
-                                    <input type="text" formControlName="name" required />
-                                    <label for="name">Tên khoản tiền ra <span style="color: red">*</span></label>
-                                    <div class="form-input-error" *ngIf="submitted && form.get('name')?.invalid">
-                                          <small>Vui lòng nhập tên khoản tiền ra</small>
+                                    <input class="" type="text" formControlName="name" autocomplete="on" required
+                                    [class.is-invalid]="showErrors && form.get('name')?.invalid"  [attr.aria-invalid]="showErrors && form.get('name')?.invalid ? 'true' : null"/>
+                                    <label for="name">Tên tài khoản chi<span style="color: red">  *</span></label>
+                                    <div class="form-input-error" *ngIf="showErrors && form.get('name')?.invalid">
+                                          <small>Vui lòng nhập tên khoản chi</small>
                                     </div>
                               </div>
                         </div>
                         <div class="form-row display-flex gap-10px">
                               <div class="flex-1">
-                                    <kit-dropdown [options]="(outgoingBankOptions | async) ?? []" [placeholder]="'Chọn tài khoản tiền ra'" [required]="true"></kit-dropdown>
+                                    <kit-dropdown  [options]="(outgoingBankOptions | async) ?? []" [placeholder]="'Chọn tài khoản khoản chi'" [required]="true" [enableFilter]="false"
+                                    [invalid]="showErrors && (form.get('outgoingBankAccountId')?.invalid ?? false)" formControlName="outgoingBankAccountId"></kit-dropdown>
+                                    <div class="form-input-error" *ngIf="showErrors && form.get('outgoingBankAccountId')?.invalid">
+                                          <small>Vui lòng chọn tài khoản khoản chi</small>
+                                    </div>
                               </div>
                               <div class="form-input flex-1">
                                     <input type="text" [value]="paymentDetail()?.supplierName" disabled>
@@ -77,11 +82,12 @@
                                     <label for="name">Số tiền chờ tạo lệnh 🔒</label>
                               </div>
                               <div class="form-input flex-1">
-                                    <input class="margin-top-10px" placeholder="Nhập số tiền khoản tiền ra" type="text" inputmode="decimal" appMoney [appMoneyDecimals]="0" formControlName="outgoingAmount" />
+                                    <input class="margin-top-10px" type="text" inputmode="decimal" appMoney [appMoneyDecimals]="0" formControlName="outgoingAmount" autocomplete="on" required
+                                    [class.is-invalid]="showErrors && form.get('outgoingAmount')?.invalid"  [attr.aria-invalid]="showErrors && form.get('outgoingAmount')?.invalid ? 'true' : null"/>
                                     <div class="form-input-error" *ngIf="submitted && form.get('outgoingAmount')?.invalid">
-                                          <small>Vui lòng nhập số tiền khoản tiền ra</small>
+                                          <small>Vui lòng nhập số tiền khoản chia</small>
                                     </div>
-                                    <label for="outgoing-amount">Số tiền khoản tiền ra <span style="color: red;">  *</span></label>
+                                    <label for="outgoing-amount">Số tiền khoản chi <span style="color: red;">  *</span></label>
                               </div>
                         </div>
                         <div class="form-row">
