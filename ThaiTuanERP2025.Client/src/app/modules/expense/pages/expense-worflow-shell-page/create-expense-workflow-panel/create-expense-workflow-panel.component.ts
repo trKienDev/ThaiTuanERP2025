@@ -8,9 +8,9 @@ import { ExpenseStepTemplateApiService } from "../../../services/expense-step-te
 import { ActionMenuOption } from "../../../../../shared/components/kit-action-menu/kit-action-menu.model";
 import { KitActionMenuComponent } from "../../../../../shared/components/kit-action-menu/kit-action-menu.component";
 import { MatDialog } from "@angular/material/dialog";
-import { SaveExpenseWorkflowTemplateDialogComponent } from "../../../components/save-expense-workflow-template-dialog/save-expense-workflow-template-dialog.component";
+import { SaveExpenseWorkflowTemplateDialogComponent } from "../../../components/dialogs/save-expense-workflow-template-dialog/save-expense-workflow-template-dialog.component";
 import { ActivatedRoute, Router } from '@angular/router';
-import { ExpenseWorkflowStepDialogComponent } from '../../../components/expense-workflow-step-dialog/expense-workflow-step-dialog.component';
+import { ExpenseWorkflowStepDialogComponent } from '../../../components/dialogs/expense-workflow-step-dialog/expense-workflow-step-dialog.component';
 
 @Component({
       selector: 'expense-workflow-request-panel',

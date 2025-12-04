@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ExpensePaymentApiService } from '../../../services/api/expense-payment.service';
 import {  ExpensePaymentLookupDto } from '../../../models/expense-payment.model';
 import { firstValueFrom } from 'rxjs';
-import { ExpensePaymentDetailDialogComponent } from '../../../components/expense-payment-detail-dialog/expense-payment-detail-dialog.component';
+import { ExpensePaymentDetailDialogComponent } from '../../../components/dialogs/expense-payment-detail-dialog/expense-payment-detail-dialog.component';
 
 @Component({
       selector: 'expense-payments-panel',

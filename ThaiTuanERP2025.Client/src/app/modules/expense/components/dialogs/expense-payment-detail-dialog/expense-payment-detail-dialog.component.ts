@@ -1,31 +1,32 @@
-import { ExpensePaymentDetailDto } from './../../models/expense-payment.model';
+import { ExpensePaymentDetailDto } from '../../../models/expense-payment.model';
 import { CommonModule } from "@angular/common";
 import { Component, Inject, inject, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { ExpensePaymentApiService } from '../../services/api/expense-payment.service';
+import { ExpensePaymentApiService } from '../../../services/api/expense-payment.service';
 import { firstValueFrom, map, Observable, shareReplay } from 'rxjs';
-import { AvatarUrlPipe } from "../../../../shared/pipes/avatar-url.pipe";
+import { AvatarUrlPipe } from "../../../../../shared/pipes/avatar-url.pipe";
 import { trigger, transition, style, animate } from '@angular/animations';
-import { ExpensePaymentStatusPipe } from "../../pipes/expense-payment-status.pipe";
-import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
-import { ExpenseWorkflowInstanceApiService } from '../../services/api/expense-workflow-instance.service';
-import { ToastService } from '../../../../shared/components/kit-toast-alert/kit-toast-alert.service';
-import {  ExpenseStepInstanceDetailDto } from '../../models/expense-step-instance.model';
-import { CountdownService } from '../../../../shared/services/countdown.service';
-import { HttpErrorHandlerService } from '../../../../core/services/http-errror-handler.service';
+import { ExpensePaymentStatusPipe } from "../../../pipes/expense-payment-status.pipe";
+import { KitSpinnerButtonComponent } from "../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
+import { ExpenseWorkflowInstanceApiService } from '../../../services/api/expense-workflow-instance.service';
+import { ToastService } from '../../../../../shared/components/kit-toast-alert/kit-toast-alert.service';
+import {  ExpenseStepInstanceDetailDto } from '../../../models/expense-step-instance.model';
+import { CountdownService } from '../../../../../shared/services/countdown.service';
+import { HttpErrorHandlerService } from '../../../../../core/services/http-errror-handler.service';
 import { Router } from '@angular/router';
-import { UserFacade } from '../../../account/facades/user.facade';
-import { KitFlipCountdownComponent } from "../../../../shared/components/kit-flip-countdown/kit-flip-countdown.component";
-import { ExpenseWorkflowStatus } from '../../models/expense-workflow-instance.model';
-import { FilePreviewService, StoredFileMetadataDto } from '../../../../core/services/file-preview.service';
-import { ExpensePaymentItemLookupDto } from '../../models/expense-payment-item.model';
-import { OutgoingPaymentStatusPipe } from "../../pipes/outgoing-payment-status.pipe";
-import { KitShellTabsComponent } from '../../../../shared/components/kit-shell-tabs/kit-shell-tabs.component';
+import { UserFacade } from '../../../../account/facades/user.facade';
+import { KitFlipCountdownComponent } from "../../../../../shared/components/kit-flip-countdown/kit-flip-countdown.component";
+import { ExpenseWorkflowStatus } from '../../../models/expense-workflow-instance.model';
+import { FilePreviewService, StoredFileMetadataDto } from '../../../../../core/services/file-preview.service';
+import { ExpensePaymentItemLookupDto } from '../../../models/expense-payment-item.model';
+import { OutgoingPaymentStatusPipe } from "../../../pipes/outgoing-payment-status.pipe";
+import { KitShellTabsComponent } from '../../../../../shared/components/kit-shell-tabs/kit-shell-tabs.component';
+import { ExpensePaymentItemsTableComponent } from "../../tables/expense-payment-items-table/expense-payment-items-table.component";
 
 @Component({
       selector: 'expense-payment-detail-dialog',
       standalone: true,
-      imports: [CommonModule, AvatarUrlPipe, ExpensePaymentStatusPipe, KitSpinnerButtonComponent, KitFlipCountdownComponent, OutgoingPaymentStatusPipe],
+      imports: [CommonModule, AvatarUrlPipe, ExpensePaymentStatusPipe, KitSpinnerButtonComponent, KitFlipCountdownComponent, OutgoingPaymentStatusPipe, ExpensePaymentItemsTableComponent],
       templateUrl: './expense-payment-detail-dialog.component.html',
       styleUrl: './expense-payment-detail-dialog.component.scss',
       animations: [

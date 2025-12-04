@@ -28,8 +28,8 @@ import { KitFileUploaderComponent } from "../../../../../shared/components/kit-f
 import { TextareaNoSpellcheckDirective } from "../../../../../shared/directives/textarea/textarea-no-spellcheck.directive";
 import { KitSpinnerButtonComponent } from "../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 import { KitOverlaySpinnerComponent } from "../../../../../shared/components/kit-overlay-spinner/kit-overlay-spinner.component";
-import { SupplierRequestDialogComponent } from "../../../components/supplier-request-dialog/supplier-request-dialog.component";
-import { AvailableBudgetPlansDialogComponent } from "../../../components/available-budget-plans-dialog/available-budget-plans-dialog.component";
+import { SupplierRequestDialogComponent } from "../../../components/dialogs/supplier-request-dialog/supplier-request-dialog.component";
+import { AvailableBudgetPlansDialogComponent } from "../../../components/dialogs/available-budget-plans-dialog/available-budget-plans-dialog.component";
 import { AmountToWordsPipe } from "../../../../../shared/pipes/amount-to-words.pipe";
 import { FileService } from "../../../../../shared/services/file.service";
 import { ExpensePaymentItemPayload } from "../../../models/expense-payment-item.model";

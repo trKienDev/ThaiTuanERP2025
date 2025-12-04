@@ -3,7 +3,7 @@ import { Component, inject } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { OutgoingBankAccountFacade } from "../../../facades/outgoing-bank-account.facade";
 import { OutgoingBankAccountDto } from "../../../models/outgoing-bank-account.model";
-import { OutgoingBankAccountRequestDialogComponent } from "../../../components/outgoing-bank-account-request-dialog/outgoing-bank-account-request-dialog.component";
+import { OutgoingBankAccountRequestDialogComponent } from "../../../components/dialogs/outgoing-bank-account-request-dialog/outgoing-bank-account-request-dialog.component";
 import { HasPermissionDirective } from "../../../../../core/auth/auth.directive";
 
 @Component({

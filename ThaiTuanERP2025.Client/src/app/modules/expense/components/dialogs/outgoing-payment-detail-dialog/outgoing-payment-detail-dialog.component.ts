@@ -2,14 +2,14 @@ import { CommonModule } from "@angular/common";
 import { Component, inject, Inject } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { firstValueFrom } from "rxjs";
-import { Kit404PageComponent } from "../../../../shared/components/kit-404-page/kit-404-page.component";
-import { KitLoadingSpinnerComponent } from "../../../../shared/components/kit-loading-spinner/kit-loading-spinner.component";
-import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
-import { AvatarUrlPipe } from "../../../../shared/pipes/avatar-url.pipe";
-import { useOutgoingPaymentDetail } from "../../composables/use-outgoing-payment-detail";
-import { OutgoingPaymentDetailDto } from "../../models/outgoing-payment.model";
-import { OutgoingPaymentStatusPipe } from "../../pipes/outgoing-payment-status.pipe";
-import { OutgoingPaymentApiService } from "../../services/api/outgoing-payment.service";
+import { Kit404PageComponent } from "../../../../../shared/components/kit-404-page/kit-404-page.component";
+import { KitLoadingSpinnerComponent } from "../../../../../shared/components/kit-loading-spinner/kit-loading-spinner.component";
+import { ToastService } from "../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
+import { AvatarUrlPipe } from "../../../../../shared/pipes/avatar-url.pipe";
+import { useOutgoingPaymentDetail } from "../../../composables/use-outgoing-payment-detail";
+import { OutgoingPaymentDetailDto } from "../../../models/outgoing-payment.model";
+import { OutgoingPaymentStatusPipe } from "../../../pipes/outgoing-payment-status.pipe";
+import { OutgoingPaymentApiService } from "../../../services/api/outgoing-payment.service";
 
 @Component({
       selector: 'outgoing-payment-detail-dialog',

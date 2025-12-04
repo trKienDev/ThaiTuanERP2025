@@ -27,10 +27,8 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Repositories.Read
 
                 public async Task<Dictionary<Guid, decimal>> GetRemainingByDetailIdsAsync(IEnumerable<Guid> detailIds, CancellationToken cancellationToken)
                 {
-                        var ctx = (ThaiTuanERP2025DbContext)_dbContext;
-
                         // BudgetPlanDetail
-                        var details = await ctx.BudgetPlanDetails
+                        var details = await _dbContext.Set<BudgetPlanDetail>()
                                 .Where(x => detailIds.Contains(x.Id))
                                 .Select(x => new
                                 {

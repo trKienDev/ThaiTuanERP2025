@@ -30,7 +30,7 @@
                                           <kit-spinner-button type="button" cssClass="danger-button" text="Từ chối" [loading]="rejecting" [disabled]="submitting" loadingText="Đang từ chối…" (click)="reject()"></kit-spinner-button>
                                     </div>
                                     <div *ngIf="!step.expired && canApproveOrReject && isInProgress" class="time-clock-border">
-                                          <kit-flip-countdown style="height: 100%;" [timeLeft]="step.seconds"></kit-flip-countdown>
+                                          <kit-flip-countdown class="display-flex align-items-center" style="height: 100%;" [timeLeft]="step.seconds"></kit-flip-countdown>
                                     </div>
                               </ng-container>
                               <ng-container *ngIf="paymentDetail?.status === 3 || paymentDetail?.status === 7">
@@ -171,53 +171,14 @@
                               <!-- Tab 1: Hạng mục thanh toán -->
                               <ng-container *ngSwitchCase="'items'">
                                     <div [@tabSwitchFade]>
-                                          <div class="payment-item-table">
-                                                <table class="table">
-                                                      <thead>
-                                                            <tr>
-                                                                  <th style="width: 1%;">#</th>
-                                                                  <th>Hạng mục</th>
-                                                                  <th class="head-quanity" style="width: 7%;">Số lượng</th>
-                                                                  <th>Đơn giá</th>
-                                                                  <th>Thành tiền</th>
-                                                                  <th class="head-tax" style="width: 6%;">Thuế</th>
-                                                                  <th>Số tiền thuế</th>
-                                                                  <th>Số tiền có thuế</th>
-                                                                  <th class="head-extension">Ngân sách</th>
-                                                                  <th class="head-invoice">Hóa đơn</th>
-                                                            </tr>
-                                                      </thead>
-                                                      <tbody>
-                                                            <tr *ngFor="let item of paymentDetail?.items; let i = index">
-                                                                  <td>{{ i + 1 }}</td>
-                                                                  <td class="item-name">{{ item.itemName }}</td>
-                                                                  <td class="item-quanity">{{ item.quantity | number:'1.0-0' }}</td>
-                                                                  <td class="item-unit-price">{{ item.unitPrice | number:'1.0-0' }} <span class="label-currency">VND</span></td>
-                                                                  <td class="item-amount">{{ item.amount | number:'1.0-0' }} <span class="label-currency">VND</span></td>
-                                                                  <td class="item-tax">{{ (item.taxRate * 100) | number:'1.0-0' }}%</td>
-                                                                  <td class="item-tax-amount">{{ item.taxAmount | number:'1.0-0' }} <span class="label-currency">VND</span></td>
-                                                                  <td class="item-total-with-tax">{{ item.totalWithTax | number:'1.0-0' }} <span class="label-currency">VND</span></td>
-                                                                  <td class="item-budget-code">{{ item.budgetCode.code }} - {{ item.budgetCode.name }}</td>
-                                                                  <td class="item-invoice">
-                                                                        <div class="display-flex justify-content-center align-items-center">
-                                                                              <button *ngIf="item.invoiceFile"type="button" class="default-button" (click)="previewInvoice(item)">Xem hóa đơn</button>
-                                                                              <span *ngIf="!item.invoiceFile" class="text-muted">Không có hóa đơn</span>
-                                                                        </div>
-                                                                  </td>
-                                                            </tr>
-                                                      </tbody>
-                                                      <tfoot *ngIf="paymentDetail?.items?.length">
-                                                            <tr class="total-row">
-                                                                  <td colspan="4"><strong>Tổng</strong></td>
-                                                                  <td>{{ paymentDetail?.totalAmount | number:'1.0-0' }} VNĐ</td>
-                                                                  <td></td>
-                                                                  <td>{{ paymentDetail?.totalTax | number:'1.0-0' }} VNĐ</td>
-                                                                  <td>{{ paymentDetail?.totalWithTax | number:'1.0-0' }} VNĐ</td>
-                                                                  <td colspan="4"></td>
-                                                            </tr>
-                                                      </tfoot>
-                                                </table>
-                                          </div>
+                                          <expense-payment-items-table
+                                                [items]="paymentDetail?.items ?? []"
+                                                [totalAmount]="paymentDetail?.totalAmount"
+                                                [totalTax]="paymentDetail?.totalTax"
+                                                [totalWithTax]="paymentDetail?.totalWithTax"
+                                                [showInvoiceButton]="true"
+                                                (viewInvoice)="previewInvoice($event)">
+                                          </expense-payment-items-table>
                                     </div>
                               </ng-container>
 

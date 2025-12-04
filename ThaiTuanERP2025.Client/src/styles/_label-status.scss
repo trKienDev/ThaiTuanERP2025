@@ -17,8 +17,8 @@
       &.approved { color:#2e7d32; background:#e8f5e9; border: 1px solid rgba(203, 221, 114, 0.91); }
       &.ready-for-payment { color: var(--bright-blue-color); background: #effeff; border: 1px solid #b3f1ff; }
       &.partially-paid { color: #ef6c00; background: #fff3e0; border: 1px solid #ffd4b0; }
-      &.fully-paid { color: #004d40; background: #e0f2f1; font-weight: 600; border: 1px solid #bad7d5 }
-      &.rejected { color:#f00;background:#ffebee; font-weight: 600; border: 1px solid #ffcad2; }
+      &.fully-paid { color: #004d40; background: #e0f2f1;  border: 1px solid #bad7d5 }
+      &.rejected { color:#f00;background:#ffebee; border: 1px solid #ffcad2; }
       &.cancelled { color:#6d4c41;background:#efebe9; }
       &.unknown { color:#555;   background:#eee; }
 }

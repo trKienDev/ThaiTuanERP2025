@@ -11,7 +11,7 @@ import { ExpenseApproveMode, ExpenseStepTemplatePayload } from "../../../models/
 import { ExpenseStepTemplateApiService } from "../../../services/expense-step-template.service";
 import { ActionMenuOption } from "../../../../../shared/components/kit-action-menu/kit-action-menu.model";
 import { KitActionMenuComponent } from "../../../../../shared/components/kit-action-menu/kit-action-menu.component";
-import { ExpenseWorkflowStepDialogComponent } from "../../../components/expense-workflow-step-dialog/expense-workflow-step-dialog.component";
+import { ExpenseWorkflowStepDialogComponent } from "../../../components/dialogs/expense-workflow-step-dialog/expense-workflow-step-dialog.component";
 
 @Component({
       selector: 'update-expense-workflow-panel',

@@ -2,13 +2,13 @@ import { CommonModule } from "@angular/common";
 import { Component, inject } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MatDialogRef } from "@angular/material/dialog";
-import { OutgoingBankAccountFacade } from "../../facades/outgoing-bank-account.facade";
+import { OutgoingBankAccountFacade } from "../../../facades/outgoing-bank-account.facade";
 import { firstValueFrom } from "rxjs";
-import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
-import { HttpErrorHandlerService } from "../../../../core/services/http-errror-handler.service";
-import { OutgoingBankAccountPayload } from "../../models/outgoing-bank-account.model";
+import { ToastService } from "../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
+import { HttpErrorHandlerService } from "../../../../../core/services/http-errror-handler.service";
+import { OutgoingBankAccountPayload } from "../../../models/outgoing-bank-account.model";
 import { CdkAutofill } from "@angular/cdk/text-field";
-import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
+import { KitSpinnerButtonComponent } from "../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 
 @Component({
       selector: 'new-outgoing-bank-account-dialog',

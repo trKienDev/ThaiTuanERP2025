@@ -20,13 +20,16 @@ import { OutgoingPaymentApiService } from "../../../services/api/outgoing-paymen
 import { UploadItem } from "../../../../../shared/components/kit-file-uploader/upload-item.model";
 import { UserOptionStore } from "../../../../account/options/user-dropdown.option";
 import { MatDialog } from "@angular/material/dialog";
-import { ExpensePaymentDetailDialogComponent } from "../../../components/expense-payment-detail-dialog/expense-payment-detail-dialog.component";
+import { ExpensePaymentDetailDialogComponent } from "../../../components/dialogs/expense-payment-detail-dialog/expense-payment-detail-dialog.component";
 import { HttpErrorHandlerService } from "../../../../../core/services/http-errror-handler.service";
+import { ExpensePaymentItemsTableComponent } from "../../../components/tables/expense-payment-items-table/expense-payment-items-table.component";
+import { ExpensePaymentItemLookupDto } from "../../../models/expense-payment-item.model";
+import { FilePreviewService } from "../../../../../core/services/file-preview.service";
 
 @Component({
       selector: 'outgoing-payment-request',
       standalone: true,
-      imports: [CommonModule, ReactiveFormsModule, KitDropdownComponent, MoneyFormatDirective, Kit404PageComponent, KitLoadingSpinnerComponent, MatDatepickerModule, KitSpinnerButtonComponent, KitOverlaySpinnerComponent, KitFileUploaderComponent],
+      imports: [CommonModule, ReactiveFormsModule, KitDropdownComponent, MoneyFormatDirective, Kit404PageComponent, KitLoadingSpinnerComponent, MatDatepickerModule, KitSpinnerButtonComponent, KitOverlaySpinnerComponent, KitFileUploaderComponent, ExpensePaymentItemsTableComponent],
       styleUrls: ['./outgoing-payment-request.component.scss'],
       templateUrl: './outgoing-payment-request.component.html',
       providers: [...provideMondayFirstDateAdapter()]
@@ -37,6 +40,7 @@ export class OutgoingPaymentRequestComponent implements OnInit {
       private readonly outgoingPaymentApi = inject(OutgoingPaymentApiService);
       private readonly dialog = inject(MatDialog)
       private readonly httpErrorHandler = inject(HttpErrorHandlerService);
+      private readonly filePreview = inject(FilePreviewService);
 
       userOptions = inject(UserOptionStore).option$;
       outgoingBankOptions = inject(OutgoingBankAccountOptionStore).options$;
@@ -143,5 +147,19 @@ export class OutgoingPaymentRequestComponent implements OnInit {
       }
       get isBusy() {
             return this.submitting;
+      }
+
+      previewInvoice(item: ExpensePaymentItemLookupDto) {
+            if (!item.invoiceFile) {
+                  this.toast.errorRich("Không tìm thấy hóa đơn");
+                  return;
+            }
+
+            this.filePreview.previewStoredFile({
+                  fileId: item.invoiceFile.fileId ?? '',
+                  objectKey: item.invoiceFile.objectKey ?? '',
+                  fileName: item.invoiceFile.fileName ?? 'invoice',
+                  isPublic: item.invoiceFile.isPublic ?? false
+            });
       }
 }

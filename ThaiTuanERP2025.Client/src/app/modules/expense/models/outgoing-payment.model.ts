@@ -34,7 +34,7 @@ export interface OutgoingPayment {
       dueDate: Date;
       postingDate: Date;
       paymentDate: Date;
-      status: OutgoingPaymentStatus | string;
+      status: OutgoingPaymentStatus;
       expensePaymentId: string;
       outgoingBankAccountId: string;
       employeeId?: string | null;

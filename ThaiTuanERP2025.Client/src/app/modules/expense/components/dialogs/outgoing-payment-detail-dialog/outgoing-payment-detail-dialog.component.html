@@ -18,20 +18,20 @@
                         <ng-container *ngIf="outgoingPaymentDetail; else errorTpl">
                               <div block-label="outgoing-payment-detail" class="container">
                                     <div class="detail-heading display-flex align-items-center gap-10px">
-                                          <ng-container *ngIf="outgoingPaymentDetail?.status === 'Pending'">
+                                          <ng-container *ngIf="outgoingPaymentDetail?.status === 0">
                                                 <div class="action-button">
                                                       <button type="button" class="pintura-button" (click)="onApprove()">Duyệt</button>
                                                 </div>
                                           </ng-container>
-                                          <ng-container *ngIf="outgoingPaymentDetail?.status === 'Approved'">
+                                          <ng-container *ngIf="outgoingPaymentDetail?.status === 1">
                                                 <div class="action-button">
                                                       <button type="button" class="button submit-button" (click)="markCreated()">Tạo lệnh</button>
                                                 </div>
                                           </ng-container>
                                           <h3 class="payment-name">{{ outgoingPaymentDetail.name }}</h3>
                                           <div class="detail-status">
-                                                <span  class="outgoing-status-badge" [ngClass]="outgoingPaymentDetail.status | outgoingPaymentStatus : 'class'">
-                                                      {{ outgoingPaymentDetail.status | outgoingPaymentStatus : 'label' }}
+                                                <span class="label-status-badge" [ngClass]="(outgoingPaymentDetail.status | outgoingPaymentStatus).class">
+                                                      {{ (outgoingPaymentDetail.status | outgoingPaymentStatus).text }}
                                                 </span>
                                           </div>
                                     </div>

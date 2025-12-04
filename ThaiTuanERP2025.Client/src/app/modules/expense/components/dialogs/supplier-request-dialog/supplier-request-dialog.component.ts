@@ -2,10 +2,10 @@ import { CommonModule } from "@angular/common";
 import { Component, inject } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MatDialogRef } from "@angular/material/dialog";
-import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
-import { HttpErrorHandlerService } from "../../../../core/services/http-errror-handler.service";
-import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
-import { SupplierFacade } from "../../facades/supplier.facade";
+import { KitSpinnerButtonComponent } from "../../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
+import { HttpErrorHandlerService } from "../../../../../core/services/http-errror-handler.service";
+import { ToastService } from "../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
+import { SupplierFacade } from "../../../facades/supplier.facade";
 import { firstValueFrom } from "rxjs";
 
 @Component({

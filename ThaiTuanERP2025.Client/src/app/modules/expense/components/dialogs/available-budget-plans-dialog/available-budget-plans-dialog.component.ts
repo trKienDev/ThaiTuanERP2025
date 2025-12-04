@@ -1,8 +1,8 @@
 import { CommonModule } from "@angular/common";
 import { Component, Inject, inject, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { BudgetPlanDetailDto } from "../../../finance/models/budget-plan.model";
-import { BudgetPlanApiService } from "../../../finance/services/api/budget-plan-api.service";
+import { BudgetPlanDetailDto } from "../../../../finance/models/budget-plan.model";
+import { BudgetPlanApiService } from "../../../../finance/services/api/budget-plan-api.service";
 import { firstValueFrom } from "rxjs";
 
 @Component({
