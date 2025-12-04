@@ -2,6 +2,7 @@
 using ThaiTuanERP2025.Domain.Shared;
 using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Expense.Enums;
+using ThaiTuanERP2025.Domain.Exceptions;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
@@ -55,46 +56,57 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public Guid ExpensePaymentId { get; private set; }
 		public ExpensePayment ExpensePayment { get; private set; } = null!;
 
-		public Guid? SupplierId { get; private set; }
-		public Supplier? Supplier { get; private set; }
-		public Guid? EmployeeId { get; private set; }
-		public User? Employee { get; private set; }
+		public Guid? SupplierId { get; set; }
+		public Supplier? Supplier { get; set; }
+		public Guid? EmployeeId { get; set; }
+		public User? Employee { get; set; }
 
 		public IReadOnlyCollection<Guid> FollowerIds => _followerIds.AsReadOnly();
 		public IReadOnlyCollection<User> Followers => _followers.AsReadOnly();
 		#endregion
 
 		#region Domain Behaviors
-		public void SetSubId(string id)
+		internal void SetSubId(string id)
 		{
 			Guard.AgainstNullOrWhiteSpace(id, nameof(id));
 			SubId = id.Trim();
 		}
 
-		public void UpdateDescription(string? description)
+		internal void AssignSupplier(Guid supplierId)
+		{
+			if (SupplierId is not null)
+				throw new DomainException("Khoản chi này đã được gán với nhà cung cấp");
+
+			if(EmployeeId is not null)
+				throw new DomainException("Khoản chi này đã được gán với nhân viên thụ hưởng");
+
+			SupplierId = supplierId;
+		}
+
+		internal void UpdateDescription(string? description)
 		{
 			Description = description?.Trim() ?? string.Empty;
 		}
 
-		public void SetOutgoingAmount(decimal amount)
+		internal void SetOutgoingAmount(decimal amount)
 		{
 			Guard.AgainstZeroOrNegative(amount, nameof(amount));
 			OutgoingAmount = amount;
 		}
 
-		public void AddFollower(Guid userId)
+		internal void AddFollower(Guid userId)
 		{
 			if (userId == Guid.Empty) return;
 			if (_followerIds.Contains(userId)) return;
 			_followerIds.Add(userId);
 		}
 
-		public void RemoveFollower(Guid userId)
+		internal void RemoveFollower(Guid userId)
 		{
 			_followerIds.Remove(userId);
 		}
 
-		public void ChangeStatus(OutgoingPaymentStatus newStatus)
+		internal void ChangeStatus(OutgoingPaymentStatus newStatus)
 		{
 			if ((int)newStatus < (int)Status)
 				throw new InvalidOperationException($"Không thể chuyển trạng thái từ {Status} về {newStatus}");
@@ -102,7 +114,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			Status = newStatus;
 		}
 
-		public void Approve(Guid actorUserId)
+		internal void Approve(Guid actorUserId)
 		{
 			Guard.AgainstDefault(actorUserId, nameof(actorUserId));
 
@@ -113,7 +125,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			PostingAt = DateTime.UtcNow;
 		}
 
-		public void MarkCreated(Guid actorUserId)
+		internal void MarkCreated(Guid actorUserId)
 		{
 			Guard.AgainstDefault(actorUserId, nameof(actorUserId));
 
@@ -124,7 +136,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			PaymentAt = DateTime.UtcNow;
 		}
 
-		public void Cancel(Guid actorUserId)
+		internal void Cancel(Guid actorUserId)
 		{
 			Guard.AgainstDefault(actorUserId, nameof(actorUserId));
 
@@ -133,6 +145,8 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 			ChangeStatus(OutgoingPaymentStatus.Cancelled);
 		}
+
+
 		#endregion
 	}
 }

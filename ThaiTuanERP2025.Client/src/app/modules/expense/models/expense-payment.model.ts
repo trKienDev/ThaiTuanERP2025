@@ -3,7 +3,7 @@ import { ExpenseWorkflowInstanceDetailDto } from "./expense-workflow-instance.mo
 import { ExpensePaymentAttachmentDto } from "./expense-payment-attachment.model";
 import { ExpensePaymentItemDetailDto, ExpensePaymentItemLookupDto, ExpensePaymentItemPayload } from "./expense-payment-item.model";
 import { SupplierDto } from "./supplier.model";
-import { OutgoingPaymentLookupDto } from "./outgoing-payment.model";
+import { OutgoingPaymentBriefDto } from "./outgoing-payment.model";
 
 
 export enum PayeeType {
@@ -73,7 +73,7 @@ export interface ExpensePaymentDetailDto {
       workflowInstance: ExpenseWorkflowInstanceDetailDto;
       items: ExpensePaymentItemLookupDto[];
       attachments: ExpensePaymentAttachmentDto[];
-      outgoingPayments: OutgoingPaymentLookupDto[];
+      outgoingPayments: OutgoingPaymentBriefDto[];
 
       status: ExpensePaymentStatus;
 

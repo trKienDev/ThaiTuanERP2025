@@ -25,11 +25,13 @@ import { HttpErrorHandlerService } from "../../../../../core/services/http-errro
 import { ExpensePaymentItemsTableComponent } from "../../../components/tables/expense-payment-items-table/expense-payment-items-table.component";
 import { ExpensePaymentItemLookupDto } from "../../../models/expense-payment-item.model";
 import { FilePreviewService } from "../../../../../core/services/file-preview.service";
+import { OutgoingPaymentStatusPipe } from "../../../pipes/outgoing-payment-status.pipe";
+import { OutgoingPaymentsTableComponent } from "../../../components/tables/outgoing-payments-table/outgoing-payments-table.component";
 
 @Component({
       selector: 'outgoing-payment-request',
       standalone: true,
-      imports: [CommonModule, ReactiveFormsModule, KitDropdownComponent, MoneyFormatDirective, Kit404PageComponent, KitLoadingSpinnerComponent, MatDatepickerModule, KitSpinnerButtonComponent, KitOverlaySpinnerComponent, KitFileUploaderComponent, ExpensePaymentItemsTableComponent],
+      imports: [CommonModule, ReactiveFormsModule, KitDropdownComponent, MoneyFormatDirective, Kit404PageComponent, KitLoadingSpinnerComponent, MatDatepickerModule, KitSpinnerButtonComponent, KitOverlaySpinnerComponent, KitFileUploaderComponent, ExpensePaymentItemsTableComponent, OutgoingPaymentStatusPipe, OutgoingPaymentsTableComponent],
       styleUrls: ['./outgoing-payment-request.component.scss'],
       templateUrl: './outgoing-payment-request.component.html',
       providers: [...provideMondayFirstDateAdapter()]

@@ -56,15 +56,28 @@ export interface OutgoingPaymentDetailDto extends OutgoingPaymentDto {
       expensePayment: ExpensePaymentDetailDto;
 }
 
-export interface OutgoingPaymentSummaryDto extends OutgoingPaymentDto {
-      outgoingBankAccountName: string;
-      expensePaymentName: string;
+export interface OutgoingPaymentBriefDto {
+      id: string;
+      name: string;
+      status: OutgoingPaymentStatus;
+      postingAt: Date;
+      outgoingAmount: number;
 }
 
 export interface OutgoingPaymentLookupDto {
       id: string;
       name: string;
       status: OutgoingPaymentStatus;
-      postingAt: Date;
+      dueAt: string;
+      postingAt: string;
       outgoingAmount: number;
+      
+      expensePaymentId: string;
+      expensePaymentName: string;
+
+      outgoingBankAccountId: string;      
+      outgoingBankAccountName: string;
+
+      supplierId?: string | null;
+      supplierName?: string;
 }

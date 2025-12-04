@@ -2,7 +2,6 @@
 using MediatR;
 using ThaiTuanERP2025.Application.Core.Followers;
 using ThaiTuanERP2025.Application.Core.Notifications;
-using ThaiTuanERP2025.Application.Expense.ExpensePayments.Repositories;
 using ThaiTuanERP2025.Application.Expense.OutgoingPayments.Contracts;
 using ThaiTuanERP2025.Application.Shared.Services;
 using ThaiTuanERP2025.Domain.Expense.Entities;
@@ -18,14 +17,16 @@ namespace ThaiTuanERP2025.Application.Expense.OutgoingPayments.Commands
 		private readonly IDocumentSubIdGeneratorService _documentSubIdGenerator;
 		private readonly IFollowerService _followerService;
 		private readonly INotificationService _notificationService;
+		private readonly IFollowerReadRepository _followerRepo;
 		public CreateOutgoingPaymentCommandHandler(
 			IUnitOfWork uow, IDocumentSubIdGeneratorService documentSubIdGenerator, IFollowerService followerService,
-			INotificationService notificationService
+			INotificationService notificationService, IFollowerReadRepository followerRepo
 		) {
 			_uow = uow;
 			_documentSubIdGenerator = documentSubIdGenerator;
 			_followerService = followerService;
 			_notificationService = notificationService;
+			_followerRepo = followerRepo;
 		}
 
 		public async Task<Unit> Handle(CreateOutgoingPaymentCommand command, CancellationToken cancellationToken)
@@ -74,6 +75,10 @@ namespace ThaiTuanERP2025.Application.Expense.OutgoingPayments.Commands
 
 			var subId = await _documentSubIdGenerator.NextSubIdAsync(Domain.Shared.Enums.DocumentType.OutgoingPayment, DateTime.UtcNow, cancellationToken);
 			newOutgoingPayment.SetSubId(subId);
+
+			if (expensePayment.SupplierId is not null)
+				newOutgoingPayment.AssignSupplier(expensePayment.SupplierId.Value);
+
 			await _uow.OutgoingPayments.AddAsync(newOutgoingPayment, cancellationToken);
 			await _uow.SaveChangesAsync(cancellationToken);
                         #endregion
@@ -83,8 +88,8 @@ namespace ThaiTuanERP2025.Application.Expense.OutgoingPayments.Commands
                         if (newOutgoingPayment.CreatedByUserId is not null)
 				await _followerService.FollowAsync(DocumentType.OutgoingPayment, newOutgoingPayment.Id, newOutgoingPayment.CreatedByUserId.Value, cancellationToken);
 
-			if (expensePayment.CreatedByUserId is not null)
-				await _followerService.FollowAsync(DocumentType.OutgoingPayment, newOutgoingPayment.Id, expensePayment.CreatedByUserId.Value, cancellationToken);
+			var expensePaymentFollowers = await _followerRepo.GetFollowerIdsByDocument(expensePayment.Id, DocumentType.ExpensePayment,cancellationToken);	
+			await _followerService.FollowManyAsync(DocumentType.OutgoingPayment, newOutgoingPayment.Id, expensePaymentFollowers, cancellationToken);
 			#endregion
 
 			#region Notifiaction

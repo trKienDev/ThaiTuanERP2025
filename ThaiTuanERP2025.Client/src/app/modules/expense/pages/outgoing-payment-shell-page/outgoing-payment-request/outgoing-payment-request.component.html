@@ -101,6 +101,14 @@
                                     (viewInvoice)="previewInvoice($event)">
                               </expense-payment-items-table>
                         </div>
+
+                        <div class="form-row">
+                              <outgoing-payments-table
+                                    [outgoings]="paymentDetail()?.outgoingPayments ?? []"
+                                    [totalPaid]="paymentDetail()?.outgoingAmountPaid">
+                              </outgoing-payments-table>
+                        </div>
+
                         <div class="form-row display-flex gap-10px">
                               <div class="form-column flex-1">
                                     <label class="label" for="name">Ngày tạo thanh toán 🔒</label>

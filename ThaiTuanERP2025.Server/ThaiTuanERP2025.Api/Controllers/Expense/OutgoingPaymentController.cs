@@ -26,6 +26,13 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
                         return Ok(ApiResponse<IReadOnlyList<OutgoingPaymentDto>>.Success(result));
                 }
 
+                [HttpGet("following")]
+                public async Task<IActionResult> GetFollowing(CancellationToken cancellationToken)
+                {
+                        var result = await _mediator.Send(new GetFollowingOutgoingPaymentsQuery(), cancellationToken);
+                        return Ok(ApiResponse<IReadOnlyList<OutgoingPaymentLookupDto>>.Success(result));
+                }
+
                 [HttpPost]
                 public async Task<IActionResult> Create([FromBody] OutgoingPaymentPayload payload, CancellationToken cancellationToken)
                 {

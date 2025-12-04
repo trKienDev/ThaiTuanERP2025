@@ -5,11 +5,11 @@ import { environment } from "../../../../../environments/environment";
 import { ApiResponse } from "../../../../shared/models/api-response.model";
 import { handleApiResponse$ } from "../../../../shared/operators/handle-api-response.operator";
 import { BaseApiService } from "../../../../shared/services/base-api.service";
-import { OutgoingPaymentSummaryDto, OutgoingPaymentPayload, OutgoingPaymentDetailDto } from "../../models/outgoing-payment.model";
+import { OutgoingPaymentPayload, OutgoingPaymentDetailDto, OutgoingPaymentLookupDto, OutgoingPaymentDto } from "../../models/outgoing-payment.model";
 
 
 @Injectable({ providedIn: 'root' })
-export class OutgoingPaymentApiService extends BaseApiService<OutgoingPaymentSummaryDto, OutgoingPaymentPayload> {
+export class OutgoingPaymentApiService extends BaseApiService<OutgoingPaymentDto, OutgoingPaymentPayload> {
       constructor(http: HttpClient) {
             super(http, `${environment.apiUrl}/outgoing-payment`);
       }
@@ -22,10 +22,10 @@ export class OutgoingPaymentApiService extends BaseApiService<OutgoingPaymentSum
                   );
       }
 
-      getFollowing(): Observable<OutgoingPaymentSummaryDto[]> {
-            return this.http.get<ApiResponse<OutgoingPaymentSummaryDto[]>>(`${this.endpoint}/following`)
+      getFollowing(): Observable<OutgoingPaymentLookupDto[]> {
+            return this.http.get<ApiResponse<OutgoingPaymentLookupDto[]>>(`${this.endpoint}/following`)
                   .pipe(
-                        handleApiResponse$<OutgoingPaymentSummaryDto[]>(),
+                        handleApiResponse$<OutgoingPaymentLookupDto[]>(),
                         catchError(err => throwError(() => err))
                   );
       }
