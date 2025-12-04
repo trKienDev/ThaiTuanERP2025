@@ -19,11 +19,12 @@ import { KitFlipCountdownComponent } from "../../../../shared/components/kit-fli
 import { ExpenseWorkflowStatus } from '../../models/expense-workflow-instance.model';
 import { FilePreviewService, StoredFileMetadataDto } from '../../../../core/services/file-preview.service';
 import { ExpensePaymentItemLookupDto } from '../../models/expense-payment-item.model';
+import { OutgoingPaymentStatusPipe } from "../../pipes/outgoing-payment-status.pipe";
 
 @Component({
       selector: 'expense-payment-detail-dialog',
       standalone: true,
-      imports: [CommonModule, AvatarUrlPipe, ExpensePaymentStatusPipe, KitSpinnerButtonComponent, KitFlipCountdownComponent],
+      imports: [CommonModule, AvatarUrlPipe, ExpensePaymentStatusPipe, KitSpinnerButtonComponent, KitFlipCountdownComponent, OutgoingPaymentStatusPipe],
       templateUrl: './expense-payment-detail-dialog.component.html',
       styleUrl: './expense-payment-detail-dialog.component.scss',
       animations: [

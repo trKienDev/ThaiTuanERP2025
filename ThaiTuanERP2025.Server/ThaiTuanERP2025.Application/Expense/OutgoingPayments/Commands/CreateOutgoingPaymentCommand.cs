@@ -17,16 +17,14 @@ namespace ThaiTuanERP2025.Application.Expense.OutgoingPayments.Commands
 		private readonly IUnitOfWork _uow;
 		private readonly IDocumentSubIdGeneratorService _documentSubIdGenerator;
 		private readonly IFollowerService _followerService;
-		private readonly IExpensePaymentReadRepository _expensePaymentRepo;
 		private readonly INotificationService _notificationService;
 		public CreateOutgoingPaymentCommandHandler(
 			IUnitOfWork uow, IDocumentSubIdGeneratorService documentSubIdGenerator, IFollowerService followerService,
-			IExpensePaymentReadRepository expensePaymentRepo, INotificationService notificationService
+			INotificationService notificationService
 		) {
 			_uow = uow;
 			_documentSubIdGenerator = documentSubIdGenerator;
 			_followerService = followerService;
-			_expensePaymentRepo = expensePaymentRepo;
 			_notificationService = notificationService;
 		}
 
@@ -34,18 +32,34 @@ namespace ThaiTuanERP2025.Application.Expense.OutgoingPayments.Commands
 		{
 			var payload = command.Payload;
 
-			#region Create entitty OutgoingPayment
-			// Normialization
+			#region Normalization
 			var nameNorm = payload.Name.Trim();
 			var bankNameNorm = payload.BankName.Trim();
 			var accountNumberNorm = payload.AccountNumber.Trim();
 			var beneficiaryNameNorm = payload.BeneficiaryName.Trim();
+			#endregion
 
+			#region Validation
+			// Check exist OutgoingPayment by name
 			var exist = await _uow.OutgoingPayments.ExistAsync(
 				q => q.Name == nameNorm, cancellationToken
 			);
-			if (exist) throw new ValidationException($"Khoản chi {nameNorm} đã tồn tại");
+			if (exist) throw new Shared.Exceptions.ValidationException($"Khoản chi {nameNorm} đã tồn tại");
 
+			// Validate ExpensePayment Amount
+			var expensePayment = await _uow.ExpensePayments.SingleOrDefaultAsync(
+				q => q.Where(x => x.Id == payload.ExpensePaymentId), 
+				asNoTracking: false,
+				cancellationToken: cancellationToken
+			);
+			if (expensePayment == null)
+				throw new Shared.Exceptions.ValidationException("Khoản thanh toán không hợp lệ");
+
+			expensePayment.RegisterOutgoingPayment(payload.OutgoingAmount);
+
+			#endregion
+
+			#region Create entitty OutgoingPayment
 			var newOutgoingPayment = new OutgoingPayment(
 				nameNorm,
 				payload.OutgoingAmount,
@@ -69,20 +83,18 @@ namespace ThaiTuanERP2025.Application.Expense.OutgoingPayments.Commands
                         if (newOutgoingPayment.CreatedByUserId is not null)
 				await _followerService.FollowAsync(DocumentType.OutgoingPayment, newOutgoingPayment.Id, newOutgoingPayment.CreatedByUserId.Value, cancellationToken);
 
-			var expensePaymentCreatorId = await _expensePaymentRepo.GetCreatorIdAsync(payload.ExpensePaymentId, cancellationToken);
-			if (expensePaymentCreatorId is not null)
-				await _followerService.FollowAsync(DocumentType.OutgoingPayment, newOutgoingPayment.Id, expensePaymentCreatorId.Value, cancellationToken);
+			if (expensePayment.CreatedByUserId is not null)
+				await _followerService.FollowAsync(DocumentType.OutgoingPayment, newOutgoingPayment.Id, expensePayment.CreatedByUserId.Value, cancellationToken);
 			#endregion
 
 			#region Notifiaction
-			var expensePaymentName = await _expensePaymentRepo.GetNameAsync(payload.ExpensePaymentId, cancellationToken);
-			if (expensePaymentCreatorId is not null && newOutgoingPayment.CreatedByUserId is not null)
+			if (expensePayment.CreatedByUserId is not null && newOutgoingPayment.CreatedByUserId is not null)
 			{
 				await _notificationService.SendAsync(
 					senderId: newOutgoingPayment.CreatedByUserId.Value,
-					receiverId: expensePaymentCreatorId.Value,
-					title: $"Thanh toán {expensePaymentName} đã được tạo khoản chi",
-					message: $"Thanh toán {expensePaymentName} đã được tạo khoản chi",
+					receiverId: expensePayment.CreatedByUserId.Value,
+					title: $"Thanh toán {expensePayment.Name} đã được tạo khoản chi",
+					message: $"Thanh toán {expensePayment.Name} đã được tạo khoản chi",
 					linkType: Domain.Core.Enums.LinkType.OutgongPaymentPending,
 					targetId: newOutgoingPayment.Id,
 					type: Domain.Core.Enums.NotificationType.Info,

@@ -257,3 +257,4 @@ input[type=number] { -moz-appearance: textfield; }
 .disabled { opacity: 0.5; }
 
 .label-currency { color:#aaa; }
+.money-color { color: var(--money-color); }

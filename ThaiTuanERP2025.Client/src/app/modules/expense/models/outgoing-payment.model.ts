@@ -61,10 +61,10 @@ export interface OutgoingPaymentSummaryDto extends OutgoingPaymentDto {
       expensePaymentName: string;
 }
 
-export interface OutgoingPaymentStatusDto {
+export interface OutgoingPaymentLookupDto {
       id: string;
       name: string;
-      status: OutgoingPaymentStatus | string;
-      postingDate: Date;
+      status: OutgoingPaymentStatus;
+      postingAt: Date;
       outgoingAmount: number;
 }

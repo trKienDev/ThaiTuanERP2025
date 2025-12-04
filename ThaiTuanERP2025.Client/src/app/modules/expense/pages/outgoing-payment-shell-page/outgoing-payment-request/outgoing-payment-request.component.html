@@ -9,7 +9,7 @@
                   <div class="request-heading display-flex justify-content-between align-items-center">
                         <div class="page-title">
                               <h3 class="icon">💷</h3>
-                              <h3 class="title">Ghi nhận khoản tiền ra</h3>
+                              <h3 class="title">Ghi nhận khoản khoản chi</h3>
                               <h3 class="title payment-name" (click)="openExpensePaymentDetailDialog(paymentDetail()?.id!)">{{ detail.name }}</h3>
                         </div>
                         <div class="process-button-container display-flex gap-10px">
@@ -70,19 +70,19 @@
                         </div>
                         <div class="form-row display-flex gap-10px">
                               <div class="form-input flex-1">
-                                    <input class="dark dark-alert user-select-none margin-top-10px" [value]="paymentDetail()?.totalWithTax | number:'1.0-2'" disabled />
+                                    <input class="dark dark-alert user-select-none" [value]="paymentDetail()?.totalWithTax | number:'1.0-2'" disabled />
                                     <label for="name">Số tiền công ty cần trả 🔒</label>
                               </div>
                               <div class="form-input flex-1">
-                                    <input class="dark dark-alert user-select-none margin-top-10px" [value]="paymentDetail()?.outgoingAmountPaid | number:'1.0-2'" disabled />
+                                    <input class="dark dark-alert user-select-none" [value]="paymentDetail()?.outgoingAmountPaid | number:'1.0-2'" disabled />
                                     <label class="" for="name">Số tiền đã tạo lệnh 🔒</label>
                               </div>
                               <div class="form-input flex-1">
-                                    <input class="dark dark-alert user-select-none margin-top-10px" [value]="paymentDetail()?.remainingOutgoingAmount | number:'1.0-2'" disabled />
+                                    <input class="dark dark-alert user-select-none" [value]="paymentDetail()?.remainingOutgoingAmount | number:'1.0-2'" disabled />
                                     <label for="name">Số tiền chờ tạo lệnh 🔒</label>
                               </div>
                               <div class="form-input flex-1">
-                                    <input class="margin-top-10px" type="text" inputmode="decimal" appMoney [appMoneyDecimals]="0" formControlName="outgoingAmount" autocomplete="on" required
+                                    <input type="text" inputmode="decimal" appMoney [appMoneyDecimals]="0" formControlName="outgoingAmount" autocomplete="on" required
                                     [class.is-invalid]="showErrors && form.get('outgoingAmount')?.invalid"  [attr.aria-invalid]="showErrors && form.get('outgoingAmount')?.invalid ? 'true' : null"/>
                                     <div class="form-input-error" *ngIf="submitted && form.get('outgoingAmount')?.invalid">
                                           <small>Vui lòng nhập số tiền khoản chia</small>

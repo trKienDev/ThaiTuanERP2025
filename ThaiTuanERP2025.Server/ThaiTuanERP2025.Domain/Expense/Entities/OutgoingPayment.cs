@@ -1,9 +1,7 @@
 ﻿using ThaiTuanERP2025.Domain.Account.Entities;
-using ThaiTuanERP2025.Domain.Account.Events;
 using ThaiTuanERP2025.Domain.Shared;
 using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Expense.Enums;
-using ThaiTuanERP2025.Domain.Expense.Events.OutgoingPayments;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
@@ -32,6 +30,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			OutgoingBankAccountId = outgoingBankAccountId;
 			ExpensePaymentId = expensePaymentId;
 			Status = OutgoingPaymentStatus.Pending;
+			PostingAt = DateTime.UtcNow;
 		}
 		#endregion
 
@@ -101,7 +100,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 				throw new InvalidOperationException($"Không thể chuyển trạng thái từ {Status} về {newStatus}");
 
 			Status = newStatus;
-			AddDomainEvent(new OutgoingPaymentStatusChangedEvent(this, newStatus));
 		}
 
 		public void Approve(Guid actorUserId)
@@ -113,7 +111,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 			ChangeStatus(OutgoingPaymentStatus.Approved);
 			PostingAt = DateTime.UtcNow;
-			AddDomainEvent(new OutgoingPaymentApprovedEvent(this, actorUserId));
 		}
 
 		public void MarkCreated(Guid actorUserId)
@@ -125,7 +122,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 
 			ChangeStatus(OutgoingPaymentStatus.Created);
 			PaymentAt = DateTime.UtcNow;
-			AddDomainEvent(new OutgoingPaymentCreatedDomainEvent(this, actorUserId));
 		}
 
 		public void Cancel(Guid actorUserId)
@@ -136,7 +132,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 				throw new InvalidOperationException("Chứng từ đã bị hủy.");
 
 			ChangeStatus(OutgoingPaymentStatus.Cancelled);
-			AddDomainEvent(new OutgoingPaymentCancelledEvent(this, actorUserId));
 		}
 		#endregion
 	}

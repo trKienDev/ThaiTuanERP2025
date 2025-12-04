@@ -22,18 +22,18 @@
                        </div>
                         <div class="right display-flex gap-10px">
                               <ng-container *ngIf="currentStepStatus$ | async as step">
-                                    <div class="payment-expired-badge margin-left-auto" *ngIf="step.expired && isInProgress">
+                                    <div class="payment-expired-badge margin-left-auto display-flex" *ngIf="step.expired && isInProgress">
                                           <span class="badge danger-badge">Quá hạn duyệt</span>
                                     </div>
-                                    <div *ngIf="!step.expired && canApproveOrReject && isInProgress" class="payment-actions display-flex gap-5px align-items-center">
+                                    <div *ngIf="canApproveOrReject" class="payment-actions display-flex gap-5px align-items-center">
                                           <kit-spinner-button type="button" cssClass="submit-button"  text="Duyệt" [loading]="approving" [disabled]="submitting" loadingText="Đang duyệt…" (click)="approve()"></kit-spinner-button>
                                           <kit-spinner-button type="button" cssClass="danger-button" text="Từ chối" [loading]="rejecting" [disabled]="submitting" loadingText="Đang từ chối…" (click)="reject()"></kit-spinner-button>
-                                          <div class="time-clock-border">
-                                                <kit-flip-countdown style="height: 100%;" [timeLeft]="step.seconds"></kit-flip-countdown>
-                                          </div>
+                                    </div>
+                                    <div *ngIf="!step.expired && canApproveOrReject && isInProgress" class="time-clock-border">
+                                          <kit-flip-countdown style="height: 100%;" [timeLeft]="step.seconds"></kit-flip-countdown>
                                     </div>
                               </ng-container>
-                              <ng-container *ngIf="paymentDetail?.status === 3">
+                              <ng-container *ngIf="paymentDetail?.status === 3 || paymentDetail?.status === 7">
                                     <button type="button" class="button pintura-button" [disabled]="submitting" (click)="redirectToOutgoingPaymentRequestPage(paymentId)">
                                           Ghi nhận khoản chi
                                     </button>
@@ -143,15 +143,15 @@
                                     <div class="card-body">
                                           <div class="payment-amount-block">
                                                 <label for="payment-total-amount">Tổng tiền thanh toán</label>
-                                                <span>{{ paymentDetail?.totalWithTax | number: '1.0-0'  }} <span class="label-currency">VND</span></span>
+                                                <span>{{ paymentDetail?.totalWithTax | number: '1.0-0'  }} <label class="label-currency">VND</label></span>
                                           </div>
                                           <div class="payment-amount-block">
                                                 <label for="outgoing-amount-paid">Khoản chi đã tạo</label>
-                                                <span>{{ paymentDetail?.outgoingAmountPaid | number: '1.0-0'  }} <span class="label-currency">VND</span></span>
+                                                <span class="money-color">{{ paymentDetail?.outgoingAmountPaid | number: '1.0-0'  }} <label class="label-currency">VND</label></span>
                                           </div>
                                           <div class="payment-amount-block">
                                                 <label for="remaining-outgoing-amount">Số tiền còn lại</label>
-                                                <span>{{ paymentDetail?.remainingOutgoingAmount | number: '1.0-0' }} <span class="label-currency">VND</span></span>
+                                                <span style="color: var(--cadmium-red);">{{ paymentDetail?.remainingOutgoingAmount | number: '1.0-0' }} <label class="label-currency">VND</label></span>
                                           </div>
                                     </div>
                               </div>
@@ -221,6 +221,52 @@
                                     </div>
                               </ng-container>
 
+                              <!-- Tab 2: Khoản tiền ra -->
+                              <ng-container *ngSwitchCase="'outgoings'">
+                                    <div class="" [@tabSwitchFade]>
+                                          <div class="outgoing-payments-table">
+                                                <table class="table">
+                                                      <thead>
+                                                            <tr>
+                                                                  <th>#</th>
+                                                                  <th>Khoản chi</th>
+                                                                  <th>Trạng thái</th>
+                                                                  <th>Ngày ghi nhận</th>
+                                                                  <th>Số tiền ghi nhận</th>
+                                                            </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                            <ng-container *ngIf="(paymentDetail?.outgoingPayments?.length ?? 0) > 0">
+                                                                  <tr *ngFor="let outgoing of paymentDetail?.outgoingPayments; let i = index">
+                                                                        <td>{{ i + 1 }}</td>
+                                                                        <td>{{ outgoing.name }}</td>
+                                                                        <td>
+                                                                              <div class="label-status" >
+                                                                                    <span class="label-status-badge" [ngClass]="(outgoing.status | outgoingPaymentStatus).class">
+                                                                                          {{ (outgoing.status | outgoingPaymentStatus).text }}
+                                                                                    </span>
+                                                                              </div>
+                                                                        </td>
+                                                                        <td>{{ outgoing.postingAt | date: 'HH:mm dd/MM/yyyy' }}</td>
+                                                                        <td>{{ outgoing.outgoingAmount | number:'1.0-0' }} <span class="label-currency">VND</span></td>
+                                                                  </tr>
+                                                            </ng-container>
+                                                            <ng-container *ngIf="(paymentDetail?.outgoingPayments?.length ?? 0) === 0">
+                                                                  <tr>
+                                                                        <td colspan="5" class="text-center text-muted">Chưa có khoản chi nào được ghi nhận.</td>
+                                                                  </tr>
+                                                            </ng-container>
+                                                      </tbody>
+                                                      <tfoot *ngIf="(paymentDetail?.outgoingPayments?.length ?? 0) > 0">
+                                                            <tr class="total-row">
+                                                                  <td colspan="4"><strong>Tổng</strong></td>
+                                                                  <td>{{ paymentDetail?.outgoingAmountPaid | number:'1.0-0' }} VNĐ</td>
+                                                            </tr>
+                                                      </tfoot>
+                                                </table>
+                                          </div>
+                                    </div>
+                              </ng-container>
                         </ng-container>
                   </div>
             </div>

@@ -96,6 +96,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			return item;
 		}
 
+		// ==== STATUS ====
 		internal void Submit()
 		{
 			if (!_items.Any())
@@ -131,10 +132,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			Status = ExpensePaymentStatus.ReadyForPayment;
 		}
 
-		internal void FullyPaid()
-		{
-			Status = ExpensePaymentStatus.FullyPaid;
-		}
 
 		internal void RecalculateTotals()
 		{
@@ -160,6 +157,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 			CurrentWorkflowInstance = instance;
 		}
 
+		// ==== ATTACHMENTS ====
 		internal ExpensePaymentAttachment AddAttachment(Guid storedFileId)
 		{
 			Guard.AgainstDefault(storedFileId, nameof(storedFileId));
@@ -174,6 +172,29 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		{
 			foreach (var id in storedFileIds)
 				AddAttachment(id);
+		}
+
+		// ====  OUTGOING AMOUNT ====
+		internal void RegisterOutgoingPayment(decimal outgoingAmount)
+		{
+			if (outgoingAmount <= 0)
+				throw new DomainException("Số tiền phải lớn hơn 0");
+
+			if (outgoingAmount > RemainingOutgoingAmount)
+				throw new DomainException("Số tiền khoản chi vượt quá số tiền còn lại của khoản thanh toán");
+
+			OutgoingAmountPaid += outgoingAmount;
+			RemainingOutgoingAmount = TotalWithTax - OutgoingAmountPaid;
+
+			if (RemainingOutgoingAmount <= 0)
+			{
+				RemainingOutgoingAmount = 0;
+				Status = ExpensePaymentStatus.FullyPaid;
+			}
+			else
+			{
+				Status = ExpensePaymentStatus.PartiallyPaid;
+			}
 		}
 		#endregion
 	}

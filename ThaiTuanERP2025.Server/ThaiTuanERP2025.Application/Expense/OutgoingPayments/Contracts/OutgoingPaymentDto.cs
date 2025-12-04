@@ -15,4 +15,13 @@ namespace ThaiTuanERP2025.Application.Expense.OutgoingPayments.Contracts
                 public Guid ExpensePaymentId { get; init; }
                 public OutgoingPaymentStatus Status { get; init; }
         }
+
+        public sealed record OutgoingPaymentLookupDto
+        {
+                public Guid Id {  get; init; } = Guid.Empty;
+                public string Name { get; init; } = string.Empty;       
+                public OutgoingPaymentStatus Status { get; init; }
+                public DateTime PostingAt { get; init; }
+                public decimal OutgoingAmount { get; init; }    
+	}
 }
