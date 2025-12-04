@@ -15,6 +15,6 @@ import { OutgoingPaymentRequestComponent } from "./outgoing-payment-request/outg
 export class OutgoingPaymentShellPageComponent {
       readonly tabs: KitShellTab[] = [
             { id: 'following-outgoing-payments', label: 'Khoản chi', component: FollowingOutgoingPaymentComponent },
-            { id: 'outgoing-payment-request', label: 'Khoản chi mới', component: OutgoingPaymentRequestComponent },
+            { id: 'outgoing-payment-request', label: 'Khoản chi mới', component: OutgoingPaymentRequestComponent, hidden: true },
       ]
 }

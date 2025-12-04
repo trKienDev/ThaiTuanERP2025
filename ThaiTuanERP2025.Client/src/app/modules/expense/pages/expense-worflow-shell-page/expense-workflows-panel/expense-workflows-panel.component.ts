@@ -51,8 +51,6 @@ export class ExpenseWorkflowsPanelComponent implements OnInit {
             });
       }     
 
-      
-
       redirectToCreateExpenseWorkflowRequestTemplatePanel() {
             KitShellTabsComponent.allowOnce('create-expense-workflow');
 

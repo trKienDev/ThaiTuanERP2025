@@ -20,6 +20,7 @@ import { ExpenseWorkflowStatus } from '../../models/expense-workflow-instance.mo
 import { FilePreviewService, StoredFileMetadataDto } from '../../../../core/services/file-preview.service';
 import { ExpensePaymentItemLookupDto } from '../../models/expense-payment-item.model';
 import { OutgoingPaymentStatusPipe } from "../../pipes/outgoing-payment-status.pipe";
+import { KitShellTabsComponent } from '../../../../shared/components/kit-shell-tabs/kit-shell-tabs.component';
 
 @Component({
       selector: 'expense-payment-detail-dialog',
@@ -194,6 +195,7 @@ export class ExpensePaymentDetailDialogComponent {
 
       redirectToOutgoingPaymentRequestPage(paymentId: string) {
             this.dialogRef.close({ redirect: true, paymentId });
+            KitShellTabsComponent.allowOnce('outgoing-payment-request');
             this.router.navigateByUrl(`/expense/outgoing-payment-shell/outgoing-payment-request/${paymentId}`);  
       }
 
