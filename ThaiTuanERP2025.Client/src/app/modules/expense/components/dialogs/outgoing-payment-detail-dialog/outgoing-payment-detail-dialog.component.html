@@ -40,6 +40,7 @@
                                           </div>
                                     </div>
                                     <div class="detail-body">
+
                                           <div class="general-infor primary-card">
                                                 <div class="card-wrapper">
                                                       <div class="card-header">Thông tin chung</div>
@@ -109,29 +110,27 @@
                                                       </div>
                                                 </div>
                                           </div>
+
                                           <div class="amount-infor primary-card margin-top-20px">
-                                                <div class="card-body">
-                                                      <div class="display-flex gap-10px justify-content-center">
-                                                            <div class="amount-block">
-                                                                  <label class="amount-label">Số tiền thanh toán</label>
-                                                                  <!-- <span>{{ outgoingPaymentDetail.expensePayment.totalWithTax | number:'1.0-0' }} VNĐ</span> -->
-                                                                  <span class="amount-date">Ngày phát sinh: 
-                                                                        <!-- <span style="font-weight: bold;">{{ outgoingPaymentDetail.expensePayment.createdAt | date: 'dd/MM/yyyy' }}</span> -->
-                                                                  </span>
+                                                <div class="card-wrapper">
+                                                      <div class="card-body">
+                                                            <div class="payment-amount">
+                                                                  <label for="expense-amount">Số tiền khoản chi</label>
+                                                                  <span class="money-color">{{ outgoingPaymentDetail.outgoingAmount | number: '1.0-0' }} <label class="label-currency">VND</label></span>
                                                             </div>
-                                                            <div class="amount-block">
-                                                                  <label class="amount-label">Số tiền khoản chi</label>
-                                                                  <span>{{ outgoingPaymentDetail.outgoingAmount | number:'1.0-0' }} VNĐ</span>
-                                                                  <span class="amount-date">Hạn thanh toán:
-                                                                        <span style="font-weight: bold;">{{ outgoingPaymentDetail.dueAt | date: 'dd/MM/yyyy' }}</span>
-                                                                  </span>
-                                                            </div>
-                                                      </div>
-                                                      <div class="amount-item-block">
-                                                            <div class="payment-item-table margin-top-20px">
+                                                            <div class="payment-amount">
+                                                                  <label for="expense-amount">Số tiền thanh toán</label>
+                                                                  <span>{{ outgoingPaymentDetail.expensePaymentAmount | number: '1.0-0' }} <label class="label-currency">VND</label></span>  
                                                             </div>
                                                       </div>
                                                 </div>
+                                          </div>
+
+                                          <div class="margin-top-20px">
+                                                <expense-payment-items-table
+                                                      [items]="outgoingPaymentDetail?.expensePaymentItems ?? []"
+                                                      [showInvoiceButton]="true">
+                                                </expense-payment-items-table>
                                           </div>
                                     </div>
                               </div>

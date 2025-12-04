@@ -1,4 +1,5 @@
 import { UserBriefAvatarDto, UserDto } from "../../account/models/user.model";
+import { ExpensePaymentItemLookupDto } from "./expense-payment-item.model";
 import { ExpensePaymentDetailDto } from "./expense-payment.model";
 import { OutgoingBankAccountDto } from "./outgoing-bank-account.model";
 import { SupplierDto } from "./supplier.model";
@@ -60,6 +61,8 @@ export interface OutgoingPaymentDetailDto {
 
       expensePaymentId: string;
       expensePaymentName: string;
+      expensePaymentAmount: number;
+      expensePaymentItems: ExpensePaymentItemLookupDto[];
 
       outgoingBankAccountId: string;
       outgoingBankAccountName: string;

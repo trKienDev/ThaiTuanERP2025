@@ -10,13 +10,14 @@ import { useOutgoingPaymentDetail } from "../../../composables/use-outgoing-paym
 import { OutgoingPaymentDetailDto } from "../../../models/outgoing-payment.model";
 import { OutgoingPaymentStatusPipe } from "../../../pipes/outgoing-payment-status.pipe";
 import { OutgoingPaymentApiService } from "../../../services/api/outgoing-payment.service";
+import { ExpensePaymentItemsTableComponent } from "../../tables/expense-payment-items-table/expense-payment-items-table.component";
 
 @Component({
       selector: 'outgoing-payment-detail-dialog',
       templateUrl: './outgoing-payment-detail-dialog.component.html',
       styleUrls: ['./outgoing-payment-detail-dialog.component.scss'],
       standalone: true,
-      imports: [CommonModule, OutgoingPaymentStatusPipe, AvatarUrlPipe, KitLoadingSpinnerComponent, Kit404PageComponent]
+      imports: [CommonModule, OutgoingPaymentStatusPipe, AvatarUrlPipe, KitLoadingSpinnerComponent, Kit404PageComponent, ExpensePaymentItemsTableComponent]
 })
 export class OutgoingPaymentDetailDialogComponent {
       private dialogRef = inject(MatDialogRef<OutgoingPaymentDetailDialogComponent>);

@@ -66,8 +66,11 @@ namespace ThaiTuanERP2025.Application.Expense.OutgoingPayments.Contracts
 
 		public Guid ExpensePaymentId { get; init; } = Guid.Empty;
 		public string ExpensePaymentName { get; init; } = string.Empty;
+                public decimal ExpensePaymentAmount { get; init; }
+                public IReadOnlyList<ExpensePaymentItemLookupDto> ExpensePaymentItems { get; init; } = Array.Empty<ExpensePaymentItemLookupDto>();
 
-		public Guid OutgoingBankAccountId { get; init; } = Guid.Empty;
+
+                public Guid OutgoingBankAccountId { get; init; } = Guid.Empty;
 		public string OutgoingBankAccountName { get; init; } = string.Empty;
 
 		public Guid? SupplierId { get; init; }
