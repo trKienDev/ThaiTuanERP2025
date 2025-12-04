@@ -14,7 +14,6 @@ import { ExpensePaymentDetailDialogComponent } from '../../../components/dialogs
       selector: 'expense-payments-panel',
       standalone: true,
       templateUrl: './following-expense-payments.component.html',
-      styleUrls: ['./following-expense-payments.component.scss'],
       imports: [CommonModule, ExpensePaymentStatusPipe, AvatarUrlPipe ],
 })
 export class FollowingExpensePaymentsPanelComponent implements OnInit {

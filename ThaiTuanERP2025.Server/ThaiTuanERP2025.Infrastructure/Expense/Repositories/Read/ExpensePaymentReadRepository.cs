@@ -58,7 +58,7 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories.Read
 				.Include(x => x.OutgoingPayments)
                                 .FirstOrDefaultAsync(x => x.Id == id);
 
-			return _mapper.Map<ExpensePaymentDetailDto>(payment);
+			return _mapper.Map<ExpensePaymentDetailDto?>(payment);
 		}
 
 		public async Task<ExpensePayment?> GetByInvoiceFileIdAsync(Guid fileId, CancellationToken cancellationToken = default)

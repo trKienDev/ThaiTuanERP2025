@@ -25,7 +25,14 @@
                         <ng-container *ngIf="followingOutgoingPayments.length > 0">
                               <tr *ngFor="let outgoing of followingOutgoingPayments; let i = index;">
                                     <td>{{ i + 1 }}</td>
-                                    <td>{{ outgoing.name }}</td>
+                                    <td>
+                                          <div class="link-text display-flex gap-5px justify-content-center" (click)="openOutgoingPaymentDetailDialog(outgoing.id)">
+                                                <span class="material-icons-outlined" style="font-size: 14px;">visibility</span> 
+                                                <a class=" display-flex gap-5px justify-content-center"> 
+                                                      {{ outgoing.name }}
+                                                </a>
+                                          </div>
+                                    </td>
                                     <td>
                                           <div class="label-status">
                                                 <span class="label-status-badge" [ngClass]="(outgoing.status | outgoingPaymentStatus).class">

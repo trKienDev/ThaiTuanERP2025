@@ -27,19 +27,17 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Queries
 			var paymentDetail = await _expensePaymentRepo.GetDetailById(query.Id, cancellationToken)
 				?? throw new NotFoundException("Khoản thanh toán không tồn tại");
 
-			var followerIds = await _folllowerRepo.ListProjectedAsync(
-				q => q.Where(x => 
-					x.DocumentId == paymentDetail.Id 
-					&& x.DocumentType == DocumentType.ExpensePayment
-				).Select(x => x.UserId),
-				cancellationToken: cancellationToken
-			);
-
-			var followerBriefAvatar = await _userRepo.GetBriefWithAvatarManyAsync(followerIds, cancellationToken);
-			paymentDetail = paymentDetail with
+			var followerIds = await _folllowerRepo.GetFollowerIdsByDocument(paymentDetail.Id, DocumentType.ExpensePayment, cancellationToken);
+			
+			if(followerIds.Any())
 			{
-				Followers = followerBriefAvatar
-			};
+				var followerBriefAvatar = await _userRepo.GetBriefWithAvatarManyAsync(followerIds, cancellationToken);
+
+				paymentDetail = paymentDetail with
+				{
+					Followers = followerBriefAvatar
+				};
+			}
 			return paymentDetail;
 		}
 

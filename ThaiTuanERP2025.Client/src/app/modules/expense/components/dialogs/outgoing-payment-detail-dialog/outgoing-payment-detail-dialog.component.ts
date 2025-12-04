@@ -23,6 +23,7 @@ export class OutgoingPaymentDetailDialogComponent {
       private outgoingPaymentLogic = useOutgoingPaymentDetail();
       private toastService = inject(ToastService);
       private outgoingPaymentService = inject(OutgoingPaymentApiService);
+
       loading = this.outgoingPaymentLogic.isLoading;
       error = this.outgoingPaymentLogic.error;
       processing = false;
@@ -34,6 +35,7 @@ export class OutgoingPaymentDetailDialogComponent {
       }
 
       get outgoingPaymentDetail(): OutgoingPaymentDetailDto | null { 
+            console.log('detail: ', this.outgoingPaymentLogic.outgoingPaymentDetail());
             return this.outgoingPaymentLogic.outgoingPaymentDetail();
       }
 

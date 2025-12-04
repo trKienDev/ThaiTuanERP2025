@@ -6,5 +6,6 @@ namespace ThaiTuanERP2025.Application.Expense.OutgoingPayments
 {
         public interface IOutgoingPaymentReadRepository : IBaseReadRepository<OutgoingPayment, OutgoingPaymentDto>
         {
+                Task<OutgoingPaymentDetailDto?> GetDetailById(Guid id, CancellationToken cancellationToken = default);
         }
 }

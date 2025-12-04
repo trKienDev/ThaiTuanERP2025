@@ -17,9 +17,16 @@ namespace ThaiTuanERP2025.Application.Expense.OutgoingPayments
                         CreateMap<OutgoingPayment, OutgoingPaymentLookupDto>()
                                 .ForMember(dest => dest.ExpensePaymentName, opt => opt.MapFrom(src => src.ExpensePayment.Name))
                                 .ForMember(dest => dest.OutgoingBankAccountName, opt => opt.MapFrom(src => src.OutgoingBankAccount.Name))
-				.ForMember(dest => dest.SupplierName, opt => opt.MapFrom(src => src.Supplier.Name))
-                                .ForMember(dest => dest.DueAt, opt => opt.MapFrom(src => TimeZoneConverter.ToVietnamTime(src.DueAt)))
+				.ForMember(dest => dest.SupplierName, opt => opt.MapFrom(src => src.Supplier != null ? src.Supplier.Name : string.Empty))
+				.ForMember(dest => dest.DueAt, opt => opt.MapFrom(src => TimeZoneConverter.ToVietnamTime(src.DueAt)))
                                 .ForMember(dest => dest.PostingAt, opt => opt.MapFrom(src => TimeZoneConverter.ToVietnamTime(src.PostingAt)));
+
+			CreateMap<OutgoingPayment, OutgoingPaymentDetailDto>()
+				.ForMember(dest => dest.ExpensePaymentName, opt => opt.MapFrom(src => src.ExpensePayment.Name))
+				.ForMember(dest => dest.OutgoingBankAccountName, opt => opt.MapFrom(src => src.OutgoingBankAccount.Name))
+				.ForMember(dest => dest.SupplierName, opt => opt.MapFrom(src => src.Supplier != null ? src.Supplier.Name : string.Empty))
+				.ForMember(dest => dest.DueAt, opt => opt.MapFrom(src => TimeZoneConverter.ToVietnamTime(src.DueAt)))
+				.ForMember(dest => dest.PostingAt, opt => opt.MapFrom(src => TimeZoneConverter.ToVietnamTime(src.PostingAt)));
 		}
         }
 }

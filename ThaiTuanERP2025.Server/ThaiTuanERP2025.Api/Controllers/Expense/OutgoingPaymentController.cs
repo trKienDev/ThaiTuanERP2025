@@ -26,6 +26,16 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
                         return Ok(ApiResponse<IReadOnlyList<OutgoingPaymentDto>>.Success(result));
                 }
 
+                [HttpGet("{id:guid}/detail")]
+                public async Task<IActionResult> GetDetail([FromRoute] Guid id, CancellationToken cancellationToken)
+                {
+                        var detail = await _mediator.Send(new GetOutgoingPaymentDetailQuery(id), cancellationToken);
+                        if (detail is null)
+                                return BadRequest(ApiResponse<string>.Fail("Không tìm thấy chi tiết khoản chi"));
+
+                        return Ok(ApiResponse<OutgoingPaymentDetailDto>.Success(detail));
+                }
+
                 [HttpGet("following")]
                 public async Task<IActionResult> GetFollowing(CancellationToken cancellationToken)
                 {

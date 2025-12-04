@@ -1,76 +1,24 @@
+.dialog {
+      min-width: 70vw;
+}
+
+.payment-name {
+      color: var(--primary-fg-color);
+}
+
 .primary-card {
       width: 100%;
 }
 
-.general-information-block {
-      .general-grid {
+.general-infor {
+      .card-body .column {
             display: grid;
-            grid-template-columns: 180px 1fr;
-            row-gap: 10px;
-            column-gap: 16px;
+            grid-template-columns: 150px 1fr; /* label 150px, value auto */
+            margin-bottom: 15px;
       }
-      .row {
-            display: contents; // để label & value bám theo grid
+      .card-body label {
+            color: #aaa;
       }
-      label {
-            color: #666;
-            font-size: 13px;
-            line-height: 28px;
-      }
-      .value {
-            line-height: 28px;
-            &.flex {
-                  display: flex;
-                  align-items: center;
-                  gap: 8px;
-            }
-            &.ellipsis {
-                  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
-            }
-            &.prewrap { white-space: pre-wrap; }
-      }
-      .avatar {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            object-fit: cover;
-            background: #eee;
-      }
-      .avatar-stack {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 0;
-            margin: 0;
-            list-style: none;
 
-            li { display: inline-flex; }
-            .more {
-                  font-size: 12px;
-                  color: #666;
-            }
-      }
 }
 
-
-.amount-information-block {
-      gap: 10px;
-
-      .amount-block {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            background-image: linear-gradient(to top, #ffffff, #feffff, #fcffff, #faffff, #f8fffe, #f5fffc, #f2fff9, #f1fff5, #ecfff2, #e7ffee, #e1ffeb, #dcffe8);
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
-            text-wrap: nowrap;
-
-            .amount-label {
-                  font-weight: bold;
-                  color: #018601;
-            }
-            .amount-date { color: #aaa; font-size: 12px;}
-      }
-}

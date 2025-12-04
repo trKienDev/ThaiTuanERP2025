@@ -1,4 +1,4 @@
-import { UserDto } from "../../account/models/user.model";
+import { UserBriefAvatarDto, UserDto } from "../../account/models/user.model";
 import { ExpensePaymentDetailDto } from "./expense-payment.model";
 import { OutgoingBankAccountDto } from "./outgoing-bank-account.model";
 import { SupplierDto } from "./supplier.model";
@@ -22,7 +22,8 @@ export interface OutgoingPaymentPayload {
       description?: string;
 }
 
-export interface OutgoingPayment {
+export interface OutgoingPaymentDto {
+      id: string;
       name: string;
       description?: string;
       bankName: string;
@@ -41,19 +42,40 @@ export interface OutgoingPayment {
       supplierId?: string | null;
 }
 
-export interface OutgoingPaymentDto extends OutgoingPayment {
+export interface OutgoingPaymentDetailDto {
       id: string;
-}
-
-export interface OutgoingPaymentDetailDto extends OutgoingPaymentDto {
       subId: string;
-      createdByUser: UserDto;
-      createdDate: Date;   
+      name: string;
+      description?: string;
+      bankName: string;
+      accountNumber: string;
+      beneficiaryName: string;
+      totalOutgoingAmount: number;
+      outgoingAmount: number;
+      status: OutgoingPaymentStatus;
+
+      dueAt: Date;
+      postingAt: Date;
+      paymentAt: Date;
+
+      expensePaymentId: string;
+      expensePaymentName: string;
+
+      outgoingBankAccountId: string;
+      outgoingBankAccountName: string;
       
-      supplier?: SupplierDto | null;
+      employeeId?: string | null;
       employee?: UserDto | null;
-      outgoingBankAccount: OutgoingBankAccountDto;
-      expensePayment: ExpensePaymentDetailDto;
+
+      supplierId?: string | null;
+      supplierName: string;
+
+      createdByUserId: string;
+      createdByUser: UserDto;
+      createdAt: Date;   
+
+      followerIds: string[];
+      followers: UserBriefAvatarDto[];
 }
 
 export interface OutgoingPaymentBriefDto {

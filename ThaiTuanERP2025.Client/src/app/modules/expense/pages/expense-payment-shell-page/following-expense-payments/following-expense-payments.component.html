@@ -1,5 +1,6 @@
 <!-- following-expense-payments.component.html (refactor) -->
 <div class="payments-container">
+      
       <div class="page-heading">
             <div class="page-title">
                   <h3 class="icon">💵</h3>
@@ -30,9 +31,9 @@
                                                 <tr>
                                                       <td>{{ i + 1 }}</td>
                                                       <td>
-                                                            <div class="payment-name display-flex gap-5px justify-content-center" (click)="openExpensePaymentDetailDialog(payment.id)">
+                                                            <div class="link-text display-flex gap-5px justify-content-center" (click)="openExpensePaymentDetailDialog(payment.id)">
                                                                   <span class="material-icons-outlined" style="font-size: 14px;">visibility</span> 
-                                                                  <a class="link-text display-flex gap-5px justify-content-center"> 
+                                                                  <a class=" display-flex gap-5px justify-content-center"> 
                                                                         {{ payment.name }}
                                                                   </a>
                                                             </div>
