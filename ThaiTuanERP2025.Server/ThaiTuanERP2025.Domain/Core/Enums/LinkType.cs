@@ -13,9 +13,10 @@
 		ExpensePaymentDetail,
 		OutgoingPaymentPending,
 		OutgoingPaymentApproved,
+                OutgoingPaymentCreated,
 
-		// Request
-		RequestDetail,
+                // Request
+                RequestDetail,
 
 		// Others
 		Dashboard

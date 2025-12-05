@@ -62,9 +62,10 @@ export class OutgoingPaymentDetailDialogComponent {
                   await firstValueFrom(this.outgoingPaymentService.markCreated(this.outgoingPaymentDetail!.id));
                   this.toastService.successRich("Đánh dấu khoản chi đã tạo thành công");
                   this.outgoingPaymentLogic.refresh();
+                  this.dialogRef.close(true);
             } catch (error) {
                   console.error('Error marking outgoing payment as created', error);
-                  this.toastService.errorRich("Không thể đánh dấu khoản chi đã tạo");
+                  this.httpErrorHandler.handle(error, "Tạo lệnh khoản chi thất bại");
             } finally {
                   this.submitting = false;
             }

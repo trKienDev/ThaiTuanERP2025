@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
 using ThaiTuanERP2025.Api.Shared;
 using ThaiTuanERP2025.Application.Expense.OutgoingPayments.Commands;
 using ThaiTuanERP2025.Application.Expense.OutgoingPayments.Contracts;
@@ -54,6 +55,13 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
                 public async Task<IActionResult> Approve([FromRoute] Guid id, CancellationToken cancellationToken)
                 {
                         var result = await _mediator.Send(new ApproveOutgoingPaymentCommand(id), cancellationToken);
+                        return Ok(ApiResponse<Unit>.Success(result));
+                }
+
+                [HttpPost("{id:guid}/mark-created")]
+                public async Task<IActionResult> MarkCreated([FromRoute] Guid id, CancellationToken cancellationToken)
+                {
+                        var result = await _mediator.Send(new MarkOutgoingPaymentCreatedCommand(id), cancellationToken);
                         return Ok(ApiResponse<Unit>.Success(result));
                 }
 	}

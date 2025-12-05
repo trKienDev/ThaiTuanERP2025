@@ -39,7 +39,7 @@ export class OutgoingPaymentApiService extends BaseApiService<OutgoingPaymentDto
       }
 
       markCreated(id: string): Observable<void> {
-            return this.http.post<ApiResponse<void>>(`${this.endpoint}/${id}/created`, {})
+            return this.http.post<ApiResponse<void>>(`${this.endpoint}/${id}/mark-created`, {})
                   .pipe(
                         handleApiResponse$<void>(),
                         catchError(err => throwError(() => err))
