@@ -2,7 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component, effect, inject, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { usePaymentDetail } from "../../../composables/use-payment-detail";
-import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
+import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
 import { OutgoingBankAccountOptionStore } from "../../../options/outgoing-bank-account-option.store";
 import { KitDropdownComponent } from "../../../../../shared/components/kit-dropdown/kit-dropdown.component";
 import { ToastService } from "../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
@@ -27,6 +27,7 @@ import { ExpensePaymentItemLookupDto } from "../../../models/expense-payment-ite
 import { FilePreviewService } from "../../../../../core/services/file-preview.service";
 import { OutgoingPaymentStatusPipe } from "../../../pipes/outgoing-payment-status.pipe";
 import { OutgoingPaymentsTableComponent } from "../../../components/tables/outgoing-payments-table/outgoing-payments-table.component";
+import { maxRemainingValidator } from "../../../../../shared/validators/max-value.validator";
 
 @Component({
       selector: 'outgoing-payment-request',
@@ -74,7 +75,7 @@ export class OutgoingPaymentRequestComponent implements OnInit {
             bankName: this.formBuilder.control<string>('', { nonNullable: true, validators: [Validators.required] }),
             accountNumber: this.formBuilder.control<string>('', { nonNullable: true, validators: [Validators.required] }),
             beneficiaryName: this.formBuilder.control<string>('', { nonNullable: true, validators: [Validators.required] }),
-            outgoingAmount: this.formBuilder.nonNullable.control<number | null>(0, { validators: [Validators.required, Validators.min(1)] }),
+            outgoingAmount: this.formBuilder.nonNullable.control<number | null>(0, { validators: [Validators.required, Validators.min(1000)] }),
             followerIds: this.formBuilder.nonNullable.control<string[]>([]),
             expensePaymentId: this.formBuilder.nonNullable.control<string>('', { validators: [Validators.required] }),
             outgoingBankAccountId: this.formBuilder.nonNullable.control<string | null>(null, { validators: [Validators.required] }),
@@ -165,4 +166,24 @@ export class OutgoingPaymentRequestComponent implements OnInit {
                   isPublic: item.invoiceFile.isPublic ?? false
             });
       }
+
+      private readonly updateOutgoingAmountValidator = effect(() => {
+            const detail = this.paymentDetail();
+
+            if (!detail) return; // chưa có dữ liệu
+
+            const remaining = detail.remainingOutgoingAmount ?? 0;
+
+            const control = this.form.get('outgoingAmount');
+
+            if (control) {
+                  control.setValidators([
+                        Validators.required,
+                        Validators.min(1),
+                        maxRemainingValidator(remaining)
+                  ]);
+
+                  control.updateValueAndValidity({ emitEvent: false });
+            }
+      });
 }

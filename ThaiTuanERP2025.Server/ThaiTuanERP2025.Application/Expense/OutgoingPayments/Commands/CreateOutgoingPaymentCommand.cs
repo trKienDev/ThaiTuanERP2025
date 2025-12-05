@@ -138,7 +138,7 @@ namespace ThaiTuanERP2025.Application.Expense.OutgoingPayments.Commands
 
 			RuleFor(x => x.Payload.DueAt)
 				.NotEmpty().WithMessage("Hạn thanh toán không được để trống")
-				.Must(dueAt => dueAt.Date >= DateTime.Today).WithMessage("Hạn thanh toán không được phép nhỏ hơn ngày hôm nay"); ;
+				.Must(dueAt => dueAt.Date >= DateTime.UtcNow.Date).WithMessage("Hạn thanh toán không được phép nhỏ hơn ngày hôm nay"); ;
 
 			RuleFor(x => x.Payload.OutgoingBankAccountId)
 				.NotEmpty().WithMessage("Định danh tài khoản tiền ra không được trống");

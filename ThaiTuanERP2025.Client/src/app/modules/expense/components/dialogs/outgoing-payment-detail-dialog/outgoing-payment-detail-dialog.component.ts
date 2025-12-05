@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject, Inject } from "@angular/core";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from "@angular/material/dialog";
 import { firstValueFrom } from "rxjs";
 import { Kit404PageComponent } from "../../../../../shared/components/kit-404-page/kit-404-page.component";
 import { KitLoadingSpinnerComponent } from "../../../../../shared/components/kit-loading-spinner/kit-loading-spinner.component";
@@ -15,6 +15,7 @@ import { HttpErrorHandlerService } from "../../../../../core/services/http-errro
 import { OutgoingPaymentsTableComponent } from "../../tables/outgoing-payments-table/outgoing-payments-table.component";
 import { ExpensePaymentApiService } from "../../../services/api/expense-payment.service";
 import { ExpensePaymentDetailDto } from "../../../models/expense-payment.model";
+import { ExpensePaymentDetailDialogComponent } from "../expense-payment-detail-dialog/expense-payment-detail-dialog.component";
 
 @Component({
       selector: 'outgoing-payment-detail-dialog',
@@ -24,6 +25,7 @@ import { ExpensePaymentDetailDto } from "../../../models/expense-payment.model";
       imports: [CommonModule, OutgoingPaymentStatusPipe, AvatarUrlPipe, KitLoadingSpinnerComponent, Kit404PageComponent, ExpensePaymentItemsTableComponent, OutgoingPaymentsTableComponent],
 })
 export class OutgoingPaymentDetailDialogComponent {
+      private readonly matDialog = inject(MatDialog);
       private readonly dialogRef = inject(MatDialogRef<OutgoingPaymentDetailDialogComponent>);
       private readonly toastService = inject(ToastService);
       private readonly outgoingPaymentService = inject(OutgoingPaymentApiService);
@@ -44,7 +46,6 @@ export class OutgoingPaymentDetailDialogComponent {
       get outgoingPaymentDetail(): OutgoingPaymentDetailDto | null { 
             return this.outgoingPaymentLogic.outgoingPaymentDetail();
       }
-
 
       // === TAB NAVIGATION ===     
       activeTab: 'items' | 'outgoings' = 'items';
@@ -84,5 +85,13 @@ export class OutgoingPaymentDetailDialogComponent {
 
       close(isSuccess: boolean = false): void {
             this.dialogRef.close(isSuccess);
+      }
+
+      // ===== SUPPORT FUNCTION =====
+      openOutgoingPaymentDetailDialog(exensePaymentId: string) {
+            const dialogRef = this.matDialog.open(ExpensePaymentDetailDialogComponent, {
+                  data: exensePaymentId,
+            });
+            
       }
 }     

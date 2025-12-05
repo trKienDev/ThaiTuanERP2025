@@ -47,6 +47,9 @@ namespace ThaiTuanERP2025.Api.Controllers.Expense
                 [HttpPost]
                 public async Task<IActionResult> Create([FromBody] OutgoingPaymentPayload payload, CancellationToken cancellationToken)
                 {
+                        var dueAt = payload.DueAt.Date;
+                        var now = DateTime.UtcNow.Date;
+                        var a = dueAt < now;
                         var result = await _mediator.Send(new CreateOutgoingPaymentCommand(payload), cancellationToken);
                         return Ok(ApiResponse<Unit>.Success(result));
                 }

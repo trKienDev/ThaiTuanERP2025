@@ -84,10 +84,13 @@
                               <div class="form-input flex-1">
                                     <input type="text" inputmode="decimal" appMoney [appMoneyDecimals]="0" formControlName="outgoingAmount" autocomplete="on" required
                                     [class.is-invalid]="showErrors && form.get('outgoingAmount')?.invalid"  [attr.aria-invalid]="showErrors && form.get('outgoingAmount')?.invalid ? 'true' : null"/>
-                                    <div class="form-input-error" *ngIf="submitted && form.get('outgoingAmount')?.invalid">
-                                          <small>Vui lòng nhập số tiền khoản chia</small>
-                                    </div>
                                     <label for="outgoing-amount">Số tiền khoản chi <span style="color: red;">  *</span></label>
+                                    <div class="form-input-error" *ngIf="submitted && form.get('outgoingAmount')?.invalid">
+                                          <small>Vui lòng nhập số tiền khoản chi</small>
+                                    </div>
+                                    <div class="form-input-error" *ngIf="showErrors && form.get('outgoingAmount')?.errors?.['maxRemaining']">
+                                          <small>Số tiền khoản chi không được vượt quá {{ paymentDetail()?.remainingOutgoingAmount | number:'1.0-2' }}</small>
+                                    </div>
                               </div>
                         </div>
                         <div class="form-row display-flex gap-5px flex-column">

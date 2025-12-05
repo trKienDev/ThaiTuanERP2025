@@ -33,6 +33,6 @@ namespace ThaiTuanERP2025.Application.Expense.OutgoingPayments
 				.ForMember(dest => dest.SupplierName, opt => opt.MapFrom(src => src.Supplier != null ? src.Supplier.Name : string.Empty))
 				.ForMember(dest => dest.DueAt, opt => opt.MapFrom(src => TimeZoneConverter.ToVietnamTime(src.DueAt)))
 				.ForMember(dest => dest.PostingAt, opt => opt.MapFrom(src => TimeZoneConverter.ToVietnamTime(src.PostingAt)));
-		}
+		}       
         }
 }

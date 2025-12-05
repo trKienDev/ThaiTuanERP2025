@@ -70,7 +70,14 @@
                                                                         </div>
                                                                         <div class="column">
                                                                               <label for="">Chi phí gốc</label>
-                                                                              <div>{{ outgoingPaymentDetail.expensePaymentName }}</div>
+                                                                              <div>
+                                                                                    <div class="link-text display-flex gap-5px" (click)="openOutgoingPaymentDetailDialog(outgoingPaymentDetail.expensePaymentId)">
+                                                                                          <span class="material-icons-outlined" style="font-size: 14px;">visibility</span> 
+                                                                                          <a class=" display-flex gap-5px justify-content-center"> 
+                                                                                                {{ outgoingPaymentDetail.expensePaymentName }}
+                                                                                          </a>
+                                                                                    </div>
+                                                                              </div>
                                                                         </div>
                                                                   </div>
                                                                   <div class="right flex-1">
