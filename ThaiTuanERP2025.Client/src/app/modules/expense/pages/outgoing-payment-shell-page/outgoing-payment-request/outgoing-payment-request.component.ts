@@ -48,6 +48,7 @@ export class OutgoingPaymentRequestComponent implements OnInit {
       outgoingBankOptions = inject(OutgoingBankAccountOptionStore).options$;
 
       private readonly paymentLogic = usePaymentDetail();
+      
       loading = this.paymentLogic.isLoading;
       err = this.paymentLogic.error;
       paymentDetail = this.paymentLogic.paymentDetail;

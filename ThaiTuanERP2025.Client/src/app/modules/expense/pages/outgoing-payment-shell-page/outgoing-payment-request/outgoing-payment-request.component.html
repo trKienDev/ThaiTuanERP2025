@@ -90,7 +90,7 @@
                                     <label for="outgoing-amount">Số tiền khoản chi <span style="color: red;">  *</span></label>
                               </div>
                         </div>
-                        <div class="form-row">
+                        <div class="form-row display-flex gap-5px flex-column">
                               <label class="label" for="category-table">Hạng mục</label>
                               <expense-payment-items-table
                                     [items]="paymentDetail()?.items ?? []"
@@ -102,7 +102,8 @@
                               </expense-payment-items-table>
                         </div>
 
-                        <div class="form-row">
+                        <div class="form-row display-flex gap-5px flex-column">
+                              <label class="label" for="">Các khoản chi đã tạo</label>
                               <outgoing-payments-table
                                     [outgoings]="paymentDetail()?.outgoingPayments ?? []"
                                     [totalPaid]="paymentDetail()?.outgoingAmountPaid">

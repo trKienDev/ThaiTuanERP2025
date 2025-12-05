@@ -22,11 +22,12 @@ import { ExpensePaymentItemLookupDto } from '../../../models/expense-payment-ite
 import { OutgoingPaymentStatusPipe } from "../../../pipes/outgoing-payment-status.pipe";
 import { KitShellTabsComponent } from '../../../../../shared/components/kit-shell-tabs/kit-shell-tabs.component';
 import { ExpensePaymentItemsTableComponent } from "../../tables/expense-payment-items-table/expense-payment-items-table.component";
+import { OutgoingPaymentsTableComponent } from "../../tables/outgoing-payments-table/outgoing-payments-table.component";
 
 @Component({
       selector: 'expense-payment-detail-dialog',
       standalone: true,
-      imports: [CommonModule, AvatarUrlPipe, ExpensePaymentStatusPipe, KitSpinnerButtonComponent, KitFlipCountdownComponent, OutgoingPaymentStatusPipe, ExpensePaymentItemsTableComponent],
+      imports: [CommonModule, AvatarUrlPipe, ExpensePaymentStatusPipe, KitSpinnerButtonComponent, KitFlipCountdownComponent, OutgoingPaymentStatusPipe, ExpensePaymentItemsTableComponent, OutgoingPaymentsTableComponent],
       templateUrl: './expense-payment-detail-dialog.component.html',
       styleUrl: './expense-payment-detail-dialog.component.scss',
       animations: [
@@ -34,15 +35,6 @@ import { ExpensePaymentItemsTableComponent } from "../../tables/expense-payment-
                   transition('* => *', [
                         style({ opacity: 0, transform: 'scale(0.98)' }),
                         animate('280ms ease-out', style({ opacity: 1, transform: 'scale(1)' }))
-                  ])
-            ]),
-            trigger('tabSwitchFade', [
-                  transition(':enter', [
-                        style({ opacity: 0, transform: 'translateX(20px)' }),
-                        animate('250ms cubic-bezier(0.25, 0.1, 0.25, 1)', style({ opacity: 1, transform: 'translateX(0)' }))
-                  ]),
-                  transition(':leave', [
-                        animate('200ms cubic-bezier(0.25, 0.1, 0.25, 1)', style({ opacity: 0, transform: 'translateX(-20px)' }))
                   ])
             ]),
       ]
@@ -112,7 +104,6 @@ export class ExpensePaymentDetailDialogComponent {
             if (!wf || !wf.steps || wf.steps.length === 0) return null;
             return wf.steps[wf.currentStepOrder] || null;
       }
-
 
       // === TAB NAVIGATION ===     
       activeTab: 'items' | 'outgoings' = 'items';

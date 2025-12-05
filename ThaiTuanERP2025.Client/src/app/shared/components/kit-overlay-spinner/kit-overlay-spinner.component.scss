@@ -9,6 +9,7 @@
       justify-content: center;
       z-index: 10; /* lớn hơn nội dung form */
       pointer-events: all; /* chặn tương tác */
+      height: fit-content;
 }
 
 .overlay-box {

@@ -126,11 +126,36 @@
                                                 </div>
                                           </div>
 
-                                          <div class="margin-top-20px">
-                                                <expense-payment-items-table
-                                                      [items]="outgoingPaymentDetail?.expensePaymentItems ?? []"
-                                                      [showInvoiceButton]="true">
-                                                </expense-payment-items-table>
+                                          <div class="payment-tabs">
+                                                <div class="payment-tab-navigation display-flex gap-5px border-bottom margin-bottom-10px">
+                                                      <button type="button" class="tab-button" [ngClass]="{ 'active': activeTab === 'items' }" (click)="setActiveTab('items')">
+                                                            Bảng hạng mục
+                                                      </button>
+                                                      <button  type="button" class="tab-button" [ngClass]="{ 'active': activeTab === 'outgoings' }" (click)="setActiveTab('outgoings')">
+                                                            Khoản tiền ra
+                                                      </button>
+                                                </div>
+
+
+                                                <ng-container [ngSwitch]="activeTab">
+
+                                                      <ng-container *ngSwitchCase="'items'">
+                                                            <expense-payment-items-table
+                                                                  [items]="outgoingPaymentDetail?.expensePaymentItems ?? []"
+                                                                  [totalAmount]="outgoingPaymentDetail.expensePaymentAmount"
+                                                                  [totalTax]="outgoingPaymentDetail.expensePaymentTaxAmount"
+                                                                  [totalWithTax]="outgoingPaymentDetail.expensePaymentTotalWithTax"
+                                                                  [showInvoiceButton]="true">
+                                                            </expense-payment-items-table>
+                                                      </ng-container>
+
+                                                      <ng-container *ngSwitchCase="'outgoings'">
+                                                            <outgoing-payments-table
+                                                                  [outgoings]="expensePaymentDetail?.outgoingPayments ?? []"
+                                                                  [totalPaid]="expensePaymentDetail?.outgoingAmountPaid">
+                                                            </outgoing-payments-table>
+                                                      </ng-container>
+                                                </ng-container>
                                           </div>
                                     </div>
                               </div>
