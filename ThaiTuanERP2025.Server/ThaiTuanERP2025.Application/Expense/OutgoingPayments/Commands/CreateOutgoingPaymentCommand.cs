@@ -83,7 +83,6 @@ namespace ThaiTuanERP2025.Application.Expense.OutgoingPayments.Commands
 			await _uow.SaveChangesAsync(cancellationToken);
                         #endregion
 
-
                         #region Add Followers
                         if (newOutgoingPayment.CreatedByUserId is not null)
 				await _followerService.FollowAsync(DocumentType.OutgoingPayment, newOutgoingPayment.Id, newOutgoingPayment.CreatedByUserId.Value, cancellationToken);
@@ -100,7 +99,7 @@ namespace ThaiTuanERP2025.Application.Expense.OutgoingPayments.Commands
 					receiverId: expensePayment.CreatedByUserId.Value,
 					title: $"Thanh toán {expensePayment.Name} đã được tạo khoản chi",
 					message: $"Thanh toán {expensePayment.Name} đã được tạo khoản chi",
-					linkType: Domain.Core.Enums.LinkType.OutgongPaymentPending,
+					linkType: Domain.Core.Enums.LinkType.OutgoingPaymentPending,
 					targetId: newOutgoingPayment.Id,
 					type: Domain.Core.Enums.NotificationType.Info,
 					cancellationToken: cancellationToken

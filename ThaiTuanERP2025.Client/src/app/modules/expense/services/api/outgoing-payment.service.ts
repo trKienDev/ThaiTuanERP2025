@@ -30,7 +30,7 @@ export class OutgoingPaymentApiService extends BaseApiService<OutgoingPaymentDto
                   );
       }
 
-      onApprove(id: string): Observable<void> {
+      approve(id: string): Observable<void> {
             return this.http.post<ApiResponse<void>>(`${this.endpoint}/${id}/approve`, {})
                   .pipe(
                         handleApiResponse$<void>(),

@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { ExpenseWorkflowTemplateApiService } from "../../../services/expense-workflow-template.service";
+import { ExpenseWorkflowTemplateApiService } from "../../../services/api/expense-workflow-template.service";
 import { ExpenseWorkflowTemplateDto, ExpenseWorkflowTemplatePayload, mapExpenseWorkflowTemplateDtoToPayload } from "../../../models/expense-workflow-template.model";
 import { firstValueFrom } from "rxjs";
 import { FormBuilder, Validators } from "@angular/forms";
@@ -34,9 +34,9 @@ export class UpdateExpenseWorkflowPanelComponent implements OnInit {
       workflowDetailPayload: ExpenseWorkflowTemplatePayload | null = null;
 
       form = this.formBuilder.group({
-            name: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ]}),
+            name: this.formBuilder.control<string>('', { nonNullable: true, validators: [Validators.required] }),
             version: this.formBuilder.control<number>(0, { nonNullable: true }),
-            steps: this.formBuilder.control<ExpenseStepTemplatePayload[]>([], { nonNullable: true, validators: [ Validators.required ]})
+            steps: this.formBuilder.control<ExpenseStepTemplatePayload[]>([], { nonNullable: true, validators: [Validators.required] })
       });
 
       ngOnInit(): void {
@@ -45,14 +45,14 @@ export class UpdateExpenseWorkflowPanelComponent implements OnInit {
       }
 
       editStep(i: number): void {
-             if (!this.workflowDetailPayload) return;  
+            if (!this.workflowDetailPayload) return;
 
             const current = this.workflowDetailPayload?.steps[i];
             const dialogRef = this.dialog.open(ExpenseWorkflowStepDialogComponent, {
                   data: { step: current, approveMode: current?.approveMode }
             });
             dialogRef.afterClosed().subscribe((step?: ExpenseStepTemplatePayload) => {
-                  if(step) {
+                  if (step) {
                         const updated = { ...step, order: current?.order };
                         this.workflowDetailPayload!.steps[i] = updated;
                   }
@@ -61,7 +61,7 @@ export class UpdateExpenseWorkflowPanelComponent implements OnInit {
 
       async getExpenseWorkflowTemplateDetail(id: string) {
             this.workflowDetailDto = await firstValueFrom(this.expenseWorkflowTemplateApi.getById(id));
-            
+
             this.workflowDetailPayload = mapExpenseWorkflowTemplateDtoToPayload(this.workflowDetailDto);
             this.form.patchValue(this.workflowDetailPayload);
       }
@@ -88,10 +88,10 @@ export class UpdateExpenseWorkflowPanelComponent implements OnInit {
             const lastIndex = (this.workflowDetailPayload?.steps.length ?? 1) - 1;
 
             return [
-                 // { label: '⚙️ Sửa', action: () => this.editStep(index) },
+                  // { label: '⚙️ Sửa', action: () => this.editStep(index) },
                   { label: '⬅️ Về trước', action: () => this.moveUp(index), disabled: index === 0 },
-                  { label: '➡️ Về sau', action:() => this.moveDown(index), disabled: index === lastIndex },
-                  { label: '⛔ Xóa', color: 'red', action: () => this.removeStep(index)},
+                  { label: '➡️ Về sau', action: () => this.moveDown(index), disabled: index === lastIndex },
+                  { label: '⛔ Xóa', color: 'red', action: () => this.removeStep(index) },
             ]
       }
       buildAddStepAction(): ActionMenuOption[] {
@@ -106,7 +106,7 @@ export class UpdateExpenseWorkflowPanelComponent implements OnInit {
       }
       moveUp(i: number): void {
             if (!this.workflowDetailPayload) return;
-            if(i <= 0) return;
+            if (i <= 0) return;
 
             const steps = this.workflowDetailPayload.steps;
             [steps[i - 1], steps[i]] = [steps[i], steps[i - 1]];
@@ -116,7 +116,7 @@ export class UpdateExpenseWorkflowPanelComponent implements OnInit {
             if (!this.workflowDetailPayload) return;
 
             const steps = this.workflowDetailPayload.steps;
-            if(i >= steps.length - 1) return;
+            if (i >= steps.length - 1) return;
 
             [steps[i], steps[i + 1]] = [steps[i + 1], steps[i]];
             this.recomputeOrders();

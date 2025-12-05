@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnInit } from "@angular/core";
-import { OutgoingPaymentDto, OutgoingPaymentLookupDto } from "../../../models/outgoing-payment.model";
+import { OutgoingPaymentDetailDto, OutgoingPaymentDto, OutgoingPaymentLookupDto } from "../../../models/outgoing-payment.model";
 import { OutgoingPaymentStatusPipe } from "../../../pipes/outgoing-payment-status.pipe";
 import { MatDialog } from "@angular/material/dialog";
 import { OutgoingPaymentFacade } from "../../../facades/outgoing-payment.facade";
@@ -26,7 +26,6 @@ export class FollowingOutgoingPaymentComponent implements OnInit {
 
       private async loadFollowingOutgoingPayments() { 
             this.followingOutgoingPayments = await firstValueFrom(this.outgoingPaymentApi.getFollowing());
-            console.log(this.followingOutgoingPayments);
       }
 
       trackById(index: number, item: OutgoingPaymentDto) { return item.id; }
@@ -37,10 +36,9 @@ export class FollowingOutgoingPaymentComponent implements OnInit {
                   data: outgoingPaymentId,
             });
             
-            dialogRef.afterClosed().subscribe((result: any) => {
-                  if (result?.success) {
-                        // Handle success result if needed
-                  }
+            dialogRef.afterClosed().subscribe((isSuccess: boolean) => {
+                  if(isSuccess === true) 
+                        this.loadFollowingOutgoingPayments();
             });
       }
 }

@@ -1,7 +1,7 @@
 import { ExpenseWorkflowTemplateDto } from './../../../models/expense-workflow-template.model';
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnInit } from "@angular/core";
-import { ExpenseWorkflowTemplateApiService } from "../../../services/expense-workflow-template.service";
+import { ExpenseWorkflowTemplateApiService } from "../../../services/api/expense-workflow-template.service";
 import { firstValueFrom } from 'rxjs';
 import { ActionMenuOption } from '../../../../../shared/components/kit-action-menu/kit-action-menu.model';
 import { KitActionMenuComponent } from "../../../../../shared/components/kit-action-menu/kit-action-menu.component";
@@ -33,7 +33,7 @@ export class ExpenseWorkflowsPanelComponent implements OnInit {
 
       buildExpenseWorkflowTemplateActions(index: number): ActionMenuOption[] {
             return [
-                  { label: 'Sửa', action: () => this.redirectToUpdateExpenseWorkflowTemplatePanel(index)},
+                  { label: 'Sửa', action: () => this.redirectToUpdateExpenseWorkflowTemplatePanel(index) },
             ]
       }
 
@@ -49,7 +49,7 @@ export class ExpenseWorkflowsPanelComponent implements OnInit {
             this.router.navigate(['../update-expense-workflow', workflowId], {
                   relativeTo: this.route
             });
-      }     
+      }
 
       redirectToCreateExpenseWorkflowRequestTemplatePanel() {
             KitShellTabsComponent.allowOnce('create-expense-workflow');
@@ -58,5 +58,5 @@ export class ExpenseWorkflowsPanelComponent implements OnInit {
             this.router.navigate(['../create-expense-workflow'], {
                   relativeTo: this.route
             });
-      }   
+      }
 }

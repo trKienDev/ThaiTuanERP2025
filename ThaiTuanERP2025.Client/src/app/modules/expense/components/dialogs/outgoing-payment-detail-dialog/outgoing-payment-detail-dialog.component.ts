@@ -11,6 +11,7 @@ import { OutgoingPaymentDetailDto } from "../../../models/outgoing-payment.model
 import { OutgoingPaymentStatusPipe } from "../../../pipes/outgoing-payment-status.pipe";
 import { OutgoingPaymentApiService } from "../../../services/api/outgoing-payment.service";
 import { ExpensePaymentItemsTableComponent } from "../../tables/expense-payment-items-table/expense-payment-items-table.component";
+import { HttpErrorHandlerService } from "../../../../../core/services/http-errror-handler.service";
 
 @Component({
       selector: 'outgoing-payment-detail-dialog',
@@ -20,14 +21,15 @@ import { ExpensePaymentItemsTableComponent } from "../../tables/expense-payment-
       imports: [CommonModule, OutgoingPaymentStatusPipe, AvatarUrlPipe, KitLoadingSpinnerComponent, Kit404PageComponent, ExpensePaymentItemsTableComponent]
 })
 export class OutgoingPaymentDetailDialogComponent {
-      private dialogRef = inject(MatDialogRef<OutgoingPaymentDetailDialogComponent>);
-      private outgoingPaymentLogic = useOutgoingPaymentDetail();
-      private toastService = inject(ToastService);
-      private outgoingPaymentService = inject(OutgoingPaymentApiService);
+      private readonly dialogRef = inject(MatDialogRef<OutgoingPaymentDetailDialogComponent>);
+      private readonly outgoingPaymentLogic = useOutgoingPaymentDetail();
+      private readonly toastService = inject(ToastService);
+      private readonly outgoingPaymentService = inject(OutgoingPaymentApiService);
+      private readonly httpErrorHandler = inject(HttpErrorHandlerService);
 
       loading = this.outgoingPaymentLogic.isLoading;
       error = this.outgoingPaymentLogic.error;
-      processing = false;
+      submitting = false;
 
       constructor(@Inject(MAT_DIALOG_DATA) private data: string) {
             if(data) {
@@ -36,26 +38,26 @@ export class OutgoingPaymentDetailDialogComponent {
       }
 
       get outgoingPaymentDetail(): OutgoingPaymentDetailDto | null { 
-            console.log('detail: ', this.outgoingPaymentLogic.outgoingPaymentDetail());
             return this.outgoingPaymentLogic.outgoingPaymentDetail();
       }
 
       async onApprove(): Promise<void> {
-            this.processing = true;
+            this.submitting = true;
             try {
-                  await firstValueFrom(this.outgoingPaymentService.onApprove(this.outgoingPaymentDetail!.id));
+                  await firstValueFrom(this.outgoingPaymentService.approve(this.outgoingPaymentDetail!.id));
                   this.toastService.successRich("Duyệt khoản chi thành công");
                   this.outgoingPaymentLogic.refresh();
+
+                  this.dialogRef.close(true);
             } catch (error) {
-                  console.error('Error approving outgoing payment', error);
-                  this.toastService.errorRich("Không thể duyệt khoản chi");
+                  this.httpErrorHandler.handle(error, "Duyệt khoản chi thất bại");
             } finally {
-                  this.processing = false;
+                  this.submitting = false;
             }
       }
 
       async markCreated(): Promise<void> {
-            this.processing = true;
+            this.submitting = true;
             try {
                   await firstValueFrom(this.outgoingPaymentService.markCreated(this.outgoingPaymentDetail!.id));
                   this.toastService.successRich("Đánh dấu khoản chi đã tạo thành công");
@@ -64,11 +66,11 @@ export class OutgoingPaymentDetailDialogComponent {
                   console.error('Error marking outgoing payment as created', error);
                   this.toastService.errorRich("Không thể đánh dấu khoản chi đã tạo");
             } finally {
-                  this.processing = false;
+                  this.submitting = false;
             }
       }
 
-      close(): void {
-            this.dialogRef.close();
+      close(isSuccess: boolean = false): void {
+            this.dialogRef.close(isSuccess);
       }
 }     

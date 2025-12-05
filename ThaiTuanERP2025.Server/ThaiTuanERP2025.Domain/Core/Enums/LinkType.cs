@@ -11,7 +11,8 @@
 
 		// Expense 
 		ExpensePaymentDetail,
-		OutgongPaymentPending,
+		OutgoingPaymentPending,
+		OutgoingPaymentApproved,
 
 		// Request
 		RequestDetail,
