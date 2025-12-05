@@ -151,8 +151,8 @@
 
                                                       <ng-container *ngSwitchCase="'outgoings'">
                                                             <outgoing-payments-table
-                                                                  [outgoings]="expensePaymentDetail?.outgoingPayments ?? []"
-                                                                  [totalPaid]="expensePaymentDetail?.outgoingAmountPaid">
+                                                                  [outgoings]="outgoingPaymentDetail?.outgoingPayments ?? []"
+                                                                  [totalPaid]="outgoingPaymentDetail?.outgoingAmountPaid">
                                                             </outgoing-payments-table>
                                                       </ng-container>
                                                 </ng-container>

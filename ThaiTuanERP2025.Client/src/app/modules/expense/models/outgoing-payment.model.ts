@@ -66,6 +66,9 @@ export interface OutgoingPaymentDetailDto {
       expensePaymentTotalWithTax: number;
       expensePaymentItems: ExpensePaymentItemLookupDto[];
 
+      outgoingPayments: OutgoingPaymentBriefDto[];
+      outgoingAmountPaid: number;
+
       outgoingBankAccountId: string;
       outgoingBankAccountName: string;
       

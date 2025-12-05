@@ -71,6 +71,9 @@ namespace ThaiTuanERP2025.Application.Expense.OutgoingPayments.Contracts
                 public decimal ExpensePaymentTotalWithTax { get; init; }
                 public IReadOnlyList<ExpensePaymentItemLookupDto> ExpensePaymentItems { get; init; } = Array.Empty<ExpensePaymentItemLookupDto>();
 
+                public IReadOnlyList<OutgoingPaymentBriefDto> OutgoingPayments { get; init; } = Array.Empty<OutgoingPaymentBriefDto>();
+                public decimal OutgoingAmountPaid { get; init; }
+
 
                 public Guid OutgoingBankAccountId { get; init; } = Guid.Empty;
 		public string OutgoingBankAccountName { get; init; } = string.Empty;

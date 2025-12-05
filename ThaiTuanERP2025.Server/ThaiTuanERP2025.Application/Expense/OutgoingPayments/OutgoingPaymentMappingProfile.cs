@@ -27,6 +27,8 @@ namespace ThaiTuanERP2025.Application.Expense.OutgoingPayments
                                 .ForMember(dest => dest.ExpensePaymentTaxAmount, opt => opt.MapFrom(src => src.ExpensePayment.TotalTax))
                                 .ForMember(dest => dest.ExpensePaymentTotalWithTax, opt => opt.MapFrom(src => src.ExpensePayment.TotalWithTax))
                                 .ForMember(dest => dest.ExpensePaymentItems, opt => opt.MapFrom(src => src.ExpensePayment.Items))
+                                .ForMember(dest => dest.OutgoingPayments, opt => opt.MapFrom(src => src.ExpensePayment.OutgoingPayments))
+                                .ForMember(dest => dest.OutgoingAmountPaid, opt => opt.MapFrom(src => src.ExpensePayment.OutgoingAmountPaid))
                                 .ForMember(dest => dest.OutgoingBankAccountName, opt => opt.MapFrom(src => src.OutgoingBankAccount.Name))
 				.ForMember(dest => dest.SupplierName, opt => opt.MapFrom(src => src.Supplier != null ? src.Supplier.Name : string.Empty))
 				.ForMember(dest => dest.DueAt, opt => opt.MapFrom(src => TimeZoneConverter.ToVietnamTime(src.DueAt)))

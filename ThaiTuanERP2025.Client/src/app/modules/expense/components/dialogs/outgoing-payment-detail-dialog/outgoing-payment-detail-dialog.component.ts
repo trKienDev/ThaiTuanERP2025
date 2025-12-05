@@ -12,7 +12,6 @@ import { OutgoingPaymentStatusPipe } from "../../../pipes/outgoing-payment-statu
 import { OutgoingPaymentApiService } from "../../../services/api/outgoing-payment.service";
 import { ExpensePaymentItemsTableComponent } from "../../tables/expense-payment-items-table/expense-payment-items-table.component";
 import { HttpErrorHandlerService } from "../../../../../core/services/http-errror-handler.service";
-import { trigger, transition, style, animate } from "@angular/animations";
 import { OutgoingPaymentsTableComponent } from "../../tables/outgoing-payments-table/outgoing-payments-table.component";
 import { ExpensePaymentApiService } from "../../../services/api/expense-payment.service";
 import { ExpensePaymentDetailDto } from "../../../models/expense-payment.model";
@@ -28,12 +27,10 @@ export class OutgoingPaymentDetailDialogComponent {
       private readonly dialogRef = inject(MatDialogRef<OutgoingPaymentDetailDialogComponent>);
       private readonly toastService = inject(ToastService);
       private readonly outgoingPaymentService = inject(OutgoingPaymentApiService);
-      private readonly expensePaymentApi = inject(ExpensePaymentApiService);
       private readonly httpErrorHandler = inject(HttpErrorHandlerService);
 
       private readonly outgoingPaymentLogic = useOutgoingPaymentDetail();
 
-      expensePaymentDetail: ExpensePaymentDetailDto | null = null;
       loading = this.outgoingPaymentLogic.isLoading;
       error = this.outgoingPaymentLogic.error;
       submitting = false;
@@ -45,18 +42,9 @@ export class OutgoingPaymentDetailDialogComponent {
       }
 
       get outgoingPaymentDetail(): OutgoingPaymentDetailDto | null { 
-            const detail = this.outgoingPaymentLogic.outgoingPaymentDetail();
-            const expensePaymentId = detail?.expensePaymentId;
-            if(expensePaymentId) this.getExpensePaymentDetail(expensePaymentId);
-                  
-            return detail;
+            return this.outgoingPaymentLogic.outgoingPaymentDetail();
       }
-      
-      async getExpensePaymentDetail(expensePaymentId: string): Promise<void> {
-            if(expensePaymentId) {
-                  this.expensePaymentDetail = await firstValueFrom(this.expensePaymentApi.getDetailById(expensePaymentId));
-            } 
-      }
+
 
       // === TAB NAVIGATION ===     
       activeTab: 'items' | 'outgoings' = 'items';

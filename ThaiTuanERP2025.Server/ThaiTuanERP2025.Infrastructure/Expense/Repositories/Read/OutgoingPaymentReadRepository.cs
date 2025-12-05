@@ -18,6 +18,7 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories.Read
                                 .Include(x => x.ExpensePayment).ThenInclude(e => e.Items)
                                 .Include(x => x.ExpensePayment).ThenInclude(e => e.Items).ThenInclude(i => i.BudgetPlanDetail).ThenInclude(b => b.BudgetCode)
                                 .Include(x => x.ExpensePayment).ThenInclude(e => e.Items).ThenInclude(i => i.InvoiceFile)
+                                .Include(x => x.ExpensePayment).ThenInclude(e => e.OutgoingPayments)
                                 .Include(x => x.OutgoingBankAccount)
                                 .Include(x => x.Supplier)
                                 .FirstOrDefaultAsync(x => x.Id == id);
