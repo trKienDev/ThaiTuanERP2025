@@ -22,6 +22,11 @@ namespace ThaiTuanERP2025.Infrastructure.Core.Configurations
                                 .HasForeignKey(x => x.UserId)
                                 .OnDelete(DeleteBehavior.Restrict);
 
+                        builder.HasOne(x => x.ParentComment)
+                               .WithMany(x => x.Replies)
+                               .HasForeignKey(x => x.ParentCommentId)
+                               .OnDelete(DeleteBehavior.NoAction);
+
                         builder.HasIndex(x => new { x.Module, x.Entity, x.EntityId}).HasDatabaseName("IX_Comments_Module_Entity_EntityId");
 			builder.HasIndex(x => x.UserId);
 

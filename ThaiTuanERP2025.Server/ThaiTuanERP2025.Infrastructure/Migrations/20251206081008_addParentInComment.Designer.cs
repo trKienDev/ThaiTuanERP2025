@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 namespace ThaiTuanERP2025.Infrastructure.Migrations
 {
     [DbContext(typeof(ThaiTuanERP2025DbContext))]
-    partial class ThaiTuanERP2025DbContextModelSnapshot : ModelSnapshot
+    [Migration("20251206081008_addParentInComment")]
+    partial class addParentInComment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -583,9 +586,6 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
-                    b.Property<Guid?>("ParentCommentId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
@@ -596,8 +596,6 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                     b.HasIndex("DeletedByUserId");
 
                     b.HasIndex("ModifiedByUserId");
-
-                    b.HasIndex("ParentCommentId");
 
                     b.HasIndex("UserId");
 
@@ -2890,11 +2888,6 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                         .HasForeignKey("ModifiedByUserId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("ThaiTuanERP2025.Domain.Core.Entities.Comment", "ParentComment")
-                        .WithMany("Replies")
-                        .HasForeignKey("ParentCommentId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.HasOne("ThaiTuanERP2025.Domain.Account.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -2906,8 +2899,6 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                     b.Navigation("DeletedByUser");
 
                     b.Navigation("ModifiedByUser");
-
-                    b.Navigation("ParentComment");
 
                     b.Navigation("User");
                 });
@@ -3836,11 +3827,6 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                     b.Navigation("UserGroups");
 
                     b.Navigation("UserRoles");
-                });
-
-            modelBuilder.Entity("ThaiTuanERP2025.Domain.Core.Entities.Comment", b =>
-                {
-                    b.Navigation("Replies");
                 });
 
             modelBuilder.Entity("ThaiTuanERP2025.Domain.Expense.Entities.ExpensePayment", b =>

@@ -216,7 +216,6 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
             this.comments = await firstValueFrom(this.commentApi.getComments(
                   APP_MODULES.EXPENSE, FINANCE_ENTITIES.EXPENSE_PAYMENT, this.paymentId
             ));
-            console.log('comments: ', this.comments);
       }
 
       async submitComment() {
@@ -239,7 +238,7 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
                   });
 
                   const newCommentDto = await firstValueFrom(this.commentApi.create(payload));
-                  this.comments.push(newCommentDto);
+                  this.comments.unshift(newCommentDto);
                   
                   this.commentControl.setValue('');
             } catch(error) {
