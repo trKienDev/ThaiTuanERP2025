@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using MediatR;
 using ThaiTuanERP2025.Application.Core.Comments.Contracts;
+using ThaiTuanERP2025.Domain.Shared.Enums;
 
 namespace ThaiTuanERP2025.Application.Core.Comments.Queries
 {
-	public sealed record GetCommentsQuery(string Module, string Entity, Guid EntityId) : IRequest<IReadOnlyList<CommentDetailDto>>;
+	public sealed record GetCommentsQuery(DocumentType DocumentType, Guid EntityId) : IRequest<IReadOnlyList<CommentDetailDto>>;
 	public sealed class GetCommentsQueryHandler : IRequestHandler<GetCommentsQuery, IReadOnlyList<CommentDetailDto>>
 	{
 		private readonly ICommentReadRepository _commentRepo;
@@ -19,15 +19,13 @@ namespace ThaiTuanERP2025.Application.Core.Comments.Queries
 
 		public async Task<IReadOnlyList<CommentDetailDto>> Handle(GetCommentsQuery query, CancellationToken cancellationToken)
 		{
-			return await _commentRepo.GetComments(query.Module, query.Entity, query.EntityId, cancellationToken);
+			return await _commentRepo.GetComments(query.DocumentType, query.EntityId, cancellationToken);
 		}
 	}
 
 	public sealed class GetCommentsQueryValidator : AbstractValidator<GetCommentsQuery>
 	{
 		public GetCommentsQueryValidator() {
-			RuleFor(x => x.Module).NotEmpty().WithMessage("Định danh module của comment không được để trống");
-			RuleFor(x => x.Entity).NotEmpty().WithMessage("Định danh entity của comment không được để trống");
 			RuleFor(x => x.EntityId).NotEmpty().WithMessage("Định danh của entity không được để trống");
 		}	
 	}

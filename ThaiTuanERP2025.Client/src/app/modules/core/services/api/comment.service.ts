@@ -13,8 +13,8 @@ export class CommentApiService extends BaseApiService<CommentPayload, CommentDto
             super(http, `${environment.apiUrl}/comment`);
       }
 
-      getComments(module: string, entity: string, entityId: string): Observable<CommentDetailDto[]> {
-            return this.http.get<ApiResponse<CommentDetailDto[]>>(`${this.endpoint}?module=${module}&entity=${entity}&entityId=${entityId}`)
+      getComments(documentType: string, documentId: string): Observable<CommentDetailDto[]> {
+            return this.http.get<ApiResponse<CommentDetailDto[]>>(`${this.endpoint}?documentType=${documentType}&documentId=${documentId}`)
                   .pipe(handleApiResponse$<CommentDetailDto[]>());
       }
 }

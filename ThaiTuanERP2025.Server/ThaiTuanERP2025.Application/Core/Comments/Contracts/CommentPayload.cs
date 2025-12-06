@@ -1,10 +1,11 @@
-﻿namespace ThaiTuanERP2025.Application.Core.Comments.Contracts
+﻿using ThaiTuanERP2025.Domain.Shared.Enums;
+
+namespace ThaiTuanERP2025.Application.Core.Comments.Contracts
 {
 	public sealed record CommentPayload
 	{
-		public string Module { get; init; } = string.Empty;
-		public string Entity { get; init; } = string.Empty;
-		public Guid EntityId { get; init;  }
+		public string DocumentType { get; init; }
+		public Guid DocumentId { get; init;  }
 		public string Content { get; init;  } = string.Empty;
 	}
 }

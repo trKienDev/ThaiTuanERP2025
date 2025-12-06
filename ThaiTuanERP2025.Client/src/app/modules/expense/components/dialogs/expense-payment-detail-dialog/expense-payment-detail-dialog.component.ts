@@ -26,8 +26,7 @@ import { ExpensePaymentItemsTableComponent } from "../../tables/expense-payment-
 import { OutgoingPaymentsTableComponent } from "../../tables/outgoing-payments-table/outgoing-payments-table.component";
 import { CommentApiService } from '../../../../core/services/api/comment.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { APP_MODULES } from '../../../../../core/constants/app-modules.constants';
-import { FINANCE_ENTITIES } from '../../../../../core/constants/app-entities.constants';
+import { DOCUMENT_TYPE } from '../../../../../core/constants/document-types.constants';
 
 @Component({
       selector: 'expense-payment-detail-dialog',
@@ -213,9 +212,7 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
       comments: CommentDetailDto[] = [];
 
       async getComments() {
-            this.comments = await firstValueFrom(this.commentApi.getComments(
-                  APP_MODULES.EXPENSE, FINANCE_ENTITIES.EXPENSE_PAYMENT, this.paymentId
-            ));
+            this.comments = await firstValueFrom(this.commentApi.getComments(DOCUMENT_TYPE.EXPENSE_PAYMENT, this.paymentId));
       }
 
       async submitComment() {
@@ -231,11 +228,12 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
                   this.isCommenting = false;
 
                   const payload: CommentPayload = ({
-                        module: APP_MODULES.EXPENSE,
-                        entity: FINANCE_ENTITIES.EXPENSE_PAYMENT,
-                        entityId: this.paymentId,
+                        documentType: DOCUMENT_TYPE.EXPENSE_PAYMENT,
+                        documentId: this.paymentId,
                         content: content
                   });
+
+                  console.log('payload: ', payload);
 
                   const newCommentDto = await firstValueFrom(this.commentApi.create(payload));
                   this.comments.unshift(newCommentDto);

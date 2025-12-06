@@ -5,6 +5,7 @@ using ThaiTuanERP2025.Api.Shared;
 using ThaiTuanERP2025.Application.Core.Comments.Commands;
 using ThaiTuanERP2025.Application.Core.Comments.Contracts;
 using ThaiTuanERP2025.Application.Core.Comments.Queries;
+using ThaiTuanERP2025.Domain.Shared.Enums;
 
 namespace ThaiTuanERP2025.Api.Controllers.Core
 {
@@ -17,12 +18,12 @@ namespace ThaiTuanERP2025.Api.Controllers.Core
                 public CommentController(IMediator mediator) => _mediator = mediator;
 
                 [HttpGet]
-		public async Task<IActionResult> GetComments([FromQuery] string module, [FromQuery] string entity, [FromQuery] Guid entityId, CancellationToken cancellationToken)
+		public async Task<IActionResult> GetComments([FromQuery] DocumentType documentType, [FromQuery] Guid documentId, CancellationToken cancellationToken)
 		{
-			if (string.IsNullOrWhiteSpace(module) || string.IsNullOrWhiteSpace(entity) || entityId == Guid.Empty)
+			if (documentId == Guid.Empty)
 				return BadRequest(ApiResponse<object>.Fail("module, entity, entityId là bắt buộc"));
 
-			var query = new GetCommentsQuery(module, entity, entityId);
+			var query = new GetCommentsQuery(documentType, documentId);
 
 			var result = await _mediator.Send(query, cancellationToken);
 

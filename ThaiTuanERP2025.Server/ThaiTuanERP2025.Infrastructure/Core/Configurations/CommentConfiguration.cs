@@ -12,9 +12,8 @@ namespace ThaiTuanERP2025.Infrastructure.Core.Configurations
                         builder.ToTable("Comments", "Core");
                         builder.HasKey(x => x.Id);
 
-                        builder.Property(x => x.Module).HasMaxLength(64).IsRequired();
-                        builder.Property(x => x.Entity).HasMaxLength(128).IsRequired();
-                        builder.Property(x => x.EntityId).IsRequired();
+                        builder.Property(x => x.DocumentType).IsRequired().HasConversion<string>();
+                        builder.Property(x => x.DocumentId).IsRequired();
                         builder.Property(x => x.UserId).IsRequired();
 
                         builder.HasOne(x => x.User)
@@ -27,7 +26,7 @@ namespace ThaiTuanERP2025.Infrastructure.Core.Configurations
                                .HasForeignKey(x => x.ParentCommentId)
                                .OnDelete(DeleteBehavior.NoAction);
 
-                        builder.HasIndex(x => new { x.Module, x.Entity, x.EntityId}).HasDatabaseName("IX_Comments_Module_Entity_EntityId");
+                        builder.HasIndex(x => new { x.DocumentType, x.DocumentId}).HasDatabaseName("IX_Comments_DocumentType_DocumentId");
 			builder.HasIndex(x => x.UserId);
 
 			builder.HasQueryFilter(x => !x.IsDeleted);
