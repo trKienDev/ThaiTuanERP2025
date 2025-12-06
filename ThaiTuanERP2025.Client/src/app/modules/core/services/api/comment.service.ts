@@ -17,4 +17,9 @@ export class CommentApiService extends BaseApiService<CommentPayload, CommentDto
             return this.http.get<ApiResponse<CommentDetailDto[]>>(`${this.endpoint}?documentType=${documentType}&documentId=${documentId}`)
                   .pipe(handleApiResponse$<CommentDetailDto[]>());
       }
+
+      reply(parentId: string, payload: CommentPayload): Observable<CommentDetailDto> {
+            return this.http.post<ApiResponse<CommentDetailDto>>(`${this.endpoint}/${parentId}/reply`, payload)
+                  .pipe(handleApiResponse$<CommentDetailDto>());
+      } 
 }

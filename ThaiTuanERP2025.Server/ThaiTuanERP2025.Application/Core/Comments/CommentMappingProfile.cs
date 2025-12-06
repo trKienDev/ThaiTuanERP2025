@@ -12,7 +12,8 @@ namespace ThaiTuanERP2025.Application.Core.Comments
 
 			CreateMap<Comment, CommentDetailDto>()
 				.ForMember(dest => dest.User, src => src.MapFrom(x => x.User))
-				.ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => TimeZoneConverter.ToVietnamTime(src.CreatedAt)));
-		}
+				.ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => TimeZoneConverter.ToVietnamTime(src.CreatedAt)))
+                                .ForMember(dest => dest.Replies, opt => opt.MapFrom(src => src.Replies));
+                }
 	}
 }

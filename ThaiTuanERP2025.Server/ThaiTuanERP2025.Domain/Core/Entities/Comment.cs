@@ -20,7 +20,7 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
 			UserId = userId;
 			Content = content.Trim();
 		}
-		#endregion
+		#endregion 
 
 		#region Properties
 		public DocumentType DocumentType { get; private set; }   // vd: "ExpensePayment"
@@ -37,11 +37,20 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
                 #endregion
 
                 #region Domain Behaviors
-                public void UpdateContent(string content)
+                internal void UpdateContent(string content)
 		{
 			Guard.AgainstNullOrWhiteSpace(content, nameof(content));
 			Content = content.Trim();
 		}
+
+		internal void AddReply(Comment reply)
+		{
+			Guard.AgainstNull(reply, nameof(reply));
+
+			reply.ParentCommentId = this.Id;
+			Replies.Add(reply);
+		}
+
                 #endregion
         }
 }

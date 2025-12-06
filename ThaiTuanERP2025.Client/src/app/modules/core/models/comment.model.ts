@@ -13,6 +13,7 @@ export interface CommentDto {
 }
 
 export interface CommentDetailDto {
+      id: string;
       documentType: string;
       documentId: string;
       content: string;
@@ -20,5 +21,8 @@ export interface CommentDetailDto {
       userId: string;
       user: UserBriefAvatarDto;
       createdAt: string;
+
+      parentId: string;
+      replies: CommentDetailDto[];
 }
 

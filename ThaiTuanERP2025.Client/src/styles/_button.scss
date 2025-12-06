@@ -131,3 +131,13 @@ button, .button {
 .excel-button > svg { margin-right: 1em; }
 .excel-button::before { content: ""; position: absolute; height: 100%; width: 0; background-color: #469b61; z-index: -1; transition: all 350ms; }
 .excel-button:hover::before { width: 100%; }
+
+// ==== comment button ====
+.comment-reply-button {
+      padding: 0px;
+      cursor: pointer;
+      background: none;
+}
+.comment-reply-button:hover {
+      color: var(--bright-blue-color);
+}

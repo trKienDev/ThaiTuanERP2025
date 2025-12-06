@@ -1,4 +1,4 @@
-import { CommentDetailDto, CommentDto, CommentPayload } from './../../../../core/models/comment.model';
+import { CommentDetailDto, CommentPayload } from './../../../../core/models/comment.model';
 import { ExpensePaymentDetailDto } from '../../../models/expense-payment.model';
 import { CommonModule } from "@angular/common";
 import { Component, Inject, inject, OnInit } from "@angular/core";
@@ -249,5 +249,52 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
 
       cancelComment() {
             this.isCommenting = false;
+      }
+
+      // ==== REPLY ====
+      replyingToCommentId: string | null = null;
+      isSubmittingReply = false;
+      replyControl = new FormControl<string>('', { nonNullable: true });
+
+      startReply(commentId: string) {
+            this.replyingToCommentId = commentId;
+            this.replyControl.setValue('');
+      }
+      
+      async submitReply(parentId: string) {
+            const content = this.replyControl.value.trim();
+            if (!content) {
+                  this.toast.warning("Bạn chưa nhập nội dung phản hồi");
+                  return;
+            }
+            
+            try {
+                  this.isSubmittingReply = true;
+
+                  const payload: CommentPayload = {
+                        documentType: DOCUMENT_TYPE.EXPENSE_PAYMENT,
+                        documentId: this.paymentId,
+                        content: content,
+                  };
+
+                  const newReply = await firstValueFrom(this.commentApi.reply(parentId, payload));
+
+                  const parent: CommentDetailDto | undefined = this.comments.find(c => c.id === parentId);
+                  if(parent) {
+                        parent.replies = parent.replies ?? [];
+                        parent.replies.push(newReply);
+                  }    
+
+                  this.replyControl.setValue('');
+                  this.replyingToCommentId = null;
+            } catch(error) {
+                  this.httpErrorHandler.handle(error, "Gửi phản hồi thất bại");
+            } finally {
+                  this.isSubmittingReply = false;
+            }
+      }
+
+      cancelReply() {
+            this.replyingToCommentId = null;
       }
 }
