@@ -26,7 +26,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Core
 
 			var result = await _mediator.Send(query, cancellationToken);
 
-			return Ok(ApiResponse<IReadOnlyList<CommentDto>>.Success(result));
+			return Ok(ApiResponse<IReadOnlyList<CommentDetailDto>>.Success(result));
 		}
 
 		[HttpPost]
@@ -36,7 +36,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Core
                                 return BadRequest(ApiResponse<object>.Fail("Dữ liệu không hợp lệ"));
 
                         var result = await _mediator.Send(new AddCommentCommand(payload), cancellationToken);
-                        return Ok(ApiResponse<CommentDto>.Success(result));
+                        return Ok(ApiResponse<CommentDetailDto>.Success(result));
                 }
         }
 }

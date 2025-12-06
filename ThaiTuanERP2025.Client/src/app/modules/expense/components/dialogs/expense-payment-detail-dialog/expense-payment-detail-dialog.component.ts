@@ -1,4 +1,4 @@
-import { CommentDto, CommentPayload } from './../../../../core/models/comment.model';
+import { CommentDetailDto, CommentDto, CommentPayload } from './../../../../core/models/comment.model';
 import { ExpensePaymentDetailDto } from '../../../models/expense-payment.model';
 import { CommonModule } from "@angular/common";
 import { Component, Inject, inject, OnInit } from "@angular/core";
@@ -26,6 +26,8 @@ import { ExpensePaymentItemsTableComponent } from "../../tables/expense-payment-
 import { OutgoingPaymentsTableComponent } from "../../tables/outgoing-payments-table/outgoing-payments-table.component";
 import { CommentApiService } from '../../../../core/services/api/comment.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { APP_MODULES } from '../../../../../core/constants/app-modules.constants';
+import { FINANCE_ENTITIES } from '../../../../../core/constants/app-entities.constants';
 
 @Component({
       selector: 'expense-payment-detail-dialog',
@@ -75,14 +77,12 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
 
       async getPaymentDetail(id: string) {
             this.paymentDetail = await firstValueFrom(this.expensePaymentApi.getDetailById(id));
-            console.log('Payment detail loaded:', this.paymentDetail);
 
             const step = this.currentStep;
             const userId = (await firstValueFrom(this.currentUser$)).id;
 
             this.canApproveOrReject = step?.approverIds?.includes(userId) ?? false;
             this.isInProgress = this.paymentDetail.workflowInstance.status === ExpenseWorkflowStatus.inProgress;
-            console.log('progress: ', this.paymentDetail.workflowInstance.status);
 
             if (!step?.dueAt) {
                   console.warn("Current step has no dueAt → skip countdown");
@@ -210,10 +210,12 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
       isCommenting = false;
       isSubmittingComment = false;
       commentControl = new FormControl<string>('', { nonNullable: true });
-      comments: CommentDto[] = [];
+      comments: CommentDetailDto[] = [];
 
       async getComments() {
-            this.comments = await firstValueFrom(this.commentApi.getComments('expense', 'expense-payment', this.paymentId));
+            this.comments = await firstValueFrom(this.commentApi.getComments(
+                  APP_MODULES.EXPENSE, FINANCE_ENTITIES.EXPENSE_PAYMENT, this.paymentId
+            ));
             console.log('comments: ', this.comments);
       }
 
@@ -230,8 +232,8 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
                   this.isCommenting = false;
 
                   const payload: CommentPayload = ({
-                        module: 'expense',
-                        entity: 'expense-payment',
+                        module: APP_MODULES.EXPENSE,
+                        entity: FINANCE_ENTITIES.EXPENSE_PAYMENT,
                         entityId: this.paymentId,
                         content: content
                   });

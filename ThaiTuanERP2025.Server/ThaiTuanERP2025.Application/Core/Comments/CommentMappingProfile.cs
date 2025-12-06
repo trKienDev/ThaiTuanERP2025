@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ThaiTuanERP2025.Application.Core.Comments.Contracts;
 using ThaiTuanERP2025.Domain.Core.Entities;
+using ThaiTuanERP2025.Domain.Shared.Utils;
 
 namespace ThaiTuanERP2025.Application.Core.Comments
 {
@@ -8,6 +9,10 @@ namespace ThaiTuanERP2025.Application.Core.Comments
 	{
 		public CommentMappingProfile() {
 			CreateMap<Comment, CommentDto>();
+
+			CreateMap<Comment, CommentDetailDto>()
+				.ForMember(dest => dest.User, src => src.MapFrom(x => x.User))
+				.ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => TimeZoneConverter.ToVietnamTime(src.CreatedAt)));
 		}
 	}
 }
