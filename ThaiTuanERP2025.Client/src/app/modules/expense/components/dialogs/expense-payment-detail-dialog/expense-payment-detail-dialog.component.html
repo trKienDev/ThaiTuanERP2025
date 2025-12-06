@@ -41,6 +41,7 @@
                         </div>
                   </div>
                   <div class="payment-infor display-flex flex-column gap-10px">
+
                         <div class="general-infor primary-card">
                               <div class="card-wrapper">
                                     <div class="card-header">Thông tin thanh toán</div>
@@ -138,6 +139,7 @@
                                     </div>
                               </div>
                         </div>
+
                         <div class="amount-infor primary-card">
                               <div class="card-wrapper">
                                     <div class="card-body">
@@ -156,44 +158,86 @@
                                     </div>
                               </div>
                         </div>
-                  </div>
-                  <div class="payment-tabs">
-                        <div class="payment-tab-navigation display-flex gap-5px border-bottom margin-bottom-10px">
-                              <button type="button" class="tab-button" [ngClass]="{ 'active': activeTab === 'items' }" (click)="setActiveTab('items')">
-                                    Bảng hạng mục
-                              </button>
-                              <button  type="button" class="tab-button" [ngClass]="{ 'active': activeTab === 'outgoings' }" (click)="setActiveTab('outgoings')">
-                                    Khoản tiền ra
-                              </button>
-                        </div>
 
-                        <ng-container [ngSwitch]="activeTab">
-                              <!-- Tab 1: Hạng mục thanh toán -->
-                              <ng-container *ngSwitchCase="'items'">
-                                    <div>
-                                          <expense-payment-items-table
-                                                [items]="paymentDetail?.items ?? []"
-                                                [totalAmount]="paymentDetail?.totalAmount"
-                                                [totalTax]="paymentDetail?.totalTax"
-                                                [totalWithTax]="paymentDetail?.totalWithTax"
-                                                [showInvoiceButton]="true"
-                                                (viewInvoice)="previewInvoice($event)">
-                                          </expense-payment-items-table>
-                                    </div>
-                              </ng-container>
+                        <div class="payment-tabs primary-card">
+                              <div class="card-wrapper">
+                                    <div class="card-body display-flex flex-column gap-5px">
+                                          <div class="payment-tab-navigation display-flex gap-5px border-bottom">
+                                                <button type="button" class="tab-button" [ngClass]="{ 'active': activeTab === 'items' }" (click)="setActiveTab('items')">
+                                                      Bảng hạng mục
+                                                </button>
+                                                <button  type="button" class="tab-button" [ngClass]="{ 'active': activeTab === 'outgoings' }" (click)="setActiveTab('outgoings')">
+                                                      Khoản tiền ra
+                                                </button>
+                                          </div>
 
-                              <!-- Tab 2: Khoản tiền ra -->
-                              <ng-container *ngSwitchCase="'outgoings'">
-                                    <div class="">
-                                          <div class="outgoing-payments-table">
-                                                <outgoing-payments-table
-                                                      [outgoings]="paymentDetail?.outgoingPayments ?? []"
-                                                      [totalPaid]="paymentDetail?.outgoingAmountPaid">
-                                                </outgoing-payments-table>
+                                          <div>
+                                                <ng-container [ngSwitch]="activeTab">
+                                                      <!-- Tab 1: Hạng mục thanh toán -->
+                                                      <ng-container *ngSwitchCase="'items'">
+                                                            <div>
+                                                                  <expense-payment-items-table
+                                                                        [items]="paymentDetail?.items ?? []"
+                                                                        [totalAmount]="paymentDetail?.totalAmount"
+                                                                        [totalTax]="paymentDetail?.totalTax"
+                                                                        [totalWithTax]="paymentDetail?.totalWithTax"
+                                                                        [showInvoiceButton]="true"
+                                                                        (viewInvoice)="previewInvoice($event)">
+                                                                  </expense-payment-items-table>
+                                                            </div>
+                                                      </ng-container>
+
+                                                      <!-- Tab 2: Khoản tiền ra -->
+                                                      <ng-container *ngSwitchCase="'outgoings'">
+                                                            <div class="">
+                                                                  <div class="outgoing-payments-table">
+                                                                        <outgoing-payments-table
+                                                                              [outgoings]="paymentDetail?.outgoingPayments ?? []"
+                                                                              [totalPaid]="paymentDetail?.outgoingAmountPaid">
+                                                                        </outgoing-payments-table>
+                                                                  </div>
+                                                            </div>
+                                                      </ng-container>
+                                                </ng-container>
                                           </div>
                                     </div>
-                              </ng-container>
-                        </ng-container>
+                              </div>
+                        </div>
+
+                        <div class="payment-comments-area primary-card">
+                              <div class="card-wrapper">
+                                    <div class="card-body display-flex flex-column gap-5px">
+                                          <span>Bình luận</span>
+                                          <div class="comments-container display-flex flex-column gap-5px">
+                                                <div class="input-comment-area display-flex flex-column gap-5px">
+                                                      <div class="user-comment display-flex gap-5px align-items-center">
+                                                            <img class="avatar-user" [src]="(currentUser$ | async) | avatarUrlPipe">
+                                                            <input type="text" class="comment-input" placeholder="Viết bình luận ...." (focus)="isCommenting = true" [formControl]="commentControl">
+                                                      </div>
+                                                      <div *ngIf="isCommenting" class="comment-actions display-flex justify-content-end gap-5px">
+                                                            <button type="button" class="button cancel-button padding-5px border-radius-3px" (click)="cancelComment()">Hủy</button>
+                                                            <kit-spinner-button type="button" cssClass="save-button padding-5px border-radius-3px"  text="Bình luận" [loading]="isSubmittingComment" [disabled]="isSubmittingComment" loadingText="Đang gửi bình luận …" (click)="submitComment()"></kit-spinner-button>
+                                                      </div>
+                                                </div>
+                                                <div class="list-comments-area">
+                                                      <div class="comment-item" *ngFor="let c of comments">
+                                                            <div class="display-flex gap-5px align-items-start">
+                                                                  <!-- <img class="avatar-user" [src]="c.user.avatarUrl | avatarUrlPipe"> -->
+
+                                                                  <div class="comment-content">
+                                                                        <!-- <div class="comment-header">
+                                                                              <strong>{{ c.user.fullName }}</strong>
+                                                                              <span class="comment-time">{{ c.createdAt | date:'short' }}</span>
+                                                                        </div> -->
+                                                                        <div class="comment-text">{{ c.content }}</div>
+                                                                  </div>
+                                                            </div>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                    </div>
+                              </div>
+                        </div>
                   </div>
             </div>
       </div>

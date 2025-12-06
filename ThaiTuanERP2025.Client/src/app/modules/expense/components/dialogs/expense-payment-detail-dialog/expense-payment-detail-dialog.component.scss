@@ -114,7 +114,6 @@
 .payment-tabs {
       .payment-tab-navigation {
             border-bottom: 1px solid #e0e0e0;
-            margin: 12px 0px;
 
             .tab-button {
                   background: none;
@@ -144,6 +143,25 @@
                   &:hover {
                         color: var(--bright-blue-color);
                   }
+            }
+      }
+}
+
+.payment-comments-area {
+      .comment-input {
+            border: none;
+            border-bottom: 1px solid var(--default-border-color);
+            outline: none !important;
+            box-shadow: none !important;
+
+            &:focus {
+                  outline: none !important;
+                  box-shadow: none !important;
+                  border-bottom: 1px solid var(--default-border-color);
+            }
+
+            .comment-actions {
+                  transition: all 0.4s ease-in;
             }
       }
 }

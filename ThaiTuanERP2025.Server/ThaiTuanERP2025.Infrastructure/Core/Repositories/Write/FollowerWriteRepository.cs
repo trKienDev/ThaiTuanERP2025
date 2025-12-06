@@ -8,7 +8,6 @@ namespace ThaiTuanERP2025.Infrastructure.Core.Repositories
 {
 	public sealed class FollowerWriteRepository : BaseWriteRepository<Follower>, IFollowerWriteRepository
 	{
-		public FollowerWriteRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider)
-			: base(dbContext, configurationProvider) { }
+		public FollowerWriteRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider mapperConfig) : base(dbContext, mapperConfig) { }
 	}
 }

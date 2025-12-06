@@ -69,6 +69,7 @@ using ThaiTuanERP2025.Infrastructure.StoredFiles.Configurations;
 using ThaiTuanERP2025.Infrastructure.StoredFiles;
 using ThaiTuanERP2025.Application.Expense.OutgoingBankAccounts;
 using ThaiTuanERP2025.Application.Expense.OutgoingPayments;
+using ThaiTuanERP2025.Application.Core.Comments;
 
 namespace ThaiTuanERP2025.Infrastructure
 {
@@ -167,6 +168,8 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IUserReminderWriteRepository, UserReminderWriteRepository>();	
 			services.AddScoped<IOutboxMessageReadRepository, OutboxMessageReadRepository>();
 			services.AddScoped<IOutboxMessageWriteRepository, OutboxMessageWriteRepository>();
+			services.AddScoped<ICommentWriteRepository, CommentWriteRepository>();
+			services.AddScoped<ICommentReadRepository, CommentReadRepository>();
 
 			// Authentication
 			services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();

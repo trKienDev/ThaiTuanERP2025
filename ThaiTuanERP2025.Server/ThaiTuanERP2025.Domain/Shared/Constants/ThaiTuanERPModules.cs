@@ -1,6 +1,6 @@
-﻿namespace ThaiTuanERP2025.Domain.StoredFiles.Constants
+﻿namespace ThaiTuanERP2025.Domain.Shared.Constants
 {
-        public sealed class FileModules
+        public sealed class ThaiTuanERPModules
         {
                 public const string Expense = "expense";
                 public const string Finance = "finance";

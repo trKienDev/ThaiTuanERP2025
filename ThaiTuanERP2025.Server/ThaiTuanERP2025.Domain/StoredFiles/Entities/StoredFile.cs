@@ -61,7 +61,6 @@ namespace ThaiTuanERP2025.Domain.StoredFiles.Entities
 		#endregion
 
 		#region Domain Behaviors
-
 		internal void MakePublic()
 		{
 			if (IsPublic) return;

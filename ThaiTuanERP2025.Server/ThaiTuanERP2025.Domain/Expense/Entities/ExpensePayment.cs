@@ -5,7 +5,7 @@ using ThaiTuanERP2025.Domain.Expense.Enums;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
-	public class ExpensePayment : AuditableEntity
+	public sealed class ExpensePayment : AuditableEntity
 	{
 		#region Constructor
 		private ExpensePayment() { } // EF
@@ -115,9 +115,6 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		{
 			if (Status != ExpensePaymentStatus.Pending)
 				throw new DomainException("Thanh toán chưa ở trạng thái chờ duyệt");
-
-			if (Status == ExpensePaymentStatus.Approved)
-				return;
 
 			Status = ExpensePaymentStatus.Rejected;
 		}

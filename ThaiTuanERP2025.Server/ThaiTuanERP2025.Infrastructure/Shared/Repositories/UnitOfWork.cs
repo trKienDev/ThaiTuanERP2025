@@ -60,6 +60,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 			IUserNotificationWriteRepository userNotifications,
 			IUserReminderWriteRepository userReminders,
 			IOutboxMessageWriteRepository outboxMessages,
+			ICommentWriteRepository comments,
 
 			// RBAC
 			IRoleWriteRepository roles,
@@ -111,6 +112,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 			UserNotifications = userNotifications;
 			UserReminders = userReminders;
 			OutboxMessages = outboxMessages;
+			Comments = comments;
 
 			Roles = roles;
 			Permissions = permissions;
@@ -163,6 +165,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 		public IUserNotificationWriteRepository UserNotifications { get; }
 		public IUserReminderWriteRepository UserReminders { get; }
 		public IOutboxMessageWriteRepository OutboxMessages { get;  }
+		public ICommentWriteRepository Comments { get; }
 
 		// RBAC
 		public IUserRoleRepository UserRoles { get; }

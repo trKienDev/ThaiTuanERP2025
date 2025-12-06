@@ -12,24 +12,6 @@
       position: relative;
       border-radius: 5px;
 }
-.dialog-exit {
-      position: absolute;
-      top: 0;
-      right: 0;
-
-      .exit-button {
-            cursor: pointer;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-            background: white;
-            border-radius: 5px;
-            border-top-left-radius: 0;
-            border-bottom-right-radius: 0;
-            padding: 3px 16px;
-            &:hover { background: red; }
-            &:hover span { color: white; }
-            span { color: red; font-size: 20px; }
-      }
-}
 .dialog-container {
       display: flex;
       flex-direction: column;
@@ -43,11 +25,35 @@
       padding: 0px var(--dialog-container-padding);
       background-image: linear-gradient(to bottom, #f2fbff, #f3fbff, #f5faff, #f6faff, #f7faff, #f8faff, #f9fbff, #fafbff, #fbfcff, #fdfdff, #fefeff, #fff);
       border-radius: 8px;
+
+      .dialog-exit {
+            position: absolute;
+            top: 0;
+            right: 0;
+
+            .exit-button {
+                  cursor: pointer;
+                  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+                  background: white;
+                  border-radius: 5px;
+                  border-top-left-radius: 0;
+                  border-bottom-right-radius: 0;
+                  padding: 3px 16px;
+                  &:hover { background: red; }
+                  &:hover span { color: white; }
+                  span { color: red; font-size: 20px; }
+            }
+      }
 }
 .dialog-body {
       padding: 10px var(--dialog-container-padding);
       padding-top: 0px;
+      overflow-y: auto;
+      max-height: 80vh;
+      background: white;
+      border-radius: 5px;
 }
+
 .dialog-footer {
       padding: 10px var(--dialog-container-padding);
       padding-top: 0px;

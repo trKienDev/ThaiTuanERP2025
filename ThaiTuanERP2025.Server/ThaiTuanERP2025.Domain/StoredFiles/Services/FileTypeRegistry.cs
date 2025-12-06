@@ -1,4 +1,5 @@
-﻿using ThaiTuanERP2025.Domain.StoredFiles.Constants;
+﻿using ThaiTuanERP2025.Domain.Shared.Constants;
+using ThaiTuanERP2025.Domain.StoredFiles.Constants;
 
 namespace ThaiTuanERP2025.Domain.StoredFiles.Services
 {
@@ -6,9 +7,9 @@ namespace ThaiTuanERP2025.Domain.StoredFiles.Services
         {
                 private static readonly HashSet<string> Modules = new(StringComparer.OrdinalIgnoreCase)
                 {
-                        FileModules.Expense,
-                        FileModules.Finance,
-                        FileModules.Core,
+                        ThaiTuanERPModules.Expense,
+                        ThaiTuanERPModules.Finance,
+                        ThaiTuanERPModules.Core,
                 };
 
                 private static readonly HashSet<string> ExpenseEntities = new(StringComparer.OrdinalIgnoreCase)
@@ -22,7 +23,7 @@ namespace ThaiTuanERP2025.Domain.StoredFiles.Services
 
                 public static bool IsValidEntity(string module, string entity)
                 {
-                        if (module == FileModules.Expense)
+                        if (module == ThaiTuanERPModules.Expense)
                                 return ExpenseEntities.Contains(entity);
 
                         return true; // Module khác chưa giới hạn entity

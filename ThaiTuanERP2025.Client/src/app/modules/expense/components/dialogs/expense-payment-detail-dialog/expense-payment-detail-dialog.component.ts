@@ -1,3 +1,4 @@
+import { CommentDto, CommentPayload } from './../../../../core/models/comment.model';
 import { ExpensePaymentDetailDto } from '../../../models/expense-payment.model';
 import { CommonModule } from "@angular/common";
 import { Component, Inject, inject, OnInit } from "@angular/core";
@@ -23,11 +24,13 @@ import { OutgoingPaymentStatusPipe } from "../../../pipes/outgoing-payment-statu
 import { KitShellTabsComponent } from '../../../../../shared/components/kit-shell-tabs/kit-shell-tabs.component';
 import { ExpensePaymentItemsTableComponent } from "../../tables/expense-payment-items-table/expense-payment-items-table.component";
 import { OutgoingPaymentsTableComponent } from "../../tables/outgoing-payments-table/outgoing-payments-table.component";
+import { CommentApiService } from '../../../../core/services/api/comment.service';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
       selector: 'expense-payment-detail-dialog',
       standalone: true,
-      imports: [CommonModule, AvatarUrlPipe, ExpensePaymentStatusPipe, KitSpinnerButtonComponent, KitFlipCountdownComponent, OutgoingPaymentStatusPipe, ExpensePaymentItemsTableComponent, OutgoingPaymentsTableComponent],
+      imports: [CommonModule, AvatarUrlPipe, ExpensePaymentStatusPipe, KitSpinnerButtonComponent, KitFlipCountdownComponent, OutgoingPaymentStatusPipe, ExpensePaymentItemsTableComponent, OutgoingPaymentsTableComponent, ReactiveFormsModule],
       templateUrl: './expense-payment-detail-dialog.component.html',
       styleUrl: './expense-payment-detail-dialog.component.scss',
       animations: [
@@ -39,7 +42,7 @@ import { OutgoingPaymentsTableComponent } from "../../tables/outgoing-payments-t
             ]),
       ]
 })
-export class ExpensePaymentDetailDialogComponent {
+export class ExpensePaymentDetailDialogComponent implements OnInit {
       private readonly dialogRef = inject(MatDialogRef<ExpensePaymentDetailDialogComponent>);
       private readonly expensePaymentApi = inject(ExpensePaymentApiService);
       private readonly expenseWorkflowInstanceApi = inject(ExpenseWorkflowInstanceApiService);
@@ -48,8 +51,9 @@ export class ExpensePaymentDetailDialogComponent {
       private readonly countdown = inject(CountdownService);
       private readonly httpErrorHandler = inject(HttpErrorHandlerService);
       private readonly router = inject(Router);
-      private readonly currentUser$ = inject(UserFacade).currentUser$;
+      currentUser$ = inject(UserFacade).currentUser$;
       private readonly filePreview = inject(FilePreviewService);
+
       approving = false;
       rejecting = false;
       submitting = false;
@@ -63,6 +67,10 @@ export class ExpensePaymentDetailDialogComponent {
       constructor(@Inject(MAT_DIALOG_DATA) public data: string) {
             this.paymentId = data;
             this.getPaymentDetail(this.paymentId);
+      }
+
+      ngOnInit(): void {
+            this.getComments();
       }
 
       async getPaymentDetail(id: string) {
@@ -193,5 +201,54 @@ export class ExpensePaymentDetailDialogComponent {
 
       close(isSuccess: boolean = false) {
             this.dialogRef.close(isSuccess);
+      }
+
+      // ===== Comment =====
+      private readonly commentApi = inject(CommentApiService);
+      module: string = "expense";
+      entity: string ="expense-payment";
+      isCommenting = false;
+      isSubmittingComment = false;
+      commentControl = new FormControl<string>('', { nonNullable: true });
+      comments: CommentDto[] = [];
+
+      async getComments() {
+            this.comments = await firstValueFrom(this.commentApi.getComments('expense', 'expense-payment', this.paymentId));
+            console.log('comments: ', this.comments);
+      }
+
+      async submitComment() {
+            const content = this.commentControl.value.trim();
+
+            if (!content) {
+                  this.toast.errorRich("Bạn chưa nhập bình luận");
+                  return;
+            }
+
+            try {
+                  this.isSubmittingComment = true;
+                  this.isCommenting = false;
+
+                  const payload: CommentPayload = ({
+                        module: 'expense',
+                        entity: 'expense-payment',
+                        entityId: this.paymentId,
+                        content: content
+                  });
+
+                  const newCommentDto = await firstValueFrom(this.commentApi.create(payload));
+                  this.comments.push(newCommentDto);
+                  
+                  this.commentControl.setValue('');
+            } catch(error) {
+                  this.httpErrorHandler.handle(error, "Bình luận không thành công");
+            } finally {
+                  this.isCommenting = false;
+                  this.isSubmittingComment = false;
+            }
+      }
+
+      cancelComment() {
+            this.isCommenting = false;
       }
 }
