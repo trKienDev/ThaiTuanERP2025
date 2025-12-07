@@ -207,7 +207,6 @@
                         <div class="payment-comments primary-card">
                               <div class="card-wrapper">
                                     <div class="card-body display-flex flex-column gap-5px">
-                                          <span>Bình luận</span>
                                           <div class="comments-container display-flex flex-column gap-10px">
                                                 <div class="input-comment-area display-flex flex-column gap-5px">
                                                       <div class="user-comment display-flex gap-5px align-items-center">
@@ -219,31 +218,14 @@
                                                             <kit-spinner-button type="button" cssClass="save-button padding-5px border-radius-3px"  text="Bình luận" [loading]="isSubmittingComment" [disabled]="isSubmittingComment" loadingText="Đang gửi bình luận …" (click)="submitComment()"></kit-spinner-button>
                                                       </div>
                                                 </div>
-                                                <div class="list-comments display-flex flex-column gap-15px">
-                                                      <div class="comment-item" *ngFor="let comment of comments">
-                                                            <div class="comment-wrapper">
-                                                                  <div class="comment-content display-flex gap-5px align-items-center">
-                                                                        <img class="avatar-user" [src]="comment.user | avatarUrlPipe">
-                                                                        <div class="comment-content display-flex flex-column gap-5px">
-                                                                              <div class="comment-header display-flex gap-10px">
-                                                                                    <strong>{{ comment.user.fullName }}</strong>
-                                                                                    <span class="comment-time" style="color: #aaa;">{{ comment.createdAt | date:'short' }}</span>
-                                                                              </div>
-                                                                              <div class="comment-text">{{ comment.content }}</div>
-                                                                        </div>
-                                                                  </div>
-                                                                  <div class="comment-actions display-flex justify-content-end">
-                                                                        <button class="comment-reply-button" (click)="startReply(comment.id)">Phản hồi</button>
-                                                                  </div>
-                                                            </div>
-                                                            <div *ngIf="replyingToCommentId === comment.id" class="reply-box display-flex flex-column gap-10px">
-                                                                  <input type="text" class="comment-input" placeholder="Viết phản hồi..." [formControl]="replyControl">
-                                                                  <div class="reply-actions display-flex gap-5px justify-content-end">
-                                                                        <button type="button" class="button cancel-button padding-5px border-radius-3px" (click)="cancelReply()">Hủy</button>
-                                                                        <kit-spinner-button type="button" cssClass="save-button padding-5px border-radius-3px"  text="Phản hồi" [loading]="isSubmittingReply" [disabled]="isSubmittingReply" loadingText="Đang gửi phản hồi …" (click)="submitReply(comment.id)"></kit-spinner-button>
-                                                                  </div>
-                                                            </div>
-                                                      </div>
+                                                <div class="list-comments">
+                                                      <comment-thread *ngFor="let comment of comments"
+                                                      [comment]="comment"
+                                                      [replyingToCommentId]="replyingToCommentId"
+                                                      (reply)="startReply($event)"
+                                                      (submitReply)="submitReply($event)"
+                                                      (cancelReply)="cancelReply()">
+                                                      </comment-thread>
                                                 </div>
                                           </div>
                                     </div>

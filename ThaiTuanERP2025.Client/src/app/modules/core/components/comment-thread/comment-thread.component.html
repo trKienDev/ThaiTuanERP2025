@@ -1,0 +1,44 @@
+<div class="comment-item" [style.marginLeft.px]="depth * 20">
+
+      <!-- Comment content -->
+      <div class="comment-wrapper">
+
+            <div class="comment-content display-flex gap-5px align-items-center">
+                  <img class="avatar-user" [src]="comment.user | avatarUrlPipe">
+                  <div class="comment-content display-flex flex-column gap-5px">
+                        <div class="comment-header display-flex gap-10px">
+                              <strong>{{ comment.user.fullName }}</strong>
+                              <span class="comment-time">{{ comment.createdAt | date:'short' }}</span>
+                        </div>
+                        <div class="comment-text">{{ comment.content }}</div>
+                  </div>
+            </div>
+
+            <div class="comment-actions display-flex justify-content-end">
+                  <button class="comment-reply-button" (click)="onReply()">Phản hồi</button>
+            </div>
+      </div>
+
+      <!-- REPLY BOX -->
+      <div *ngIf="replyingToCommentId === comment.id" class="reply-box display-flex flex-column gap-10px">
+            <input type="text" class="comment-input" placeholder="Viết phản hồi..." [formControl]="replyControl">
+            <div class="reply-actions display-flex gap-5px justify-content-end">
+                  <button type="button" class="button cancel-button padding-5px border-radius-3px" (click)="reply.emit(null)">Hủy</button>
+                  <kit-spinner-button type="button" cssClass="save-button padding-5px border-radius-3px" text="Phản hồi" (click)="onSubmitReply()"></kit-spinner-button>
+            </div>
+      </div>
+
+      <!-- Render replies -->
+      <div class="replies" *ngIf="comment.replies?.length">
+            <comment-thread 
+                  *ngFor="let child of comment.replies"
+                  [comment]="child"
+                  [depth]="depth + 1"
+                  [replyingToCommentId]="replyingToCommentId"
+                  (reply)="reply.emit($event)"
+                  (submitReply)="submitReply.emit($event)"
+                  (cancelReply)="cancelReply.emit()"
+            ></comment-thread>
+      </div>
+
+</div>

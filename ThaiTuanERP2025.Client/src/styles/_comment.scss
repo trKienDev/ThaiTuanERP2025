@@ -1,0 +1,28 @@
+.comment-input {
+      border: none;
+      border-bottom: 1px solid var(--default-border-color);
+      outline: none !important;
+      box-shadow: none !important;
+
+      &:focus {
+            outline: none !important;
+            box-shadow: none !important;
+            border-bottom: 1px solid var(--default-border-color);
+      }
+
+      .comment-actions {
+            transition: all 0.4s ease-in;
+      }
+}
+
+.comment-content {
+      padding: 5px;
+      border-radius: 5px;
+      background: var(--secondary-theme-color);
+}
+
+.comment-wrapper {
+      padding: 3px;
+      border-radius: 3px;
+      width: fit-content;
+}

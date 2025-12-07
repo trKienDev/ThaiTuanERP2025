@@ -27,13 +27,14 @@ import { OutgoingPaymentsTableComponent } from "../../tables/outgoing-payments-t
 import { CommentApiService } from '../../../../core/services/api/comment.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { DOCUMENT_TYPE } from '../../../../../core/constants/document-types.constants';
+import { CommentThreadComponent } from "../../../../core/components/comment-thread/comment-thread.component";
 
 @Component({
       selector: 'expense-payment-detail-dialog',
       standalone: true,
-      imports: [CommonModule, AvatarUrlPipe, ExpensePaymentStatusPipe, KitSpinnerButtonComponent, KitFlipCountdownComponent, OutgoingPaymentStatusPipe, ExpensePaymentItemsTableComponent, OutgoingPaymentsTableComponent, ReactiveFormsModule],
+      imports: [CommonModule, AvatarUrlPipe, ExpensePaymentStatusPipe, KitSpinnerButtonComponent, KitFlipCountdownComponent, OutgoingPaymentStatusPipe, ExpensePaymentItemsTableComponent, OutgoingPaymentsTableComponent, ReactiveFormsModule, CommentThreadComponent],
       templateUrl: './expense-payment-detail-dialog.component.html',
-      styleUrl: './expense-payment-detail-dialog.component.scss',
+      styleUrls: ['./expense-payment-detail-dialog.component.scss'],
       animations: [
             trigger('statusChangeFade', [
                   transition('* => *', [
@@ -256,15 +257,14 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
       isSubmittingReply = false;
       replyControl = new FormControl<string>('', { nonNullable: true });
 
-      startReply(commentId: string) {
+      startReply(commentId: string | null) {
             this.replyingToCommentId = commentId;
-            this.replyControl.setValue('');
       }
       
-      async submitReply(parentId: string) {
-            const content = this.replyControl.value.trim();
+      async submitReply(event: { parentId: string; content: string }) {
+            const { parentId, content } = event;
             if (!content) {
-                  this.toast.warning("Bạn chưa nhập nội dung phản hồi");
+                  this.toast.warningRich("Bạn chưa nhập nội dung phản hồi");
                   return;
             }
             
@@ -274,7 +274,7 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
                   const payload: CommentPayload = {
                         documentType: DOCUMENT_TYPE.EXPENSE_PAYMENT,
                         documentId: this.paymentId,
-                        content: content,
+                        content: content.trim(),
                   };
 
                   const newReply = await firstValueFrom(this.commentApi.reply(parentId, payload));
