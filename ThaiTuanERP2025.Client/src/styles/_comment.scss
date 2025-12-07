@@ -1,3 +1,36 @@
+.comment-item {
+      position: relative;
+      padding-left: 10px;
+
+      &.depth-0 {
+            // Không vẽ line ở root
+            &:before, &:after { display: none; }
+      }
+
+      /* Vertical line */
+      &:before {
+            content: "";
+            position: absolute;
+            left: -10px; 
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: #e0e0e0;
+      }
+
+      /* Horizontal branch */
+      &:after {
+            content: "";
+            position: absolute;
+            left: -10px;
+            top: 20px;  /* vị trí giữa avatar */
+            width: 10px;
+            height: 2px;
+            background: #e0e0e0;
+      }     
+}
+
+
 .comment-input {
       border: none;
       border-bottom: 1px solid var(--default-border-color);

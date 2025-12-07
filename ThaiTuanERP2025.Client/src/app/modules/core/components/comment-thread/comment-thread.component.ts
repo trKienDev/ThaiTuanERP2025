@@ -33,17 +33,20 @@ export class CommentThreadComponent {
       onReply() {
             this.reply.emit(this.comment.id);
       }
-
-      onCancel() {
-            this.cancelReply.emit();
-      }
-
-
       onSubmitReply() {
             const content = this.replyControl.value.trim();
             if (!content) return;
 
             this.submitReply.emit({ parentId: this.comment.id, content });
             this.replyControl.setValue('');
+      }
+
+      onCancel() {
+            this.cancelReply.emit();
+      }
+
+      showReplies = false;
+      toggleReplies() {
+            this.showReplies = !this.showReplies;
       }
 }
