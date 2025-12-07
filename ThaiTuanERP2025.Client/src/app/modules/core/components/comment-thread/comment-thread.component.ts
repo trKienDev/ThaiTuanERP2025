@@ -12,13 +12,26 @@ import { CommentDetailDto } from "../../models/comment.model";
       templateUrl: './comment-thread.component.html',
 })
 export class CommentThreadComponent {
+      ngOnChanges() {
+            console.log(">>> THREAD <<<", {
+                  selfId: this.comment.id,
+                  depth: this.depth,
+                  replyingToCommentId: this.replyingToCommentId,
+                  shouldShow: this.replyingToCommentId === this.comment.id
+            });
+      }
+
       @Input() comment!: CommentDetailDto;
       @Input() depth = 0;
       @Input() replyingToCommentId: string | null = null;
 
-      @Output() reply = new EventEmitter<string | null>();
+      @Output() replyRequest = new EventEmitter<string | null>();
       @Output() submitReply = new EventEmitter<{ parentId: string; content: string }>();
       @Output() cancelReply = new EventEmitter<void>();
+
+      trackById(index: number, item: CommentDetailDto) {
+            return item.id;
+      }
 
       replyControl = new FormControl('', { nonNullable: true });
 
@@ -31,7 +44,7 @@ export class CommentThreadComponent {
       }
 
       onReply() {
-            this.reply.emit(this.comment.id);
+            this.replyRequest.emit(this.comment.id);
       }
       onSubmitReply() {
             const content = this.replyControl.value.trim();

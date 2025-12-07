@@ -223,7 +223,7 @@
                                                       <comment-thread *ngFor="let comment of comments"
                                                       [comment]="comment"
                                                       [replyingToCommentId]="replyingToCommentId"
-                                                      (reply)="startReply($event)"
+                                                      (replyRequest)="startReply($event)"
                                                       (submitReply)="submitReply($event)"
                                                       (cancelReply)="cancelReply()">
                                                       </comment-thread>
