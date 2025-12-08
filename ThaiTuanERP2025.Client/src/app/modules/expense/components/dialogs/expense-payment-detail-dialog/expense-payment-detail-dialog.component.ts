@@ -315,6 +315,10 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
             this.replyingToCommentId = null;
       }
 
+      previewCommentLocalFile(file: File) {
+            this.filePreview.previewLocalFile(file);
+      }
+
       private findCommentRecursive(list: CommentDetailDto[], id: string): CommentDetailDto | null {
             for (const c of list) {
                   if (c.id === id) return c;

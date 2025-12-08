@@ -21,6 +21,7 @@ export class KitFileUploaderComponent {
       @Output() uploadsChange = new EventEmitter<UploadItem[]>();
       @Output() completed = new EventEmitter<UploadItem>();      // bắn từng file khi done
       @Output() removed = new EventEmitter<UploadItem>();        // bắn khi xoá
+      @Output() previewRequested = new EventEmitter<File>();
 
       private readonly fileService = inject(FileService);
       private readonly toast = inject(ToastService);
@@ -73,6 +74,10 @@ export class KitFileUploaderComponent {
             }
             this.uploadsChange.emit(this.uploads);
             input.value = '';
+      }
+
+      preview(item: UploadItem) {
+            this.previewRequested.emit(item.file);
       }
 
       remove(i: number) {

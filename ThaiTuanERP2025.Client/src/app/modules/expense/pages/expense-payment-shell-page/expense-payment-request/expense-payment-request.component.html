@@ -85,6 +85,7 @@
                                           <th>Xóa</th>
                                     </tr>
                               </thead>
+                              
                               <tbody formArrayName="items">
                                     <tr *ngFor="let row of items.controls; let i = index; trackBy: trackByIndex" [formGroupName]="i">
                                           <td>{{ i + 1 }}</td>

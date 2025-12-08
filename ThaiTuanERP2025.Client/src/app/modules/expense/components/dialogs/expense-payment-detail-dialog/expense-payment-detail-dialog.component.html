@@ -216,13 +216,13 @@
                                                       </div>
                                                       
                                                       <div *ngIf="isCommenting" class="comment-actions display-flex justify-content-between gap-5px">
-                                                            <kit-file-uploader class="width-fit-content" [meta]="uploadMetaForComment" [(uploads)]="commentUploads" [compact]="true"></kit-file-uploader>
+                                                            <kit-file-uploader class="width-fit-content" 
+                                                            [meta]="uploadMetaForComment" [(uploads)]="commentUploads" [compact]="true"
+                                                            (previewRequested)="previewCommentLocalFile($event)"></kit-file-uploader>
                                                             <div class="display-flex gap-5px">
                                                                   <button type="button" class="button cancel-button padding-5px border-radius-3px" (click)="cancelComment()">Hủy</button>
                                                                   <kit-spinner-button type="button" cssClass="save-button padding-5px border-radius-3px"  text="Bình luận" loadingText="Đang gửi bình luận …" 
-                                                                  [loading]="isSubmittingComment" 
-                                                                  [disabled]="!canSubmitComment"
-                                                                  (click)="submitComment()"></kit-spinner-button>
+                                                                  [loading]="isSubmittingComment" [disabled]="!canSubmitComment" (click)="submitComment()"></kit-spinner-button>
                                                             </div>
                                                       </div>
                                                 </div>

@@ -11,7 +11,7 @@
       <!-- Danh sách file -->
       <div class="compact-files">
             <div *ngFor="let u of uploads; let i = index; trackBy: trackById" class="compact-file" style="height: 14px;">
-                  <span class="file-name">{{ u.file.name }}</span>
+                  <span class="file-name" (click)="preview(u)">{{ u.file.name }}</span>
                   <button type="button" class="remove-button" (click)="remove(i)">
                         <span class="material-icons-outlined">remove_circle_outline</span>
                   </button>
