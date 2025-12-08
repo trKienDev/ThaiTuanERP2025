@@ -281,6 +281,7 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
                   this.comments.unshift(newCommentDto);
                   
                   this.commentControl.setValue('');
+                  this.commentUploads = []; // uploads được bind 2-way:
             } catch(error) {
                   this.httpErrorHandler.handle(error, "Bình luận không thành công");
             } finally {
