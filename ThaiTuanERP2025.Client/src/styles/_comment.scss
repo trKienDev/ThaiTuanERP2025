@@ -15,20 +15,8 @@
             top: 0;
             bottom: 0;
             width: 1px;
-            height: 50%;
             background: #e0e0e0;
-      }
-
-      /* Horizontal branch */
-      &:after {
-            content: "";
-            position: absolute;
-            left: -10px;
-            top: 20px;  /* vị trí giữa avatar */
-            width: 10px;
-            height: 2px;
-            background: #e0e0e0;
-      }     
+      } 
 }
 
 

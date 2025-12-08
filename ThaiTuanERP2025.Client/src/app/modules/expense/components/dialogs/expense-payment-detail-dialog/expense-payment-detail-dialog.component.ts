@@ -216,6 +216,10 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
             this.comments = await firstValueFrom(this.commentApi.getComments(DOCUMENT_TYPE.EXPENSE_PAYMENT, this.paymentId));
       }
 
+      get canSubmitComment(): boolean {
+            return !this.isSubmittingComment && this.commentControl.value.trim().length > 0;
+      }
+
       async submitComment() {
             const content = this.commentControl.value.trim();
 

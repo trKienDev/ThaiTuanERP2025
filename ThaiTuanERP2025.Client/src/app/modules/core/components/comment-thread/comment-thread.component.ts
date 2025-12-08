@@ -28,6 +28,10 @@ export class CommentThreadComponent {
 
       replyControl = new FormControl('', { nonNullable: true });
 
+      get canSubmitReply(): boolean {
+            return this.replyControl.value.trim().length > 0;
+      }
+
       trackById(index: number, item: CommentDetailDto) {
             return item.id;
       }
