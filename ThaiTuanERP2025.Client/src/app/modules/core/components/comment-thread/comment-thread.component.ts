@@ -1,9 +1,10 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, ChangeDetectionStrategy } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, inject } from "@angular/core";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 import { AvatarUrlPipe } from "../../../../shared/pipes/avatar-url.pipe";
 import { CommentDetailDto } from "../../models/comment.model";
+import { CommentStateService } from "../../services/states/comment-state.service";
 
 @Component({
       selector: 'comment-thread',
@@ -22,15 +23,32 @@ export class CommentThreadComponent {
       @Output() submitReply = new EventEmitter<{ parentId: string; content: string }>();
       @Output() cancelReply = new EventEmitter<void>();
 
+      private readonly state = inject(CommentStateService);
+      private readonly changeDetector = inject(ChangeDetectorRef);
+
+      replyControl = new FormControl('', { nonNullable: true });
+
       trackById(index: number, item: CommentDetailDto) {
             return item.id;
       }
 
-      replyControl = new FormControl('', { nonNullable: true });
+      /** Comment này có đang mở reply không */
+      get expanded(): boolean { return this.state.isExpanded(this.comment.id); }
+
+      /** Toggle mở/đóng toàn bộ cây con */
+      toggleReplies() {
+            if (this.expanded)
+                  this.state.collapseRecursive(this.comment);
+            else
+                  this.state.expandRecursive(this.comment);
+
+            this.changeDetector.markForCheck();
+      }
 
       @ViewChild('replyInput') replyInput!: ElementRef<HTMLInputElement>;
 
-      ngAfterViewInit(): void {
+
+      ngAfterViewInit() {
             if (this.replyingToCommentId === this.comment.id) {
                   setTimeout(() => this.replyInput?.nativeElement?.focus(), 50);
             }
@@ -39,6 +57,7 @@ export class CommentThreadComponent {
       onReply() {
             this.replyRequest.emit(this.comment.id);
       }
+
       onSubmitReply() {
             const content = this.replyControl.value.trim();
             if (!content) return;
@@ -51,8 +70,4 @@ export class CommentThreadComponent {
             this.cancelReply.emit();
       }
 
-      showReplies = false;
-      toggleReplies() {
-            this.showReplies = !this.showReplies;
-      }
 }

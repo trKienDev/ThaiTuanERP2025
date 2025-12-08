@@ -24,5 +24,8 @@ export interface CommentDetailDto {
 
       parentId: string;
       replies: CommentDetailDto[];
+
+      // CLIENT ONLY
+      _forceExpand?: boolean; 
 }
 
