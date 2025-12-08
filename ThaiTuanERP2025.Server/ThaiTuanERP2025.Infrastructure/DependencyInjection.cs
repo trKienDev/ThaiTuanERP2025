@@ -155,9 +155,6 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IExpensePaymentWriteRepository, ExpensePaymentWriteRepository>();
 			services.AddScoped<IExpensePaymentItemsWriteRepository, ExpensePaymentItemsWriteRepository>();
 			services.AddScoped<IExpensePaymentAttachmentWriteRepository, ExpensePaymentAttachmentWriteRepository>();
-			services.AddScoped<IExpensePaymentCommentRepository, ExpensePaymentCommentRepository>();
-			services.AddScoped<IExpensePaymentCommentTagRepository, ExpensePaymentCommentTagRepository>();
-			services.AddScoped<IExpensePaymentCommentAttachmentRepository, ExpensePaymentCommentAttachmentRepository>();
 
 			// Core
 			services.AddScoped<IFollowerReadRepository, FollowerReadRepository>();
@@ -170,6 +167,7 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<IOutboxMessageWriteRepository, OutboxMessageWriteRepository>();
 			services.AddScoped<ICommentWriteRepository, CommentWriteRepository>();
 			services.AddScoped<ICommentReadRepository, CommentReadRepository>();
+			services.AddScoped<ICommentAttachmentWriteRepository, CommentAttachmentWriteRepository>();
 
 			// Authentication
 			services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();

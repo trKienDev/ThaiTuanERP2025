@@ -30,6 +30,7 @@ import { DOCUMENT_TYPE } from '../../../../../core/constants/document-types.cons
 import { CommentThreadComponent } from "../../../../core/components/comment-thread/comment-thread.component";
 import { UploadItem } from '../../../../../shared/components/kit-file-uploader/upload-item.model';
 import { KitFileUploaderComponent } from "../../../../../shared/components/kit-file-uploader/kit-file-uploader.component";
+import { FileService } from '../../../../../shared/services/file.service';
 
 @Component({
       selector: 'expense-payment-detail-dialog',
@@ -57,6 +58,7 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
       private readonly router = inject(Router);
       currentUser$ = inject(UserFacade).currentUser$;
       private readonly filePreview = inject(FilePreviewService);
+      private readonly fileApi = inject(FileService);
 
       approving = false;
       rejecting = false;
@@ -241,11 +243,39 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
                   this.isSubmittingComment = true;
                   this.isCommenting = false;
 
+                  // ====== 1. Upload ATTACHMENTS trước ======
+                  const uploadedIds: string[] = [];
+
+                  for (const u of this.commentUploads) {
+                        try {
+                              const result = await firstValueFrom(
+                                    this.fileApi.uploadFile(
+                                          u.file,
+                                          'expense',
+                                          'expense-payment-comment-attachment',
+                                          this.paymentId,
+                                          false
+                                    )
+                              );
+
+                              if (result.data?.id) {
+                                    uploadedIds.push(result.data.id);
+                                    u.fileId = result.data.id;
+                                    u.status = 'done';
+                              }
+                        } catch (err) {
+                              u.status = 'error';
+                        }
+                  }
+
                   const payload: CommentPayload = ({
                         documentType: DOCUMENT_TYPE.EXPENSE_PAYMENT,
                         documentId: this.paymentId,
-                        content: content
+                        content: content,
+                        attachmentIds: uploadedIds.length ? uploadedIds : undefined
                   });
+
+                  console.log('payload: ', payload);
 
                   const newCommentDto = await firstValueFrom(this.commentApi.create(payload));
                   this.comments.unshift(newCommentDto);

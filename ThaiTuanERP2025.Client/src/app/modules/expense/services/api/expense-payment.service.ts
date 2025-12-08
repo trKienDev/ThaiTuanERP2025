@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { ExpensePaymentDetailDto, ExpensePaymentDto, ExpensePaymentLookupDto, ExpensePaymentPayload } from "../../models/expense-payment.model";
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { environment } from "../../../../../environments/environment";
 import { catchError, Observable, throwError } from "rxjs";
 import { ApiResponse } from "../../../../shared/models/api-response.model";

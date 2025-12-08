@@ -63,10 +63,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<ExpensePayment> ExpensePayments => Set<ExpensePayment>();	
 		public DbSet<ExpensePaymentItem> ExpensePaymentItems => Set<ExpensePaymentItem>();
 		public DbSet<ExpensePaymentAttachment> ExpensePaymentAttachments => Set<ExpensePaymentAttachment>();
-		public DbSet<ExpensePaymentComment> ExpensePaymentComments => Set<ExpensePaymentComment>();
-		public DbSet<ExpensePaymentCommentAttachment> ExpensePaymentCommentAttachments => Set<ExpensePaymentCommentAttachment>();
-		public DbSet<ExpensePaymentCommentTag> expensePaymentCommentTags => Set<ExpensePaymentCommentTag>();
-		public DbSet<OutgoingPayment> outgoingPayments => Set<OutgoingPayment>();
+		public DbSet<OutgoingPayment> OutgoingPayments => Set<OutgoingPayment>();
 
 		// RBAC
 		public DbSet<Role> Roles => Set<Role>();
@@ -76,6 +73,8 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 
 		// Core
 		public DbSet<Follower> Followers => Set<Follower>();
+		public DbSet<Comment> Comments => Set<Comment>();	
+		public DbSet<CommentAttachment> CommentAttachments => Set<CommentAttachment>();
 		public DbSet<UserNotification> UserNotifications => Set<UserNotification>();
 		public DbSet<UserReminder> UserReminders => Set<UserReminder>();
 		public DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();

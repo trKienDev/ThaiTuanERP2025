@@ -51,9 +51,6 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 			IExpensePaymentWriteRepository expensePayments,
 			IExpensePaymentItemsWriteRepository expensePaymentItems,
 			IExpensePaymentAttachmentWriteRepository expensePaymentAttachments,
-			IExpensePaymentCommentRepository expensePaymentComments,
-			IExpensePaymentCommentTagRepository expensePaymentCommentTags,
-			IExpensePaymentCommentAttachmentRepository expensePaymentCommentAttachments,
 
 			// Core
 			IFollowerWriteRepository followers,
@@ -61,6 +58,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 			IUserReminderWriteRepository userReminders,
 			IOutboxMessageWriteRepository outboxMessages,
 			ICommentWriteRepository comments,
+			ICommentAttachmentWriteRepository commentAttachments,
 
 			// RBAC
 			IRoleWriteRepository roles,
@@ -104,15 +102,13 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 			ExpensePayments = expensePayments;
 			ExpensePaymentItems = expensePaymentItems;
 			ExpensePaymentAttachments = expensePaymentAttachments;
-			ExpensePaymentComments = expensePaymentComments;
-			ExpensePaymentCommentAttachments = expensePaymentCommentAttachments;
-			ExpensePaymentCommentTags = expensePaymentCommentTags;
 
 			Followers = followers;
 			UserNotifications = userNotifications;
 			UserReminders = userReminders;
 			OutboxMessages = outboxMessages;
 			Comments = comments;
+			CommentAttachments  = commentAttachments;
 
 			Roles = roles;
 			Permissions = permissions;
@@ -156,9 +152,6 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 		public IExpensePaymentWriteRepository ExpensePayments { get; }
 		public IExpensePaymentItemsWriteRepository ExpensePaymentItems { get; }
 		public IExpensePaymentAttachmentWriteRepository ExpensePaymentAttachments { get; }
-		public IExpensePaymentCommentRepository ExpensePaymentComments { get; }
-		public IExpensePaymentCommentAttachmentRepository ExpensePaymentCommentAttachments { get; }
-		public IExpensePaymentCommentTagRepository ExpensePaymentCommentTags { get; }
 
 		// Core
 		public IFollowerWriteRepository Followers { get; }
@@ -166,6 +159,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 		public IUserReminderWriteRepository UserReminders { get; }
 		public IOutboxMessageWriteRepository OutboxMessages { get;  }
 		public ICommentWriteRepository Comments { get; }
+		public ICommentAttachmentWriteRepository CommentAttachments { get; }
 
 		// RBAC
 		public IUserRoleRepository UserRoles { get; }

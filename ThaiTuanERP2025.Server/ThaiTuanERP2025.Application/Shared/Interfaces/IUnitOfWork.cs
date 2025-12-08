@@ -47,9 +47,6 @@ namespace ThaiTuanERP2025.Domain.Shared.Repositories
 		IExpensePaymentWriteRepository ExpensePayments { get; }
 		IExpensePaymentItemsWriteRepository ExpensePaymentItems { get; }
 		IExpensePaymentAttachmentWriteRepository ExpensePaymentAttachments { get; }
-		IExpensePaymentCommentRepository ExpensePaymentComments { get; }
-		IExpensePaymentCommentAttachmentRepository ExpensePaymentCommentAttachments { get; }
-		IExpensePaymentCommentTagRepository ExpensePaymentCommentTags { get; }
 
 		// Core
 		IFollowerWriteRepository Followers { get; }
@@ -57,6 +54,8 @@ namespace ThaiTuanERP2025.Domain.Shared.Repositories
 		IUserReminderWriteRepository UserReminders { get; }
 		IOutboxMessageWriteRepository OutboxMessages { get; }	
 		ICommentWriteRepository Comments { get; }
+		ICommentAttachmentWriteRepository CommentAttachments { get; }
+
 
 		// RBAC
 		IRoleWriteRepository Roles { get; }

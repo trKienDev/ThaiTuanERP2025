@@ -43,7 +43,9 @@ namespace ThaiTuanERP2025.Application.Core.Comments.Commands
 		public async Task<CommentDetailDto> Handle(AddCommentCommand command, CancellationToken cancellationToken)
 		{
 			var payload = command.Payload;
-                        var documentType = Enum.Parse<DocumentType>(payload.DocumentType, ignoreCase: true);
+
+			#region Construct Comment
+			var documentType = Enum.Parse<DocumentType>(payload.DocumentType, ignoreCase: true);
 
                         var userId = _currentUser.UserId ?? throw new UnauthorizedException("User không hợp lệ");
 			var userName = await _userRepo.GetUserNameAsync(userId, cancellationToken);
@@ -54,6 +56,14 @@ namespace ThaiTuanERP2025.Application.Core.Comments.Commands
 				userId,
 				payload.Content
 			);
+			#endregion
+
+			#region Attachments
+			if (payload.AttachmentIds.Any())
+			{
+				newComment.AddAttachments(payload.AttachmentIds);
+			}
+			#endregion
 
 			#region Send notifications to followers
 			switch (documentType)

@@ -11,7 +11,7 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Comments_Comments_ParentCommentId",
+                name: "c",
                 schema: "Core",
                 table: "Comments");
 

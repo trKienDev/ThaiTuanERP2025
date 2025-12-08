@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ThaiTuanERP2025.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using ThaiTuanERP2025.Infrastructure.Persistence;
 namespace ThaiTuanERP2025.Infrastructure.Migrations
 {
     [DbContext(typeof(ThaiTuanERP2025DbContext))]
-    partial class ThaiTuanERP2025DbContextModelSnapshot : ModelSnapshot
+    [Migration("20251208083016_RemoveEntityExpensePaymentComment_Tag_Attachment")]
+    partial class RemoveEntityExpensePaymentComment_Tag_Attachment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -599,27 +602,6 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                         .HasDatabaseName("IX_Comments_DocumentType_DocumentId");
 
                     b.ToTable("Comments", "Core");
-                });
-
-            modelBuilder.Entity("ThaiTuanERP2025.Domain.Core.Entities.CommentAttachment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CommentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("StoredFileId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CommentId");
-
-                    b.HasIndex("StoredFileId");
-
-                    b.ToTable("CommentAttachments", "Core");
                 });
 
             modelBuilder.Entity("ThaiTuanERP2025.Domain.Core.Entities.Follower", b =>
@@ -2755,25 +2737,6 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ThaiTuanERP2025.Domain.Core.Entities.CommentAttachment", b =>
-                {
-                    b.HasOne("ThaiTuanERP2025.Domain.Core.Entities.Comment", "Comment")
-                        .WithMany("Attachments")
-                        .HasForeignKey("CommentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ThaiTuanERP2025.Domain.StoredFiles.Entities.StoredFile", "StoredFile")
-                        .WithMany()
-                        .HasForeignKey("StoredFileId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Comment");
-
-                    b.Navigation("StoredFile");
-                });
-
             modelBuilder.Entity("ThaiTuanERP2025.Domain.Core.Entities.UserNotification", b =>
                 {
                     b.HasOne("ThaiTuanERP2025.Domain.Account.Entities.User", "Receiver")
@@ -3591,8 +3554,6 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
 
             modelBuilder.Entity("ThaiTuanERP2025.Domain.Core.Entities.Comment", b =>
                 {
-                    b.Navigation("Attachments");
-
                     b.Navigation("Replies");
                 });
 
