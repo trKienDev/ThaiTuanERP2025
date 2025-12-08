@@ -73,5 +73,4 @@ export class CommentThreadComponent {
       onCancel() {
             this.cancelReply.emit();
       }
-
 }

@@ -39,9 +39,31 @@ export class KitFileUploaderComponent {
       onFileSelected(ev: Event) {
             const input = ev.target as HTMLInputElement;
             const files = Array.from(input.files ?? []);
+
             if (!files.length) return;
 
+            // --- Giới hạn số file chọn trong 1 lần ---
+            if (files.length > 10) {
+                  this.toast.errorRich('Bạn chỉ được chọn tối đa 10 tệp mỗi lần tải lên');
+                  input.value = '';
+                  return;
+            }
+
+            // --- Giới hạn tổng số file đã upload ---
+            if ((this.uploads.length + files.length) > 10) {
+                  this.toast.errorRich('Tổng số tệp tối đa là 10');
+                  input.value = '';
+                  return;
+            }
+
+            const MAX_SIZE = 50 * 1024 * 1024; // 10MB
             for (const f of files) {
+                  if (f.size > MAX_SIZE) {
+                        this.toast.errorRich(`Tệp "${f.name}" vượt quá 50 MB và sẽ không được tải lên.`);
+                        continue;
+                  }                                                                                                                                               
+
+
                   if (!f.size) { 
                         this.toast.errorRich('File không hợp lệ'); 
                         continue; 
@@ -62,4 +84,5 @@ export class KitFileUploaderComponent {
       }
 
       get hasQueued() { return this.uploads.some(u => u.status === 'queued'); }
+      get isFull(): boolean { return this.uploads.length >= 10; }
 }

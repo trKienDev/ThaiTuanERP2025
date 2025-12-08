@@ -2,10 +2,11 @@
 <div *ngIf="compact" class="compact-uploader">
       <button type="button" (click)="openFilePicker()" class="comment-reply-button color-aaa display-flex align-items-center gap-5px">
             <span style="font-size: 14px;" class="material-icons-outlined">attach_file</span>
-            Đính kèm
+            {{ isFull ? 'Đã đủ 10 tệp' : 'Đính kèm' }}
       </button>
 
-      <input #fileInput type="file" [accept]="accept" hidden (change)="onFileSelected($event)" />
+      <input #fileInput type="file" [accept]="accept" hidden 
+      [attr.multiple]="multiple ? '' : null" (change)="onFileSelected($event)" />
 
       <!-- Danh sách file -->
       <div class="compact-files">
@@ -22,9 +23,12 @@
 <!-- NORMAL MODE -->
  <div *ngIf="!compact" class="file-uploader-container margin-top-10px">
       <div class="file-uploader">
-            <input id="kitUploaderInput" type="file" class="file-input d-none" [accept]="accept" [attr.multiple]="multiple ? '' : null" (change)="onFileSelected($event)" />
+            <input id="kitUploaderInput" type="file" class="file-input d-none" 
+            [accept]="accept" [attr.multiple]="multiple ? '' : null" (change)="onFileSelected($event)" />
             <div class="button default-button">
-                  <label for="kitUploaderInput" class="cursor-pointer">Chọn file (PDF/Ảnh)</label>
+                  <label for="kitUploaderInput" class="cursor-pointer">
+                        {{ isFull ? 'Đã đủ 10 tệp' : 'Chọn file (PDF/Ảnh)' }}
+                  </label>
             </div>
             <span *ngIf="!(uploads?.length)" class="file-name muted" style="color: #aaa; margin-left:10px;">Chưa chọn file</span>
       </div>
