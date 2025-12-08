@@ -208,17 +208,22 @@
                               <div class="card-wrapper">
                                     <div class="card-body display-flex flex-column gap-5px">
                                           <div class="comments-container display-flex flex-column gap-10px">
-                                                <div class="input-comment-area display-flex flex-column gap-5px">
+
+                                                <div class="input-comment-box display-flex flex-column gap-5px">
                                                       <div class="user-comment display-flex gap-5px align-items-center">
                                                             <img class="avatar-user" [src]="(currentUser$ | async) | avatarUrlPipe">
                                                             <input type="text" class="comment-input" placeholder="Viết bình luận ...." (focus)="isCommenting = true" [formControl]="commentControl">
                                                       </div>
-                                                      <div *ngIf="isCommenting" class="comment-actions display-flex justify-content-end gap-5px">
-                                                            <button type="button" class="button cancel-button padding-5px border-radius-3px" (click)="cancelComment()">Hủy</button>
-                                                            <kit-spinner-button type="button" cssClass="save-button padding-5px border-radius-3px"  text="Bình luận" loadingText="Đang gửi bình luận …" 
-                                                            [loading]="isSubmittingComment" 
-                                                            [disabled]="!canSubmitComment"
-                                                            (click)="submitComment()"></kit-spinner-button>
+                                                      
+                                                      <div *ngIf="isCommenting" class="comment-actions display-flex justify-content-between gap-5px">
+                                                            <kit-file-uploader class="width-fit-content" [meta]="uploadMetaForComment" [(uploads)]="commentUploads" [compact]="true"></kit-file-uploader>
+                                                            <div class="display-flex gap-5px">
+                                                                  <button type="button" class="button cancel-button padding-5px border-radius-3px" (click)="cancelComment()">Hủy</button>
+                                                                  <kit-spinner-button type="button" cssClass="save-button padding-5px border-radius-3px"  text="Bình luận" loadingText="Đang gửi bình luận …" 
+                                                                  [loading]="isSubmittingComment" 
+                                                                  [disabled]="!canSubmitComment"
+                                                                  (click)="submitComment()"></kit-spinner-button>
+                                                            </div>
                                                       </div>
                                                 </div>
 

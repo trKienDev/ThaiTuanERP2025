@@ -443,16 +443,10 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
 
                   console.log('payload: ', payload);
                   await firstValueFrom(this.expensePaymentService.create(payload));
-                  // this.router.navigate(
-                  //       ['/expense/expense-payment-shell/following-payments'],
-                  //       { queryParams: { paymentId: result } }
-                  // );
                   this.toast.successRich('Gửi phê duyệt thành công');
             } catch (error) {
                   this.httpErrorHandler.handle(error, "Gửi phê duyệt thất bại");
             } finally {
-                  // demo 
-                  // await this.wait(800);
                   this.submitting = false;
             }
       }

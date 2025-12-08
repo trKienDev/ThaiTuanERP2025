@@ -28,11 +28,13 @@ import { CommentApiService } from '../../../../core/services/api/comment.service
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { DOCUMENT_TYPE } from '../../../../../core/constants/document-types.constants';
 import { CommentThreadComponent } from "../../../../core/components/comment-thread/comment-thread.component";
+import { UploadItem } from '../../../../../shared/components/kit-file-uploader/upload-item.model';
+import { KitFileUploaderComponent } from "../../../../../shared/components/kit-file-uploader/kit-file-uploader.component";
 
 @Component({
       selector: 'expense-payment-detail-dialog',
       standalone: true,
-      imports: [CommonModule, AvatarUrlPipe, ExpensePaymentStatusPipe, KitSpinnerButtonComponent, KitFlipCountdownComponent, OutgoingPaymentStatusPipe, ExpensePaymentItemsTableComponent, OutgoingPaymentsTableComponent, ReactiveFormsModule, CommentThreadComponent],
+      imports: [CommonModule, AvatarUrlPipe, ExpensePaymentStatusPipe, KitSpinnerButtonComponent, KitFlipCountdownComponent, OutgoingPaymentStatusPipe, ExpensePaymentItemsTableComponent, OutgoingPaymentsTableComponent, ReactiveFormsModule, CommentThreadComponent, KitFileUploaderComponent],
       templateUrl: './expense-payment-detail-dialog.component.html',
       styleUrls: ['./expense-payment-detail-dialog.component.scss'],
       animations: [
@@ -65,6 +67,13 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
       paymentId: string;
       paymentDetail: ExpensePaymentDetailDto | null = null;
 
+      commentUploads: UploadItem[] = [];
+      uploadMetaForComment = {
+            module: 'expense',
+            entity: 'comment-attachment',
+            entityId: undefined as string | undefined,
+            isPublic: false
+      };
 
       constructor(@Inject(MAT_DIALOG_DATA) public data: string) {
             this.paymentId = data;

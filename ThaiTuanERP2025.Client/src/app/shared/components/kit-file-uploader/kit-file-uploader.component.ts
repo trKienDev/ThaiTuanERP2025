@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
 import { FileService } from '../../services/file.service';
 import { ToastService } from '../kit-toast-alert/kit-toast-alert.service';
 import { UploadMeta, UploadItem } from './upload-item.model';
@@ -15,14 +15,26 @@ export class KitFileUploaderComponent {
       @Input() accept = 'application/pdf,image/*';
       @Input() multiple = true;
       @Input({ required: true }) meta!: UploadMeta;
-
       @Input() uploads: UploadItem[] = [];
+      @Input() compact: boolean = false;
+
       @Output() uploadsChange = new EventEmitter<UploadItem[]>();
       @Output() completed = new EventEmitter<UploadItem>();      // bắn từng file khi done
       @Output() removed = new EventEmitter<UploadItem>();        // bắn khi xoá
 
       private readonly fileService = inject(FileService);
       private readonly toast = inject(ToastService);
+
+      trackById(index: number, item: UploadItem) {
+            return item.name;
+      }
+
+      @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+      openFilePicker() {
+            if (this.fileInput) {
+                  this.fileInput.nativeElement.click();
+            }
+      }
 
       onFileSelected(ev: Event) {
             const input = ev.target as HTMLInputElement;
@@ -40,8 +52,6 @@ export class KitFileUploaderComponent {
             this.uploadsChange.emit(this.uploads);
             input.value = '';
       }
-
-
 
       remove(i: number) {
             const item = this.uploads[i];

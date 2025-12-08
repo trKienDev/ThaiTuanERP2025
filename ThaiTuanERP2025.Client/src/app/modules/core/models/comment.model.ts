@@ -4,6 +4,7 @@ export interface CommentPayload {
       documentType: string;
       documentId: string;
       content: string;
+      attachmentIds?: string[];
 }
 
 export interface CommentDto {

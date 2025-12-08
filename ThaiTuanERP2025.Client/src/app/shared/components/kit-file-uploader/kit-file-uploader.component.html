@@ -1,4 +1,26 @@
-<div class="file-uploader-container margin-top-10px">
+<!-- COMPACT MODE -->
+<div *ngIf="compact" class="compact-uploader">
+      <button type="button" (click)="openFilePicker()" class="comment-reply-button color-aaa display-flex align-items-center gap-5px">
+            <span style="font-size: 14px;" class="material-icons-outlined">attach_file</span>
+            Đính kèm
+      </button>
+
+      <input #fileInput type="file" [accept]="accept" hidden (change)="onFileSelected($event)" />
+
+      <!-- Danh sách file -->
+      <div class="compact-files">
+            <div *ngFor="let u of uploads; let i = index; trackBy: trackById" class="compact-file" style="height: 14px;">
+                  <span class="file-name">{{ u.file.name }}</span>
+                  <button type="button" class="remove-button" (click)="remove(i)">
+                        <span class="material-icons-outlined">remove_circle_outline</span>
+                  </button>
+            </div>
+      </div>
+</div>
+
+
+<!-- NORMAL MODE -->
+ <div *ngIf="!compact" class="file-uploader-container margin-top-10px">
       <div class="file-uploader">
             <input id="kitUploaderInput" type="file" class="file-input d-none" [accept]="accept" [attr.multiple]="multiple ? '' : null" (change)="onFileSelected($event)" />
             <div class="button default-button">
