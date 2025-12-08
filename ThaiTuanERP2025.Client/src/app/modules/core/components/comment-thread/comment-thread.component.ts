@@ -22,10 +22,6 @@ export class CommentThreadComponent {
       @Output() submitReply = new EventEmitter<{ parentId: string; content: string }>();
       @Output() cancelReply = new EventEmitter<void>();
 
-      ngOnInit() {
-            console.log("Initial comment:", this.comment);
-      }
-
       trackById(index: number, item: CommentDetailDto) {
             return item.id;
       }

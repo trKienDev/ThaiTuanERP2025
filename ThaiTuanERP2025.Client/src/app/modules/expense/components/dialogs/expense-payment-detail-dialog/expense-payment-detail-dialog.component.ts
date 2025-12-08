@@ -234,8 +234,6 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
                         content: content
                   });
 
-                  console.log('payload: ', payload);
-
                   const newCommentDto = await firstValueFrom(this.commentApi.create(payload));
                   this.comments.unshift(newCommentDto);
                   
@@ -264,6 +262,13 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
       
       async submitReply(event: { parentId: string; content: string }) {
             const { parentId, content } = event;
+
+            const parent = this.findCommentRecursive(this.comments, parentId);
+            if (!parent) {
+                  this.toast.errorRich("Lỗi chương trình, ko tìm thấy comment cha");
+                  return;
+            }
+
             if (!content) {
                   this.toast.warningRich("Bạn chưa nhập nội dung phản hồi");
                   return;
@@ -280,13 +285,11 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
 
                   const newReply = await firstValueFrom(this.commentApi.reply(parentId, payload));
 
-                  const parent: CommentDetailDto | undefined = this.comments.find(c => c.id === parentId);
-                  if(parent) {
-                        parent.replies = parent.replies ?? [];
-                        parent.replies.push(newReply);
-                  }    
+                  parent.replies = parent.replies ?? [];
+                  parent.replies.push(newReply);
 
-                  this.replyControl.setValue('');
+                  this.comments = [...this.comments]; // force update để OnPush chạy
+
                   this.replyingToCommentId = null;
             } catch(error) {
                   this.httpErrorHandler.handle(error, "Gửi phản hồi thất bại");
@@ -297,5 +300,16 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
 
       cancelReply() {
             this.replyingToCommentId = null;
+      }
+
+      private findCommentRecursive(list: CommentDetailDto[], id: string): CommentDetailDto | null {
+            for (const c of list) {
+                  if (c.id === id) return c;
+                  if (c.replies?.length) {
+                        const found = this.findCommentRecursive(c.replies, id);
+                        if (found) return found;
+                  }
+            }
+            return null;
       }
 }
