@@ -25,8 +25,17 @@ namespace ThaiTuanERP2025.Application.Core.Comments.Queries
 
                 private List<CommentDetailDto> BuildTree(IReadOnlyList<CommentDetailDto> flat)
                 {
-                        var lookup = flat.ToDictionary(x => x.Id);
-                        var roots = new List<CommentDetailDto>();
+			// 1 ) Reset Replies trước khi build tree
+			foreach (var c in flat)
+			{
+				c.Replies = new List<CommentDetailDto>();
+			}
+
+			// 2 ) Tạo lookup để tìm parent nhanh
+			var lookup = flat.ToDictionary(x => x.Id);
+
+			// 3 ) Tạo danh sách root comments
+			var roots = new List<CommentDetailDto>();
 
                         foreach (var c in flat)
                         {

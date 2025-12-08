@@ -259,6 +259,7 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
 
       startReply(commentId: string | null) {
             this.replyingToCommentId = commentId;
+            this.comments = [...this.comments];
       }
       
       async submitReply(event: { parentId: string; content: string }) {

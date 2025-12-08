@@ -22,6 +22,6 @@ namespace ThaiTuanERP2025.Application.Core.Comments.Contracts
 		public DateTime CreatedAt { get; init; }
 
                 public Guid? ParentCommentId { get; set; }
-                public List<CommentDetailDto> Replies { get; set; } = new();
+                public List<CommentDetailDto> Replies { get; set; }
         }
 }

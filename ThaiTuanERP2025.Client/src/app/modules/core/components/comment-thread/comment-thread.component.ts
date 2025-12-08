@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input, Output, EventEmitter, ViewChild, ElementRef } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 import { AvatarUrlPipe } from "../../../../shared/pipes/avatar-url.pipe";
@@ -10,16 +10,9 @@ import { CommentDetailDto } from "../../models/comment.model";
       standalone: true,
       imports: [CommonModule, AvatarUrlPipe, ReactiveFormsModule, KitSpinnerButtonComponent],
       templateUrl: './comment-thread.component.html',
+      changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CommentThreadComponent {
-      ngOnChanges() {
-            console.log(">>> THREAD <<<", {
-                  selfId: this.comment.id,
-                  depth: this.depth,
-                  replyingToCommentId: this.replyingToCommentId,
-                  shouldShow: this.replyingToCommentId === this.comment.id
-            });
-      }
 
       @Input() comment!: CommentDetailDto;
       @Input() depth = 0;
@@ -28,6 +21,10 @@ export class CommentThreadComponent {
       @Output() replyRequest = new EventEmitter<string | null>();
       @Output() submitReply = new EventEmitter<{ parentId: string; content: string }>();
       @Output() cancelReply = new EventEmitter<void>();
+
+      ngOnInit() {
+            console.log("Initial comment:", this.comment);
+      }
 
       trackById(index: number, item: CommentDetailDto) {
             return item.id;

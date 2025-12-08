@@ -15,14 +15,21 @@
             </div>
 
             <div class="comment-actions display-flex justify-content-between">
-                  <div *ngIf="comment.replies?.length" class="reply-toggle" (click)="toggleReplies()">
-                        <button type="button" class="comment-reply-button color-aaa" *ngIf="!showReplies">
-                              Xem {{ comment.replies.length }} phản hồi
-                        </button>
-                        <button type="button" class="comment-reply-button color-aaa" *ngIf="showReplies">
-                              Ẩn phản hồi
-                        </button>
-                  </div>
+                  <ng-container *ngIf="comment.replies?.length; else placeholder">
+                        <div class="reply-toggle" (click)="toggleReplies()">
+                              <button type="button" class="comment-reply-button color-aaa" *ngIf="!showReplies">
+                                    Xem {{ comment.replies.length }} phản hồi
+                              </button>
+                              <button type="button" class="comment-reply-button color-aaa" *ngIf="showReplies">
+                                    Ẩn phản hồi
+                              </button>
+                        </div>
+                  </ng-container>
+
+                  <ng-template #placeholder>
+                        <div style="visibility: hidden;"></div>
+                  </ng-template>
+
                   <button class="comment-reply-button color-aaa" (click)="onReply()">Phản hồi</button>
             </div>
       </div>
