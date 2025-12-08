@@ -129,7 +129,7 @@
                                                 <ng-container *ngIf="(paymentDetail?.attachments?.length ?? 0) > 0">
                                                       <div class="payment-attachments display-flex gap-5px">
                                                             <ng-container *ngFor="let attachment of paymentDetail?.attachments">
-                                                                  <div class="payment-attachment">
+                                                                  <div class="file-attachment">
                                                                         <span (click)="previewAttachment(attachment.storedFile)">{{ attachment.storedFile.fileName }}</span>
                                                                   </div>
                                                             </ng-container>

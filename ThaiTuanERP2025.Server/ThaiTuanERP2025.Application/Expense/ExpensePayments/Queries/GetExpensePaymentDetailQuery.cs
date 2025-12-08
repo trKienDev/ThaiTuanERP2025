@@ -38,6 +38,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Queries
 					Followers = followerBriefAvatar
 				};
 			}
+
 			return paymentDetail;
 		}
 

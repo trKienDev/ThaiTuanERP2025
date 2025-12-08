@@ -51,3 +51,8 @@ export interface ExpensePaymentItemDetailDto extends ExpensePaymentItemDto {
       cashoutCode?: CashoutCodeDto;
       invoice?: InvoiceDto;
 }
+
+export interface ExpensePaymentAttachmentDto {
+      storedFile: StoredFileMetadataDto;
+}
+

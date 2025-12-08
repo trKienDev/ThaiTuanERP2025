@@ -17,7 +17,7 @@ namespace ThaiTuanERP2025.Domain.StoredFiles.Services
                         ExpenseFileEntities.Invoice,
                         ExpenseFileEntities.PaymentAttachment,
                         ExpenseFileEntities.OutgoingAttachment,
-                        ExpenseFileEntities.ExpensePaymentCommentAttachment
+                        ExpenseFileEntities.CommentAttachment
                 };
 
                 public static bool IsValidModule(string module) => Modules.Contains(module);

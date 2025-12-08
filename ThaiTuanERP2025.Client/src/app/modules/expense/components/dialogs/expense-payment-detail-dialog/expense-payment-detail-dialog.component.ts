@@ -251,8 +251,8 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
                               const result = await firstValueFrom(
                                     this.fileApi.uploadFile(
                                           u.file,
-                                          'expense',
-                                          'expense-payment-comment-attachment',
+                                          'core',
+                                          'comment-attachment',
                                           this.paymentId,
                                           false
                                     )

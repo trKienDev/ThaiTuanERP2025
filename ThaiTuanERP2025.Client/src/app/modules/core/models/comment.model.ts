@@ -1,3 +1,4 @@
+import { StoredFileMetadataDto } from "../../../core/services/file-preview.service";
 import { UserBriefAvatarDto } from "../../account/models/user.model";
 
 export interface CommentPayload {
@@ -26,7 +27,10 @@ export interface CommentDetailDto {
       parentId: string;
       replies: CommentDetailDto[];
 
-      // CLIENT ONLY
-      _forceExpand?: boolean; 
+      attachments: CommentAttachmentDto[];
+}
+
+export interface CommentAttachmentDto {
+      storedFile: StoredFileMetadataDto;
 }
 

@@ -36,6 +36,8 @@
             transition: duration 80ms;
             text-wrap: nowrap;
             width: fit-content;
+            display: flex;
+            gap: 5px;
 
             .file-name {
                   display: inline-block;
@@ -51,17 +53,18 @@
                   }
             }
 
-            .remove-button {
-                  color: #aaa;
-                  padding: 0px;
-                  background: none;
-                  cursor: pointer;
-                  span { font-size: 12px; }
-
-                  &:hover span { color: red; }
-            }
+            
       }
 
+      .remove-button {
+            color: #aaa;
+            padding: 0px;
+            background: none;
+            cursor: pointer;
+            span { font-size: 12px; }
+
+            &:hover span { color: red; }
+      }
 }
 
 

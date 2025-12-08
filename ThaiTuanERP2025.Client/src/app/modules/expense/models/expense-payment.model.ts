@@ -1,7 +1,6 @@
 import { UserBriefAvatarDto } from "../../account/models/user.model";
 import { ExpenseWorkflowInstanceDetailDto } from "./expense-workflow-instance.model";
-import { ExpensePaymentAttachmentDto } from "./expense-payment-attachment.model";
-import { ExpensePaymentItemDetailDto, ExpensePaymentItemLookupDto, ExpensePaymentItemPayload } from "./expense-payment-item.model";
+import { ExpensePaymentAttachmentDto, ExpensePaymentItemDetailDto, ExpensePaymentItemLookupDto, ExpensePaymentItemPayload } from "./expense-payment-item.model";
 import { SupplierDto } from "./supplier.model";
 import { OutgoingPaymentBriefDto } from "./outgoing-payment.model";
 

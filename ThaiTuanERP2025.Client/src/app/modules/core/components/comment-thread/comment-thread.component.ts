@@ -5,6 +5,8 @@ import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spi
 import { AvatarUrlPipe } from "../../../../shared/pipes/avatar-url.pipe";
 import { CommentDetailDto } from "../../models/comment.model";
 import { CommentStateService } from "../../services/states/comment-state.service";
+import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
+import { FilePreviewService, StoredFileMetadataDto } from "../../../../core/services/file-preview.service";
 
 @Component({
       selector: 'comment-thread',
@@ -25,6 +27,8 @@ export class CommentThreadComponent {
 
       private readonly state = inject(CommentStateService);
       private readonly changeDetector = inject(ChangeDetectorRef);
+      private readonly toast = inject(ToastService);
+      private readonly filePreview = inject(FilePreviewService);
 
       replyControl = new FormControl('', { nonNullable: true });
 
@@ -73,4 +77,19 @@ export class CommentThreadComponent {
       onCancel() {
             this.cancelReply.emit();
       }
+
+      previewAttachment(item: StoredFileMetadataDto) {
+            if(!item) {
+                  this.toast.errorRich("Không tìm thấy tệp đính kèm");
+                  return;
+            }
+
+            this.filePreview.previewStoredFile({
+                  fileId: item.fileId ?? '',
+                  objectKey: item.objectKey ?? '',
+                  fileName: item.fileName ?? '',
+                  isPublic: item.isPublic ?? false
+            })
+      }
+
 }

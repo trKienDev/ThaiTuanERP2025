@@ -47,7 +47,8 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Repositories.Read
 
 		public async Task<ExpensePaymentDetailDto?> GetDetailById(Guid id, CancellationToken cancellationToken = default)
 		{
-			var payment = await _dbSet.Include(x => x.CreatedByUser)
+			var payment = await _dbSet
+				.Include(x => x.CreatedByUser)
 				.Include(x => x.Supplier)
 				.Include(x => x.CurrentWorkflowInstance).ThenInclude(w => w.Steps).ThenInclude(s => s.ApprovedByUser)
 				.Include(x => x.CurrentWorkflowInstance).ThenInclude(w => w.Steps).ThenInclude(s => s.RejectedByUser)

@@ -20,8 +20,10 @@ namespace ThaiTuanERP2025.Application.Core.Comments.Contracts
 		public UserBriefAvatarDto User { get; init; }
 		public string Content { get; init; } = string.Empty;
 		public DateTime CreatedAt { get; init; }
+		public IReadOnlyList<CommentAttachmentDto> Attachments { get; init; } = Array.Empty<CommentAttachmentDto>();
 
                 public Guid? ParentCommentId { get; set; }
                 public List<CommentDetailDto> Replies { get; set; }
+
         }
 }

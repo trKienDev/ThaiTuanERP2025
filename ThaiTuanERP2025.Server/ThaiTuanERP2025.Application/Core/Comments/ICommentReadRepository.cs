@@ -9,5 +9,7 @@ namespace ThaiTuanERP2025.Application.Core.Comments
 	{
 		Task<CommentDetailDto> GetDetailById(Guid id, CancellationToken cancellationToken);
 		Task<IReadOnlyList<CommentDetailDto>> GetComments(DocumentType documentType, Guid documentId, CancellationToken cancellationToken);
-        }
+		Task<bool> IsExistByAttachmentFileIdAsync(Guid fileId, CancellationToken cancellationToken = default);
+
+	}
 }

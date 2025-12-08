@@ -11,6 +11,14 @@
                         </div>
 
                         <div class="comment-text">{{ comment.content }}</div>
+
+                        <div class="comment-attachments display-flex gap-5px" *ngIf="comment.attachments.length > 0">
+                              <ng-container *ngFor="let attachment of comment.attachments">
+                                    <div class="file-attachment">
+                                          <span (click)="previewAttachment(attachment.storedFile)">{{ attachment.storedFile.fileName }}</span>
+                                    </div>
+                              </ng-container>
+                        </div>
                   </div>
              </div>
 
