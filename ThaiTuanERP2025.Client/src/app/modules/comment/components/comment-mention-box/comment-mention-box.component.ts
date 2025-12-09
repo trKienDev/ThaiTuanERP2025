@@ -82,8 +82,12 @@ export class CommentMentionBoxComponent implements OnInit, OnDestroy {
 
       selectMention(user: DropdownOption) {
             const current = this.control.value ?? '';
+            alert(user.label);
             const mentionText = `@${user.label} `;
 
+            alert('mention-text' + mentionText);
+            const curentText = current.replace(/@$/, mentionText);
+            alert('current + ' + curentText);
             this.control.setValue(current.replace(/@$/, mentionText));
 
             this.showMentionBox = false;

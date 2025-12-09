@@ -37,7 +37,7 @@ import { CommentMentionBoxComponent } from "../../../../comment/components/comme
 @Component({
       selector: 'expense-payment-detail-dialog',
       standalone: true,
-      imports: [CommonModule, AvatarUrlPipe, ExpensePaymentStatusPipe, KitSpinnerButtonComponent, KitFlipCountdownComponent, OutgoingPaymentStatusPipe, ExpensePaymentItemsTableComponent, OutgoingPaymentsTableComponent, ReactiveFormsModule, KitFileUploaderComponent, CommentThreadComponent, CommentMentionBoxComponent],
+      imports: [CommonModule, AvatarUrlPipe, ExpensePaymentStatusPipe, KitSpinnerButtonComponent, KitFlipCountdownComponent, OutgoingPaymentStatusPipe, ExpensePaymentItemsTableComponent, OutgoingPaymentsTableComponent, ReactiveFormsModule, KitFileUploaderComponent, CommentThreadComponent, CommentMentionBoxComponent ],
       templateUrl: './expense-payment-detail-dialog.component.html',
       styleUrls: ['./expense-payment-detail-dialog.component.scss'],
       animations: [
@@ -295,6 +295,8 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
 
       cancelComment() {
             this.isCommenting = false;
+            this.commentControl.setValue('', { emitEvent: false }); // clear value nhưng không trigger valueChanges → CommentMentionBox không xử lý lại
+            this.commentUploads = [];
       }
 
       // ==== REPLY ====
@@ -347,6 +349,8 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
 
       cancelReply() {
             this.replyingToCommentId = null;
+            this.commentControl.setValue('');
+            this.commentUploads = [];  
       }
 
       previewCommentLocalFile(file: File) {
