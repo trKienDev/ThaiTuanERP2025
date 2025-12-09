@@ -1,10 +1,9 @@
-import { CommentDetailDto, CommentPayload } from './../../../../core/models/comment.model';
 import { ExpensePaymentDetailDto } from '../../../models/expense-payment.model';
 import { CommonModule } from "@angular/common";
 import { Component, Inject, inject, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { ExpensePaymentApiService } from '../../../services/api/expense-payment.service';
-import { firstValueFrom, map, Observable, shareReplay } from 'rxjs';
+import { firstValueFrom, map, Observable, shareReplay, take } from 'rxjs';
 import { AvatarUrlPipe } from "../../../../../shared/pipes/avatar-url.pipe";
 import { trigger, transition, style, animate } from '@angular/animations';
 import { ExpensePaymentStatusPipe } from "../../../pipes/expense-payment-status.pipe";
@@ -24,18 +23,21 @@ import { OutgoingPaymentStatusPipe } from "../../../pipes/outgoing-payment-statu
 import { KitShellTabsComponent } from '../../../../../shared/components/kit-shell-tabs/kit-shell-tabs.component';
 import { ExpensePaymentItemsTableComponent } from "../../tables/expense-payment-items-table/expense-payment-items-table.component";
 import { OutgoingPaymentsTableComponent } from "../../tables/outgoing-payments-table/outgoing-payments-table.component";
-import { CommentApiService } from '../../../../core/services/api/comment.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { DOCUMENT_TYPE } from '../../../../../core/constants/document-types.constants';
-import { CommentThreadComponent } from "../../../../core/components/comment-thread/comment-thread.component";
 import { UploadItem } from '../../../../../shared/components/kit-file-uploader/upload-item.model';
 import { KitFileUploaderComponent } from "../../../../../shared/components/kit-file-uploader/kit-file-uploader.component";
 import { FileService } from '../../../../../shared/services/file.service';
+import { CommentDetailDto, CommentPayload } from '../../../../comment/models/comment.model';
+import { CommentThreadComponent } from "../../../../comment/components/comment-thread/comment-thread.component";
+import { CommentApiService } from '../../../../comment/services/comment-api.service';
+import { UserOptionStore } from '../../../../account/options/user-dropdown.option';
+import { CommentMentionBoxComponent } from "../../../../comment/components/comment-mention-box/comment-mention-box.component";
 
 @Component({
       selector: 'expense-payment-detail-dialog',
       standalone: true,
-      imports: [CommonModule, AvatarUrlPipe, ExpensePaymentStatusPipe, KitSpinnerButtonComponent, KitFlipCountdownComponent, OutgoingPaymentStatusPipe, ExpensePaymentItemsTableComponent, OutgoingPaymentsTableComponent, ReactiveFormsModule, CommentThreadComponent, KitFileUploaderComponent],
+      imports: [CommonModule, AvatarUrlPipe, ExpensePaymentStatusPipe, KitSpinnerButtonComponent, KitFlipCountdownComponent, OutgoingPaymentStatusPipe, ExpensePaymentItemsTableComponent, OutgoingPaymentsTableComponent, ReactiveFormsModule, KitFileUploaderComponent, CommentThreadComponent, CommentMentionBoxComponent],
       templateUrl: './expense-payment-detail-dialog.component.html',
       styleUrls: ['./expense-payment-detail-dialog.component.scss'],
       animations: [
@@ -59,6 +61,7 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
       currentUser$ = inject(UserFacade).currentUser$;
       private readonly filePreview = inject(FilePreviewService);
       private readonly fileApi = inject(FileService);
+      private readonly userOptionsStore = inject(UserOptionStore);
 
       approving = false;
       rejecting = false;
@@ -229,6 +232,8 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
             return !this.isSubmittingComment && this.commentControl.value.trim().length > 0;
       }
 
+
+
       async submitComment() {
             const content = this.commentControl.value.trim();
 
@@ -270,7 +275,7 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
                         documentType: DOCUMENT_TYPE.EXPENSE_PAYMENT,
                         documentId: this.paymentId,
                         content: content,
-                        attachmentIds: uploadedIds.length ? uploadedIds : undefined
+                        attachmentIds: uploadedIds.length ? uploadedIds : undefined,
                   });
 
                   console.log('payload: ', payload);

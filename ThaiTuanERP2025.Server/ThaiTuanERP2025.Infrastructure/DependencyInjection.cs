@@ -168,6 +168,8 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<ICommentWriteRepository, CommentWriteRepository>();
 			services.AddScoped<ICommentReadRepository, CommentReadRepository>();
 			services.AddScoped<ICommentAttachmentWriteRepository, CommentAttachmentWriteRepository>();
+			services.AddScoped<ICommentMentionWriteRepository, CommentMentionWriteRepository>();
+
 
 			// Authentication
 			services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();

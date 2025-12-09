@@ -212,8 +212,13 @@
                                                 <div class="input-comment-box display-flex flex-column gap-5px">
                                                       <div class="user-comment display-flex gap-5px align-items-center">
                                                             <img class="avatar-user" [src]="(currentUser$ | async) | avatarUrlPipe">
-                                                            <input type="text" class="comment-input" placeholder="Viết bình luận ...." (focus)="isCommenting = true" [formControl]="commentControl">
+
+                                                            <input type="text" class="comment-input" placeholder="Viết bình luận ...." 
+                                                            (focus)="isCommenting = true" [formControl]="commentControl">
+
+                                                            <comment-mention-box [control]="commentControl"></comment-mention-box>
                                                       </div>
+                                                     
                                                       
                                                       <div *ngIf="isCommenting" class="comment-actions display-flex justify-content-between gap-5px">
                                                             <kit-file-uploader class="width-fit-content" 

@@ -6,6 +6,14 @@ export interface CommentPayload {
       documentId: string;
       content: string;
       attachmentIds?: string[];
+      mentionIds?: string[];
+}
+
+export interface MentionState {
+    active: boolean;
+    keyword: string;
+    caretX: number;
+    caretY: number;
 }
 
 export interface CommentDto {

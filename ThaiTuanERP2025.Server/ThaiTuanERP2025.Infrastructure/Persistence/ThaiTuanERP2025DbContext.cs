@@ -75,6 +75,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<Follower> Followers => Set<Follower>();
 		public DbSet<Comment> Comments => Set<Comment>();	
 		public DbSet<CommentAttachment> CommentAttachments => Set<CommentAttachment>();
+		public DbSet<CommentMention> CommentMentions => Set<CommentMention>();
 		public DbSet<UserNotification> UserNotifications => Set<UserNotification>();
 		public DbSet<UserReminder> UserReminders => Set<UserReminder>();
 		public DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();

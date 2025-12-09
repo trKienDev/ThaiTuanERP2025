@@ -4,7 +4,7 @@ import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 import { AvatarUrlPipe } from "../../../../shared/pipes/avatar-url.pipe";
 import { CommentDetailDto } from "../../models/comment.model";
-import { CommentStateService } from "../../services/states/comment-state.service";
+import { CommentStateService } from "../../services/comment-state.service";
 import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { FilePreviewService, StoredFileMetadataDto } from "../../../files/file-preview.service";
 

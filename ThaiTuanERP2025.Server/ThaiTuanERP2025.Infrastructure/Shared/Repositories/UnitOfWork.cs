@@ -59,6 +59,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 			IOutboxMessageWriteRepository outboxMessages,
 			ICommentWriteRepository comments,
 			ICommentAttachmentWriteRepository commentAttachments,
+			ICommentMentionWriteRepository commentMentions,
 
 			// RBAC
 			IRoleWriteRepository roles,
@@ -109,6 +110,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 			OutboxMessages = outboxMessages;
 			Comments = comments;
 			CommentAttachments  = commentAttachments;
+			CommentMentions = commentMentions;
 
 			Roles = roles;
 			Permissions = permissions;
@@ -160,6 +162,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 		public IOutboxMessageWriteRepository OutboxMessages { get;  }
 		public ICommentWriteRepository Comments { get; }
 		public ICommentAttachmentWriteRepository CommentAttachments { get; }
+		public ICommentMentionWriteRepository CommentMentions { get; }
 
 		// RBAC
 		public IUserRoleRepository UserRoles { get; }

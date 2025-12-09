@@ -30,12 +30,9 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			return Ok(ApiResponse<UserDto>.Success(result));
 		}
 
+		#region GET
 		[HttpGet]
-		public async Task<IActionResult> GetAllAsync(
-			[FromQuery] string? keyword,
-			[FromQuery] string? role,
-			[FromQuery] Guid? departmentId,
-			CancellationToken cancellationToken
+		public async Task<IActionResult> GetAllAsync([FromQuery] string? keyword, [FromQuery] string? role, [FromQuery] Guid? departmentId, CancellationToken cancellationToken
 		) {
 			var users = await _mediator.Send(new GetAllUsersQuery(keyword, role, departmentId), cancellationToken);
 			return Ok(ApiResponse<IReadOnlyList<UserInforDto>>.Success(users));
@@ -61,6 +58,14 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			return Ok(ApiResponse<IReadOnlyList<UserBriefAvatarDto>>.Success(result));
 		}
 
+		[HttpGet("search")]
+		public async Task<IActionResult> Search([FromQuery] string keyword, CancellationToken cancellationToken)
+		{
+			var dtos = await _mediator.Send(new SearchUserByNameQuery(keyword));
+			return Ok(ApiResponse<IReadOnlyList<UserBriefAvatarDto>>.Success(dtos));
+		} 
+		#endregion
+
 		[HttpPost]
 		public async Task<IActionResult> Create([FromBody] CreateUserCommand command, CancellationToken cancellationToken)
 		{
@@ -68,6 +73,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			return Ok(ApiResponse<Unit>.Success(result));
 		}
 
+		#region PUT
 		[HttpPut("{id:guid}/managers")]
 		public async Task<IActionResult> SetManagers(Guid id, [FromBody] SetUserManagersRequest request, CancellationToken cancellationToken)
 		{
@@ -82,6 +88,7 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			var result = await _mediator.Send(new SetUserAvatarCommand(id, request), cancellationToken);
 			return Ok(ApiResponse<Unit>.Success(result));
 		}
+		#endregion
 
 		[HasPermission("user.delete")]
 		[HttpDelete("{id:guid}")]

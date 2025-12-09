@@ -1,5 +1,5 @@
 import { Injectable, signal } from "@angular/core";
-import { CommentDetailDto } from "../../models/comment.model";
+import { CommentDetailDto } from "../models/comment.model";
 
 @Injectable({ providedIn: 'root' })
 export class CommentStateService {

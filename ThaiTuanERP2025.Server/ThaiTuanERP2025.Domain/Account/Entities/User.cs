@@ -73,8 +73,6 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public IReadOnlyCollection<UserManagerAssignment> DirectReportsAssignments => _directReportsAssignments.AsReadOnly();
 		#endregion
 
-		
-
 		#region Domain Behaviors
 		internal void AssignManager(Guid managerId)
 		{

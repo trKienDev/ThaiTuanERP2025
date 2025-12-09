@@ -37,6 +37,9 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
 		private readonly List<CommentAttachment> _attachments = new();
 		public IReadOnlyCollection<CommentAttachment> Attachments => _attachments.AsReadOnly();
 
+		private readonly List<CommentMention> _mentions = new();
+		public IReadOnlyCollection<CommentMention> Mentions => _mentions.AsReadOnly();
+
 		#endregion
 
 		#region Domain Behaviors
@@ -67,6 +70,12 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
 		{
 			foreach (var id in storedFileIds)
 				AddAttachment(id);
+		}
+
+		internal void AddMentions(IEnumerable<Guid> userIds)
+		{
+			foreach (var id in userIds)
+				_mentions.Add(new CommentMention(Id, id));
 		}
 		#endregion
 	}

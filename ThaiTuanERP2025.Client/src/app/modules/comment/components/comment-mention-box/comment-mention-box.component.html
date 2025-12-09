@@ -1,0 +1,8 @@
+<div class="mention-box" *ngIf="showMentionBox">
+      <ng-container *ngIf="mentionUsers$ | async as users">
+            <div class="mention-item" *ngFor="let u of users" (click)="selectMention(u)">
+                  <img class="avatar-user" [src]="u.imgUrl">
+                  <span>{{ u.label }}</span>
+            </div>
+      </ng-container>
+</div>

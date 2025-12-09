@@ -1,0 +1,31 @@
+.mention-box {
+      position: absolute;
+      top: 100%;
+      left: 40px; // đẩy qua tránh avatar
+      width: 250px;
+      background: white;
+      border: 1px solid #dcdcdc;
+      border-radius: 5px;
+      box-shadow: 0 3px 6px rgb(0 0 0 / 15%);
+      z-index: 2000;
+}
+
+.mention-item {
+      padding: 8px 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+}
+
+.mention-item:hover {
+      background: var(--bright-blue-color);
+      color: white;
+}
+
+.avatar-user {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      object-fit: cover;
+}

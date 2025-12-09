@@ -16,19 +16,10 @@ export class UserApiService extends BaseApiService<UserDto, UserRequest> {
 
       private readonly fileService = inject(FileService);
 
+      // ===== GET =====
       getCurrentuser(): Observable <UserDto> {
             return this.http.get<ApiResponse<UserDto>>(`${this.endpoint}/me`)
                   .pipe(handleApiResponse$<UserDto>());
-      }
-
-      updateAvatar(file: File, userId: string): Observable<string> {
-            return this.fileService.uploadFile(file, 'account', 'user', userId, false).pipe(
-                  switchMap((uploadResult) => {
-                        const body = { fileId: uploadResult.data?.id };
-                        return this.http.put<ApiResponse<string>>(`${this.endpoint}/${userId}/avatar`, body)
-                              .pipe(handleApiResponse$<string>());
-                  })
-            );
       }
 
       getManagerIds(id: string): Observable<string[]> {
@@ -41,13 +32,31 @@ export class UserApiService extends BaseApiService<UserDto, UserRequest> {
                   .pipe(handleApiResponse$<UserBriefAvatarDto[]>());
       }
 
+      getDepartmentManagersByUser(): Observable<UserBriefAvatarDto[]> {
+            return this.http.get<ApiResponse<UserBriefAvatarDto[]>>(`${this.endpoint}/me/department/managers`)
+                  .pipe(handleApiResponse$<UserBriefAvatarDto[]>());
+      }
+
+      search(keyword: string): Observable<UserBriefAvatarDto[]> {
+            return this.http.get<ApiResponse<UserBriefAvatarDto[]>>(`${this.endpoint}/search`)
+                  .pipe(handleApiResponse$<UserBriefAvatarDto[]>());
+      }
+
+      
+      // ==== PUT ====
+      updateAvatar(file: File, userId: string): Observable<string> {
+            return this.fileService.uploadFile(file, 'account', 'user', userId, false).pipe(
+                  switchMap((uploadResult) => {
+                        const body = { fileId: uploadResult.data?.id };
+                        return this.http.put<ApiResponse<string>>(`${this.endpoint}/${userId}/avatar`, body)
+                              .pipe(handleApiResponse$<string>());
+                  })
+            );
+      }
+      
       setManagers(id: string, request: SetUserManagerRequest): Observable<string> {
             return this.http.put<ApiResponse<string>>(`${this.endpoint}/${id}/managers`, request)
                   .pipe(handleApiResponse$<string>());
       }
 
-      getDepartmentManagersByUser(): Observable<UserBriefAvatarDto[]> {
-            return this.http.get<ApiResponse<UserBriefAvatarDto[]>>(`${this.endpoint}/me/department/managers`)
-                  .pipe(handleApiResponse$<UserBriefAvatarDto[]>());
-      }
 }
