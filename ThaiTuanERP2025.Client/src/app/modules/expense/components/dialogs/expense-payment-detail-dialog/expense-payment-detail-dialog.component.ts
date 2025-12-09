@@ -18,7 +18,7 @@ import { Router } from '@angular/router';
 import { UserFacade } from '../../../../account/facades/user.facade';
 import { KitFlipCountdownComponent } from "../../../../../shared/components/kit-flip-countdown/kit-flip-countdown.component";
 import { ExpenseWorkflowStatus } from '../../../models/expense-workflow-instance.model';
-import { FilePreviewService, StoredFileMetadataDto } from '../../../../../core/services/file-preview.service';
+import { FilePreviewService, StoredFileMetadataDto } from '../../../../files/file-preview.service';
 import { ExpensePaymentItemLookupDto } from '../../../models/expense-payment-item.model';
 import { OutgoingPaymentStatusPipe } from "../../../pipes/outgoing-payment-status.pipe";
 import { KitShellTabsComponent } from '../../../../../shared/components/kit-shell-tabs/kit-shell-tabs.component';
@@ -186,7 +186,6 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
                   fileId: item.invoiceFile.fileId ?? '',
                   objectKey: item.invoiceFile.objectKey ?? '',
                   fileName: item.invoiceFile.fileName ?? 'invoice',
-                  isPublic: item.invoiceFile.isPublic ?? false
             });
       }
 
@@ -200,7 +199,6 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
                   fileId: item.fileId ?? '',
                   objectKey: item.objectKey ?? '',
                   fileName: item.fileName ?? '',
-                  isPublic: item.isPublic ?? false
             })
       }
 

@@ -22,7 +22,6 @@ namespace ThaiTuanERP2025.Infrastructure.StoredFiles.Configurations
 			builder.Property(x => x.Module).HasMaxLength(100).IsRequired();
 			builder.Property(x => x.Entity).HasMaxLength(100).IsRequired();
 			builder.Property(x => x.EntityId).HasMaxLength(64);
-			builder.Property(x => x.IsPublic).IsRequired();
 
 			// ====== Indexes ======
 			builder.HasIndex(x => new { x.Bucket, x.ObjectKey }).IsUnique(); // objectKey unique trong bucket

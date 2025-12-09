@@ -12,7 +12,7 @@ namespace ThaiTuanERP2025.Domain.StoredFiles.Entities
 		private StoredFile() { } 
 		public StoredFile(
 			string bucket, string objectKey, string fileName, string contentType, long size, string module,
-			string entity, string? entityId = null, string? hash = null, bool isPublic = false
+			string entity, string? entityId = null, string? hash = null
 		) {
 			Guard.AgainstNullOrWhiteSpace(objectKey, nameof(objectKey));
 			Guard.AgainstNullOrWhiteSpace(fileName, nameof(fileName));
@@ -40,8 +40,6 @@ namespace ThaiTuanERP2025.Domain.StoredFiles.Entities
 			Module = module.Trim();
 			Entity = entity.Trim();
 			EntityId = entityId;
-			Hash = hash;
-			IsPublic = isPublic;
 		}
 		#endregion
 
@@ -61,18 +59,6 @@ namespace ThaiTuanERP2025.Domain.StoredFiles.Entities
 		#endregion
 
 		#region Domain Behaviors
-		internal void MakePublic()
-		{
-			if (IsPublic) return;
-			IsPublic = true;
-		}
-
-		internal void MakePrivate()
-		{
-			if (!IsPublic) return;
-			IsPublic = false;
-		}
-
 		internal void ChangeEntityReference(string module, string entity, string? entityId)
 		{
 			Guard.AgainstNullOrWhiteSpace(module, nameof(module));

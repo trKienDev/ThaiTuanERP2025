@@ -2,7 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component, effect, inject, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { usePaymentDetail } from "../../../composables/use-payment-detail";
-import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
+import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { OutgoingBankAccountOptionStore } from "../../../options/outgoing-bank-account-option.store";
 import { KitDropdownComponent } from "../../../../../shared/components/kit-dropdown/kit-dropdown.component";
 import { ToastService } from "../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
@@ -24,7 +24,7 @@ import { ExpensePaymentDetailDialogComponent } from "../../../components/dialogs
 import { HttpErrorHandlerService } from "../../../../../core/services/http-errror-handler.service";
 import { ExpensePaymentItemsTableComponent } from "../../../components/tables/expense-payment-items-table/expense-payment-items-table.component";
 import { ExpensePaymentItemLookupDto } from "../../../models/expense-payment-item.model";
-import { FilePreviewService } from "../../../../../core/services/file-preview.service";
+import { FilePreviewService } from "../../../../files/file-preview.service";
 import { OutgoingPaymentStatusPipe } from "../../../pipes/outgoing-payment-status.pipe";
 import { OutgoingPaymentsTableComponent } from "../../../components/tables/outgoing-payments-table/outgoing-payments-table.component";
 import { maxRemainingValidator } from "../../../../../shared/validators/max-value.validator";
@@ -163,7 +163,6 @@ export class OutgoingPaymentRequestComponent implements OnInit {
                   fileId: item.invoiceFile.fileId ?? '',
                   objectKey: item.invoiceFile.objectKey ?? '',
                   fileName: item.invoiceFile.fileName ?? 'invoice',
-                  isPublic: item.invoiceFile.isPublic ?? false
             });
       }
 

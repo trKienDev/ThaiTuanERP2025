@@ -1,4 +1,4 @@
-import { StoredFileMetadataDto } from "../../../core/services/file-preview.service";
+import { StoredFileMetadataDto } from "../../files/file-preview.service";
 import { UserBriefAvatarDto } from "../../account/models/user.model";
 
 export interface CommentPayload {

@@ -3,14 +3,12 @@
 	public sealed record StoredFileDownloadDto (
 		Stream Stream,
 		string ContentType,
-		string FileName,
-		bool IsPublic
+		string FileName
 	);
 
 	public sealed record StoredFileMetadataDto(
 		Guid? FileId,
 		string? ObjectKey,
-		string? FileName,
-		bool IsPublic
+		string? FileName
 	);
 }

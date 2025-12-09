@@ -6,7 +6,7 @@ import { AvatarUrlPipe } from "../../../../shared/pipes/avatar-url.pipe";
 import { CommentDetailDto } from "../../models/comment.model";
 import { CommentStateService } from "../../services/states/comment-state.service";
 import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
-import { FilePreviewService, StoredFileMetadataDto } from "../../../../core/services/file-preview.service";
+import { FilePreviewService, StoredFileMetadataDto } from "../../../files/file-preview.service";
 
 @Component({
       selector: 'comment-thread',
@@ -88,7 +88,6 @@ export class CommentThreadComponent {
                   fileId: item.fileId ?? '',
                   objectKey: item.objectKey ?? '',
                   fileName: item.fileName ?? '',
-                  isPublic: item.isPublic ?? false
             })
       }
 

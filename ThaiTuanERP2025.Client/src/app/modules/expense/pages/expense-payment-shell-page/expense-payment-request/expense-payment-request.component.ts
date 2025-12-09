@@ -35,7 +35,7 @@ import { FileService } from "../../../../../shared/services/file.service";
 import { ExpensePaymentItemPayload } from "../../../models/expense-payment-item.model";
 import { HttpErrorHandlerService } from "../../../../../core/services/http-errror-handler.service";
 import { SupplierApiService } from "../../../services/api/supplier.service";
-import { FilePreviewService } from "../../../../../core/services/file-preview.service";
+import { FilePreviewService } from "../../../../files/file-preview.service";
 import { UploadItem } from "../../../../../shared/components/kit-file-uploader/upload-item.model";
 
 type PaymentItem = {

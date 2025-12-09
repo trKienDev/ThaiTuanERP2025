@@ -64,11 +64,6 @@ namespace ThaiTuanERP2025.Api.Controllers.StoredFiles
 		{
 			var dto = await _mediator.Send(new DownloadStoredFileQuery(id), cancellationToken);
 
-			if (dto.IsPublic)
-			{
-				return Redirect($"/files/public/{id}");
-			}
-
 			return File(dto.Stream, dto.ContentType, dto.FileName);
 		}
 

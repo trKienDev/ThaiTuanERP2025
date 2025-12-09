@@ -1,8 +1,8 @@
 import { inject, Injectable } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { ToastService } from "../../shared/components/kit-toast-alert/kit-toast-alert.service";
-import { FileImagePreviewDialog } from "../../shared/components/file-preview/file-image-preview-dialog.component";
-import { FilePdfPreviewDialog } from "../../shared/components/file-preview/file-pdf-preview-dialog.component";
+import { FileImagePreviewDialog } from "./file-image-preview-dialog.component";
+import { FilePdfPreviewDialog } from "./file-pdf-preview-dialog.component";
 import { FileService } from "../../shared/services/file.service";
 import { environment } from "../../../environments/environment";
 import { firstValueFrom } from "rxjs";
@@ -12,13 +12,11 @@ export interface StoredFileDownloadDto {
       objectKey: string;
       fileName: string;
       contentType?: string; // optional FE-side
-      isPublic: boolean;
 }
 export interface StoredFileMetadataDto {
       fileId: string | null;
       objectKey: string | null;
       fileName: string | null;
-      isPublic: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -72,14 +70,7 @@ export class FilePreviewService {
        * - nếu private → gọi API download (Blob) → previewBlob
        */
       async previewStoredFile(info: StoredFileDownloadDto): Promise<void> {
-            const { fileId, objectKey, fileName, isPublic } = info;
-
-            // Case 1: file public → dùng URL public
-            if (isPublic && objectKey) {
-                  const url = `${this.baseUrl}/files/public/${objectKey}`;
-                  window.open(url, '_blank');
-                  return;
-            }
+            const { fileId, objectKey, fileName } = info;
 
             // Case 2: file private → bắt buộc cần fileId để gọi /api/files/{id}/download
             if (!fileId) {

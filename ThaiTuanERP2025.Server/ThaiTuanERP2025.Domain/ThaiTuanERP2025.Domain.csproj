@@ -15,7 +15,6 @@
     <Folder Include="Core\ValueObjects\" />
     <Folder Include="Partner\" />
     <Folder Include="Shared\Interfaces\" />
-    <Folder Include="StoredFiles\Constants\" />
   </ItemGroup>
 
   <ItemGroup>

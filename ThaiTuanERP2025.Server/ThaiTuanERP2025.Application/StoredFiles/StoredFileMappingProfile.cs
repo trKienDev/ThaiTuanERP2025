@@ -10,8 +10,7 @@ namespace ThaiTuanERP2025.Application.Files
 			CreateMap<StoredFile, StoredFileMetadataDto>()
 				.ForCtorParam("FileId", opt => opt.MapFrom(src => src.Id))
 				.ForCtorParam("ObjectKey", opt => opt.MapFrom(src => src.ObjectKey))
-				.ForCtorParam("FileName", opt => opt.MapFrom(src => src.FileName))
-				.ForCtorParam("IsPublic", opt => opt.MapFrom(src => src.IsPublic));
+				.ForCtorParam("FileName", opt => opt.MapFrom(src => src.FileName));
 		}
 	}
 }
