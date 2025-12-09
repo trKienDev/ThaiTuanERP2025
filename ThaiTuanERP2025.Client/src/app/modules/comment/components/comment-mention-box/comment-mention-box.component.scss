@@ -8,24 +8,43 @@
       border-radius: 5px;
       box-shadow: 0 3px 6px rgb(0 0 0 / 15%);
       z-index: 2000;
+      max-height: 240px;
+      overflow-y: auto;
+      font-size: 11px;
+
+      .mention-filter-input {
+            width: 100%;
+            padding: 6px 10px;
+            border: none;
+            border-bottom: 1px solid #e0e0e0;
+            border-radius: 0;
+            outline: none;
+            background: var(--secondary-theme-color);
+
+            &:focus { border-bottom-color: var(--bright-blue-color); }
+      }
+
+      .mention-item {
+            padding: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+
+            &:hover { background: var(--bright-blue-color); color: white; }
+
+            .avatar-user {
+                  width: 15px;
+                  height: 15px;
+                  border-radius: 50%;
+                  margin-right: 8px;
+            }
+      }
+
+      .no-result {
+            padding: 8px 12px;
+            color: #888;
+            font-style: italic;
+      }
+
 }
 
-.mention-item {
-      padding: 8px 12px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-}
-
-.mention-item:hover {
-      background: var(--bright-blue-color);
-      color: white;
-}
-
-.avatar-user {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      object-fit: cover;
-}
