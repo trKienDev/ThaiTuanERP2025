@@ -39,6 +39,10 @@
                   margin-right: 8px;
             }
       }
+      .mention-item.active {
+            background: var(--bright-blue-color);
+            color: white;
+      }
 
       .no-result {
             padding: 8px 12px;

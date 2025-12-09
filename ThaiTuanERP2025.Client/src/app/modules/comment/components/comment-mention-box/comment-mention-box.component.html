@@ -1,10 +1,9 @@
 <div class="mention-box" *ngIf="showMentionBox">
       <ng-container *ngIf="filteredUsers$ | async as users">
-            <div class="mention-item" *ngFor="let u of users" (click)="selectMention(u)">
+            <div class="mention-item" *ngFor="let u of users; let i = index" 
+            [class.active]="i === activeIndex" (click)="selectMention(u)">
                   <img class="avatar-user" [src]="u.imgUrl">
                   <span>{{ u.label }}</span>
             </div>
-
-            <div class="no-result" *ngIf="users.length === 0">Không tìm thấy kết quả</div>
       </ng-container>
 </div>
