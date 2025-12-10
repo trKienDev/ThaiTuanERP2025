@@ -2,7 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component, inject, OnInit } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { KitDropdownOption, KitDropdownComponent } from "../../../../../shared/components/kit-dropdown/kit-dropdown.component";
-import { DepartmentOptionStore } from "../../../../account/options/department-dropdown-options.option";
+import { DepartmentOptionStore } from "../../../../account/options/department-dropdown.option";
 import { handleHttpError } from "../../../../../shared/utils/handle-http-errors.util";
 import { resolveAvatarUrl } from "../../../../../shared/utils/avatar.utils";
 import { MoneyFormatDirective } from "../../../../../shared/directives/money/money-format.directive";

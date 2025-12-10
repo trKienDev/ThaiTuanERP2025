@@ -6,7 +6,7 @@ import { handleHttpError } from "../../../../shared/utils/handle-http-errors.uti
 import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { UserOptionStore } from "../../options/user-dropdown.option";
-import { DepartmentOptionStore } from "../../options/department-dropdown-options.option";
+import { DepartmentOptionStore } from "../../options/department-dropdown.option";
 import { DepartmentRequest } from "../../models/department.model";
 import { firstValueFrom } from "rxjs";
 import { DepartmentFacade } from "../../facades/department.facade";

@@ -3,7 +3,7 @@ import { Component, inject, Inject } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { DepartmentFacade } from "../../facades/department.facade";
-import { DepartmentOptionStore } from "../../options/department-dropdown-options.option";
+import { DepartmentOptionStore } from "../../options/department-dropdown.option";
 import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 import { KitDropdownComponent, KitDropdownOption } from "../../../../shared/components/kit-dropdown/kit-dropdown.component";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";

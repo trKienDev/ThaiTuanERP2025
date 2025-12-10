@@ -215,7 +215,7 @@
                                                             <input type="text" class="comment-input" placeholder="Viết bình luận ...." 
                                                             (focus)="isCommenting = true" [formControl]="commentControl">
 
-                                                            <comment-mention-box [control]="commentControl"></comment-mention-box>
+                                                            <comment-mention-box [control]="commentControl" (mentionsChange)="onMentionsChanged($event)"></comment-mention-box>
                                                       </div>
                                                      
                                                       
@@ -237,8 +237,7 @@
                                                       [replyingToCommentId]="replyingToCommentId"
                                                       (replyRequest)="startReply($event)"
                                                       (submitReply)="submitReply($event)"
-                                                      (cancelReply)="cancelReply()">
-                                                      </comment-thread>
+                                                      (cancelReply)="cancelReply()"></comment-thread>
                                                 </div>
                                           </div>
                                     </div>

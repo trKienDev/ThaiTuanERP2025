@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, inject, Input, OnDestroy, OnInit } from "@angular/core";
+import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { AbstractControl, FormControl, ReactiveFormsModule } from "@angular/forms";
 import { combineLatest, map, Observable, startWith, Subject, takeUntil, tap } from "rxjs";
 import { UserOptionStore } from "../../../account/options/user-dropdown.option";
@@ -19,9 +19,11 @@ export interface DropdownOption {
 })
 export class CommentMentionBoxComponent implements OnInit, OnDestroy {
 
-      // [ Inputs & Injections ]
+      // [ Inputs/Outputs & Injections ]
       @Input({ required: true }) control!: FormControl<string | null> | AbstractControl<string | null>;
       mentionUsers$ = inject(UserOptionStore).option$;
+
+      @Output() mentionsChange = new EventEmitter<string[]>();
       // ===================
 
 
@@ -159,6 +161,7 @@ export class CommentMentionBoxComponent implements OnInit, OnDestroy {
                   const label = this.resolveMentionLabel(raw); 
                   if (label) {
                         this.mentionedSet.add(label);
+                        this.mentionsChange.emit([...this.mentionedSet]);
                   }
             }
       }
@@ -175,7 +178,6 @@ export class CommentMentionBoxComponent implements OnInit, OnDestroy {
             );
       }
       private filterOutMentioned(users: DropdownOption[]): DropdownOption[] {
-            console.log('mentionedSet: ', this.mentionedSet);
             return users.filter(u => !this.mentionedSet.has(u.label));
       }
 
@@ -192,7 +194,7 @@ export class CommentMentionBoxComponent implements OnInit, OnDestroy {
             return candidates.length > 0 ? candidates[0].label : null;
       }
 
-      
+
       // [ Helper ]
       private extractMentionKeyword(text: string, caretPos: number): string | null {
             // Lấy phần text trước caret

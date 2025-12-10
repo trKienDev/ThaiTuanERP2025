@@ -232,8 +232,6 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
             return !this.isSubmittingComment && this.commentControl.value.trim().length > 0;
       }
 
-
-
       async submitComment() {
             const content = this.commentControl.value.trim();
 
@@ -271,14 +269,17 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
                         }
                   }
 
+                  const mentionIds = this.mentionLabels
+                        .map(label => this.userOptionsStore.snapshot.find(u => u.label === label)?.id)
+                        .filter(id => !!id) as string[];
+
                   const payload: CommentPayload = ({
                         documentType: DOCUMENT_TYPE.EXPENSE_PAYMENT,
                         documentId: this.paymentId,
                         content: content,
                         attachmentIds: uploadedIds.length ? uploadedIds : undefined,
+                        mentionIds: mentionIds.length ? mentionIds : undefined
                   });
-
-                  console.log('payload: ', payload);
 
                   const newCommentDto = await firstValueFrom(this.commentApi.create(payload));
                   this.comments.unshift(newCommentDto);
@@ -297,6 +298,12 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
             this.isCommenting = false;
             this.commentControl.setValue('', { emitEvent: false }); // clear value nhưng không trigger valueChanges → CommentMentionBox không xử lý lại
             this.commentUploads = [];
+      }
+
+      // ===== MENTION =====
+      mentionLabels: string[] = [];
+      onMentionsChanged(labels: string[]) {
+            this.mentionLabels = labels;
       }
 
       // ==== REPLY ====

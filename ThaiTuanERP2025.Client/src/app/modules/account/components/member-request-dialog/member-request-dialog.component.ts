@@ -8,7 +8,7 @@ import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-
 import { handleHttpError } from "../../../../shared/utils/handle-http-errors.util";
 import { UserFacade } from "../../facades/user.facade";
 import { UserRequest } from "../../models/user.model";
-import { DepartmentOptionStore } from "../../options/department-dropdown-options.option";
+import { DepartmentOptionStore } from "../../options/department-dropdown.option";
 import { UserOptionStore } from "../../options/user-dropdown.option";
 import { RoleDropdownOptionsStore } from "../../options/role-dropdown.options";
 import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";

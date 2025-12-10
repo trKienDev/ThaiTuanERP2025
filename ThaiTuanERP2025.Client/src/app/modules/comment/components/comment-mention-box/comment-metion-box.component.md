@@ -135,5 +135,4 @@ Component xử lý:
 - Maintain mentionedSet  
 - Sync input text  
 
-Phiên bản refactor rõ ràng, dễ maintain và dễ mở rộng.
 

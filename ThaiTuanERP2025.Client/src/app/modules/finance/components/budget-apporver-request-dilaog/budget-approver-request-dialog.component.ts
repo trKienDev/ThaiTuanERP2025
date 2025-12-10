@@ -5,7 +5,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { KitDropdownComponent, KitDropdownOption } from "../../../../shared/components/kit-dropdown/kit-dropdown.component";
 import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
 import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
-import { DepartmentOptionStore } from "../../../account/options/department-dropdown-options.option";
+import { DepartmentOptionStore } from "../../../account/options/department-dropdown.option";
 import { UserOptionStore } from "../../../account/options/user-dropdown.option";
 import { BudgetApproverDto, BudgetApproversRequest } from "../../models/budget-approvers.model";
 import { firstValueFrom } from "rxjs";
