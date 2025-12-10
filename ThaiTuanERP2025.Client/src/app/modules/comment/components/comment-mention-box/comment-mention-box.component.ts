@@ -21,41 +21,22 @@ export class CommentMentionBoxComponent implements OnInit, OnDestroy {
       @Input({ required: true }) control!: FormControl<string | null> | AbstractControl<string | null>;
 
       private readonly destroy$ = new Subject<void>();
+      private readonly mentionedSet = new Set<string>(); // Danh sách user đã được mention
+      private allUsers: DropdownOption[] = [];
 
       filterControl = new FormControl('');
       mentionUsers$ = inject(UserOptionStore).option$;
-
       showMentionBox = false;
       currentKeyword = "";
-
       activeIndex = 0;               // index đang được highlight
       currentUsers: DropdownOption[] = []; // danh sách user hiện tại để điều hướng
-
-      private mentionedSet = new Set<string>(); // Danh sách user đã được mention
-      
-      
-      filteredUsers$ = combineLatest([
-            this.mentionUsers$, 
-            this.filterControl.valueChanges.pipe(startWith(''))
-      ]).pipe(
-            map(([users, keyword]) => { 
-                  // 1. loại bỏ các user đã được mention
-                  let result = users.filter(u => !this.mentionedSet.has(u.label));
-
-                  // 2. nếu không gõ filter thì trả về toàn bộ
-                  const search = (keyword ?? '').trim().toLowerCase();
-                  if (!search) return result;
-
-                  // 3. filter theo text
-                  return result.filter(u => u.label.toLowerCase().includes(search));
-            })
-      )
 
       ngOnInit(): void {
             if (!this.control) return;
 
             // detect khi user gõ '@'
-            this.control.valueChanges.pipe(takeUntil(this.destroy$))
+            this.control.valueChanges
+                  .pipe(takeUntil(this.destroy$))
                   .subscribe(text => {
                         const value = text ?? "";
 
@@ -74,10 +55,29 @@ export class CommentMentionBoxComponent implements OnInit, OnDestroy {
 
                         this.updateFilteredUsers();
                   });
+
+            this.mentionUsers$
+                  .pipe(takeUntil(this.destroy$))
+                  .subscribe(users => { this.allUsers = users; });
       }
 
+      filteredUsers$ = combineLatest([
+            this.mentionUsers$, 
+            this.filterControl.valueChanges.pipe(startWith(''))
+      ]).pipe(map(([users, keyword]) => { 
+            // 1 ) loại bỏ các user đã được mention
+            let result = this.filterOutMentioned(users);
+
+            // 2 ) nếu không gõ filter thì trả về toàn bộ
+            const search = (keyword ?? '').trim().toLowerCase();
+            if (!search) return result;
+
+            // 3 ) filter theo text
+            return result.filter(u => u.label.toLowerCase().includes(search));
+      }))
+
       ngAfterViewInit() {
-      document.addEventListener("keydown", this.handleKeydown);
+            document.addEventListener("keydown", this.handleKeydown);
       }
 
       selectMention(user: DropdownOption) {
@@ -97,6 +97,7 @@ export class CommentMentionBoxComponent implements OnInit, OnDestroy {
             this.destroy$.complete();
       }
 
+      // <==== HELPER ====>
       private extractMentionKeyword(text: string, caretPos: number): string | null {
             // Lấy phần text trước caret
             const left = text.slice(0, caretPos);
@@ -106,25 +107,10 @@ export class CommentMentionBoxComponent implements OnInit, OnDestroy {
 
             return match ? match[1] : null;
       }
-      
-      private updateFilteredUsers() {
-            this.filteredUsers$ = this.mentionUsers$.pipe(
-                  map(users => users
-                        .filter(u => !this.mentionedSet.has(u.label)) // loại bỏ user đã mention
-                        .filter(u => u.label.toLowerCase().includes(this.currentKeyword))
-                  ),
-                  tap(list => {
-                        this.currentUsers = list;
-                        this.activeIndex = 0; // reset về item đầu tiên
-                  })
-            );
-      }
-
       private getCaretPosition(): number {
             const input = document.activeElement as HTMLInputElement;
             return input?.selectionStart ?? 0;
       }
-
       private handleKeydown = (event: KeyboardEvent) => {
             if (!this.showMentionBox || this.currentUsers.length === 0) return;
 
@@ -152,7 +138,6 @@ export class CommentMentionBoxComponent implements OnInit, OnDestroy {
                         break;
             }
       };
-
       private syncMentionedSet(text: string) {
             this.mentionedSet.clear();
 
@@ -161,10 +146,37 @@ export class CommentMentionBoxComponent implements OnInit, OnDestroy {
             let match;
 
             while ((match = regex.exec(text)) !== null) {
-                  const label = match[1].trim();
+                  const raw = match[1].trim(); 
+
+                  const label = this.resolveMentionLabel(raw); 
                   if (label) {
                         this.mentionedSet.add(label);
                   }
             }
+      }
+
+      private updateFilteredUsers() {
+            this.filteredUsers$ = this.mentionUsers$.pipe(
+                  map(users => this.filterOutMentioned(users).filter(u => u.label.toLowerCase().includes(this.currentKeyword))),
+                  tap(list => {
+                        this.currentUsers = list;
+                        this.activeIndex = 0; // reset về item đầu tiên
+                  })
+            );
+      }
+      private filterOutMentioned(users: DropdownOption[]): DropdownOption[] {
+            console.log('mentionedSet: ', this.mentionedSet);
+            return users.filter(u => !this.mentionedSet.has(u.label));
+      }
+
+      private resolveMentionLabel(raw: string): string | null {
+            const text = raw.trim();
+
+            // ưu tiên label dài nhất (tránh nhầm với prefix ngắn)
+            const candidates = this.allUsers
+                  .filter(u => text.startsWith(u.label))
+                  .sort((a, b) => b.label.length - a.label.length);
+
+            return candidates.length > 0 ? candidates[0].label : null;
       }
 }
