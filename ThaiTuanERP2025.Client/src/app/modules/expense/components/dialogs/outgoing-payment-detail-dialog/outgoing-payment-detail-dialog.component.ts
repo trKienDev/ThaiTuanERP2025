@@ -13,8 +13,6 @@ import { OutgoingPaymentApiService } from "../../../services/api/outgoing-paymen
 import { ExpensePaymentItemsTableComponent } from "../../tables/expense-payment-items-table/expense-payment-items-table.component";
 import { HttpErrorHandlerService } from "../../../../../core/services/http-errror-handler.service";
 import { OutgoingPaymentsTableComponent } from "../../tables/outgoing-payments-table/outgoing-payments-table.component";
-import { ExpensePaymentApiService } from "../../../services/api/expense-payment.service";
-import { ExpensePaymentDetailDto } from "../../../models/expense-payment.model";
 import { ExpensePaymentDetailDialogComponent } from "../expense-payment-detail-dialog/expense-payment-detail-dialog.component";
 
 @Component({
@@ -30,7 +28,6 @@ export class OutgoingPaymentDetailDialogComponent {
       private readonly toastService = inject(ToastService);
       private readonly outgoingPaymentService = inject(OutgoingPaymentApiService);
       private readonly httpErrorHandler = inject(HttpErrorHandlerService);
-
       private readonly outgoingPaymentLogic = useOutgoingPaymentDetail();
 
       loading = this.outgoingPaymentLogic.isLoading;

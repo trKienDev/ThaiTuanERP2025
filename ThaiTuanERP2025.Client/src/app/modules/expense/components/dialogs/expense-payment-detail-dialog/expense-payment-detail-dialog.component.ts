@@ -34,11 +34,14 @@ import { CommentApiService } from '../../../../comment/services/comment-api.serv
 import { UserOptionStore } from '../../../../account/options/user-dropdown.option';
 import { CommentMentionBoxComponent } from "../../../../comment/components/comment-mention-box/comment-mention-box.component";
 import { CommentEditorComponent } from "../../../../comment/components/comment-editor/comment-editor.component";
+import { usePaymentDetail } from '../../../composables/use-payment-detail';
+import { KitLoadingSpinnerComponent } from "../../../../../shared/components/kit-loading-spinner/kit-loading-spinner.component";
+import { Kit404PageComponent } from "../../../../../shared/components/kit-404-page/kit-404-page.component";
 
 @Component({
       selector: 'expense-payment-detail-dialog',
       standalone: true,
-      imports: [CommonModule, AvatarUrlPipe, ExpensePaymentStatusPipe, KitSpinnerButtonComponent, KitFlipCountdownComponent, OutgoingPaymentStatusPipe, ExpensePaymentItemsTableComponent, OutgoingPaymentsTableComponent, ReactiveFormsModule, KitFileUploaderComponent, CommentThreadComponent, CommentMentionBoxComponent, CommentEditorComponent],
+      imports: [CommonModule, AvatarUrlPipe, ExpensePaymentStatusPipe, KitSpinnerButtonComponent, KitFlipCountdownComponent, OutgoingPaymentStatusPipe, ExpensePaymentItemsTableComponent, OutgoingPaymentsTableComponent, ReactiveFormsModule, KitFileUploaderComponent, CommentThreadComponent, CommentMentionBoxComponent, CommentEditorComponent, KitLoadingSpinnerComponent, Kit404PageComponent],
       templateUrl: './expense-payment-detail-dialog.component.html',
       styleUrls: ['./expense-payment-detail-dialog.component.scss'],
       animations: [
@@ -51,26 +54,30 @@ import { CommentEditorComponent } from "../../../../comment/components/comment-e
       ]
 })
 export class ExpensePaymentDetailDialogComponent implements OnInit {
+      readonly documentType = DOCUMENT_TYPE;
       private readonly dialogRef = inject(MatDialogRef<ExpensePaymentDetailDialogComponent>);
       private readonly expensePaymentApi = inject(ExpensePaymentApiService);
       private readonly expenseWorkflowInstanceApi = inject(ExpenseWorkflowInstanceApiService);
       private readonly toast = inject(ToastService);
-      currentStepStatus$!: Observable<{ seconds: number, expired: boolean }>;
       private readonly countdown = inject(CountdownService);
       private readonly httpErrorHandler = inject(HttpErrorHandlerService);
       private readonly router = inject(Router);
-      currentUser$ = inject(UserFacade).currentUser$;
       private readonly filePreview = inject(FilePreviewService);
       private readonly fileApi = inject(FileService);
       private readonly userOptionsStore = inject(UserOptionStore);
-      readonly documentType = DOCUMENT_TYPE;
+
+      private readonly paymentLogic = usePaymentDetail();
+      loading = this.paymentLogic.isLoading;
+      err = this.paymentLogic.error;
 
       approving = false;
       rejecting = false;
       submitting = false;
       canApproveOrReject = false;
       isInProgress = false;
-      
+
+      currentStepStatus$!: Observable<{ seconds: number, expired: boolean }>;
+      currentUser$ = inject(UserFacade).currentUser$;
       paymentId: string;
       paymentDetail: ExpensePaymentDetailDto | null = null;
 
@@ -84,6 +91,7 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
 
       constructor(@Inject(MAT_DIALOG_DATA) public data: string) {
             this.paymentId = data;
+            this.paymentLogic.load(data);
             this.getPaymentDetail(this.paymentId);
       }
 
@@ -314,7 +322,7 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
 
             try {
                   this.isSubmittingReply = true;
-                  
+
                   // 1) Upload files
                   const uploadedIds: string[] = [];
                   for (const u of uploads) {
