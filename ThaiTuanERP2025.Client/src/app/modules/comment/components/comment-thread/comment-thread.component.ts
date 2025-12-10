@@ -7,11 +7,12 @@ import { CommentDetailDto } from "../../models/comment.model";
 import { CommentStateService } from "../../services/comment-state.service";
 import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { FilePreviewService, StoredFileMetadataDto } from "../../../files/file-preview.service";
+import { MentionHighlightPipe } from "../../pipes/comment-mention-highlight.pipe";
 
 @Component({
       selector: 'comment-thread',
       standalone: true,
-      imports: [CommonModule, AvatarUrlPipe, ReactiveFormsModule, KitSpinnerButtonComponent],
+      imports: [CommonModule, AvatarUrlPipe, ReactiveFormsModule, KitSpinnerButtonComponent, MentionHighlightPipe],
       templateUrl: './comment-thread.component.html',
       changeDetection: ChangeDetectionStrategy.OnPush
 })

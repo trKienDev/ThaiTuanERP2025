@@ -10,7 +10,7 @@
                               <span class="comment-time color-aaa">{{ comment.createdAt | date:'short' }}</span>
                         </div>
 
-                        <div class="comment-text">{{ comment.content }}</div>
+                        <div class="comment-text" [innerHTML]="comment.content | commentMentionHighlight: comment.mentions"></div>
 
                         <div class="comment-attachments display-flex gap-5px" *ngIf="comment.attachments.length > 0">
                               <ng-container *ngFor="let attachment of comment.attachments">

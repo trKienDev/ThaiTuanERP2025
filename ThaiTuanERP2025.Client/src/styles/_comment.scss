@@ -41,6 +41,12 @@
       padding: 5px;
       border-radius: 5px;
       background: var(--secondary-theme-color);
+
+      .comment-text {
+            .user-mention {
+                  color: var(--bright-blue-color);
+            }
+      }
 }
 
 .comment-wrapper {

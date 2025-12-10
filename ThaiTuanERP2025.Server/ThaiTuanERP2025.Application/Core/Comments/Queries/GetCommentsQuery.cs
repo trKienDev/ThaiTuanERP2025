@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using FluentValidation;
+﻿using FluentValidation;
 using MediatR;
 using ThaiTuanERP2025.Application.Core.Comments.Contracts;
 using ThaiTuanERP2025.Domain.Shared.Enums;
@@ -10,11 +9,9 @@ namespace ThaiTuanERP2025.Application.Core.Comments.Queries
 	public sealed class GetCommentsQueryHandler : IRequestHandler<GetCommentsQuery, List<CommentDetailDto>>
 	{
 		private readonly ICommentReadRepository _commentRepo;
-		private readonly IMapper _mapper;
-		public GetCommentsQueryHandler(ICommentReadRepository commentRepo, IMapper mapper)
+		public GetCommentsQueryHandler(ICommentReadRepository commentRepo)
 		{
 			_commentRepo = commentRepo;
-			_mapper = mapper;
 		}
 
 		public async Task<List<CommentDetailDto>> Handle(GetCommentsQuery query, CancellationToken cancellationToken)

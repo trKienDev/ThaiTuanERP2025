@@ -25,5 +25,6 @@ namespace ThaiTuanERP2025.Application.Core.Comments.Contracts
                 public Guid? ParentCommentId { get; set; }
                 public List<CommentDetailDto> Replies { get; set; }
 
-        }
+		public IReadOnlyList<CommentMentionDto> Mentions { get; init; }
+	}
 }

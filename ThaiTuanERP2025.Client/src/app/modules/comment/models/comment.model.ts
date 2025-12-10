@@ -36,9 +36,16 @@ export interface CommentDetailDto {
       replies: CommentDetailDto[];
 
       attachments: CommentAttachmentDto[];
+      
+      mentions: CommentMentionDto[];
 }
 
 export interface CommentAttachmentDto {
       storedFile: StoredFileMetadataDto;
+}
+
+export interface CommentMentionDto {
+      id: string;
+      fullName: string;
 }
 

@@ -23,6 +23,7 @@ namespace ThaiTuanERP2025.Infrastructure.Core.Repositories.Read
 		{
 			var comments = await _dbSet
 				.Include(x => x.CreatedByUser)
+				.Include(x => x.Mentions).ThenInclude(m => m.User)
 				.Include(x => x.Attachments).ThenInclude(a => a.StoredFile)
 				.Where(x => x.DocumentType == documentType && x.DocumentId == documentId)
 				.OrderByDescending(x => x.CreatedAt) 

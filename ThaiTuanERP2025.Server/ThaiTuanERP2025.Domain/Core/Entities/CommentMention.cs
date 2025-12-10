@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.Design;
-using ThaiTuanERP2025.Domain.Account.Entities;
+﻿using ThaiTuanERP2025.Domain.Account.Entities;
 
 namespace ThaiTuanERP2025.Domain.Core.Entities
 {

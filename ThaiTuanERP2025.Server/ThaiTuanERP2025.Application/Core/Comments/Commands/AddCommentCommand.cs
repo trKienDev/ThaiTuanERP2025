@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using FluentValidation;
+﻿using FluentValidation;
 using MediatR;
-using System.Xml.Linq;
 using ThaiTuanERP2025.Application.Account.Users.Repositories;
 using ThaiTuanERP2025.Application.Core.Comments.Contracts;
 using ThaiTuanERP2025.Application.Core.Followers;
@@ -63,6 +61,19 @@ namespace ThaiTuanERP2025.Application.Core.Comments.Commands
 			{
 				newComment.AddAttachments(payload.AttachmentIds);
 			}
+			#endregion
+
+			#region Add Mention
+			if (payload.MentionIds.Any())
+			{
+				foreach(var id in payload.MentionIds)
+				{
+					var userExist = await _userRepo.ExistAsync(q => q.Id == id && q.IsActive, cancellationToken);
+					if (!userExist) throw new UnauthorizedException("Có một mention user không hợp lệ");
+				}
+				newComment.AddMentions(payload.MentionIds);
+			}
+				
 			#endregion
 
 			#region Send notifications to followers
