@@ -54,8 +54,6 @@ namespace ThaiTuanERP2025.Domain.StoredFiles.Entities
 		public string Module { get; private set; } = null!;
 		public string Entity { get; private set; } = null!;
 		public string? EntityId { get; private set; }
-
-		public bool IsPublic { get; private set; }
 		#endregion
 
 		#region Domain Behaviors

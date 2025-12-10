@@ -65,6 +65,7 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
       private readonly filePreview = inject(FilePreviewService);
       private readonly fileApi = inject(FileService);
       private readonly userOptionsStore = inject(UserOptionStore);
+      private readonly commentApi = inject(CommentApiService);
 
       private readonly paymentLogic = usePaymentDetail();
       loading = this.paymentLogic.isLoading;
@@ -86,7 +87,6 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
             module: 'expense',
             entity: 'comment-attachment',
             entityId: undefined as string | undefined,
-            isPublic: false
       };
 
       constructor(@Inject(MAT_DIALOG_DATA) public data: string) {
@@ -226,7 +226,6 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
       }
 
       // ===== Comment =====
-      private readonly commentApi = inject(CommentApiService);
       module: string = "expense";
       entity: string ="expense-payment";
       isCommenting = false;
