@@ -1,0 +1,44 @@
+<div class="dialog">
+      <div class="dialog-container">
+            <div class="dialog-heading">
+                  <div class="dialog-title">
+                        <h1>{{  dialogTitle }}</h1>
+                  </div>
+                  <div class="dialog-exit">
+                        <button type="button" class="exit-button" (click)="close()">
+                              <span class="text material-icons-outlined">close</span>
+                        </button>
+                  </div>
+            </div>
+            <div class="dialog-body">
+                  <form [formGroup]="form" (ngSubmit)="submit()">
+                        <div class="dialog-row">
+                              <div class="form-input">
+                                    <input class="" type="text" formControlName="name" autocomplete="on" required/>
+                                    <label for="name">Tên phòng ban <span style="color: red;">  *</span></label>
+                              </div>
+                        </div>
+                        <div class="dialog-row">
+                              <div class="form-input">
+                                    <input class="" type="text" formControlName="code" autocomplete="on" required/>
+                                    <label for="name">Mã phòng ban <span style="color: red;">  *</span></label>
+                              </div>
+                        </div>
+                        <div class="dialog-row">
+                              <kit-dropdown [options]="(managerOptions$ | async) ?? []" [placeholder]="'Chọn quản lý (nếu có)'" (selectionChange)="onManagerSelected($event)"></kit-dropdown>
+                        </div>
+                        <div class="dialog-row">
+                              <kit-dropdown [options]="(departmentOptions$ | async) ?? []" [placeholder]="'Phòng ban cha (nếu có)'" (selectionChange)="onDepartmentSelected($event)"></kit-dropdown>
+                        </div>
+                        <div class="dialog-row">
+                              <div class="dialog-buttons">
+                                    <button type="button" class="button cancel-button" (click)="close()" [disabled]="submitting">Hủy</button>
+                                    <button type="submit" class="button save-button display-flex justify-content-center" [disabled]="submitting">
+                                          {{ submitting ? 'Đang lưu...' : 'Lưu' }}
+                                    </button>
+                              </div>
+                        </div>
+                  </form>
+            </div>
+      </div>
+</div>

@@ -1,0 +1,42 @@
+<div class="dialog">
+      <div class="dialog-container">
+            <form [formGroup]="form" (ngSubmit)="submit()">
+                  <div class="dialog-heading">
+                        <div class="dialog-title">
+                              <h1>Kỳ ngân sách
+                                    <span style="color: var(--bright-blue-color);">{{ periodTitle }}</span>
+                              </h1>
+                        </div>
+                        <div class="dialog-exit">
+                              <button type="button" class="exit-button" (click)="close()">
+                                    <span class="text material-icons-outlined">close</span>
+                              </button>
+                        </div>            
+                  </div>
+                  <div class="dialog-body">
+                        <div class="dialog-row">
+                              <div class="display-flex gap-10px">
+                                    <label class="width-fit-content text-no-wrap align-content-center" for="name">Ngày bắt đầu <span style="color: red;">  *</span></label>
+                                    <input class="" formControlName="startDate" matInput [matDatepicker]="startDatePicker" (focus)="startDatePicker.open()" (click)="startDatePicker.open()" (keydown.enter)="startDatePicker.open()" (keydown.arrowDown)="startDatePicker.open()"  required/>
+                                    <mat-datepicker #startDatePicker panelClass="kit-datepicker"></mat-datepicker>
+                              </div>
+                        </div>
+                        <div class="dialog-row">
+                              <div class="display-flex gap-10px">
+                                    <label class="width-fit-content text-no-wrap align-content-center" for="name">Ngày kết thúc <span style="color: red;">  *</span></label>
+                                    <input class="" formControlName="endDate" matInput [matDatepicker]="endDatePicker" placeholder="chọn ngày/tháng/năm"
+                                          (focus)="endDatePicker.open()" (click)="endDatePicker.open()" (keydown.enter)="endDatePicker.open()" (keydown.arrowDown)="endDatePicker.open()"  required/>
+                                    <mat-datepicker #endDatePicker panelClass="kit-datepicker"></mat-datepicker>
+                              </div>
+                        </div>
+                        <div class="error" *ngIf="form.hasError('endBeforeStart') && showErrors">
+                              <small class="text-danger">Ngày kết thúc phải lớn hơn hoặc bằng ngày bắt đầu.</small>
+                        </div>
+                  </div>
+                  <div class="dialog-footer display-flex gap-10px">
+                        <button type="button" class="width-50pt button cancel-button" (click)="close()">Hủy</button>
+                        <kit-spinner-button type="submit" class="width-50pt" cssClass="save-button" [loading]="submitting" [disabled]="submitting" text="Lưu" [loadingText]="''" style="width: 10%;"></kit-spinner-button>
+                  </div>
+            </form>
+      </div>
+</div>

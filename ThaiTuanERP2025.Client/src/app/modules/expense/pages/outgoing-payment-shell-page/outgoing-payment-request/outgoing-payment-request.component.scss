@@ -1,0 +1,16 @@
+.outgoing-payment-form {
+      .payment-name {
+            color: var(--bright-blue-color);
+            user-select: text;
+            cursor: pointer;
+      }
+      .payment-name:hover {
+            text-decoration: underline;
+      }
+}
+
+.outgoing-payment-form:disabled, .outgoing-payment-form.ng-disabled {
+      opacity: 0.6;
+      pointer-events: none;
+      transition: opacity 0.2s ease-in-out;
+}

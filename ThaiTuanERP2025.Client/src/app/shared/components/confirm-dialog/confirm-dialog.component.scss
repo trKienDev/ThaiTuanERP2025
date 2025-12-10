@@ -7,38 +7,44 @@
 .confirm-dialog {
       padding: 20px;
       user-select: none;
+
+      .title-error, .message-error {
+            color: red; 
+      }
 }
-
-
 
 .dialog-icon {
       font-size: 80px;
       line-height: 0.5;
-      animation: pulseWarning 1.2s infinite;
+      animation: pulseWarning 2s infinite;
 }
 
 @keyframes pulseWarning {
       0%   { transform: scale(1); opacity: 1; }
-      50%  { transform: scale(1.2); opacity: 0.7; }
+      50%  { transform: scale(1.1); opacity: 0.7; }
       100% { transform: scale(1); opacity: 1; }
 }
 
 .dialog-message {
       text-align: center;
-      padding-top: 20px;
+      padding-top: 10px;
+}
+
+.confirm-button {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
 }
 
 .danger-background {
       background-color: #a20000;
-      border-radius: 8px;
+      border-radius: 5px;
       color: white;
       box-shadow: rgba(255, 255, 255, 0.77) 0px 10px 36px 0px, rgba(255, 255, 255, 0.09) 0px 0px 0px 1px;
       
-      .danger-cancel-button {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-
+      .dialog-title { color: white; }
+      
+      .confirm-button {
             .danger-cancel {
                   width: 100%;
                   cursor: pointer;
@@ -52,3 +58,6 @@
             }
       }
 }
+
+.error-confirm-button { appearance: none; backface-visibility: hidden; background-color: red;  border-style: none; box-shadow: rgba(185, 41, 41, 0.15) 0 4px 9px; box-sizing: border-box; color: #ffffff; cursor: pointer; display: inline-block; font-weight: 600; outline: none; overflow: hidden; position: relative; text-align: center; text-decoration: none; transform: translate3d(0, 0, 0); transition: all .3s; user-select: none; -webkit-user-select: none; touch-action: manipulation; vertical-align: top; white-space: nowrap; border: 1px solid transparent !important; }
+.error-confirm-button:hover { background-color: #c50000; opacity: 1; transform: translateY(0); transition-duration: .35s; box-shadow: rgba(219, 0, 0, 0.2) 0 6px 12px; }

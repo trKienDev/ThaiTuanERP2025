@@ -1,16 +1,13 @@
 ﻿using ThaiTuanERP2025.Application.Account.Dtos;
 using ThaiTuanERP2025.Domain.Account.Entities;
 using AutoMapper;
+using ThaiTuanERP2025.Application.Account.Departments;
 
 namespace ThaiTuanERP2025.Application.Account.Mappings
 {
 	public class AccountMappingProfile : Profile
 	{
-		public AccountMappingProfile() {			
-			// Nested mapping (nếu cần)
-			CreateMap<Department, DepartmentDto>()
-				.ForMember(dest => dest.Manager, opt => opt.MapFrom(src => src.ManagerUser));
-
+		public AccountMappingProfile() {
 			CreateMap<Group, GroupDto>()
 				.ForMember(dest => dest.Members, opt => opt.MapFrom(
 					src => src.UserGroups.Select(ug => ug.User)

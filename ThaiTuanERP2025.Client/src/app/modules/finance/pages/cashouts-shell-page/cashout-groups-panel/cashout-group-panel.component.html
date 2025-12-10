@@ -1,0 +1,44 @@
+<div class="page-container">
+      <div class="page-heading">
+            <div class="page-title">
+                  <h3 class="title">Danh sách nhóm khoản chi</h3>
+            </div>
+            <button *appHasPermission="'cashout-group.create'"  class="button default-button" (click)="openCashoutGroupRequestModal()">Thêm nhóm dòng tiền ra</button>
+      </div>
+      <div class="page-body">
+            <table class="table">
+                  <thead>
+                        <tr>
+                              <th class="width-50pt">Tên</th>
+                              <th>Mô tả</th>
+                        </tr>
+                  </thead>
+                  <tbody>
+                        <ng-container *ngIf="cashoutGroupTrees.length > 0">
+                              <ng-container *ngFor="let group of cashoutGroupTrees">
+                                    <tr *ngIf="isVisible(group)" [class.has-children]="hasChildren(group)">
+                                          <td>
+                                                <div class="indent-row" [style.--level]="group.level">
+                                                      <button *ngIf="hasChildren(group)" (click)="toggle(group)" class="none-button">
+                                                            <ng-container [ngSwitch]="isExpanded(group)">
+                                                                  <kit-square-down-arrow *ngSwitchCase="true"  size="16"></kit-square-down-arrow>
+                                                                  <kit-square-right-arrow *ngSwitchCase="false" size="16"></kit-square-right-arrow>
+                                                            </ng-container>
+                                                      </button>
+                                                      <span class="indent-space"></span>
+                                                      {{ group.name }} 
+                                                </div>
+                                          </td>
+                                          <td>{{ group.description ?? '---' }}</td>
+                                    </tr>
+                              </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="cashoutGroupTrees.length === 0">
+                              <tr>
+                                    <td colspan="2">Không có dữ liệu</td>
+                              </tr>
+                        </ng-container>
+                  </tbody>
+            </table>
+      </div>
+</div>

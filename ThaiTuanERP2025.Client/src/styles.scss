@@ -4,21 +4,26 @@
 @import url('./styles/_keyword-css.scss');
 @import url('./styles/_cards.scss');
 @import url('./styles/_toggle-switch.scss');
-@import url('./app/shared/components/messages/_message.scss');
 @import url('./styles/_form.scss');
 @import url('./styles/_alert.scss');
 @import url('./styles/_checkbox.scss');
 @import url('./styles/_table.scss');
 @import url('./styles/_dialog.scss');
+@import url('./styles/_comment.scss');
+@import url('./styles/_file_attachments.scss');
 @import url('./styles/_dropdown-menu.scss');
 @import url('./styles/_badge.scss');
-@import url('./app/shared/animations/load-dom/load-dom.animation.scss');
 @import url('./app/core/services/ngprogress/ngprogress.scss');
-@import url('./styles/_expense-payment-status.scss');
+@import url('./styles/_label-status.scss');
 @import url('./styles/_outgoing-payment-status.scss');
+@import url('./styles/_select-option.scss');
 @import url('https://fonts.googleapis.com/css2?family=Allerta+Stencil&family=Orbitron:wght@400..900&display=swap');
 
 :root {
+      --primary-theme-color: #fcfcfd;
+      --secondary-theme-color: #f6f8fa;
+      --primary-fg-color: #A50021;
+
       --cadmium-red: #D22B2B;
       --neon-red-color: #FF3131;
       --ultramarin: #0437F2;
@@ -30,7 +35,7 @@
       --sub-bg-color: #f6f8fa;
       --sub-bg-color_hover: #818b981a;
       --main-theme-bg: #d5a36e;
-      --main-foreground-hover: #A50021;
+     
       --main-theme-fg: #f8e1e1;
       
       --gold-color: #FFD700;
@@ -41,6 +46,7 @@
       --bright-red: #EE4B2B;
 
       --kelly-green-color: #4CBB17;
+      --money-color: #019311;
 
       --logo-size: 250px;
 
@@ -52,6 +58,9 @@
       --sidebar-width: 80px;
       --sidebar-padding: 5px;
       --navbar-height: 40px;
+
+      // font-size
+      --main-font-size: 12px;
 }
 
 
@@ -59,10 +68,10 @@ body {
       background-image: linear-gradient(to right top, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff, #fefeff, #fdfdff, #fcfcff, #fafaff, #f7f8ff, #f5f7ff, #f2f5ff);
 }
 html, body { height: 100%; overflow: hidden; }
-body, input { font-family: 'Lexend', sans-serif; font-size: 13px; }
+body, input { font-family: 'Lexend', sans-serif; font-size: var(--main-font-size); }
 textarea { 
       font-family: "Lexend", sans-serif;
-      font-size: 13px;
+      font-size: var(--main-font-size);
       width: 100%;
       min-height: 100px;
       height: fit-content;
@@ -88,6 +97,8 @@ input {
       border-radius: 5px;
       border: 1px solid var(--default-border-color);
 }
+
+input[type="checkbox"] { cursor: pointer; }
 
 @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 
@@ -138,7 +149,7 @@ html, body { height: 100%; margin: 0; }
 }
 .page-body { margin-top: 20px; }
 
-.default-title { font-size: 20px; font-weight: 900; color: var(--main-foreground-hover); }
+.default-title { font-size: 20px; font-weight: 900; color: var(--primary-fg-color); }
 .ahref-non-decoration { text-decoration: none; color: black; }
 .ahref-non-decoration:hover { color: var(--bright-blue-color); text-decoration: underline; cursor: pointer;}
 
@@ -150,12 +161,8 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 input[type=number] { -moz-appearance: textfield; }
 
 .mat-mdc-tooltip-surface { font-family: 'Lexend' !important; user-select: none; background-color: var(--gold-color) !important; color: black !important; }
-/* target đúng nơi Material render (overlay) */
-.cdk-overlay-pane .mat-mdc-dialog-surface {  overflow-y: unset; border-radius: 8px; }
-.cdk-overlay-pane .cdk-overlay-black-backdrop { background: rgba(15, 15, 15, 0.5); }
 
 /* mat-calendar */
-
 .mat-datepicker-content .mat-calendar { width: 300px !important; height: unset !important; border-top-left-radius: var(--default-border-color-radius); border-top-right-radius: var(--default-border-color-radius); }
 .kit-datepicker { 
       background: #f2faff;
@@ -181,8 +188,7 @@ input[type=number] { -moz-appearance: textfield; }
 .kit-datepicker .mat-calendar-body-selected { background-color: #1976d2; color: white; }
 .kit-datepicker .mat-calendar-body-row { display: table-row !important; }
 .kit-datepicker .mat-calendar-body-cell { display: table-cell !important; }
-
-
+.mat-calendar-body-disabled { color: #aaa !important; opacity: 0.5 !important; pointer-events: none !important; }
 
 /* mat-snackbar */
 /* Bọc MDC surface: bo góc + shadow + padding đẹp hơn */
@@ -222,26 +228,31 @@ input[type=number] { -moz-appearance: textfield; }
 /* mat-dialog  */
 .mat-mdc-dialog-surface { min-width: fit-content !important; }
 .cdk-overlay-pane, .mat-mdc-dialog-container, .mat-mdc-dialog-inner-container { min-width: fit-content !important; }
+.cdk-overlay-pane .mat-mdc-dialog-surface {  overflow-y: unset !important;  border-radius: 5px; }
 
-.white-space {
-      display: block;
-      // height: 300px;
-}
+.white-space { display: block; }
 
-.avatar-user {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      margin: 0px 5px;
-}
-.approver-avatar {
-      box-shadow:  rgba(54, 223, 12, 0.44) 0px 1px 3px, rgba(103, 197, 15, 0.79) 0px 1px 2px;
-}
-.rejecter-avatar {
-      box-shadow:  rgba(244, 31, 31, 0.44) 0px 1px 3px, rgba(240, 24, 24, 0.79) 0px 1px 2px;
-}
-.waiting-avatar {
-      animation: blink 2s infinite;
-}
+.avatar-user { width: 30px; height: 30px; border-radius: 50%; }
+.approver-avatar { box-shadow:  rgba(54, 223, 12, 0.44) 0px 1px 3px, rgba(103, 197, 15, 0.79) 0px 1px 2px; }
+.rejecter-avatar { box-shadow:  rgba(244, 31, 31, 0.44) 0px 1px 3px, rgba(240, 24, 24, 0.79) 0px 1px 2px; }
+.waiting-avatar {animation: blink 2s infinite; }
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
+.link-text:hover { color: var(--bright-blue-color); cursor: pointer; }
+.link-text:hover a { text-decoration: underline; }
+
+.label {
+      background: #f2f5fa;
+      background: linear-gradient(90deg,rgba(242, 245, 250, 1) 0%, rgba(246, 248, 250, 1) 35%, rgba(255, 255, 255, 1) 100%);
+      padding: 4px;
+      border-radius: 5px;
+      box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+      width: fit-content;
+      color: #888;
+}
+
+.pointer-events-none { pointer-events: none; opacity: 0.5; }
+.disabled { opacity: 0.5; }
+
+.label-currency { color:#aaa; }
+.money-color { color: var(--money-color); }

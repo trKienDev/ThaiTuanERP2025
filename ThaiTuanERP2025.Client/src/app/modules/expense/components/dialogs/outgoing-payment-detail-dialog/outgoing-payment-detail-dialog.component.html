@@ -1,0 +1,211 @@
+<div class="dialog">
+      <div class="dialog-container">
+            <div class="dialog-heading">
+                  <div class="dialog-title">
+                        <h1>Chi tiết khoản chi</h1>
+                  </div>
+                  <div class="dialog-exit">
+                        <button type="button" class="exit-button" (click)="close()" aria-label="Đóng">
+                              <span class="text material-icons-outlined">close</span>
+                        </button>
+                  </div>
+            </div>
+            <div class="dialog-body">
+                  <ng-container *ngIf="loading(); else contentTpl">
+                        <kit-loading-spinner></kit-loading-spinner>
+                  </ng-container>
+                  <ng-template #contentTpl>
+                        <ng-container *ngIf="outgoingPaymentDetail; else errorTpl">
+                              <div block-label="outgoing-payment-detail" class="container">
+                                    <div class="detail-heading display-flex  justify-content-between">
+                                          <div class="left display-flex gap-10px align-items-center">
+                                                <div class="detail-status">
+                                                      <span class="label-status-badge" [ngClass]="(outgoingPaymentDetail.status | outgoingPaymentStatus).class">
+                                                            {{ (outgoingPaymentDetail.status | outgoingPaymentStatus).text }}
+                                                      </span>
+                                                </div>
+                                                <h3 class="payment-name">{{ outgoingPaymentDetail.name }}</h3>
+                                          </div>
+                                          <div class="right">
+                                                <ng-container *ngIf="outgoingPaymentDetail?.status === 1">
+                                                      <div class="action-button">
+                                                            <button type="button" class="button submit-button" (click)="markCreated()">Tạo lệnh</button>
+                                                      </div>
+                                                </ng-container>
+                                                <ng-container *ngIf="outgoingPaymentDetail?.status === 0">
+                                                      <div class="action-button">
+                                                            <button type="button" class="pintura-button" (click)="onApprove()">Duyệt</button>
+                                                      </div>
+                                                </ng-container>
+                                          </div>
+                                    </div>
+                                    <div class="detail-body display-flex flex-column gap-10px">
+
+                                          <div class="general-infor primary-card">
+                                                <div class="card-wrapper">
+                                                      <div class="card-header">Thông tin chung</div>
+                                                      <div class="card-body">
+                                                            <div class="display-flex justify-content-between">
+                                                                  <div class="left flex-1">
+                                                                        <div class="column">
+                                                                              <label for="detail-subid">ID</label>
+                                                                              <span>{{ outgoingPaymentDetail.subId }}</span>
+                                                                        </div>
+                                                                        <div class="column">
+                                                                              <label for="created-by-user" class="align-content-center">Tạo bởi</label>
+                                                                              <div class="display-flex gap-5px align-items-center">
+                                                                                    <img class="avatar-user" [src]="outgoingPaymentDetail.createdByUser | avatarUrlPipe">
+                                                                                    <span>{{ outgoingPaymentDetail.createdByUser.fullName }}</span>
+                                                                              </div>
+                                                                        </div>
+                                                                        <div class="column">
+                                                                              <label for="">Trả cho</label>
+                                                                              <ng-container *ngIf="outgoingPaymentDetail.supplierId">
+                                                                                    <span>{{ outgoingPaymentDetail.supplierName }}</span>
+                                                                              </ng-container>
+                                                                        </div>
+                                                                        <div class="column">
+                                                                              <label for="posting-at">Ghi nhận</label>
+                                                                              <div>{{ outgoingPaymentDetail.postingAt | date: 'HH:mm dd/MM/yyyy' }}</div>
+                                                                        </div>
+                                                                        <div class="column">
+                                                                              <label for="">Chi phí gốc</label>
+                                                                              <div>
+                                                                                    <div class="link-text display-flex gap-5px" (click)="openOutgoingPaymentDetailDialog(outgoingPaymentDetail.expensePaymentId)">
+                                                                                          <span class="material-icons-outlined" style="font-size: 14px;">visibility</span> 
+                                                                                          <a class=" display-flex gap-5px justify-content-center"> 
+                                                                                                {{ outgoingPaymentDetail.expensePaymentName }}
+                                                                                          </a>
+                                                                                    </div>
+                                                                              </div>
+                                                                        </div>
+                                                                  </div>
+                                                                  <div class="right flex-1">
+                                                                        <div class="column">
+                                                                              <label for="">Tài khoản tiền</label>
+                                                                              <div>{{ outgoingPaymentDetail.outgoingBankAccountName }}</div>
+                                                                        </div>
+                                                                        <div class="column">
+                                                                              <label for="">Ngân hàng</label>
+                                                                              <div>{{ outgoingPaymentDetail.bankName }}</div>
+                                                                        </div>
+                                                                        <div class="column">
+                                                                              <label for="">Tài khoản thụ hưởng</label>
+                                                                              <div>{{ outgoingPaymentDetail.accountNumber }}</div>
+                                                                        </div>
+                                                                        <div class="column">
+                                                                              <label for="">Người thụ hưởng</label>
+                                                                              <div>{{ outgoingPaymentDetail.beneficiaryName }}</div>
+                                                                        </div>
+                                                                  </div>
+                                                            </div>        
+                                                            <div class="column">
+                                                                  <label for="followers" class="align-content-center">Người theo dõi</label>
+                                                                  <ng-container *ngIf="(outgoingPaymentDetail?.followers?.length ?? 0) > 0">
+                                                                        <div class="payment-followers display-flex gap-5px align-items-center">
+                                                                              <ng-container *ngFor="let follower of outgoingPaymentDetail?.followers">
+                                                                                    <div class="payment-follower">
+                                                                                          <img class="avatar-user" [src]="follower | avatarUrlPipe">
+                                                                                    </div>
+                                                                              </ng-container>
+                                                                        </div>
+                                                                  </ng-container>
+                                                            </div>  
+                                                            <div class="column">
+                                                                  <label for="attachments">Tệp đính kèm</label>
+                                                            </div>        
+                                                      </div>
+                                                </div>
+                                          </div>
+
+                                          <div class="amount-infor primary-card">
+                                                <div class="card-wrapper">
+                                                      <div class="card-body">
+                                                            <div class="payment-amount">
+                                                                  <label for="expense-amount">Số tiền khoản chi</label>
+                                                                  <span class="money-color">{{ outgoingPaymentDetail.outgoingAmount | number: '1.0-0' }} <label class="label-currency">VND</label></span>
+                                                            </div>
+                                                            <div class="payment-amount">
+                                                                  <label for="expense-amount">Số tiền thanh toán</label>
+                                                                  <span>{{ outgoingPaymentDetail.expensePaymentAmount | number: '1.0-0' }} <label class="label-currency">VND</label></span>  
+                                                            </div>
+                                                      </div>
+                                                </div>
+                                          </div>
+
+                                          <div class="payment-tabs primary-card">
+                                                <div class="card-wrapper">
+                                                      <div class="card-body">
+                                                            <div class="payment-tab-navigation display-flex gap-5px border-bottom margin-bottom-10px">
+                                                                  <button type="button" class="tab-button" [ngClass]="{ 'active': activeTab === 'items' }" (click)="setActiveTab('items')">
+                                                                        Bảng hạng mục
+                                                                  </button>
+                                                                  <button  type="button" class="tab-button" [ngClass]="{ 'active': activeTab === 'outgoings' }" (click)="setActiveTab('outgoings')">
+                                                                        Khoản tiền ra
+                                                                  </button>
+                                                            </div>
+
+                                                            <ng-container [ngSwitch]="activeTab">
+                                                                  <ng-container *ngSwitchCase="'items'">
+                                                                        <expense-payment-items-table
+                                                                              [items]="outgoingPaymentDetail?.expensePaymentItems ?? []"
+                                                                              [totalAmount]="outgoingPaymentDetail.expensePaymentAmount"
+                                                                              [totalTax]="outgoingPaymentDetail.expensePaymentTaxAmount"
+                                                                              [totalWithTax]="outgoingPaymentDetail.expensePaymentTotalWithTax"
+                                                                              [showInvoiceButton]="true">
+                                                                        </expense-payment-items-table>
+                                                                  </ng-container>
+
+                                                                  <ng-container *ngSwitchCase="'outgoings'">
+                                                                        <outgoing-payments-table
+                                                                              [outgoings]="outgoingPaymentDetail?.outgoingPayments ?? []"
+                                                                              [totalPaid]="outgoingPaymentDetail?.outgoingAmountPaid">
+                                                                        </outgoing-payments-table>
+                                                                  </ng-container>
+                                                            </ng-container>
+                                                      </div>
+                                                </div>
+                                          </div>
+
+                                          <div class="comment-area primary-card">
+                                                <div class="card-wrapper">
+                                                      <div class="card-body display-flex flex-column gap-5px">
+                                                            <div class="comments-container display-flex flex-column gap-10px">
+                                                                  <div class="input-comment-box display-flex flex-column gap-5px">
+                                                                        <div class="user-comment display-flex gap-5px">
+                                                                              <img class="avatar-user" [src]="(currentUser$ | async) | avatarUrlPipe">
+                                                                              <comment-editor class="width-100pt" mode="comment" placeholder="Viết bình luận..."
+                                                                                    [documentType]="documentType.EXPENSE_PAYMENT"
+                                                                                    [documentId]="outgoingPaymentDetail.id"
+                                                                                    [control]="commentControl"         
+                                                                                    [loading]="isSubmittingComment"                                                         
+                                                                                    (submitted)="handleSubmitComment($event)"
+                                                                                    (canceled)="cancelComment()">
+                                                                              </comment-editor>
+                                                                        </div>
+                                                                  </div>
+
+                                                                  <div class="list-comments display-flex flex-column">
+                                                                        <comment-thread *ngFor="let comment of comments"
+                                                                              [comment]="comment"
+                                                                              [replyingToCommentId]="replyingToCommentId"
+                                                                              [documentType]="documentType.OUTGOING_PAYMENT"
+                                                                              (replyRequest)="startReply($event)"
+                                                                              (submitReply)="submitReply($event)"
+                                                                              (cancelReply)="cancelReply()">
+                                                                        </comment-thread>
+                                                                  </div>
+                                                            </div>      
+                                                      </div>
+                                                </div>
+                                          </div>
+                                    </div>
+                              </div>
+                        </ng-container>
+                  </ng-template>
+                  <ng-template #errorTpl>
+                        <kit-404-page title="⛔ Không thể tải dữ liệu khoản chi" variant="error"></kit-404-page>
+                  </ng-template>
+            </div>
+      </div>
+</div>

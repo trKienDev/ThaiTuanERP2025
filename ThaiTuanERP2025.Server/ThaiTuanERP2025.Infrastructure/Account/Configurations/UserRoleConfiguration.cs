@@ -12,6 +12,7 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 
 			builder.HasKey(ur => new { ur.UserId, ur.RoleId });
 
+			// Relationships
 			builder.HasOne(ur => ur.User)
 				.WithMany(u => u.UserRoles)
 				.HasForeignKey(ur => ur.UserId)
@@ -20,7 +21,7 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 			builder.HasOne(ur => ur.Role)
 				.WithMany(r => r.UserRoles)
 				.HasForeignKey(ur => ur.RoleId)
-				.OnDelete(DeleteBehavior.Cascade);
+				.OnDelete(DeleteBehavior.Restrict);
 		}
 	}
 }

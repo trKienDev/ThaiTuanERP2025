@@ -1,0 +1,63 @@
+<div class="page-container">
+      <div class="page-heading">
+            <div class="page-title">
+                  <h3 class="title">Khoản chi đang theo dõi</h3>
+            </div>
+      </div>
+      
+      <div class="page-body">
+            <table class="table">
+                  <thead>
+                        <tr>
+                              <th>#</th>
+                              <th>Tên khoản chi</th>
+                              <th>Trạng thái</th>
+                              <th>Số tiền</th>
+                              <th>Hạn thanh toán</th>
+                              <th>Trả cho</th>
+                              <th>Ngày ghi nhận</th>
+                              <th>Tài khoản tiền</th>
+                              <th>Thanh toán gốc</th>
+                        </tr>
+                  </thead>
+
+                  <tbody>
+                        <ng-container *ngIf="followingOutgoingPayments.length > 0">
+                              <tr *ngFor="let outgoing of followingOutgoingPayments; let i = index;">
+                                    <td>{{ i + 1 }}</td>
+                                    <td>
+                                          <div class="link-text display-flex gap-5px justify-content-center" (click)="openOutgoingPaymentDetailDialog(outgoing.id)">
+                                                <span class="material-icons-outlined" style="font-size: 14px;">visibility</span> 
+                                                <a class=" display-flex gap-5px justify-content-center"> 
+                                                      {{ outgoing.name }}
+                                                </a>
+                                          </div>
+                                    </td>
+                                    <td>
+                                          <div class="label-status">
+                                                <span class="label-status-badge" [ngClass]="(outgoing.status | outgoingPaymentStatus).class">
+                                                      {{ (outgoing.status | outgoingPaymentStatus).text }}
+                                                </span>
+                                          </div>
+                                    </td>
+                                    <td>{{ outgoing.outgoingAmount | number: '1.0-0' }} <label class="label-currency">VNĐ</label></td>
+                                    <td>{{ outgoing.dueAt | date: 'HH:mm dd/MM/yyyy'  }}</td>
+                                    <td>
+                                          <ng-container *ngIf="outgoing.supplierId">
+                                                <span>{{ outgoing.supplierName }}</span>
+                                          </ng-container>
+                                    </td>
+                                    <td>{{ outgoing.postingAt | date: 'HH:mm dd/MM/yyyy'  }}</td>
+                                    <td>{{ outgoing.outgoingBankAccountName }}</td>
+                                    <td>{{ outgoing.expensePaymentName }}</td>
+                              </tr>
+                        </ng-container>
+                        <ng-container *ngIf="followingOutgoingPayments.length === 0">
+                              <tr>
+                                    <td colspan="9" class="text-center">Không có khoản chi nào đang theo dõi</td>
+                              </tr> 
+                        </ng-container>
+                  </tbody>
+            </table>
+      </div>
+</div>

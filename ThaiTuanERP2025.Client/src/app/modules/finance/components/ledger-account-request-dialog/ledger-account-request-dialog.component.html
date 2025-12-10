@@ -1,0 +1,59 @@
+<div class="dialog">
+      <div class="dialog-container">
+            <form [formGroup]="form" (ngSubmit)="submit()">
+                  <div class="dialog-heading">
+                        <div class="dialog-title">
+                              <h1>Tài khoản hạch toán mới</h1>
+                        </div>
+                        <div class="dialog-exit">
+                              <button type="button" class="exit-button" (click)="close()">
+                                    <span class="text material-icons-outlined">close</span>
+                              </button>
+                        </div>
+                  </div>
+                  <div class="dialog-body">
+                        <div class="dialog-row">
+                              <div class="form-input">
+                                    <input class="" type="text" formControlName="name" autocomplete="on" required
+                                    [class.is-invalid]="showErrors && form.get('name')?.invalid"
+                                    [attr.aria-invalid]="showErrors && form.get('name')?.invalid ? 'true' : null" />
+                                    <label for="name">Tên tài khoản <span style="color: red;"> *</span></label>
+                                    <div class="form-input-error" *ngIf="showErrors && form.get('name')?.invalid">
+                                          <small>Vui lòng nhập tên tài khoản</small>
+                                    </div>
+                              </div>
+                        </div>
+                        <div class="dialog-row display-flex gap-10px">
+                              <div class="form-input flex-1">
+                                    <input class="" type="text" formControlName="number" autocomplete="on" required
+                                          [class.is-invalid]="showErrors && form.get('number')?.invalid"
+                                          [attr.aria-invalid]="showErrors && form.get('number')?.invalid ? 'true' : null" />
+                                    <label for="number">Số hiệu <span style="color: red;"> *</span></label>
+                                    <div class="form-input-error" *ngIf="showErrors && form.get('number')?.invalid">
+                                          <small>Vui lòng nhập số hiệu tài khoản</small>
+                                    </div>
+                              </div>
+                              <div class="flex-1" [class.is-invalid]="showErrors && form.get('balanceType')?.invalid">
+                                    <kit-dropdown [options]="balanceTypeOptions" formControlName="balanceType" [placeholder]="'Chọn kiểu'" [enableFilter]="false" [required]="true"
+                                    [invalid]="showErrors && (form.get('balanceType')?.invalid ?? false)"></kit-dropdown>
+                                    <div class="form-input-error" *ngIf="showErrors && form.get('balanceType')?.invalid">
+                                          <small>Vui lòng chọn kiểu</small>
+                                    </div>
+                              </div>
+                        </div>
+                        <div class="dialog-row">
+                              <kit-dropdown [options]="(ledgerAccountTypeOptions$ | async) ?? []"
+                                    [placeholder]="'Chọn loại tài khoản'" formControlName="ledgerAccountTypeId"
+                                    (selectionChange)="onLedgerAccountTypeSeleted($event)"></kit-dropdown>
+                        </div>
+                        <div class="dialog-row">
+                              <kit-dropdown [options]="(parentLedgerAccountOptions$ | async) ?? []" [placeholder]="'Chọn tài khoản cha'" formControlName="parentLedgerAccountId" (selectionChange)="onParentLedgerAccountSelected($event)"></kit-dropdown>
+                        </div>
+                  </div>
+                  <div class="dialog-footer display-flex gap-10px">
+                        <button type="button" class="flex-1 button cancel-button" (click)="close()">Thoát</button>
+                        <kit-spinner-button type="submit" class="flex-1" cssClass="save-button" [loading]="submitting" [disabled]="submitting" text="Lưu" [loadingText]="''"></kit-spinner-button>
+                  </div>
+            </form>
+      </div>
+</div>

@@ -1,0 +1,42 @@
+<table class="table">
+      <thead>
+            <tr>
+                  <th style="width: 40px;">#</th>
+                  <th>Khoản chi</th>
+                  <th>Trạng thái</th>
+                  <th>Ngày ghi nhận</th>
+                  <th>Số tiền ghi nhận</th>
+            </tr>
+      </thead>
+
+      <tbody>
+            <ng-container *ngIf="(outgoings?.length ?? 0) > 0; else noDataTpl">
+                  <tr *ngFor="let outgoing of outgoings; let i = index">
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ outgoing.name }}</td>
+                        <td>
+                              <div class="label-status">
+                                    <span class="label-status-badge" [ngClass]="(outgoing.status | outgoingPaymentStatus).class">
+                                          {{ (outgoing.status | outgoingPaymentStatus).text }}
+                                    </span>
+                              </div>
+                        </td>
+                        <td>{{ outgoing.postingAt | date: 'HH:mm dd/MM/yyyy' }}</td>
+                        <td>{{ outgoing.outgoingAmount | number:'1.0-0' }} <span class="label-currency">VND</span></td>
+                  </tr>
+            </ng-container>
+
+            <ng-template #noDataTpl>
+                  <tr>
+                        <td colspan="5" class="text-center text-muted">Chưa có khoản chi nào được ghi nhận.</td>
+                  </tr>
+            </ng-template>
+      </tbody>
+
+      <tfoot *ngIf="(outgoings?.length ?? 0) > 0">
+            <tr class="total-row">
+                  <td colspan="4"><strong>Tổng</strong></td>
+                  <td>{{ totalPaid | number:'1.0-0' }} VND</td>
+            </tr>
+      </tfoot>
+</table>

@@ -1,210 +1,198 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using ThaiTuanERP2025.Domain.Account.Entities;
-using ThaiTuanERP2025.Domain.Common;
+﻿using ThaiTuanERP2025.Domain.Shared;
+using ThaiTuanERP2025.Domain.Shared.Entities;
+using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Expense.Enums;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
-	public class ExpensePayment : AuditableEntity
+	public sealed class ExpensePayment : AuditableEntity
 	{
-		private readonly List<ExpensePaymentItem> _items = new();
-
+		#region Constructor
 		private ExpensePayment() { } // EF
-
-		public ExpensePayment(string name, PayeeType payeeType, DateTime dueDate, string managerApproverId, string? description)
+		public ExpensePayment(
+			string name, bool hasGoodsReceipt, ExpensePayeeType payeeType, DateTime dueAt, Guid managerApproverId, string? description
+		)
 		{
+			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
+			Guard.AgainstInvalidEnumValue(payeeType, nameof(payeeType));
+			Guard.AgainstDefault(managerApproverId, nameof(managerApproverId));
+
 			Id = Guid.NewGuid();
-			ManagerApproverId = Guid.Parse(managerApproverId);
 			Name = name.Trim();
+			HasGoodsReceipt = hasGoodsReceipt;
 			PayeeType = payeeType;
-			DueDate = dueDate;
+			DueAt = dueAt;
+			ManagerApproverId = managerApproverId;
 			Status = ExpensePaymentStatus.Pending;
 			Description = description?.Trim() ?? string.Empty;
 		}
+		#endregion
 
-		// Thông tin chung
+		#region Properties
+		private readonly List<ExpensePaymentItem> _items = new();
+		private readonly List<OutgoingPayment> _outgoingPayments = new();
+		private readonly List<ExpensePaymentAttachment> _attachments = new();
+
 		public string Name { get; private set; } = string.Empty;
 		public string SubId { get; private set; } = default!;
+		public ExpensePayeeType PayeeType { get; private set; }
+		public Guid? SupplierId { get; private set; }
+		public Supplier? Supplier { get; set; } 
 
-		// Đối tượng thụ hưởng
-		public PayeeType PayeeType { get; private set; }
-		public Guid? SupplierId { get; private set; }   // null nếu Employee
-		public Supplier? Supplier { get; private set; }  // optional nav
-
-		// Thông tin chuyển khoản (ghi nhận “snapshot” tại thời điểm tạo)
 		public string BankName { get; private set; } = string.Empty;
 		public string AccountNumber { get; private set; } = string.Empty;
 		public string BeneficiaryName { get; private set; } = string.Empty;
 
-		// Lịch thanh toán
-		public DateTime DueDate { get; private set; }
+		public DateTime DueAt { get; private set; }
 		public bool HasGoodsReceipt { get; private set; }
-		public string? Description { get; set; } = string.Empty;
+		public string? Description { get; private set; }
 
-		// Tổng cộng (được item cộng dồn)
-		public decimal TotalAmount { get; private set; }     // 18,2
-		public decimal TotalTax { get; private set; }        // 18,2
-		public decimal TotalWithTax { get; private set; }    // 18,2
-
-		// Tổng số tiền khoản chi đã tạo lệnh
+		public decimal TotalAmount { get; private set; }
+		public decimal TotalTax { get; private set; }
+		public decimal TotalWithTax { get; private set; }
 		public decimal OutgoingAmountPaid { get; private set; } = 0;
 		public decimal RemainingOutgoingAmount { get; private set; }
 
-
-		// Trạng thái luồng duyệt/chi
 		public ExpensePaymentStatus Status { get; private set; }
 
-		// Dòng hạng mục
-		public IReadOnlyCollection<ExpensePaymentItem> Items => _items;
+		public IReadOnlyCollection<ExpensePaymentItem> Items => _items.AsReadOnly();
+		public IReadOnlyCollection<OutgoingPayment> OutgoingPayments => _outgoingPayments.AsReadOnly();
+                public IReadOnlyCollection<ExpensePaymentAttachment> Attachments => _attachments.AsReadOnly();
 
-		// Đính kèm (tùy dự án, có thể dùng bảng chung Attachment; ở đây minh họa entity riêng)
-		private readonly List<ExpensePaymentAttachment> _attachments = new();
-		public IReadOnlyCollection<ExpensePaymentAttachment> Attachments => _attachments;
-
-		// Workflow instance id (nếu có)
-		public Guid? CurrentWorkflowInstanceId { get; private set; }
-		public ApprovalWorkflowInstance? CurrentWorkflowInstance { get; private set; }
-
+                public Guid? CurrentWorkflowInstanceId { get; private set; }
+		public ExpenseWorkflowInstance? CurrentWorkflowInstance { get; private set; }
 		public Guid ManagerApproverId { get; private set; }
 
-		private readonly List<OutgoingPayment> _outgoingPayments = new();
-		public IReadOnlyCollection<OutgoingPayment> OutgoingPayments => _outgoingPayments.AsReadOnly();
+		#endregion
 
-		public User CreatedByUser { get; set; } = null!;
-		public User? ModifiedByUser { get; set; }
-		public User? DeletedByUser { get; set; }
-
-		// ==== HÀM NGHIỆP VỤ ====
-		public void SetSubId(string value)
+		#region Domain Behaviors
+		internal void SetSubId(string subId)
 		{
-			if (string.IsNullOrWhiteSpace(value)) throw new ArgumentException("SubId is required");
-			SubId = value;
+			Guard.AgainstNullOrWhiteSpace(subId, nameof(subId));
+			SubId = subId.Trim();
 		}
 
-		public void SetSupplier(Guid? supplierId)
+		internal void SetSupplier(Guid? supplierId)
 		{
 			SupplierId = supplierId;
 		}
 
-		public void SetBankInfo(string bankName, string accountNumber, string beneficiaryName)
+		internal void SetBankInfo(string bankName, string accountNumber, string beneficiaryName)
 		{
-			BankName = bankName?.Trim() ?? string.Empty;
-			AccountNumber = accountNumber?.Trim() ?? string.Empty;
-			BeneficiaryName = beneficiaryName?.Trim() ?? string.Empty;
+			Guard.AgainstNullOrWhiteSpace(bankName, nameof(bankName));
+			Guard.AgainstNullOrWhiteSpace(accountNumber, nameof(accountNumber));
+			Guard.AgainstNullOrWhiteSpace(beneficiaryName, nameof(beneficiaryName));
+
+			BankName = bankName.Trim();
+			AccountNumber = accountNumber.Trim();
+			BeneficiaryName = beneficiaryName.Trim();
 		}
 
-		public void SetDueDate(DateTime date) => DueDate = date;
-
-		public void SetGoodsReceipt(bool hasGoodsReceipt) => HasGoodsReceipt = hasGoodsReceipt;
-
-		public ExpensePaymentItem AddItem (
-			string itemName, int quantity, decimal unitPrice,
-			decimal taxRate, Guid? budgetCodeId, Guid? cashoutCodeId,
-			Guid? invoiceId = null, decimal? overrideTaxAmount = null
-		) {
-			var item = new ExpensePaymentItem(Id, itemName, quantity, unitPrice, taxRate, budgetCodeId, cashoutCodeId, invoiceId, overrideTaxAmount);
+		internal ExpensePaymentItem AddItem(string itemName,  int quantity, decimal unitPrice, decimal taxRate,  decimal amount, decimal taxAmount, decimal totalWithTax, Guid budgetPlanDetailId, Guid? invoiceFileId = null)
+		{
+			var item = new ExpensePaymentItem(Id, itemName, quantity, unitPrice, taxRate, amount, taxAmount, totalWithTax, budgetPlanDetailId, invoiceFileId);
 			_items.Add(item);
 			RecalculateTotals();
 			return item;
 		}
 
-		public void RemoveItem(Guid itemId)
+		// ==== STATUS ====
+		internal void Submit()
 		{
-			var idx = _items.FindIndex(i => i.Id == itemId);
-			if (idx >= 0)
-			{
-				_items.RemoveAt(idx);
-				RecalculateTotals();
-			}
+			if (!_items.Any())
+				throw new DomainException("Không thể gửi duyệt phiếu không có hạng mục chi.");
+			Status = ExpensePaymentStatus.Submitted;
 		}
 
-		public void RecalculateTotals()
+		internal void MarkApproved()
 		{
+			if(Status != ExpensePaymentStatus.Pending)
+				throw new DomainException("Thanh toán chưa ở trạng thái chờ duyệt");
+			Status = ExpensePaymentStatus.Approved;
+		}
+
+		internal void MarkRejected()
+		{
+			if (Status != ExpensePaymentStatus.Pending)
+				throw new DomainException("Thanh toán chưa ở trạng thái chờ duyệt");
+
+			Status = ExpensePaymentStatus.Rejected;
+		}
+
+		internal void Cancel()
+		{
+			Status = ExpensePaymentStatus.Cancelled;
+		}
+
+		internal void ReadyForOutgoingPayment()
+		{
+			Status = ExpensePaymentStatus.ReadyForPayment;
+		}
+
+
+		internal void RecalculateTotals()
+		{
+			var oldTotalWithTax = TotalWithTax;
+
+			// Cộng từng phần
 			TotalAmount = _items.Sum(i => i.Amount);
 			TotalTax = _items.Sum(i => i.TaxAmount);
 			TotalWithTax = _items.Sum(i => i.TotalWithTax);
-			RemainingOutgoingAmount = TotalWithTax;
-		}
-
-		public void ReplaceItems(IEnumerable<ExpensePaymentItem> items)
-		{
-			_items.Clear();
-			_items.AddRange(items);
-			RecalculateTotals();
-		}
-
-		public void Submit() => Status = ExpensePaymentStatus.Submitted;
-		public void Approve() => Status = ExpensePaymentStatus.Approved;
-		public void Reject() => Status = ExpensePaymentStatus.Rejected;
-		public void Cancel() => Status = ExpensePaymentStatus.Cancelled;
-		public void ReadyForOutgoingPayment() => Status = ExpensePaymentStatus.ReadyForPayment;
-		public void PartiallyPaid() => Status = ExpensePaymentStatus.PartiallyPaid;
-		public void FullyPaid() => Status = ExpensePaymentStatus.FullyPaid;
-
-		public void AddAttachment(string objectKey, string fileName, long size, string? url, Guid? fileId)
-		{
-			_attachments.Add(new ExpensePaymentAttachment(Id, objectKey, fileName, size, url, fileId));
-		}
-
-		public void LinkWorkflow(Guid instanceId) => CurrentWorkflowInstanceId = instanceId;
-		public void UnlinkWorkflow() => CurrentWorkflowInstanceId = null;
-
-		/// <summary>
-		/// Tổng số tiền đã chi (bao gồm tất cả lệnh chi con)
-		/// </summary>
-		[NotMapped]
-		public decimal TotalOutgoing => _outgoingPayments.Sum(o => o.OutgoingAmount);
-
-		/// <summary>
-		/// Số tiền còn lại chưa chi (computed runtime, không lưu DB)
-		/// </summary>
-		[NotMapped]
-		public decimal RemainingAmount => TotalWithTax - TotalOutgoing;
-
-		public OutgoingPayment AddOutgoingPayment (
-			string name, string bankName, string accountNumber, string beneficiaryName,
-			decimal amount, DateTime dueDate, Guid outgoingBankAccountId,
-			string? description = null 
-		) {
-			if (amount <= 0)
-				throw new InvalidOperationException("Số tiền chi phải lớn hơn 0.");
-			if (amount > RemainingAmount)
-				throw new InvalidOperationException("Số tiền chi vượt quá tổng cần thanh toán.");
-
-			var outgoing = new OutgoingPayment(
-				name, amount,
-				bankName, accountNumber, beneficiaryName,
-				dueDate, outgoingBankAccountId, this.Id,
-				description
-			);
-
-			_outgoingPayments.Add(outgoing);
-
-			// Nếu tổng chi đã đủ
-			if (RemainingAmount == 0)
-				Status = ExpensePaymentStatus.FullyPaid;
-
-			return outgoing;
-		}
-
-		public void UpdateOutgoingAmountPaid(IEnumerable<OutgoingPayment> outgoingPayments)
-		{
-			var sum = outgoingPayments.Where(x => x.Status == OutgoingPaymentStatus.Approved).Sum(x => x.OutgoingAmount);
-			OutgoingAmountPaid = sum;
-		}
-
-		public void RecalculateOutgoingRemaining()
-		{
 			RemainingOutgoingAmount = TotalWithTax - OutgoingAmountPaid;
+
+			// Nếu có thay đổi tổng -> raise domain event
+			if (TotalWithTax != oldTotalWithTax)
+			{
+				// AddDomainEvent(new ExpensePaymentTotalsChangedEvent(this));
+			}
 		}
 
-		public void EvaluatePaymentStatus()
+		internal void LinkWorkflowInstance(ExpenseWorkflowInstance instance)
 		{
-			if (RemainingOutgoingAmount > 0)
-				PartiallyPaid();
-			else if (RemainingOutgoingAmount == 0)
-				FullyPaid();
+			Guard.AgainstNull(instance, nameof(instance));
+			CurrentWorkflowInstanceId = instance.Id;
+			CurrentWorkflowInstance = instance;
 		}
 
+		// ==== ATTACHMENTS ====
+		internal ExpensePaymentAttachment AddAttachment(Guid storedFileId)
+		{
+			Guard.AgainstDefault(storedFileId, nameof(storedFileId));
+
+			// Id ở đây là Id của chính ExpensePayment
+			var att = new ExpensePaymentAttachment(Id, storedFileId);
+			_attachments.Add(att);
+			return att;
+		}
+
+		internal void AddAttachments(IEnumerable<Guid> storedFileIds)
+		{
+			foreach (var id in storedFileIds)
+				AddAttachment(id);
+		}
+
+		// ====  OUTGOING AMOUNT ====
+		internal void RegisterOutgoingPayment(decimal outgoingAmount)
+		{
+			if (outgoingAmount <= 0)
+				throw new DomainException("Số tiền phải lớn hơn 0");
+
+			if (outgoingAmount > RemainingOutgoingAmount)
+				throw new DomainException("Số tiền khoản chi vượt quá số tiền còn lại của khoản thanh toán");
+
+			OutgoingAmountPaid += outgoingAmount;
+			RemainingOutgoingAmount = TotalWithTax - OutgoingAmountPaid;
+
+			if (RemainingOutgoingAmount <= 0)
+			{
+				RemainingOutgoingAmount = 0;
+				Status = ExpensePaymentStatus.FullyPaid;
+			}
+			else
+			{
+				Status = ExpensePaymentStatus.PartiallyPaid;
+			}
+		}
+		#endregion
 	}
 }

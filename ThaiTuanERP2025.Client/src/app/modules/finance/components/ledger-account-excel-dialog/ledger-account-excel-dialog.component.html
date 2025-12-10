@@ -1,0 +1,35 @@
+<div class="dialog">
+      <div class="dialog-container">
+            <div class="dialog-heading">
+                  <div class="dialog-title">
+                        <h1>Thêm tài khoản hạch toán từ Excel</h1>
+                  </div>
+                  <div class="dialog-exit">
+                        <button type="button" class="exit-button" (click)="close()">
+                              <span class="text material-icons-outlined">close</span>
+                        </button>
+                  </div>
+            </div>
+            <div class="dialog-body">
+                  <div class="dialog-row">
+                        <button type="button" class="button button-download" (click)="downloadTemplate()">Tải file excel mẫu</button>
+                  </div>
+                  <div class="dialog-row display-flex align-items-center gap-10px">
+                        <div class="button default-button" [class.disabled]="submitting">
+                              <label for="uploader-input" class="cursor-pointer" [class.pointer-events-none]="submitting">Chọn file excel </label>
+                        </div>
+                        <input id="uploader-input" type="file" accept=".xlsx,.xls, .csv" class="file-input" (change)="onFileChosen($event)"  [disabled]="submitting"/>
+                        <ng-container *ngIf="selectedFile">
+                              <div class="file-name" >{{ selectedFile.name }}</div>
+                              <button type="button" class="mini-close-button" (click)="removeFile()">x</button>
+                        </ng-container>
+                        <div *ngIf="!selectedFile">Chưa upload file (.xlsx, .xls, .csv)</div>
+                  </div>
+            </div>
+            <div class="dialog-footer display-flex gap-10px">
+                  <button type="button" class="flex-1 button cancel-button" (click)="close()"  [disabled]="submitting">Thoát</button>
+                  <kit-spinner-button type="button" class="width-50pt" cssClass="save-button" 
+                  [loading]="submitting" [disabled]="submitting" text="Lưu" [loadingText]="''" (click)="submit()"></kit-spinner-button>
+            </div>
+      </div>
+</div>

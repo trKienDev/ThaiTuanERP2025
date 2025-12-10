@@ -10,8 +10,14 @@ export function handleApiResponse$<T>() {
                               return response.data;
                         }
 
-                  const errors = response.errors ?? [response.message ?? 'Đã xảy ra lỗi không xác định'];
-                  throw new Error(errors[0]); // hoặc tạo class CustomApiError để chi tiết hơn
+                        if (response.message?.toLowerCase().includes('forbidden')) {
+                              // Để HttpErrorInterceptor xử lý thay vì ném lỗi logic
+                              throw { status: 403, message: response.message };
+                        }
+
+                        const errors = response.errors ?? [response.message ?? 'Đã xảy ra lỗi không xác định'];
+                        throw new Error(errors[0]
+                  ); // hoặc tạo class CustomApiError để chi tiết hơn
             })
       );
 }     

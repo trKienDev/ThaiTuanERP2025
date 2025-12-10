@@ -1,13 +1,19 @@
 <div [ngClass]="data.tone === 'danger' ? 'danger-background' : (data.tone === 'warning' ? 'warning-background' : 'primary-background')">
       <div class="confirm-dialog">
-            <h2 class="dialog-title">{{ data.title || 'Xác nhận' }}</h2>
+            <h2 class="dialog-title" [ngClass]="data.tone === 'error' ? 'title-error' : ''">{{ data.title || 'Xác nhận' }}</h2>
 
-            <div class="dialog-icon-wrapper display-flex justify-content-center align-items-center" style="margin: 30px 0px;">
-                  <span class="dialog-icon">⚠️</span>
-            </div>
+            <ng-container>
+                  <div class="dialog-icon-wrapper display-flex justify-content-center align-items-center" style="margin: 30px 0px;">
+                        <span *ngIf="data.tone !== 'error' && data.tone !== 'danger'" class="dialog-icon">⚠️</span>
+                        <ng-container *ngIf="data.tone === 'danger'">
+                              <kit-danger-icon class="dialog-icon" [size]="80"></kit-danger-icon>
+                        </ng-container>
+                        <span *ngIf="data.tone === 'error'" class="dialog-icon">⛔</span>
+                  </div>
+            </ng-container>
 
             <div class="dialog-message">
-                  <span class="message">{{ data.message || 'Bạn chắc chắn muốn tiếp tục?' }}</span>
+                  <span class="message" [ngClass]="data.tone === 'error' ? 'message-error' : ''">{{ data.message || 'Bạn chắc chắn muốn tiếp tục?' }}</span>
             </div>
 
             <ng-container *ngIf="data.tone === 'warning'">
@@ -16,10 +22,17 @@
                         <button class="width-50pt button save-button display-flex justify-content-center" (click)="close(true)">{{ data.confirmText || 'Đồng ý' }}</button>
                   </div>
             </ng-container>
-            <ng-container *ngIf="data.tone === 'danger'" >
-                  <div [ngClass]="data.tone === 'danger' ? 'danger-cancel-button' : ''">
-                        <button class="button" [ngClass]="data.tone === 'danger' ? 'danger-cancel' : ''" (click)="close(false)">Quay lại</button>
-                  </div>
+            <ng-container>
+                  <ng-container *ngIf="data.tone === 'danger'">
+                        <div class="confirm-button">
+                              <button class="button danger-cancel" (click)="close(false)">Quay lại</button>
+                        </div>
+                  </ng-container>
+                  <ng-container *ngIf="data.tone === 'error'">
+                        <div class="confirm-button">
+                              <button class="button error-confirm-button" (click)="close(false)">Quay lại</button>
+                        </div>
+                  </ng-container>
             </ng-container>
       </div>
 </div>

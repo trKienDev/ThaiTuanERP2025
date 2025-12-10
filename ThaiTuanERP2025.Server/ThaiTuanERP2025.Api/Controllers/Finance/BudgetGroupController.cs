@@ -1,27 +1,31 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Api.Common;
-using ThaiTuanERP2025.Application.Finance.Budgets.Commands.BudgetGroups.CreateBudgetGroup;
-using ThaiTuanERP2025.Application.Finance.Budgets.Requests;
+using ThaiTuanERP2025.Api.Shared;
+using ThaiTuanERP2025.Application.Finance.BudgetGroups;
+using ThaiTuanERP2025.Application.Finance.BudgetGroups.Commands;
+using ThaiTuanERP2025.Application.Finance.BudgetGroups.Query;
 
 namespace ThaiTuanERP2025.Api.Controllers.Finance
 {
 	[Authorize]
 	[ApiController]
 	[Route("api/budget-group")]
-	public class BudgetGroupController : Controller
+	public class BudgetGroupController : ControllerBase
 	{
 		private readonly IMediator _mediator;
-		public BudgetGroupController(IMediator mediator)
-		{
-			_mediator = mediator;
+		public BudgetGroupController(IMediator mediator) => _mediator = mediator;
+		
+		[HttpGet]
+		public async Task<IActionResult> GetAll(CancellationToken cancellationToken) {
+			var result = await _mediator.Send(new GetAllBudgetGroupsQuery(), cancellationToken);
+			return Ok(ApiResponse<IReadOnlyList<BudgetGroupDto>>.Success(result));
 		}
 
-		[HttpPost("new")]
-		public async Task<IActionResult> Create([FromBody] BudgetGroupRequest request, CancellationToken cancellationToken) {
-			var result = await _mediator.Send(new CreateBudgetGroupCommand(request), cancellationToken);
+		[HttpPost]
+		public async Task<IActionResult> Handle([FromBody] CreateBudgetGroupCommand command, CancellationToken cancellationToken) {
+			var result = await _mediator.Send(command, cancellationToken);
 			return Ok(ApiResponse<Unit>.Success(result));
 		}
-	}
+ 	}
 }

@@ -12,7 +12,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Core\ValueObjects\" />
     <Folder Include="Partner\" />
+    <Folder Include="Shared\Interfaces\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="11.1.0" />
   </ItemGroup>
 
 </Project>

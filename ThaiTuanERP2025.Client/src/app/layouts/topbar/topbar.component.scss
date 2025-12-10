@@ -1,0 +1,168 @@
+$topbar-padding: 1.5rem;
+
+.topbar {
+      position: fixed !important;
+      height: var(--topbar-height);
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      color: black;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 $topbar-padding;
+      font-size: 1rem;
+      position: relative;
+      user-select: none;
+}
+.topbar-icon-wrapper {
+      border: 1px solid var(--default-border-color);
+      height: 38px;
+      width: 38px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      background-color: white;
+      color: var(--default-border-color);
+      position: relative;
+      cursor: pointer;
+      transition: all 0.2s;
+      &:hover { 
+            color: black; 
+      }
+}
+.topbar-icon { font-size: 20px;  }
+.thaituan-topbar-logo {
+      height: 50px;
+      width: auto;
+      margin-left: -$topbar-padding;
+}
+
+.title {
+      font-weight: bold;
+      font-size: 1.2rem;
+}
+
+.user-section {
+      font-size: 0.95rem;
+}
+.user-avatar {
+      height: 40px;
+      width: 40px;
+      border-radius: 50%;
+}
+
+.notification-wrapper {
+      border-radius: 50%;
+}
+.notification-badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      min-width: 14px;
+      height: 14px;
+      line-height: 14px;
+      font-size: 8px;
+      border-radius: 9px;
+      background: #e11d48; 
+      color: #fff;
+      box-shadow: 0 0 0 2px #fff; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+}
+
+// reminder
+.reminder-wrapper { 
+      gap: 5px;
+      border-radius: 5px;
+      padding: 0 12px;
+      &.remind {
+            border-color: 1px solid red;
+      }
+}
+.reminder-badge {
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 13px;
+
+      &.has-reminders {
+            background-color: red;
+            color: white;
+      }
+      &.no-reminders {
+            background-color: transparent;
+            color: black;
+      }
+}
+.reminder-icon {
+      transform-origin: 60% 20%;
+      will-change: transform;
+}
+.reminder-icon.ringing {
+      animation: ring 3.2s ease-in-out infinite;
+}
+
+/* keyframes lắc kiểu chuông báo thức */
+@keyframes ring {
+      /* start: màu đen, nghỉ */
+      0%    { transform: rotate(0); color: black;    }
+      10%   { transform: rotate(15deg); color: black; }
+      20%   { transform: rotate(-14deg); color: black; }
+      30%   { transform: rotate(12deg); color: black; }
+      37.5% { transform: rotate(0); color: black; } /* kết thúc ring (1.2s) */
+
+      /* nghỉ 2.0s: đứng yên + về đen */
+      100%  { transform: rotate(0); color: black; }
+}
+
+.user-avatar-wrapper {
+      position: relative;
+      cursor: pointer;
+
+      .user-menu {
+            position: absolute;
+            right: 0;
+            top: 45px;
+            background: #fff;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+            border-radius: 8px;
+            min-width: 180px;
+            z-index: 1000;
+            padding: 8px;
+            animation: fadeIn 0.15s ease-in-out;
+
+            .user-menu-item {
+                  display: flex;
+                  align-items: center;
+                  gap: 10px;
+                  width: 100%;
+                  padding: 8px 14px;
+                  background: transparent;
+                  border: none;
+                  text-align: left;
+                  cursor: pointer;
+                  color: #333;
+
+                  &:hover {
+                        background-color: var(--main-bg-color);
+                  }
+
+                  .icon {
+                        font-size: 20px;
+                  }
+                  &.logout {
+                        color: #c0392b;
+                        font-weight: 500;
+                        border: none !important;
+                  }
+            }
+      }
+}
+
+@keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+}
+
+

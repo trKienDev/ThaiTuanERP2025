@@ -1,0 +1,18 @@
+﻿namespace ThaiTuanERP2025.Application.Finance.BudgetPeriods
+{
+	public sealed record BudgetPeriodLookupDto {
+		public Guid Id { get; init; }
+		public int Year { get; init; }
+		public int Month { get; init; }
+	}
+
+	public sealed record BudgetPeriodDto
+	{
+		public Guid Id { get; init; }
+		public int Year { get; init; }
+		public int Month { get; init; }
+		public DateOnly StartDate { get; init; }
+		public DateOnly EndDate { get; init; }
+		public bool IsActive { get; init; }
+	}
+}

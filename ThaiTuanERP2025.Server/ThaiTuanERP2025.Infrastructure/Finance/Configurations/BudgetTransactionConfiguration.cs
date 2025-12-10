@@ -10,18 +10,41 @@ namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 		{
 			builder.ToTable("BudgetTransaction", "Finance");
 
-			builder.HasKey(bt => bt.Id);
+			builder.HasKey(x => x.Id);
 
-			builder.Property(bt => bt.Amount).HasColumnType("decimal(18, 2)").IsRequired();
-			builder.Property(bt => bt.Type).HasConversion<int>().IsRequired();
-			builder.Property(bt => bt.TransactionDate).IsRequired();
+			// ===== Basic properties =====
+			builder.Property(x => x.Amount).HasColumnType("decimal(18,2)").IsRequired();
+			builder.Property(x => x.Type).HasConversion<int>().IsRequired();
+			builder.Property(x => x.TransactionDate).IsRequired();
 
-			builder.HasOne(bt => bt.BudgetPlan)
-				.WithMany(bp => bp.Transactions)
-				.HasForeignKey(bt => bt.BudgetPlanId)
-				.OnDelete(DeleteBehavior.Cascade);
+			// Foreign Key
+			builder.HasOne(x => x.BudgetPlanDetail)
+			       .WithMany() // hoặc .WithMany(bd => bd.Transactions)
+			       .HasForeignKey(x => x.BudgetPlanDetailId)
+			       .OnDelete(DeleteBehavior.Restrict);
 
-			builder.HasIndex(bt => new { bt.BudgetPlanId, bt.Type });
-		}
+			// FK: ExpensePaymentItem
+			builder.HasOne(x => x.ExpensePaymentItem)
+			       .WithMany()
+			       .HasForeignKey(x => x.ExpensePaymentItemId)
+			       .OnDelete(DeleteBehavior.Restrict);
+
+                        // Self reference: OriginalTransaction → ReversedTransaction
+                        builder.HasOne(x => x.OriginalTransaction)
+                               .WithOne(x => x.ReversedByTransaction)
+                               .HasForeignKey<BudgetTransaction>(x => x.OriginalTransactionId)
+                               .OnDelete(DeleteBehavior.NoAction); // tránh cascade
+
+                        builder.HasOne(x => x.ReversedByTransaction)
+                               .WithOne(x => x.OriginalTransaction)
+                               .HasForeignKey<BudgetTransaction>(x => x.ReversedByTransactionId)
+                               .OnDelete(DeleteBehavior.NoAction); // tránh cascade
+
+                        // ===== Indexes =====
+                        builder.HasIndex(x => x.TransactionDate);
+			builder.HasIndex(x => x.Type);
+                        builder.HasIndex(x => x.OriginalTransactionId);
+                        builder.HasIndex(x => x.ReversedByTransactionId);
+                }
 	}
 }

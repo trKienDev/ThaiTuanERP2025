@@ -1,26 +1,78 @@
-﻿using ThaiTuanERP2025.Domain.Account.Entities;
-using ThaiTuanERP2025.Domain.Common;
+﻿using ThaiTuanERP2025.Domain.Shared;
+using ThaiTuanERP2025.Domain.Shared.Entities;
+using ThaiTuanERP2025.Domain.Finance.Events;
+using ThaiTuanERP2025.Domain.Shared.Interfaces;
 
 namespace ThaiTuanERP2025.Domain.Finance.Entities
 {
-	public class CashoutCode : AuditableEntity
+	public class CashoutCode : AuditableEntity, IActiveEntity
 	{
-		public string Code { get; set; } = null!;
-		public string Name { get; set; } = null!;	
+		#region Constructors
+		private CashoutCode() { } 
+		public CashoutCode(string name, Guid cashoutGroupId, Guid postingLedgerAccountId, string? description = null)
+		{
+			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
+			Guard.AgainstDefault(cashoutGroupId, nameof(cashoutGroupId));
+			Guard.AgainstDefault(postingLedgerAccountId, nameof(postingLedgerAccountId));
 
-		public Guid CashoutGroupId { get; set; }	
-		public Guid PostingLedgerAccountId { get; set; }
+			Id = Guid.NewGuid();
+			Name = name.Trim();
+			CashoutGroupId = cashoutGroupId;
+			PostingLedgerAccountId = postingLedgerAccountId;
+			Description = description?.Trim();
+			IsActive = true;
 
-		public string? Description { get; set; }
-		public bool IsActive { get; set; } = true;
+			AddDomainEvent(new CashoutCodeCreatedEvent(this));
+		}
+		#endregion
 
-		public CashoutGroup CashoutGroup { get; set; } = null!;
-		public LedgerAccount PostingLedgerAccount { get; set; } = null!;
+		#region Properties
+		public string Name { get; private set; } = null!;
+		public Guid CashoutGroupId { get; private set; }
+		public Guid PostingLedgerAccountId { get; private set; }
+		public string? Description { get; private set; }
+		public bool IsActive { get; private set; } = true;
 
-		public ICollection<BudgetCode> BudgetCodes { get; set; } = new List<BudgetCode>();
+		public CashoutGroup CashoutGroup { get; private set; } = null!;
+		public LedgerAccount PostingLedgerAccount { get; private set; } = null!;
+		public ICollection<BudgetCode> BudgetCodes { get; private set; } = new List<BudgetCode>();
+		#endregion
 
-		public User CreatedByUser { get; set; } = null!;
-		public User? ModifiedByUser { get; set; }
-		public User? DeletedByUser { get; set; }
+		#region Domain Behaviors
+
+		public void Rename(string newName)
+		{
+			Guard.AgainstNullOrWhiteSpace(newName, nameof(newName));
+			Name = newName.Trim();
+			AddDomainEvent(new CashoutCodeRenamedEvent(this));
+		}
+
+		public void ChangeLedgerAccount(Guid newLedgerAccountId)
+		{
+			Guard.AgainstDefault(newLedgerAccountId, nameof(newLedgerAccountId));
+			PostingLedgerAccountId = newLedgerAccountId;
+			AddDomainEvent(new CashoutCodeLedgerChangedEvent(this));
+		}
+
+		public void ChangeDescription(string? description)
+		{
+			Description = description?.Trim();
+		}
+
+		public void Activate()
+		{
+			if (IsActive) return;
+			IsActive = true;
+			AddDomainEvent(new CashoutCodeActivatedEvent(this));
+		}
+
+		public void Deactivate()
+		{
+			if (!IsActive) return;
+			IsActive = false;
+			AddDomainEvent(new CashoutCodeDeactivatedEvent(this));
+		}
+
+		#endregion
 	}
 }

@@ -1,9 +1,6 @@
 import { Injectable, inject } from "@angular/core";
 import { HttpClient, HttpEvent, HttpEventType, HttpRequest } from "@angular/common/http";
 import { Observable, catchError, map, throwError } from "rxjs";
-
-
-// Nếu bạn đã có sẵn 2 type này ở vị trí khác, sửa import cho đúng:
 import { ApiResponse } from "../models/api-response.model";
 import { UploadFileResult } from "../models/upload-file-result.model";
 import { environment } from "../../../environments/environment";
@@ -76,6 +73,11 @@ export class FileService {
       getDownloadUrl$(idOrObjectKey: string) {
             // nếu backend nhận ID DB: truyền id; nếu nhận objectKey: sửa path cho đúng
             return this.http.get<ApiResponse<string>>(`${this.API_URL}/${encodeURIComponent(idOrObjectKey)}/download-url`);
+      }
+
+      /** Download file private theo StoredFile.Id (Guid) */
+      downloadById$(fileId: string): Observable<Blob> {
+            return this.http.get(`${this.API_URL}/${encodeURIComponent(fileId)}/download`, { responseType: 'blob' });
       }
 
       /** Xóa mềm theo objectKey (hoặc id – sửa path nếu backend dùng id) */

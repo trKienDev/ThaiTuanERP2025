@@ -1,43 +1,85 @@
-﻿using ThaiTuanERP2025.Domain.Common;
+﻿using ThaiTuanERP2025.Domain.Shared;
+using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Finance.Enums;
+using ThaiTuanERP2025.Domain.Finance.Events.BudgetTransactions;
+using ThaiTuanERP2025.Domain.Expense.Entities;
 
 namespace ThaiTuanERP2025.Domain.Finance.Entities
 {
 	/// <summary>
 	/// Ghi nhận bút toán thay đổi ngân sách (ledger entry) cho từng BudgetPlan.
 	/// </summary>
-	public class BudgetTransaction : AuditableEntity
+	public class BudgetTransaction : BaseEntity
 	{
-		private BudgetTransaction() { }
-
-		public BudgetTransaction(Guid budgetPlanId, Guid paymentId, decimal amount, BudgetTransactionType type)
+		#region Constructors
+		private BudgetTransaction() { } 
+		public BudgetTransaction(Guid planDetailId, Guid paymentItemId, decimal amount, BudgetTransactionType type)
 		{
-			if (amount <= 0)
-				throw new ArgumentException("Số tiền phải lớn hơn 0.", nameof(amount));
+			Guard.AgainstDefault(planDetailId, nameof(planDetailId));
+			Guard.AgainstDefault(paymentItemId, nameof(paymentItemId));
+			Guard.AgainstZeroOrNegative(amount, nameof(amount));
+			Guard.AgainstInvalidEnumValue(type, nameof(type));
 
-			BudgetPlanId = budgetPlanId;
-			PaymentId = paymentId;
+			Id = Guid.NewGuid();
+			BudgetPlanDetailId = planDetailId;
+			ExpensePaymentItemId = paymentItemId;
 			Amount = amount;
 			Type = type;
 			TransactionDate = DateTime.UtcNow;
+
+			AddDomainEvent(new BudgetTransactionCreatedEvent(this));
 		}
+		#endregion
 
-		/// Foreign key - BudgetPlan.
-		public Guid BudgetPlanId { get; private set; }
+		#region Properties
+		public Guid BudgetPlanDetailId { get; private set; }
+		public BudgetPlan BudgetPlanDetail { get; private set; } = null!;
 
-		/// Id của thực thể nghiệp vụ gây ra giao dịch (ExpensePaymentId, RefundId...).
-		public Guid PaymentId { get; private set; }
+		public Guid ExpensePaymentItemId { get; private set; }
+		public ExpensePaymentItem ExpensePaymentItem { get; private set; } = null!;
 
-		/// Số tiền thay đổi ngân sách.
 		public decimal Amount { get; private set; }
-
-		/// Loại giao dịch ngân sách: Expense, Refund, Reserve, Adjust...
 		public BudgetTransactionType Type { get; private set; }
-
-		/// Ngày ghi nhận giao dịch.
 		public DateTime TransactionDate { get; private set; }
 
-		// --- Navigation ---
-		public BudgetPlan BudgetPlan { get; private set; } = null!;
+                public Guid? OriginalTransactionId { get; private set; }
+                public Guid? ReversedByTransactionId { get; private set; }
+
+                public BudgetTransaction? OriginalTransaction { get; private set; }
+                public BudgetTransaction? ReversedByTransaction { get; private set; }
+
+                #endregion
+
+                #region Domain Behaviors
+
+                public BudgetTransaction CreateReverse()
+                {
+                        var reversed = new BudgetTransaction(
+				  planDetailId: this.BudgetPlanDetailId,
+				  paymentItemId: this.ExpensePaymentItemId,
+				  amount: this.Amount,
+				  type: BudgetTransactionType.Credit
+		      );
+
+                        // Gán quan hệ 2 chiều
+                        reversed.OriginalTransactionId = this.Id;
+                        this.ReversedByTransactionId = reversed.Id;
+
+			return reversed;
+                }
+
+                internal void Reverse()
+		{
+			AddDomainEvent(new BudgetTransactionReversedEvent(this));
+		}
+
+		internal void AdjustAmount(decimal newAmount)
+		{
+			Guard.AgainstZeroOrNegative(newAmount, nameof(newAmount));
+			Amount = newAmount;
+			AddDomainEvent(new BudgetTransactionAdjustedEvent(this));
+		}
+
+		#endregion
 	}
 }

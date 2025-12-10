@@ -1,0 +1,97 @@
+<div class="page-container">
+      <form [formGroup]="form" class="display-flex flex-column gap-10px" (ngSubmit)="submit()">
+            <div class="page-heading">
+                  <div class="page-title">
+                        <h3 class="title">Tạo kế hoạch ngân sách</h3>
+                  </div>
+                  <div class="actions display-flex gap-10px">
+                        <button type="button" class="button cancel-button">Hủy</button>
+                        <kit-spinner-button type="submit" cssClass="save-button" [loading]="submitting" text="Gửi xem xét" loadingText="Đang gửi…"></kit-spinner-button>
+                  </div>
+            </div>
+            <div class="page-body display-flex flex-column gap-20px">
+                  <div class="budget-plan-general display-flex flex-column gap-10px">
+                        <div class="row display-flex gap-10px">
+                              <div class="width-50pt">
+                                    <kit-dropdown formControlName="departmentId" [options]="(departmentOptions$ | async) ?? []"  [placeholder]="'Chọn phòng ban'"  [required]="true"
+                                    [invalid]="showErrors && (form.get('departmentId')?.invalid ?? false)"></kit-dropdown>
+                                    <div class="form-input-error" *ngIf="showErrors && form.get('departmentId')?.invalid">
+                                          <small>Vui lòng chọn phòng ban</small>
+                                    </div>
+                              </div>
+                              <div class="width-50pt">
+                                    <kit-dropdown formControlName="budgetPeriodId" [options]="budgetPeriodOptions"  [placeholder]="'Chọn kỳ ngân sách'"  [required]="true"
+                                    [invalid]="showErrors && (form.get('budgetPeriodId')?.invalid ?? false)" [enableFilter]="false" [autoSelectFirst]="true"></kit-dropdown>
+                                    <div class="form-input-error" *ngIf="showErrors && form.get('budgetPeriodId')?.invalid">
+                                          <small>Vui lòng chọn kỳ ngân sách</small>
+                                    </div>
+                              </div>
+                        </div>
+                        <div class="row display-flex gap-10px">
+                              <div class="width-50pt">
+                                    <kit-dropdown  [options]="budgetReviewerOptions" [placeholder]="'User xem xét'" [required]="true" [enableFilter]="false"
+                                    [invalid]="showErrors && (form.get('reviewerId')?.invalid ?? false)" (selectionChange)="onReviewerSelected($event)"
+                                    formControlName="selectedReviewerId" [autoSelectFirst]="true"></kit-dropdown>
+                                    <div class="form-input-error" *ngIf="showErrors && form.get('reviewerId')?.invalid">
+                                          <small>Vui lòng chọn user xem xét</small>
+                                    </div>
+                              </div>
+                              <div class="width-50pt">
+                                    <kit-dropdown  [options]="budgetApproverOptions" [placeholder]="'User phê duyệt'" [required]="true" [enableFilter]="false"
+                                    [invalid]="showErrors && (form.get('approverId')?.invalid ?? false)" (selectionChange)="onApproverSelected($event)"
+                                    formControlName="selectedApproverId"></kit-dropdown>
+                                    <div class="form-input-error" *ngIf="showErrors && form.get('approverId')?.invalid">
+                                          <small>Vui lòng chọn user phê duyệt</small>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+                  <div class="budget-plan-table-detail">
+                        <div>
+                              <label class="label">Bảng chi tiết <span style="color: red;">  *</span></label>
+                              <table class="table margin-top-15px">
+                                    <thead>
+                                          <tr>
+                                                <th style="width: 4%;">#</th>
+                                                <th style="width: 30%;">Mã ngân sách</th>
+                                                <th style="width: 20%;">Số tiền</th>
+                                                <th style="width: 40%;">Ghi chú</th>
+                                                <th style="width: 6%;">Xóa</th>
+                                          </tr>
+                                    </thead>
+                                    <tbody formArrayName="details">
+                                          <tr *ngFor="let row of details.controls; let i = index; trackBy: trackByIndex;" [formGroupName]="i">
+                                                <td>{{ i + 1 }}</td>
+                                                <td>
+                                                      <kit-dropdown formControlName="budgetCodeId" [options]="detailOptions[i]" [placeholder]="'Chọn mã ngân sách'" [required]="true" [enableFilter]="false"
+                                                      [invalid]="showErrors && (row.get('budgetCodeId')?.invalid ?? false)" (selectionChange)="onBudgetCodeSelected(i, $event)"></kit-dropdown>
+                                                      <div class="form-input-error" *ngIf="showErrors && row.get('budgetCodeId')?.invalid">
+                                                            <small>Vui lòng chọn mã ngân sách</small>
+                                                      </div>
+                                                </td>
+                                                <td>
+                                                      <input type="text" formControlName="amount" inputmode="decimal" appMoney [appMoneyDecimals]="0"  />
+                                                </td>
+                                                <td>
+                                                      <input type="text" formControlName="note">
+                                                </td>
+                                                <td>
+                                                      <div class="display-flex justify-content-center">
+                                                            <button type="button" class="button danger-button" aria-label="Xóa dòng" (click)="removeDetail(i)" style="max-height: 36px;">
+                                                                  <span class="material-icons-outlined">close</span>
+                                                            </button>
+                                                      </div>
+                                                </td>
+                                          </tr>
+                                          <tr class="tr-non-hover">
+                                                <td colspan="12">
+                                                      <button type="button" class="text-button" (click)="addDetail()">Thêm chi tiết</button>
+                                                </td>
+                                          </tr>
+                                    </tbody>
+                              </table>
+                        </div>
+                  </div>
+            </div>
+      </form>
+</div>

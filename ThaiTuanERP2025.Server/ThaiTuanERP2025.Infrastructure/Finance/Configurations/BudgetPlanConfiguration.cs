@@ -1,77 +1,57 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ThaiTuanERP2025.Domain.Finance.Entities;
+using ThaiTuanERP2025.Infrastructure.Persistence.Configurations;
 
 namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 {
-	public class BudgetPlanConfiguration : IEntityTypeConfiguration<BudgetPlan>
+	public class BudgetPlanConfiguration : BaseEntityConfiguration<BudgetPlan>
 	{
-		public void Configure(EntityTypeBuilder<BudgetPlan> builder)
+		public override void Configure(EntityTypeBuilder<BudgetPlan> builder)
 		{
 			builder.ToTable("BudgetPlan", "Finance");
 
 			builder.HasKey(e => e.Id);
-			builder.Property(e => e.Amount).HasColumnType("decimal(18, 2)").IsRequired();
-			builder.Property(e => e.IsActive).IsRequired().HasDefaultValue(true);
-			builder.Property(e => e.RowVersion).IsRowVersion();
-			builder.HasIndex(e => new { e.DepartmentId, e.BudgetCodeId, e.BudgetPeriodId }).IsUnique();
 
-			builder.HasOne(e => e.Department)
-				.WithMany()
-				.HasForeignKey(e => e.DepartmentId)
-				.OnDelete(DeleteBehavior.Restrict);
+			// ===== Basic properties =====
+			builder.Property(x => x.IsActive).IsRequired();
+			builder.Property(x => x.Status).HasConversion<int>().IsRequired();
+			builder.Property(x => x.RowVersion).IsRowVersion(); // concurrency token
+			builder.Property(x => x.IsReviewed).HasDefaultValue(false);
+			builder.Property(x => x.IsApproved).HasDefaultValue(false);
 
-			builder.HasOne(e => e.BudgetCode)
-				.WithMany(c => c.BudgetPlans)
-				.HasForeignKey(e => e.BudgetCodeId)
-				.OnDelete(DeleteBehavior.Restrict);
-
-			builder.HasOne(e => e.BudgetPeriod)
-				.WithMany(p => p.BudgetPlans)
-				.HasForeignKey(e => e.BudgetPeriodId)
-				.OnDelete(DeleteBehavior.Restrict);
-
-			builder.HasMany(e => e.Transactions)
-				.WithOne(t => t.BudgetPlan)
-				.HasForeignKey(t => t.BudgetPlanId)
+			// ===== Relationships =====
+			builder.HasOne(x => x.BudgetPeriod)
+				.WithMany(x => x.BudgetPlans)
+				.HasForeignKey(x => x.BudgetPeriodId)
 				.OnDelete(DeleteBehavior.Cascade);
 
-			builder.HasOne(e => e.ReviewedByUser)
+			builder.HasOne(x => x.Department)
 				.WithMany()
-				.HasForeignKey(e => e.ReviewedByUserId)
+				.HasForeignKey(x => x.DepartmentId)
 				.OnDelete(DeleteBehavior.Restrict);
 
-			builder.HasOne(e => e.ApprovedByUser)
+			// Review & Approval Users
+			builder.HasOne(x => x.ReviewedByUser)
 				.WithMany()
-				.HasForeignKey(e => e.ApprovedByUserId)
+				.HasForeignKey(x => x.ReviewedByUserId)
 				.OnDelete(DeleteBehavior.Restrict);
 
-			builder.HasOne(e => e.BudgetCode)
-				.WithMany(c => c.BudgetPlans)
-				.HasForeignKey(e => e.BudgetCodeId)
-				.OnDelete(DeleteBehavior.Restrict);
-			builder.HasOne(e => e.BudgetPeriod)
-				.WithMany(p => p.BudgetPlans)
-				.HasForeignKey(e => e.BudgetPeriodId)
+			builder.HasOne(x => x.ApprovedByUser)
+				.WithMany()
+				.HasForeignKey(x => x.ApprovedByUserId)
 				.OnDelete(DeleteBehavior.Restrict);
 
-			builder.HasOne(e => e.CreatedByUser)
-				.WithMany()
-				.HasForeignKey(e => e.CreatedByUserId)
-				.OnDelete(DeleteBehavior.Restrict);
-			builder.HasIndex(e => e.CreatedByUserId);
+			// Transactions (private field)
+			//builder.Navigation(e => e.Transactions).UsePropertyAccessMode(PropertyAccessMode.Field);
 
-			builder.HasOne(e => e.ModifiedByUser)
-				.WithMany()
-				.HasForeignKey(e => e.ModifiedByUserId)
-				.OnDelete(DeleteBehavior.Restrict);
-			builder.HasIndex(e => e.ModifiedByUserId);
+			// ===== Indexes =====
+			builder.HasIndex(x => new { x.DepartmentId, x.BudgetPeriodId }).IsUnique(); // Không cho phép trùng kế hoạch cùng mã ngân sách / phòng / kỳ
+			builder.HasIndex(x => x.Status);
+			builder.HasIndex(x => x.IsActive);
 
-			builder.HasOne(e => e.DeletedByUser)
-				.WithMany()
-				.HasForeignKey(e => e.DeletedByUserId)
-				.OnDelete(DeleteBehavior.Restrict);
-			builder.HasIndex(e => e.DeletedByUserId);
+			// Auditable
+			ConfigureAuditUsers(builder);
 		}
 	}
 }

@@ -1,0 +1,254 @@
+<div class="dialog">
+      <div class="dialog-container">
+            <div class="dialog-heading">
+                  <div class="dialog-title">
+                        <h1>Chi tiết thanh toán</h1>
+                  </div>
+                  <div class="dialog-exit">
+                        <button type="button" class="exit-button" (click)="close()">
+                              <span class="text material-icons-outlined">close</span>
+                        </button>
+                  </div>
+            </div>
+            <div class="dialog-body">
+                  <ng-container *ngIf="loading(); else contentTpl">
+                        <kit-loading-spinner></kit-loading-spinner>
+                  </ng-container>
+
+                  <ng-template #contentTpl>
+                        <ng-container *ngIf="paymentDetail; else errorTpl">
+                              <div class="payment-header display-flex gap-10px align-items-center justify-content-between">
+                                    <div class="left display-flex gap-10px align-items-center">
+                                          <div class="payment-status" [@statusChangeFade]="paymentDetail?.status">
+                                                <span class="label-status-badge" [ngClass]="(paymentDetail?.status | expensePaymentStatus).class">
+                                                      {{ (paymentDetail?.status | expensePaymentStatus).text }}
+                                                </span>
+                                          </div>
+                                          <h3 class="payment-name">{{ paymentDetail?.name }}</h3>
+                                    </div>
+                                    <div class="right display-flex gap-10px">
+                                          <ng-container *ngIf="currentStepStatus$ | async as step">
+                                                <div class="payment-expired-badge margin-left-auto display-flex" *ngIf="step.expired && isInProgress">
+                                                      <span class="badge danger-badge">Quá hạn duyệt</span>
+                                                </div>
+                                                <div *ngIf="canApproveOrReject" class="payment-actions display-flex gap-5px align-items-center">
+                                                      <kit-spinner-button type="button" cssClass="submit-button"  text="Duyệt" [loading]="approving" [disabled]="submitting" loadingText="Đang duyệt…" (click)="approve()"></kit-spinner-button>
+                                                      <kit-spinner-button type="button" cssClass="danger-button" text="Từ chối" [loading]="rejecting" [disabled]="submitting" loadingText="Đang từ chối…" (click)="reject()"></kit-spinner-button>
+                                                </div>
+                                                <div *ngIf="!step.expired && canApproveOrReject && isInProgress" class="time-clock-border">
+                                                      <kit-flip-countdown class="display-flex align-items-center" style="height: 100%;" [timeLeft]="step.seconds"></kit-flip-countdown>
+                                                </div>
+                                          </ng-container>
+                                          <ng-container *ngIf="paymentDetail?.status === 3 || paymentDetail?.status === 7">
+                                                <button type="button" class="button pintura-button" [disabled]="submitting" (click)="redirectToOutgoingPaymentRequestPage(paymentId)">
+                                                      Ghi nhận khoản chi
+                                                </button>
+                                          </ng-container>
+                                    </div>
+                              </div>
+                              <div class="payment-infor display-flex flex-column gap-10px">
+
+                                    <div class="general-infor primary-card">
+                                          <div class="card-wrapper">
+                                                <div class="card-header">Thông tin thanh toán</div>
+                                                <div class="card-body">
+                                                      <div class="display-flex justify-content-between">
+                                                            <div class="left-side flex-1">
+                                                                  <div class="column">
+                                                                        <label for="sub-id">ID chi phí</label>
+                                                                        <span>{{ paymentDetail?.subId }}</span>
+                                                                  </div>
+                                                                  <div class="column">
+                                                                        <label for="created-by-user" class="align-content-center">Tạo bởi</label>
+                                                                        <div class="display-flex gap-5px align-items-center">
+                                                                              <img class="avatar-user" [src]="paymentDetail?.createdByUser | avatarUrlPipe">
+                                                                              <span>{{ paymentDetail?.createdByUser?.fullName}}</span>
+                                                                        </div>
+                                                                  </div>
+                                                                  <div class="column">
+                                                                        <label for="created-at">Tạo lúc</label>
+                                                                        <span>{{ paymentDetail?.createdAt | date: 'HH:mm dd/MM/yyyy' }}</span>
+                                                                  </div>
+                                                                  <div class="column">
+                                                                        <label for="hasGoodsReceipt">Đã nhập kho</label>
+                                                                        <input type="checkbox" [checked]="paymentDetail?.hasGoodsReceipt" disabled style="width: fit-content;"/>
+                                                                  </div>
+                                                                  <div class="column">
+                                                                        <label for="workflow-instance" class="align-content-center">Luồng duyệt</label>
+                                                                        <ng-container *ngIf="(paymentDetail?.workflowInstance?.steps?.length ?? 0) > 0">
+                                                                              <div class="approvers display-flex gap-5px">
+                                                                                    <ng-container *ngFor="let step of paymentDetail?.workflowInstance?.steps">
+                                                                                          <ng-container *ngIf="step.approvedByUser">
+                                                                                                <div class="expense-step">
+                                                                                                      <img class="avatar-user approved-user" [src]="step.approvedByUser | avatarUrlPipe">
+                                                                                                      <span class="status-icon approved-icon">✓</span>
+                                                                                                </div>
+                                                                                          </ng-container>
+                                                                                          <ng-container *ngIf="step.rejectedByUser">
+                                                                                                <div class="expense-step">
+                                                                                                      <img class="avatar-user rejected-user" [src]="step.rejectedByUser | avatarUrlPipe">
+                                                                                                      <span class="status-icon rejected-icon">✗</span>
+                                                                                                </div>
+                                                                                          </ng-container>
+                                                                                    </ng-container>
+                                                                              </div>
+                                                                        </ng-container>
+                                                                  </div>
+                                                            </div>
+                                                            <div class="right-side flex-1">
+                                                                  <div class="column">
+                                                                        <label for="supplier">Nhà cung cấp</label>
+                                                                        <span>{{ paymentDetail?.supplierName }}</span>
+                                                                  </div>
+                                                                  <div class="column">
+                                                                        <label for="bank-name">Tên ngân hàng</label>
+                                                                        <span>{{ paymentDetail?.bankName }}</span>
+                                                                  </div>
+                                                                  <div class="column">
+                                                                        <label for="bank-account">Số tài khoản</label>
+                                                                        <span>{{ paymentDetail?.accountNumber }}</span>
+                                                                  </div>
+                                                                  <div class="column">
+                                                                        <label for="beneficiary-name">Người thụ hưởng</label>
+                                                                        <span>{{ paymentDetail?.beneficiaryName }}</span>
+                                                                  </div>
+                                                                  <div class="column">
+                                                                        <label for="description">Mô tả</label>
+                                                                        <span>{{ paymentDetail?.description || '---'}}</span>
+                                                                  </div>
+                                                            </div>
+                                                      </div>
+                                                      <div class="column">
+                                                            <label for="followers" class="align-content-center">Người theo dõi</label>
+                                                            <ng-container *ngIf="(paymentDetail?.followers?.length ?? 0) > 0">
+                                                                  <div class="payment-followers display-flex gap-5px align-items-center">
+                                                                        <ng-container *ngFor="let follower of paymentDetail?.followers">
+                                                                              <div class="payment-follower">
+                                                                                    <img class="avatar-user" [src]="follower | avatarUrlPipe">
+                                                                              </div>
+                                                                        </ng-container>
+                                                                  </div>
+                                                            </ng-container>
+                                                      </div>
+                                                      <div class="column">
+                                                            <label for="attachments">Tệp đính kèm</label>
+                                                            <ng-container *ngIf="(paymentDetail?.attachments?.length ?? 0) > 0">
+                                                                  <div class="payment-attachments display-flex gap-5px">
+                                                                        <ng-container *ngFor="let attachment of paymentDetail?.attachments">
+                                                                              <div class="file-attachment">
+                                                                                    <span (click)="previewAttachment(attachment.storedFile)">{{ attachment.storedFile.fileName }}</span>
+                                                                              </div>
+                                                                        </ng-container>
+                                                                  </div>
+                                                            </ng-container>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                    </div>
+
+                                    <div class="amount-infor primary-card">
+                                          <div class="card-wrapper">
+                                                <div class="card-body">
+                                                      <div class="payment-amount-block">
+                                                            <label for="payment-total-amount">Tổng tiền thanh toán</label>
+                                                            <span>{{ paymentDetail?.totalWithTax | number: '1.0-0'  }} <label class="label-currency">VND</label></span>
+                                                      </div>
+                                                      <div class="payment-amount-block">
+                                                            <label for="outgoing-amount-paid">Khoản chi đã tạo</label>
+                                                            <span class="money-color">{{ paymentDetail?.outgoingAmountPaid | number: '1.0-0'  }} <label class="label-currency">VND</label></span>
+                                                      </div>
+                                                      <div class="payment-amount-block">
+                                                            <label for="remaining-outgoing-amount">Số tiền còn lại</label>
+                                                            <span style="color: var(--cadmium-red);">{{ paymentDetail?.remainingOutgoingAmount | number: '1.0-0' }} <label class="label-currency">VND</label></span>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                    </div>
+
+                                    <div class="payment-tabs primary-card">
+                                          <div class="card-wrapper">
+                                                <div class="card-body display-flex flex-column gap-5px">
+                                                      <div class="payment-tab-navigation display-flex gap-5px border-bottom">
+                                                            <button type="button" class="tab-button" [ngClass]="{ 'active': activeTab === 'items' }" (click)="setActiveTab('items')">
+                                                                  Bảng hạng mục
+                                                            </button>
+                                                            <button  type="button" class="tab-button" [ngClass]="{ 'active': activeTab === 'outgoings' }" (click)="setActiveTab('outgoings')">
+                                                                  Khoản chi
+                                                            </button>
+                                                      </div>
+
+                                                      <div>
+                                                            <ng-container [ngSwitch]="activeTab">
+                                                                  <!-- Tab 1: Hạng mục thanh toán -->
+                                                                  <ng-container *ngSwitchCase="'items'">
+                                                                        <div>
+                                                                              <expense-payment-items-table
+                                                                                    [items]="paymentDetail?.items ?? []"
+                                                                                    [totalAmount]="paymentDetail?.totalAmount"
+                                                                                    [totalTax]="paymentDetail?.totalTax"
+                                                                                    [totalWithTax]="paymentDetail?.totalWithTax"
+                                                                                    [showInvoiceButton]="true"
+                                                                                    (viewInvoice)="previewInvoice($event)">
+                                                                              </expense-payment-items-table>
+                                                                        </div>
+                                                                  </ng-container>
+
+                                                                  <!-- Tab 2: Khoản tiền ra -->
+                                                                  <ng-container *ngSwitchCase="'outgoings'">
+                                                                        <div class="">
+                                                                              <div class="outgoing-payments-table">
+                                                                                    <outgoing-payments-table
+                                                                                          [outgoings]="paymentDetail?.outgoingPayments ?? []"
+                                                                                          [totalPaid]="paymentDetail?.outgoingAmountPaid">
+                                                                                    </outgoing-payments-table>
+                                                                              </div>
+                                                                        </div>
+                                                                  </ng-container>
+                                                            </ng-container>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                    </div>
+
+                                    <div class="payment-comments primary-card">
+                                          <div class="card-wrapper">
+                                                <div class="card-body display-flex flex-column gap-5px">
+                                                      <div class="comments-container display-flex flex-column gap-10px">
+                                                            <div class="input-comment-box display-flex flex-column gap-5px">
+                                                                  <div class="user-comment display-flex gap-5px">
+                                                                        <img class="avatar-user" [src]="(currentUser$ | async) | avatarUrlPipe">
+                                                                        <comment-editor class="width-100pt" mode="comment" placeholder="Viết bình luận..."
+                                                                              [documentType]="documentType.EXPENSE_PAYMENT"
+                                                                              [documentId]="paymentId"
+                                                                              [control]="commentControl"         
+                                                                              [loading]="isSubmittingComment"                                                         
+                                                                              (submitted)="handleSubmitComment($event)"
+                                                                              (canceled)="cancelComment()">
+                                                                        </comment-editor>
+                                                                  </div>
+                                                            </div>
+
+                                                            <div class="list-comments display-flex flex-column">
+                                                                  <comment-thread *ngFor="let comment of comments"
+                                                                        [comment]="comment"
+                                                                        [replyingToCommentId]="replyingToCommentId"
+                                                                        [documentType]="documentType.EXPENSE_PAYMENT"
+                                                                        (replyRequest)="startReply($event)"
+                                                                        (submitReply)="submitReply($event)"
+                                                                        (cancelReply)="cancelReply()">
+                                                                  </comment-thread>
+                                                            </div>
+                                                      </div>      
+                                                </div>
+                                          </div>
+                                    </div>
+                              </div>
+                        </ng-container>
+                  </ng-template>
+                  
+                  <ng-template #errorTpl>
+                        <kit-404-page title="⛔ Không thể tải dữ liệu khoản chi" variant="error"></kit-404-page>
+                  </ng-template>
+            </div>
+      </div>
+</div>

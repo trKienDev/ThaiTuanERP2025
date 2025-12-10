@@ -1,59 +1,43 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Api.Common;
-using ThaiTuanERP2025.Application.Account.RBAC.Commands.Roles.AssignRoleToUser;
-using ThaiTuanERP2025.Application.Account.RBAC.Commands.Roles.CreateRole;
-using ThaiTuanERP2025.Application.Account.RBAC.Commands.Roles.DeleteRole;
-using ThaiTuanERP2025.Application.Account.RBAC.Commands.Roles.ToggleRoleActive;
-using ThaiTuanERP2025.Application.Account.RBAC.Dtos;
-using ThaiTuanERP2025.Application.Account.RBAC.Queries.Roles.GetAllRoles;
-using ThaiTuanERP2025.Application.Account.RBAC.Requests;
+using ThaiTuanERP2025.Api.Shared;
+using ThaiTuanERP2025.Application.Account.Permissions.Commands;
+using ThaiTuanERP2025.Application.Account.Roles;
+using ThaiTuanERP2025.Application.Account.Roles.Commands;
+using ThaiTuanERP2025.Application.Account.Roles.Queries;
+using ThaiTuanERP2025.Application.Account.Roles.Request;
 
 namespace ThaiTuanERP2025.Api.Controllers.Account
 {
 	[ApiController]
+	[Route("api/role")]
 	[Authorize]
-	[Route("api/roles")]
 	public class RoleController : ControllerBase
 	{
 		private readonly IMediator _mediator;
-		public RoleController(IMediator mediator)
-		{
+		public RoleController(IMediator mediator) {
 			_mediator = mediator;
 		}
 
-		[HttpGet("all")]
-		public async Task<IActionResult> GetAllRoles()
+		[HttpGet]
+		public async Task<IActionResult> GetAllRolesAsync(CancellationToken cancellationToken)
 		{
-			var result = await _mediator.Send(new GetAllRolesQuery());
-			return Ok(ApiResponse<IEnumerable<RoleDto>>.Success(result));
+			var roles = await _mediator.Send(new GetAllRolesQuery(), cancellationToken);
+			return Ok(ApiResponse<IEnumerable<RoleDto>>.Success(roles));
 		}
 
-		[HttpPost("new")]
-		public async Task<IActionResult> CreateRole([FromBody] RoleRequest request)
+		[HttpPost]
+		public async Task<IActionResult> CreateRole([FromBody] RoleRequest request, CancellationToken cancellationToken)
 		{
-			var result = await _mediator.Send(new CreateRoleCommand(request));
+			var result = await _mediator.Send(new CreateRoleCommand(request), cancellationToken);
 			return Ok(ApiResponse<Unit>.Success(result));
 		}
 
-		[HttpPost("assign-to-user")]
-		public async Task<IActionResult> AssignRoleToUser([FromBody] AssignRoleToUserCommand command)
+		[HttpPost("{roleId:guid}/permissions")]
+		public async Task<IActionResult> AssignPermissions([FromRoute] Guid roleId, [FromBody] List<Guid> permissionIds, CancellationToken cancellationToken)
 		{
-			var result = await _mediator.Send(command);
-			return Ok(ApiResponse<Unit>.Success(result));
-		}
-
-		[HttpPatch("{roleId:guid}/toggle-activate")]
-		public async Task<IActionResult> ToogleActive(Guid roleId, CancellationToken cancellationToken) {
-			var result = await _mediator.Send(new ToggleRoleActiveCommand(roleId), cancellationToken);
-			return Ok(ApiResponse<Unit>.Success(result));
-		}
-
-		[HttpDelete("{roleId:guid}")]
-		public async Task<IActionResult> Delete(Guid roleId, CancellationToken cancellationToken)
-		{
-			var result = await _mediator.Send(new DeleteRoleCommand(roleId), cancellationToken);
+			var result = await _mediator.Send(new AssignPermissionToRoleCommand(roleId, permissionIds), cancellationToken);
 			return Ok(ApiResponse<Unit>.Success(result));
 		}
 	}

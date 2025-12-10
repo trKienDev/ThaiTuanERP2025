@@ -1,0 +1,15 @@
+<app-topbar></app-topbar>
+<div class="layout-container">
+      <app-sidebar></app-sidebar>
+
+      <main class="main-content">
+            <div class="main-content-container">
+                  <div class="main-content-border">
+                        <router-outlet #o="outlet"></router-outlet>
+                        <app-toast-host></app-toast-host>
+                  </div>
+            </div>
+      </main>
+
+      
+</div>

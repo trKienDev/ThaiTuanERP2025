@@ -1,0 +1,75 @@
+import { CommonModule } from "@angular/common";
+import { Component, inject, Inject } from "@angular/core";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
+import { DepartmentFacade } from "../../facades/department.facade";
+import { DepartmentOptionStore } from "../../options/department-dropdown.option";
+import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
+import { KitDropdownComponent, KitDropdownOption } from "../../../../shared/components/kit-dropdown/kit-dropdown.component";
+import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
+import { firstValueFrom } from "rxjs";
+import { DepartmentApiService } from "../../services/api/department-api.service";
+
+@Component({
+      selector: 'set-parent-department-dialog',
+      standalone: true,
+      imports: [CommonModule, KitSpinnerButtonComponent, KitDropdownComponent, ReactiveFormsModule ],
+      templateUrl: './set-parent-department-dialog.component.html',
+})
+export class SetParentDepartmentDialogComponent {
+      private readonly dialogRef = inject(MatDialogRef<SetParentDepartmentDialogComponent>);
+      private readonly toastService = inject(ToastService);
+      private readonly departmentApi = inject(DepartmentApiService);
+      private readonly departmentFacade = inject(DepartmentFacade);
+      departments$ = this.departmentFacade.departments$;
+      private readonly departmentOptionStore = inject(DepartmentOptionStore);
+      departmentOptions$ = this.departmentOptionStore.option$;
+      private readonly formBuilder = inject(FormBuilder);
+      departmentId: string = '';
+      isSubmitting = false;
+
+      form = this.formBuilder.group({
+            parentId: this.formBuilder.control<string>('', { nonNullable: true, validators: [ Validators.required ] })
+      });
+
+      constructor( @Inject(MAT_DIALOG_DATA) public data: string ) {
+            this.departmentId = data;
+            this.loadParentDepartment(this.departmentId);
+      }
+
+      async loadParentDepartment(departmentId: string) {
+            const parentDept = await firstValueFrom(this.departmentApi.getParentDepartment(departmentId));
+            if (parentDept) {
+                  this.form.patchValue({ parentId: parentDept.id });
+            }
+      }
+
+      onDepartmentSelected(opt: KitDropdownOption): void {
+            this.form.patchValue({ parentId: opt.id });
+      }
+
+      async submit() {
+            if (this.form.invalid) {
+                  this.toastService.error('Vui lòng điền đầy đủ thông tin.');
+                  return;
+            }
+
+            this.isSubmitting = true;
+
+            try {
+                  const parentId = this.form.value.parentId === '' ? null : this.form.value.parentId;
+                  await this.departmentFacade.setParent(this.departmentId, parentId!);
+                  this.toastService.successRich('Cập nhật thành công.');
+                  this.close(this.form.value);
+            } catch (error) {
+                  this.toastService.error('Cập nhật thất bại.');
+            } finally {
+                  this.isSubmitting = false;
+            }
+      }
+
+      close(result?: any) {
+            this.dialogRef.close(result);
+      }
+      
+}

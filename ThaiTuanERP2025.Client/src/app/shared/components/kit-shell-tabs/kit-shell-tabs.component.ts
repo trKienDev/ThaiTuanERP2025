@@ -1,12 +1,8 @@
-import {
-  Component, Input, Output, EventEmitter, Type,
-  ChangeDetectionStrategy, OnInit, OnDestroy, inject
-} from '@angular/core';
+import { Component, Input,  Type, OnInit, OnDestroy} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
-import { loadDomAnimations } from '../../animations/load-dom/load-dom.animation';
 
 export interface KitShellTab {
       id: string;              // ví dụ: 'code' | 'group' | 'plan' | 'period'
@@ -23,121 +19,126 @@ export interface KitShellTab {
       imports: [CommonModule, RouterOutlet],
       templateUrl: './kit-shell-tabs.component.html',
       styleUrl: './kit-shell-tabs.component.scss',
-      // animations: [ loadDomAnimations], 
 })
 export class KitShellTabsComponent implements OnInit, OnDestroy {
       @Input() tabs: KitShellTab[] = [];
-  /** Bật/tắt cơ chế "mở 1 lần" cho tab ẩn qua sessionStorage */
-  @Input() allowOnce = true;
-  /** Prefix để tránh đụng key giữa nhiều shell khác nhau */
-  @Input() allowOnceStoragePrefix = 'kit-shell-tabs.allowOnce';
+      /** Bật/tắt cơ chế "mở 1 lần" cho tab ẩn qua sessionStorage */
+      @Input() allowOnce = true;
+      /** Prefix để tránh đụng key giữa nhiều shell khác nhau */
+      @Input() allowOnceStoragePrefix = 'kit-shell-tabs.allowOnce';
 
-  selectedId: string | null = null;
+      selectedId: string | null = null;
 
-  private destroy$ = new Subject<void>();
+      private readonly destroy$ = new Subject<void>();
 
-  constructor(public route: ActivatedRoute, private router: Router) {}
+      constructor(public route: ActivatedRoute, private readonly router: Router) {}
 
-  // ------- Lifecycle ---------------------------------------------------------
+      // ------- Lifecycle ---------------------------------------------------------
 
-  ngOnInit(): void {
-    // 1) Lần đầu: đọc child route hiện tại; nếu không có -> redirect sang tab đầu tiên không hidden
-    const initial = this.readChildPath();
-    const fallback = this.firstVisibleTabId();
-    const next = initial ?? fallback;
+      ngOnInit(): void {
+            // 1) Lần đầu: đọc child route hiện tại; nếu không có -> redirect sang tab đầu tiên không hidden
+            const initial = this.readChildPath();
+            const fallback = this.firstVisibleTabId();
+            const next = initial ?? fallback;
 
-    if (!initial && fallback) {
-      // chuyển lần đầu cho sạch URL
-      this.navigateTo(fallback, /*replaceUrl*/ true);
-    }
-    this.selectedId = next;
+            if (!initial && fallback) {
+                  // chuyển lần đầu cho sạch URL
+                  this.navigateTo(fallback, /*replaceUrl*/ true);
+            }
+            this.selectedId = next;
 
-    // 2) Theo dõi điều hướng để sync selectedId khi user đổi child-route
-    this.router.events
-      .pipe(
-        filter((e): e is NavigationEnd => e instanceof NavigationEnd),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(() => {
-        const current = this.readChildPath();
-        if (current && this.selectedId !== current) {
-          this.selectedId = current;
-        }
-      });
-  }
+            console.log('[KitShellTabs] selectedId:',  this.selectedId,);
+            this.router.events.subscribe((e) => {
+            if (e instanceof NavigationEnd)
+                  console.log('[Router NavigationEnd]',  e.urlAfterRedirects);
+            });
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+            // 2) Theo dõi điều hướng để sync selectedId khi user đổi child-route
+            this.router.events
+            .pipe(
+                  filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+                  takeUntil(this.destroy$)
+            )
+            .subscribe(() => {
+                  const current = this.readChildPath();
+                  if (current && this.selectedId !== current) {
+                  this.selectedId = current;
+                  }
+            });
+      }
 
-  // ------- Template helpers --------------------------------------------------
+      ngOnDestroy(): void {
+            this.destroy$.next();
+            this.destroy$.complete();
+      }
 
-  trackById = (_: number, t: KitShellTab) => t.id;
+      // ------- Template helpers --------------------------------------------------
 
-  get displayTabs(): KitShellTab[] {
-    return this.tabs.filter((t) => {
-      if (!t.hidden) return true;
-      if (t.id === this.selectedId) return true; // đang chọn thì luôn hiển thị
+      trackById = (_: number, t: KitShellTab) => t.id;
 
-      if (!this.allowOnce) return false;
-      // Cho phép hiện 1 lần (nếu bên ngoài đã "mở khóa" trước khi điều hướng)
-      return sessionStorage.getItem(this.allowOnceKey(t.id)) === '1';
-    });
-  }
+      get displayTabs(): KitShellTab[] {
+            return this.tabs.filter((t) => {
+                  if (!t.hidden) return true;
+                  if (t.id === this.selectedId) return true; // đang chọn thì luôn hiển thị
 
-  // ------- Actions -----------------------------------------------------------
+                  if (!this.allowOnce) return false;
+                  // Cho phép hiện 1 lần (nếu bên ngoài đã "mở khóa" trước khi điều hướng)
+                  return sessionStorage.getItem(this.allowOnceKey(t.id)) === '1';
+            });
+      }
 
-  selectTab(id: string) {
-    if (id === this.selectedId) return;
-    const tab = this.tabs.find((t) => t.id === id);
-    if (!tab || tab.disabled) return;
+      // ------- Actions -----------------------------------------------------------
 
-    this.navigateTo(id);
-  }
+      selectTab(id: string) {
+            if (id === this.selectedId) return;
+            const tab = this.tabs.find((t) => t.id === id);
+            if (!tab || tab.disabled) return;
 
-  // ------- Internals ---------------------------------------------------------
+            this.navigateTo(id);
+      }
 
-  private readChildPath(): string | null {
-    // Lấy segment đầu của child route hiện tại: /parent/<this>
-    const child = this.route.firstChild;
-    if (!child) return null;
+      // ------- Internals ---------------------------------------------------------
 
-    // Ưu tiên URL thực tế (ổn với case path tham số), fallback path tĩnh
-    const seg = child.snapshot.url?.[0]?.path;
-    if (seg) return seg;
+      private readChildPath(): string | null {
+            // Lấy segment đầu của child route hiện tại: /parent/<this>
+            const child = this.route.firstChild;
+            if (!child) return null;
 
-    const cfgPath = child.snapshot.routeConfig?.path ?? null;
-    // Nếu cfgPath là '' (redirect), coi như null
-    return cfgPath && cfgPath !== '' ? cfgPath : null;
-  }
+            // Ưu tiên URL thực tế (ổn với case path tham số), fallback path tĩnh
+            const seg = child.snapshot.url?.[0]?.path;
+            if (seg) return seg;
 
-  private firstVisibleTabId(): string | null {
-    const t = this.tabs.find((x) => !x.hidden && !x.disabled);
-    return t ? t.id : null;
-  }
+            const cfgPath = child.snapshot.routeConfig?.path ?? null;
+            // Nếu cfgPath là '' (redirect), coi như null
+            return cfgPath && cfgPath !== '' ? cfgPath : null;
+      }
 
-  private navigateTo(id: string, replaceUrl = false) {
-    // Điều hướng sang child route: /parent/<id>
-    this.router.navigate([id], {
-      relativeTo: this.route,
-      replaceUrl,
-    });
+      private firstVisibleTabId(): string | null {
+            const t = this.tabs.find((x) => !x.hidden && !x.disabled);
+            return t ? t.id : null;
+      }
 
-    // "Tiêu thụ" allowOnce nếu có
-    sessionStorage.removeItem(this.allowOnceKey(id));
+      private navigateTo(id: string, replaceUrl = false) {
+            // Điều hướng sang child route: /parent/<id>
+            this.router.navigate([id], {
+                  relativeTo: this.route,
+                  replaceUrl,
+            });
 
-    this.selectedId = id;
-  }
+            // "Tiêu thụ" allowOnce nếu có
+            sessionStorage.removeItem(this.allowOnceKey(id));
 
-  private allowOnceKey(tabId: string) {
-    return `${this.allowOnceStoragePrefix}.${tabId}`;
-  }
+            this.selectedId = id;
+      }
 
-  // ------- Static helper: mở khoá 1 lần từ nơi khác -------------------------
+      private allowOnceKey(tabId: string) {
+            return `${this.allowOnceStoragePrefix}.${tabId}`;
+      }
 
-  /** Gọi hàm này TRƯỚC khi navigate tới route cần mở tab ẩn */
-  static allowOnce(tabId: string, storagePrefix = 'kit-shell-tabs.allowOnce') {
-    sessionStorage.setItem(`${storagePrefix}.${tabId}`, '1');
-  }
+      // ------- Static helper: mở khoá 1 lần từ nơi khác -------------------------
+
+      /** Gọi hàm này TRƯỚC khi navigate tới route cần mở tab ẩn */
+      static allowOnce(tabId: string, storagePrefix = 'kit-shell-tabs.allowOnce') {
+            sessionStorage.setItem(`${storagePrefix}.${tabId}`, '1');
+      }
 }

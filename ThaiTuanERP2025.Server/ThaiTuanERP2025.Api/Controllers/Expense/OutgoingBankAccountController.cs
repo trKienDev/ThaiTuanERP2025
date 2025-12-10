@@ -1,35 +1,36 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Api.Common;
-using ThaiTuanERP2025.Application.Expense.Dtos;
-using ThaiTuanERP2025.Application.Expense.Queries.OutgoingBankAccounts.GetAllOutgoingBankAccount;
+using ThaiTuanERP2025.Api.Shared;
+using ThaiTuanERP2025.Application.Expense.OutgoingBankAccounts.Commands;
+using ThaiTuanERP2025.Application.Expense.OutgoingBankAccounts.Contracts;
+using ThaiTuanERP2025.Application.Expense.OutgoingBankAccounts.Queries;
 
 namespace ThaiTuanERP2025.Api.Controllers.Expense
 {
-	[ApiController]
-	[Authorize]
-	[Route("api/outgoing-bank-accounts")]
-	public class OutgoingBankAccountController : ControllerBase
-	{
-		private readonly IMediator _mediator;
-		public OutgoingBankAccountController(IMediator mediator)
-		{
-			_mediator = mediator;
-		}
+        [ApiController]
+        [Route("api/outgoing-bank-account")]
+        [Authorize]
+        public class OutgoingBankAccountController : ControllerBase
+        {
+                private readonly IMediator _mediator;
+                public OutgoingBankAccountController(IMediator mediator)
+                {
+                    _mediator = mediator;
+                }
 
-		[HttpGet("all")] 
-		public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
-		{
-			var result = await _mediator.Send(new GetAllOutgoingBankAccountQuery(), cancellationToken);
-			return Ok(ApiResponse<IReadOnlyList<OutgoingBankAccountDto>>.Success(result, "Lấy danh sách tài khoản tiền ra thành công"));
-		}
+                [HttpGet]
+                public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+                {
+                        var result = await _mediator.Send(new GetAllOutgoingBankAccountsQuery(), cancellationToken);
+                        return Ok(ApiResponse<IReadOnlyList<OutgoingBankAccountDto>>.Success(result));
+                }
 
-		[HttpPost("new")]
-		public async Task<ActionResult> Create([FromBody] OutgoingBankAccountRequest body, CancellationToken cancellationToken)
-		{
-			var result = await _mediator.Send(new Application.Expense.Commands.OutgoingBankAccounts.NewOutgoingBankAccount.NewOutgoingBankAccountCommand(body), cancellationToken);
-			return Ok(ApiResponse<Unit>.Success(result, "Tạo tài khoản tiền ra thành công"));
+                [HttpPost]
+                public async Task<IActionResult> Create([FromBody] OutgoingBankAccountPayload payload, CancellationToken cancellationToken)
+                {
+                        var result = await _mediator.Send(new CreateOutgoingBankAccountCommand(payload), cancellationToken);
+                        return Ok(ApiResponse<Unit>.Success(result));
 		}
-	}
+        }
 }

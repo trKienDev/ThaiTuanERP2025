@@ -1,0 +1,9 @@
+<div class="mention-box" *ngIf="showMentionBox">
+      <ng-container *ngIf="filteredUsers$ | async as users">
+            <div class="mention-item" *ngFor="let u of users; let i = index" 
+            [class.active]="i === activeIndex" (click)="selectMention(u)">
+                  <img class="avatar-user" [src]="u.imgUrl">
+                  <span>{{ u.label }}</span>
+            </div>
+      </ng-container>
+</div>

@@ -1,0 +1,72 @@
+<!-- following-expense-payments.component.html (refactor) -->
+<div class="payments-container">
+      
+      <div class="page-heading">
+            <div class="page-title">
+                  <h3 class="icon">💵</h3>
+                  <h3 class="title">Thanh toán đang theo dõi</h3>
+            </div>
+      </div>
+
+      <div class="page-body">
+            <div class="table-wrapper">
+                  <table class="table margin-top-20px">
+                        <thead>
+                              <tr>
+                                    <th>#</th>
+                                    <th>Tên thanh toán</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thành tiền</th>
+                                    <th>Tổng thuế</th>
+                                    <th>Tổng tiền</th>
+                                    <th>Số tiền đã tạo lệnh</th>
+                                    <th>Người tạo</th>
+                                    <th>Tạo lúc</th>
+                              </tr>
+                        </thead>
+                        <tbody>
+                              <ng-container *ngIf="followingExpensePayments.length > 0">
+                                    <ng-container *ngFor="let payment of followingExpensePayments; let i = index; trackBy: trackById">
+                                          <ng-container *ngIf="payment">
+                                                <tr>
+                                                      <td>{{ i + 1 }}</td>
+                                                      <td>
+                                                            <div class="link-text display-flex gap-5px justify-content-center" (click)="openExpensePaymentDetailDialog(payment.id)">
+                                                                  <span class="material-icons-outlined" style="font-size: 14px;">visibility</span> 
+                                                                  <a class=" display-flex gap-5px justify-content-center"> 
+                                                                        {{ payment.name }}
+                                                                  </a>
+                                                            </div>
+                                                      </td>
+                                                      <td>
+                                                            <div class="label-status" >
+                                                                  <span class="label-status-badge" [ngClass]="(payment.status | expensePaymentStatus).class">
+                                                                        {{ (payment.status | expensePaymentStatus).text }}
+                                                                  </span>
+                                                            </div>
+                                                      </td>
+                                                      <td>{{ payment.totalAmount | number: '1.0-0' }} <label class="label-currency">VNĐ</label></td>
+                                                      <td>{{ payment.totalTax | number: '1.0-0' }} <label class="label-currency">VNĐ</label></td>
+                                                      <td>{{ payment.totalWithTax  | number: '1.0-0' }} <label class="label-currency">VNĐ</label></td>
+                                                      <td>{{ payment.outgoingAmountPaid | number: '1.0-0' }} <label class="label-currency">VNĐ</label></td>
+                                                      <td>
+                                                            <div class="display-flex align-items-center justify-content-center">
+                                                                  <img class="avatar-user" [src]="payment.createdByUser | avatarUrlPipe" alt="">
+                                                                  <span>{{ payment.createdByUser.fullName }}</span>
+                                                            </div>
+                                                      </td>
+                                                      <td>{{ payment.createdAt | date: 'HH:mm dd/MM/yyyy' }}</td>
+                                                </tr>
+                                          </ng-container>
+                                    </ng-container>
+                              </ng-container>
+                              <ng-container *ngIf="followingExpensePayments.length === 0">
+                                    <tr>
+                                          <td colspan="10">Không có dữ liệu</td>
+                                    </tr>
+                              </ng-container>
+                        </tbody>
+                  </table>
+            </div>
+      </div>
+</div>      

@@ -1,0 +1,57 @@
+<div class="page-container">
+      <div class="page-heading">
+            <div class="page-title">
+                  <kit-abacus-icon class="display-flex align-items-center"></kit-abacus-icon>
+                  <h3 class="title">Danh sách tài khoản hạch toán</h3>
+            </div>
+            <div class="display-flex gap-10px">
+                  <button *appHasPermission="'ledger-account-type.import-excel'" class="excel-button" (click)="openLedgerAccountExcelDialog()">
+                        <kit-excel-icon [size]="15" style="height: 15px; padding-right: 5px;"></kit-excel-icon>
+                        Nhập từ file excel
+                  </button>
+                  <button *appHasPermission="'ledger-account.create'" type="button" class="button default-button" (click)="openLedgerAccountRequestDialog()">Thêm mới</button>
+            </div>
+      </div>
+      <div class="page-body">
+            <table class="table">
+                  <thead>
+                        <tr>
+                              <th style="width: 10%;">Số hiệu</th>
+                              <th style="width: 30%;">Tên</th>
+                              <th>Tính chất</th>
+                              <th>Loại tài khoản</th>
+                              <th>Mô tả</th>
+                        </tr>
+                  </thead>
+                  <tbody>
+                        <ng-container *ngIf="ledgerAccountTrees.length > 0">
+                              <ng-container *ngFor="let account of ledgerAccountTrees; let i = index">
+                                    <tr *ngIf="isVisible(account)" [class.has-children]="hasChildren(account)">
+                                          <td>
+                                                <div class="indent-row" [style.--level]="account.level">
+                                                      <button *ngIf="hasChildren(account)" (click)="toggle(account)" class="none-button">
+                                                            <ng-container [ngSwitch]="isExpanded(account)">
+                                                                  <kit-square-down-arrow *ngSwitchCase="true"  size="16"></kit-square-down-arrow>
+                                                                  <kit-square-right-arrow *ngSwitchCase="false" size="16"></kit-square-right-arrow>
+                                                            </ng-container>
+                                                      </button>
+                                                      <span class="indent-space"></span>
+                                                      {{ account.number }}
+                                                </div>
+                                          </td>
+                                          <td>{{ account.name }}</td>
+                                          <td>{{ account.balanceType | ledgerAccountBalanceType }}</td>
+                                          <td>{{ account.ledgerAccountTypeName ?? '---' }}</td>
+                                          <td>{{ account.description ?? '---' }}</td>
+                                    </tr>
+                              </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="ledgerAccountTrees.length === 0">
+                              <tr>
+                                    <td colspan="5" class="text-align-center">Không có dữ liệu</td>
+                              </tr>
+                        </ng-container>
+                  </tbody>
+            </table>
+      </div>
+</div>

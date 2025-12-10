@@ -1,51 +1,40 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Api.Common;
-using ThaiTuanERP2025.Application.Account.Commands.Permissions.AssignPermissionToRole;
-using ThaiTuanERP2025.Application.Account.Commands.Permissions.CreateNewPermission;
+using ThaiTuanERP2025.Api.Shared;
 using ThaiTuanERP2025.Application.Account.Dtos;
-using ThaiTuanERP2025.Application.Account.Queries.Permissions.GetAllPermissions;
-using ThaiTuanERP2025.Application.Account.Queries.Permissions.GetPermissionsByRoleId;
+using ThaiTuanERP2025.Application.Account.Permissions;
+using ThaiTuanERP2025.Application.Account.Permissions.Commands;
+using ThaiTuanERP2025.Application.Account.Permissions.Queries;
 
 namespace ThaiTuanERP2025.Api.Controllers.Account
 {
 	[Authorize]
-	[ApiController]
 	[Route("api/permission")]
-	public class PermissionController :ControllerBase
+	[ApiController]
+	public class PermissionController : ControllerBase
 	{
 		private readonly IMediator _mediator;
-		public PermissionController(IMediator mediator)
+		public PermissionController(IMediator mediator) => _mediator = mediator;
+
+		[HttpGet]	
+		public async Task<IActionResult> GetAllPermissions(CancellationToken cancellationToken)
 		{
-			_mediator = mediator;
+			var dtos =  await _mediator.Send(new GetAllPermissionsQuery(), cancellationToken);
+			return Ok(ApiResponse<IReadOnlyList<PermissionDto>>.Success(dtos));
 		}
 
-		[HttpGet("all")]
-		public async Task<IActionResult> GetAllPermissions()
+		[HttpGet("role/{roleId:guid}")]
+		public async Task<IActionResult> GetByRole([FromRoute] Guid roleId, CancellationToken cancellationToken)
 		{
-			var result = await _mediator.Send(new GetAllPermissionsQuery());
-			return Ok(ApiResponse<IEnumerable<PermissionDto>>.Success(result));
+			var result = await _mediator.Send(new GetPermissionsByRoleIdQuery(roleId), cancellationToken);
+			return Ok(ApiResponse<IReadOnlyList<PermissionDto>>.Success(result));
 		}
 
-		[HttpGet("by-role-id/{roleId:guid}")]
-		public async Task<IActionResult>  GetByRoleId([FromRoute] Guid roleId)
+		[HttpPost]
+		public async Task<IActionResult> CreatePermission([FromBody] PermissionRequest request, CancellationToken cancellationToken)
 		{
-			var result = await _mediator.Send(new GetPermissionsByRoleIdQuery(roleId));
-			return Ok(ApiResponse<IEnumerable<PermissionDto>>.Success(result));
-		}
-
-		[HttpPost("new")]
-		public async Task<IActionResult> Create(PermissionRequest request) {
-			var result = await _mediator.Send(new CreateNewPermissionCommand(request));
-			return Ok(ApiResponse<Unit>.Success(result));
-		}
-
-		[HttpPost("{id:guid}/assign-permissions")]
-		public async Task<IActionResult> AssignPermissionToRole(Guid id, [FromBody] List<Guid> permissionIds, CancellationToken cancellationToken)
-		{
-			var command = new AssignPermissionToRoleCommand(id, permissionIds);
-			var result = await _mediator.Send(command, cancellationToken);
+			var result = await _mediator.Send(new CreatePermissionCommand(request), cancellationToken);
 			return Ok(ApiResponse<Unit>.Success(result));
 		}
 	}

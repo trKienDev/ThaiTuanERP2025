@@ -6,15 +6,20 @@
 
 button, .button { 
       font-family: 'Lexend', sans-serif; 
-      font-size: 12px; 
+      font-size: 11px; 
       padding: 10px 10px;
       border-radius: 5px;
       height: fit-content;
-      border: 1px solid !important;
+      border: 1px solid transparent !important;
 }
 
+.button[disabled], .button[disabled]:hover, .button[disabled]:focus, .button[disabled]:active { opacity: 0.5; cursor: not-allowed; background: #aaa; transform: none !important; }
+
+// *** none button ***
+.none-button { padding: 0 !important; background: none !important; border: none !important; cursor: pointer; }
+
 // *** default button ***
-.default-button { background-color: #f6f8fa; box-shadow: 0px 1px 0px 0px #1f23280a; color: #696e75; cursor: pointer; user-select: none; border: 1px solid #d1d9e0 !important; }
+.default-button { background-color: #f6f8fa; box-shadow: 0px 1px 0px 0px #1f23280a; color: #696e75; cursor: pointer; user-select: none; border: 1px solid #d1d9e0 !important; display: flex; justify-content: center; align-items: center; }
 .default-button:hover { transition-duration: 80ms; background-color: #eff2f5; color: #25292e;}
 
 // *** button-1 ***
@@ -42,17 +47,11 @@ button, .button {
 .button-noor:hover { background-color: #1C84FF; }
 
 /*** danger-button ***/
-.danger-button { align-items: center; background-color: #FFE7E7; background-position: 0 0; border: 2px solid #FEE0E0 !important; border-radius: 5px; box-sizing: border-box; color: #D33A2C; cursor: pointer; display: flex ; font-weight: 700; text-align: left; text-decoration: none; text-shadow: none; text-underline-offset: 1px; transition: border .2s ease-in-out,box-shadow .2s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: manipulation; white-space: nowrap; word-break: break-word; border-color: transparent !important; transition: all ease 0.5s; }
+.danger-button { align-items: center; background-color: #FFE7E7; background-position: 0 0; border-radius: 5px; box-sizing: border-box; color: #D33A2C; cursor: pointer; display: flex ; font-weight: 700; text-align: left; text-decoration: none; text-shadow: none; text-underline-offset: 1px; transition: border .2s ease-in-out,box-shadow .2s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: manipulation; white-space: nowrap; word-break: break-word; border-color: transparent !important; transition: all ease 0.5s; }
 .danger-button:active, .danger-button:hover, .danger-button:focus { outline: 0; }
 .danger-button:active { background-color: #D33A2C; box-shadow: rgba(0, 0, 0, 0.12) 0 1px 3px 0 inset; color: #FFFFFF; }
 .danger-button:hover { background-color: #FFE3E3; border-color: #FAA4A4 !important; }
 .danger-button:active:hover, .danger-button:focus:hover, .danger-button:focus { background-color: #D33A2C; box-shadow: rgba(0, 0, 0, 0.12) 0 1px 3px 0 inset; color: #FFFFFF; }
-
-/*** icon-button ***/
-.icon-button { background-color: #007ACC; outline: 2px #007ACC solid; outline-offset: -2px; border-radius: 5px; border: none; cursor: pointer; transition: 400ms; }
-.icon-button .text { color: white; font-size: 22px; transition: 400ms; }
-.icon-button:hover { background-color: transparent; }
-.icon-button:hover .text { color: #007ACC; }
 
 /*** link-button ***/
 .link-button { color: var(--ultramarin); background-color: var(--light-blue-color); border-color: none !important; border: none !important; border-bottom: 2px solid var(--ultramarin) !important; border-radius: unset; border-top-left-radius: 5px; border-top-right-radius: 5px; }
@@ -63,24 +62,17 @@ button, .button {
 .text-button:hover { text-decoration: underline; cursor: pointer;}
 
 /* cancel */
-.cancel-button { 
-      border: none  !important; background: #6E6D70;
-      box-shadow: 0px 0.5px 1px rgba(0, 0, 0, 0.1), inset 0px 0.5px 0.5px rgba(255, 255, 255, 0.5), 0px 0px 0px 0.5px rgba(0, 0, 0, 0.12); 
-      color: white; user-select: none; -webkit-user-select: none; touch-action: manipulation; 
+.cancel-button {  background: #6E6D70; color: white; user-select: none; -webkit-user-select: none; touch-action: manipulation; 
 }
 .cancel-button:focus { box-shadow: inset 0px 0.8px 0px -0.25px rgba(255, 255, 255, 0.2), 0px 0.5px 1px rgba(0, 0, 0, 0.1), 0px 0px 0px 3.5px rgba(58, 108, 217, 0.5); outline: 0; }
 .cancel-button:hover { cursor: pointer; opacity: 0.8; }
 
 /* save */   
-// .save-button { align-items: center; appearance: button; background-color: #0276FF; box-shadow: rgba(255, 255, 255, 0.26) 0 1px 2px inset; box-sizing: border-box; color: #fff; cursor: pointer; display: flex; flex-direction: row; flex-shrink: 0; margin: 0; text-align: center; text-transform: none; transition: color .13s ease-in-out,background .13s ease-in-out,opacity .13s ease-in-out,box-shadow .13s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: manipulation; border: none !important;}
-// .save-button:active { background-color: #006AE8; }
-// .save-button:hover { background-color: #1C84FF; }
-
-.save-button { background-color: var(--bright-blue-color); cursor: pointer; transition: all ease-in-out 0.2s; color: white !important; border: none !important; box-shadow: 0px 4px 6px -1px #0276FF31, 0px 2px 4px -1px #0276FF17; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+.save-button { background-color: var(--bright-blue-color); cursor: pointer; transition: all ease-in-out 0.2s; color: white !important; box-shadow: 0px 4px 6px -1px #0276FF31, 0px 2px 4px -1px #0276FF17; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
 .save-button:hover { background-color: #0071e2; }
 /* submit */
 /* CSS */
-.submit-button { appearance: none; backface-visibility: hidden; background-color: #27ae60; border-radius: 8px; border-style: none; box-shadow: rgba(39, 174, 96, .15) 0 4px 9px; box-sizing: border-box; color: #fff; cursor: pointer; display: inline-block; font-weight: 600; letter-spacing: normal; line-height: 1.5; outline: none; overflow: hidden; position: relative; text-align: center; text-decoration: none; transform: translate3d(0, 0, 0); transition: all .3s; user-select: none; -webkit-user-select: none; touch-action: manipulation; vertical-align: top; white-space: nowrap; }
+.submit-button { appearance: none; backface-visibility: hidden; background-color: #27ae60; border-style: none; box-shadow: rgba(39, 174, 96, .15) 0 4px 9px; box-sizing: border-box; color: #fff; cursor: pointer; display: inline-block; font-weight: 600; letter-spacing: normal; outline: none; overflow: hidden; position: relative; text-align: center; text-decoration: none; transform: translate3d(0, 0, 0); transition: all .3s; user-select: none; -webkit-user-select: none; touch-action: manipulation; vertical-align: top; white-space: nowrap; }
 .submit-button:hover { background-color: #1e8449; opacity: 1; transform: translateY(0); transition-duration: .35s; }
 .submit-button:active { transform: translateY(2px); transition-duration: .35s; }
 .submit-button:hover { box-shadow: rgba(39, 174, 96, .2) 0 6px 12px; }
@@ -89,6 +81,8 @@ button, .button {
 .close-button { padding: unset !important; border: none !important; background-color: unset !important; cursor: pointer; outline: none; box-shadow: none;}
 .close-button span { font-weight: bold; font-size: 25px !important;  color: #ffa8a8; transition: color 0.5s ease-in-out; }
 .close-button:hover span { color: red; }
+.mini-close-button { background: none !important; }
+.mini-close-button:hover { color: red; cursor: pointer; }
 
 /* plus-button */
 .plus-button { border: 2px solid lightgrey; background-color: #fff; font-size: 16px; height: 2.5em; width: 2.5em; border-radius: 999px; position: relative;
@@ -99,13 +93,13 @@ button, .button {
 }
 .plus-button--small { font-size: 12px; }
 
-.pintura-button { background: linear-gradient(to bottom right, #EF4765, #FF9A5A); border: 0 !important; color: #FFFFFF; cursor: pointer; display: inline-block; font-weight: 500; line-height: 2.5; outline: transparent; padding: 0 1rem !important;  text-align: center; text-decoration: none; transition: box-shadow .2s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: manipulation; white-space: nowrap; }
+.pintura-button { background: linear-gradient(to bottom right, #EF4765, #FF9A5A); border: 0 !important; color: #FFFFFF; cursor: pointer; display: inline-block; font-weight: 500; outline: transparent;  text-align: center; text-decoration: none; transition: box-shadow .2s ease-in-out; user-select: none; -webkit-user-select: none; touch-action: manipulation; white-space: nowrap; }
 .pintura-button:not([disabled]):focus { box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5); }
 .pintura-button:not([disabled]):hover { box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5); }
 
-.blue-button { border: none !important; color: white; 
+.blue-button { border: none !important; color: white; background-size: 100% auto; cursor: pointer;
       background-image: linear-gradient(to right bottom, #0c30d6, #0042df, #0053e7, #0062ed, #0070f3, #0078f3, #0080f2, #0087f1, #0d8aea, #1f8de3, #2f90db, #3d92d3);
-      background-size: 100% auto; padding: 0.6em 1.5em !important; cursor: pointer; }
+}
 .blue-button:hover { background-position: right center; background-size: 200% auto; -webkit-animation: pulse 2s infinite; animation: pulse512 1.5s infinite; }
 @keyframes pulse512 {
       0% { box-shadow: 0 0 0 0 #05bada66; }
@@ -131,3 +125,19 @@ button, .button {
 	&:hover { cursor: pointer; background-color: white !important; }
 }
 
+// === Excel === 
+.excel-button { display: flex; position: relative; justify-content: center; align-items: center; background-color: #307750; color: #fff; overflow: hidden; z-index: 1; box-shadow: 4px 8px 10px -3px rgba(0, 0, 0, 0.356); transition: all 250ms; cursor: pointer; }
+.excel-button input[type="file"] { position: absolute; width: 100%; height: 100%;  opacity: 0; cursor: pointer; }
+.excel-button > svg { margin-right: 1em; }
+.excel-button::before { content: ""; position: absolute; height: 100%; width: 0; background-color: #469b61; z-index: -1; transition: all 350ms; }
+.excel-button:hover::before { width: 100%; }
+
+// ==== comment button ====
+.comment-reply-button {
+      padding: 0px;
+      cursor: pointer;
+      background: none;
+}
+.comment-reply-button:hover {
+      color: var(--bright-blue-color);
+}

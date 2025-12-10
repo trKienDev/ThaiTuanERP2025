@@ -1,4 +1,6 @@
-﻿namespace ThaiTuanERP2025.Domain.Account.Entities
+﻿using ThaiTuanERP2025.Domain.Shared;
+
+namespace ThaiTuanERP2025.Domain.Account.Entities
 {
 	public class RolePermission
 	{
@@ -8,12 +10,24 @@
 		public Guid PermissionId { get; private set; }
 		public Permission Permission { get; private set; } = default!;
 
-		private RolePermission() { }
+		private RolePermission() { } // EF only
 
-		public RolePermission(Guid roleId, Guid permissionId)
+		internal RolePermission(Guid roleId, Guid permissionId)
 		{
+			Guard.AgainstDefault(roleId, nameof(roleId));
+			Guard.AgainstDefault(permissionId, nameof(permissionId));
+
 			RoleId = roleId;
 			PermissionId = permissionId;
 		}
+
+		// Optional: equality based on composite key
+		public override bool Equals(object? obj)
+		{
+			if (obj is not RolePermission other) return false;
+			return RoleId == other.RoleId && PermissionId == other.PermissionId;
+		}
+
+		public override int GetHashCode() => HashCode.Combine(RoleId, PermissionId);
 	}
 }

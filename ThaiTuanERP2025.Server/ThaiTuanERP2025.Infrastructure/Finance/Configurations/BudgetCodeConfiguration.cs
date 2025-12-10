@@ -1,49 +1,43 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ThaiTuanERP2025.Domain.Finance.Entities;
+using ThaiTuanERP2025.Infrastructure.Persistence.Configurations;
 
 namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 {
-	public class BudgetCodeConfiguration : IEntityTypeConfiguration<BudgetCode>
+	public class BudgetCodeConfiguration : BaseEntityConfiguration<BudgetCode>
 	{
-		public void Configure(EntityTypeBuilder<BudgetCode> builder)
+		public override void Configure(EntityTypeBuilder<BudgetCode> builder)
 		{
 			builder.ToTable("BudgetCode", "Finance").HasIndex(x => x.Id);
 
-			builder.HasIndex(e => e.Code).IsUnique();
-			builder.Property(e => e.Code).IsRequired().HasMaxLength(50);
-			builder.Property(e => e.Name).IsRequired().HasMaxLength(255);
+			// ===== Basic properties =====
+			builder.Property(x => x.Code).HasMaxLength(50).IsRequired();
+			builder.Property(x => x.Name).HasMaxLength(200).IsRequired();
+			builder.Property(x => x.IsActive).IsRequired();
+			builder.Property(x => x.CashoutCodeId).IsRequired(false);
 
-			builder.HasOne(e => e.BudgetGroup)
-				.WithMany(g => g.BudgetCodes)
-				.HasForeignKey(e => e.BudgetGroupId)
-				.OnDelete(DeleteBehavior.Restrict);
-			builder.HasIndex(bc => new { bc.BudgetGroupId, bc.Code }).IsUnique();
+			// ===== Relationships =====
 
-			builder.HasOne(e => e.CashoutCode)
-				.WithMany(c => c.BudgetCodes)
-				.HasForeignKey(e => e.CashoutCodeId)
-				.OnDelete(DeleteBehavior.Restrict);
-			builder.HasIndex(e => e.CashoutCodeId);
+			// BudgetGroup (1 - n)
+			builder.HasOne(x => x.BudgetGroup)
+			    .WithMany(x => x.BudgetCodes)
+			    .HasForeignKey(x => x.BudgetGroupId)
+			    .OnDelete(DeleteBehavior.Cascade);
 
-			builder.HasOne(e => e.CreatedByUser)
+			// CashoutCode (1 - n)
+			builder.HasOne(x => x.CashoutCode)
 				.WithMany()
-				.HasForeignKey(e => e.CreatedByUserId)
-				.OnDelete(DeleteBehavior.Restrict);
-			builder.HasIndex(e => e.CreatedByUserId);
+				.HasForeignKey(x => x.CashoutCodeId)
+				.OnDelete(DeleteBehavior.SetNull);
 
-			builder.HasOne(e => e.ModifiedByUser)
-				.WithMany()
-				.HasForeignKey(e => e.ModifiedByUserId)
-				.OnDelete(DeleteBehavior.Restrict);
-			builder.HasIndex(e => e.ModifiedByUserId);
+			// ===== Indexes & Constraints =====
+			builder.HasIndex(x => new { x.BudgetGroupId, x.Code }).IsUnique(); // Code duy nhất trong mỗi nhóm
+			builder.HasIndex(x => x.IsActive);
+			builder.HasIndex(x => x.Name);
 
-			builder.HasOne(e => e.DeletedByUser)
-				.WithMany()
-				.HasForeignKey(e => e.DeletedByUserId)
-				.OnDelete(DeleteBehavior.Restrict);
-			builder.HasIndex(e => e.DeletedByUserId);
-
+			// Auditable
+			ConfigureAuditUsers(builder);
 		}
 	}
 }

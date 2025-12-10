@@ -1,0 +1,25 @@
+<aside class="sidebar">
+      <nav>
+            <ul>
+                  <li>
+                        <a routerLink="/finance" routerLinkActive="active" class="display-flex flex-column gap-5px">
+                              <kit-money-bag-icon [size]="'30px'"></kit-money-bag-icon>
+                              <span class="sidebar-title">Ngân sách</span>
+                        </a>
+                  </li>
+                  <li>
+                        <a routerLink="/expense" routerLinkActive="active" class="display-flex flex-column gap-5px">
+                              <kit-debit-card-icon [size]="'30px'"></kit-debit-card-icon>
+                              <span class="sidebar-title">Thanh toán</span>
+                        </a>
+                  </li>
+                  <li>
+                        <a routerLink="/account" routerLinkActive="active" class="display-flex flex-column gap-5px">
+                              <kit-user-icon [size]="'30px'"></kit-user-icon>                              
+                              <span class="sidebar-title">Tài khoản</span>
+                        </a>
+                  </li>
+                  <!-- Thêm menu khác -->
+            </ul>
+      </nav>
+</aside>

@@ -1,0 +1,75 @@
+<div class="comment-item" style="margin-left: 15px;">
+
+      <div class="comment-wrapper">
+            <div class="comment-box display-flex gap-5px">
+                  <img class="avatar-user" [src]="comment.user | avatarUrlPipe">
+
+                  <div class="comment-content display-flex flex-column gap-5px">
+                        <div class="comment-header display-flex gap-10px">
+                              <strong>{{ comment.user.fullName }}</strong>
+                              <span class="comment-time color-aaa">{{ comment.createdAt | date:'short' }}</span>
+                        </div>
+
+                        <div class="comment-text" [innerHTML]="comment.content | commentMentionHighlight: comment.mentions"></div>
+
+                        <div class="comment-attachments display-flex gap-5px" *ngIf="comment.attachments.length > 0">
+                              <ng-container *ngFor="let attachment of comment.attachments">
+                                    <div class="file-attachment">
+                                          <span (click)="previewAttachment(attachment.storedFile)">{{ attachment.storedFile.fileName }}</span>
+                                    </div>
+                              </ng-container>
+                        </div>
+                  </div>
+             </div>
+
+            <div class="comment-actions display-flex justify-content-between">
+
+                  <!-- Toggle replies -->
+                  <ng-container *ngIf="comment.replies?.length; else placeholder">
+                        <div class="reply-toggle" (click)="toggleReplies()">
+                              <button type="button" class="comment-reply-button color-aaa" *ngIf="!expanded">
+                                    Xem {{ comment.replies.length }} phản hồi
+                              </button>
+
+                              <button type="button" class="comment-reply-button color-aaa" *ngIf="expanded">
+                                    Ẩn phản hồi
+                              </button>
+                        </div>
+                  </ng-container>
+
+                  <ng-template #placeholder>
+                        <div style="visibility: hidden;"></div>
+                  </ng-template>
+
+                  <button class="comment-reply-button color-aaa" (click)="onReply()">Phản hồi</button>
+            </div>
+      </div>
+
+      <!-- Reply textbox -->
+      <comment-editor
+            *ngIf="replyingToCommentId === comment.id"
+            class="width-100pt" mode="reply" placeholder="Viết phản hồi..."
+            [documentType]="documentType"
+            [documentId]="comment.id"
+            [control]="replyControl"
+            [loading]="replyLoading"
+            [isCommenting] = "true"
+            (submitted)="onSubmitReply($event)"
+            (canceled)="onCancelReply()">
+      </comment-editor>
+
+      <!-- Render child replies -->
+      <div class="replies" *ngIf="expanded && comment.replies?.length">
+            <comment-thread
+                  *ngFor="let child of comment.replies; trackBy: trackById"
+                  [comment]="child"
+                  [depth]="depth + 1"
+                  [replyingToCommentId]="replyingToCommentId"
+                   [documentType]="documentType"
+                  (replyRequest)="replyRequest.emit($event)"
+                  (submitReply)="submitReply.emit($event)"
+                  (cancelReply)="cancelReply.emit()">
+            </comment-thread>
+      </div>
+
+</div>

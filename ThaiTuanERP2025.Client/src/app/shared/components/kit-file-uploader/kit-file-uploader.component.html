@@ -1,10 +1,36 @@
-<div class="file-uploader-container margin-top-10px">
-      <div class="file-uploader">
-            <input id="kitUploaderInput" type="file" class="file-input d-none" [accept]="accept" [attr.multiple]="multiple ? '' : null" (change)="onFileSelected($event)" />
-            <div class="button default-button">
-                  <label for="kitUploaderInput" class="cursor-pointer">Chọn file (PDF/Ảnh)</label>
+<!-- COMPACT MODE -->
+<div *ngIf="compact" class="compact-uploader">
+      <button type="button" (click)="openFilePicker()" class="comment-reply-button color-aaa display-flex align-items-center gap-5px">
+            <span style="font-size: 14px;" class="material-icons-outlined">attach_file</span>
+            {{ isFull ? 'Đã đủ 10 tệp' : 'Đính kèm' }}
+      </button>
+
+      <input #fileInput type="file" [accept]="accept" hidden 
+      [attr.multiple]="multiple ? '' : null" (change)="onFileSelected($event)" />
+
+      <!-- Danh sách file -->
+      <div class="compact-files">
+            <div *ngFor="let u of uploads; let i = index; trackBy: trackById" class="compact-file" style="height: 14px;">
+                  <span class="file-name" (click)="preview(u)">{{ u.file.name }}</span>
+                  <button type="button" class="remove-button" (click)="remove(i)">
+                        <span class="material-icons-outlined">remove_circle_outline</span>
+                  </button>
             </div>
-            <span *ngIf="!(uploads?.length)" class="file-name muted" style="color:#888; margin-left:10px;">Chưa chọn file</span>
+      </div>
+</div>
+
+
+<!-- NORMAL MODE -->
+ <div *ngIf="!compact" class="file-uploader-container margin-top-10px">
+      <div class="file-uploader">
+            <input id="kitUploaderInput" type="file" class="file-input d-none" 
+            [accept]="accept" [attr.multiple]="multiple ? '' : null" (change)="onFileSelected($event)" />
+            <div class="button default-button">
+                  <label for="kitUploaderInput" class="cursor-pointer">
+                        {{ isFull ? 'Đã đủ 10 tệp' : 'Chọn file (PDF/Ảnh)' }}
+                  </label>
+            </div>
+            <span *ngIf="!(uploads?.length)" class="file-name muted" style="color: #aaa; margin-left:10px;">Chưa chọn file</span>
       </div>
 
       <ul class="uploader-list" *ngIf="uploads?.length">
@@ -15,18 +41,14 @@
                         </div>
                         <div class="status-line" [ngClass]="u.status">
                               <ng-container [ngSwitch]="u.status">
-                                    <span *ngSwitchCase="'queued'">Đang chờ...</span>
-                                    <span *ngSwitchCase="'uploading'">Đang tải lên: {{ u.progress | number:'1.0-0' }}%</span>
-                                    <span *ngSwitchCase="'done'">✔ Đã tải</span>
-                                    <span *ngSwitchCase="'error'">✖ Lỗi</span>
+                                    <span *ngSwitchCase="'queued'">Đang chờ gửi…</span>
+                                    <span *ngSwitchCase="'done'">✔ Đã lưu</span>
+                                    <span *ngSwitchCase="'error'">✖ Lỗi lưu</span>
                               </ng-container>
                         </div>
                         <button type="button" class="display-flex close-button" (click)="remove(i)" [disabled]="u.status === 'uploading'">
                               <span class="text material-icons-outlined" style="font-size: 15px;">close</span>
                         </button>
-                  </div>
-                  <div class="progress" *ngIf="u.status === 'uploading'">
-                        <div class="progress-bar" [style.width.%]="u.progress"></div>
                   </div>
             </li>
       </ul>

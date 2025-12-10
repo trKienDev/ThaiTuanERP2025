@@ -12,13 +12,15 @@
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.0.0" />
     <PackageReference Include="MediatR" Version="11.1.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.10" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Expense\Commands\BankAccounts\NewFolder\" />
-    <Folder Include="Finance\Commands\BudgetPeriods\" />
+    <Folder Include="Core\Services\" />
+    <Folder Include="Expense\ExpensePayments\EventHandlers\" />
     <Folder Include="Finance\Requests\" />
     <Folder Include="Finance\Validators\" />
+    <Folder Include="Shared\Enums\" />
   </ItemGroup>
 
   <PropertyGroup>

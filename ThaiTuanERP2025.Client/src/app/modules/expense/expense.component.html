@@ -1,0 +1,34 @@
+<div class="expense-navbar dom-animation-content" >
+      <nav class="expense-navbar__container">
+            <ul class="expense-navbar__list">
+                  <li class="expense-navbar__item">
+                        <a class="expense-navbar__link" routerLink="/expense/expense-payment-shell" routerLinkActive="selected">
+                              <span class="expense-navbar__icon material-icons-round">add_card</span>
+                              <span class="expense-navbar__name">Thanh toán</span>
+                        </a>
+                  </li>
+                  <li class="expense-navbar__item">
+                        <a class="expense-navbar__link" routerLink="/expense/outgoing-payment-shell" routerLinkActive="selected">
+                              <span class="expense-navbar__icon material-icons-round">credit_score</span>
+                              <span class="expense-navbar__name">Khoản chi</span>
+                        </a>
+                  </li>
+                  <li class="expense-navbar__item">
+                        <a class="expense-navbar__link" routerLink="/expense/bank-account-shell-page" routerLinkActive="selected">
+                              <span class="expense-navbar__icon material-icons-round">account_balance</span>
+                              <span class="expense-navbar__name">Ngân hàng</span>
+                        </a>
+                  </li>
+                  <li class="expense-navbar__item">
+                        <a class="expense-navbar__link" routerLink="/expense/expense-workflows-shell" routerLinkActive="selected">
+                              <span class="expense-navbar__icon material-icons-round">account_tree</span>
+                              <span class="expense-navbar__name">Luồng duyệt</span>
+                        </a>
+                  </li>
+            </ul>
+      </nav>
+</div>
+<div class="expense-navbar__content">
+      <router-outlet></router-outlet>
+</div>
+<div class="expense-navbar__footer"></div>

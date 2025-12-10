@@ -1,0 +1,53 @@
+<div class="page-container">
+      <div class="page-heading">
+            <div class="page-title">
+                  <h3 class="icon">📅</h3>
+                  <h3 class="title">Thời gian lập ngân sách</h3>
+            </div>
+            <div class="">
+                  <form *appHasPermission="'budget-period.create-for-year'" [formGroup]="autoGenerateForm" class="display-flex gap-5px justify-content-end" (ngSubmit)="autoGenerateForYear()">
+                        <kit-spinner-button type="submit" cssClass="button save-button height-100pt border-transparent" [loading]="submitting" [disabled]="submitting" text="Thêm kỳ ngân sách tự động" loadingText="Đang xử lý…"></kit-spinner-button>
+                        <div class="form-input" style="width: 20%;">
+                              <input class="" type="text" formControlName="year" autocomplete="on" required/>
+                              <label for="name">Năm <span style="color: red;">  *</span></label>
+                        </div>
+                  </form>
+            </div>
+      </div>
+      <div class="page-body">
+            <table class="table">
+                  <thead>
+                        <tr>
+                              <th>Năm</th>
+                              <th>Tháng</th>
+                              <th>Ngày bắt đầu</th>
+                              <th>Ngày kết thúc</th>
+                              <th class="text-align-center">Hiệu lực</th>
+                              <th *appHasPermission="'budget-period.edit'" class="text-align-center">Hành dộng</th>
+                        </tr>
+                  </thead>
+                  <tbody>
+                        <tr *ngFor="let period of budgetPeriods; let i = index; trackBy: trackById">
+                              <td>{{ period.year }}</td>
+                              <td>{{ period.month }}</td>
+                              <td>{{ period.startDate | date: 'dd/MM/yyyy' }}</td>
+                              <td>{{ period.endDate | date: 'dd/MM/yyyy' }}</td>
+                              <td>
+                                    <div class="display-flex justify-content-center">
+                                          <label class="switch-1">
+                                                <input type="checkbox" [checked]="period.isActive" disabled>
+                                                <span class="slider"></span>
+                                          </label>
+                                    </div>
+                              </td>
+                              <td *appHasPermission="'budget-period.edit'" class="display-flex justify-content-center">
+                                    <kit-action-menu [actions]="buildBudgetPeriodActions(period)"></kit-action-menu>
+                              </td>
+                        </tr>
+                        <tr *ngIf="budgetPeriods.length === 0">
+                              <td colspan="6" class="text-center text-muted">Không có dữ liệu</td>
+                        </tr>
+                  </tbody>
+            </table>
+      </div>
+</div>

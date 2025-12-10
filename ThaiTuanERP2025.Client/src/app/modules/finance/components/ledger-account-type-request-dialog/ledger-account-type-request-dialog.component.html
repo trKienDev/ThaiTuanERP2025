@@ -1,0 +1,57 @@
+<div class="dialog">
+      <div class="dialog-container">
+            <form [formGroup]="form" (ngSubmit)="submit()">
+                  <div class="dialog-heading">
+                        <div class="dialog-title">
+                              <h1>Loại tài khoản hạch toán mới</h1>
+                        </div>
+                        <div class="dialog-exit">
+                              <button type="button" class="exit-button" (click)="close()">
+                                    <span class="text material-icons-outlined">close</span>
+                              </button>
+                        </div>
+                  </div>
+                  <div class="dialog-body">
+                        <div class="dialog-row">
+                              <div class="form-input">
+                                    <input class="" type="text" formControlName="name" autocomplete="on" required
+                                    [class.is-invalid]="showErrors && form.get('name')?.invalid"
+                                    [attr.aria-invalid]="showErrors && form.get('name')?.invalid ? 'true' : null"/>
+                                    <label for="name">Tên loại tài khoản <span style="color: red;">  *</span></label>
+                                    <div class="form-input-error" *ngIf="showErrors && form.get('name')?.invalid">
+                                          <small>Vui lòng nhập tên loại tài khoản</small>
+                                    </div>
+                              </div>
+                        </div>
+                        <div class="dialog-row display-flex gap-10px">
+                              <div class="form-input flex-1">
+                                    <input class="" type="text" formControlName="code" autocomplete="on" required
+                                    [class.is-invalid]="showErrors && form.get('code')?.invalid"
+                                    [attr.aria-invalid]="showErrors && form.get('code')?.invalid ? 'true' : null"/>
+                                    <label for="code">Mã loại tài khoản <span style="color: red;">  *</span></label>
+                                    <div class="form-input-error" *ngIf="!showErrors">
+                                          <small style="font-style: italic; color: #aaa;">VD: government_source_expenditure</small>
+                                    </div>
+                                    <div class="form-input-error" *ngIf="showErrors && form.get('code')?.invalid">
+                                          <small>Vui lòng nhập mã loại tài khoản</small>
+                                    </div>
+                              </div>
+                              <div class="flex-1" [class.is-invalid]="showErrors && form.get('kind')?.invalid">
+                                    <kit-dropdown [options]="typeKindOptions" [placeholder]="'Chọn kiểu'" formControlName="kind" [enableFilter]="false" [required]="true"
+                                    [invalid]="showErrors && (form.get('kind')?.invalid ?? false)"></kit-dropdown>
+                              </div>
+                        </div>
+                        <div class="dialog-row">
+                              <div class="form-input">
+                                    <textarea formControlName="description" placeholder="" noSpellcheck></textarea>
+                                    <label for="code">Ghi chú</label>
+                              </div>
+                        </div>
+                  </div>
+                  <div class="dialog-footer display-flex gap-10px">
+                        <button type="button" class="width-50pt button cancel-button" (click)="close()">Thoát</button>
+                        <kit-spinner-button type="submit" class="width-50pt" cssClass="save-button" [loading]="submitting" [disabled]="submitting" text="Lưu" [loadingText]="''" style="width: 10%;"></kit-spinner-button>
+                  </div>
+            </form>
+      </div>
+</div>

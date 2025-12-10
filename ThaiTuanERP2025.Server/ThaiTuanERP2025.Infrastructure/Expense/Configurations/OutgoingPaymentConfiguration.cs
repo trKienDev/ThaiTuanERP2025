@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ThaiTuanERP2025.Domain.Expense.Entities;
+using ThaiTuanERP2025.Infrastructure.Persistence.Configurations;
 
 namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 {
-	public class OutgoingPaymentConfiguration : IEntityTypeConfiguration<OutgoingPayment>
+	public class OutgoingPaymentConfiguration : BaseEntityConfiguration<OutgoingPayment>
 	{
-		public void Configure(EntityTypeBuilder<OutgoingPayment> builder)
+		public override void Configure(EntityTypeBuilder<OutgoingPayment> builder)
 		{
 			builder.ToTable("OutgoingPayments", "Expense");
 			builder.HasKey(x => x.Id);
@@ -18,13 +19,10 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 			builder.Property(x => x.AccountNumber).HasMaxLength(64);
 			builder.Property(x => x.BeneficiaryName).HasMaxLength(256);
 			builder.Property(x => x.OutgoingAmount).HasPrecision(18, 2).IsRequired();
-			builder.Property(x => x.DueDate).IsRequired();
-			builder.Property(x => x.PostingDate);
-			builder.Property(x => x.PaymentDate);
-			builder.Property(x => x.Status)
-			       .HasConversion<int>() 
-			       .HasMaxLength(30)
-			       .IsRequired();
+			builder.Property(x => x.DueAt).IsRequired();
+			builder.Property(x => x.PostingAt);
+			builder.Property(x => x.PaymentAt);
+			builder.Property(x => x.Status).HasConversion<int>().HasMaxLength(30).IsRequired();
 
 			// === Relationships ===
 			builder.HasOne(o => o.ExpensePayment)
@@ -47,27 +45,13 @@ namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
 				.HasForeignKey("EmployeeId")
 				.OnDelete(DeleteBehavior.Restrict);
 
-			builder.HasOne(o => o.CreatedByUser)
-				.WithMany()
-				.HasForeignKey("CreatedByUserId")
-				.OnDelete(DeleteBehavior.Restrict);
-
-			builder.HasOne(o => o.ModifiedByUser)
-				.WithMany()
-				.HasForeignKey("ModifiedByUserId")
-				.OnDelete(DeleteBehavior.Restrict);
-
-			builder.HasOne(o => o.DeletedByUser)
-				.WithMany()
-				.HasForeignKey("DeletedByUserId")
-				.OnDelete(DeleteBehavior.Restrict);
-
 			// === Indexes ===
+			builder.HasIndex(o => o.Name).IsUnique();
 			builder.HasIndex(o => o.ExpensePaymentId);
 			builder.HasIndex(o => o.OutgoingBankAccountId);
-			builder.HasIndex(o => o.DueDate);
-			builder.HasIndex(o => o.PostingDate);
-			builder.HasIndex(o => o.PaymentDate);
+			builder.HasIndex(o => o.DueAt);
+			builder.HasIndex(o => o.PostingAt);
+			builder.HasIndex(o => o.PaymentAt);
 		}
 	}
 }

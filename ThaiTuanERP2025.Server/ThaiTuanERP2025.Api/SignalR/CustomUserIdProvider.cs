@@ -9,6 +9,7 @@ public sealed class CustomUserIdProvider : IUserIdProvider
 	{
 		// Trả về GUID user id dạng string để dùng Clients.User(...)
 		// Thường là ClaimTypes.NameIdentifier hoặc sub (OpenID)
-		return connection.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+		return connection.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value
+			?? connection.User?.FindFirst("sub")?.Value;
 	}
 }

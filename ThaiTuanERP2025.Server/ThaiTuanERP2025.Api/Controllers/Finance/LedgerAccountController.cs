@@ -1,77 +1,61 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ThaiTuanERP2025.Api.Common;
-using ThaiTuanERP2025.Application.Finance.Commands.LedgerAccounts.CreateLedgerAccount;
-using ThaiTuanERP2025.Application.Finance.Commands.LedgerAccounts.DeleteLedgerAccount;
-using ThaiTuanERP2025.Application.Finance.Commands.LedgerAccounts.ToggleLedgerAccountStatus;
-using ThaiTuanERP2025.Application.Finance.Commands.LedgerAccounts.UpdateLedgerAccount;
-using ThaiTuanERP2025.Application.Finance.DTOs;
-using ThaiTuanERP2025.Application.Finance.Queries.LedgerAccounts.GetAllLedgerAccounts;
-using ThaiTuanERP2025.Application.Finance.Queries.LedgerAccounts.GetLedgerAccountById;
-using ThaiTuanERP2025.Application.Finance.Queries.LedgerAccounts.GetLedgerAccountsByType;
-using ThaiTuanERP2025.Application.Finance.Queries.LedgerAccounts.LookupLedgerAccounts;
+using ThaiTuanERP2025.Api.Shared;
+using ThaiTuanERP2025.Application.Finance.LedgerAccounts.Commands;
+using ThaiTuanERP2025.Application.Finance.LedgerAccounts.Contracts;
+using ThaiTuanERP2025.Application.Finance.LedgerAccounts.Queries;
+using ThaiTuanERP2025.Application.Finance.LedgerAccounts.Services;
+using ThaiTuanERP2025.Domain.Exceptions;
 
 namespace ThaiTuanERP2025.Api.Controllers.Finance
 {
-	[Authorize]
-	[ApiController]
-	[Route("api/ledger-accounts")]
-	public class LedgerAccountController : ControllerBase
-	{
-		private readonly IMediator _mediator;
-		public LedgerAccountController(IMediator mediator) {
-			_mediator = mediator;
-		}
+        [Authorize]
+        [ApiController]
+        [Route("api/ledger-account")]
+        public class LedgerAccountController : ControllerBase
+        {
+                private readonly IMediator _mediator;
+                private readonly ILedgerAccountExcelReader _ledgerAccountExcelReader;
+                public LedgerAccountController(IMediator mediator, ILedgerAccountExcelReader ledgerAccountExcelReader)
+                {
+                        _mediator = mediator;
+                        _ledgerAccountExcelReader = ledgerAccountExcelReader;
+                }
 
-		[HttpGet("all")]
-		public async Task<IActionResult> GetAll() {
-			var list = await _mediator.Send(new GetAllLedgerAccountsQuery());
-			return Ok(ApiResponse<List<LedgerAccountDto>>.Success(list));
-		} 
+                [HttpGet]
+                public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+                {
+                        var dtos = await _mediator.Send(new GetAllLedgerAccountsQuery(), cancellationToken);
+                        return Ok(ApiResponse<IReadOnlyList<LedgerAccountDto>>.Success(dtos));
+                }
 
-		[HttpGet("{id:guid}")]
-		public async Task<IActionResult> GetById(Guid id) {
-			var dto = await _mediator.Send(new GetLedgerAccountByIdQuery(id));
-			return Ok(ApiResponse<LedgerAccountDto>.Success(dto));
-		}
+                [HttpGet("tree")]
+                public async Task<IActionResult> GetTree(CancellationToken cancellationToken)
+                {
+                        var tree = await _mediator.Send(new GetLedgerAccountTreeQuery(), cancellationToken);
+                        return Ok(ApiResponse<IReadOnlyList<LedgerAccountTreeDto>>.Success(tree));
+                }
 
-		[HttpGet("by-type")]
-		public async Task<IActionResult> GetByType([FromQuery] Guid typeId) {
-			var tree = await _mediator.Send(new GetLedgerAccountsByTypeQuery(typeId));
-			return Ok(ApiResponse<List<LedgerAccountTreeDto>>.Success(tree));
-		}
+                [HttpPost]
+                public async Task<IActionResult> Create([FromBody] LedgerAccountPayload payload, CancellationToken cancellationToken)
+                {
+                        var result = await _mediator.Send(new CreateLedgerAccountCommand(payload), cancellationToken);
+                        return Ok(ApiResponse<Unit>.Success(result));
+                }
 
-		[HttpGet("lookup")]
-		public async Task<ActionResult<ApiResponse<List<LedgerAccountLookupDto>>>> Lookup(
-			[FromQuery] string? keyword, [FromQuery] int take = 20, CancellationToken cancellationToken = default
-		) {
-			var result = await _mediator.Send(new LookupLedgerAccountsQuery(keyword, take), cancellationToken);
-			return Ok(ApiResponse<List<LedgerAccountLookupDto>>.Success(result));
-		}
+                [HttpPost("excel")]
+                public async Task<IActionResult> ImportExcel(IFormFile file, CancellationToken cancellationToken)
+                {
+                        if (file == null || file.Length == 0)
+                                throw new BusinessRuleViolationException("File trống.");
 
-		[HttpPost("new")]
-		public async Task<ActionResult> Create([FromBody] CreateLedgerAccountCommand command) {
-			var result = await _mediator.Send(command);
-			return Ok(ApiResponse<LedgerAccountDto>.Success(result));
-		}
+                        using var stream = file.OpenReadStream();
+                        var rows = _ledgerAccountExcelReader.Read(stream);
 
-		[HttpPut("{id:guid}")]
-		public async Task<IActionResult> Update(Guid id, [FromBody] UpdateLedgerAccountCommand command) {
-			var result = await _mediator.Send(command with { Id = id});
-			return Ok(ApiResponse<LedgerAccountDto>.Success(result, "Cập nhật thành công"));
-		}
+                        var result = await _mediator.Send(new BulkCreateLedgerAccountsCommand(rows), cancellationToken);
 
-		[HttpPatch("{id:guid}/status")]
-		public async Task<IActionResult> ToggleStatus(Guid id, [FromBody] bool IsActive) {
-			await _mediator.Send(new ToggleLedgerAccountStatusCommand(id, IsActive));
-			return Ok(ApiResponse<bool>.Success(true));
-		}
-
-		[HttpDelete("{id:guid}")]
-		public async Task<ActionResult> Delete(Guid id) {
-			await _mediator.Send(new DeleteLedgerAccountCommand(id));
-			return Ok(ApiResponse<bool>.Success(true));
-		}
-	}
+                        return Ok(ApiResponse<Unit>.Success(result));
+                }
+        }
 }

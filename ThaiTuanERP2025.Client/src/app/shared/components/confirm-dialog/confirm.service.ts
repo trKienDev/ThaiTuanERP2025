@@ -5,7 +5,7 @@ import { map, Observable, of } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
 export class ConfirmService {
-      constructor(private dialog: MatDialog) {}
+      constructor(private readonly dialog: MatDialog) {}
 
       /** Hộp thoại xác nhận chung — trả về Observable<boolean> */
       ask$(data: ConfirmDialogData): Observable<boolean> {
@@ -26,6 +26,10 @@ export class ConfirmService {
       /** Preset: thao tác nguy hiểm (màu đỏ) */
       danger$(message: string, title = 'Cảnh báo', confirmText = 'Tiếp tục', cancelText = 'Hủy'): Observable<boolean> {
             return this.ask$({ title, message, confirmText, cancelText, tone: 'danger' });
+      }
+
+      error$(message: string, title = 'Lỗi', confirmText = 'Tiếp tục', cancelText = 'Hủy'): Observable<boolean> {
+            return this.ask$({ title, message, confirmText, cancelText, tone: 'error' });
       }
 
       /** Tiện ích: hỏi thay thế hoá đơn cho 1 dòng items */

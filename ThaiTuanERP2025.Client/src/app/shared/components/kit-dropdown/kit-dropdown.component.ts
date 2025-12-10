@@ -1,9 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { booleanAttribute, Component, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnChanges, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { booleanAttribute, Component, ElementRef, EventEmitter, forwardRef,HostBinding, HostListener, inject, Input, OnChanges, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-export type KitDropdownOption = { id: string; label: string, imgUrl?: string };
+export interface KitDropdownOption<T = any> {
+      id: T;
+      label: string;
+      imgUrl?: string;
+}
 
 @Component({
       selector: 'kit-dropdown',
@@ -13,134 +17,256 @@ export type KitDropdownOption = { id: string; label: string, imgUrl?: string };
       styleUrl: './kit-dropdown.component.scss',
       animations: [
             trigger('slide', [
-                  state('closed', style({ height: '0px', opacity: 0, overflow: 'hidden' })),
-                  state('open',   style({ height: '*',   opacity: 1, overflow: 'hidden' })),
-                  transition('closed <=> open', [animate('300ms ease')])
-            ]),
+                  state('closed', style({
+                        height: '0px',
+                        opacity: 0,
+                        overflow: 'hidden'
+                  })),
+                  state('open', style({
+                        height: '*',
+                        opacity: 1
+                  })),
+                  transition('closed <=> open', [ animate('300ms ease') ])
+            ])
       ],
-      providers: [{
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => KitDropdownComponent),
-            multi: true
-      }]
+      providers: [
+            {
+                  provide: NG_VALUE_ACCESSOR,
+                  useExisting: forwardRef(() => KitDropdownComponent),
+                  multi: true,
+            },
+      ],
 })
-export class KitDropdownComponent implements ControlValueAccessor, OnChanges {
-      @Input() options: KitDropdownOption[] = [];
+export class KitDropdownComponent<T = any> implements ControlValueAccessor, OnChanges {
+      // ===== Inputs / Outputs =====
+      @Input() options: KitDropdownOption<T>[] = [];
       @Input() placeholder = 'chọn ....';
       @Input() width: string | number | null = null;
-      @Input() multiple = false; // Bật chế độ chọn nhiều
-      @Input() enableFilter = true;       /** Bật/tắt ô filter và placeholder của nó */
+      @Input() multiple = false;
+      @Input() enableFilter = true;
       @Input() filterPlaceholder = '🔎 Tìm...';
-      @Input() caseSensitive = false;       /** Có phân biệt hoa/thường không */
-      @Input() autoFocusFilter = true;       /** Khi mở menu, tự động focus vào ô filter */     
+      @Input() caseSensitive = false;
+      @Input() autoFocusFilter = true;
       @Input() required = false;
+      @Input() visibleItemCount: number = 6;
 
-      @Output() selectionChange = new EventEmitter<KitDropdownOption>();
-      @Output() selectionChangeMany = new EventEmitter<KitDropdownOption[]>();    // Output cho multi-select 
+      @Input({ transform: booleanAttribute }) autoSelectFirst = false;
+      @Input({ transform: booleanAttribute }) invalid = false;
 
+      @HostBinding('class.invalid') get hostInvalidClass() {
+            return this.invalid;
+      }
+
+      @Output() selectionChange = new EventEmitter<KitDropdownOption<T>>();
+      @Output() selectionChangeMany = new EventEmitter<KitDropdownOption<T>[]>();
+
+      // ===== State =====
       isOpen = false;
       disabled = false;
-      // ** Filter & Focus **
-      filterText = '';  // Filter state
+
+      filterText = '';
       focusedIndex = -1;
 
-      // *** single ***
-      private _value: string | null = null;
+      // Danh sách options sau filter (state thật)
+      filteredOptions: KitDropdownOption<T>[] = [];
+
+      // Single-value
+      private _value: T | null = null;
       selectedLabel: string | null = null;
       selectedImgUrl: string | null = null;
 
-      // *** multiple ***
-      private _values = new Set<string>();
+      // Multi-value
+      private readonly _values = new Set<T>();
 
-      // ===== CVA =====
-      private onChange: (val: any) => void = () => {};
+      // CVA
+      private onChange: (val: T | T[]) => void = () => {};
       private onTouched: () => void = () => {};
 
-      writeValue(val: string | string[] | null): void {
+      // View refs
+      @ViewChild('filterInput') filterInput!: ElementRef<HTMLInputElement>;
+      @ViewChildren('optionRow') optionRows!: QueryList<ElementRef<HTMLLIElement>>;
+
+      private readonly hostEl = inject(ElementRef<HTMLElement>);
+
+      // ===== ControlValueAccessor =====
+      writeValue(val: T | T[] | null | undefined): void {
             if (this.multiple) {
                   this._values.clear();
-                  if (Array.isArray(val)) val.forEach(v => this._values.add(v));
+                  if (Array.isArray(val)) {
+                        val.forEach((v) => this._values.add(v as T));
+                  }
             } else {
-                  this._value = (typeof val === 'string' ? val : null);
+                  if (val === null || val === undefined) {
+                        this._value = null;
+                  } else {
+                        this._value = val as T;
+                  }
                   this.syncLabelFromValue();
             }
       }
-      registerOnChange(fn: any): void { this.onChange = fn; }
-      registerOnTouched(fn: () => void): void { this.onTouched = fn; }
-      setDisabledState(isDisabled: boolean): void { this.disabled = isDisabled; }
 
+      registerOnChange(fn: any): void {
+            this.onChange = fn as (val: T | T[] | null) => void;
+      }
+
+      registerOnTouched(fn: () => void): void {
+            this.onTouched = fn;
+      }
+
+      setDisabledState(isDisabled: boolean): void {
+            this.disabled = isDisabled;
+      }
+
+      // ===== Lifecycle =====
       ngOnChanges(changes: SimpleChanges): void {
             if (changes['options']) {
-                  if (!this.multiple) this.syncLabelFromValue();
+                  // Khi options thay đổi: đồng bộ lại label + filteredOptions
+                  this.syncLabelFromValue();
+                  this.resetFilteredOptions();
+                  this.syncSelectedOptionsForMultiple();
+
+                  if (this.autoSelectFirst) {
+                        this.tryAutoSelectFirst();
+                  }
             }
       }
 
+      // ===== Layout helpers =====
+      get maxMenuHeight(): string {
+            const itemHeight = 36;
+            return `${this.visibleItemCount * itemHeight}px`;
+      }
+
       get hasValue(): boolean {
-            return this.multiple ? this._values.size > 0 : !!this._value;
+            return this.multiple ? this._values.size > 0 : this._value !== null && this._value !== undefined;
       }
 
       get computedWidth(): string | null {
-            if(this.width === null || this.width === undefined) 
-                  return null;
+            if (this.width === null || this.width === undefined) return null;
             return typeof this.width === 'number' ? `${this.width}px` : this.width;
       }
 
       // ===== Filtering =====
-      get filteredOptions(): KitDropdownOption[] {
-            const text = this.caseSensitive ? this.filterText : this.filterText.toLowerCase();
-            if (!this.enableFilter || !text) return this.options;
-            return this.options.filter(o => {
-                  const label = this.caseSensitive ? o.label : o.label.toLowerCase();
+      private resetFilteredOptions(): void {
+            this.filteredOptions = [...this.options];
+            this.focusedIndex = this.filteredOptions.length > 0 ? 0 : -1;
+      }
+
+      applyFilter(): void {
+            if (!this.enableFilter) {
+                  this.resetFilteredOptions();
+                  return;
+            }
+
+            const raw = this.filterText.trim();
+            const text = this.caseSensitive ? raw : raw.toLowerCase();
+
+            if (text === '') {
+                  this.resetFilteredOptions();
+                  return;
+            }
+
+            this.filteredOptions = this.options.filter((opt) => {
+                  const label = this.caseSensitive ? opt.label : opt.label.toLowerCase();
                   return label.includes(text);
             });
-      }
-      onFilterInput(event: Event) {
-            const input = event.target as HTMLInputElement | null;
-            this.filterText = input?.value ?? '';
-      }
-      clearFilter() {
-            if (!this.enableFilter) return;
-            this.filterText = '';
-            // Sau khi xóa filter, đảm bảo focusedIndex hợp lệ
-            this.focusedIndex = this.filteredOptions.length > 0 ? 0 : -1;
-            this.ensureItemVisible();
-      }
 
-      // ===== Toggle mở/đóng =====
-      onToggle() {
-            if (this.disabled) return;
-            this.isOpen = !this.isOpen;
-            if (this.isOpen) { 
-                  this.focusedIndex = this.filteredOptions.length > 0 ? 0 : -1; // Reset vị trí focus theo danh sách đã filter
-                  (this as any).eRef.nativeElement.focus();
-
-                  // Chờ render xong rồi ensure visible + (tùy chọn) focus filter
-                  setTimeout(() => {
-                        this.ensureItemVisible();
-                        if (this.enableFilter && this.autoFocusFilter) {
-                              this.filterInput?.nativeElement.focus();
-                              this.filterInput?.nativeElement.select();
-                        }
-                  });
+            if (this.filteredOptions.length === 0) {
+                  this.focusedIndex = -1;
             } else {
-                  this.clearFilter();
+                  this.focusedIndex = 0;
+                  this.scrollToFocused();
             }
       }
 
-      selectOption(opt: KitDropdownOption) {
-            if(this.disabled) return;
+      onFilterInput(event: Event): void {
+            const input = event.target as HTMLInputElement | null;
+            this.filterText = input?.value ?? '';
+            this.applyFilter();
+      }
 
-            if(this.multiple) {
-                  // toggle
-                  if(this._values.has(opt.id)) this._values.delete(opt.id);
+      clearFilter(): void {
+            if (!this.enableFilter) return;
+            this.filterText = '';
+            this.resetFilteredOptions();
+      }
+
+      // Ngăn phím trong ô filter “lọt” ra host
+      onFilterKeydown(event: KeyboardEvent): void {
+            const key = event.key;
+
+            if (key === 'ArrowDown') {
+                  event.preventDefault();
+                  this.moveFocus(1);
+            } else if (key === 'ArrowUp') {
+                  event.preventDefault();
+                  this.moveFocus(-1);
+            } else if (key === 'Enter') {
+                  event.preventDefault();
+                  const opt = this.filteredOptions[this.focusedIndex];
+                  if (opt) this.selectOption(opt);
+            } else if (key === 'Escape') {
+                  event.preventDefault();
+                  this.close();
+            }
+      }
+
+      // ===== Toggle mở/đóng =====
+      toggle(): void {
+            if (this.disabled) return;
+            this.isOpen ? this.close() : this.open();
+      }
+
+      open(): void {
+            if (this.disabled || this.isOpen) return;
+
+            this.isOpen = true;
+            this.applyFilter();
+
+            this.hostEl.nativeElement.focus();
+
+            setTimeout(() => {
+                  if (this.enableFilter && this.autoFocusFilter && this.filterInput) {
+                  this.filterInput.nativeElement.focus();
+                  this.filterInput.nativeElement.select();
+                  }
+                  this.scrollToFocused();
+            });
+      }
+
+      close(): void {
+            if (!this.isOpen) return;
+
+            this.isOpen = false;
+            this.focusedIndex = -1;
+
+            if (this.enableFilter) {
+                  this.filterText = '';
+                  this.resetFilteredOptions();
+            }
+
+            // Focus lại host để A11y ok
+            setTimeout(() => {
+                  this.hostEl.nativeElement.focus();
+            });
+
+            this.onTouched();
+      }
+
+      // ===== Selection =====
+      selectOption(opt: KitDropdownOption<T>): void {
+            if (this.disabled) return;
+
+            if (this.multiple) {
+                  if (this._values.has(opt.id)) this._values.delete(opt.id);
                   else this._values.add(opt.id);
 
-                  // emit mảng id (CVA) + emit danh sách option (event)
-                  this.onChange(Array.from(this._values));
+                  const selectedIds = Array.from(this._values);
+                  this.onChange(selectedIds);
                   this.onTouched();
-                  this.selectionChange.emit(opt); // tùy bạn có dùng hay không
-                  this.selectionChangeMany.emit(this.options.filter(o => this._values.has(o.id)));
-                  // không đóng menu trong multi
+                  this.selectionChange.emit(opt);
+                  this.selectionChangeMany.emit(this.selectedOptions);
+
                   return;
             }
 
@@ -148,131 +274,181 @@ export class KitDropdownComponent implements ControlValueAccessor, OnChanges {
             this._value = opt.id;
             this.selectedLabel = opt.label;
             this.selectedImgUrl = opt.imgUrl ?? null;
-            this.isOpen = false;
 
             this.onChange(this._value);
             this.onTouched();
             this.selectionChange.emit(opt);
-            this.clearFilter(); // Đóng menu rồi thì dọn filter
+
+            this.close();
       }
 
-      /** Danh sách option đã chọn (giữ thứ tự theo options gốc) */
-      get selectedOptions(): KitDropdownOption[] {
-            return this.options.filter(o => this._values.has(o.id));
+      get selectedOptions(): KitDropdownOption<T>[] {
+            const arr = this.options.filter((o) => this._values.has(o.id));
+            return arr;
       }
 
-      /** Xoá một lựa chọn khi đang ở multiple */
-      remove(id: string) {
+      remove(id: T): void {
             if (!this.multiple || this.disabled) return;
             if (this._values.delete(id)) {
-                  this.onChange(Array.from(this._values));       
-                  this.onTouched();                // CVA: push mảng id
-                  this.selectionChangeMany.emit(this.selectedOptions);           // emit option đã chọn (tuỳ bạn dùng)  
+                  const selectedIds = Array.from(this._values);
+                  this.onChange(selectedIds);
+                  this.onTouched();
+                  this.selectionChangeMany.emit(this.selectedOptions);
             }
       }
 
-      /** (Tuỳ chọn) Xoá hết lựa chọn */
-      clearAll() {
+      clearAll(): void {
             if (!this.multiple || this.disabled) return;
             if (this._values.size === 0) return;
+
             this._values.clear();
-            this.onChange([]);                                               // CVA: mảng rỗng
-            this.selectionChangeMany.emit([]);                               // emit rỗng
+            this.onChange([]);
+            this.onTouched();
+            this.selectionChangeMany.emit([]);
       }
 
-      // ===== Trạng thái selected cho item =====
-      isSelected(id: string): boolean {
+      isSelected(id: T): boolean {
             return this.multiple ? this._values.has(id) : this._value === id;
       }
 
-      // Click ra ngoài thì đóng
+      // ===== Keyboard & Outside click =====
       @HostListener('document:click', ['$event'])
-            onClickOutside(event: Event) {
-            if (this.isOpen && !this.eRef.nativeElement.contains(event.target as Node)) {
-                  this.isOpen = false;
-                  this.clearFilter();
-            }
-      }
-
-      // Nhấn ESC thì đóng (dùng document để vẫn bắt được nếu focus trôi)
-      @HostListener('document:keydown.escape', ['$event'])
-      onEsc(event: KeyboardEvent) {
-            if (this.isOpen) {
-                  this.isOpen = false;
-                  this.clearFilter();
-                  event.stopPropagation();
-            }
-      }
-
-      // 🔑 Điều hướng bàn phím — NGHE TRÊN HOST (khi host đã được focus)
-      @HostListener('keydown', ['$event'])
-      onKeydown(event: KeyboardEvent) {
+            onDocumentClick(event: Event): void {
             if (!this.isOpen) return;
+            const target = event.target as Node;
+            if (!this.hostEl.nativeElement.contains(target)) {
+                  this.close();
+            }
+      }
 
-            const list = this.filteredOptions;         // ⟵ dùng filteredOptions
-            const len = list.length;
+      @HostListener('keydown', ['$event'])
+            onHostKeydown(event: KeyboardEvent): void {
+            // nếu dropdown đang đóng → cho phép dùng phím mở
+            if (!this.isOpen) {
+                  if (event.key === 'Enter' || event.key === ' ' || event.key === 'ArrowDown') {
+                        event.preventDefault();
+                        this.open();
+                  }
+                  return;
+            }
+
+            const len = this.filteredOptions.length;
             if (len === 0) return;
 
             if (event.key === 'ArrowDown') {
                   event.preventDefault();
-                  this.focusedIndex = (this.focusedIndex + 1 + len) % len;
-                  this.ensureItemVisible();
+                  this.moveFocus(1);
                   return;
             }
 
             if (event.key === 'ArrowUp') {
                   event.preventDefault();
-                  this.focusedIndex = (this.focusedIndex - 1 + len) % len;
-                  this.ensureItemVisible();
-                  return;
-            }
-
-            if (event.key === 'Enter' || event.key === ' ') {
-                  event.preventDefault();
-                  const idx = this.focusedIndex;
-
-                  if (idx >= 0 && idx < len) 
-                        this.selectOption(list[idx]); 
+                  this.moveFocus(-1);
                   return;
             }
 
             if (event.key === 'Home') {
                   event.preventDefault();
                   this.focusedIndex = 0;
-                  this.ensureItemVisible();
+                  this.scrollToFocused();
                   return;
             }
 
             if (event.key === 'End') {
                   event.preventDefault();
                   this.focusedIndex = len - 1;
-                  this.ensureItemVisible();
+                  this.scrollToFocused();
+                  return;
+            }
+
+            if (event.key === 'Enter') {
+                  event.preventDefault();
+                  const idx = this.focusedIndex;
+                  if (idx >= 0 && idx < len) {
+                        this.selectOption(this.filteredOptions[idx]);
+                  }
+                  return;
+            }
+
+            if (event.key === 'Escape') {
+                  event.preventDefault();
+                  this.close();
                   return;
             }
       }
 
-      @ViewChildren('optRef') optionItems!: QueryList<ElementRef<HTMLLIElement>>;
-      @ViewChild('filterInput') filterInput?: ElementRef<HTMLInputElement>;
+      // ===== Focus helpers =====
+      private scrollToFocused(): void {
+            if (!this.optionRows || this.focusedIndex < 0) return;
+            const arr = this.optionRows.toArray();
+            if (this.focusedIndex >= arr.length) return;
 
-      constructor(private eRef: ElementRef<HTMLElement>) {}
-
-      private ensureItemVisible() {
-            const items = this.optionItems?.toArray();
-            if (!items || this.focusedIndex < 0 || this.focusedIndex >= items.length) return;
-            items[this.focusedIndex].nativeElement.scrollIntoView({ block: 'nearest' });
+            const el = arr[this.focusedIndex]?.nativeElement;
+            if (el) {
+                  el.scrollIntoView({ block: 'nearest' });
+            }
       }
-      // Ngăn phím mũi tên trong ô filter “lọt” ra host (tránh cuộn focus)
-      onFilterKeydown(ev: KeyboardEvent) { ev.stopPropagation(); }
 
-      private syncLabelFromValue() {
-            if(!this._value) {
+      private moveFocus(step: number): void {
+            const len = this.filteredOptions.length;
+            if (len === 0) return;
+
+            this.focusedIndex = (this.focusedIndex + step + len) % len;
+            this.scrollToFocused();
+      }
+
+      private syncLabelFromValue(): void {
+            if (!this._value) {
                   this.selectedLabel = null;
                   this.selectedImgUrl = null;
                   return;
             }
 
-            const opt = this.options.find(o => o.id === this._value);
+            const opt = this.options.find((o) => o.id === this._value);
             this.selectedLabel = opt ? opt.label : null;
             this.selectedImgUrl = opt?.imgUrl ?? null;
       }
+
+      private syncSelectedOptionsForMultiple(): void {
+            if (!this.multiple) return;
+
+            // dựa trên danh sách options mới, chọn lại những cái đã tồn tại trong _values
+            const selected = this.options.filter(o => this._values.has(o.id));
+
+            // clear set cũ
+            this._values.clear();
+
+            // add lại từng id
+            selected.forEach(s => this._values.add(s.id));
+      }
+
+      private tryAutoSelectFirst(): void {
+            if (!this.autoSelectFirst) return;
+            if (!this.filteredOptions || this.filteredOptions.length === 0) return;
+
+            // Nếu single và chưa có value
+            if (!this.multiple && (this._value === null || this._value === undefined)) {
+                  const first = this.filteredOptions[0];
+                  this._value = first.id;
+                  this.selectedLabel = first.label;
+                  this.selectedImgUrl = first.imgUrl ?? null;
+
+                  this.onChange(this._value);
+                  this.onTouched();
+                  this.selectionChange.emit(first);
+                  return;
+            }
+
+            // Nếu multiple và chưa có giá trị nào
+            if (this.multiple && this._values.size === 0) {
+                  const first = this.filteredOptions[0];
+                  this._values.add(first.id);
+
+                  const selectedIds = Array.from(this._values);
+                  this.onChange(selectedIds);
+                  this.onTouched();
+                  this.selectionChangeMany.emit(this.selectedOptions);
+            }
+      }
+
 }

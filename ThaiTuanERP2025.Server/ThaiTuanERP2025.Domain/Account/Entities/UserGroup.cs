@@ -1,34 +1,62 @@
-﻿using ThaiTuanERP2025.Domain.Common;
+﻿using ThaiTuanERP2025.Domain.Account.Events.UserGroups;
+using ThaiTuanERP2025.Domain.Shared;
+using ThaiTuanERP2025.Domain.Shared.Entities;
+using ThaiTuanERP2025.Domain.Exceptions;
 
 namespace ThaiTuanERP2025.Domain.Account.Entities
 {
 	public class UserGroup : AuditableEntity
 	{
-		public Guid UserId { get; private set; }
-		public User User { get; private set; }
-		public Guid GroupId { get; private set; }
-		public Group Group { get; private set; }
-		public DateTime JoinedAt { get; private set; } = DateTime.UtcNow;
+		#region Constructors
+		private UserGroup() { }
+		public UserGroup(Guid userId, Guid groupId)
+		{
+			Guard.AgainstDefault(userId, nameof(userId));
+			Guard.AgainstDefault(groupId, nameof(groupId));
 
-		public User CreatedByUser { get; set; } = null!;
-		public User? ModifiedByUser { get; set; }
-		public User? DeletedByUser { get; set; }
-
-
-		private UserGroup() {
-			User = null!;
-			Group = null!;
-		}
-
-		public UserGroup(Guid userId, Guid groupId) {
-			if(userId == Guid.Empty) throw new ArgumentNullException("UserId không hợp lệ");
-			if (groupId == Guid.Empty) throw new ArgumentNullException("GroupId không hợp lệ");
-
+			Id = Guid.NewGuid();
 			UserId = userId;
 			GroupId = groupId;
+			JoinedAt = DateTime.UtcNow;
+			IsActive = true;
 
-			User = null!;
-			Group = null!;	
+			AddDomainEvent(new UserJoinedGroupEvent(userId, groupId));
 		}
+		#endregion
+
+		#region Properties
+		public Guid UserId { get; private set; }
+		public Guid GroupId { get; private set; }
+
+		public User User { get; private set; } = default!;
+		public Group Group { get; private set; } = default!;
+
+		public DateTime JoinedAt { get; private set; } = DateTime.UtcNow;
+		public DateTime? LeftAt { get; private set; }
+
+		public bool IsActive { get; private set; } = true;
+		#endregion
+
+		#region Domain Behaviors
+		public void Leave()
+		{
+			if (!IsActive)
+				throw new DomainException("Người dùng đã rời khỏi nhóm này.");
+
+			IsActive = false;
+			LeftAt = DateTime.UtcNow;
+			AddDomainEvent(new UserLeftGroupEvent(UserId, GroupId));
+		}
+
+		public void Reactivate()
+		{
+			if (IsActive)
+				return;
+
+			IsActive = true;
+			LeftAt = null;
+			AddDomainEvent(new UserRejoinedGroupEvent(UserId, GroupId));
+		}
+		#endregion
 	}
 }

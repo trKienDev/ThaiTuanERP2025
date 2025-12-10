@@ -1,0 +1,61 @@
+<div class="dialog">
+      <div class="dialog-container">
+            <form [formGroup]="form" (ngSubmit)="submit()">
+                  <div class="dialog-heading">
+                        <div class="dialog-title">
+                              <h3>Quản lý của 
+                                    <span style="color: var(--bright-blue-color);">{{ depatment.name }}</span>
+                              </h3>
+                        </div>
+                        <div class="dialog-exit">
+                              <button type="button" class="exit-button" (click)="close()">
+                                    <span class="text material-icons-outlined">close</span>
+                              </button>
+                        </div>
+                  </div>
+                  <div class="dialog-body">
+
+                        <!-- PRIMARY MANAGER -->
+                        <div class="dialog-row">
+                              <kit-dropdown [options]="(managerOptions$ | async) ?? []" [placeholder]="'Chọn quản lý trưởng'" formControlName="primaryManagerId" 
+                              (selectionChange)="onPrimaryManagerSelected($event)" [required]="true"
+                              [invalid]="showErrors && (form.get('primaryManagerId')?.invalid ?? false)"></kit-dropdown>
+                              <div class="form-input-error" *ngIf="showErrors && form.get('primaryManagerId')?.invalid">
+                                    <small>Vui lòng chọn quản lý chính</small>
+                              </div>
+                        </div>
+
+                        <!-- VICE MANAGERS -->
+                        <div class="dialog-row">
+                              <kit-dropdown [multiple]="true" [options]="(viceOptions$ | async) ?? []" [placeholder]="'Chọn quản lý phụ'" formControlName="viceManagerIds" (selectionChange)="onViceManagersSelected($event)"></kit-dropdown>
+                        </div>
+                        
+                        <!-- CASCADE OPTION -->
+                        <div class="dialog-row margin-bottom-10">
+                              <label class="checkbox-row display-flex align-items-center gap-5px">
+                                    <input type="checkbox" formControlName="cascadeToMembers" class="width-fit-content"/>
+                                    <span>Cập nhật lại quản lý cho tất cả nhân viên trong phòng ban</span>
+                              </label>
+                        </div>
+
+                        <!-- REPLACE / MERGE MODE -->
+                        <div class="dialog-row display-flex flex-column gap-10px" *ngIf="form.get('cascadeToMembers')?.value">
+                              <label class="radio-row display-flex align-items-center gap-5px">
+                                    <input type="radio" formControlName="replaceMode" [value]="true" class="width-fit-content"/>
+                                    <span>Thay thế (xoá quản lý cũ, dùng quản lý phòng ban)</span>
+                              </label>
+                              <label class="radio-row display-flex align-items-center gap-5px">
+                                    <input type="radio" formControlName="replaceMode" [value]="false" class="width-fit-content"/>
+                                    <span>Gộp thêm (giữ quản lý cũ & thêm quản lý phòng ban)</span>
+                              </label>
+                        </div>
+                  </div>
+                  <div class="dialog-footer display-flex gap-10px">
+                        <button type="button" class="width-50pt button cancel-button" (click)="close()" [disabled]="submitting">Hủy</button>
+                        <div class="width-50pt">
+                              <kit-spinner-button type="submit" cssClass="save-button" [loading]="submitting" [disabled]="submitting" text="Lưu" [loadingText]="''"></kit-spinner-button>
+                        </div>
+                  </div>
+            </form>
+      </div>
+</div>

@@ -2,9 +2,10 @@
 {
 	public enum BudgetPlanStatus
 	{
-		Draft,
-		Reviewed,
-		Approved,
-		Rejected
+		Draft = 0,
+		Reviewed = 1,
+		Approved = 2,
+		Rejected = 3,
+		Cancelled = 4,
 	}
 }

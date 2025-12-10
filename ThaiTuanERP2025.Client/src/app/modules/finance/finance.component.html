@@ -1,0 +1,27 @@
+<div class="finance-navbar">
+      <nav class="finance-navbar__container">
+            <ul class="finance-navbar__list">
+                  <li class="finance-navbar__item">
+                        <a class="finance-navbar__link" routerLink="/finance/budgets-shell" routerLinkActive="selected">
+                              <span class="finance-navbar__icon material-icons-round">savings</span>
+                              <span class="finance-navbar__name">Ngân sách</span>
+                        </a>
+                  </li>
+                  <li class="finance-navbar__item">
+                        <a class="finance-navbar__link" routerLink="/finance/ledger-account-shell" routerLinkActive="selected">
+                              <span class="finance-navbar__icon material-icons-round">calculate</span>
+                              <span class="finance-navbar__name">Hoạch toán</span>
+                        </a>
+                  </li> 
+                  <li class="finance-navbar__item">
+                        <a class="finance-navbar__link" routerLink="/finance/cashouts" routerLinkActive="selected">
+                              <span class="finance-navbar__icon material-icons-round">credit_score</span>
+                              <span class="finance-navbar__name">Khoản chi</span>
+                        </a>
+                  </li> 
+            </ul>
+      </nav>
+</div>
+<div class="finance-navbar__content">
+      <router-outlet></router-outlet>
+</div>

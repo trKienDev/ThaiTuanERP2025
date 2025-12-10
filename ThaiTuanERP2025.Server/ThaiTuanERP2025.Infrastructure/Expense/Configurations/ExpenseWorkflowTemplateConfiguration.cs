@@ -1,0 +1,28 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ThaiTuanERP2025.Domain.Expense.Entities;
+using ThaiTuanERP2025.Infrastructure.Persistence.Configurations;
+
+namespace ThaiTuanERP2025.Infrastructure.Expense.Configurations
+{
+	public class ExpenseWorkflowTemplateConfiguration : BaseEntityConfiguration<ExpenseWorkflowTemplate>
+	{
+		public override void Configure(EntityTypeBuilder<ExpenseWorkflowTemplate> builder)
+		{
+			builder.ToTable("ExpenseWorkflowTemplates", "ExpenseWorkflow");
+			builder.HasKey(x => x.Id);
+
+			builder.Property(x => x.Name).IsRequired().HasMaxLength(200);
+			builder.Property(x => x.Version).IsRequired();
+			builder.Property(x => x.IsActive).IsRequired().HasDefaultValue(true);
+			builder.Property(x => x.IsDeleted).IsRequired().HasDefaultValue(false);
+
+			builder.HasMany(x => x.Steps)
+			       .WithOne(s => s.WorkflowTemplate)
+			       .HasForeignKey(s => s.WorkflowTemplateId)
+			       .OnDelete(DeleteBehavior.Cascade);
+
+			ConfigureAuditUsers(builder);
+		}
+	}
+}

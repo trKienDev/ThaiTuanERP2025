@@ -1,0 +1,26 @@
+<header class="topbar">
+      <img class="thaituan-topbar-logo" src="thaituan-logo-homepage.png" alt="thaituan-logo">
+      <div class="user-section display-flex gap-10px">
+            <div class="reminder-wrapper topbar-icon-wrapper" title="Nhắc việc" (click)="toggleTaskReminderDrawer()">
+                  <span class="reminder-icon topbar-icon material-icons-round" [class.ringing]="activeReminders().length > 0">alarm</span>
+                  <span class="reminder-badge" [class.has-reminders]="activeReminders().length > 0"[class.no-reminders]="activeReminders().length === 0">
+                        {{ activeReminders().length }}
+                  </span>
+            </div>
+            <div #bellBtn class="notification-wrapper topbar-icon-wrapper" (click)="toggleNotificationPanel(bellBtn)" title="Thông báo">
+                  <span class="topbar-icon material-icons-round">notifications</span>
+                  <span class="notification-badge" *ngIf="(unreadCount$ | async) as c" [style.display]="c>0 ? null : 'none'">{{ c }}</span>
+            </div>
+            <div class="user-avatar-wrapper"  (click)="toggleUserMenu($event)" tabindex="0">
+                  <img class="user-avatar" [src]="(currentUser$ | async) | avatarUrlPipe">
+                  <div class="user-menu" *ngIf="menuVisible" 
+                  [class.fade-in]="menuState === 'entering'"
+                  [class.fade-out]="menuState === 'leaving'">
+                        <button class="user-menu-item logout" (click)="onLogout()">
+                              <span class="icon material-icons-outlined">logout</span>      
+                              <span>Đăng xuất</span>
+                        </button>
+                  </div>
+            </div>
+      </div>      
+</header>

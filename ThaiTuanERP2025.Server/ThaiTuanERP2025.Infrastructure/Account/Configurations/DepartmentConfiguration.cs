@@ -1,52 +1,42 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Infrastructure.Persistence.Configurations;
 
 namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 {
-	public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
+	public class DepartmentConfiguration : BaseEntityConfiguration<Department>
 	{
-		public void Configure(EntityTypeBuilder<Department> builder)
+		public override void Configure(EntityTypeBuilder<Department> builder)
 		{
-			builder.ToTable("Departments", "Core");
-			builder.HasKey(x => x.Id);
+			builder.ToTable("Departments", "Account");
 
-			builder.Property(x => x.Code).IsRequired().HasMaxLength(64);
-			builder.Property(x => x.Name).IsRequired().HasMaxLength(200);
-			builder.Property(x => x.Region).HasConversion<int>().IsRequired();
-			builder.Property(x => x.Level).IsRequired();
+			builder.HasKey(d => d.Id);
 
-			builder.HasOne(x => x.Parent)
-				.WithMany(x => x.Children)
-				.HasForeignKey(x => x.ParentId)
+			builder.Property(d => d.Name).IsRequired().HasMaxLength(150);
+			builder.Property(d => d.Code).IsRequired().HasMaxLength(50);
+			builder.Property(d => d.Level).HasDefaultValue(0);
+			builder.Property(d => d.IsActive).HasDefaultValue(true);
+
+			builder.HasMany(d => d.Users)
+			       .WithOne(u => u.Department)
+			       .HasForeignKey(u => u.DepartmentId)
+			       .OnDelete(DeleteBehavior.Restrict);
+
+			// Self reference (Parent)
+			builder.HasOne(d => d.Parent)
+				.WithMany(p => p.Children)
+				.HasForeignKey(d => d.ParentId)
 				.OnDelete(DeleteBehavior.Restrict);
 
-			builder.HasIndex(x => x.Code).IsUnique();
-			builder.HasIndex(x => x.Name);
+			// Indexes
+			builder.HasIndex(d => d.Code).IsUnique();
 
-			builder.HasOne(d => d.ManagerUser)
-				.WithMany()                
-				.HasForeignKey(d => d.ManagerUserId)
-				.OnDelete(DeleteBehavior.Restrict);
+			builder.Navigation(d => d.Users).UsePropertyAccessMode(PropertyAccessMode.Field);
+			builder.Navigation(d => d.Children).UsePropertyAccessMode(PropertyAccessMode.Field);
+			builder.Navigation(d => d.Managers).UsePropertyAccessMode(PropertyAccessMode.Field);
 
-			builder.HasOne(e => e.CreatedByUser)
-				.WithMany()
-				.HasForeignKey(e => e.CreatedByUserId)
-				.OnDelete(DeleteBehavior.Restrict);
-
-			builder.HasOne(e => e.ModifiedByUser)
-				.WithMany()
-				.HasForeignKey(e => e.ModifiedByUserId)
-				.OnDelete(DeleteBehavior.Restrict);
-
-			builder.HasOne(e => e.DeletedByUser)
-				.WithMany()
-				.HasForeignKey(e => e.DeletedByUserId)
-				.OnDelete(DeleteBehavior.Restrict);
-
-			builder.HasIndex(e => e.CreatedByUserId);
-			builder.HasIndex(e => e.ModifiedByUserId);
-			builder.HasIndex(e => e.DeletedByUserId);
+			ConfigureAuditUsers(builder);
 		}
 	}
 }

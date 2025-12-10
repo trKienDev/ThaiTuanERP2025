@@ -1,0 +1,19 @@
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ThaiTuanERP2025.Domain.Finance.Entities;
+using ThaiTuanERP2025.Domain.Finance.Repositories;
+using ThaiTuanERP2025.Infrastructure.Shared.Repositories;
+using ThaiTuanERP2025.Infrastructure.Persistence;
+
+namespace ThaiTuanERP2025.Infrastructure.Finance.Repositories
+{
+	public class CashoutCodeWriteRepository : BaseWriteRepository<CashoutCode>, ICashoutCodeWriteRepository
+	{
+		public CashoutCodeWriteRepository(ThaiTuanERP2025DbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider) { }
+	}
+}

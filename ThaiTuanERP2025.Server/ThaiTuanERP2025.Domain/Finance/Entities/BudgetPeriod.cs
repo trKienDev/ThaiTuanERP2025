@@ -1,72 +1,92 @@
-﻿using ThaiTuanERP2025.Domain.Account.Entities;
-using ThaiTuanERP2025.Domain.Common;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using ThaiTuanERP2025.Domain.Shared;
+using ThaiTuanERP2025.Domain.Shared.Entities;
+using ThaiTuanERP2025.Domain.Exceptions;
+using ThaiTuanERP2025.Domain.Finance.Events;
 
 namespace ThaiTuanERP2025.Domain.Finance.Entities
 {
 	public class BudgetPeriod : AuditableEntity
 	{
-		private BudgetPeriod( ) { }
-		public BudgetPeriod (int year, int month, DateTime startDate, DateTime endDate) {
-			this.Year = year;
-			this.Month = month;
-			this.StartDate = startDate;
-			this.EndDate = endDate;
-			this.IsActive = true;
-		}
+		#region Constructors
+		private BudgetPeriod() { }
+		public BudgetPeriod(int year, int month, DateOnly startDate, DateOnly endDate)
+		{
+			Guard.AgainstOutOfRange(year, 2000, 2100, nameof(year));
+			Guard.AgainstOutOfRange(month, 1, 12, nameof(month));
+			Guard.AgainstInvalidDateRange(startDate, endDate, nameof(BudgetPeriod));
 
+			Id = Guid.NewGuid();
+			Year = year;
+			Month = month;
+			StartDate = startDate;
+			EndDate = endDate;
+
+			AddDomainEvent(new BudgetPeriodCreatedEvent(this));
+		}
+		#endregion
+
+		#region Properties
 		public int Year { get; private set; }
 		public int Month { get; private set; }
-		public DateTime StartDate { get; private set; }
-		public DateTime EndDate { get; private set; }
-		public bool IsActive { get; private set; } = true;
+		public DateOnly StartDate { get; private set; }
+		public DateOnly EndDate { get; private set; }
 
-		public ICollection<BudgetPlan> BudgetPlans { get; set; } = new List<BudgetPlan>();
+                [NotMapped]
+                public bool IsActive
+                {
+                        get
+                        {
+                                var today = DateOnly.FromDateTime(DateTime.UtcNow);
+                                return today >= StartDate && today <= EndDate;
+                        }
+                }
 
-		public User CreatedByUser { get; set; } = null!;
-		public User? ModifiedByUser { get; set; }
-		public User? DeletedByUser { get; set; }
+                public ICollection<BudgetPlan> BudgetPlans { get; private set; } = new List<BudgetPlan>();
+		#endregion
 
-		public void AddBudgetPlan(BudgetPlan plan)
+		#region Domain Behaviors
+		internal void AddBudgetPlan(BudgetPlan plan)
 		{
-			if (plan == null)
-				throw new ArgumentNullException(nameof(plan));
+			Guard.AgainstNull(plan, nameof(plan));
 
-			// Đảm bảo BudgetPlan phải thuộc cùng BudgetPeriod
-			if (plan.BudgetPeriodId != this.Id)
-				plan.AssignToPeriod(this.Id);
+			if (plan.BudgetPeriodId != Id)
+				plan.AssignToPeriod(Id);
 
-			// (Tùy chọn) kiểm tra trùng Department + BudgetCode
 			bool exists = BudgetPlans.Any(
-				x => x.DepartmentId == plan.DepartmentId && x.BudgetCodeId == plan.BudgetCodeId
-			);
+				x => x.DepartmentId == plan.DepartmentId 			);
 
 			if (exists)
-				throw new InvalidOperationException(
-				    $"Phòng ban đã có kế hoạch ngân sách cho mã ngày sách trong kỳ này.");
+				throw new DomainException("Phòng ban đã có kế hoạch ngân sách cho mã ngân sách trong kỳ này.");
 
 			BudgetPlans.Add(plan);
+			AddDomainEvent(new BudgetPlanAddedToPeriodEvent(this, plan));
 		}
 
-		public void RemoveBudgetPlan(Guid budgetPlanId)
+		internal void RemoveBudgetPlan(Guid budgetPlanId)
 		{
 			var plan = BudgetPlans.FirstOrDefault(x => x.Id == budgetPlanId)
 			    ?? throw new KeyNotFoundException("Không tìm thấy kế hoạch ngân sách.");
 
 			BudgetPlans.Remove(plan);
+			AddDomainEvent(new BudgetPlanRemovedFromPeriodEvent(this, plan));
 		}
 
-		public void SetStartDate(DateTime startDate) {
+		internal void SetStartDate(DateOnly startDate)
+		{
 			if (startDate > EndDate)
-				throw new InvalidOperationException("Ngày bắt đầu không thể lớn hơn ngày kết thúc.");
+				throw new DomainException("Ngày bắt đầu không thể lớn hơn ngày kết thúc.");
 			StartDate = startDate;
-		}
-		public void SetEndDate(DateTime endDate) {
-			if (endDate < StartDate)
-				throw new InvalidOperationException("Ngày kết thúc không thể trước ngày bắt đầu.");
-			EndDate = endDate;
+			AddDomainEvent(new BudgetPeriodUpdatedEvent(this));
 		}
 
-		public void DeactiveBudgetPeriod() => IsActive = false;
-		public void ActivateBudgetPeriod() => IsActive = true;
+		internal void SetEndDate(DateOnly endDate)
+		{
+			if (endDate < StartDate)
+				throw new DomainException("Ngày kết thúc không thể trước ngày bắt đầu.");
+			EndDate = endDate;
+			AddDomainEvent(new BudgetPeriodUpdatedEvent(this));
+		}
+		#endregion
 	}
 }

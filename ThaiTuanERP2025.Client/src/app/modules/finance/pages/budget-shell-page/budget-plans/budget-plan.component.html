@@ -1,0 +1,87 @@
+<div class="page-container">
+      <div class="page-heading">
+            <div class="page-title">
+                  <h3 class="icon">⚖️</h3>
+                  <h3 class="title">Kế hoạch ngân sách</h3>
+            </div>
+            <div class="display-flex gap-10px">
+                  <div class="">
+                        <form class="display-flex gap-10px height-100pt" [formGroup]="periodForm">
+                              <div class="display-flex gap-5px align-items-center">
+                                    <label for="period-year">Năm</label>
+                                    <select class="select height-100pt" id="period-year" formControlName="year">
+                                          <option class="option" *ngFor="let y of (years$ | async) ?? []" [ngValue]="y">
+                                                {{ y }}
+                                          </option>
+                                    </select>
+                              </div>
+                              <div class="display-flex gap-5px align-items-center">
+                                    <label for="period-month">Tháng</label>
+                                    <select class="select height-100pt" id="period-month" formControlName="month">
+                                          <option class="option" *ngFor="let m of (months$ | async) ?? []" [ngValue]="m">
+                                                Tháng {{ m }}
+                                          </option>
+                                    </select>
+                              </div>
+                        </form>
+                  </div>
+                  <ng-container *appHasPermission="'budget-approver.create'">
+                        <button type="button" class="button default-button" (click)="openBudgetPlanApproversDialog();">Thêm người duyệt ngân sách</button>
+                  </ng-container>
+                  <button type="button" class="button default-button" (click)="openListBudgetApproverDialog();">Danh sách user duyệt ngân sách</button>
+            </div>
+      </div>
+      <div class="page-body">
+            <table class="table">
+                  <thead>
+                        <tr>
+                              <th>#</th>
+                              <th>Phòng ban</th>
+                              <th>Kỳ ngân sách</th>
+                              <th>Mã ngân sách</th>
+                              <th>Tổng tiền</th>
+                              <th>Trạng thái</th>
+                              <th>Chi tiết</th>
+                              <th>Ngày tạo</th>
+                        </tr>
+                  </thead>
+                  <tbody>
+                        <ng-container *ngIf="budgetPlans.length > 0">
+                              <tr *ngFor="let plans of budgetPlans; trackBy: trackById; let i = index;">
+                                    <td>{{ i + 1 }}</td>
+                                    <td>
+                                          <a class="link-text" (click)="openBudgetPlanDetailDialog(plans)">
+                                                {{ plans.department.name }}
+                                          </a>
+                                    </td>
+                                    <td>T{{ plans.budgetPeriod.month }} - {{ plans.budgetPeriod.year }}</td>
+                                    <td>
+                                          <select class="select" name="" id="">
+                                                <option class="option" *ngFor="let detail of plans.details">
+                                                      {{ detail.budgetCode.code }} - {{ detail.budgetCode.name }}
+                                                </option>
+                                          </select>
+                                    </td>
+                                    <td>{{ plans.totalAmount | number: '1.0-0' }} VNĐ</td>
+                                    <td>
+                                          <div class="label-status" [@statusChangeFade]="plans.status">
+                                                <span class="label-status-badge" [ngClass]="(plans.status | budgetPlanStatus).class">
+                                                      {{ (plans.status | budgetPlanStatus).text }}
+                                                </span>
+                                          </div>
+                                    </td>
+                                    <td>
+                                          <div class="display-flex justify-content-center">
+                                                <button type="button" class="button default-button padding-5px" (click)="openBudgetPlanDetailDialog(plans)">Chi tiết</button>
+                                          </div>
+                                    </td>
+                                    <td>{{ plans.createdAt | date:'dd/MM/yyyy' }}</td>
+                              </tr>
+                        </ng-container> 
+                        <ng-container *ngIf="budgetPlans.length === 0">
+                              <td colspan="10" class="text-center">Không có dữ liệu.</td>
+                        </ng-container>
+                  </tbody>
+            </table>
+      </div>
+</div>

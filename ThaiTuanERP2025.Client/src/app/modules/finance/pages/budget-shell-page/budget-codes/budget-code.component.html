@@ -1,0 +1,32 @@
+<button *appHasPermission="'budget-group.create'" class="button default-button" (click)="openNewBudgetCodeDialog()">Thêm ngân sách</button>
+<table class=" table table-budget-codes margin-top-20px">
+      <thead>
+            <tr>
+                  <th>Nhóm ngân sách</th>
+                  <th>Mã ngân sách</th>
+                  <th>Tên ngân sách</th>
+                  <th class="text-align-center">Hiệu lực</th>
+            </tr>
+      </thead>
+      <tbody>
+            <tr *ngFor="let budgetCode of budgetCodes" [ngClass]="{ 'inactive-budget-code': !budgetCode.isActive}">
+                  <td>{{ budgetCode.budgetGroupName }}</td>
+                  <td>{{ budgetCode.code }}</td>
+                  <td>
+                        {{ budgetCode.name }}
+                        <span class="user-select-none" *ngIf="!budgetCode.isActive" matTooltip="Hết hiệu lực" matTooltipClass="font-lexend">🔒</span>
+                  </td>
+                  <td>
+                        <div class="display-flex justify-content-center">
+                               <label class="switch-1">
+                                    <input type="checkbox" [checked]="budgetCode.isActive" disabled>
+                                    <span class="slider"></span>
+                              </label>
+                        </div>
+                  </td>
+            </tr>
+            <tr *ngIf="budgetCodes.length === 0">
+                  <td colspan="6" class="text-center text-muted">Không có dữ liệu</td>
+            </tr>
+      </tbody>
+</table>

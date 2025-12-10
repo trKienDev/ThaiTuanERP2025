@@ -1,0 +1,34 @@
+<button *appHasPermission="'department.create'" type="button" class="button default-button" (click)="openDeparmentRequestDialog()">Tạo phòng ban mới</button>
+
+<table class="table margin-top-20px">
+      <thead>
+            <tr>
+                  <th>#</th>
+                  <th>Mã phòng ban</th>
+                  <th>Tên phòng ban</th>
+                  <th>Trường bộ phận</th>
+                  <th *appHasPermission="'department.actions'" class="text-align-center">Hành động</th>
+            </tr>
+      </thead>
+      <tbody>
+            <tr *ngFor="let dept of (departments$ | async) ?? []; trackBy: trackById; let i = index;">
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ dept.code }}</td>
+                  <td>{{ dept.name }}</td>
+                  <td>
+                        <ng-container *ngIf="dept.primaryManager">
+                              <div class="display-flex justify-content-center align-items-center gap-5px"> 
+                                    <img class="avatar-user" [src]="(dept.primaryManager | avatarUrlPipe)" alt="">
+                                    <span>{{ dept?.primaryManager?.fullName }}</span>
+                              </div>
+                        </ng-container>
+                  </td>
+                  <td *appHasPermission="'department.actions'" class="display-flex justify-content-center">
+                        <kit-action-menu [actions]="buildDepartmentActions(dept)"></kit-action-menu>
+                  </td>
+            </tr>
+            <tr *ngIf="(departments$ | async)?.length === 0">
+                  <td colspan="5" class="text-center">Không có dữ liệu.</td>
+            </tr>
+      </tbody>
+</table>

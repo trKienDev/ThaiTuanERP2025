@@ -1,38 +1,35 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ThaiTuanERP2025.Domain.Account.Entities;
+using ThaiTuanERP2025.Infrastructure.Persistence.Configurations;
 
 namespace ThaiTuanERP2025.Infrastructure.Account.Configurations
 {
-	public class UserGroupConfiguration : IEntityTypeConfiguration<UserGroup>
+	public class UserGroupConfiguration : BaseEntityConfiguration<UserGroup>
 	{
-		public void Configure(EntityTypeBuilder<UserGroup> builder)
+		public override void Configure(EntityTypeBuilder<UserGroup> builder)
 		{
-			builder.ToTable("UserGroup", "Core");
-			builder.HasKey(ug => new { ug.UserId, ug.GroupId });
-			builder.HasOne(ug => ug.User).WithMany(u => u.UserGroups).HasForeignKey(ug => ug.UserId);
-			builder.HasOne(ug => ug.Group).WithMany(g => g.UserGroups).HasForeignKey(ug => ug.GroupId);
+			builder.ToTable("UserGroups", "Account");
 
-			builder.HasIndex(x =>  x.UserId);
-			builder.HasIndex(x => x.GroupId);
+			builder.HasKey(ug => ug.Id);
 
-			builder.HasOne(e => e.CreatedByUser)
-				.WithMany()
-				.HasForeignKey(e => e.CreatedByUserId)
-				.OnDelete(DeleteBehavior.Restrict);
-			builder.HasIndex(e => e.CreatedByUserId);
+			builder.Property(ug => ug.JoinedAt).IsRequired();
+			builder.Property(ug => ug.IsActive).HasDefaultValue(true);
 
-			builder.HasOne(e => e.ModifiedByUser)
-				.WithMany()
-				.HasForeignKey(e => e.ModifiedByUserId)
-				.OnDelete(DeleteBehavior.Restrict);
-			builder.HasIndex(e => e.ModifiedByUserId);
+			// Relations
+			builder.HasOne(ug => ug.User)
+				.WithMany(u => u.UserGroups)
+				.HasForeignKey(ug => ug.UserId)
+				.OnDelete(DeleteBehavior.NoAction);
 
-			builder.HasOne(e => e.DeletedByUser)
-				.WithMany()
-				.HasForeignKey(e => e.DeletedByUserId)
-				.OnDelete(DeleteBehavior.Restrict);
-			builder.HasIndex(e => e.DeletedByUserId);
+			builder.HasOne(ug => ug.Group)
+				.WithMany(g => g.UserGroups)
+				.HasForeignKey(ug => ug.GroupId)
+				.OnDelete(DeleteBehavior.NoAction);
+
+			builder.HasIndex(ug => new { ug.UserId, ug.GroupId }).IsUnique();
+
+			ConfigureAuditUsers(builder);
 		}
 	}
 }

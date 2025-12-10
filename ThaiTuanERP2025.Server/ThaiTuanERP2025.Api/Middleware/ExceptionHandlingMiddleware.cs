@@ -2,10 +2,10 @@
 using Microsoft.Extensions.Options;
 using System.Net;
 using System.Text.Json;
-using ThaiTuanERP2025.Api.Common;
+using ThaiTuanERP2025.Api.Shared;
+using ThaiTuanERP2025.Application.Shared.Exceptions;
 using ThaiTuanERP2025.Domain.Exceptions;
 using FVValidationException = FluentValidation.ValidationException;
-using DomainValidationException = ThaiTuanERP2025.Domain.Exceptions.ValidationException;
 
 namespace ThaiTuanERP2025.Api.Middleware
 {
@@ -51,14 +51,17 @@ namespace ThaiTuanERP2025.Api.Middleware
 					statusCode = ce.StatusCode;
 					message = ce.Message;
 					break;
-				case DomainValidationException dv:
+				case ValidationException dv:
 					statusCode = 422; // Unprocessable Entity
 					message = "Dữ liệu không hợp lệ";
-					errors = dv.Errors?.SelectMany(kv => kv.Value ?? Array.Empty<string>()).ToArray();
 					break;
 				case AppException appEx:
 					statusCode = appEx.StatusCode;
 					message = appEx.Message;
+					break;
+				case DomainException de:
+					statusCode = StatusCodes.Status400BadRequest;
+					message = de.Message;
 					break;
 				case FVValidationException fv:
 					statusCode = (int)HttpStatusCode.BadRequest;

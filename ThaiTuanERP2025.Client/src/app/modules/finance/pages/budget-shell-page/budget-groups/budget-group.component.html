@@ -1,0 +1,60 @@
+<div class="page-container">
+      <div class="page-heading">
+            <div class="page-title">
+                  <h3 class="icon">🧮</h3>
+                  <h3 class="title">Nhóm ngân sách</h3>
+            </div>
+      </div>
+      <div class="page-body">
+            <div *appHasPermission="'budget-group.create'" class="primary-card" style="width: 35%;">
+                  <div class="card-wrapper">
+                        <div class="card-header">
+                              <div class="card-title">Thêm nhóm ngân sách</div>
+                        </div>
+                        <div class="card-body">
+                              <form class="display-flex gap-10px align-flex-start" [formGroup]="form" (ngSubmit)="createBudgetGroup()">
+                                    <div class="form-input" style="width: 30%;">
+                                          <input type="text" formControlName="code" autocomplete="on" required
+                                          [class.is-invalid]="showErrors && form.get('code')?.invalid"
+                                          [attr.aria-invalid]="showErrors && form.get('code')?.invalid ? 'true' : null" />
+                                          <label for="name">Mã <span style="color: red;">  *</span></label>
+                                          <div class="form-input-error" *ngIf="showErrors && form.get('code')?.invalid">
+                                                <small>Vui lòng nhập mã</small>
+                                          </div>
+                                    </div>
+                                    <div class="form-input" style="width: 60%;">
+                                          <input class="" type="text" formControlName="name" autocomplete="on" required
+                                          [class.is-invalid]="showErrors && form.get('name')?.invalid"
+                                           [attr.aria-invalid]="showErrors && form.get('name')?.invalid ? 'true' : null" />
+                                          <label for="name">Tên <span style="color: red;">  *</span></label>
+                                          <div class="form-input-error" *ngIf="showErrors && form.get('name')?.invalid" >
+                                                <small>Vui lòng nhập tên</small>
+                                          </div>
+                                    </div>
+                                    <kit-spinner-button type="submit" cssClass="save-button height-100pt border-transparent" [loading]="submitting" [disabled]="submitting" text="Lưu" [loadingText]="''" style="width: 10%;"></kit-spinner-button>
+                              </form>
+                        </div>
+                  </div>
+            </div>
+
+            <table class="table margin-top-20px">
+                  <thead>
+                        <tr>
+                              <th>#</th>
+                              <th>Mã nhóm ngân sách</th>
+                              <th>Tên nhóm ngân sách</th>
+                        </tr>
+                  </thead>
+                  <tbody *ngIf="(budgetGroups$ | async) as items">
+                        <tr *ngFor="let bg of items ?? []; trackBy: trackById; let i = index">
+                              <td>{{ i + 1}}</td>
+                              <td>{{ bg.code }}</td>
+                              <td>{{ bg.name }}</td>
+                        </tr>
+                        <tr *ngIf="items.length === 0">
+                              <td colspan="2" class="text-center">Không có dữ liệu.</td>
+                        </tr>
+                  </tbody>
+            </table>
+      </div>
+</div>

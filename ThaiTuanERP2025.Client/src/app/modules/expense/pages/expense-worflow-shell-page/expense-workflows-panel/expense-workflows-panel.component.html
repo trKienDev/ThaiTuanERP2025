@@ -1,0 +1,50 @@
+<div class="page-container">
+      <div class="page-heading">
+            <div class="page-title">
+                  <h3 class="title">Danh sách luồng duyệt</h3>
+            </div>
+            <div>
+                  <button *appHasPermission="'expense-workflow-template.create'" type="button" class="button default-button" (click)="redirectToCreateExpenseWorkflowRequestTemplatePanel()">Tạo luồng duyệt mới</button>
+            </div>
+      </div>
+      <div class="page-body">
+            <table class="table">
+                  <thead>
+                        <tr>
+                              <th>#</th>
+                              <th>Tên</th>
+                              <th class="text-align-center">Hiệu lực</th>
+                              <th class="text-align-center" *appHasPermission="'expense-workflow-template.create'">Hành động</th>
+                        </tr>
+                  </thead>
+                  <tbody>
+                        <ng-container *ngIf="expenseWorkflowTemplates.length > 0">
+                              <ng-container *ngFor="let workflow of expenseWorkflowTemplates; let i = index">
+                                    <tr>
+                                          <td>{{ i + 1 }}</td>
+                                          <td>{{ workflow.name }}</td>
+                                          <td>
+                                                <div class="display-flex justify-content-center">
+                                                      <label class="switch-1">
+                                                            <input type="checkbox" [checked]="workflow.isActive" disabled>
+                                                            <span class="slider"></span>
+                                                      </label>
+                                                </div>
+                                          </td>
+                                          <td *appHasPermission="'expense-workflow-template.create'">
+                                                <div class="display-flex justify-content-center">
+                                                      <kit-action-menu [actions]="buildExpenseWorkflowTemplateActions(i)"></kit-action-menu>
+                                                </div>
+                                          </td>
+                                    </tr>
+                              </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="expenseWorkflowTemplates.length === 0">
+                              <tr>  
+                                    <td colspan="4" class="text-align-center">Không có dữ liệu</td>
+                              </tr>
+                        </ng-container>
+                  </tbody>
+            </table>
+      </div>
+</div>

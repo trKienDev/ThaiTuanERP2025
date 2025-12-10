@@ -1,37 +1,36 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ThaiTuanERP2025.Domain.Finance.Entities;
+using ThaiTuanERP2025.Infrastructure.Persistence.Configurations;
 
 namespace ThaiTuanERP2025.Infrastructure.Finance.Configurations
 {
-	public class BudgetGroupConfiguration : IEntityTypeConfiguration<BudgetGroup>
+	public class BudgetGroupConfiguration : BaseEntityConfiguration<BudgetGroup>
 	{
-		public void Configure(EntityTypeBuilder<BudgetGroup> builder) {
+		public override void Configure(EntityTypeBuilder<BudgetGroup> builder)
+		{
 			builder.ToTable("BudgetGroup", "Finance");
 			builder.HasKey(x => x.Id);
 
-			builder.HasIndex(e => e.Code).IsUnique();
-			builder.Property(e => e.Code).IsRequired().HasMaxLength(50);
-			builder.Property(e => e.Name).IsRequired().HasMaxLength(255);
+			// ===== Basic properties =====
+			builder.Property(x => x.Code).HasMaxLength(50).IsRequired();
+			builder.Property(x => x.Name).HasMaxLength(200).IsRequired();
 
-			// Audit User
-			builder.HasOne(e => e.CreatedByUser)
-				.WithMany()
-				.HasForeignKey(e => e.CreatedByUserId)
-				.OnDelete(DeleteBehavior.Restrict);
-			builder.HasIndex(e => e.CreatedByUserId);
+			// ===== Navigation BudgetCodes (private field) =====
+			builder.Navigation(nameof(BudgetGroup.BudgetCodes))
+				.UsePropertyAccessMode(PropertyAccessMode.Field); // EF truy cập private field
 
-			builder.HasOne(e => e.ModifiedByUser)
-				.WithMany()
-				.HasForeignKey(e => e.ModifiedByUserId)
-				.OnDelete(DeleteBehavior.Restrict);
-			builder.HasIndex(e => e.ModifiedByUserId);
+			builder.HasMany(typeof(BudgetCode), nameof(BudgetGroup.BudgetCodes))
+				.WithOne(nameof(BudgetCode.BudgetGroup))
+				.HasForeignKey(nameof(BudgetCode.BudgetGroupId))
+				.OnDelete(DeleteBehavior.Cascade); // Khi xóa nhóm, xóa luôn các code thuộc nhóm đó
 
-			builder.HasOne(e => e.DeletedByUser)
-				.WithMany()
-				.HasForeignKey(e => e.DeletedByUserId)
-				.OnDelete(DeleteBehavior.Restrict);
-			builder.HasIndex(e => e.DeletedByUserId);
+			// ===== Indexes =====
+			builder.HasIndex(x => x.Code).IsUnique(); // Mã nhóm ngân sách phải duy nhất
+			builder.HasIndex(x => x.Name);
+
+			// Auditable
+			ConfigureAuditUsers(builder);
 		}
 	}
 }

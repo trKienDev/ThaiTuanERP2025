@@ -1,0 +1,53 @@
+﻿using ThaiTuanERP2025.Application.Shared.Interfaces;
+using ThaiTuanERP2025.Api.Hubs;
+using Microsoft.AspNetCore.SignalR;
+
+
+namespace ThaiTuanERP2025.Infrastructure.Realtime
+{
+	public sealed class SignalRealtimeNotifier : IRealtimeNotifier
+	{
+		private readonly IHubContext<NotificationsHub> _hub;
+		public SignalRealtimeNotifier(IHubContext<NotificationsHub> hub)
+		{
+			_hub = hub;
+		}
+
+		#region Notification
+		public async Task PushNotificationsAsync(IEnumerable<Guid> userIds, IEnumerable<object> payloads, CancellationToken cancellationToken = default)
+		{
+			var ids = userIds.Select(u => u.ToString()).ToArray();
+			if (!ids.Any() || !payloads.Any()) return;
+
+			await _hub.Clients.Users(ids).SendAsync("ReceiveNotification", payloads, cancellationToken);
+		}
+
+		public async Task PushNotificationReadAsync(Guid notificationId, Guid receiverId,DateTime readAt, CancellationToken cancellationToken)
+		{
+			await _hub.Clients.User(receiverId.ToString())
+				.SendAsync("notificationRead", new {
+					id = notificationId,
+					readAt = readAt
+				}, 
+				cancellationToken
+			);
+		}
+
+		#endregion
+
+		#region Reminder
+		public async Task PushRemindersAsync(IEnumerable<Guid> userIds, IEnumerable<object> payloads, CancellationToken cancellationToken = default)
+		{
+			var ids = userIds.Select(u => u.ToString()).ToArray();
+			if (!ids.Any() || !payloads.Any()) return;
+
+			await _hub.Clients.Users(ids).SendAsync("ReceiveReminder", payloads, cancellationToken);
+		}
+		public async Task PushReminderResolvedAsync(Guid userId, Guid reminderId, CancellationToken cancellationToken)
+		{
+			await _hub.Clients.User(userId.ToString())
+				.SendAsync("ResolveReminder", new[] { reminderId.ToString() }, cancellationToken);
+		}
+		#endregion
+	}
+}

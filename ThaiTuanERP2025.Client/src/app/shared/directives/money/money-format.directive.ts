@@ -17,7 +17,7 @@ export class MoneyFormatDirective implements ControlValueAccessor {
       private onTouched: () => void = () => {};
       private disabled = false;
 
-      constructor(private element: ElementRef<HTMLInputElement>) {}
+      constructor(private readonly element: ElementRef<HTMLInputElement>) {}
 
       // ===== ControlValueAccessor =====
       writeValue(value: any): void {

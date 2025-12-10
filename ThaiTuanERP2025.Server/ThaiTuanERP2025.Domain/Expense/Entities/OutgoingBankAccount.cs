@@ -1,50 +1,78 @@
-﻿using ThaiTuanERP2025.Domain.Account.Entities;
-using ThaiTuanERP2025.Domain.Common;
+﻿using ThaiTuanERP2025.Domain.Shared;
+using ThaiTuanERP2025.Domain.Shared.Entities;
+using ThaiTuanERP2025.Domain.Expense.Events.OutgoingBankAccounts;
+using ThaiTuanERP2025.Domain.Shared.Interfaces;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
-	public class OutgoingBankAccount : AuditableEntity
+	public class OutgoingBankAccount : AuditableEntity, IActiveEntity
 	{
-		private OutgoingBankAccount() { } // EF
+		#region Constructors
+		private OutgoingBankAccount() { } 
 		public OutgoingBankAccount(string name, string bankName, string accountNumber, string ownerName)
 		{
+			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
+			Guard.AgainstNullOrWhiteSpace(bankName, nameof(bankName));
+			Guard.AgainstNullOrWhiteSpace(accountNumber, nameof(accountNumber));
+			Guard.AgainstNullOrWhiteSpace(ownerName, nameof(ownerName));
+
 			Id = Guid.NewGuid();
-			Name = name;
-			BankName = bankName.Trim();
-			AccountNumber = accountNumber.Trim();
-			OwnerName = ownerName.Trim();
-		}
-
-		public string Name { get; set; } = null!;
-		public string BankName { get; set; } = null!;
-		public string AccountNumber { get; set; } = null!;
-		public string OwnerName { get; set; } = null!; // Tên chủ tài khoản
-		public bool IsActive { get; set; } = true;
-
-		public User CreatedByUser { get; set; } = null!;
-		public User? ModifiedByUser { get; set; }
-		public User? DeletedByUser { get; set; }
-
-		public void setName(string name)
-		{
-			if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Tên không được để trống");
 			Name = name.Trim();
-		}
-
-		public void SetOutgoingBankAccount(string bankName, string accountNumber, string ownerName)
-		{
 			BankName = bankName.Trim();
 			AccountNumber = accountNumber.Trim();
 			OwnerName = ownerName.Trim();
+			IsActive = true;
+
+			AddDomainEvent(new OutgoingBankAccountCreatedEvent(this));
+		}
+		#endregion
+
+		#region Properties
+		public string Name { get; private set; } = null!;
+		public string BankName { get; private set; } = null!;
+		public string AccountNumber { get; private set; } = null!;
+		public string OwnerName { get; private set; } = null!;
+		public bool IsActive { get; private set; } = true;
+		#endregion
+
+		#region Domain Behaviors
+		public void SetName(string name)
+		{
+			Guard.AgainstNullOrWhiteSpace(name, nameof(name));
+			Name = name.Trim();
+			AddDomainEvent(new OutgoingBankAccountUpdatedEvent(this));
+		}
+
+		public void UpdateBankInfo(string bankName, string accountNumber, string ownerName)
+		{
+			Guard.AgainstNullOrWhiteSpace(bankName, nameof(bankName));
+			Guard.AgainstNullOrWhiteSpace(accountNumber, nameof(accountNumber));
+			Guard.AgainstNullOrWhiteSpace(ownerName, nameof(ownerName));
+
+			BankName = bankName.Trim();
+			AccountNumber = accountNumber.Trim();
+			OwnerName = ownerName.Trim();
+
+			AddDomainEvent(new OutgoingBankAccountUpdatedEvent(this));
+		}
+
+		public void Activate()
+		{
+			if (!IsActive)
+			{
+				IsActive = true;
+				AddDomainEvent(new OutgoingBankAccountActivatedEvent(this));
+			}
 		}
 
 		public void Deactivate()
 		{
-			IsActive = false;
+			if (IsActive)
+			{
+				IsActive = false;
+				AddDomainEvent(new OutgoingBankAccountDeactivatedEvent(this));
+			}
 		}
-		public void Activate()
-		{
-			IsActive = true;
-		}	
+		#endregion
 	}
 }

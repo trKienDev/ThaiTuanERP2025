@@ -1,0 +1,49 @@
+<div class="page-container">
+      <div class="page-heading">
+            <div class="page-title">
+                  <h3 class="icon">🪪</h3>
+                  <h3 class="title">Tài khoản tiền ra</h3>
+            </div>
+            <div class="actions">
+                  <button *appHasPermission="'outgoing-bank-account.create'" class="button default-button" (click)="openNewOutgoingBankAccountDialog()">Thêm Tài khoản tiền ra</button>
+            </div>
+      </div>
+      <div class="page-body">
+            <table class="table margin-top-20px">
+                  <thead>
+                        <tr>
+                              <th>#</th>
+                              <th>Tên tài khoản ra</th>
+                              <th>Ngân hàng</th>
+                              <th>Số tài khoản</th>
+                              <th>Chủ tài khoản</th>
+                              <th>Hiệu lực</th>
+                        </tr>
+                  </thead>
+                  <tbody>
+                        <ng-container *ngIf="((outgoingBankAccounts$ | async)?.length ?? 0) > 0">
+                              <tr *ngFor="let account of (outgoingBankAccounts$ | async) ?? []; trackBy: trackById; let i = index;">
+                                    <td>{{ i + 1 }}</td>
+                                    <td>{{ account.name }}</td>
+                                    <td>{{ account.bankName }}</td>
+                                    <td>{{ account.accountNumber }}</td>
+                                    <td>{{ account.ownerName }}</td>
+                                    <td>
+                                          <div class="display-flex justify-content-center">
+                                                <label class="switch-1">
+                                                      <input type="checkbox" [checked]="account.isActive" disabled>
+                                                      <span class="slider"></span>
+                                                </label>
+                                          </div>
+                                    </td>
+                              </tr>
+                        </ng-container>
+                        <ng-container *ngIf="((outgoingBankAccounts$ | async)?.length ?? 0) === 0">
+                              <tr>
+                                    <td colspan="5" class="text-center">Không có tài khoản tiền ra nào</td>
+                              </tr>
+                        </ng-container>
+                  </tbody>
+            </table>
+      </div>
+</div>
