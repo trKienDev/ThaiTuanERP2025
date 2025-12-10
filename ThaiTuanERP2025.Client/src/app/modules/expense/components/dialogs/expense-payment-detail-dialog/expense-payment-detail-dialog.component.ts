@@ -358,6 +358,7 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
                         attachmentIds: uploadedIds.length ? uploadedIds : undefined,
                         mentionIds: mentionIds.length ? mentionIds : undefined
                   };
+                  console.log('payload: ', payload);
 
                   const newReply = await firstValueFrom(this.commentApi.reply(parentId, payload));
 

@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using MediatR;
+using ThaiTuanERP2025.Application.Account.Users.Repositories;
 using ThaiTuanERP2025.Application.Core.Comments.Contracts;
 using ThaiTuanERP2025.Application.Shared.Exceptions;
 using ThaiTuanERP2025.Application.Shared.Interfaces;
@@ -15,11 +16,13 @@ namespace ThaiTuanERP2025.Application.Core.Comments.Commands
                 private readonly IUnitOfWork _uow;
                 private readonly ICommentReadRepository _commentRepo;
                 private readonly ICurrentUserService _currentUser;
-                public ReplyCommentCommandHandler(IUnitOfWork uow, ICommentReadRepository commentRepo, ICurrentUserService currentUser)
+                private readonly IUserReadRepostiory _userRepo;
+                public ReplyCommentCommandHandler(IUnitOfWork uow, ICommentReadRepository commentRepo, ICurrentUserService currentUser, IUserReadRepostiory userRepo)
                 {
                         _uow = uow;
                         _commentRepo = commentRepo;
                         _currentUser = currentUser;
+                        _userRepo = userRepo;
                 }
 
                 public async Task<CommentDetailDto> Handle(ReplyCommentCommand command, CancellationToken cancellationToken)
@@ -48,7 +51,25 @@ namespace ThaiTuanERP2025.Application.Core.Comments.Commands
                         );
                         await _uow.Comments.AddAsync(reply, cancellationToken);
 
-                        parentComment.AddReply(reply);
+			#region Attachments
+                        if(payload.AttachmentIds.Any())
+                        {
+                                reply.AddAttachments(payload.AttachmentIds);
+                        }
+			#endregion
+
+			#region Mention
+			if (payload.MentionIds.Any())
+                        {
+                                foreach(var id in payload.MentionIds)
+                                {
+                                        var userExist = await _userRepo.ExistAsync(q => q.Id == id && q.IsActive, cancellationToken);
+                                        if(userExist) reply.AddMentions(payload.MentionIds);
+                                }
+                        }
+			#endregion
+
+			parentComment.AddReply(reply);
 
                         await _uow.SaveChangesAsync(cancellationToken);
                         var replyDetail = await _commentRepo.GetDetailById(reply.Id, cancellationToken);

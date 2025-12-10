@@ -69,9 +69,9 @@ namespace ThaiTuanERP2025.Application.Core.Comments.Commands
 				foreach(var id in payload.MentionIds)
 				{
 					var userExist = await _userRepo.ExistAsync(q => q.Id == id && q.IsActive, cancellationToken);
-					if (!userExist) throw new UnauthorizedException("Có một mention user không hợp lệ");
+					if (userExist) newComment.AddMentions(payload.MentionIds);
 				}
-				newComment.AddMentions(payload.MentionIds);
+				
 			}
 				
 			#endregion
