@@ -1,0 +1,31 @@
+<div class="dialog">
+      <div class="dialog-container">
+            <div class="dialog-heading">
+                  <div class="dialog-title">
+                        <h3>Điều chỉnh kích thước avatar của bạn</h3>
+                  </div>
+                  <div class="dialog-exit">
+                        <button type="button" class="exit-button" (click)="close()">
+                              <span class="text material-icons-outlined">close</span>
+                        </button>
+                  </div>
+            </div>
+
+            <div class="dialog-body">
+                  <div class="cropper-wrapper">
+                        <image-cropper
+                              [roundCropper]="true"
+                              [maintainAspectRatio]="true"
+                              [aspectRatio]="1"
+                              [imageChangedEvent]="imageChangedEvent"
+                              format="png"
+                              (imageCropped)="onImageCropped($event)"
+                        ></image-cropper>
+                  </div>
+            </div>
+
+            <div class="dialog-footer margin-top-20px">
+                  <kit-spinner-button type="submit" cssClass="save-button" [loading]="isUploading" text="Cập nhật avatar" [loadingText]="'Đang xử lý ....'" (click)="save()"></kit-spinner-button>
+            </div>
+      </div>
+</div>      

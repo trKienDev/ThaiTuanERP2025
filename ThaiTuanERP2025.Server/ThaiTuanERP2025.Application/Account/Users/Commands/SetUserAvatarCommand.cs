@@ -20,7 +20,7 @@ namespace ThaiTuanERP2025.Application.Account.Users.Commands
 			var file = await _unitOfWork.StoredFiles.GetByIdAsync(request.FileId)
 				?? throw new NotFoundException("File không tồn tại");
 
-			if (file.Module != "account" || file.Entity != "user" || file.EntityId != command.UserId.ToString())
+			if (file.Module != "account" || file.Entity != "user-avatar" || file.EntityId != command.UserId.ToString())
 				throw new ConflictException("File không thuộc về user này");
 
 			var user = await _unitOfWork.Users.GetByIdAsync(command.UserId)

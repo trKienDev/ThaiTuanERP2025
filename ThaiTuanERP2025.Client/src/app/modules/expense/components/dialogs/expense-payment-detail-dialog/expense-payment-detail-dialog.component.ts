@@ -257,7 +257,6 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
                                           'core',
                                           'comment-attachment',
                                           this.paymentId,
-                                          false
                                     )
                               );
                               if (result.data?.id) {
@@ -332,7 +331,6 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
                                           'core',
                                           'comment-attachment',
                                           this.paymentId,
-                                          false
                                     )
                               );
 

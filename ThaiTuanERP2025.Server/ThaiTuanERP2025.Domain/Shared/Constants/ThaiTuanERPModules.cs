@@ -2,6 +2,7 @@
 {
         public sealed class ThaiTuanERPModules
         {
+                public const string Account = "account";
                 public const string Expense = "expense";
                 public const string Finance = "finance";
                 public const string Core = "core";

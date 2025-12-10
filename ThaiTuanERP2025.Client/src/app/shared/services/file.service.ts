@@ -46,13 +46,12 @@ export class FileService {
       }
 
       /** Single upload (không cần progress) – giữ lại nếu chỗ khác đang dùng */
-      uploadFile(file: File, module: string, entity: string, entityId?: string, isPublic = false) {
+      uploadFile(file: File, module: string, entity: string, entityId?: string) {
             const formData = new FormData();
             formData.append("file", file); // <-- field "file"
             formData.append("module", module);
             formData.append("entity", entity);
             if (entityId) formData.append("entityId", entityId);
-            formData.append("isPublic", String(isPublic));
 
             return this.http.post<ApiResponse<UploadFileResult>>(`${this.API_URL}/upload-single`, formData);
       }
