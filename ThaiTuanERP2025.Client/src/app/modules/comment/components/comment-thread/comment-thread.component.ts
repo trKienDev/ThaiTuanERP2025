@@ -10,11 +10,14 @@ import { FilePreviewService, StoredFileMetadataDto } from "../../../files/file-p
 import { MentionHighlightPipe } from "../../pipes/comment-mention-highlight.pipe";
 import { CommentMentionBoxComponent } from "../comment-mention-box/comment-mention-box.component";
 import { KitFileUploaderComponent } from "../../../../shared/components/kit-file-uploader/kit-file-uploader.component";
+import { CommentEditorComponent } from "../comment-editor/comment-editor.component";
+import { DOCUMENT_TYPE, DocumentTypeLiteral } from "../../../../core/constants/document-types.constants";
+import { UploadItem } from "../../../../shared/components/kit-file-uploader/upload-item.model";
 
 @Component({
       selector: 'comment-thread',
       standalone: true,
-      imports: [CommonModule, AvatarUrlPipe, ReactiveFormsModule, KitSpinnerButtonComponent, MentionHighlightPipe, CommentMentionBoxComponent, KitFileUploaderComponent],
+      imports: [CommonModule, AvatarUrlPipe, ReactiveFormsModule, KitSpinnerButtonComponent, MentionHighlightPipe, CommentMentionBoxComponent, KitFileUploaderComponent, CommentEditorComponent],
       templateUrl: './comment-thread.component.html',
       changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -23,9 +26,16 @@ export class CommentThreadComponent {
       @Input() comment!: CommentDetailDto;
       @Input() depth = 0;
       @Input() replyingToCommentId: string | null = null;
+      @Input() replyLoading = false;
+      @Input({ required: true }) documentType!: DocumentTypeLiteral;
       
       @Output() replyRequest = new EventEmitter<string | null>();
-      @Output() submitReply = new EventEmitter<{ parentId: string; content: string }>();
+      @Output() submitReply = new EventEmitter<{
+            parentId: string;
+            content: string;
+            mentionLabels: string[];
+            uploads: UploadItem[];
+      }>();
       @Output() cancelReply = new EventEmitter<void>();
 
       private readonly state = inject(CommentStateService);
@@ -69,15 +79,19 @@ export class CommentThreadComponent {
             this.replyRequest.emit(this.comment.id);
       }
 
-      onSubmitReply() {
-            const content = this.replyControl.value.trim();
-            if (!content) return;
+      onSubmitReply(event: { content: string; mentionLabels: string[]; uploads: UploadItem[] }) {
+            this.submitReply.emit({
+                  parentId: this.comment.id,
+                  content: event.content,
+                  mentionLabels: event.mentionLabels,
+                  uploads: event.uploads
+            });
 
-            this.submitReply.emit({ parentId: this.comment.id, content });
             this.replyControl.setValue('');
       }
 
-      onCancel() {
+      onCancelReply() {
+            this.replyControl.setValue('');
             this.cancelReply.emit();
       }
 

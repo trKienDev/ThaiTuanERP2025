@@ -309,39 +309,61 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
             this.comments = [...this.comments];
       }
       
-      async submitReply(event: { parentId: string; content: string }) {
-            const { parentId, content } = event;
+      async submitReply(event: { parentId: string; content: string; mentionLabels: string[]; uploads: UploadItem[]; }) {
+            const { parentId, content, mentionLabels, uploads } = event;
 
-            const parent = this.findCommentRecursive(this.comments, parentId);
-            if (!parent) {
-                  this.toast.errorRich("Lỗi chương trình, ko tìm thấy comment cha");
-                  return;
-            }
-
-            if (!content) {
-                  this.toast.warningRich("Bạn chưa nhập nội dung phản hồi");
-                  return;
-            }
-            
             try {
                   this.isSubmittingReply = true;
+                  
+                  // 1) Upload files
+                  const uploadedIds: string[] = [];
+                  for (const u of uploads) {
+                        try {
+                              const result = await firstValueFrom(
+                                    this.fileApi.uploadFile(
+                                          u.file,
+                                          'core',
+                                          'comment-attachment',
+                                          this.paymentId,
+                                          false
+                                    )
+                              );
 
+                              if (result.data?.id) {
+                                    uploadedIds.push(result.data.id);
+                                    u.status = 'done';
+                              }
+                        } catch {
+                              u.status = 'error';
+                        }
+                  }
+
+                  // 2) Resolve mention IDs
+                  const mentionIds = mentionLabels
+                        .map(label => this.userOptionsStore.snapshot.find(x => x.label === label)?.id)
+                        .filter(id => !!id) as string[];
+
+                  // 3) Send reply payload
                   const payload: CommentPayload = {
                         documentType: DOCUMENT_TYPE.EXPENSE_PAYMENT,
                         documentId: this.paymentId,
                         content: content.trim(),
+                        attachmentIds: uploadedIds.length ? uploadedIds : undefined,
+                        mentionIds: mentionIds.length ? mentionIds : undefined
                   };
 
                   const newReply = await firstValueFrom(this.commentApi.reply(parentId, payload));
 
-                  parent.replies = parent.replies ?? [];
-                  parent.replies.push(newReply);
+                  // add to tree
+                  const parent = this.findCommentRecursive(this.comments, parentId);
+                  parent!.replies = parent!.replies ?? [];
+                  parent!.replies.push(newReply);
 
-                  this.comments = [...this.comments]; // force update để OnPush chạy
-
+                  this.comments = [...this.comments];
                   this.replyingToCommentId = null;
-            } catch(error) {
-                  this.httpErrorHandler.handle(error, "Gửi phản hồi thất bại");
+
+            } catch (error) {
+                  this.httpErrorHandler.handle(error, 'Gửi phản hồi thất bại');
             } finally {
                   this.isSubmittingReply = false;
             }

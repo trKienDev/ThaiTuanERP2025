@@ -46,16 +46,16 @@
       </div>
 
       <!-- Reply textbox -->
-      <div *ngIf="replyingToCommentId === comment.id" class="reply-box display-flex flex-column gap-10px">
-            <!-- <input type="text" class="comment-input" placeholder="Viết phản hồi..." [formControl]="replyControl"> -->
-            <input type="text" class="comment-input" placeholder="Viết bình luận ...." [formControl]="replyControl">
-
-            <div class="reply-actions display-flex gap-5px justify-content-end">
-                  <button class="button cancel-button padding-5px border-radius-3px" (click)="onCancel()">Hủy</button>
-                  <kit-spinner-button type="button" cssClass="save-button padding-5px border-radius-3px" text="Phản hồi" 
-                  (click)="onSubmitReply()" [disabled]="!canSubmitReply"></kit-spinner-button>
-            </div> 
-      </div>
+      <comment-editor
+            *ngIf="replyingToCommentId === comment.id"
+            class="width-100pt" mode="reply" placeholder="Viết phản hồi..."
+            [documentType]="documentType"
+            [documentId]="comment.id"
+            [control]="replyControl"
+            [loading]="replyLoading"
+            (submitted)="onSubmitReply($event)"
+            (canceled)="onCancelReply()">
+      </comment-editor>
 
       <!-- Render child replies -->
       <div class="replies" *ngIf="expanded && comment.replies?.length">
@@ -64,6 +64,7 @@
                   [comment]="child"
                   [depth]="depth + 1"
                   [replyingToCommentId]="replyingToCommentId"
+                   [documentType]="documentType"
                   (replyRequest)="replyRequest.emit($event)"
                   (submitReply)="submitReply.emit($event)"
                   (cancelReply)="cancelReply.emit()">

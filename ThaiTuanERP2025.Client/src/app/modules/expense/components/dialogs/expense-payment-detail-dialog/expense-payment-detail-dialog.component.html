@@ -224,13 +224,15 @@
 
                                                 <div class="list-comments display-flex flex-column">
                                                       <comment-thread *ngFor="let comment of comments"
-                                                      [comment]="comment"
-                                                      [replyingToCommentId]="replyingToCommentId"
-                                                      (replyRequest)="startReply($event)"
-                                                      (submitReply)="submitReply($event)"
-                                                      (cancelReply)="cancelReply()"></comment-thread>
+                                                            [comment]="comment"
+                                                            [replyingToCommentId]="replyingToCommentId"
+                                                            [documentType]="documentType.EXPENSE_PAYMENT"
+                                                            (replyRequest)="startReply($event)"
+                                                            (submitReply)="submitReply($event)"
+                                                            (cancelReply)="cancelReply()">
+                                                      </comment-thread>
                                                 </div>
-                                          </div>
+                                          </div>      
                                     </div>
                               </div>
                         </div>
