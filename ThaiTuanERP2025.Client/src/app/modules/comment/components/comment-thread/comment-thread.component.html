@@ -53,6 +53,7 @@
             [documentId]="comment.id"
             [control]="replyControl"
             [loading]="replyLoading"
+            [isCommenting] = "true"
             (submitted)="onSubmitReply($event)"
             (canceled)="onCancelReply()">
       </comment-editor>

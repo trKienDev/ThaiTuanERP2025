@@ -25,7 +25,7 @@ export class CommentEditorComponent {
       // Mode: "comment" hoặc "reply" → để cha biết đang xử lý gì
       @Input() mode: 'comment' | 'reply' = 'comment';
 
-      isCommenting = false;
+      @Input() isCommenting = false;
 
       // ---- OUTPUT ----
       @Output() submitted = new EventEmitter<{

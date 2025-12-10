@@ -11,7 +11,7 @@ import { MentionHighlightPipe } from "../../pipes/comment-mention-highlight.pipe
 import { CommentMentionBoxComponent } from "../comment-mention-box/comment-mention-box.component";
 import { KitFileUploaderComponent } from "../../../../shared/components/kit-file-uploader/kit-file-uploader.component";
 import { CommentEditorComponent } from "../comment-editor/comment-editor.component";
-import { DOCUMENT_TYPE, DocumentTypeLiteral } from "../../../../core/constants/document-types.constants";
+import { DocumentTypeLiteral } from "../../../../core/constants/document-types.constants";
 import { UploadItem } from "../../../../shared/components/kit-file-uploader/upload-item.model";
 
 @Component({
