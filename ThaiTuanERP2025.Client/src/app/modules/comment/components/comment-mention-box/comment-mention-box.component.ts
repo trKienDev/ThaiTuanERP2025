@@ -18,68 +18,91 @@ export interface DropdownOption {
       styleUrls: ['./comment-mention-box.component.scss']
 })
 export class CommentMentionBoxComponent implements OnInit, OnDestroy {
-      @Input({ required: true }) control!: FormControl<string | null> | AbstractControl<string | null>;
 
+      // [ Inputs & Injections ]
+      @Input({ required: true }) control!: FormControl<string | null> | AbstractControl<string | null>;
+      mentionUsers$ = inject(UserOptionStore).option$;
+      // ===================
+
+
+      // [ Internal State ]
       private readonly destroy$ = new Subject<void>();
       private readonly mentionedSet = new Set<string>(); // Danh sách user đã được mention
       private allUsers: DropdownOption[] = [];
 
       filterControl = new FormControl('');
-      mentionUsers$ = inject(UserOptionStore).option$;
       showMentionBox = false;
       currentKeyword = "";
       activeIndex = 0;               // index đang được highlight
       currentUsers: DropdownOption[] = []; // danh sách user hiện tại để điều hướng
+      // ==============================
 
+
+      // [Lifecycle Hooks ]
       ngOnInit(): void {
             if (!this.control) return;
 
             // detect khi user gõ '@'
             this.control.valueChanges
                   .pipe(takeUntil(this.destroy$))
-                  .subscribe(text => {
-                        const value = text ?? "";
-
-                        this.syncMentionedSet(value);
-
-                        const caret = this.getCaretPosition();
-                        const keyword = this.extractMentionKeyword(value, caret);
-
-                        if (keyword !== null) {
-                              this.currentKeyword = keyword.toLowerCase();
-                              this.showMentionBox = true;
-                        } else {
-                              this.currentKeyword = "";
-                              this.showMentionBox = false;
-                        }
-
-                        this.updateFilteredUsers();
-                  });
+                  .subscribe(value => this.handleInputChanged(value ?? ""));
 
             this.mentionUsers$
                   .pipe(takeUntil(this.destroy$))
                   .subscribe(users => { this.allUsers = users; });
       }
 
-      filteredUsers$ = combineLatest([
-            this.mentionUsers$, 
-            this.filterControl.valueChanges.pipe(startWith(''))
-      ]).pipe(map(([users, keyword]) => { 
-            // 1 ) loại bỏ các user đã được mention
-            let result = this.filterOutMentioned(users);
-
-            // 2 ) nếu không gõ filter thì trả về toàn bộ
-            const search = (keyword ?? '').trim().toLowerCase();
-            if (!search) return result;
-
-            // 3 ) filter theo text
-            return result.filter(u => u.label.toLowerCase().includes(search));
-      }))
-
       ngAfterViewInit() {
             document.addEventListener("keydown", this.handleKeydown);
       }
 
+      ngOnDestroy(): void {
+            document.removeEventListener("keydown", this.handleKeydown);
+            this.destroy$.next();
+            this.destroy$.complete();
+      }
+      // ================================
+
+
+      // [ Main input handler ]
+      private handleInputChanged(text: string): void {
+            // cập nhật mentionedSet từ nội dung input
+            this.syncMentionedSet(text);
+
+            // xác định keyword người dùng đang nhập sau @
+            const caret = this.getCaretPosition();
+            const keyword = this.extractMentionKeyword(text, caret);
+
+            if (keyword !== null) {
+                  this.currentKeyword = keyword.toLowerCase();
+                  this.showMentionBox = true;
+            } else {
+                  this.currentKeyword = "";
+                  this.showMentionBox = false;
+            }
+
+            // cập nhật danh sách gợi ý
+            this.updateFilteredUsers();
+      }
+
+
+      // [ Filtered input stream ]
+      filteredUsers$ = combineLatest([
+            this.mentionUsers$, 
+            this.filterControl.valueChanges.pipe(startWith(''))
+      ]).pipe(
+            map(([users, keyword]) => { 
+                  let result = this.filterOutMentioned(users); // loại bỏ các user đã được mention
+                  const search = (keyword ?? '').trim().toLowerCase(); // nếu không gõ filter thì trả về toàn bộ
+
+                  return search 
+                        ? result.filter(u => u.label.toLowerCase().includes(search)) 
+                        : result;
+            })
+      )
+
+
+      // [ Select mention ]
       selectMention(user: DropdownOption) {
             const current = this.control.value ?? '';
             const mentionText = `@${user.label} `;
@@ -91,26 +114,8 @@ export class CommentMentionBoxComponent implements OnInit, OnDestroy {
             this.showMentionBox = false;
       }
 
-      ngOnDestroy(): void {
-            document.removeEventListener("keydown", this.handleKeydown);
-            this.destroy$.next();
-            this.destroy$.complete();
-      }
 
-      // <==== HELPER ====>
-      private extractMentionKeyword(text: string, caretPos: number): string | null {
-            // Lấy phần text trước caret
-            const left = text.slice(0, caretPos);
-
-            // Regex tìm từ gần nhất có dạng @abc
-            const match = left.match(/@([A-Za-zÀ-ỹ0-9 ._-]*)$/);
-
-            return match ? match[1] : null;
-      }
-      private getCaretPosition(): number {
-            const input = document.activeElement as HTMLInputElement;
-            return input?.selectionStart ?? 0;
-      }
+      // [ Keyboard navigation ]
       private handleKeydown = (event: KeyboardEvent) => {
             if (!this.showMentionBox || this.currentUsers.length === 0) return;
 
@@ -138,6 +143,9 @@ export class CommentMentionBoxComponent implements OnInit, OnDestroy {
                         break;
             }
       };
+
+
+      // [ Sync mentioned set ]
       private syncMentionedSet(text: string) {
             this.mentionedSet.clear();
 
@@ -155,6 +163,8 @@ export class CommentMentionBoxComponent implements OnInit, OnDestroy {
             }
       }
 
+
+      // [ Filtering logic for popup display ]
       private updateFilteredUsers() {
             this.filteredUsers$ = this.mentionUsers$.pipe(
                   map(users => this.filterOutMentioned(users).filter(u => u.label.toLowerCase().includes(this.currentKeyword))),
@@ -169,6 +179,8 @@ export class CommentMentionBoxComponent implements OnInit, OnDestroy {
             return users.filter(u => !this.mentionedSet.has(u.label));
       }
 
+
+      // [ Mention label resolution ]
       private resolveMentionLabel(raw: string): string | null {
             const text = raw.trim();
 
@@ -178,5 +190,21 @@ export class CommentMentionBoxComponent implements OnInit, OnDestroy {
                   .sort((a, b) => b.label.length - a.label.length);
 
             return candidates.length > 0 ? candidates[0].label : null;
+      }
+
+      
+      // [ Helper ]
+      private extractMentionKeyword(text: string, caretPos: number): string | null {
+            // Lấy phần text trước caret
+            const left = text.slice(0, caretPos);
+
+            // Regex tìm từ gần nhất có dạng @abc
+            const match = left.match(/@([A-Za-zÀ-ỹ0-9 ._-]*)$/);
+
+            return match ? match[1] : null;
+      }
+      private getCaretPosition(): number {
+            const input = document.activeElement as HTMLInputElement;
+            return input?.selectionStart ?? 0;
       }
 }
