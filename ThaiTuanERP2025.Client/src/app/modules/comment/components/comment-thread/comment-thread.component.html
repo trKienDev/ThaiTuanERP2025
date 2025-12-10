@@ -1,7 +1,7 @@
 <div class="comment-item" style="margin-left: 15px;">
 
       <div class="comment-wrapper">
-            <div class="comment-content display-flex gap-5px align-items-center">
+            <div class="comment-box display-flex gap-5px">
                   <img class="avatar-user" [src]="comment.user | avatarUrlPipe">
 
                   <div class="comment-content display-flex flex-column gap-5px">
@@ -47,7 +47,8 @@
 
       <!-- Reply textbox -->
       <div *ngIf="replyingToCommentId === comment.id" class="reply-box display-flex flex-column gap-10px">
-            <input type="text" class="comment-input" placeholder="Viết phản hồi..." [formControl]="replyControl">
+            <!-- <input type="text" class="comment-input" placeholder="Viết phản hồi..." [formControl]="replyControl"> -->
+            <input type="text" class="comment-input" placeholder="Viết bình luận ...." [formControl]="replyControl">
 
             <div class="reply-actions display-flex gap-5px justify-content-end">
                   <button class="button cancel-button padding-5px border-radius-3px" (click)="onCancel()">Hủy</button>

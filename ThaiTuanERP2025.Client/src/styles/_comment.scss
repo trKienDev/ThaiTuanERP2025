@@ -38,10 +38,6 @@
 }
 
 .comment-content {
-      padding: 5px;
-      border-radius: 5px;
-      background: var(--secondary-theme-color);
-
       .comment-text {
             .user-mention {
                   color: var(--bright-blue-color);
@@ -49,6 +45,12 @@
       }
 }
 
+.comment-box {
+      padding: 8px;
+      border-radius: 5px;
+      background: var(--secondary-theme-color);
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+}
 .comment-wrapper {
       padding: 3px;
       border-radius: 3px;

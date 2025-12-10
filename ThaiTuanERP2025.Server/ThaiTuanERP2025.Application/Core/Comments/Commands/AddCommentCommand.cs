@@ -102,8 +102,7 @@ namespace ThaiTuanERP2025.Application.Core.Comments.Commands
                         await _uow.Comments.AddAsync( newComment, cancellationToken);
 			await _uow.SaveChangesAsync(cancellationToken);
 
-			var commentDetail = await _commentRepo.GetDetailById(newComment.Id, cancellationToken);
-			return commentDetail;
+			return await _commentRepo.GetDetailById(newComment.Id, cancellationToken);
 		}
 	}
 

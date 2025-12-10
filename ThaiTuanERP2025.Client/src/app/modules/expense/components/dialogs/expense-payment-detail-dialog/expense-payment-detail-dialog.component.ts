@@ -33,11 +33,12 @@ import { CommentThreadComponent } from "../../../../comment/components/comment-t
 import { CommentApiService } from '../../../../comment/services/comment-api.service';
 import { UserOptionStore } from '../../../../account/options/user-dropdown.option';
 import { CommentMentionBoxComponent } from "../../../../comment/components/comment-mention-box/comment-mention-box.component";
+import { CommentEditorComponent } from "../../../../comment/components/comment-editor/comment-editor.component";
 
 @Component({
       selector: 'expense-payment-detail-dialog',
       standalone: true,
-      imports: [CommonModule, AvatarUrlPipe, ExpensePaymentStatusPipe, KitSpinnerButtonComponent, KitFlipCountdownComponent, OutgoingPaymentStatusPipe, ExpensePaymentItemsTableComponent, OutgoingPaymentsTableComponent, ReactiveFormsModule, KitFileUploaderComponent, CommentThreadComponent, CommentMentionBoxComponent ],
+      imports: [CommonModule, AvatarUrlPipe, ExpensePaymentStatusPipe, KitSpinnerButtonComponent, KitFlipCountdownComponent, OutgoingPaymentStatusPipe, ExpensePaymentItemsTableComponent, OutgoingPaymentsTableComponent, ReactiveFormsModule, KitFileUploaderComponent, CommentThreadComponent, CommentMentionBoxComponent, CommentEditorComponent],
       templateUrl: './expense-payment-detail-dialog.component.html',
       styleUrls: ['./expense-payment-detail-dialog.component.scss'],
       animations: [
@@ -62,6 +63,7 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
       private readonly filePreview = inject(FilePreviewService);
       private readonly fileApi = inject(FileService);
       private readonly userOptionsStore = inject(UserOptionStore);
+      readonly documentType = DOCUMENT_TYPE;
 
       approving = false;
       rejecting = false;
@@ -232,22 +234,15 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
             return !this.isSubmittingComment && this.commentControl.value.trim().length > 0;
       }
 
-      async submitComment() {
-            const content = this.commentControl.value.trim();
-
-            if (!content) {
-                  this.toast.errorRich("Bạn chưa nhập bình luận");
-                  return;
-            }
-
+      async handleSubmitComment(event: { content: string; mentionLabels: string[]; uploads: UploadItem[] }) {
             try {
                   this.isSubmittingComment = true;
-                  this.isCommenting = false;
 
-                  // ====== 1. Upload ATTACHMENTS trước ======
-                  const uploadedIds: string[] = [];
+                  const { content, mentionLabels, uploads } = event;
 
-                  for (const u of this.commentUploads) {
+                  // 1 ) Upload attachments
+                  const uploadedIds = [];
+                  for (const u of uploads) {
                         try {
                               const result = await firstValueFrom(
                                     this.fileApi.uploadFile(
@@ -258,38 +253,36 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
                                           false
                                     )
                               );
-
                               if (result.data?.id) {
                                     uploadedIds.push(result.data.id);
-                                    u.fileId = result.data.id;
                                     u.status = 'done';
                               }
-                        } catch (err) {
+                        } catch {
                               u.status = 'error';
                         }
                   }
 
-                  const mentionIds = this.mentionLabels
+                  // 2 ) Resolve mention IDs
+                  const mentionIds = mentionLabels
                         .map(label => this.userOptionsStore.snapshot.find(u => u.label === label)?.id)
-                        .filter(id => !!id) as string[];
+                        .filter(x => !!x) as string[];
 
-                  const payload: CommentPayload = ({
+                  // 3. Gửi comment
+                  const payload: CommentPayload = {
                         documentType: DOCUMENT_TYPE.EXPENSE_PAYMENT,
                         documentId: this.paymentId,
-                        content: content,
+                        content,
                         attachmentIds: uploadedIds.length ? uploadedIds : undefined,
                         mentionIds: mentionIds.length ? mentionIds : undefined
-                  });
+                  };
 
-                  const newCommentDto = await firstValueFrom(this.commentApi.create(payload));
-                  this.comments.unshift(newCommentDto);
-                  
+                  const newComment = await firstValueFrom(this.commentApi.create(payload));
+                  console.log('new comment: ', newComment);
+                  this.comments.unshift(newComment);
                   this.commentControl.setValue('');
-                  this.commentUploads = []; // uploads được bind 2-way:
             } catch(error) {
                   this.httpErrorHandler.handle(error, "Bình luận không thành công");
             } finally {
-                  this.isCommenting = false;
                   this.isSubmittingComment = false;
             }
       }

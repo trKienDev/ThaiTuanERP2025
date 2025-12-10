@@ -8,11 +8,13 @@ import { CommentStateService } from "../../services/comment-state.service";
 import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { FilePreviewService, StoredFileMetadataDto } from "../../../files/file-preview.service";
 import { MentionHighlightPipe } from "../../pipes/comment-mention-highlight.pipe";
+import { CommentMentionBoxComponent } from "../comment-mention-box/comment-mention-box.component";
+import { KitFileUploaderComponent } from "../../../../shared/components/kit-file-uploader/kit-file-uploader.component";
 
 @Component({
       selector: 'comment-thread',
       standalone: true,
-      imports: [CommonModule, AvatarUrlPipe, ReactiveFormsModule, KitSpinnerButtonComponent, MentionHighlightPipe],
+      imports: [CommonModule, AvatarUrlPipe, ReactiveFormsModule, KitSpinnerButtonComponent, MentionHighlightPipe, CommentMentionBoxComponent, KitFileUploaderComponent],
       templateUrl: './comment-thread.component.html',
       changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -21,7 +23,7 @@ export class CommentThreadComponent {
       @Input() comment!: CommentDetailDto;
       @Input() depth = 0;
       @Input() replyingToCommentId: string | null = null;
-
+      
       @Output() replyRequest = new EventEmitter<string | null>();
       @Output() submitReply = new EventEmitter<{ parentId: string; content: string }>();
       @Output() cancelReply = new EventEmitter<void>();

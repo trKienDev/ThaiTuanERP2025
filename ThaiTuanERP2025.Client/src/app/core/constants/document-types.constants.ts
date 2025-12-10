@@ -4,3 +4,5 @@ export const DOCUMENT_TYPE = {
       ADVANCED_PAYMENT: 'AdvancedPayment',
       
 } as const;
+
+export type DocumentTypeLiteral = typeof DOCUMENT_TYPE[keyof typeof DOCUMENT_TYPE];

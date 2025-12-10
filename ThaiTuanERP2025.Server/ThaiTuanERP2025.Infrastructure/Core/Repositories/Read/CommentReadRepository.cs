@@ -15,7 +15,11 @@ namespace ThaiTuanERP2025.Infrastructure.Core.Repositories.Read
 
 		public async Task<CommentDetailDto> GetDetailById(Guid id, CancellationToken cancellationToken)
 		{
-			var commentDetail = await _dbSet.Include(x => x.CreatedByUser).FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+			var commentDetail = await _dbSet
+				.Include(x => x.CreatedByUser)
+				.Include(x => x.Mentions).ThenInclude(m => m.User)
+				.Include(x => x.Attachments).ThenInclude(a => a.StoredFile)
+				.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 			return _mapper.Map<CommentDetailDto>(commentDetail);
 		}
 
