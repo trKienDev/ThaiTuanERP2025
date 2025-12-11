@@ -1,0 +1,16 @@
+FROM mcr.microsoft.com/dotnet/sdk:9.0
+
+WORKDIR /src
+
+COPY ThaiTuanERP2025.sln ./
+COPY ThaiTuanERP2025.Server/ThaiTuanERP2025.Api/*.csproj ThaiTuanERP2025.Server/ThaiTuanERP2025.Api/
+COPY ThaiTuanERP2025.Server/ThaiTuanERP2025.Application/*.csproj ThaiTuanERP2025.Server/ThaiTuanERP2025.Application/
+COPY ThaiTuanERP2025.Server/ThaiTuanERP2025.Domain/*.csproj ThaiTuanERP2025.Server/ThaiTuanERP2025.Domain/
+COPY ThaiTuanERP2025.Server/ThaiTuanERP2025.Infrastructure/*.csproj ThaiTuanERP2025.Server/ThaiTuanERP2025.Infrastructure/
+
+RUN dotnet restore
+
+COPY . .
+
+# EXTRA: bật hot reload
+CMD ["dotnet", "watch", "run", "--project", "ThaiTuanERP2025.Server/ThaiTuanERP2025.Api"]

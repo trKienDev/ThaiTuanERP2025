@@ -1,0 +1,47 @@
+version: "3.8"
+
+services:
+
+  api:
+    build:
+      context: .
+      dockerfile: ThaiTuanERP2025.Server/Dockerfile.dev
+    container_name: erp-api-dev
+    ports:
+      - "5000:8080"
+    volumes:
+      - ./ThaiTuanERP2025.Server:/src/ThaiTuanERP2025.Server
+      - ./ThaiTuanERP2025.sln:/src/ThaiTuanERP2025.sln
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      - erp-network
+
+  client:
+    build:
+      context: ./ThaiTuanERP2025.Client
+      dockerfile: Dockerfile.dev
+      args:
+        BUILD_ENV: docker
+    container_name: erp-client-dev
+    ports:
+      - "4200:80"
+    volumes:
+      - ./ThaiTuanERP2025.Client:/app
+      - /app/node_modules
+    networks:
+      - erp-network
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: "Password123!"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    networks:
+      - erp-network
+
+networks:
+  erp-network:
+    driver: bridge

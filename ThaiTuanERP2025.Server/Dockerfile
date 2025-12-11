@@ -25,7 +25,7 @@ RUN dotnet publish ThaiTuanERP2025.Server/ThaiTuanERP2025.Api/ThaiTuanERP2025.Ap
 # ================================
 # STAGE 2 — RUNTIME
 # ================================
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+FROM mcr.microsoft.com/dotnet/aspnet:9.0
 WORKDIR /app
 COPY --from=build /app/publish .
 

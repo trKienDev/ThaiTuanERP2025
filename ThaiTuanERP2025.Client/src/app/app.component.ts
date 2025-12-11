@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
       private sub?: Subscription;
 
       constructor(
-            private readonly authService: AuthService, private readonly refreshScheduler: RefreshScheduler
+            private readonly authService: AuthService, private readonly refreshScheduler: RefreshScheduler,
       ) {}
 
       ngOnInit() {

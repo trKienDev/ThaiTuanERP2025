@@ -19,7 +19,6 @@ builder.Services
 	.AddInfrastructure(builder.Configuration)
 	.AddPresentation(builder.Configuration);
 
-
 // ========= Swagger =========
 builder.Services.AddSwaggerDocumentation();
 
@@ -33,20 +32,33 @@ var app = builder.Build();
 await app.SeedDataIfRequestedAsync(args);
 await app.LoadDynamicPoliciesAsync();
 
-// Middleware
+// ========= ENVIRONMENT CHECK =========
+var isDocker = Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
+
+// Swagger
 if (app.Environment.IsDevelopment())
 {
 	app.UseSwaggerDocumentation();
 	builder.WebHost.CaptureStartupErrors(true);
 }
 
+
+// Middleware
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseMiddleware<RequestLoggingMiddleware>();
 app.UseCorrelationId();
-app.UseHttpsRedirection();
+
+// ========= HTTPS REDIRECTION LOGIC =========
+// Không bật HTTPS khi chạy trong Docker
+if (!isDocker)
+{
+	app.UseHttpsRedirection();
+}
+
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapHub<NotificationsHub>("/hubs/notifications");
 app.MapControllers();
 
