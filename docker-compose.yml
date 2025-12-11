@@ -1,10 +1,8 @@
-version: "3.8"
-
 services:
       api:
             build:
-                  context: ./ThaiTuanERP2025.Server
-                  dockerfile: Dockerfile
+                  context: .
+                  dockerfile: ThaiTuanERP2025.Server/Dockerfile
             container_name: erp-api
             ports:
                   - "5000:8080"

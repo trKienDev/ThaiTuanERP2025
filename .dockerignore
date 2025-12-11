@@ -1,0 +1,35 @@
+# Ignore build outputs
+bin/
+obj/
+
+# Ignore packages
+node_modules/
+
+# Ignore Angular outputs
+dist/
+
+# do not ignoire nginx.conf
+!ThaiTuanERP2025.Client/nginx.conf
+
+# Ignore version control
+.git/
+.gitignore
+
+# Ignore IDE files
+.vscode/
+.idea/
+
+# Ignore logs & temp
+logs/
+*.log
+*.tmp
+
+# Ignore OS files
+Thumbs.db
+.DS_Store
+
+# Ignore docker-compose override
+docker-compose.override.yml
+
+# DO NOT ignore Dockerfile & docker-compose.yml
+# because Docker needs them to build images
