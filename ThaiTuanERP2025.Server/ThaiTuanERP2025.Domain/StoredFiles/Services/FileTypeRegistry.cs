@@ -7,12 +7,18 @@ namespace ThaiTuanERP2025.Domain.StoredFiles.Services
         {
                 private static readonly HashSet<string> Modules = new(StringComparer.OrdinalIgnoreCase)
                 {
+                        ThaiTuanERPModules.Account,
                         ThaiTuanERPModules.Expense,
                         ThaiTuanERPModules.Finance,
                         ThaiTuanERPModules.Core,
                 };
 
-                private static readonly HashSet<string> ExpenseEntities = new(StringComparer.OrdinalIgnoreCase)
+		private static readonly HashSet<string> AccountEntities = new(StringComparer.OrdinalIgnoreCase)
+		{
+                        AccountFileEntities.UserAvatar,
+		};
+
+		private static readonly HashSet<string> ExpenseEntities = new(StringComparer.OrdinalIgnoreCase)
                 {
                         ExpenseFileEntities.Invoice,
                         ExpenseFileEntities.PaymentAttachment,
@@ -26,6 +32,9 @@ namespace ThaiTuanERP2025.Domain.StoredFiles.Services
                 {
                         if (module == ThaiTuanERPModules.Expense)
                                 return ExpenseEntities.Contains(entity);
+
+                        if(module == ThaiTuanERPModules.Account)
+                                return AccountEntities.Contains(entity);
 
                         return true; // Module khác chưa giới hạn entity
                 }

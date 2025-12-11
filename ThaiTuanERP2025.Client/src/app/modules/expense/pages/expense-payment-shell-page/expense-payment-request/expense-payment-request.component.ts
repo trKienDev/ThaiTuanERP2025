@@ -386,7 +386,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
                         if (item.uploadedInvoiceFile) {
                               const file = item.uploadedInvoiceFile;
 
-                              const result = await firstValueFrom(this.fileService.uploadFile(file, 'expense', 'invoice', undefined, false));
+                              const result = await firstValueFrom(this.fileService.uploadFile(file, 'expense', 'invoice', undefined));
 
                               uploadedInvoiceResults[i] = result.data?.id; // StoredFileId
                         }
@@ -397,7 +397,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
                   for (const u of this.uploads) {
                         try {
                               const result = await firstValueFrom(
-                                    this.fileService.uploadFile(u.file, 'expense', 'payment-attachment', undefined, false)
+                                    this.fileService.uploadFile(u.file, 'expense', 'payment-attachment', undefined)
                               );
 
                               if (result.data?.id) {

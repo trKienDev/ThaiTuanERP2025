@@ -45,7 +45,7 @@ export class UserApiService extends BaseApiService<UserDto, UserRequest> {
       
       // ==== PUT ====
       updateAvatar(file: File, userId: string): Observable<string> {
-            return this.fileService.uploadFile(file, 'account', 'user', userId, false).pipe(
+            return this.fileService.uploadFile(file, 'account', 'user-avatar', userId).pipe(
                   switchMap((uploadResult) => {
                         const body = { fileId: uploadResult.data?.id };
                         return this.http.put<ApiResponse<string>>(`${this.endpoint}/${userId}/avatar`, body)

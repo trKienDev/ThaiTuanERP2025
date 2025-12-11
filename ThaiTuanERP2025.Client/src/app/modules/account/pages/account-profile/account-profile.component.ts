@@ -8,6 +8,8 @@ import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-
 import { UserApiService } from "../../services/api/user-api.service";
 import { AvatarUrlPipe } from "../../../../shared/pipes/avatar-url.pipe";
 import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
+import { MatDialog } from "@angular/material/dialog";
+import { AvatarCropperDialogComponent } from "../../components/avatar-cropper-dialog/avatar-cropper-dialog.component";
 
 @Component({
       selector: 'account-profile',
@@ -17,6 +19,7 @@ import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spi
       styleUrl: './account-profile.component.scss',
 })
 export class AccountProfileComponent {
+      private readonly dialog = inject(MatDialog);
       private readonly userFacade = inject(UserFacade);
       private readonly toastService = inject(ToastService);
       private readonly userApi = inject(UserApiService);
@@ -28,6 +31,7 @@ export class AccountProfileComponent {
       isUploading: boolean = false;
 
       previewAvatarSrc: string | null = null;
+
       
       triggerAvatarUpload(): void {
             const fileInput = document.getElementById('avatar-input') as HTMLInputElement;
@@ -49,31 +53,18 @@ export class AccountProfileComponent {
                   return;
             }
 
-            this.selectedAvatarFile = file;
-
-            const reader = new FileReader();
-            reader.onload = () => {
-                  this.previewAvatarSrc = reader.result as string;
-            };
-            reader.readAsDataURL(file);
+            this.openAvatarCropperDialog(event, );
       }
-            
-      async uploadAvatar(userId?: string): Promise<void> {
-            if (!this.selectedAvatarFile || !userId) {
-                  this.toastService.errorRich('Thiếu thông tin người dùng hoặc file');
-                  return;
-            }
 
-            this.isUploading = true;
-            try {
-                  await firstValueFrom(this.userApi.updateAvatar(this.selectedAvatarFile,  userId));
-                  this.userFacade.refreshCurrentUser();
-                  this.toastService.successRich('Cập nhật avatar thành công');
-            } catch (err) {
-                  console.error(err);
-                  this.toastService.errorRich('Không thể cập nhật ảnh đại diện');
-            } finally {
-                  this.isUploading = false;
-            }
+      
+      async openAvatarCropperDialog(imageEvent: Event) {
+            const user = await firstValueFrom(this.currentUser$);
+            const userId = user.id;
+
+            const dialogRef = this.dialog.open(AvatarCropperDialogComponent, {
+                  data: { imageEvent, userId}
+            });
+
+            dialogRef.afterClosed().subscribe(result => {            });
       }
 }

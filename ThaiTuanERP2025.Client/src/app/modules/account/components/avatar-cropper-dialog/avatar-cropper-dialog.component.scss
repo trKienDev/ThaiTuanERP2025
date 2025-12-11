@@ -1,0 +1,16 @@
+.cropper-wrapper {
+      width: 400px;               // hoặc 450px tùy UI
+      height: fit-content;
+      max-width: 400px;
+      max-height: 400px;
+      margin: 0 auto;             // căn giữa
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;           // tránh overflow
+}
+
+image-cropper {
+      width: 100% !important;
+      height: 100% !important;
+}

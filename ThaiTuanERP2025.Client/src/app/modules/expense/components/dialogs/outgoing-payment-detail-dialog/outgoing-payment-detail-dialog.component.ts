@@ -243,7 +243,6 @@ export class OutgoingPaymentDetailDialogComponent implements OnInit {
                                           'core',
                                           'comment-attachment',
                                           this.outgoingPaymentId,
-                                          false
                                     )
                               );
 
