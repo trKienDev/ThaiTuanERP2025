@@ -1,4 +1,4 @@
-﻿namespace ThaiTuanERP2025.Api.Shared
+﻿namespace Drive.Api.Contracts
 {
 	public sealed class ApiResponse<T>
 	{

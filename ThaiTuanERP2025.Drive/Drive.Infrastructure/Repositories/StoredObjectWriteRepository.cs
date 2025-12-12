@@ -1,15 +1,16 @@
-﻿using Drive.Domain.Repositories;
-using Drive.Infrastructure.Persistence.Shared.Repositories;
+﻿using AutoMapper;
+using Drive.Domain.Repositories;
+using Drive.Infrastructure.Persistence;
+using Drive.Infrastructure.Shared.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using ThaiTuanERP2025.Domain.StoredFiles.Entities;
 
-namespace Drive.Infrastructure.Persistence.Repositories
+namespace Drive.Infrastructure.Repositories
 {
 	public class StoredObjectWriteRepository : BaseWriteRepository<StoredObject>, IStoredObjectWriteRepository
 	{
 		private readonly ThaiTuanERP2025DriveDbContext _dbContext;
-		public StoredObjectWriteRepository(ThaiTuanERP2025DriveDbContext dbContext, IConfigurationProvider configurationProvider) : base(dbContext, configurationProvider)
+		public StoredObjectWriteRepository(ThaiTuanERP2025DriveDbContext dbContext, IConfigurationProvider mapperConfig) : base(dbContext, mapperConfig)
 		{
 			_dbContext = dbContext;
 		}

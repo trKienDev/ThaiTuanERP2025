@@ -10,6 +10,8 @@ namespace Drive.Application.DependencyInjection
 
 			services.AddAutoMapper(typeof(ApplicationServiceRegistration).Assembly);
 
+
+
 			return services;
 		}
 	}

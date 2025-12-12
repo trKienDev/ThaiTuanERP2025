@@ -1,7 +1,8 @@
 ﻿using Drive.Application.Shared.Interfaces;
 using Drive.Domain.Repositories;
+using Drive.Infrastructure.Persistence;
 
-namespace Drive.Infrastructure.Persistence.Shared.Repositories
+namespace Drive.Infrastructure.Shared.Repositories
 {
 	public sealed class UnitOfWork : IUnitOfWork
 	{

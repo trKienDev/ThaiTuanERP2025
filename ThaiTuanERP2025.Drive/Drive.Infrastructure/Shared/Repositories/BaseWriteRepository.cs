@@ -1,9 +1,10 @@
-﻿using Drive.Domain.Shared.Repositories;
+﻿using AutoMapper;
+using Drive.Domain.Shared.Repositories;
+using Drive.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using System.Linq.Expressions;
 
-namespace Drive.Infrastructure.Persistence.Shared.Repositories
+namespace Drive.Infrastructure.Shared.Repositories
 {
 	public class BaseWriteRepository<TEntity> : IBaseWriteRepository<TEntity> where TEntity : class
 	{

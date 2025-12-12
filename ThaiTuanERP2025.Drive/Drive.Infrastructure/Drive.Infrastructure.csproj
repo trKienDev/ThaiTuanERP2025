@@ -1,30 +1,31 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <ItemGroup>
-    <ProjectReference Include="..\Drive.Application\Drive.Application.csproj" />
-    <ProjectReference Include="..\Drive.Domain\Drive.Domain.csproj" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-<ItemGroup>
-	<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
-	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.10" />
-	<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
-		<PrivateAssets>all</PrivateAssets>
-	</PackageReference>
-	<PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+	<ItemGroup>
+		<ProjectReference Include="..\Drive.Application\Drive.Application.csproj" />
+		<ProjectReference Include="..\Drive.Domain\Drive.Domain.csproj" />
+	</ItemGroup>
 
-	<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.2" />
+	<ItemGroup>
+		<!-- EF Core -->
+		<PackageReference Include="Microsoft.EntityFrameworkCore"/>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer"/>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
 
-	<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="8.0.0" />
+		<!-- Configuration (CHỈ GIỮ CÁI CẦN) -->
+		<PackageReference Include="Microsoft.Extensions.Configuration"/>
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json"/>
+		<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables"/>
 
-	<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
-	<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
-</ItemGroup>
-
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+		<!-- DI abstractions -->
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"/>
+	</ItemGroup>
 
 </Project>

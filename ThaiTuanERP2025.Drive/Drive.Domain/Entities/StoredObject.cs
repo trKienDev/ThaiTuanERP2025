@@ -5,7 +5,7 @@
 		#region Constructors
 		private StoredObject() { }
 		public StoredObject(
-			string bucket, string objectKey, string fileName, string contentType, long size, string module
+			string bucket, string objectKey, string fileName, string contentType, long size
 		)
 		{
 			Id = Guid.NewGuid();
