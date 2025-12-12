@@ -7,7 +7,7 @@ import { BaseApiService } from "../../../../shared/services/base-api.service";
 @Injectable({ providedIn: 'root' })
 export class BudgetGroupApiService extends BaseApiService<BudgetGroupDto, BudgetGroupRequest> {
       constructor(http: HttpClient) {
-            super(http, `${environment.apiUrl}/budget-group`);
+            super(http, `${environment.server.apiUrl}/budget-group`);
       }
 
 }

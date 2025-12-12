@@ -10,7 +10,7 @@ import { handleApiResponse$ } from "../../../../shared/operators/handle-api-resp
 @Injectable({ providedIn: 'root' })
 export class LedgerAccountApiService extends BaseApiService<LedgerAccountDto, LedgerAccountPayload> {
       constructor(http: HttpClient) {
-            super(http, `${environment.apiUrl}/ledger-account`);
+            super(http, `${environment.server.apiUrl}/ledger-account`);
       }
 
       getTreeAsync(): Observable<LedgerAccountTreeDto[]> {

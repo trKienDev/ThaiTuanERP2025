@@ -4,13 +4,10 @@
 	{
 		#region Constructors
 		private StoredObject() { }
-		public StoredObject(
-			string bucket, string objectKey, string fileName, string contentType, long size
-		)
+		public StoredObject( string objectKey, string fileName, string contentType, long size)
 		{
 			Id = Guid.NewGuid();
 
-			Bucket = bucket.Trim();
 			ObjectKey = objectKey.Trim();
 			FileName = fileName.Trim();
 			ContentType = contentType.Trim();
@@ -21,7 +18,6 @@
 
 		#region Properties
 		public Guid Id { get; private set;  }
-		public string Bucket { get; private set; } = null!;
 		public string ObjectKey { get; private set; } = null!;
 		public string FileName { get; private set; } = null!;
 		public string ContentType { get; private set; } = null!;

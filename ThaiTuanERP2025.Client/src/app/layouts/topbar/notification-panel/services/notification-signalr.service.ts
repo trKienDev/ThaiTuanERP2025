@@ -28,7 +28,7 @@ export class NotificationSignalRService {
             }
 
             this.hubConnection = new signalR.HubConnectionBuilder()
-                  .withUrl(`${environment.baseUrl}${environment.hubs.notification}`, {
+                  .withUrl(`${environment.server.baseUrl}${environment.server.hubs.notification}`, {
                         accessTokenFactory: () => token
                   })
                   .configureLogging(signalR.LogLevel.Information)

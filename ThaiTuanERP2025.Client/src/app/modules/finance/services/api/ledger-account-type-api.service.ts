@@ -10,7 +10,7 @@ import { handleApiResponse$ } from "../../../../shared/operators/handle-api-resp
 @Injectable({ providedIn: 'root' })
 export class LedgerAccountTypeApiService extends BaseApiService<LedgerAccountTypeDto, LedgerAccountTypePayload> {
       constructor(http: HttpClient) {
-            super(http, `${environment.apiUrl}/ledger-account-type`);
+            super(http, `${environment.server.apiUrl}/ledger-account-type`);
       }
 
       importExcel(file: File): Observable<void> {

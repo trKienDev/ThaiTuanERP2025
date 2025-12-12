@@ -8,7 +8,7 @@ import { handleApiResponse$ } from "../../../../shared/operators/handle-api-resp
 
 @Injectable({ providedIn: 'root' })
 export class GroupApiService {
-      private readonly API_URL = `${environment.apiUrl}/group`;
+      private readonly API_URL = `${environment.server.apiUrl}/group`;
 
       constructor(private readonly http: HttpClient) {}
 

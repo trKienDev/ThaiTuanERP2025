@@ -10,7 +10,7 @@ import { handleApiResponse$ } from "../../../../shared/operators/handle-api-resp
 @Injectable({ providedIn: 'root' })
 export class SupplierApiService extends BaseApiService<SupplierDto, SupplierPayload, string> {
       constructor(http: HttpClient) {
-            super(http, `${environment.apiUrl}/supplier`)
+            super(http, `${environment.server.apiUrl}/supplier`)
       }
 
       override create(payload: SupplierPayload): Observable<string> {

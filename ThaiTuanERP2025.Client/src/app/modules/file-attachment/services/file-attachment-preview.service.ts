@@ -1,11 +1,11 @@
 import { inject, Injectable } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { ToastService } from "../../shared/components/kit-toast-alert/kit-toast-alert.service";
-import { FileImagePreviewDialog } from "./file-image-preview-dialog.component";
-import { FilePdfPreviewDialog } from "./file-pdf-preview-dialog.component";
-import { environment } from "../../../environments/environment";
 import { firstValueFrom } from "rxjs";
-import { FileApiService } from "./file-api.service";
+import { FileAttachmentApiService } from "./file-attachment-api.service";
+import { environment } from "../../../../environments/environment";
+import { ToastService } from "../../../shared/components/kit-toast-alert/kit-toast-alert.service";
+import { ImageAttachmentPreviewDialog } from "../components/image-attachment-preview-dialog.component";
+import { PdfAttachmentPreviewDialog } from "../components/pdf-attachment-preview-dialog.component";
 
 export interface StoredFileDownloadDto {
       fileId: string; 
@@ -20,12 +20,12 @@ export interface StoredFileMetadataDto {
 }
 
 @Injectable({ providedIn: 'root' })
-export class FilePreviewService {
+export class FileAttachmentPreviewService {
 
       private dialog = inject(MatDialog);
       private toast = inject(ToastService);
-      private fileApi = inject(FileApiService);
-      private readonly baseUrl = environment.baseUrl;
+      private fileApi = inject(FileAttachmentApiService);
+      private readonly baseUrl = environment.server.baseUrl;
 
       /** Preview File object local (image / pdf / docx) – code của bạn giữ nguyên */
       previewLocalFile(file: File) {
@@ -33,12 +33,12 @@ export class FilePreviewService {
             const url = URL.createObjectURL(file);
 
             if (fileType.startsWith('image/')) {
-                  this.dialog.open(FileImagePreviewDialog, { data: { src: url } });
+                  this.dialog.open(ImageAttachmentPreviewDialog, { data: { src: url } });
                   return;
             }
 
             if (fileType === 'application/pdf') {
-                  this.dialog.open(FilePdfPreviewDialog, { data: { src: url } });
+                  this.dialog.open(PdfAttachmentPreviewDialog, { data: { src: url } });
                   return;
             }
 
@@ -52,12 +52,12 @@ export class FilePreviewService {
             const type = blob.type;
 
             if (type.startsWith('image/')) {
-                  this.dialog.open(FileImagePreviewDialog, { data: { src: url } });
+                  this.dialog.open(ImageAttachmentPreviewDialog, { data: { src: url } });
                   return;
             }
 
             if (type === 'application/pdf') {
-                  this.dialog.open(FilePdfPreviewDialog, { data: { src: url } });
+                  this.dialog.open(PdfAttachmentPreviewDialog, { data: { src: url } });
                   return;
             }
 

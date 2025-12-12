@@ -10,7 +10,7 @@ import { BaseApiService } from "../../../../shared/services/base-api.service";
 @Injectable({ providedIn: 'root'})
 export class ExpenseWorkflowInstanceApiService extends BaseApiService<ApprovalWorkflowInstanceDto, ApprovalWorkflowInstanceRequest> {
       constructor(http: HttpClient) {
-            super(http, `${environment.apiUrl}/expense-workflow-instance`);
+            super(http, `${environment.server.apiUrl}/expense-workflow-instance`);
       }
 
       approve(workflowId: string): Observable<void> {

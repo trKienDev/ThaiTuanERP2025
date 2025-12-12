@@ -6,13 +6,13 @@ import { AvatarUrlPipe } from "../../../../shared/pipes/avatar-url.pipe";
 import { CommentDetailDto } from "../../models/comment.model";
 import { CommentStateService } from "../../services/comment-state.service";
 import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
-import { FilePreviewService, StoredFileMetadataDto } from "../../../files/file-preview.service";
 import { MentionHighlightPipe } from "../../pipes/comment-mention-highlight.pipe";
 import { CommentMentionBoxComponent } from "../comment-mention-box/comment-mention-box.component";
 import { KitFileUploaderComponent } from "../../../../shared/components/kit-file-uploader/kit-file-uploader.component";
 import { CommentEditorComponent } from "../comment-editor/comment-editor.component";
 import { DocumentTypeLiteral } from "../../../../core/constants/document-types.constants";
 import { UploadItem } from "../../../../shared/components/kit-file-uploader/upload-item.model";
+import { FileAttachmentPreviewService, StoredFileMetadataDto } from "../../../file-attachment/services/file-attachment-preview.service";
 
 @Component({
       selector: 'comment-thread',
@@ -41,7 +41,7 @@ export class CommentThreadComponent {
       private readonly state = inject(CommentStateService);
       private readonly changeDetector = inject(ChangeDetectorRef);
       private readonly toast = inject(ToastService);
-      private readonly filePreview = inject(FilePreviewService);
+      private readonly filePreview = inject(FileAttachmentPreviewService);
 
       replyControl = new FormControl('', { nonNullable: true });
 

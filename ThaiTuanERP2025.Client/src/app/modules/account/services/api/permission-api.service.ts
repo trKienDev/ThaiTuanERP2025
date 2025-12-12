@@ -10,7 +10,7 @@ import { BaseApiService } from "../../../../shared/services/base-api.service";
 @Injectable({ providedIn: 'root'})
 export class PermissionApiService extends BaseApiService<PermissionDto, PermissionRequest> {
       constructor(http: HttpClient) {
-            super(http, `${environment.apiUrl}/permission`);
+            super(http, `${environment.server.apiUrl}/permission`);
       }
 
       getByRoleId(roleId: string): Observable<PermissionDto[]> {

@@ -34,9 +34,9 @@ import { AmountToWordsPipe } from "../../../../../shared/pipes/amount-to-words.p
 import { ExpensePaymentItemPayload } from "../../../models/expense-payment-item.model";
 import { HttpErrorHandlerService } from "../../../../../core/services/http-errror-handler.service";
 import { SupplierApiService } from "../../../services/api/supplier.service";
-import { FilePreviewService } from "../../../../files/file-preview.service";
 import { UploadItem } from "../../../../../shared/components/kit-file-uploader/upload-item.model";
-import { FileApiService } from "../../../../files/file-api.service";
+import { FileAttachmentApiService } from "../../../../file-attachment/services/file-attachment-api.service";
+import { FileAttachmentPreviewService } from "../../../../file-attachment/services/file-attachment-preview.service";
 
 type PaymentItem = {
       itemName: FormControl<string>;
@@ -72,9 +72,9 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       private readonly supplierApi = inject(SupplierApiService);
       private readonly confirm = inject(ConfirmService);
       private readonly bankAccountApi = inject(BankAccountApiService);
-      private readonly fileApi = inject(FileApiService);
+      private readonly fileApi = inject(FileAttachmentApiService);
       private readonly httpErrorHandler = inject(HttpErrorHandlerService);
-      private readonly filePreview = inject(FilePreviewService);
+      private readonly filePreview = inject(FileAttachmentPreviewService);
 
       submitting = false;
       showErrors = false;

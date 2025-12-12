@@ -10,7 +10,7 @@ import { handleApiResponse$ } from "../../../shared/operators/handle-api-respons
 @Injectable({ providedIn: 'root' })
 export class CommentApiService extends BaseApiService<CommentPayload, CommentDto, CommentDetailDto> {
       constructor(http: HttpClient) {
-            super(http, `${environment.apiUrl}/comment`);
+            super(http, `${environment.server.apiUrl}/comment`);
       }
 
       getComments(documentType: string, documentId: string): Observable<CommentDetailDto[]> {

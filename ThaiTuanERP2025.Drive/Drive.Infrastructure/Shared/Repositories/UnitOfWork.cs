@@ -9,14 +9,14 @@ namespace Drive.Infrastructure.Shared.Repositories
 		private readonly ThaiTuanERP2025DriveDbContext _dbContext;
 		public UnitOfWork(
 			ThaiTuanERP2025DriveDbContext dbContext,
-			IStoredObjectWriteRepository storedFiles
+			IStoredObjectWriteRepository storedObjects
 		)
 		{
 			_dbContext = dbContext;
-			StoredFiles = storedFiles;
+			StoredObjects = storedObjects;
 		}
 
-		public IStoredObjectWriteRepository StoredFiles { get; }
+		public IStoredObjectWriteRepository StoredObjects { get; }
 
 		public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{

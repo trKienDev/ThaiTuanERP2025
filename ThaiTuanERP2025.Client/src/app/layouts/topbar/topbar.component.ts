@@ -37,7 +37,7 @@ export class TopbarComponent implements OnInit {
       private  readonly reminderDrawer = inject(TaskReminderDrawerService);
       readonly reminders = this.reminderFacade.reminders;
 
-      baseUrl: string = environment.baseUrl;
+      baseUrl: string = environment.server.baseUrl;
       currentUser$ = this.userFacade.currentUser$;
       currentUser: UserDto | null = null;
 

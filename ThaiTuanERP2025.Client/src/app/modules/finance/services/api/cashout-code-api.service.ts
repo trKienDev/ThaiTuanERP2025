@@ -11,7 +11,7 @@ import { CashoutGroupTreeWithCodeDto } from "../../models/cashout-group.model";
 @Injectable({ providedIn: 'root' })
 export class CashoutCodeApiService extends BaseApiService<CashoutCodeDto, CashoutCodePayload> {
       constructor(http: HttpClient) {
-            super(http, `${environment.apiUrl}/cashout-code`);
+            super(http, `${environment.server.apiUrl}/cashout-code`);
       }
 
       getTree(): Observable<CashoutGroupTreeWithCodeDto[]> {

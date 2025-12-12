@@ -10,7 +10,7 @@ import { BaseApiService } from "../../../../shared/services/base-api.service";
 @Injectable({ providedIn: 'root' })
 export class BudgetPeriodApiService extends BaseApiService<BudgetPeriodDto, BudgetPeriodPayload, void, UpdateBudgetPeriodPayload, void> {
       constructor(http: HttpClient) {
-            super(http, `${environment.apiUrl}/budget-period`);
+            super(http, `${environment.server.apiUrl}/budget-period`);
       }
 
       getAvailable() {

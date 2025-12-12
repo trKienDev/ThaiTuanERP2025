@@ -4,7 +4,7 @@ namespace Drive.Application.Shared.Interfaces
 {
 	public interface IUnitOfWork
 	{
-		IStoredObjectWriteRepository StoredFiles { get; }
+		IStoredObjectWriteRepository StoredObjects { get; }
 		Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 	}
 }

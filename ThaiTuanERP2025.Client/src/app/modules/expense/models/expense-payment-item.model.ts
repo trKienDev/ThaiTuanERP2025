@@ -1,4 +1,4 @@
-import { StoredFileMetadataDto } from "../../files/file-preview.service";
+import { StoredFileMetadataDto } from "../../file-attachment/services/file-attachment-preview.service";
 import { BudgetCodeDto, BudgetCodeLookupDto } from "../../finance/models/budget-code.model";
 import { CashoutCodeDto } from "../../finance/models/cashout-code.model";
 import { InvoiceDto } from "./invoice.model";

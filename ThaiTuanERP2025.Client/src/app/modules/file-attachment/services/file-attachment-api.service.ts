@@ -1,17 +1,18 @@
 import { Injectable, inject } from "@angular/core";
 import { HttpClient, HttpEvent, HttpEventType, HttpRequest } from "@angular/common/http";
 import { Observable, catchError, map, throwError } from "rxjs";
-import { environment } from "../../../environments/environment";
-import { UploadFileResult } from "../../shared/models/upload-file-result.model";
-import { ApiResponse } from "../../shared/models/api-response.model";
+import { environment } from "../../../../environments/environment";
+import { ApiResponse } from "../../../shared/models/api-response.model";
+import { UploadFileResult } from "../../../shared/models/upload-file-result.model";
+import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
 
 export type UploadEventProgress = { type: 'progress'; percent: number };
 export type UploadEventDone = { type: 'done'; data?: UploadFileResult };
 
 @Injectable({ providedIn: "root" })
-export class FileApiService {
+export class FileAttachmentApiService {
       private http = inject(HttpClient);
-      private API_URL = `${environment.baseUrl}/api/files`;
+      private API_URL = `${environment.server.baseUrl}/api/files`;
 
       /** Single upload (field "file") + progress, khớp FilesController.UploadSingle */
       uploadFileWithProgress$(
@@ -44,6 +45,8 @@ export class FileApiService {
                   catchError((e) => throwError(() => e))
             );
       }
+
+
 
       /** Single upload (không cần progress) – giữ lại nếu chỗ khác đang dùng */
       uploadFile(file: File, module: string, entity: string, entityId?: string) {

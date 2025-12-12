@@ -8,7 +8,7 @@ import { handleApiResponse$ } from "../operators/handle-api-response.operator";
 export abstract class BaseApiService<TDto, TPayload, TCreateResponse = void, TUpdate = TPayload, TUpdateResponse = TDto> {
       protected constructor(
             protected http: HttpClient,
-            protected readonly endpoint: string// e.g. `${environment.apiUrl}/api/taxes`
+            protected readonly endpoint: string// e.g. `${environment.server.apiUrl}/api/taxes`
       ) {}
 
       getAll(): Observable<TDto[]> {

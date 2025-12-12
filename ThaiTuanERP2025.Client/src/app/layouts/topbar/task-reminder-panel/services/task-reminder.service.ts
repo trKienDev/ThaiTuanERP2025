@@ -24,7 +24,7 @@ export class TaskReminderSignalRService {
             if (this.hub?.state === signalR.HubConnectionState.Connected) return;
 
             this.hub = new signalR.HubConnectionBuilder()
-                  .withUrl(`${environment.baseUrl}${environment.hubs.notification}`, {
+                  .withUrl(`${environment.server.baseUrl}${environment.server.hubs.notification}`, {
                         accessTokenFactory: () => getToken?.() ?? ''
                   })
                   .withAutomaticReconnect()

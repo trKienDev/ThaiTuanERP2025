@@ -10,7 +10,7 @@ import { handleApiResponse$ } from "../../../../shared/operators/handle-api-resp
 @Injectable({ providedIn: 'root' })
 export class CashoutGroupApiService extends BaseApiService<CashoutGroupDto, CashoutGroupPayload> {
       constructor(http: HttpClient) {
-            super(http, `${environment.apiUrl}/cashout-group`);
+            super(http, `${environment.server.apiUrl}/cashout-group`);
       }
 
       getTree(): Observable<CashoutGroupTreeDto[]> {

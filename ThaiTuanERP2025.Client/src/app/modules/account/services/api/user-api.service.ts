@@ -6,15 +6,17 @@ import { ApiResponse } from "../../../../shared/models/api-response.model";
 import { SetUserManagerRequest, UserBriefAvatarDto, UserDto, UserRequest } from "../../models/user.model";
 import { handleApiResponse$ } from "../../../../shared/operators/handle-api-response.operator";
 import { BaseApiService } from "../../../../shared/services/base-api.service";
-import { FileApiService } from "../../../files/file-api.service";
+import { FileAttachmentApiService } from "../../../file-attachment/services/file-attachment-api.service";
+import { DriveApiService } from "../../../drive/drive-api.service";
 
 @Injectable({ providedIn: 'root'})
 export class UserApiService extends BaseApiService<UserDto, UserRequest> {
       constructor(http: HttpClient) {
-            super(http, `${environment.apiUrl}/user`);
+            super(http, `${environment.server.apiUrl}/user`);
       }
 
-      private readonly fileApi = inject(FileApiService);
+      private readonly driveApi = inject(DriveApiService);
+      private readonly fileApi = inject(FileAttachmentApiService);
 
       // ===== GET =====
       getCurrentuser(): Observable <UserDto> {
@@ -45,13 +47,7 @@ export class UserApiService extends BaseApiService<UserDto, UserRequest> {
       
       // ==== PUT ====
       updateAvatar(file: File, userId: string): Observable<string> {
-            return this.fileApi.uploadFile(file, 'account', 'user-avatar', userId).pipe(
-                  switchMap((uploadResult) => {
-                        const body = { fileId: uploadResult.data?.id };
-                        return this.http.put<ApiResponse<string>>(`${this.endpoint}/${userId}/avatar`, body)
-                              .pipe(handleApiResponse$<string>());
-                  })
-            );
+            return this.driveApi.uploadFile(file);
       }
       
       setManagers(id: string, request: SetUserManagerRequest): Observable<string> {

@@ -9,7 +9,7 @@ import { handleApiResponse$ } from "../../../shared/operators/handle-api-respons
 
 @Injectable({ providedIn: 'root' })
 export class InvoiceApiService {
-      private readonly API_URL = `${environment.apiUrl}/invoices`;
+      private readonly API_URL = `${environment.server.apiUrl}/invoices`;
 
       constructor(private readonly http: HttpClient) {}
 

@@ -7,6 +7,6 @@ import { ExpenseWorkflowTemplateDto, ExpenseWorkflowTemplatePayload } from "../.
 @Injectable({ providedIn: 'root' })
 export class ExpenseWorkflowTemplateApiService extends BaseApiService<ExpenseWorkflowTemplateDto, ExpenseWorkflowTemplatePayload> {
       constructor(http: HttpClient) {
-            super(http, `${environment.apiUrl}/expense-workflow-template`);
+            super(http, `${environment.server.apiUrl}/expense-workflow-template`);
       }
 }

@@ -4,9 +4,9 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { FormsModule, ReactiveFormsModule, FormControl } from "@angular/forms";
 import { KitFileUploaderComponent } from "../../../../shared/components/kit-file-uploader/kit-file-uploader.component";
 import { UploadItem } from "../../../../shared/components/kit-file-uploader/upload-item.model";
-import { FilePreviewService } from "../../../files/file-preview.service";
 import { CommentMentionBoxComponent } from "../comment-mention-box/comment-mention-box.component";
 import { KitSpinnerButtonComponent } from "../../../../shared/components/kit-spinner-button/kit-spinner-button.component";
+import { FileAttachmentPreviewService } from '../../../file-attachment/services/file-attachment-preview.service';
 
 @Component({
       selector: 'comment-editor',
@@ -55,7 +55,7 @@ export class CommentEditorComponent {
             isPublic: false
       };
 
-      constructor(private readonly filePreview: FilePreviewService) {}
+      constructor(private readonly filePreview: FileAttachmentPreviewService) {}
 
       get canSubmit(): boolean {
             return this.control.value.trim().length > 0;

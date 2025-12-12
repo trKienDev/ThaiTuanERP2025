@@ -8,7 +8,7 @@ import { handleApiResponse$ } from "../../../shared/operators/handle-api-respons
 
 @Injectable({ providedIn: 'root' })
 export class BankAccountApiService {
-      private readonly API_URL = `${environment.apiUrl}/bank-accounts`;
+      private readonly API_URL = `${environment.server.apiUrl}/bank-accounts`;
 
       constructor(private readonly http: HttpClient) {}
 

@@ -12,7 +12,7 @@ import { firstValueFrom } from "rxjs";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { handleHttpError } from "../../../../../../shared/utils/handle-http-errors.util";
 import { ToastService } from "../../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
-import { FileApiService } from "../../../../../files/file-api.service";
+import { FileAttachmentApiService } from "../../../../../file-attachment/services/file-attachment-api.service";
 
 @Component({
       selector: 'mini-invoice-request-dialog',
@@ -28,7 +28,7 @@ export class MiniInvoiceRequestDialogComponent {
       private ref = inject(MatDialogRef<MiniInvoiceRequestDialogComponent>);
       private adapter = inject<DateAdapter<Date>>(DateAdapter as any);
       private formBuilder = inject(FormBuilder);
-      private fileApi = inject(FileApiService);
+      private fileApi = inject(FileAttachmentApiService);
       private invoiceService = inject(InvoiceApiService);
       private toast = inject(ToastService);
 

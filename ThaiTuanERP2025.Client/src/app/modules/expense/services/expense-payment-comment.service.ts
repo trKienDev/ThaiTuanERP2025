@@ -8,7 +8,7 @@ import { handleApiResponse$ } from "../../../shared/operators/handle-api-respons
 
 @Injectable({ providedIn: 'root' })
 export class ExpensePaymentCommentApiService {
-      private readonly API_URL = `${environment.apiUrl}/expense-payment-comments`;
+      private readonly API_URL = `${environment.server.apiUrl}/expense-payment-comments`;
       constructor(private readonly http: HttpClient) {}
 
       submitComment(paymentId: string, request: ExpensePaymentCommentRequest): Observable<ExpensePaymentCommentDto> {

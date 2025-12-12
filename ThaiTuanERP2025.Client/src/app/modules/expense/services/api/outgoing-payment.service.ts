@@ -11,7 +11,7 @@ import { OutgoingPaymentPayload, OutgoingPaymentDetailDto, OutgoingPaymentLookup
 @Injectable({ providedIn: 'root' })
 export class OutgoingPaymentApiService extends BaseApiService<OutgoingPaymentDto, OutgoingPaymentPayload> {
       constructor(http: HttpClient) {
-            super(http, `${environment.apiUrl}/outgoing-payment`);
+            super(http, `${environment.server.apiUrl}/outgoing-payment`);
       }
 
       getDetailById(id: string): Observable<OutgoingPaymentDetailDto> {

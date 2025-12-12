@@ -10,7 +10,7 @@ import { BaseApiService } from "../../../../shared/services/base-api.service";
 @Injectable({ providedIn: 'root' }) 
 export class DepartmentApiService extends BaseApiService<DepartmentDto, DepartmentRequest> {
       constructor(http: HttpClient) {
-            super(http,`${environment.apiUrl}/department`);
+            super(http,`${environment.server.apiUrl}/department`);
       }
 
       setManager(id: string, request: SetDepartmentManagerPayload): Observable<string> {

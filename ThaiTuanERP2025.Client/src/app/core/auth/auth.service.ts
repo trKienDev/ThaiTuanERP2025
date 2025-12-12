@@ -15,7 +15,7 @@ export class AuthService {
       private readonly USER_KEY = 'user';
       private readonly ROLES_KEY = 'roles';
       private readonly PERMISSONS_KEY = 'permissions';     
-      private readonly apiUrl = `${environment.apiUrl}/auth`;
+      private readonly apiUrl = `${environment.server.apiUrl}/auth`;
       private isRefreshing = false;
 
       // ===== Reactive State =====
@@ -137,7 +137,7 @@ export class AuthService {
             }
       }
       getCurrentUserFromServer() {
-            return this.http.get<UserDto>(`${environment.apiUrl}user/me`).pipe(
+            return this.http.get<UserDto>(`${environment.server.apiUrl}user/me`).pipe(
                   tap((user) => {
                         // Đồng bộ lại localStorage và BehaviorSubject
                         localStorage.setItem(this.USER_KEY, JSON.stringify(user));

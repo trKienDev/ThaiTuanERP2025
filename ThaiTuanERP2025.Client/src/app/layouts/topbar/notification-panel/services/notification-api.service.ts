@@ -8,7 +8,7 @@ import { handleApiResponse$ } from "../../../../shared/operators/handle-api-resp
 @Injectable({ providedIn: 'root' })
 export class NotificationsApiService {
       private readonly http = inject(HttpClient);
-      private readonly baseUrl = `${environment.baseUrl}/api/notification`;
+      private readonly baseUrl = `${environment.server.baseUrl}/api/notification`;
 
       getList(opts?: { unreadOnly?: boolean; page?: number; pageSize?: number }): Observable<NotificationDto[]> {
             const params = new HttpParams()

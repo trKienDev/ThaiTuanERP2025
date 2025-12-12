@@ -1,20 +1,19 @@
-import { CommonModule } from "@angular/common";
 import { Component, inject, Inject } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 
 @Component({
-      selector: 'file-image-preview-dialog',
+      selector: 'pdf-attachment-preview-dialog',
       standalone: true,
-      imports: [ CommonModule ],
       template: `
             <div class="preview-container">
-                  <button type="button" class="exit-button" (click)="close()">
-                        <span class="text material-icons-outlined">close</span>
-                  </button>
-                  <div class="img-wrapper">
-                        <div class="scroll">
-                              <img [src]="data.src" class="preview-img"/>
-                        </div>
+                  <div class="display-flex justify-content-end">
+                        <button type="button" class="exit-button" (click)="close()">
+                              <span class="text material-icons-outlined">close</span>
+                        </button>
+                  </div>
+                  <div class="pdf-wrapper">
+                        <embed [src]="safeUrl" type="application/pdf" class="pdf-viewer" />
                   </div>
             </div>
       `,
@@ -23,24 +22,22 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
                   border-radius: 10px;
                   box-shadow: rgba(255, 255, 255, 0.77) 0px 10px 36px 0px, rgba(255, 255, 255, 0.09) 0px 0px 0px 1px;
                   background: white;
-                  position: relative;
+                  width: 80vw;
+                  height: 90vh;
+                  display: flex;
+                  flex-direction: column;
             }
-            .img-wrapper {
+            
+            .pdf-wrapper {
                   padding: 10px;
+                  height: 100%;
             }
-            .scroll {
-                  overflow: auto;
-                  max-width: 80vw;
-                  max-height: 80vh;
-            }
-            .preview-img {
-                  display: block;
-                  max-width: 100%;
-                  height: auto;     /* Quan trọng */
-                  object-fit: unset;
+            .pdf-viewer {
+                  width: 100%;
+                  height: 100%;
+                  border: none;
             }
             .exit-button {
-                  position: absolute;      /* đè lên ảnh */
                   right: 0;
                   z-index: 10;
                   width: 32px;
@@ -66,10 +63,18 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
             }
       `]
 })
-export class FileImagePreviewDialog {
-      private readonly dialogRef = inject(MatDialogRef<FileImagePreviewDialog>);
+export class PdfAttachmentPreviewDialog {
+      private readonly dialogRef = inject(MatDialogRef<PdfAttachmentPreviewDialog>);
 
-      constructor(@Inject(MAT_DIALOG_DATA) public data: { src: string }) {}
+
+      safeUrl: SafeResourceUrl;
+
+      constructor(
+            @Inject(MAT_DIALOG_DATA) public data: { src: string },
+            private sanitizer: DomSanitizer
+      ) {
+            this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(data.src);
+      }
 
       close() {
             this.dialogRef.close();

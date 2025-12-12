@@ -17,7 +17,6 @@ import { Router } from '@angular/router';
 import { UserFacade } from '../../../../account/facades/user.facade';
 import { KitFlipCountdownComponent } from "../../../../../shared/components/kit-flip-countdown/kit-flip-countdown.component";
 import { ExpenseWorkflowStatus } from '../../../models/expense-workflow-instance.model';
-import { FilePreviewService, StoredFileMetadataDto } from '../../../../files/file-preview.service';
 import { ExpensePaymentItemLookupDto } from '../../../models/expense-payment-item.model';
 import { OutgoingPaymentStatusPipe } from "../../../pipes/outgoing-payment-status.pipe";
 import { KitShellTabsComponent } from '../../../../../shared/components/kit-shell-tabs/kit-shell-tabs.component';
@@ -36,7 +35,8 @@ import { CommentEditorComponent } from "../../../../comment/components/comment-e
 import { usePaymentDetail } from '../../../composables/use-payment-detail';
 import { KitLoadingSpinnerComponent } from "../../../../../shared/components/kit-loading-spinner/kit-loading-spinner.component";
 import { Kit404PageComponent } from "../../../../../shared/components/kit-404-page/kit-404-page.component";
-import { FileApiService } from '../../../../files/file-api.service';
+import { FileAttachmentApiService } from '../../../../file-attachment/services/file-attachment-api.service';
+import { FileAttachmentPreviewService, StoredFileMetadataDto } from '../../../../file-attachment/services/file-attachment-preview.service';
 
 @Component({
       selector: 'expense-payment-detail-dialog',
@@ -62,8 +62,8 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
       private readonly countdown = inject(CountdownService);
       private readonly httpErrorHandler = inject(HttpErrorHandlerService);
       private readonly router = inject(Router);
-      private readonly filePreview = inject(FilePreviewService);
-      private readonly fileApi = inject(FileApiService);
+      private readonly filePreview = inject(FileAttachmentPreviewService);
+      private readonly fileApi = inject(FileAttachmentApiService);
       private readonly userOptionsStore = inject(UserOptionStore);
       private readonly commentApi = inject(CommentApiService);
 

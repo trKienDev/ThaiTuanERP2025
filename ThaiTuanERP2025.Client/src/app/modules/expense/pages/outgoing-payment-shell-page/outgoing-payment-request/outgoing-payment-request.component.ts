@@ -24,10 +24,10 @@ import { ExpensePaymentDetailDialogComponent } from "../../../components/dialogs
 import { HttpErrorHandlerService } from "../../../../../core/services/http-errror-handler.service";
 import { ExpensePaymentItemsTableComponent } from "../../../components/tables/expense-payment-items-table/expense-payment-items-table.component";
 import { ExpensePaymentItemLookupDto } from "../../../models/expense-payment-item.model";
-import { FilePreviewService } from "../../../../files/file-preview.service";
 import { OutgoingPaymentStatusPipe } from "../../../pipes/outgoing-payment-status.pipe";
 import { OutgoingPaymentsTableComponent } from "../../../components/tables/outgoing-payments-table/outgoing-payments-table.component";
 import { maxRemainingValidator } from "../../../../../shared/validators/max-value.validator";
+import { FileAttachmentPreviewService } from "../../../../file-attachment/services/file-attachment-preview.service";
 
 @Component({
       selector: 'outgoing-payment-request',
@@ -43,7 +43,7 @@ export class OutgoingPaymentRequestComponent implements OnInit {
       private readonly outgoingPaymentApi = inject(OutgoingPaymentApiService);
       private readonly dialog = inject(MatDialog)
       private readonly httpErrorHandler = inject(HttpErrorHandlerService);
-      private readonly filePreview = inject(FilePreviewService);
+      private readonly filePreview = inject(FileAttachmentPreviewService);
 
       userOptions = inject(UserOptionStore).option$;
       outgoingBankOptions = inject(OutgoingBankAccountOptionStore).options$;

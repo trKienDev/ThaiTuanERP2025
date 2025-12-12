@@ -20,11 +20,12 @@ import { UploadItem } from "../../../../../shared/components/kit-file-uploader/u
 import { DOCUMENT_TYPE } from "../../../../../core/constants/document-types.constants";
 import { FormControl } from "@angular/forms";
 import { CommentDetailDto, CommentPayload } from "../../../../comment/models/comment.model";
-import { FilePreviewService } from "../../../../files/file-preview.service";
 import { UserOptionStore } from "../../../../account/options/user-dropdown.option";
 import { CommentApiService } from "../../../../comment/services/comment-api.service";
 import { CommentThreadComponent } from "../../../../comment/components/comment-thread/comment-thread.component";
-import { FileApiService } from "../../../../files/file-api.service";
+import { FileAttachmentApiService } from "../../../../file-attachment/services/file-attachment-api.service";
+import { FileAttachmentPreviewService } from "../../../../file-attachment/services/file-attachment-preview.service";
+
 
 @Component({
       selector: 'outgoing-payment-detail-dialog',
@@ -40,8 +41,8 @@ export class OutgoingPaymentDetailDialogComponent implements OnInit {
       private readonly outgoingPaymentService = inject(OutgoingPaymentApiService);
       private readonly httpErrorHandler = inject(HttpErrorHandlerService);
       private readonly outgoingPaymentLogic = useOutgoingPaymentDetail();
-      private readonly filePreview = inject(FilePreviewService);
-      private readonly fileApi = inject(FileApiService);
+      private readonly filePreview = inject(FileAttachmentPreviewService);
+      private readonly fileApi = inject(FileAttachmentApiService);
       private readonly userOptionsStore = inject(UserOptionStore);
       private readonly commentApi = inject(CommentApiService);
 

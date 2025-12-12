@@ -24,7 +24,7 @@ export class AccountProfileComponent {
       private readonly toastService = inject(ToastService);
       private readonly userApi = inject(UserApiService);
 
-      baseUrl: string = environment.baseUrl;      
+      baseUrl: string = environment.server.baseUrl;      
       currentUser$ = this.userFacade.currentUser$;
 
       selectedAvatarFile: File | null = null;

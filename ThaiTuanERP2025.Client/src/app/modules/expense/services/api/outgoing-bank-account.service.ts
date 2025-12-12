@@ -7,6 +7,6 @@ import { BaseApiService } from "../../../../shared/services/base-api.service";
 @Injectable({ providedIn: 'root' })
 export class OutgoingBankAccountApiService extends BaseApiService<OutgoingBankAccountDto, OutgoingBankAccountPayload> {
       constructor(http: HttpClient) {
-            super(http, `${environment.apiUrl}/outgoing-bank-account`);
+            super(http, `${environment.server.apiUrl}/outgoing-bank-account`);
       }
 }

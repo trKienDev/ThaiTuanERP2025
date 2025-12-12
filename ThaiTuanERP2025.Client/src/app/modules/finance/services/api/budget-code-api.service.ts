@@ -10,7 +10,7 @@ import { BaseApiService } from "../../../../shared/services/base-api.service";
 @Injectable({ providedIn: 'root' })
 export class BudgetCodeApiService extends BaseApiService<BudgetCodeDto, BudgetCodeRequest > {
       constructor(http: HttpClient) {
-            super(http, `${environment.apiUrl}/budget-code`);
+            super(http, `${environment.server.apiUrl}/budget-code`);
       }
 
       getAllActive(): Observable<BudgetCodeDto[]> {

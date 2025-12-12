@@ -1,38 +1,60 @@
 ﻿using Drive.Application.Contracts;
+using Drive.Application.Interfaces;
 using Drive.Application.Shared.Interfaces;
 using MediatR;
+using System.ComponentModel.DataAnnotations;
 using ThaiTuanERP2025.Domain.StoredFiles.Entities;
 
 namespace Drive.Application.Commands
 {
-	public sealed record CreateStoredObjectCommand(StoredObjectPayload Payload) : IRequest<Guid>;
+	public sealed record CreateStoredObjectCommand(RawObject Object) : IRequest<Guid>;
 
 	public sealed class CreateStoredObjectCommandHandler : IRequestHandler<CreateStoredObjectCommand, Guid>
 	{
+		private readonly IObjectStorage _storage;
 		private readonly IUnitOfWork _uow;
-		public CreateStoredObjectCommandHandler(IUnitOfWork uow)
+		public CreateStoredObjectCommandHandler(IUnitOfWork uow, IObjectStorage storage)
 		{
 			_uow = uow;
+			_storage = storage;
 		}
 
 		public async Task<Guid> Handle(CreateStoredObjectCommand command, CancellationToken cancellationToken) {
-			var payload = command.Payload;
+			if (command.Object is null || command.Object.Length <= 0)
+				throw new ValidationException("Không có object được gửi lên");
 
-			// 1. Create domain entity
-			var storedObject = new StoredObject(
-				bucket: payload.Bucket,
-				objectKey: payload.ObjectKey,
-				fileName: payload.FileName,
-				contentType: payload.ContentType,
-				size: payload.Size
+			try
+			{
+				await _storage.EnsureReadyAsync(cancellationToken);
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex);
+				throw;
+			}
+
+			var objectKey = BuildObjectKey(command.Object.FileName);
+
+			await using var stream = await command.Object.OpenReadStream(cancellationToken);
+			var contentType = string.IsNullOrWhiteSpace(command.Object.ContentType) ? "application/octet-stream" : command.Object.ContentType!;
+
+			await _storage.UploadAsync(objectKey, stream, contentType, cancellationToken);
+
+			var entity = new StoredObject
+			(
+				objectKey,
+				command.Object.FileName,
+				contentType,
+				command.Object.Length
 			);
 
-			// 2. Persist
-			await _uow.StoredFiles.AddAsync(storedObject, cancellationToken);
+			await _uow.StoredObjects.AddAsync(entity, cancellationToken);
 			await _uow.SaveChangesAsync(cancellationToken);
 
-			// 3. Return ID
-			return storedObject.Id;
+			return entity.Id;
 		}
+
+		private static string BuildObjectKey(string originalName)
+			=> $"{DateTime.UtcNow:yyyy/MM}/" + $"{Guid.NewGuid():N}{Path.GetExtension(originalName)}";
 	}
 }

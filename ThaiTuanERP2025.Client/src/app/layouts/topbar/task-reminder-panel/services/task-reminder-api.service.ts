@@ -9,7 +9,7 @@ import { ApiResponse } from '../../../../shared/models/api-response.model';
 @Injectable({ providedIn: 'root' })
 export class TaskReminderApiService {
       private readonly http = inject(HttpClient);
-      private readonly baseUrl = `${environment.baseUrl}/api/reminder`;
+      private readonly baseUrl = `${environment.server.baseUrl}/api/reminder`;
 
       getMyActive(): Observable<TaskReminderDto[]> {
             return this.http.get<ApiResponse<TaskReminderDto[]>>(this.baseUrl)

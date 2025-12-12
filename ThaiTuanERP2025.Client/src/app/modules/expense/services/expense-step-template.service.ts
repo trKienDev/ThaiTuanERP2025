@@ -7,6 +7,6 @@ import { ExpenseStepTemplateDto, ExpenseStepTemplatePayload } from "../models/ex
 @Injectable({ providedIn: 'root'})
 export class ExpenseStepTemplateApiService extends BaseApiService<ExpenseStepTemplateDto, ExpenseStepTemplatePayload> {
       constructor(http: HttpClient) {
-            super(http, `${environment.apiUrl}/expense-step-templates/`);
+            super(http, `${environment.server.apiUrl}/expense-step-templates/`);
       }
 }
