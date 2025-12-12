@@ -5,8 +5,8 @@ import { Observable, switchMap } from "rxjs";
 import { ApiResponse } from "../../../../shared/models/api-response.model";
 import { SetUserManagerRequest, UserBriefAvatarDto, UserDto, UserRequest } from "../../models/user.model";
 import { handleApiResponse$ } from "../../../../shared/operators/handle-api-response.operator";
-import { FileService } from "../../../../shared/services/file.service";
 import { BaseApiService } from "../../../../shared/services/base-api.service";
+import { FileApiService } from "../../../files/file-api.service";
 
 @Injectable({ providedIn: 'root'})
 export class UserApiService extends BaseApiService<UserDto, UserRequest> {
@@ -14,7 +14,7 @@ export class UserApiService extends BaseApiService<UserDto, UserRequest> {
             super(http, `${environment.apiUrl}/user`);
       }
 
-      private readonly fileService = inject(FileService);
+      private readonly fileApi = inject(FileApiService);
 
       // ===== GET =====
       getCurrentuser(): Observable <UserDto> {
@@ -45,7 +45,7 @@ export class UserApiService extends BaseApiService<UserDto, UserRequest> {
       
       // ==== PUT ====
       updateAvatar(file: File, userId: string): Observable<string> {
-            return this.fileService.uploadFile(file, 'account', 'user-avatar', userId).pipe(
+            return this.fileApi.uploadFile(file, 'account', 'user-avatar', userId).pipe(
                   switchMap((uploadResult) => {
                         const body = { fileId: uploadResult.data?.id };
                         return this.http.put<ApiResponse<string>>(`${this.endpoint}/${userId}/avatar`, body)

@@ -61,15 +61,14 @@ using ThaiTuanERP2025.Infrastructure.Account.Services;
 using ThaiTuanERP2025.Application.Finance.BudgetTransasctions;
 using ThaiTuanERP2025.Application.Expense.ExpenseWorkflows.Repositories;
 using ThaiTuanERP2025.Application.Expense.ExpensePayments.Repositories;
-using ThaiTuanERP2025.Application.Files;
-using ThaiTuanERP2025.Application.Files.Interfaces;
-using ThaiTuanERP2025.Domain.StoredFiles.Repositories;
-using ThaiTuanERP2025.Infrastructure.StoredFiles.Repositories;
 using ThaiTuanERP2025.Infrastructure.StoredFiles.Configurations;
-using ThaiTuanERP2025.Infrastructure.StoredFiles;
 using ThaiTuanERP2025.Application.Expense.OutgoingBankAccounts;
 using ThaiTuanERP2025.Application.Expense.OutgoingPayments;
 using ThaiTuanERP2025.Application.Core.Comments;
+using ThaiTuanERP2025.Infrastructure.Core.Services;
+using ThaiTuanERP2025.Domain.StoredFiles.Repositories;
+using ThaiTuanERP2025.Application.Core.FileAttachments.Repositories;
+using ThaiTuanERP2025.Application.Core.FileAttachments.Services;
 
 namespace ThaiTuanERP2025.Infrastructure
 {
@@ -93,8 +92,8 @@ namespace ThaiTuanERP2025.Infrastructure
 			services.AddScoped<ICodeGenerator, CodeGenerator>();
 
 			// Files
-			services.AddScoped<IStoredFilesRepository, StoredFileWriteRepository>();
-			services.AddScoped<IStoredFileReadRepository, StoredFileReadRepository>();
+			services.AddScoped<IFileAttachmentWriteRepository, FileAttachmentWriteRepository>();
+			services.AddScoped<IFileAttachmentReadRepository, FileAttachmentReadRepository>();
 
 			// Account
 			services.AddScoped<IUserReadRepostiory, UserReadRepository>();
@@ -176,7 +175,7 @@ namespace ThaiTuanERP2025.Infrastructure
 
 			// ========= File Storage (MinIO) =========
 			services.Configure<FileStorageOptions>(cfg.GetSection("Minio"));
-			services.AddScoped<IFileStorage, LocalFileStorage>();
+			services.AddScoped<IFileAttachmentStorageService, LocalFileAttachmentStorageService>();
 			services.AddOptions<FileStorageOptions>()
 				.Bind(cfg.GetSection(FileStorageOptions.SectionName))
 				.ValidateDataAnnotations()

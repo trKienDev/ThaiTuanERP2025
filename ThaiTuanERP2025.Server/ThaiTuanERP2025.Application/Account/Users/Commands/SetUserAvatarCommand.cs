@@ -17,7 +17,7 @@ namespace ThaiTuanERP2025.Application.Account.Users.Commands
 		public async Task<Unit> Handle(SetUserAvatarCommand command, CancellationToken cancellationToken)
 		{
 			var request = command.Request;
-			var file = await _unitOfWork.StoredFiles.GetByIdAsync(request.FileId)
+			var file = await _unitOfWork.FileAttachments.GetByIdAsync(request.FileId)
 				?? throw new NotFoundException("File không tồn tại");
 
 			if (file.Module != "account" || file.Entity != "user-avatar" || file.EntityId != command.UserId.ToString())
@@ -26,7 +26,7 @@ namespace ThaiTuanERP2025.Application.Account.Users.Commands
 			var user = await _unitOfWork.Users.GetByIdAsync(command.UserId)
 				?? throw new NotFoundException($"Không tìm thấy thông tin user'");
 
-			user.UpdateAvatar(request.FileId, file.ObjectKey);
+			//user.UpdateAvatar(request.FileId, file.ObjectKey);
 			_unitOfWork.Users.Update(user);
 			await _unitOfWork.SaveChangesAsync();
 			return Unit.Value;

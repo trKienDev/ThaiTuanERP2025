@@ -9,7 +9,6 @@ using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Core.Entities;
 using ThaiTuanERP2025.Domain.Expense.Entities;
 using ThaiTuanERP2025.Domain.Finance.Entities;
-using ThaiTuanERP2025.Domain.StoredFiles.Entities;
 
 namespace ThaiTuanERP2025.Infrastructure.Persistence
 {
@@ -47,7 +46,7 @@ namespace ThaiTuanERP2025.Infrastructure.Persistence
 		public DbSet<OutgoingBankAccount> OutgoingBankAccounts => Set<OutgoingBankAccount>();
 
 		// Files
-		public DbSet<StoredFile> StoredFiles => Set<StoredFile>();
+		public DbSet<FileAttachment> StoredFiles => Set<FileAttachment>();
 		
 		// Expense
 		public DbSet<Supplier> Suppliers => Set<Supplier>();

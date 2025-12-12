@@ -1,6 +1,6 @@
-﻿using ThaiTuanERP2025.Domain.Shared;
+﻿using ThaiTuanERP2025.Domain.Core.Entities;
+using ThaiTuanERP2025.Domain.Shared;
 using ThaiTuanERP2025.Domain.Shared.Entities;
-using ThaiTuanERP2025.Domain.StoredFiles.Entities;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
@@ -24,7 +24,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public ExpensePayment ExpensePayment { get; private set; } = null!;
 
 		public Guid StoredFileId { get; private set; }
-		public StoredFile StoredFile { get; private set; } = null!;
+		public FileAttachment StoredFile { get; private set; } = null!;
 		#endregion
 	}
 }

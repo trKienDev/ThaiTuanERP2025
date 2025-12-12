@@ -3,9 +3,9 @@ import { MatDialog } from "@angular/material/dialog";
 import { ToastService } from "../../shared/components/kit-toast-alert/kit-toast-alert.service";
 import { FileImagePreviewDialog } from "./file-image-preview-dialog.component";
 import { FilePdfPreviewDialog } from "./file-pdf-preview-dialog.component";
-import { FileService } from "../../shared/services/file.service";
 import { environment } from "../../../environments/environment";
 import { firstValueFrom } from "rxjs";
+import { FileApiService } from "./file-api.service";
 
 export interface StoredFileDownloadDto {
       fileId: string; 
@@ -24,7 +24,7 @@ export class FilePreviewService {
 
       private dialog = inject(MatDialog);
       private toast = inject(ToastService);
-      private fileService = inject(FileService);
+      private fileApi = inject(FileApiService);
       private readonly baseUrl = environment.baseUrl;
 
       /** Preview File object local (image / pdf / docx) – code của bạn giữ nguyên */
@@ -79,7 +79,7 @@ export class FilePreviewService {
             }
 
             try {
-                  const blob = await firstValueFrom(this.fileService.downloadById$(fileId));
+                  const blob = await firstValueFrom(this.fileApi.downloadById$(fileId));
 
                   this.previewBlob(blob, fileName ?? 'file');
             } catch (error) {

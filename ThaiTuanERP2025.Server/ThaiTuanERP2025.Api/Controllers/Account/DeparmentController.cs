@@ -16,12 +16,12 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 		private readonly IMediator _mediator;
 		public DeparmentController(IMediator mediator) => _mediator = mediator;
 
-		[HttpGet]
-		public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
-		{
-			var deptDtos = await _mediator.Send(new GetAllDepartmentsQuery(), cancellationToken);
-			return Ok(ApiResponse<IReadOnlyList<DepartmentDto>>.Success(deptDtos));
-		}
+		//[HttpGet]
+		//public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+		//{
+		//	var deptDtos = await _mediator.Send(new GetAllDepartmentsQuery(), cancellationToken);
+		//	return Ok(ApiResponse<IReadOnlyList<DepartmentDto>>.Success(deptDtos));
+		//}
 
 		[HttpGet("{id:guid}/parent")]
 		public async Task<IActionResult> GetParentDepartment([FromRoute] Guid id, CancellationToken cancellationToken)

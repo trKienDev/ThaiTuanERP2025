@@ -27,7 +27,6 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { DOCUMENT_TYPE } from '../../../../../core/constants/document-types.constants';
 import { UploadItem } from '../../../../../shared/components/kit-file-uploader/upload-item.model';
 import { KitFileUploaderComponent } from "../../../../../shared/components/kit-file-uploader/kit-file-uploader.component";
-import { FileService } from '../../../../../shared/services/file.service';
 import { CommentDetailDto, CommentPayload } from '../../../../comment/models/comment.model';
 import { CommentThreadComponent } from "../../../../comment/components/comment-thread/comment-thread.component";
 import { CommentApiService } from '../../../../comment/services/comment-api.service';
@@ -37,6 +36,7 @@ import { CommentEditorComponent } from "../../../../comment/components/comment-e
 import { usePaymentDetail } from '../../../composables/use-payment-detail';
 import { KitLoadingSpinnerComponent } from "../../../../../shared/components/kit-loading-spinner/kit-loading-spinner.component";
 import { Kit404PageComponent } from "../../../../../shared/components/kit-404-page/kit-404-page.component";
+import { FileApiService } from '../../../../files/file-api.service';
 
 @Component({
       selector: 'expense-payment-detail-dialog',
@@ -63,7 +63,7 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
       private readonly httpErrorHandler = inject(HttpErrorHandlerService);
       private readonly router = inject(Router);
       private readonly filePreview = inject(FilePreviewService);
-      private readonly fileApi = inject(FileService);
+      private readonly fileApi = inject(FileApiService);
       private readonly userOptionsStore = inject(UserOptionStore);
       private readonly commentApi = inject(CommentApiService);
 

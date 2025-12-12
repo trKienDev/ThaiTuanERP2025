@@ -26,6 +26,7 @@ export class AuthService {
 
       // === Login ===
       login(employeeCode: string, password: string) {
+            console.log('environment: ', environment);
             return this.http
                   .post<ApiResponse<LoginResponseDto>>(`${this.apiUrl}/login`, { employeeCode, password })
                   .pipe(

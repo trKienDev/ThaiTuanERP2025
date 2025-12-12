@@ -610,14 +610,14 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                     b.Property<Guid>("CommentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("StoredFileId")
+                    b.Property<Guid>("FileAttachmentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CommentId");
 
-                    b.HasIndex("StoredFileId");
+                    b.HasIndex("FileAttachmentId");
 
                     b.ToTable("CommentAttachments", "Core");
                 });
@@ -642,6 +642,77 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("CommentMentions", "Core");
+                });
+
+            modelBuilder.Entity("ThaiTuanERP2025.Domain.Core.Entities.FileAttachment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("DriveObjectId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Entity")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("EntityId")
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ModifiedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Module")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<long>("Size")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("DeletedByUserId");
+
+                    b.HasIndex("DriveObjectId");
+
+                    b.HasIndex("ModifiedByUserId");
+
+                    b.HasIndex("Module", "Entity", "EntityId");
+
+                    b.ToTable("FileAttachment", "Core");
                 });
 
             modelBuilder.Entity("ThaiTuanERP2025.Domain.Core.Entities.Follower", b =>
@@ -2357,90 +2428,6 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                     b.ToTable("NumberSeries", (string)null);
                 });
 
-            modelBuilder.Entity("ThaiTuanERP2025.Domain.StoredFiles.Entities.StoredFile", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Bucket")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("ContentType")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("CreatedByUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("DeletedByUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Entity")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("EntityId")
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("Hash")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("ModifiedByUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Module")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("ObjectKey")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<long>("Size")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedByUserId");
-
-                    b.HasIndex("DeletedByUserId");
-
-                    b.HasIndex("ModifiedByUserId");
-
-                    b.HasIndex("Bucket", "ObjectKey")
-                        .IsUnique();
-
-                    b.HasIndex("Module", "Entity", "EntityId");
-
-                    b.ToTable("StoredFiles", "Files");
-                });
-
             modelBuilder.Entity("ThaiTuanERP2025.Domain.Account.Entities.Department", b =>
                 {
                     b.HasOne("ThaiTuanERP2025.Domain.Account.Entities.User", "CreatedByUser")
@@ -2566,7 +2553,7 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
 
             modelBuilder.Entity("ThaiTuanERP2025.Domain.Account.Entities.User", b =>
                 {
-                    b.HasOne("ThaiTuanERP2025.Domain.StoredFiles.Entities.StoredFile", "AvatarFile")
+                    b.HasOne("ThaiTuanERP2025.Domain.Core.Entities.FileAttachment", "AvatarFile")
                         .WithMany()
                         .HasForeignKey("AvatarFileId")
                         .OnDelete(DeleteBehavior.SetNull);
@@ -2780,15 +2767,15 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ThaiTuanERP2025.Domain.StoredFiles.Entities.StoredFile", "StoredFile")
+                    b.HasOne("ThaiTuanERP2025.Domain.Core.Entities.FileAttachment", "FileAttachment")
                         .WithMany()
-                        .HasForeignKey("StoredFileId")
+                        .HasForeignKey("FileAttachmentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Comment");
 
-                    b.Navigation("StoredFile");
+                    b.Navigation("FileAttachment");
                 });
 
             modelBuilder.Entity("ThaiTuanERP2025.Domain.Core.Entities.CommentMention", b =>
@@ -2808,6 +2795,30 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                     b.Navigation("Comment");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ThaiTuanERP2025.Domain.Core.Entities.FileAttachment", b =>
+                {
+                    b.HasOne("ThaiTuanERP2025.Domain.Account.Entities.User", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("ThaiTuanERP2025.Domain.Account.Entities.User", "DeletedByUser")
+                        .WithMany()
+                        .HasForeignKey("DeletedByUserId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("ThaiTuanERP2025.Domain.Account.Entities.User", "ModifiedByUser")
+                        .WithMany()
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("DeletedByUser");
+
+                    b.Navigation("ModifiedByUser");
                 });
 
             modelBuilder.Entity("ThaiTuanERP2025.Domain.Core.Entities.UserNotification", b =>
@@ -2907,7 +2918,7 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                         .HasForeignKey("ModifiedByUserId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("ThaiTuanERP2025.Domain.StoredFiles.Entities.StoredFile", "StoredFile")
+                    b.HasOne("ThaiTuanERP2025.Domain.Core.Entities.FileAttachment", "StoredFile")
                         .WithMany()
                         .HasForeignKey("StoredFileId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -2946,7 +2957,7 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ThaiTuanERP2025.Domain.StoredFiles.Entities.StoredFile", "InvoiceFile")
+                    b.HasOne("ThaiTuanERP2025.Domain.Core.Entities.FileAttachment", "InvoiceFile")
                         .WithMany()
                         .HasForeignKey("InvoiceFileId")
                         .OnDelete(DeleteBehavior.SetNull);
@@ -3556,30 +3567,6 @@ namespace ThaiTuanERP2025.Infrastructure.Migrations
                     b.HasOne("ThaiTuanERP2025.Domain.Account.Entities.User", "ModifiedByUser")
                         .WithMany()
                         .HasForeignKey("ModifiedByUserId");
-
-                    b.Navigation("CreatedByUser");
-
-                    b.Navigation("DeletedByUser");
-
-                    b.Navigation("ModifiedByUser");
-                });
-
-            modelBuilder.Entity("ThaiTuanERP2025.Domain.StoredFiles.Entities.StoredFile", b =>
-                {
-                    b.HasOne("ThaiTuanERP2025.Domain.Account.Entities.User", "CreatedByUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedByUserId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("ThaiTuanERP2025.Domain.Account.Entities.User", "DeletedByUser")
-                        .WithMany()
-                        .HasForeignKey("DeletedByUserId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("ThaiTuanERP2025.Domain.Account.Entities.User", "ModifiedByUser")
-                        .WithMany()
-                        .HasForeignKey("ModifiedByUserId")
-                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("CreatedByUser");
 

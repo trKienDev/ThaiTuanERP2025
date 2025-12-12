@@ -20,22 +20,20 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			_mediator = mediator;
 		}
 
-		// Lấy thông tin user hiện tại (yêu cầu đăng nhập)
-		[HttpGet("me")]
-		[Produces("application/json")]
-		[ProducesResponseType(typeof(ApiResponse<UserDto>), StatusCodes.Status200OK)]
-		public async Task<ActionResult<UserDto>> GetCurrentUser(CancellationToken ct)
-		{
-			var result = await _mediator.Send(new GetProfilleQuery(User), ct);
-			return Ok(ApiResponse<UserDto>.Success(result));
-		}
-
 		#region GET
 		[HttpGet]
 		public async Task<IActionResult> GetAllAsync([FromQuery] string? keyword, [FromQuery] string? role, [FromQuery] Guid? departmentId, CancellationToken cancellationToken
 		) {
 			var users = await _mediator.Send(new GetAllUsersQuery(keyword, role, departmentId), cancellationToken);
 			return Ok(ApiResponse<IReadOnlyList<UserInforDto>>.Success(users));
+		}
+
+		// Lấy thông tin user hiện tại (yêu cầu đăng nhập)
+		[HttpGet("me")]
+		public async Task<ActionResult<UserDto>> GetCurrentUser(CancellationToken ct)
+		{
+			var result = await _mediator.Send(new GetProfilleQuery(User), ct);
+			return Ok(ApiResponse<UserDto>.Success(result));
 		}
 
 		[HttpGet("{id:guid}/managers/ids")]
@@ -52,11 +50,11 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			return Ok(ApiResponse<IReadOnlyList<UserBriefAvatarDto>>.Success(dtos));
 		}
 
-		[HttpGet("me/department/managers")]
-		public async Task<IActionResult> GetDepartmentManagersByUser(CancellationToken cancellationToken) {
-			var result = await _mediator.Send(new GetDepartmentManagersByUserQuery(), cancellationToken);
-			return Ok(ApiResponse<IReadOnlyList<UserBriefAvatarDto>>.Success(result));
-		}
+		//[HttpGet("me/department/managers")]
+		//public async Task<IActionResult> GetDepartmentManagersByUser(CancellationToken cancellationToken) {
+		//	var result = await _mediator.Send(new GetDepartmentManagersByUserQuery(), cancellationToken);
+		//	return Ok(ApiResponse<IReadOnlyList<UserBriefAvatarDto>>.Success(result));
+		//}
 
 		[HttpGet("search")]
 		public async Task<IActionResult> Search([FromQuery] string keyword, CancellationToken cancellationToken)

@@ -4,7 +4,7 @@ using ThaiTuanERP2025.Domain.Shared;
 using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Exceptions;
 using ThaiTuanERP2025.Domain.Shared.Interfaces;
-using ThaiTuanERP2025.Domain.StoredFiles.Entities;
+using ThaiTuanERP2025.Domain.Core.Entities;
 
 namespace ThaiTuanERP2025.Domain.Account.Entities
 {
@@ -51,7 +51,7 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 
 		public Guid? AvatarFileId { get; private set; }
 		public string? AvatarFileObjectKey { get; private set; }
-		public StoredFile? AvatarFile { get; init; }
+		public FileAttachment? AvatarFile { get; init; }
 
 		public string Position { get; private set; } = string.Empty;
 

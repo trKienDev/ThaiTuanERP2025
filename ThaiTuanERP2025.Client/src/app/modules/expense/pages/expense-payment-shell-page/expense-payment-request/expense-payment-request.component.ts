@@ -31,12 +31,12 @@ import { KitOverlaySpinnerComponent } from "../../../../../shared/components/kit
 import { SupplierRequestDialogComponent } from "../../../components/dialogs/supplier-request-dialog/supplier-request-dialog.component";
 import { AvailableBudgetPlansDialogComponent } from "../../../components/dialogs/available-budget-plans-dialog/available-budget-plans-dialog.component";
 import { AmountToWordsPipe } from "../../../../../shared/pipes/amount-to-words.pipe";
-import { FileService } from "../../../../../shared/services/file.service";
 import { ExpensePaymentItemPayload } from "../../../models/expense-payment-item.model";
 import { HttpErrorHandlerService } from "../../../../../core/services/http-errror-handler.service";
 import { SupplierApiService } from "../../../services/api/supplier.service";
 import { FilePreviewService } from "../../../../files/file-preview.service";
 import { UploadItem } from "../../../../../shared/components/kit-file-uploader/upload-item.model";
+import { FileApiService } from "../../../../files/file-api.service";
 
 type PaymentItem = {
       itemName: FormControl<string>;
@@ -72,7 +72,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
       private readonly supplierApi = inject(SupplierApiService);
       private readonly confirm = inject(ConfirmService);
       private readonly bankAccountApi = inject(BankAccountApiService);
-      private readonly fileService = inject(FileService);
+      private readonly fileApi = inject(FileApiService);
       private readonly httpErrorHandler = inject(HttpErrorHandlerService);
       private readonly filePreview = inject(FilePreviewService);
 
@@ -386,7 +386,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
                         if (item.uploadedInvoiceFile) {
                               const file = item.uploadedInvoiceFile;
 
-                              const result = await firstValueFrom(this.fileService.uploadFile(file, 'expense', 'invoice', undefined));
+                              const result = await firstValueFrom(this.fileApi.uploadFile(file, 'expense', 'invoice', undefined));
 
                               uploadedInvoiceResults[i] = result.data?.id; // StoredFileId
                         }
@@ -397,7 +397,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
                   for (const u of this.uploads) {
                         try {
                               const result = await firstValueFrom(
-                                    this.fileService.uploadFile(u.file, 'expense', 'payment-attachment', undefined)
+                                    this.fileApi.uploadFile(u.file, 'expense', 'payment-attachment', undefined)
                               );
 
                               if (result.data?.id) {

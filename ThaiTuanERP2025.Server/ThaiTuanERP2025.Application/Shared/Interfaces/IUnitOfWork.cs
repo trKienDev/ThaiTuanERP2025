@@ -30,7 +30,7 @@ namespace ThaiTuanERP2025.Domain.Shared.Repositories
 		ICashoutGroupWriteRepository CashoutGroups { get; }
 
 		// Files
-		IStoredFilesRepository StoredFiles { get; }
+		IFileAttachmentWriteRepository FileAttachments { get; }
 
 		// Expense
 		ISupplierWriteRepository Suppliers { get; }

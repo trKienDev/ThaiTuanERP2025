@@ -15,7 +15,6 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 		public UnitOfWork (
 			ThaiTuanERP2025DbContext dbContext,
 
-			IStoredFilesRepository storedFiles,
                         // Account
                         IUserWriteRepository users,
                         IUserManagerAssignmentWriteRepository userManagerAssignments,
@@ -60,6 +59,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 			ICommentWriteRepository comments,
 			ICommentAttachmentWriteRepository commentAttachments,
 			ICommentMentionWriteRepository commentMentions,
+			IFileAttachmentWriteRepository fileAttachments,
 
 			// RBAC
 			IRoleWriteRepository roles,
@@ -70,7 +70,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 		{
 			_dbContext = dbContext;
 
-			StoredFiles = storedFiles;
+			FileAttachments = fileAttachments;
 
 			Users = users;
 			UserManagerAssignments = userManagerAssignments;
@@ -118,7 +118,6 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 			UserRoles = userRoles;
 		}
 
-		public IStoredFilesRepository StoredFiles { get; }
 		// Account
 		public IUserWriteRepository Users { get; }
 		public IUserManagerAssignmentWriteRepository UserManagerAssignments { get; }
@@ -163,6 +162,7 @@ namespace ThaiTuanERP2025.Infrastructure.Shared.Repositories
 		public ICommentWriteRepository Comments { get; }
 		public ICommentAttachmentWriteRepository CommentAttachments { get; }
 		public ICommentMentionWriteRepository CommentMentions { get; }
+		public IFileAttachmentWriteRepository FileAttachments { get; }
 
 		// RBAC
 		public IUserRoleRepository UserRoles { get; }

@@ -12,7 +12,7 @@ import { firstValueFrom } from "rxjs";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { handleHttpError } from "../../../../../../shared/utils/handle-http-errors.util";
 import { ToastService } from "../../../../../../shared/components/kit-toast-alert/kit-toast-alert.service";
-import { FileService } from "../../../../../../shared/services/file.service";
+import { FileApiService } from "../../../../../files/file-api.service";
 
 @Component({
       selector: 'mini-invoice-request-dialog',
@@ -28,7 +28,7 @@ export class MiniInvoiceRequestDialogComponent {
       private ref = inject(MatDialogRef<MiniInvoiceRequestDialogComponent>);
       private adapter = inject<DateAdapter<Date>>(DateAdapter as any);
       private formBuilder = inject(FormBuilder);
-      private fileService = inject(FileService);
+      private fileApi = inject(FileApiService);
       private invoiceService = inject(InvoiceApiService);
       private toast = inject(ToastService);
 
@@ -108,7 +108,7 @@ export class MiniInvoiceRequestDialogComponent {
 
                   // 2) Nếu chọn file → upload rồi replace main
                   if (this.pendingFile) {
-                        const up = await firstValueFrom(this.fileService.uploadFile(this.pendingFile, 'expense', 'invoice', invoiceId));
+                        const up = await firstValueFrom(this.fileApi.uploadFile(this.pendingFile, 'expense', 'invoice', invoiceId));
                         const fileId = (up as any).id ?? (up as any).data?.id;
                         await firstValueFrom(this.invoiceService.replaceMainFile(invoiceId, { newFileId: fileId }));
                   }

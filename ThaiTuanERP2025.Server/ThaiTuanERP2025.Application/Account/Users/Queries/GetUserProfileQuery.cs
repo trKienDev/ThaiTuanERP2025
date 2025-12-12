@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using System.Security.Claims;
 using ThaiTuanERP2025.Application.Account.Users.Repositories;
-using ThaiTuanERP2025.Application.Files;
+using ThaiTuanERP2025.Application.Core.FileAttachments.Repositories;
 using ThaiTuanERP2025.Application.Shared.Exceptions;
 
 namespace ThaiTuanERP2025.Application.Account.Users.Queries
@@ -18,8 +18,8 @@ namespace ThaiTuanERP2025.Application.Account.Users.Queries
 	public sealed class GetProfilleQueryHandler : IRequestHandler<GetProfilleQuery, UserDto>
 	{
 		private readonly IUserReadRepostiory _userReadRepostiory;
-		private readonly IStoredFileReadRepository _fileRepo;
-		public GetProfilleQueryHandler(IUserReadRepostiory userReadRepostiory, IStoredFileReadRepository fileRepo)
+		private readonly IFileAttachmentReadRepository _fileRepo;
+		public GetProfilleQueryHandler(IUserReadRepostiory userReadRepostiory, IFileAttachmentReadRepository fileRepo)
 		{
 			_userReadRepostiory = userReadRepostiory;
 			_fileRepo = fileRepo;

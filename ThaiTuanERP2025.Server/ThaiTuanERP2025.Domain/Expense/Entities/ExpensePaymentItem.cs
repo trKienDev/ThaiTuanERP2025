@@ -2,7 +2,7 @@
 using ThaiTuanERP2025.Domain.Shared.Entities;
 using ThaiTuanERP2025.Domain.Expense.Events.ExpensePaymentItems;
 using ThaiTuanERP2025.Domain.Finance.Entities;
-using ThaiTuanERP2025.Domain.StoredFiles.Entities;
+using ThaiTuanERP2025.Domain.Core.Entities;
 
 namespace ThaiTuanERP2025.Domain.Expense.Entities
 {
@@ -45,7 +45,7 @@ namespace ThaiTuanERP2025.Domain.Expense.Entities
 		public string ItemName { get; private set; } = string.Empty;
 
 		public Guid? InvoiceFileId { get; private set;  }
-		public StoredFile? InvoiceFile { get; init; }
+		public FileAttachment? InvoiceFile { get; init; }
 
 		public Guid BudgetPlanDetailId { get; private set; }
 		public BudgetPlanDetail BudgetPlanDetail { get; init; } 

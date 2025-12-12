@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
-import { FileService } from '../../services/file.service';
 import { ToastService } from '../kit-toast-alert/kit-toast-alert.service';
 import { UploadMeta, UploadItem } from './upload-item.model';
 
@@ -23,7 +22,6 @@ export class KitFileUploaderComponent {
       @Output() removed = new EventEmitter<UploadItem>();        // bắn khi xoá
       @Output() previewRequested = new EventEmitter<File>();
 
-      private readonly fileService = inject(FileService);
       private readonly toast = inject(ToastService);
 
       trackById(index: number, item: UploadItem) {

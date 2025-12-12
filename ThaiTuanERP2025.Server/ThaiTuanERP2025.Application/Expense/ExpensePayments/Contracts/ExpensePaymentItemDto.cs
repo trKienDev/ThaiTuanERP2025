@@ -1,5 +1,4 @@
-﻿using ThaiTuanERP2025.Application.Files.Contracts;
-using ThaiTuanERP2025.Application.Finance.BudgetCodes;
+﻿using ThaiTuanERP2025.Application.Finance.BudgetCodes;
 
 namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Contracts
 {
@@ -14,7 +13,7 @@ namespace ThaiTuanERP2025.Application.Expense.ExpensePayments.Contracts
 		public decimal TotalWithTax { get; init; }
 		public string CashoutCodeName { get; init; } = string.Empty;
 
-		public StoredFileMetadataDto? InvoiceFile { get; init; }
+		//public StoredFileMetadataDto? InvoiceFile { get; init; }
 		public BudgetCodeLookupDto BudgetCode { get; init; } = new BudgetCodeLookupDto();
 	}
 }

@@ -1,5 +1,4 @@
 ﻿using ThaiTuanERP2025.Domain.Shared;
-using ThaiTuanERP2025.Domain.StoredFiles.Entities;
 
 namespace ThaiTuanERP2025.Domain.Core.Entities
 {
@@ -7,14 +6,14 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
 	{
 		#region EF Constructor
 		private CommentAttachment() { }
-		public CommentAttachment(Guid commentId, Guid storedFileId)
+		public CommentAttachment(Guid commentId, Guid fileAttachmentId)
 		{
 			Guard.AgainstDefault(commentId, nameof(commentId));
-			Guard.AgainstDefault(storedFileId, nameof(storedFileId));
+			Guard.AgainstDefault(fileAttachmentId, nameof(fileAttachmentId));
 
 			Id = Guid.NewGuid();
 			CommentId = commentId;
-			StoredFileId = storedFileId;
+			FileAttachmentId = fileAttachmentId;
 		}
 		#endregion
 
@@ -23,8 +22,8 @@ namespace ThaiTuanERP2025.Domain.Core.Entities
 		public Guid CommentId { get; private set; }
 		public Comment Comment { get; private set; } = default!;
 
-		public Guid StoredFileId { get; private set; }
-		public StoredFile StoredFile { get; private set; } = default!;
+		public Guid FileAttachmentId { get; private set; }
+		public FileAttachment FileAttachment { get; private set; } = default!;
 		#endregion
 	}
 }
