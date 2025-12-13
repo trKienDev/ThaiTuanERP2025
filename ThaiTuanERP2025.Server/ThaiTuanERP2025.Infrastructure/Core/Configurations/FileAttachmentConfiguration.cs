@@ -15,15 +15,12 @@ namespace ThaiTuanERP2025.Infrastructure.Core.Configurations
 			// ====== Basic Properties ======
 			builder.Property(x => x.Id).ValueGeneratedNever();
 			builder.Property(x => x.DriveObjectId).IsRequired();
-			builder.Property(x => x.FileName).HasMaxLength(255).IsRequired();
-			builder.Property(x => x.ContentType).HasMaxLength(150).IsRequired();
-			builder.Property(x => x.Size).HasColumnType("bigint").IsRequired();
 			builder.Property(x => x.Module).HasMaxLength(100).IsRequired();
-			builder.Property(x => x.Entity).HasMaxLength(100).IsRequired();
-			builder.Property(x => x.EntityId).HasMaxLength(64);
+			builder.Property(x => x.Document).HasMaxLength(100).IsRequired();
+			builder.Property(x => x.DocumentId).HasMaxLength(64);
 
 			// ====== Indexes ======
-			builder.HasIndex(x => new { x.Module, x.Entity, x.EntityId });
+			builder.HasIndex(x => new { x.Module, x.Document, x.DocumentId });
 			builder.HasIndex(x => x.DriveObjectId);
 
 			// Auditable

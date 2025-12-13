@@ -5,6 +5,7 @@ import { environment } from "../../../../environments/environment";
 import { ApiResponse } from "../../../shared/models/api-response.model";
 import { UploadFileResult } from "../../../shared/models/upload-file-result.model";
 import { handleApiResponse$ } from "../../../shared/operators/handle-api-response.operator";
+import { FileAttachmentPayload } from "../models/file-attachment.model";
 
 export type UploadEventProgress = { type: 'progress'; percent: number };
 export type UploadEventDone = { type: 'done'; data?: UploadFileResult };
@@ -12,7 +13,7 @@ export type UploadEventDone = { type: 'done'; data?: UploadFileResult };
 @Injectable({ providedIn: "root" })
 export class FileAttachmentApiService {
       private http = inject(HttpClient);
-      private API_URL = `${environment.server.baseUrl}/api/files`;
+      private API_URL = `${environment.server.baseUrl}/api/file`;
 
       /** Single upload (field "file") + progress, khớp FilesController.UploadSingle */
       uploadFileWithProgress$(
@@ -49,27 +50,11 @@ export class FileAttachmentApiService {
 
 
       /** Single upload (không cần progress) – giữ lại nếu chỗ khác đang dùng */
-      uploadFile(file: File, module: string, entity: string, entityId?: string) {
-            const formData = new FormData();
-            formData.append("file", file); // <-- field "file"
-            formData.append("module", module);
-            formData.append("entity", entity);
-            if (entityId) formData.append("entityId", entityId);
-
-            return this.http.post<ApiResponse<UploadFileResult>>(`${this.API_URL}/upload-single`, formData);
+      attachFile(payload: FileAttachmentPayload): Observable<string> {
+            return this.http.post<ApiResponse<string>>(this.API_URL, payload)
+                  .pipe(handleApiResponse$<string>());
       }
 
-      /** Multiple upload – field phải là "files" để khớp IFormFile List files */
-      uploadMultipleFiles(files: File[], module: string, entity: string, entityId?: string, isPublic = false) {
-            const formData = new FormData();
-            files.forEach((f) => formData.append("files", f)); // <-- field "files"
-            formData.append("module", module);
-            formData.append("entity", entity);
-            if (entityId) formData.append("entityId", entityId);
-            formData.append("isPublic", String(isPublic));
-
-            return this.http.post<ApiResponse<UploadFileResult[]>>(`${this.API_URL}/upload-multiple`, formData);
-      }
 
       /** Lấy presigned URL để tải/xem file (tùy backend) */
       getDownloadUrl$(idOrObjectKey: string) {

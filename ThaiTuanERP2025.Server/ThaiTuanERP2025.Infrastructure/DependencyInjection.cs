@@ -65,10 +65,8 @@ using ThaiTuanERP2025.Infrastructure.StoredFiles.Configurations;
 using ThaiTuanERP2025.Application.Expense.OutgoingBankAccounts;
 using ThaiTuanERP2025.Application.Expense.OutgoingPayments;
 using ThaiTuanERP2025.Application.Core.Comments;
-using ThaiTuanERP2025.Infrastructure.Core.Services;
 using ThaiTuanERP2025.Domain.StoredFiles.Repositories;
 using ThaiTuanERP2025.Application.Core.FileAttachments.Repositories;
-using ThaiTuanERP2025.Application.Core.FileAttachments.Services;
 
 namespace ThaiTuanERP2025.Infrastructure
 {
@@ -175,7 +173,6 @@ namespace ThaiTuanERP2025.Infrastructure
 
 			// ========= File Storage (MinIO) =========
 			services.Configure<FileStorageOptions>(cfg.GetSection("Minio"));
-			services.AddScoped<IFileAttachmentStorageService, LocalFileAttachmentStorageService>();
 			services.AddOptions<FileStorageOptions>()
 				.Bind(cfg.GetSection(FileStorageOptions.SectionName))
 				.ValidateDataAnnotations()

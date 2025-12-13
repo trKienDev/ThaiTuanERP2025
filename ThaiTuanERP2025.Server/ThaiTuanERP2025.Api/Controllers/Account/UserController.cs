@@ -80,10 +80,10 @@ namespace ThaiTuanERP2025.Api.Controllers.Account
 			return Ok(ApiResponse<string>.Success("Cập nhật người quản lý thành công"));
 		}
 
-		[HttpPut("{id:guid}/avatar")]
-		public async Task<IActionResult> SetAvatar(Guid id, [FromBody] SetUserAvatarRequest request, CancellationToken cancellationToken)
+		[HttpPut("avatar")]
+		public async Task<IActionResult> SetAvatar([FromBody] SetAvatarPayload payload, CancellationToken cancellationToken)
 		{
-			var result = await _mediator.Send(new SetUserAvatarCommand(id, request), cancellationToken);
+			var result = await _mediator.Send(new SetUserAvatarCommand(payload), cancellationToken);
 			return Ok(ApiResponse<Unit>.Success(result));
 		}
 		#endregion

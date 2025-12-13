@@ -43,7 +43,6 @@ namespace ThaiTuanERP2025.Application.Core.Notifications.Queries
 							Id = n.Sender.Id,
 							FullName = n.Sender.FullName,
 							AvatarFileId = n.Sender.AvatarFileId,
-							AvatarFileObjectKey = n.Sender.AvatarFileObjectKey
 						},
 						Title = n.Title,
 						Message = n.Message,

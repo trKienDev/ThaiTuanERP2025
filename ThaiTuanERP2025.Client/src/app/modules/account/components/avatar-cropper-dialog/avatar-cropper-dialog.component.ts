@@ -8,6 +8,8 @@ import { ToastService } from "../../../../shared/components/kit-toast-alert/kit-
 import { UserFacade } from "../../facades/user.facade";
 import { firstValueFrom } from "rxjs";
 import { HttpErrorHandlerService } from "../../../../core/services/http-errror-handler.service";
+import { APP_MODULES } from "../../../../core/constants/app-modules.constants";
+import { DOCUMENT_TYPE } from "../../../../core/constants/document-types.constants";
 
 @Component({
       selector: 'avatar-cropper-dialog',
@@ -48,7 +50,7 @@ export class AvatarCropperDialogComponent {
             this.isUploading = true;
 
             try {
-                  await firstValueFrom(this.userApi.updateAvatar(file, userId));
+                  await firstValueFrom(this.userApi.setAvatar(file, APP_MODULES.ACCOUNT, DOCUMENT_TYPE.USER_AVATAR));
 
                   await this.userFacade.refreshCurrentUser();  // reload profile
                   this.toast.successRich('Cập nhật avatar thành công');

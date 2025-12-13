@@ -10,9 +10,11 @@ export class DriveApiService {
       private http = inject(HttpClient);
       private API_URL = `${environment.drive.apiUrl}/drive`;
 
-      uploadFile(file: File):Observable<string> {
+      uploadFile(file: File, module: string, entity: string):Observable<string> {
             const formData = new FormData();
             formData.append("file", file);
+            formData.append("module", module);
+            formData.append("entity", entity);
 
             return this.http.post<ApiResponse<string>>(this.API_URL, formData)
                   .pipe(handleApiResponse$<string>());

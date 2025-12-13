@@ -16,7 +16,7 @@ namespace Drive.Api.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Create(IFormFile file, CancellationToken cancellationToken) {
+		public async Task<IActionResult> Create(IFormFile file, [FromForm] string module, [FromForm] string entity, CancellationToken cancellationToken) {
 			if (file is null || file.Length == 0)
 				return BadRequest(ApiResponse<string>.Fail("Không tìm thấy file tải lên"));
 
@@ -27,7 +27,7 @@ namespace Drive.Api.Controllers
 				_ => Task.FromResult<Stream>(file.OpenReadStream())
 			);
 
-			var objectId = await _mediator.Send(new CreateStoredObjectCommand(raw), cancellationToken);
+			var objectId = await _mediator.Send(new CreateStoredObjectCommand(raw, module, entity), cancellationToken);
 			return Ok(ApiResponse<Guid>.Success(objectId));
 		}
 	}

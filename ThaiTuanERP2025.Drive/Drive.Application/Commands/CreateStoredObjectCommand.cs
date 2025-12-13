@@ -7,7 +7,7 @@ using ThaiTuanERP2025.Domain.StoredFiles.Entities;
 
 namespace Drive.Application.Commands
 {
-	public sealed record CreateStoredObjectCommand(RawObject Object) : IRequest<Guid>;
+	public sealed record CreateStoredObjectCommand(RawObject Object, string Module, string Entity) : IRequest<Guid>;
 
 	public sealed class CreateStoredObjectCommandHandler : IRequestHandler<CreateStoredObjectCommand, Guid>
 	{
@@ -33,7 +33,7 @@ namespace Drive.Application.Commands
 				throw;
 			}
 
-			var objectKey = BuildObjectKey(command.Object.FileName);
+			var objectKey = BuildObjectKey(command.Object.FileName, command.Module, command.Entity);
 
 			await using var stream = await command.Object.OpenReadStream(cancellationToken);
 			var contentType = string.IsNullOrWhiteSpace(command.Object.ContentType) ? "application/octet-stream" : command.Object.ContentType!;
@@ -54,7 +54,7 @@ namespace Drive.Application.Commands
 			return entity.Id;
 		}
 
-		private static string BuildObjectKey(string originalName)
-			=> $"{DateTime.UtcNow:yyyy/MM}/" + $"{Guid.NewGuid():N}{Path.GetExtension(originalName)}";
+		private static string BuildObjectKey(string originalName, string module, string entity)
+			=> $"{DateTime.UtcNow:yyyy/MM}/{module}/{entity}/" + $"{Guid.NewGuid():N}{Path.GetExtension(originalName)}";
 	}
 }

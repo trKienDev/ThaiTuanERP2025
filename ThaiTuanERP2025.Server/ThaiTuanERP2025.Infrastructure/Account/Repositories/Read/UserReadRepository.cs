@@ -31,8 +31,7 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories.Read
 						FullName = u.FullName,
 						Username = u.Username,
 						EmployeeCode = u.EmployeeCode,
-						AvatarFileId = u.AvatarFileId,
-						AvatarFileObjectKey = u.AvatarFileObjectKey
+						AvatarFileId = u.AvatarFileId
 					}
 				).SingleOrDefaultAsync(cancellationToken);
 		}
@@ -48,7 +47,6 @@ namespace ThaiTuanERP2025.Infrastructure.Account.Repositories.Read
 					Username = u.Username,
 					EmployeeCode = u.EmployeeCode,
 					AvatarFileId = u.AvatarFileId,
-					AvatarFileObjectKey = u.AvatarFileObjectKey
 				})
 				.ToListAsync(cancellationToken);
 		}

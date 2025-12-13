@@ -50,7 +50,6 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 		public string PasswordHash { get; private set; } = string.Empty;
 
 		public Guid? AvatarFileId { get; private set; }
-		public string? AvatarFileObjectKey { get; private set; }
 		public FileAttachment? AvatarFile { get; init; }
 
 		public string Position { get; private set; } = string.Empty;
@@ -122,12 +121,9 @@ namespace ThaiTuanERP2025.Domain.Account.Entities
 			AddDomainEvent(new UserProfileUpdatedEvent(this));
 		}
 
-		internal void UpdateAvatar (Guid fileId, string objectKey)
+		internal void SetAvatar (Guid fileId)
 		{
 			AvatarFileId = fileId;
-			AvatarFileObjectKey = objectKey;
-
-			AddDomainEvent(new UserAvatarUpdatedEvent(this));
 		}
 
 		internal void AssignRole(Guid roleId)

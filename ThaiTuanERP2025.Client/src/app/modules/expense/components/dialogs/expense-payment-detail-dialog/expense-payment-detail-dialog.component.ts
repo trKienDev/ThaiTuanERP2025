@@ -248,24 +248,24 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
                   const { content, mentionLabels, uploads } = event;
 
                   // 1 ) Upload attachments
-                  const uploadedIds = [];
+                  // const uploadedIds = [];
                   for (const u of uploads) {
-                        try {
-                              const result = await firstValueFrom(
-                                    this.fileApi.uploadFile(
-                                          u.file,
-                                          'core',
-                                          'comment-attachment',
-                                          this.paymentId,
-                                    )
-                              );
-                              if (result.data?.id) {
-                                    uploadedIds.push(result.data.id);
-                                    u.status = 'done';
-                              }
-                        } catch {
-                              u.status = 'error';
-                        }
+                        // try {
+                        //       const result = await firstValueFrom(
+                        //             this.fileApi.uploadFile(
+                        //                   u.file,
+                        //                   'core',
+                        //                   'comment-attachment',
+                        //                   this.paymentId,
+                        //             )
+                        //       );
+                        //       if (result.data?.id) {
+                        //             uploadedIds.push(result.data.id);
+                        //             u.status = 'done';
+                        //       }
+                        // } catch {
+                        //       u.status = 'error';
+                        // }
                   }
 
                   // 2 ) Resolve mention IDs
@@ -274,17 +274,17 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
                         .filter(x => !!x) as string[];
 
                   // 3. Gửi comment
-                  const payload: CommentPayload = {
-                        documentType: DOCUMENT_TYPE.EXPENSE_PAYMENT,
-                        documentId: this.paymentId,
-                        content,
-                        attachmentIds: uploadedIds.length ? uploadedIds : undefined,
-                        mentionIds: mentionIds.length ? mentionIds : undefined
-                  };
+                  // const payload: CommentPayload = {
+                  //       documentType: DOCUMENT_TYPE.EXPENSE_PAYMENT,
+                  //       documentId: this.paymentId,
+                  //       content,
+                  //       attachmentIds: uploadedIds.length ? uploadedIds : undefined,
+                  //       mentionIds: mentionIds.length ? mentionIds : undefined
+                  // };
 
-                  const newComment = await firstValueFrom(this.commentApi.create(payload));
-                  console.log('new comment: ', newComment);
-                  this.comments.unshift(newComment);
+                  // const newComment = await firstValueFrom(this.commentApi.create(payload));
+                  // console.log('new comment: ', newComment);
+                  // this.comments.unshift(newComment);
                   this.commentControl.setValue('');
             } catch(error) {
                   this.httpErrorHandler.handle(error, "Bình luận không thành công");
@@ -325,19 +325,19 @@ export class ExpensePaymentDetailDialogComponent implements OnInit {
                   const uploadedIds: string[] = [];
                   for (const u of uploads) {
                         try {
-                              const result = await firstValueFrom(
-                                    this.fileApi.uploadFile(
-                                          u.file,
-                                          'core',
-                                          'comment-attachment',
-                                          this.paymentId,
-                                    )
-                              );
+                              // const result = await firstValueFrom(
+                              //       this.fileApi.attachFile(
+                              //             u.file,
+                              //             'core',
+                              //             'comment-attachment',
+                              //             this.paymentId,
+                              //       )
+                              // );
 
-                              if (result.data?.id) {
-                                    uploadedIds.push(result.data.id);
-                                    u.status = 'done';
-                              }
+                              // if (result.data?.id) {
+                              //       uploadedIds.push(result.data.id);
+                              //       u.status = 'done';
+                              // }
                         } catch {
                               u.status = 'error';
                         }

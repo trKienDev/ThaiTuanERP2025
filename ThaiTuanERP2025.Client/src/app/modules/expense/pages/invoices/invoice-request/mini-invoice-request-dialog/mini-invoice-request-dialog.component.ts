@@ -108,9 +108,9 @@ export class MiniInvoiceRequestDialogComponent {
 
                   // 2) Nếu chọn file → upload rồi replace main
                   if (this.pendingFile) {
-                        const up = await firstValueFrom(this.fileApi.uploadFile(this.pendingFile, 'expense', 'invoice', invoiceId));
-                        const fileId = (up as any).id ?? (up as any).data?.id;
-                        await firstValueFrom(this.invoiceService.replaceMainFile(invoiceId, { newFileId: fileId }));
+                        // const up = await firstValueFrom(this.fileApi.uploadFile(this.pendingFile, 'expense', 'invoice', invoiceId));
+                        // const fileId = (up as any).id ?? (up as any).data?.id;
+                        // await firstValueFrom(this.invoiceService.replaceMainFile(invoiceId, { newFileId: fileId }));
                   }
 
                   // 3) mini-dialog không có invoiceLines, nên kết thúc ở đây

@@ -17,7 +17,7 @@ namespace ThaiTuanERP2025.Infrastructure.Core.Repositories.Write
 
 		public async Task<List<FileAttachment>> ListByEntitiesAsync(string module, string entity, string entityId, CancellationToken cancellationToken)
 		{
-			return await _dbContext.StoredFiles.Where(x => x.Module == module && x.Entity == entity && x.EntityId == entityId)
+			return await _dbContext.StoredFiles.Where(x => x.Module == module && x.Document == entity && x.DocumentId == entityId)
 				.OrderByDescending(x => x.CreatedAt).ToListAsync();
 		}
 

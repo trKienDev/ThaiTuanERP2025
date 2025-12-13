@@ -10,7 +10,6 @@ namespace ThaiTuanERP2025.Application.Account.Users
 				.ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email != null ? src.Email.Value : null))
 				.ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Phone != null ? src.Phone.Value : null))
 				.ForMember(dest => dest.AvatarFileId, opt => opt.MapFrom(src => src.AvatarFileId))
-				.ForMember(dest => dest.AvatarFileObjectKey, opt => opt.MapFrom(src => src.AvatarFileObjectKey))
 				.ForMember(d => d.Roles, o => o.Ignore())
 				.ForMember(d => d.Managers, o => o.Ignore());
 

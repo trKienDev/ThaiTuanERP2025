@@ -155,25 +155,25 @@ export class OutgoingPaymentDetailDialogComponent implements OnInit {
                   const { content, mentionLabels, uploads } = event;
 
                   // 1 ) Upload attachments
-                  const uploadedIds = [];
-                  for (const u of uploads) {
-                        try {
-                              const result = await firstValueFrom(
-                                    this.fileApi.uploadFile(
-                                          u.file,
-                                          'core',
-                                          'comment-attachment',
-                                          this.outgoingPaymentDetail?.id
-                                    )
-                              );
-                              if (result.data?.id) {
-                                    uploadedIds.push(result.data.id);
-                                    u.status = 'done';
-                              }
-                        } catch {
-                              u.status = 'error';
-                        }
-                  }
+                  // const uploadedIds = [];
+                  // for (const u of uploads) {
+                  //       try {
+                  //             const result = await firstValueFrom(
+                  //                   this.fileApi.uploadFile(
+                  //                         u.file,
+                  //                         'core',
+                  //                         'comment-attachment',
+                  //                         this.outgoingPaymentDetail?.id
+                  //                   )
+                  //             );
+                  //             if (result.data?.id) {
+                  //                   uploadedIds.push(result.data.id);
+                  //                   u.status = 'done';
+                  //             }
+                  //       } catch {
+                  //             u.status = 'error';
+                  //       }
+                  // }
 
                   // 2 ) Resolve mention IDs
                   const mentionIds = mentionLabels
@@ -181,18 +181,18 @@ export class OutgoingPaymentDetailDialogComponent implements OnInit {
                         .filter(x => !!x) as string[];
 
                   // 3. Gửi comment
-                  const payload: CommentPayload = {
-                        documentType: DOCUMENT_TYPE.OUTGOING_PAYMENT,
-                        documentId: this.outgoingPaymentId,
-                        content,
-                        attachmentIds: uploadedIds.length ? uploadedIds : undefined,
-                        mentionIds: mentionIds.length ? mentionIds : undefined
-                  };
+                  // const payload: CommentPayload = {
+                  //       documentType: DOCUMENT_TYPE.OUTGOING_PAYMENT,
+                  //       documentId: this.outgoingPaymentId,
+                  //       content,
+                  //       attachmentIds: uploadedIds.length ? uploadedIds : undefined,
+                  //       mentionIds: mentionIds.length ? mentionIds : undefined
+                  // };
 
-                  const newComment = await firstValueFrom(this.commentApi.create(payload));
-                  console.log('new comment: ', newComment);
-                  this.comments.unshift(newComment);
-                  this.commentControl.setValue('');
+                  // const newComment = await firstValueFrom(this.commentApi.create(payload));
+                  // console.log('new comment: ', newComment);
+                  // this.comments.unshift(newComment);
+                  // this.commentControl.setValue('');
             } catch(error) {
                   this.httpErrorHandler.handle(error, "Bình luận không thành công");
             } finally {
@@ -224,67 +224,67 @@ export class OutgoingPaymentDetailDialogComponent implements OnInit {
       }
       
       async submitReply(event: { parentId: string; content: string; mentionLabels: string[]; uploads: UploadItem[]; }) {
-            if(this.outgoingPaymentId === null) {
-                  this.toastService.warningRich("Không thể xác định định danh khoản chi");
-                        return;
-            }
+            // if(this.outgoingPaymentId === null) {
+            //       this.toastService.warningRich("Không thể xác định định danh khoản chi");
+            //             return;
+            // }
 
-            const { parentId, content, mentionLabels, uploads } = event;
+            // const { parentId, content, mentionLabels, uploads } = event;
 
-            try {
-                  this.isSubmittingReply = true;
+            // try {
+            //       this.isSubmittingReply = true;
 
-                  // 1) Upload files
-                  const uploadedIds: string[] = [];
-                  for (const u of uploads) {
-                        try {
-                              const result = await firstValueFrom(
-                                    this.fileApi.uploadFile(
-                                          u.file,
-                                          'core',
-                                          'comment-attachment',
-                                          this.outgoingPaymentId,
-                                    )
-                              );
+            //       // 1) Upload files
+            //       const uploadedIds: string[] = [];
+            //       for (const u of uploads) {
+            //             try {
+            //                   const result = await firstValueFrom(
+            //                         this.fileApi.uploadFile(
+            //                               u.file,
+            //                               'core',
+            //                               'comment-attachment',
+            //                               this.outgoingPaymentId,
+            //                         )
+            //                   );
 
-                              if (result.data?.id) {
-                                    uploadedIds.push(result.data.id);
-                                    u.status = 'done';
-                              }
-                        } catch {
-                              u.status = 'error';
-                        }
-                  }
+            //                   if (result.data?.id) {
+            //                         uploadedIds.push(result.data.id);
+            //                         u.status = 'done';
+            //                   }
+            //             } catch {
+            //                   u.status = 'error';
+            //             }
+            //       }
 
-                  // 2) Resolve mention IDs
-                  const mentionIds = mentionLabels
-                        .map(label => this.userOptionsStore.snapshot.find(x => x.label === label)?.id)
-                        .filter(id => !!id) as string[];
+            //       // 2) Resolve mention IDs
+            //       const mentionIds = mentionLabels
+            //             .map(label => this.userOptionsStore.snapshot.find(x => x.label === label)?.id)
+            //             .filter(id => !!id) as string[];
 
-                  // 3) Send reply payload
-                  const payload: CommentPayload = {
-                        documentType: DOCUMENT_TYPE.OUTGOING_PAYMENT,
-                        documentId: this.outgoingPaymentId,
-                        content: content.trim(),
-                        attachmentIds: uploadedIds.length ? uploadedIds : undefined,
-                        mentionIds: mentionIds.length ? mentionIds : undefined
-                  };
+            //       // 3) Send reply payload
+            //       const payload: CommentPayload = {
+            //             documentType: DOCUMENT_TYPE.OUTGOING_PAYMENT,
+            //             documentId: this.outgoingPaymentId,
+            //             content: content.trim(),
+            //             attachmentIds: uploadedIds.length ? uploadedIds : undefined,
+            //             mentionIds: mentionIds.length ? mentionIds : undefined
+            //       };
 
-                  const newReply = await firstValueFrom(this.commentApi.reply(parentId, payload));
+            //       const newReply = await firstValueFrom(this.commentApi.reply(parentId, payload));
 
-                  // add to tree
-                  const parent = this.findCommentRecursive(this.comments, parentId);
-                  parent!.replies = parent!.replies ?? [];
-                  parent!.replies.push(newReply);
+            //       // add to tree
+            //       const parent = this.findCommentRecursive(this.comments, parentId);
+            //       parent!.replies = parent!.replies ?? [];
+            //       parent!.replies.push(newReply);
 
-                  this.comments = [...this.comments];
-                  this.replyingToCommentId = null;
+            //       this.comments = [...this.comments];
+            //       this.replyingToCommentId = null;
 
-            } catch (error) {
-                  this.httpErrorHandler.handle(error, 'Gửi phản hồi thất bại');
-            } finally {
-                  this.isSubmittingReply = false;
-            }
+            // } catch (error) {
+            //       this.httpErrorHandler.handle(error, 'Gửi phản hồi thất bại');
+            // } finally {
+            //       this.isSubmittingReply = false;
+            // }
       }
 
       cancelReply() {

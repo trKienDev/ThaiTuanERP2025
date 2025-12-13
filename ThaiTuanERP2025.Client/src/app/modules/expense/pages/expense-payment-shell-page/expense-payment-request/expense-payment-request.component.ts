@@ -348,7 +348,7 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
 
       async Submit(): Promise<void> {
             // chặn double-click & chặn khi vẫn còn upload file
-            if (this.isBusy) return;
+            // if (this.isBusy) return;
 
             if (this.form.invalid) {
                   this.form.markAllAsTouched();
@@ -375,80 +375,79 @@ export class ExpensePaymentRequestPanelComponent implements OnInit, OnDestroy {
                   return;
             }
 
-
             this.submitting = true;
-            try {
-                  const raw = this.form.getRawValue();
+            // try {
+            //       const raw = this.form.getRawValue();
 
-                  // === UPLOAD INVOICES ===
-                  const uploadedInvoiceResults: (string | undefined)[] = [];
-                  for (const [i, item] of raw.items.entries()) {
-                        if (item.uploadedInvoiceFile) {
-                              const file = item.uploadedInvoiceFile;
+            //       // === UPLOAD INVOICES ===
+            //       const uploadedInvoiceResults: (string | undefined)[] = [];
+            //       for (const [i, item] of raw.items.entries()) {
+            //             if (item.uploadedInvoiceFile) {
+            //                   const file = item.uploadedInvoiceFile;
 
-                              const result = await firstValueFrom(this.fileApi.uploadFile(file, 'expense', 'invoice', undefined));
+            //                   // const result = await firstValueFrom(this.fileApi.uploadFile(file, 'expense', 'invoice', undefined));
 
-                              uploadedInvoiceResults[i] = result.data?.id; // StoredFileId
-                        }
-                  }
+            //                   // uploadedInvoiceResults[i] = result.data?.id; // StoredFileId
+            //             }
+            //       }
 
-                  // === UPLOAD ATTACHMENTS ===
-                  const uploadedAttachmentIds: string[] = [];
-                  for (const u of this.uploads) {
-                        try {
-                              const result = await firstValueFrom(
-                                    this.fileApi.uploadFile(u.file, 'expense', 'payment-attachment', undefined)
-                              );
+            //       // === UPLOAD ATTACHMENTS ===
+            //       const uploadedAttachmentIds: string[] = [];
+            //       for (const u of this.uploads) {
+            //             // try {
+            //             //       const result = await firstValueFrom(
+            //             //             this.fileApi.uploadFile(u.file, 'expense', 'payment-attachment', undefined)
+            //             //       );
 
-                              if (result.data?.id) {
-                                    uploadedAttachmentIds.push(result.data.id);
-                                    u.fileId = result.data.id;
-                                    u.status = 'done';
-                              }
-                        } catch (err) {
-                              u.status = 'error';
-                        }
-                  }
+            //             //       if (result.data?.id) {
+            //             //             uploadedAttachmentIds.push(result.data.id);
+            //             //             u.fileId = result.data.id;
+            //             //             u.status = 'done';
+            //             //       }
+            //             // } catch (err) {
+            //             //       u.status = 'error';
+            //             }
+            //       }
 
-                  // ==== Build Item payload ====
-                  const items: ExpensePaymentItemPayload[] = (raw.items ?? []).map((it, i) => ({
-                        itemName: it.itemName,
-                        budgetPlanDetailId: it.budgetPlanDetailId!,
-                        invoiceStoredFileId: uploadedInvoiceResults[i] ?? undefined,
-                        quantity: Number(it.quantity ?? 0),
-                        unitPrice: Number(it.unitPrice ?? 0),
-                        taxRate: Number(it.taxRate ?? 0),
-                        amount: Number(it.amount ?? 0),
-                        taxAmount: Number(it.taxAmount ?? 0),
-                        totalWithTax: Number(it.totalWithTax ?? 0),
-                  }));
+            //       // ==== Build Item payload ====
+            //       const items: ExpensePaymentItemPayload[] = (raw.items ?? []).map((it, i) => ({
+            //             itemName: it.itemName,
+            //             budgetPlanDetailId: it.budgetPlanDetailId!,
+            //             invoiceStoredFileId: uploadedInvoiceResults[i] ?? undefined,
+            //             quantity: Number(it.quantity ?? 0),
+            //             unitPrice: Number(it.unitPrice ?? 0),
+            //             taxRate: Number(it.taxRate ?? 0),
+            //             amount: Number(it.amount ?? 0),
+            //             taxAmount: Number(it.taxAmount ?? 0),
+            //             totalWithTax: Number(it.totalWithTax ?? 0),
+            //       }));
 
-                  // ==== Build Payload ====
-                  const payload: ExpensePaymentPayload = {
-                        name: raw.name,
-                        payeeType: this.selectedPayee ?? PayeeType.supplier,
-                        supplierId: this.selectedPayee === PayeeType.supplier ? raw.supplierId ?? undefined : undefined,
-                        bankName: raw.bankName,
-                        accountNumber: raw.accountNumber,
-                        description: raw.description ?? '',
-                        beneficiaryName: raw.beneficiaryName,
-                        dueDate: raw.dueDate,
-                        hasGoodsReceipt: raw.hasGoodsReceipt ?? false,
-                        items,
-                        attachmentIds: uploadedAttachmentIds.length > 0 ? uploadedAttachmentIds : undefined,
-                        followerIds: raw.followerIds,
-                        managerApproverId: raw.managerApproverId,
-                  }
+            //       // ==== Build Payload ====
+            //       const payload: ExpensePaymentPayload = {
+            //             name: raw.name,
+            //             payeeType: this.selectedPayee ?? PayeeType.supplier,
+            //             supplierId: this.selectedPayee === PayeeType.supplier ? raw.supplierId ?? undefined : undefined,
+            //             bankName: raw.bankName,
+            //             accountNumber: raw.accountNumber,
+            //             description: raw.description ?? '',
+            //             beneficiaryName: raw.beneficiaryName,
+            //             dueDate: raw.dueDate,
+            //             hasGoodsReceipt: raw.hasGoodsReceipt ?? false,
+            //             items,
+            //             attachmentIds: uploadedAttachmentIds.length > 0 ? uploadedAttachmentIds : undefined,
+            //             followerIds: raw.followerIds,
+            //             managerApproverId: raw.managerApproverId,
+            //       }
 
 
-                  console.log('payload: ', payload);
-                  await firstValueFrom(this.expensePaymentService.create(payload));
-                  this.toast.successRich('Gửi phê duyệt thành công');
-            } catch (error) {
-                  this.httpErrorHandler.handle(error, "Gửi phê duyệt thất bại");
-            } finally {
-                  this.submitting = false;
-            }
+            //       console.log('payload: ', payload);
+            //       await firstValueFrom(this.expensePaymentService.create(payload));
+            //       this.toast.successRich('Gửi phê duyệt thành công');
+            // } catch (error) {
+            //       this.httpErrorHandler.handle(error, "Gửi phê duyệt thất bại");
+            // } finally {
+            //       this.submitting = false;
+            // }
       }
 
       get isUploading() {

@@ -189,7 +189,7 @@ export class InvoiceRequestPageComponent {
                   // 2) nếu có file → upload & replace-main
                   if(this.pendingFile) {
                         const up = await firstValueFrom(
-                              this.fileService.uploadFile(this.pendingFile, 'Expense', 'Invoice', invoiceId, false)
+                              this.fileService.(this.pendingFile, 'Expense', 'Invoice', invoiceId, false)
                         ); // upload gắn entity id
                         const fileId = (up as any).id ?? (up as any).data?.id;
                         await firstValueFrom(
